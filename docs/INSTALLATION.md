@@ -9,7 +9,7 @@
 - GM-Rechte für Erststart, Datenimporte und KI-Anwendung
 
 ## Installation
-1. ZIP nach `<FoundryData>/Data/modules/janus7/` entpacken.
+1. ZIP nach `<FoundryData>/Data/modules/Janus7/` entpacken.
 2. Prüfen, dass `module.json` direkt im Ordner `janus7/` liegt.
 3. Foundry starten, Modul aktivieren, **Ctrl+F5** für sauberen Reload.
 4. Shell öffnen oder `game.janus7.ui.openShell()` ausführen.

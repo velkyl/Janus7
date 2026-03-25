@@ -167,10 +167,7 @@ export const P4B_TC_08 = {
     const result2 = await conditionsEvaluator.evaluate(condition2, context);
     assert(result2 === false, 'Failing expression did not return false');
     
-    // Test 3: DSA5 Check (optional, depends on bridge availability)
-    // const dsa5Condition = 'CHECK(Magiekunde, 15)';
-    // const dsa5Result = await conditionsEvaluator.evaluate(dsa5Condition, { actorId: 'Actor.test' });
-    // assert(typeof dsa5Result === 'boolean', 'DSA5 check did not return boolean');
+    // Test 3: DSA5 Check omitted (optional, depends on bridge availability)
     
     return { success: true, test1: result1, test2: result2 };
   }

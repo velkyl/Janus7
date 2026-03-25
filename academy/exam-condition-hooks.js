@@ -198,24 +198,3 @@ export class JanusExamConditionHooks {
   }
 }
 
-// ─── Bootstrap-Patch (für phase4.js) ─────────────────────────────────────────
-//
-// In phase4.js nach der Initialisierung aller Engines:
-//
-//   import { JanusExamConditionHooks } from './exam-condition-hooks.js';
-//
-//   const examConditionHooks = new JanusExamConditionHooks({
-//     bridge: game.janus7.bridge.dsa5,
-//     logger: game.janus7.logger,
-//   });
-//   examConditionHooks.register();
-//   game.janus7.academy.examConditionHooks = examConditionHooks;
-//
-// Außerdem in exams.js — in recordExamResult() nach dem State-Write:
-//
-//   Hooks.callAll('janus7ExamResultRecorded', {
-//     actorUuid,
-//     examId,
-//     status: grading.statusId,
-//     examDef: effectiveExam,
-//   });

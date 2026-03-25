@@ -5,7 +5,7 @@ export default {
   phases: [1],
   kind: 'auto',
   expected: "Keine Core-Hook-Registrierung (updateWorldTime/getSceneControlButtons) außerhalb scripts/janus.mjs.",
-  whereToFind: 'modules/janus7/scripts/janus.mjs',
+  whereToFind: 'modules/Janus7/scripts/janus.mjs',
   async run(_ctx) {
     try {
       const [janusTxt, phase4Txt, questTxt, moonTxt] = await Promise.all([

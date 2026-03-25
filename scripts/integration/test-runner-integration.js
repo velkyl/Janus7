@@ -7,7 +7,7 @@
  * Exposes manual APIs without loading the heavy test catalog during world boot.
  */
 
-const MODULE_ID = 'janus7';
+const MODULE_ID = 'Janus7';
 let _resultApp = null;
 let _manualApp = null;
 let _harness = null;

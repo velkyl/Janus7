@@ -1,6 +1,6 @@
 import { JanusValidator } from '../../../../core/validator.js';
 async function read(rel) {
-  const moduleId = globalThis.game?.modules?.get?.('janus7')?.id ?? 'janus7';
+  const moduleId = globalThis.game?.modules?.get?.('Janus7')?.id ?? 'Janus7';
   const url = `/modules/${moduleId}/${String(rel).replace(/^\/+/, '')}`;
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Failed to load ${url} (${response.status})`);
