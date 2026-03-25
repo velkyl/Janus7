@@ -126,9 +126,6 @@ export async function ensureLessonDocumentsReady(engine, { forceSync = false } =
   const toCreate = [];
   const toUpdate = [];
 
-  const toCreate = [];
-  const toUpdate = [];
-
   for (const lesson of lessons) {
     const data = {
       name: lesson.name || lesson.id,

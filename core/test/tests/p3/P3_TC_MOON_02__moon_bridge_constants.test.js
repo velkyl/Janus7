@@ -24,7 +24,7 @@ export default {
           MOON_CYCLE_DAYS,
           FULL_MOON_INDEX,
           NEW_MOON_INDEX
-        } = await import('/modules/janus7/bridge/dsa5/moon.js');
+        } = await import('/modules/Janus7/bridge/dsa5/moon.js');
 
         console.assert(MOON_CYCLE_DAYS === 28, 'MOON_CYCLE_DAYS should be 28');
 
