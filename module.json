@@ -9,7 +9,7 @@
   "authors": [
     {
       "name": "Thomas (JANUS7 Development)",
-      "url": "https://github.com/janus7"
+      "url": "https://github.com/velkyl/janus7"
     }
   ],
   "description": "Hybrid-first academy management system for DSA5 magic academy campaigns. Features: State Management, Calendar, Simulation Engine, Quest & Event System, DSA5 Bridge, Atmosphere Control, Control Panel UI. Includes modular JANUS Shell UI layer.",
@@ -87,12 +87,12 @@
       ]
     }
   },
-  "url": "https://github.com/janus7/janus7",
-  "manifest": "https://github.com/janus7/janus7/releases/latest/download/module.json",
-  "download": "https://github.com/janus7/janus7/releases/latest/download/janus7.zip",
-  "readme": "https://github.com/janus7/janus7/blob/main/README.md",
-  "changelog": "https://github.com/janus7/janus7/blob/main/CHANGELOG.md",
-  "bugs": "https://github.com/janus7/janus7/issues",
+  "url": "https://github.com/velkyl/janus7",
+  "manifest": "https://github.com/velkyl/janus7/releases/latest/download/module.json",
+  "download": "https://github.com/velkyl/janus7/releases/latest/download/janus7.zip",
+  "readme": "https://github.com/velkyl/janus7/blob/main/README.md",
+  "changelog": "https://github.com/velkyl/janus7/blob/main/CHANGELOG.md",
+  "bugs": "https://github.com/velkyl/janus7/issues",
   "license": "PRIVATE - See LICENSE file",
   "socket": true,
   "documentTypes": {
