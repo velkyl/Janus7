@@ -222,7 +222,7 @@ export class JanusDirector {
    */
   async resetCalendar(opts = {}) {
     this._assertGM();
-    await this._engine().calendar.resetToStart?.();
+    await this._engine().calendar?.resetToStart?.();
     if (opts.save ?? true) await this.saveState(opts);
     return this._engine().calendar.getCurrentSlotRef();
   }

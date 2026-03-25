@@ -217,7 +217,7 @@ export class JanusLessonsEngine {
     if (!lesson) return null;
 
     try {
-      const teacher = lesson.teacherNpcId ? this.academyData.getNPC(lesson.teacherNpcId) : null;
+      const teacher = lesson.teacherNpcId ? this.academyData.getNpc(lesson.teacherNpcId) : null;
       const location = lesson.locationId ? this.academyData.getLocation(lesson.locationId) : null;
       return { lesson, teacher, location };
     } catch (err) {
