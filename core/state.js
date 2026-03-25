@@ -50,7 +50,6 @@ function normalizeStatePathAlias(path) {
   for (const [legacyPrefix, canonicalPrefix] of LEGACY_PATH_ALIASES) {
     if (source === legacyPrefix) return canonicalPrefix;
     if (source.startsWith(legacyPrefix + '.')) return canonicalPrefix + source.slice(legacyPrefix.length);
-    if (source.indexOf(legacyPrefix + '.') == 0) return canonicalPrefix + source.slice(legacyPrefix.length);
   }
   return source;
 }

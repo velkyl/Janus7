@@ -81,18 +81,26 @@ import {
 } from './data-api-readers.js';
 
 export class AcademyDataApi {
+  constructor(_opts = {}) {
+    this._opts = _opts;
+    this._logger = _opts?.logger ?? null;
+    this._lessonByIdCache = null;
+    this._examByIdCache = null;
+    this._npcByIdCache = null;
+    this._locationByIdCache = null;
+  }
+
   findCalendarEntries(query = {}) { return findCalendarEntries(query); }
   getCalendarEntryByDay(slotRef) { return getCalendarEntryByDay(slotRef); }
   listEventsForDay(slotRef) { return listEventsForDay(slotRef); }
 
-  constructor(_opts = {}) { this._opts = _opts; }
   async init() { await AcademyDataApi.init(); return this; }
   get isReady() { return AcademyDataApi.isReady; }
   get validation() { return AcademyDataApi.getValidation(); }
-  get lessonById() { return new Map(this.getLessons().map((row) => [row.id, row])); }
-  get examById() { return new Map(this.getExams().map((row) => [row.id, row])); }
-  get npcById() { return new Map(this.getNpcs().map((row) => [row.id, row])); }
-  get locationById() { return new Map(this.getLocations().map((row) => [row.id, row])); }
+  get lessonById() { return this._lessonByIdCache ??= new Map(this.getLessons().map((row) => [row.id, row])); }
+  get examById() { return this._examByIdCache ??= new Map(this.getExams().map((row) => [row.id, row])); }
+  get npcById() { return this._npcByIdCache ??= new Map(this.getNpcs().map((row) => [row.id, row])); }
+  get locationById() { return this._locationByIdCache ??= new Map(this.getLocations().map((row) => [row.id, row])); }
   async getContentRegistry(opts = {}) { return AcademyDataApi.getContentRegistry(opts); }
   async reloadContentRegistry(opts = {}) { return AcademyDataApi.reloadContentRegistry(opts); }
   hasLesson(id) { return !!AcademyDataApi.getLesson(id); }
