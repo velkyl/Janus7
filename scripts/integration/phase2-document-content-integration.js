@@ -124,6 +124,9 @@ export async function ensureLessonDocumentsReady(engine, { forceSync = false } =
   let created = 0;
   let updated = 0;
 
+  const toCreate = [];
+  const toUpdate = [];
+
   for (const lesson of lessons) {
     const data = {
       name: lesson.name || lesson.id,
@@ -142,15 +145,24 @@ export async function ensureLessonDocumentsReady(engine, { forceSync = false } =
 
     const existingDoc = byLessonId.get(lesson.id);
     if (!existingDoc) {
-      await Item.create(data, { keepId: false });
-      created += 1;
+      toCreate.push(data);
       continue;
     }
 
     if (forceSync) {
-      await existingDoc.update(data);
-      updated += 1;
+      data._id = existingDoc.id;
+      toUpdate.push(data);
     }
+  }
+
+  if (toCreate.length > 0) {
+    await Item.createDocuments(toCreate, { keepId: false });
+    created += toCreate.length;
+  }
+
+  if (toUpdate.length > 0) {
+    await Item.updateDocuments(toUpdate);
+    updated += toUpdate.length;
   }
 
   engine.academy ??= {};

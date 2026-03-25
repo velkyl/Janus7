@@ -15,6 +15,16 @@
       "hasRun": true
     },
     {
+      "id": "SEC-TC-04",
+      "title": "Secure Randomness in Bridge Keys",
+      "importPath": "./tests/sec/SEC_TC_04__secure_randomness.test.js",
+      "suiteClass": "extended-auto",
+      "kind": "auto",
+      "phase": 3,
+      "phases": [3],
+      "hasRun": true
+    },
+    {
       "id": "INT-TC-02",
       "title": "KI-Roundtrip: Export → Edit → Import",
       "importPath": "./tests/int/INT_TC_02__ki_roundtrip_export_edit_import.test.js",
@@ -587,6 +597,18 @@
       "hasRun": true
     },
     {
+      "id": "P3-TC-FATE-02",
+      "title": "Fate Bridge: Edge Cases for _onActorUpdate",
+      "importPath": "./tests/p3/P3_TC_FATE_02__fate_bridge_edge_cases.test.js",
+      "suiteClass": "auto",
+      "kind": "auto",
+      "phase": 3,
+      "phases": [
+        3
+      ],
+      "hasRun": true
+    },
+    {
       "id": "P3-TC-01",
       "title": "DSA5 Roll-API funktioniert",
       "importPath": "./tests/p3/P3_TC_01__dsa5_roll_api_funktioniert.test.js",
@@ -700,13 +722,25 @@
       "id": "P3-TC-MOON-01",
       "title": "Moon Bridge: Mondphasen lesen, Modifikatoren, Phasenwechsel-Hook",
       "importPath": "./tests/p3/P3_TC_MOON_01__moon_bridge.test.js",
+      "suiteClass": "extended-auto",
+      "kind": "auto",
+      "phase": 3,
+      "phases": [
+        3
+      ],
+      "hasRun": true
+    },
+    {
+      "id": "P3-TC-MOON-02",
+      "title": "Moon Bridge: Constants and Exports",
+      "importPath": "./tests/p3/P3_TC_MOON_02__moon_bridge_constants.test.js",
       "suiteClass": "manual",
       "kind": "manual",
       "phase": 3,
       "phases": [
         3
       ],
-      "hasRun": true
+      "hasRun": false
     },
     {
       "id": "P3-TC-SOCIAL-01",
@@ -1456,6 +1490,18 @@
       "id": "P3-TC-14",
       "title": "DSA5Resolver Contract",
       "importPath": "./tests/p3/P3_TC_14__dsa5_resolver_contract.test.js",
+      "suiteClass": "binding",
+      "kind": "auto",
+      "phase": 3,
+      "phases": [
+        3
+      ],
+      "hasRun": false
+    },
+    {
+      "id": "P3-TC-COND-01",
+      "title": "DSA5 Condition IDs Export",
+      "importPath": "./tests/p3/P3_TC_COND_01__dsa5_condition_ids.test.js",
       "suiteClass": "binding",
       "kind": "auto",
       "phase": 3,

@@ -230,7 +230,10 @@ export class DSA5CalendarSync {
       }
 
       const dsa5Date = this.janusTimeToDSA5Date(janusTime);
+
+
       const entryKey = `janus_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`;
+
 
       const existing = page.system?.calendarentries ?? {};
       await page.update({
