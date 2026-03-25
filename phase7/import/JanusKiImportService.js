@@ -440,7 +440,7 @@ export class JanusKiImportService {
   async restoreBackup(fileRef, { validate = false, save = true } = {}) {
     const timestamp = new Date().toISOString();
     const hasFoundryGame = (typeof game !== 'undefined') && game?.user;
-    if (hasFoundryGame && !game.user.isGM) {
+    if (hasFoundryGame && !game.user?.isGM) {
       const error = new JanusKiPermissionError('Only GMs may restore KI backups', { userId: game.user?.id });
       this._history.push({ timestamp, applied: false, diffs: [], backup: this._extractBackupName(fileRef), backupPath: String(fileRef ?? ''), error: error.message, operation: 'restore' });
       throw error;
@@ -832,7 +832,7 @@ export class JanusKiImportService {
     }
     // Check GM permission when running in Foundry (enforced server-side, not UI-only)
     const hasFoundryGame = (typeof game !== 'undefined') && game?.user;
-    if (hasFoundryGame && !game.user.isGM) {
+    if (hasFoundryGame && !game.user?.isGM) {
       const error = new JanusKiPermissionError('Only GMs may import KI responses', { userId: game.user?.id });
       this._history.push({ timestamp, applied: false, diffs: summary, error: error.message, operation: 'apply' });
       throw error;
