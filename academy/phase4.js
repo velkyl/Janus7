@@ -26,12 +26,14 @@ import { JanusLessonsEngine } from './lessons.js';
 import { RollScoringConnector } from './roll-scoring-connector.js';
 import { JanusSocialSync } from './social-sync.js';
 import { JanusExamConditionHooks } from './exam-condition-hooks.js';
+import { HOOKS } from '../core/hooks/topics.js';
+import { registerRuntimeHook } from '../core/hooks/runtime.js';
 
 /**
  * Attach Phase-4 engines on janus7Ready.
  * We use `Hooks.on` (not once) so a manual re-init (future) could re-run.
  */
-Hooks.on('janus7Ready', async (engine) => {
+registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (engine) => {
   const baseLogger = engine?.core?.logger ?? console;
   try {
     // Respect kill-switch.

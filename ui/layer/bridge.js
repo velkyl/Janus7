@@ -1,5 +1,7 @@
 
 import { getQuickPanels } from './panel-registry.js';
+import { HOOKS } from '../../core/hooks/topics.js';
+import { registerRuntimeHook } from '../../core/hooks/runtime.js';
 
 export const JanusUiLayerBridge = {
   attach(engine) {
@@ -44,7 +46,7 @@ export const JanusUiLayerBridge = {
   }
 };
 
-Hooks.on('janus7Ready', (engine) => {
+registerRuntimeHook('janus7:ready:ui-layer-bridge', HOOKS.ENGINE_READY, (engine) => {
   try {
     JanusUiLayerBridge.attach(engine);
     JanusUiLayerBridge.registerSceneTools(engine);

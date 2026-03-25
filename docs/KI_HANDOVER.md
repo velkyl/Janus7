@@ -1,8 +1,8 @@
 # JANUS7 KI-HANDOVER
 
-**Modul-Version:** 0.9.12.29  
+**Modul-Version:** 0.9.12.43  
 **Foundry:** v13+  
-**Datum:** 2026-03-08
+**Datum:** 2026-03-25
 
 Zweck: Kurzbriefing für KI-Assistenz (Architektur, SSOT, Qualitäts-Gates). Kein Roman.
 

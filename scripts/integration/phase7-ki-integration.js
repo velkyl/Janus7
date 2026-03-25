@@ -11,6 +11,8 @@ import { JanusKiExportService } from '../../phase7/export/JanusKiExportService.j
 import { JanusKiImportService } from '../../phase7/import/JanusKiImportService.js';
 import { JanusKiIoService } from '../../phase7/io/JanusKiIoService.js';
 import { Prompts } from '../../phase7/ki/prompts.js';
+import { HOOKS } from '../../core/hooks/topics.js';
+import { registerRuntimeHook } from '../../core/hooks/runtime.js';
 
 export function attachPhase7Ki(engine) {
   if (!engine) return null;
@@ -74,7 +76,7 @@ export function attachPhase7Ki(engine) {
 }
 
 if (typeof Hooks !== 'undefined') {
-  Hooks.on('janus7Ready', (engine) => {
+  registerRuntimeHook('janus7:ready:phase7-ki', HOOKS.ENGINE_READY, (engine) => {
     try { attachPhase7Ki(engine); } catch (_err) { /* already logged in attach */ }
   });
 }

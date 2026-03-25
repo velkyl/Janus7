@@ -1,11 +1,13 @@
 /**
  * Integration module for the JANUS knowledge graph service.  This
- * module registers a hook on janus7Ready to initialize and attach
+ * module registers a hook on janus7.ready to initialize and attach
  * the graph to the engine.  It defers loading of the graph code
  * until needed to avoid increasing the initial bundle size.
  */
+import { HOOKS } from '../../core/hooks/topics.js';
+import { registerRuntimeHook } from '../../core/hooks/runtime.js';
 
-Hooks.on('janus7Ready', async (engine) => {
+registerRuntimeHook('janus7:ready:graph-service', HOOKS.ENGINE_READY, async (engine) => {
   const logger = engine?.core?.logger ?? console;
   try {
     const { registerGraphService } = await import('../graph/index.js');

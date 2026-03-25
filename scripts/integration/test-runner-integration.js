@@ -6,6 +6,8 @@
  * Lightweight test-runner integration.
  * Exposes manual APIs without loading the heavy test catalog during world boot.
  */
+import { HOOKS } from '../../core/hooks/topics.js';
+import { registerRuntimeHook } from '../../core/hooks/runtime.js';
 
 const MODULE_ID = 'Janus7';
 let _resultApp = null;
@@ -132,7 +134,7 @@ export async function openGuidedManualTests(opts = {}) {
   return opts?.awaitCompletion === true ? session : app;
 }
 
-Hooks.on('janus7Ready', (engine) => {
+registerRuntimeHook('janus7:ready:test-runner', HOOKS.ENGINE_READY, (engine) => {
   if (!engine) return;
   if (!engine.test) engine.test = {};
   engine.test.runCatalog = runCatalog;

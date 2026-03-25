@@ -6,8 +6,9 @@ import {
   JanusSanctuarySimulationEngine,
   JanusLivingWorldScheduler
 } from "../../academy/living-world.js";
+import { cleanupEngineHookBucket, registerEngineHook, registerRuntimeHook } from "../../core/hooks/runtime.js";
 
-Hooks.on("janus7Ready", async (engine) => {
+registerRuntimeHook('janus7:ready:living-world', HOOKS.ENGINE_READY, async (engine) => {
   const logger = engine?.core?.logger ?? console;
   try {
     const state = engine?.core?.state;
@@ -32,7 +33,8 @@ Hooks.on("janus7Ready", async (engine) => {
     engine.simulation.livingWorld = engine.academy.livingWorld;
     engine.livingWorld = engine.academy.livingWorld;
 
-    Hooks.on(HOOKS.DATE_CHANGED, async (payload) => {
+    cleanupEngineHookBucket(engine, '_livingWorldHookIds');
+    registerEngineHook(engine, '_livingWorldHookIds', HOOKS.DATE_CHANGED, async (payload) => {
       try {
         await scheduler.onDateChanged(payload);
         await state.save?.();

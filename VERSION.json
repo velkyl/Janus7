@@ -1,11 +1,22 @@
 {
   "module": "janus7",
-  "version": "0.9.12.42",
+  "version": "0.9.12.43",
   "schemaVersion": "7.1",
   "foundry": ">=13",
   "roadmap": "7.0",
   "status": "wave4-release-hardening",
   "changelog": [
+    {
+      "version": "0.9.12.43",
+      "date": "2026-03-25",
+      "type": "consistency-ci-hook-runtime-cleanup",
+      "notes": [
+        "DOKU: README und Kern-Dokumente auf die Runtime-SSOT aus module.json angehoben.",
+        "CI: GitHub Actions validiert jetzt das Repository statt eines kaputten npm-Publish-Pfads.",
+        "ARCH: Runtime-Hooks werden dedupliziert registriert; Engine-Cleanup räumt alle _*HookIds-Buckets auf.",
+        "GC: mehrere Integrationen nutzen jetzt kanonische HOOKS.*-Topics statt Legacy-Aliasen."
+      ]
+    },
     {
       "version": "0.9.12.26",
       "date": "2026-03-12",
@@ -621,5 +632,5 @@
   ],
   "releaseDate": "2026-03-12",
   "notes": "Welle 3 weiter gehärtet: Inline-Styles aus Control-Panel/Dialogen entfernt, IO-Roundtrip/Progression-Fixes nachgezogen.",
-  "prevVersion": "0.9.12.23"
+  "prevVersion": "0.9.12.42"
 }

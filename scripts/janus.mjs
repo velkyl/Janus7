@@ -246,43 +246,13 @@ function runReadySanityCheck(engine) {
 }
 
 /**
- * Optional Test Harness loader.
- * @param {Janus7Engine} engine
+ * Legacy no-op kept for compatibility with older audits.
+ * Active harness loading lives in scripts/integration/test-runner-integration.js.
+ * @param {Janus7Engine} _engine
  */
-async function maybeLoadTestHarness(engine) {
-  try {
-    const [RegMod, RunMod, CatMod, BuiltinMod] = await Promise.all([
-      import('../core/test/registry.js'),
-      import('../core/test/runner.js'),
-      import('../core/test/register-catalog.js'),
-      import('../core/test/register-builtins.js'),
-    ]);
-
-    const Registry = RegMod?.default;
-    const Runner = RunMod?.default;
-    const registerCatalog = CatMod?.default;
-    const registerBuiltins = BuiltinMod?.default;
-
-    if (!Registry || !Runner || typeof registerCatalog !== 'function') {
-      throw new Error('Test harness: missing exports.');
-    }
-
-    const logger = engine.core?.logger;
-    const registry = new Registry();
-    const runner = new Runner({ registry, logger, engine });
-    engine.test = { registry, runner };
-
-    // Builtins first: register actual executable test functions.
-    if (typeof registerBuiltins === 'function') {
-      await registerBuiltins({ registry, logger, engine });
-    }
-    // Catalog second: fills gaps with metadata-only placeholders (skips existing IDs).
-    await registerCatalog({ registry, logger, engine });
-
-    logger?.info?.('[JANUS7] Test harness loaded.');
-  } catch (err) {
-    engine.core?.logger?.debug?.('[JANUS7] Test harness not available.', { message: err?.message });
-  }
+async function maybeLoadTestHarness(_engine) {
+  // Legacy no-op: active test harness loading lives in scripts/integration/test-runner-integration.js.
+  return null;
 }
 
 // ─────────────────────────────────────────────────────────
@@ -399,7 +369,7 @@ try {
     // Back-compat aliases
     engine.engine  = engine;
 
-    // Pre-ready chain: test harness + phase integrations (async, not awaited)
+    // Pre-ready chain: phase integrations (async, not awaited)
     JANUS_GLOBAL.preReady = (async () => {
       await loadPhaseIntegrations(engine);
     })();

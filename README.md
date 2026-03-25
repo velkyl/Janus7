@@ -1,12 +1,12 @@
 # JANUS7 (Foundry VTT Modul)
 
-**Version:** 0.9.12.42  
+**Version:** 0.9.12.43  
 **Foundry:** v13+  
 **Systemfokus:** DSA5-Zauberakademie-OS mit Shell-UI, Director-Workflow, Akademiedaten, Simulation, KI-Roundtrip und Test-Harness.
 
 JANUS7 ist ein mehrschichtiges Foundry-Modul für eine langfristige Zauberakademie-Kampagne. Der aktuelle Stand ist **produktiv nutzbar**, aber nicht jede Oberfläche ist gleich reif. Die Shell ist die bevorzugte Hauptoberfläche, ältere Einzel-Apps bleiben teils als Bridge erhalten.
 
-## Status (0.9.12.42)
+## Status (0.9.12.43)
 - **Produktiv nutzbar:** Core/State, AcademyDataApi, DSA5-Bridge (inkl. Moon/Fate/Advancement/TimedCond), Kalender/Scoring/Social/Quest-Basis, Shell-Frontdoor, KI-Backup/Preview.
 - **Teilweise umgesetzt:** Shell-Cutover der Alt-Apps, einige Panel-Migrationen, Data Studio/Session Prep als arbeitsfähige Werkzeuge.
 - **Experimentell / intern:** einzelne Debug-/Test-Apps, manuelle Testpfade, Legacy-Wrapper, einige Import-/Restore-Kantenfälle.

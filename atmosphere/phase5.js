@@ -14,6 +14,8 @@
  */
 
 import { MODULE_ID } from '../core/common.js';
+import { HOOKS } from '../core/hooks/topics.js';
+import { cleanupEngineHookBucket, registerEngineHook, registerRuntimeHook } from '../core/hooks/runtime.js';
 import { JanusAtmosphereController } from './controller.js';
 import { FoundryPlaylistProvider } from './providers/foundry-playlist-provider.js';
 
@@ -28,7 +30,7 @@ const SOCKET_CHANNEL = `module.${MODULE_ID}`;
  * @property {string} [senderUserName]
  */
 
-Hooks.on('janus7Ready', (engine) => {
+registerRuntimeHook('janus7:ready:atmosphere-phase5', HOOKS.ENGINE_READY, (engine) => {
   try {
     const logger = engine?.core?.logger;
     const state = engine?.core?.state;
@@ -73,11 +75,11 @@ Hooks.on('janus7Ready', (engine) => {
       logger?.warn?.('Atmosphere: game.socket nicht verfügbar – Hybrid-Routing deaktiviert.');
     }
 
+    cleanupEngineHookBucket(engine, '_atmosphereHookIds');
 
     // Calendar-Auto-Moods: reagiert nur auf dem Master-Client
     try {
-      const HooksRef = globalThis.Hooks;
-      HooksRef?.on?.('janus7DateChanged', async (payload) => {
+      registerEngineHook(engine, '_atmosphereHookIds', HOOKS.DATE_CHANGED, async (payload) => {
         try {
           const st = controller.status();
           if (!st.enabled) return;
@@ -95,33 +97,27 @@ Hooks.on('janus7Ready', (engine) => {
         }
       });
     } catch (errHook) {
-      logger?.warn?.('Atmosphere: janus7DateChanged Hook nicht registriert', errHook);
+      logger?.warn?.('Atmosphere: janus7.date.changed Hook nicht registriert', errHook);
     }
 
-    // Event->Mood Auto: janus7EventTriggered (Phase 4 Event-Runner)
+    // Event->Mood Auto: canonical event hook from the event engine.
     try {
-      const HooksRef = globalThis.Hooks;
-      const eventHandler = (payload) => controller.onEventTriggered(payload);
-      const id = HooksRef?.on?.('janus7EventTriggered', eventHandler);
-      if (id) engine._phase5HookIds = (engine._phase5HookIds || []).concat([{ name: 'janus7EventTriggered', id }]);
+      registerEngineHook(engine, '_atmosphereHookIds', HOOKS.EVENT_SHOWN, (payload) => controller.onEventTriggered(payload));
     } catch (errHook) {
-      logger?.warn?.('Atmosphere: janus7EventTriggered Hook nicht registriert', errHook);
+      logger?.warn?.('Atmosphere: janus7.event.shown Hook nicht registriert', errHook);
     }
 
-    // Location->Mood Auto: janus7LocationChanged (Phase 5 LocationsEngine oder UI)
+    // Location->Mood Auto: canonical location change hook.
     try {
-      const HooksRef = globalThis.Hooks;
-      const locHandler = (payload) => controller.onLocationChanged(payload);
-      const id = HooksRef?.on?.('janus7LocationChanged', locHandler);
-      if (id) engine._phase5HookIds = (engine._phase5HookIds || []).concat([{ name: 'janus7LocationChanged', id }]);
+      registerEngineHook(engine, '_atmosphereHookIds', HOOKS.LOCATION_CHANGED, (payload) => controller.onLocationChanged(payload));
     } catch (errHook) {
-      logger?.warn?.('Atmosphere: janus7LocationChanged Hook nicht registriert', errHook);
+      logger?.warn?.('Atmosphere: janus7.location.changed Hook nicht registriert', errHook);
     }
 
     // Auto-init (harmlos, no-op wenn disabled)
     controller.init().catch((err) => logger?.error?.('Atmosphere init() fehlgeschlagen', err));
   } catch (err) {
-    (logger ?? console).error?.('[JANUS7] Phase 5 Registrierung fehlgeschlagen', err);
+    (engine?.core?.logger ?? console).error?.('[JANUS7] Phase 5 Registrierung fehlgeschlagen', err);
     // no hard fail: Phase 5 darf die Engine nicht blockieren
   }
 });

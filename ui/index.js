@@ -18,6 +18,8 @@ import { JanusLessonLibraryApp } from './apps/JanusLessonLibraryApp.js';
 import { JanusShellApp } from './apps/JanusShellApp.js';
 import './layer/bridge.js';
 import { JANUS_UI_APP_STATUS, listJanusUiAppStatus } from './app-manifest.js';
+import { HOOKS } from '../core/hooks/topics.js';
+import { registerRuntimeHook } from '../core/hooks/runtime.js';
 
 // Optional: devtools harness is best-effort and must not block UI init.
 let JanusSettingsTestHarnessApp = null;
@@ -110,7 +112,7 @@ JanusUI.manifest = JANUS_UI_APP_STATUS;
 export default JanusUI;
 
 // Attach UI router onto engine once JANUS7 is ready.
-Hooks.on('janus7Ready', (engine) => {
+registerRuntimeHook('janus7:ready:ui-index-attach', HOOKS.ENGINE_READY, (engine) => {
   try {
     if (!engine) return;
     engine.ui = JanusUI;
@@ -156,5 +158,5 @@ function _ensureCompatBindings(engineLike) {
   } catch (_err) { /* noop */ }
 }
 
-Hooks.on('janus7Ready', (engine) => _ensureCompatBindings(engine));
+registerRuntimeHook('janus7:ready:ui-index-compat', HOOKS.ENGINE_READY, (engine) => _ensureCompatBindings(engine));
 try { _ensureCompatBindings(game?.janus7); } catch (_err) { /* noop */ }

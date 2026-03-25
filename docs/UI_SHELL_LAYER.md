@@ -1,7 +1,7 @@
 
 # JANUS7 UI Shell Layer
 
-Stand: v0.9.12.29
+Stand: v0.9.12.43
 
 ## Ziel
 Additive, modulare Oberfläche innerhalb von JANUS7.

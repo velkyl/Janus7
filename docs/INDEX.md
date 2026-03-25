@@ -1,8 +1,8 @@
 # JANUS7 — Dokumentations-Index
 
-**Modul-Version (SSOT: `module.json`):** 0.9.12.29  
+**Modul-Version (SSOT: `module.json`):** 0.9.12.43  
 **Foundry:** v13+  
-**Stand:** 2026-03-12
+**Stand:** 2026-03-25
 
 ## Einstieg
 1. `README.md`

@@ -1,6 +1,6 @@
 # KI in JANUS7 — Stabilität, Workflow, Grenzen
 
-Stand: **v0.9.12.29** (Phase 7 / produktiver Roundtrip mit konservativen Schutzschienen)
+Stand: **v0.9.12.43** (Phase 7 / produktiver Roundtrip mit konservativen Schutzschienen)
 
 ## Produktiv nutzbar
 - Export eines `JANUS_EXPORT_V2` Bundles

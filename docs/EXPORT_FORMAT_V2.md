@@ -1,8 +1,8 @@
 # JANUS7 Export-Format V2
 
 **Schema-Version:** 2  
-**Modul-Version:** 0.9.12.29  
-**Datum:** 2026-03-20
+**Modul-Version:** 0.9.12.43  
+**Datum:** 2026-03-25
 
 ---
 
@@ -135,7 +135,7 @@ Alle Arrays in `changes` enthalten Patch-Objekte der Form:
 ```json
 {
   "version": "JANUS_KI_RESPONSE_V1",
-  "sourceExportMeta": { "exportedAt": "2026-03-20T14:00:00Z", "world": "punin-akademie", "moduleVersion": "0.9.12.29" },
+  "sourceExportMeta": { "exportedAt": "2026-03-25T14:00:00Z", "world": "punin-akademie", "moduleVersion": "0.9.12.43" },
   "changes": {
     "calendarUpdates": [],
     "lessonUpdates": [

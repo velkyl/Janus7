@@ -1,15 +1,13 @@
-# Update 0.9.12.42
+# Update 0.9.12.43
 
-## Änderungen seit 0.9.12.37
+## Änderungen seit 0.9.12.42
 
-- ARCH: Moon Hook-Centralization — bridge/dsa5/moon.js registriert updateWorldTime nicht mehr direkt; Delegation via janus.mjs
-- TEST: P1-TC-11 scannt bridge/dsa5/moon.js auf Hook-Leaks
-- TEST: P3-BUFF/FATE/SOCIAL/TRAD mit Prereq-Gates (auto-SKIP bei fehlenden Weltdaten)
-- FIX: bridge/dsa5/index.js ruft timedCond.applyTimedAcademyCondition() korrekt auf
-- FIX: KI-Inbox-Verzeichnis wird vor FilePicker-Open und importFromInbox best-effort angelegt
-- RELEASE: Versionierung module.json/VERSION.json/package.json/README auf 0.9.12.40 synchronisiert
+- DOKU: README, Index, Status, Installation, KI- und Release-Dokumente auf `0.9.12.43` synchronisiert
+- CI: GitHub-Workflow validiert jetzt das Repo statt eines kaputten npm-Publish-/`npm ci`-Pfads
+- ARCH: gemeinsame Runtime-Hook-Hilfe eingeführt; Engine-Cleanup räumt alle `_*HookIds`-Buckets auf
+- GC: mehrere Ready-/Domain-Hooks auf kanonische `HOOKS.*`-Topics umgestellt; Legacy-Alias-Nutzung reduziert
 
-## Gesamtstatus (0.9.12.40)
+## Gesamtstatus (0.9.12.43)
 
 | Phase | Status |
 |-------|--------|

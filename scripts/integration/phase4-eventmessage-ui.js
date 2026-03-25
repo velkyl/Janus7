@@ -2,33 +2,28 @@
  * Phase 4 → Phase 6 UI bridge
  *
  * Purpose:
- * - Keep Phase 4 headless: it emits janus7EventMessage payloads.
+ * - Keep Phase 4 headless: it emits HOOKS.EVENT_MESSAGE payloads.
  * - If enabled (client setting), render those payloads as ChatMessages.
  *
  * Architecture:
- * - Uses custom hook janus7EventMessage (NOT a Foundry core hook).
+ * - Uses the canonical JANUS hook HOOKS.EVENT_MESSAGE (NOT a Foundry core hook).
  * - Foundry core hooks remain centralized in scripts/janus.mjs.
  */
 
 import { JanusConfig } from '../../core/config.js';
 import { emitHook, HOOKS } from '../../core/hooks/emitter.js';
+import { cleanupEngineHookBucket, registerEngineHook, registerRuntimeHook } from '../../core/hooks/runtime.js';
 
 const TAG = '[JANUS7][EventMessageUI]';
 
-Hooks.on('janus7Ready', (engine) => {
+registerRuntimeHook('janus7:ready:eventmessage-ui', HOOKS.ENGINE_READY, (engine) => {
   const logger = engine?.core?.logger;
   try {
     if (!engine) return;
 
-    // Cleanup previous registration (hot reload safety)
-    engine._phase6HookIds = engine._phase6HookIds ?? [];
-    for (const h of engine._phase6HookIds) {
-      if (h?.name === 'janus7EventMessage' && h?.id != null) {
-        try { Hooks.off('janus7EventMessage', h.id); } catch (_) {}
-      }
-    }
+    cleanupEngineHookBucket(engine, '_eventMessageUiHookIds');
 
-    const hookId = Hooks.on('janus7EventMessage', async (payload = {}) => {
+    registerEngineHook(engine, '_eventMessageUiHookIds', HOOKS.EVENT_MESSAGE, async (payload = {}) => {
       try {
         if (!JanusConfig.get('uiEventMessagesToChat')) return;
         if (!payload?.content) return;
@@ -55,9 +50,7 @@ Hooks.on('janus7Ready', (engine) => {
       }
     });
 
-    engine._phase6HookIds.push({ name: 'janus7EventMessage', id: hookId });
-
-    const eventMessageHookId = Hooks.on(HOOKS.DATE_CHANGED, async (payload = {}) => {
+    registerEngineHook(engine, '_eventMessageUiHookIds', HOOKS.DATE_CHANGED, async (payload = {}) => {
       try {
         const eventsApi = engine?.simulation?.events ?? engine?.academy?.events ?? engine?.events ?? null;
         const slot = payload?.current ?? payload?.slot ?? engine?.calendar?.getCurrentSlotRef?.() ?? null;
@@ -83,8 +76,6 @@ Hooks.on('janus7Ready', (engine) => {
         (logger ?? console).warn?.(TAG, 'event-message emitter failed:', err);
       }
     });
-
-    engine._phase6HookIds.push({ name: HOOKS.DATE_CHANGED, id: eventMessageHookId });
   } catch (err) {
     (logger ?? console).warn?.(TAG, 'init failed:', err);
   }

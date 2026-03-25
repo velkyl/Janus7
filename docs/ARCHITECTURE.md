@@ -34,24 +34,29 @@ JANUS7 ist kein “Monolith mit Makros”, sondern ein modularer Stack. Ziel ist
   - Wrapper (einfache, stabile API für JANUS)
 - Diagnosefunktionen (Capabilities)
 
-### Phase 4 – UI / Director
-- ApplicationV2 (keine deprecated V1 Apps)
-- UI spricht nur mit Phase 1–3 APIs (nicht “quer” durch Ordner)
+### Phase 4 – Simulation / Academy Runtime
+- Kalender, Scoring, Social, Lessons, Exams
+- Living World und Academy Progression als aufgesetzte Laufzeitschichten
+- UI-freie Domänenlogik auf Basis von Phase 1–3
 
-### Phase 5 – Import/Export
-- JSON-Formate (JANUS_IMPORT / JANUS_EXPORT)
-- Validierung & Recovery (teilweise Importfehler ohne Totalschaden)
+### Phase 5 – Atmosphere
+- Audio-/Mood-Steuerung
+- Playlist-Provider, Auto-Mood-Regeln, Hybrid-/Socket-Pfade
+- Optional und per Kill-Switch abschaltbar
 
-### Phase 6 – Integration / Regression
-- Tests gegen echte Worlds / typische Modulsets
-- Kompatibilitätschecks bei Foundry-/dsa5-Updates
+### Phase 6 – UI / Shell / Commands
+- ApplicationV2-Apps und JANUS Shell
+- UI-Router, Layer/Registry, Scene-Controls, Commands
+- UI spricht über Core-/Bridge-/Academy-APIs statt quer durch den Code
 
-### Phase 7 – Hardening
-- Resilience: saubere Fehlerpfade, Retry/Backoff, Logging
-- Security: Eingabedaten validieren, kein eval, keine stillen Side-Effects
+### Phase 7 – KI Roundtrip / Import / Export
+- JSON-Formate (JANUS_EXPORT_V2 / JANUS_KI_RESPONSE_V1)
+- Preview, Diff, Backup/Restore, semantische Validierung
+- konservative Apply-/Recovery-Pfade
 
-### Phase 8 – Extensions
-- Optionales: Atmosphere, Media, zusätzliche Tools
+### Phase 8 – Extensions / Zusatzwerkzeuge
+- Session Prep, Discovery, Graph, optionale Zusatztools
+- Nicht alles davon ist gleich reif oder produktiv
 
 ## Anti-Patterns (bitte vermeiden)
 - Direktzugriff auf `actor.system` ohne Bridge (bricht bei dsa5-Updates)

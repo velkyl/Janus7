@@ -1,3 +1,11 @@
+## v0.9.12.43 - Version Sync + CI Repair + Hook Runtime Cleanup
+
+### Fixed
+- DOKU: Kern-Dokumente wieder auf die Runtime-SSOT aus `module.json` synchronisiert
+- CI: GitHub-Workflow von kaputtem npm-Publish auf echte Repo-Validierung umgestellt
+- ARCH: Runtime-Hook-Registrierung dedupliziert und Engine-Hook-Cleanup auf alle `_*HookIds` vereinheitlicht
+- GC: mehrere Integrationen auf kanonische `HOOKS.*`-Topics umgestellt; tote/duplizierte Legacy-Schichten reduziert
+
 ## v0.9.12.42 - Test Cleanup + Diagnostics Drift-Check
 
 ### Fixed

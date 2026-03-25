@@ -8,6 +8,8 @@
  */
 
 import { MODULE_ID } from '../../core/common.js';
+import { HOOKS } from '../../core/hooks/topics.js';
+import { registerRuntimeHook } from '../../core/hooks/runtime.js';
 
 // UI + Commands are Phase 6 deliverables.
 import { JanusUI } from '../../ui/index.js';
@@ -26,7 +28,7 @@ try {
 }
 
 // Keep engine links consistent at the moment the engine is declared ready.
-Hooks.on('janus7Ready', (engine) => {
+registerRuntimeHook('janus7:ready:phase6-ui', HOOKS.ENGINE_READY, (engine) => {
   try {
     engine.commands = engine.commands ?? JanusCommands;
     engine.ui = engine.ui ?? JanusUI;

@@ -12,6 +12,8 @@ import { JanusConditionContextProvider } from '../academy/conditions/context-pro
 import { JanusConditionEvaluator } from '../academy/conditions/condition-evaluator.js';
 import { JanusEventsEngineExtended as JanusEventsEngine } from '../academy/events/event-engine.js';
 import { JanusQuestEngine } from '../academy/quests/quest-engine.js';
+import { HOOKS } from '../../core/hooks/topics.js';
+import { registerRuntimeHook } from '../../core/hooks/runtime.js';
 
 /** @returns {import('../../core/logger.js').JanusLogger|Console} */
 const _qlog = () => game?.janus7?.core?.logger ?? console;
@@ -107,7 +109,7 @@ export class QuestSystemIntegration {
 
   static setupHooks() {
     // Auto-show event popup when event is presented
-    Hooks.on('janus7EventShown', async ({eventId, actorId, event}) => {
+    registerRuntimeHook('janus7:quest:event-shown', HOOKS.EVENT_SHOWN, async ({eventId, actorId, event}) => {
       if (game.user.isGM) {
         const popup = new JanusEventPopup({eventId, actorId, event});
         // ApplicationV2 expects an options object, not a boolean.
@@ -116,11 +118,11 @@ export class QuestSystemIntegration {
     });
 
     // Log quest events
-    Hooks.on('janus7QuestStarted', ({questId, actorId}) => {
+    registerRuntimeHook('janus7:quest:quest-started', HOOKS.QUEST_STARTED, ({questId, actorId}) => {
       ui.notifications.info(`Quest gestartet: ${questId}`);
     });
 
-    Hooks.on('janus7QuestCompleted', ({questId, actorId}) => {
+    registerRuntimeHook('janus7:quest:quest-completed', HOOKS.QUEST_COMPLETED, ({questId, actorId}) => {
       ui.notifications.info(`Quest abgeschlossen: ${questId}`);
     });
   }
@@ -233,7 +235,7 @@ export class QuestSystemIntegration {
 }
 
 // Initialize on janus7Ready hook
-Hooks.on('janus7Ready', async (engine) => {
+registerRuntimeHook('janus7:ready:quest-system', HOOKS.ENGINE_READY, async (engine) => {
   try {
     await QuestSystemIntegration.initialize(engine);
   } catch (err) {

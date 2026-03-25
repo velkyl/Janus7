@@ -7,8 +7,9 @@ import { JanusSocialEngine } from '../../academy/social-engine.js';
 import { JanusMilestoneEngine } from '../../academy/milestone-engine.js';
 import { JanusCollectionEngine } from '../../academy/collection-engine.js';
 import { JanusActivityEngine } from '../../academy/activity-engine.js';
+import { cleanupEngineHookBucket, registerEngineHook, registerRuntimeHook } from '../../core/hooks/runtime.js';
 
-Hooks.on('janus7Ready', async (engine) => {
+registerRuntimeHook('janus7:ready:academy-progression', HOOKS.ENGINE_READY, async (engine) => {
   const logger = engine?.core?.logger ?? console;
   try {
     const state = engine?.core?.state;
@@ -34,7 +35,8 @@ Hooks.on('janus7Ready', async (engine) => {
 
     let _defaultsEnsured = true;
 
-    Hooks.on(HOOKS.DATE_CHANGED, async ({ current } = {}) => {
+    cleanupEngineHookBucket(engine, '_progressionHookIds');
+    registerEngineHook(engine, '_progressionHookIds', HOOKS.DATE_CHANGED, async ({ current } = {}) => {
       try {
         if (!_defaultsEnsured) {
           await resourcesEngine.ensureDefaults();

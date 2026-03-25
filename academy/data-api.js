@@ -111,7 +111,6 @@ export class AcademyDataApi {
   getLessons() { return AcademyDataApi.getLessons(); }
   getLesson(id) { return AcademyDataApi.getLesson(id); }
   getNpcs() { return AcademyDataApi.getNpcs(); }
-  getNpc(id) { return AcademyDataApi.getNpc(id); }
 
   // ─── Convenience-Filter (v0.9.12.30) ───────────────────────────────────
   /** Alle NPCs mit role === 'student'. */

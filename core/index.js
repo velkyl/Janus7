@@ -27,6 +27,7 @@ import { runJanusDiagnostics, generateBugReport } from './diagnostics.js';
 import { buildDiagnosticSnapshot } from './diagnostics/diagnostic-snapshot.js';
 import { installUiWriteGuard } from './guards/ui-write-guard.js';
 import { JanusFolderService } from './folder-service.js';
+import { cleanupEngineHookBuckets, listEngineHookBuckets } from './hooks/runtime.js';
 // ---------------------------------------------------------------------------
 // Boot-Guard (Hardening)
 // Verhindert doppelte Hook-Registrierung bei Reloads / Session-Reconnects.
@@ -178,26 +179,13 @@ export class Janus7Engine {
 
   /**
    * Entfernt alle von höheren Phasen registrierten Hooks.
-   * Iteriert über `_phase5HookIds` (und zukünftig ähnliche Arrays) und
+   * Iteriert über alle Engine-Felder nach dem Muster `_*HookIds` und
    * ruft `Hooks.off()` auf. Wird beim Engine-Shutdown / Reload aufgerufen.
    */
   cleanupPhaseHooks() {
-    const hookArrays = [
-      '_phase5HookIds',
-      '_phase6HookIds',
-      '_phase7HookIds'
-    ];
-    for (const field of hookArrays) {
-      const arr = this[field];
-      if (!Array.isArray(arr)) continue;
-      for (const entry of arr) {
-        try {
-          Hooks.off(entry.name, entry.id);
-        } catch (_) { /* noop */ }
-      }
-      this[field] = [];
-    }
-    this.core?.logger?.debug?.('Phase hooks cleaned up');
+    const hookArrays = listEngineHookBuckets(this);
+    const removed = cleanupEngineHookBuckets(this, hookArrays);
+    this.core?.logger?.debug?.('Phase hooks cleaned up', { buckets: hookArrays, removed });
   }
 
   /**

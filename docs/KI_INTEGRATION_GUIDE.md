@@ -1,8 +1,8 @@
 # JANUS7 KI-Integration Guide
 
-**Modul-Version:** 0.9.12.29  
+**Modul-Version:** 0.9.12.43  
 **Phase:** 7 – KI-Roundtrip  
-**Datum:** 2026-03-20
+**Datum:** 2026-03-25
 
 ---
 
@@ -68,11 +68,11 @@ await game.janus7.ki.exportToOutbox({ mode: 'week' });
 {
   "version": "JANUS_EXPORT_V2",
   "meta": {
-    "version": "0.9.12.29",
+    "version": "0.9.12.43",
     "schemaVersion": "2",
     "exportedAt": "2026-03-20T14:00:00Z",
     "world": "punin-akademie",
-    "moduleVersion": "0.9.12.29",
+    "moduleVersion": "0.9.12.43",
     "stateVersion": "...",
     "exportMode": "week"
   },

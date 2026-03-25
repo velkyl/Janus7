@@ -1,6 +1,6 @@
-# JANUS7 – Nutzerhandbuch (v0.9.12.29)
+# JANUS7 – Nutzerhandbuch (v0.9.12.43)
 
-**Stand:** 2026-03-08  
+**Stand:** 2026-03-25  
 **Foundry:** v13+  
 **Zielgruppe:** Spielleitung (GM) und fortgeschrittene Nutzer (Debug/IO optional)
 

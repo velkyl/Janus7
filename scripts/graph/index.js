@@ -5,6 +5,8 @@ import { AcademyGraphProvider } from './providers/AcademyGraphProvider.js';
 import { StateGraphProvider } from './providers/StateGraphProvider.js';
 import { Dsa5IndexGraphProvider } from './providers/Dsa5IndexGraphProvider.js';
 import { JanusGraphCache } from '../../services/graph/JanusGraphCache.js';
+import { HOOKS } from '../../core/hooks/topics.js';
+import { cleanupEngineHookBucket, registerEngineHook } from '../../core/hooks/runtime.js';
 
 /**
  * Registers the knowledge graph service on the given engine.  The
@@ -17,6 +19,7 @@ import { JanusGraphCache } from '../../services/graph/JanusGraphCache.js';
  */
 export async function registerGraphService({ engine, core, academyData, dsa5Index, logger } = {}) {
   if (!engine || !core) return;
+  cleanupEngineHookBucket(engine, '_graphHookIds');
   const providers = [
     new AcademyGraphProvider({ academyData, logger }),
     new StateGraphProvider({ state: core.state, logger }),
@@ -115,16 +118,16 @@ export async function registerGraphService({ engine, core, academyData, dsa5Inde
   const markAcademyDirty = () => service.markDirty('academy');
   const markIndexDirty = () => service.markDirty('index');
 
-  Hooks.on('janus7.state.changed', markStateDirty);
-  Hooks.on('janus7.state.replaced', markStateDirty);
-  Hooks.on('janus7QuestStarted', markStateDirty);
-  Hooks.on('janus7QuestNodeChanged', markStateDirty);
-  Hooks.on('janus7QuestCompleted', markStateDirty);
-  Hooks.on('janus7KiImportApplied', markStateDirty);
+  registerEngineHook(engine, '_graphHookIds', HOOKS.STATE_CHANGED, markStateDirty);
+  registerEngineHook(engine, '_graphHookIds', HOOKS.STATE_REPLACED, markStateDirty);
+  registerEngineHook(engine, '_graphHookIds', HOOKS.QUEST_STARTED, markStateDirty);
+  registerEngineHook(engine, '_graphHookIds', HOOKS.QUEST_NODE_CHANGED, markStateDirty);
+  registerEngineHook(engine, '_graphHookIds', HOOKS.QUEST_COMPLETED, markStateDirty);
+  registerEngineHook(engine, '_graphHookIds', HOOKS.KI_IMPORT_APPLIED, markStateDirty);
 
   // Reserved integration hooks for future explicit reload paths.
-  Hooks.on('janus7.academy.data.reloaded', markAcademyDirty);
-  Hooks.on('janus7.dsa5.index.updated', markIndexDirty);
+  registerEngineHook(engine, '_graphHookIds', HOOKS.ACADEMY_DATA_RELOADED, markAcademyDirty);
+  registerEngineHook(engine, '_graphHookIds', HOOKS.DSA5_INDEX_UPDATED, markIndexDirty);
 
   logger?.info?.('[JANUS7] Graph service registered');
 }
