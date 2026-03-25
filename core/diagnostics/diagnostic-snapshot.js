@@ -8,7 +8,7 @@ export function buildDiagnosticSnapshot(engine) {
 
   return {
     moduleId: engine?.moduleId ?? 'janus7',
-    moduleVersion: game?.modules?.get?.('janus7')?.version ?? engine?.version ?? 'unknown',
+    moduleVersion: game?.modules?.get?.('Janus7')?.version ?? engine?.version ?? 'unknown',
     worldId: game?.world?.id ?? null,
     foundryVersion: game?.version ?? null,
     systemId: game?.system?.id ?? null,

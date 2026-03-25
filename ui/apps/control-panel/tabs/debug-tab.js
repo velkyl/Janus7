@@ -50,7 +50,7 @@ export function renderDebugTab(snap) {
   const disExport = can('exportState') ? '' : 'disabled';
   const disHarness = can('openTestHarness') ? '' : 'disabled';
 
-  const version = game?.modules?.get?.('janus7')?.version ?? 'unknown';
+  const version = game?.modules?.get?.('Janus7')?.version ?? 'unknown';
   const stateLoaded = !!state;
   const meta = state?.meta ?? {};
 

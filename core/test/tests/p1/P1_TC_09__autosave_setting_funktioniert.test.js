@@ -11,7 +11,7 @@ export default {
     if (!state) return { ok: false, summary: "State fehlt" };
 
     // Settings-Key für autoSave
-    const MODULE_ID = "janus7";
+    const MODULE_ID = "Janus7";
     const key = "autoSave";
     const has = game?.settings?.settings?.has?.(`${MODULE_ID}.${key}`);
     if (!has) return { ok: true, status: "SKIP", summary: "SKIP: Setting janus7.autoSave nicht registriert" };

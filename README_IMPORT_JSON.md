@@ -21,7 +21,7 @@ Dieses Paket baut auf deiner angereicherten `AkademieJSON.zip` auf und erweitert
 
 ## Einspielen
 1. Foundry beenden.
-2. Backup von `Data/modules/janus7/` anlegen.
+2. Backup von `Data/modules/Janus7/` anlegen.
 3. ZIP entpacken.
 4. Die enthaltenen Dateien **über** deinen bestehenden Modulordner kopieren.
 5. Foundry starten.

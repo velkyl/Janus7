@@ -21,7 +21,7 @@
  * - File list is embedded at build-time (generatedAt: 2026-01-21T20:05:48Z).
  */
 
-const MODULE_ID = "janus7";
+const MODULE_ID = "Janus7";
 const UI_FILES = [
   "ui/commands.js",
   "ui/control-panel/JanusControlPanelApp.js",

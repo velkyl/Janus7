@@ -15,7 +15,7 @@ export async function buildDiagnosticsView({ engine, state = {}, aiPreview = {},
     snapshotGeneratedAt: diagnosticSnapshot?.generatedAt ?? null,
     build: {
       moduleId: diagSections?.build?.moduleId ?? aiPreview.moduleId ?? 'janus7',
-      moduleVersion: diagSections?.build?.moduleVersion ?? aiPreview.moduleVersion ?? game?.modules?.get?.('janus7')?.version ?? '—',
+      moduleVersion: diagSections?.build?.moduleVersion ?? aiPreview.moduleVersion ?? game?.modules?.get?.('Janus7')?.version ?? '—',
       stateVersion: diagSections?.build?.stateVersion ?? state?.meta?.version ?? '—',
       stateSchemaVersion: diagSections?.build?.stateSchemaVersion ?? state?.meta?.schemaVersion ?? aiPreview.schemaVersion ?? '—',
       foundryVersion: diagSections?.build?.foundryVersion ?? game?.version ?? '—',
