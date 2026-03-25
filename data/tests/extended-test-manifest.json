@@ -719,6 +719,18 @@
       "hasRun": true
     },
     {
+      "id": "P3-TC-MOON-02",
+      "title": "Moon Bridge: Constants and Exports",
+      "importPath": "./tests/p3/P3_TC_MOON_02__moon_bridge_constants.test.js",
+      "suiteClass": "manual",
+      "kind": "manual",
+      "phase": 3,
+      "phases": [
+        3
+      ],
+      "hasRun": false
+    },
+    {
       "id": "P3-TC-SOCIAL-01",
       "title": "PersonaeDramatis Social Sync: socialContact.level ↔ JanusSocialEngine",
       "importPath": "./tests/p3/P3_TC_SOCIAL_01__personae_social_sync.test.js",
