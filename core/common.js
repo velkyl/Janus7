@@ -1,7 +1,7 @@
 /**
  * Gemeinsame Konstanten für JANUS7.
  */
-export const MODULE_ID = 'janus7';
+export const MODULE_ID = 'Janus7';
 export const MODULE_ABBREV = 'JANUS7';
 export const MODULE_TITLE = 'JANUS7 Engine';
 

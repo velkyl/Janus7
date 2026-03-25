@@ -11,7 +11,7 @@
  */
 
 (async () => {
-  const MODULE_ID = 'janus7';
+  const MODULE_ID = 'Janus7';
   
   // Helper: Test Framework
   const TestRunner = {

@@ -206,7 +206,7 @@ export class JanusControlPanelApp extends HandlebarsApplicationMixin(JanusBaseAp
     // ── AI Preview (Diagnostics) ─────────────────────────────────────────────
     const { aiPreview, aiPreviewJson } = buildAiPreviewContext({
       engine: e,
-      moduleVersion: game?.modules?.get?.('janus7')?.version ?? '?'
+      moduleVersion: game?.modules?.get?.('Janus7')?.version ?? '?'
     });
 
     // ── System ──────────────────────────────────────────────────────────────
@@ -224,7 +224,7 @@ export class JanusControlPanelApp extends HandlebarsApplicationMixin(JanusBaseAp
 
     return {
       ...ctx,
-      version: e?.version ?? game?.modules?.get?.('janus7')?.version ?? 'unknown',
+      version: e?.version ?? game?.modules?.get?.('Janus7')?.version ?? 'unknown',
       time, timeBar, slotRef, slotLabel, slotPos, slotPosLabel,
       current, today, todayEntries, slotResolution,
       directorSummary, directorRuntime, directorWorkflow, directorRunbook,

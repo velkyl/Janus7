@@ -1,7 +1,7 @@
 import { JANUS_TO_DSA5_CONDITION_MAP, DSA5_CONDITION_IDS } from '../../../../bridge/dsa5/conditions.js';
 
 export default {
-  id: 'P3-TC-15',
+  id: 'P3-TC-16',
   title: 'JANUS_TO_DSA5_CONDITION_MAP Contract',
   phases: [3],
   kind: 'auto',

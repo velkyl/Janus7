@@ -73,7 +73,7 @@ export class JanusKiImportService {
       const hinted = response?.sourceExportMeta?.moduleVersion ?? response?.sourceExportMeta?.version ?? null;
       if (hinted) {
         const current = (typeof game !== 'undefined' && game?.modules?.get)
-          ? (game.modules.get('janus7')?.version ?? null)
+          ? (game.modules.get('Janus7')?.version ?? null)
           : null;
         const stateV = this.state?.getPath?.('meta.version') ?? this.state?.getPath?.('meta.moduleVersion') ?? null;
         const effective = current ?? stateV ?? null;

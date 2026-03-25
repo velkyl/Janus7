@@ -113,7 +113,7 @@
 
   const html = `
     <h2>JANUS7 Phase 4 – Seed Verifier</h2>
-    <p><b>Version:</b> ${game.modules.get("janus7")?.version ?? "?"} | <b>Time:</b> ${now()}</p>
+    <p><b>Version:</b> ${game.modules.get("Janus7")?.version ?? "?"} | <b>Time:</b> ${now()}</p>
     <hr/>
     <div>${htmlLines.join("<br/>")}</div>
     <hr/>

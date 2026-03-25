@@ -97,6 +97,8 @@ export class JanusFolderService {
     this._logger = deps.logger ?? console;
     /** @type {Map<string,string>} */
     this._cache = new Map();
+    /** @type {Map<string,Promise<any>>} */
+    this._promises = new Map();
   }
 
   /**
@@ -131,35 +133,48 @@ export class JanusFolderService {
       return { folderId: this._cache.get(key), folderKey: key, type, path };
     }
 
-    if (!game.user?.isGM) {
-      throw new Error('Nur GM darf Folder anlegen.');
+    if (this._promises.has(key)) {
+      return this._promises.get(key);
     }
 
-    let parent = null;
-    for (const name of path) {
-      const parentId = parent?.id ?? null;
-      const existing = game.folders?.find(f =>
-        f.type === type &&
-        f.name === name &&
-        ((parentId && f.folder?.id === parentId) || (!parentId && !f.folder))
-      ) ?? null;
+    const promise = (async () => {
+      try {
+        if (!game.user?.isGM) {
+          throw new Error('Nur GM darf Folder anlegen.');
+        }
 
-      if (existing) {
-        parent = existing;
-        continue;
+        let parent = null;
+        for (const name of path) {
+          const parentId = parent?.id ?? null;
+          const existing = game.folders?.find(f =>
+            f.type === type &&
+            f.name === name &&
+            ((parentId && f.folder?.id === parentId) || (!parentId && !f.folder))
+          ) ?? null;
+
+          if (existing) {
+            parent = existing;
+            continue;
+          }
+
+          parent = await Folder.create({ name, type, folder: parentId });
+        }
+
+        const folderId = parent?.id;
+        if (!folderId) {
+          throw new Error(`Folder create failed for ${type}:${path.join(' / ')}`);
+        }
+
+        this._cache.set(key, folderId);
+        this._logger.debug?.(`[Folders] ensured ${key} → ${folderId}`);
+        return { folderId, folderKey: key, type, path };
+      } finally {
+        this._promises.delete(key);
       }
+    })();
 
-      parent = await Folder.create({ name, type, folder: parentId });
-    }
-
-    const folderId = parent?.id;
-    if (!folderId) {
-      throw new Error(`Folder create failed for ${type}:${path.join(' / ')}`);
-    }
-
-    this._cache.set(key, folderId);
-    this._logger.debug?.(`[Folders] ensured ${key} → ${folderId}`);
-    return { folderId, folderKey: key, type, path };
+    this._promises.set(key, promise);
+    return promise;
   }
 
   /**

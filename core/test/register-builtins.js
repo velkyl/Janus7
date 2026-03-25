@@ -55,12 +55,15 @@ export const BUILTIN_AUTO_MODULES = [
   './tests/p3/P3_TC_ADV_01__advancement_bridge.test.js',
   './tests/p3/P3_TC_BUFF_01__postroll_teacher_bonus.test.js',
   './tests/p3/P3_TC_FATE_01__fate_bridge.test.js',
+  './tests/p3/P3_TC_FATE_02__fate_bridge_edge_cases.test.js',
   './tests/p3/P3_TC_MOON_01__moon_bridge.test.js',
+  './tests/p3/P3_TC_MOON_02__moon_bridge_constants.test.js',
   './tests/p3/P3_TC_SOCIAL_01__personae_social_sync.test.js',
   './tests/p3/P3_TC_TIMED_01__timed_conditions.test.js',
   './tests/p3/P3_TRAD_TC_01__tradition_circle_mapping.test.js',
   './tests/p3/P3_TC_14__dsa5_resolver_contract.test.js',
-  './tests/p3/P3_TC_15__janus_to_dsa5_condition_map.test.js',
+  './tests/p3/P3_TC_15__dsa5_condition_bridge.test.js',
+  './tests/p3/P3_TC_16__janus_to_dsa5_condition_map.test.js',
 
   // Phase 4
   './tests/p4/P4_TC_01__calendar_progression.test.js',
@@ -128,6 +131,7 @@ export const BUILTIN_AUTO_MODULES = [
   './tests/p7/P7_TC_07__ki_patch_apply.test.js',
   './tests/p7/P7_TC_08__ki_preflight_invalid_version.test.js',
   './tests/p7/P7_TC_09__ki_preflight_valid_shape.test.js',
+  './tests/p7/P7_TC_10__ki_import_rejects_empty_patches.test.js',
   './tests/p7/P7_TC_A1__permission_enforced.test.js',
   './tests/p7/P7_TC_A2__ui_history_refresh_manual.test.js',
   './tests/p7/P7_TC_A3__export_uses_saveDataToFile.test.js',
@@ -185,6 +189,7 @@ export const BUILTIN_MANUAL_MODULES = [
   './tests/sec/SEC_TC_01__import_validiert_alle_felder.test.js',
   './tests/sec/SEC_TC_02__keine_script_injection_in_ui.test.js',
   './tests/sec/SEC_TC_03__keine_dsa5_actor_manipulation_ohne_berechtigung.test.js',
+  './tests/sec/SEC_TC_04__secure_randomness.test.js',
 ];
 
 export const BUILTIN_TEST_MODULES = [

@@ -131,7 +131,7 @@ function buildStatePanel(engine) {
       { label: 'Dirty', value: diagnostics?.stateStatus ?? diagnostics?.dirty ?? '—' }
     ],
     items: [
-      { label: 'Version', value: game?.modules?.get?.('janus7')?.version ?? '—' },
+      { label: 'Version', value: game?.modules?.get?.('Janus7')?.version ?? '—' },
       { label: 'Welt', value: game?.world?.title ?? game?.world?.id ?? '—' }
     ]
   };
