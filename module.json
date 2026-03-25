@@ -88,7 +88,7 @@
     }
   },
   "url": "https://github.com/velkyl/Janus7",
-  "manifest": "https://github.com/velkyl/Janus7/releases/latest/download/module.json",
+  "manifest": "https://raw.githubusercontent.com/velkyl/Janus7/main/module.json",
   "download": "https://github.com/velkyl/Janus7/releases/latest/download/janus7.zip",
   "readme": "https://github.com/velkyl/Janus7/blob/main/README.md",
   "changelog": "https://github.com/velkyl/Janus7/blob/main/CHANGELOG.md",
