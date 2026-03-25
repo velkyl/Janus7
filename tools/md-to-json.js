@@ -17,6 +17,80 @@ import fs from 'fs';
 import path from 'path';
 
 /**
+ * Parses markdown text into structured data.
+ * @param {string} text
+ * @returns {Array<Object>}
+ */
+function parseMarkdownContent(text) {
+  const lines = text.split('\n');
+  const sections = [];
+  let currentSection = { level: 0, title: 'Document', content: '', tables: [] };
+  let currentTable = null;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    // Headings
+    const headingMatch = trimmed.match(/^(#{1,6})\s+(.*)$/);
+    if (headingMatch) {
+      if (currentSection.content.trim() || currentSection.tables.length > 0 || currentSection.level > 0) {
+        currentSection.content = currentSection.content.trim();
+        sections.push(currentSection);
+      }
+      currentSection = {
+        level: headingMatch[1].length,
+        title: headingMatch[2].trim(),
+        content: '',
+        tables: []
+      };
+      currentTable = null;
+      continue;
+    }
+
+    // Tables
+    if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+      const isSeparator = /^\|[\s-|:]+\|$/.test(trimmed);
+      const cells = trimmed
+        .split('|')
+        .slice(1, -1)
+        .map(c => c.trim());
+
+      if (!currentTable) {
+        currentTable = { headers: cells, rows: [] };
+        currentSection.tables.push(currentTable);
+      } else if (!isSeparator) {
+        // If it's not a separator line, it's a row
+        const rowData = {};
+        currentTable.headers.forEach((header, index) => {
+          rowData[header] = cells[index] || '';
+        });
+        currentTable.rows.push(rowData);
+      }
+      continue;
+    }
+
+    // Normal text
+    // Reset table parsing if we hit an empty line or normal text
+    if (trimmed === '') {
+      currentTable = null;
+      continue;
+    }
+
+    currentTable = null;
+    currentSection.content += (currentSection.content ? '\n' : '') + trimmed;
+  }
+
+  // Push the last section
+  if (currentSection.content.trim() || currentSection.tables.length > 0 || currentSection.level > 0) {
+    currentSection.content = currentSection.content.trim();
+    sections.push(currentSection);
+  }
+
+  return sections;
+}
+
+/**
  * Sehr einfacher Stub-Parser: Liest eine Markdown-Datei und gibt eine
  * minimale JSON-Struktur zurück. In echten Projekten sollte hier eine
  * robuste Parser-Logik entstehen.
@@ -25,10 +99,11 @@ import path from 'path';
  */
 export function parseMarkdownCurriculum(mdPath) {
   const text = fs.readFileSync(mdPath, 'utf-8');
+
   return {
     source: path.basename(mdPath),
     length: text.length,
-    // TODO: Überschriften / Sections / Tabellen in strukturierte Daten überführen
+    sections: parseMarkdownContent(text)
   };
 }
 
