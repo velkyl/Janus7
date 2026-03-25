@@ -10,6 +10,16 @@ export default {
   title: 'Moon Bridge: Mondphasen lesen, Modifikatoren, Phasenwechsel-Hook',
   prio: 'P2',
   type: 'M',
+  kind: 'auto',
+
+  async run() {
+    const { NEW_MOON_INDEX, FULL_MOON_INDEX } = await import('../../../../bridge/dsa5/moon.js');
+    const ok = NEW_MOON_INDEX === 0 && FULL_MOON_INDEX === 4;
+    const summary = ok
+      ? `NEW_MOON_INDEX is ${NEW_MOON_INDEX}, FULL_MOON_INDEX is ${FULL_MOON_INDEX} (expected 0 and 4)`
+      : `FAIL: NEW_MOON_INDEX=${NEW_MOON_INDEX}, FULL_MOON_INDEX=${FULL_MOON_INDEX}`;
+    return { ok, summary };
+  },
 
   requires: [
     'DSA5-System aktiv',
