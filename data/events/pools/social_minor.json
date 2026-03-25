@@ -1,0 +1,46 @@
+[
+  {
+    "eventId": "E_MENTOR_HELP",
+    "pool": "social_minor",
+    "triggerExpr": "playerState.stress >= 5",
+    "title": "Mentor bietet Hilfe",
+    "description": "Dein Mentor bemerkt deinen Stress und bietet Unterstützung an.",
+    "highImpact": false,
+    "options": [
+      "OPT_MENTOR_ACCEPT",
+      "OPT_MENTOR_DECLINE"
+    ]
+  },
+  {
+    "eventId": "E_ORIOR_TUTORING_REQUEST",
+    "pool": "social_minor",
+    "triggerExpr": "week >= 1",
+    "title": "Orior bittet um Hilfe",
+    "description": "Ein Tutorium für schwächere Scholaren braucht Unterstützung. Gute Tat, Gelegenheit zur Profilierung oder beides?",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ORIOR_RIVAL_TENSION",
+    "pool": "social_minor",
+    "triggerExpr": "week >= 1",
+    "title": "Rivalität im Tutorium",
+    "description": "Nicht alle wollen, dass Orior schwächeren Schülern hilft. Kleine Sticheleien drohen das Tutorium zu vergiften.",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_DEBATE_INVITE",
+    "pool": "social_minor",
+    "triggerExpr": "week >= 3",
+    "title": "Einladung zur Debatte",
+    "description": "Orior und die Rohals Erben suchen Stimmen, Zuhörer oder Opfer für einen Abend voller akademischer Eitelkeit.",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_DEBATE_SCANDAL",
+    "pool": "social_minor",
+    "triggerExpr": "slotName == 'Abend'",
+    "title": "Die Debatte kippt",
+    "description": "Zwischen Rhetorik, Spott und persönlichen Seitenhieben wird aus einer Debatte fast ein Skandal.",
+    "highImpact": false
+  }
+]

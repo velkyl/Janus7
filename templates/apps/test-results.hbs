@@ -1,0 +1,109 @@
+<div class="janus7-page j7-test-harness">
+  {{#if running}}
+    <div class="j7-test-running">
+      <i class="fas fa-spinner fa-spin"></i>
+      <p>Tests werden ausgeführt…</p>
+    </div>
+  {{else if hasResults}}
+
+  <div class="j7-test-summary">
+    <div class="kpi total"><div class="kpi__label">Gesamt</div><div class="kpi__value">{{summary.total}}</div></div>
+    <div class="kpi active"><div class="kpi__label">Auto aktiv</div><div class="kpi__value">{{summary.autoActive}}</div></div>
+    <div class="kpi pass"><div class="kpi__label">PASS</div><div class="kpi__value">{{summary.pass}}</div></div>
+    <div class="kpi fail"><div class="kpi__label">FAIL</div><div class="kpi__value">{{summary.fail}}</div></div>
+    <div class="kpi error"><div class="kpi__label">ERROR</div><div class="kpi__value">{{summary.error}}</div></div>
+    <div class="kpi warn"><div class="kpi__label">Importfehler</div><div class="kpi__value">{{summary.importFailed}}</div></div>
+    <div class="kpi neutral"><div class="kpi__label">Manuell</div><div class="kpi__value">{{summary.manual}}</div></div>
+    <div class="kpi neutral"><div class="kpi__label">Katalog</div><div class="kpi__value">{{summary.catalogOnly}}</div></div>
+  </div>
+
+  <div class="j7-test-toolbar">
+    <div class="j7-btn-row">
+      <button type="button" class="j7-btn primary" data-action="rerun"><i class="fas fa-redo"></i> Erneut ausführen</button>
+      <button type="button" class="j7-btn" data-action="openGuidedManual"><i class="fas fa-route"></i> Guided Manual</button>
+      <button type="button" class="j7-btn" data-action="copyReport"><i class="fas fa-clipboard"></i> Report kopieren</button>
+      <button type="button" class="j7-btn" data-action="copyBugReport"><i class="fas fa-bug"></i> Bug Report kopieren</button>
+    </div>
+    <div class="j7-test-meta">
+      <span><strong>Version:</strong> {{summary.version}}</span>
+      <span><strong>Sichtbar:</strong> {{visibleCount}}</span>
+      {{#if generatedAt}}<span><strong>Zuletzt:</strong> {{generatedAt}}</span>{{/if}}
+    </div>
+  </div>
+
+  <div class="j7-test-filters">
+    <label>Phase
+      <select name="phaseFilter">
+        {{#each phaseOptions}}
+          <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+        {{/each}}
+      </select>
+    </label>
+    <label>Klasse
+      <select name="suiteFilter">
+        {{#each suiteOptions}}
+          <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+        {{/each}}
+      </select>
+    </label>
+    <label>Status
+      <select name="statusFilter">
+        {{#each statusOptions}}
+          <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+        {{/each}}
+      </select>
+    </label>
+    <button type="button" class="j7-btn" data-action="applyFilters"><i class="fas fa-filter"></i> Anwenden</button>
+    <button type="button" class="j7-btn" data-action="resetFilters"><i class="fas fa-eraser"></i> Reset</button>
+  </div>
+
+  <div class="j7-test-suite-grid">
+    {{#each suiteMetrics}}
+      <div class="j7-suite-card">
+        <div class="j7-suite-card__title">{{suiteClass}}</div>
+        <div class="j7-suite-card__body">
+          <span>Gesamt: {{total}}</span>
+          <span>Ausgeführt: {{executed}}</span>
+          <span>PASS: {{pass}}</span>
+          <span>FAIL: {{fail}}</span>
+          <span>ERROR: {{error}}</span>
+          <span>MANUAL: {{manual}}</span>
+          <span>CATALOG: {{catalogOnly}}</span>
+          <span>IMPORT: {{importFailed}}</span>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+
+  {{#each groups}}
+    <div class="j7-test-group">
+      <div class="j7-test-group-header" data-action="toggleGroup" data-group="{{groupName}}">
+        <span>{{groupName}}</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="j7-test-group-body">
+        {{#each tests}}
+          <div class="j7-test-row {{statusClass}}">
+            <span class="j7-test-status">{{statusIcon}}</span>
+            <div class="j7-test-main">
+              <div class="j7-test-title"><code>{{id}}</code> {{name}}</div>
+              <div class="j7-test-sub">{{statusLabel}} · {{suiteClass}} · {{kind}} · {{phaseText}} · {{msText}}</div>
+              {{#if detail}}<div class="j7-test-detail">{{detail}}</div>{{/if}}
+              {{#if sourceFile}}<div class="j7-test-detail">Quelle: <code>{{sourceFile}}</code></div>{{/if}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  {{/each}}
+
+  {{else}}
+    <div class="j7-test-idle">
+      <i class="fas fa-vial"></i>
+      <p>Keine Testergebnisse vorhanden.</p>
+      <button type="button" class="j7-btn primary" data-action="rerun">
+        <i class="fas fa-play"></i> Tests starten
+      </button>
+    </div>
+  {{/if}}
+</div>

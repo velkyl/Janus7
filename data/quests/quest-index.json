@@ -1,0 +1,133 @@
+[
+  {
+    "questId": "Q_DEMO_LIBRARY",
+    "title": "Bibliotheksgeheimnis",
+    "category": "uncategorized",
+    "tags": [
+      "demo",
+      "mystery"
+    ]
+  },
+  {
+    "questId": "Q_KOBOLD_AWAKENING",
+    "title": "Der Puniner Kobold I – Das verbotene Lachen",
+    "category": "kobold",
+    "tags": [
+      "kobold",
+      "mystery",
+      "elevium",
+      "library"
+    ]
+  },
+  {
+    "questId": "Q_KOBOLD_REBINDING",
+    "title": "Der Puniner Kobold II – Der feenhafte Bann",
+    "category": "kobold",
+    "tags": [
+      "kobold",
+      "novizium",
+      "feen",
+      "ritual"
+    ]
+  },
+  {
+    "questId": "Q_LIBRARY_CATALOGUE",
+    "title": "Verloren im Katalog",
+    "category": "uncategorized",
+    "tags": [
+      "library",
+      "research",
+      "minor"
+    ]
+  },
+  {
+    "questId": "Q_ALCHEMY_MISSING_REAGENTS",
+    "title": "Das verschwundene Reagenz",
+    "category": "uncategorized",
+    "tags": [
+      "alchemy",
+      "minor",
+      "mystery"
+    ]
+  },
+  {
+    "questId": "Q_ORIOR_TUTORIUM",
+    "title": "Tutorium des Orior",
+    "category": "social",
+    "tags": [
+      "social",
+      "orior",
+      "students"
+    ]
+  },
+  {
+    "questId": "Q_CODEX_DISCIPLINE_CASE",
+    "title": "Fallbeispiel Nazir",
+    "category": "discipline",
+    "tags": [
+      "discipline",
+      "gildenrecht",
+      "minor"
+    ]
+  },
+  {
+    "questId": "Q_NORDTURM_LIGHTS",
+    "title": "Das Flackern im Nordturm",
+    "category": "study",
+    "tags": [
+      "nacht",
+      "geheimnis",
+      "studium"
+    ]
+  },
+  {
+    "questId": "Q_PRODIGIOSIS_INITIATION",
+    "title": "Die stille Einladung",
+    "category": "study",
+    "tags": [
+      "societas_prodigiosis",
+      "library",
+      "forbidden"
+    ]
+  },
+  {
+    "questId": "Q_THAUMATOTURRIS_BINDING",
+    "title": "Vor der Bindung",
+    "category": "study",
+    "tags": [
+      "artefaktmagie",
+      "stabbindung",
+      "studium"
+    ]
+  },
+  {
+    "questId": "Q_CULINA_FAVOR",
+    "title": "Eine Schuld bei Sorscha",
+    "category": "social",
+    "tags": [
+      "mensa",
+      "social",
+      "minor"
+    ]
+  },
+  {
+    "questId": "Q_FAMILIAR_FUGITIVE",
+    "title": "Das entlaufene Vertrautentier",
+    "category": "uncategorized",
+    "tags": [
+      "familiar",
+      "garden",
+      "minor"
+    ]
+  },
+  {
+    "questId": "Q_ORIOR_VS_ROHAL",
+    "title": "Debatte um die Zukunft",
+    "category": "social",
+    "tags": [
+      "social",
+      "zirkel",
+      "debate"
+    ]
+  }
+]

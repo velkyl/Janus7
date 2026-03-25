@@ -1,0 +1,149 @@
+{{!-- templates/apps/config-panel.hbs --}}
+<form class="janus7-page janus7-config-panel">
+
+  {{#if notGM}}
+    <div class="janus7-loading">
+      <h3><i class="fas fa-lock"></i> Kein Zugriff</h3>
+      <p>Nur der GM kann die Konfiguration bearbeiten.</p>
+    </div>
+  {{else if notReady}}
+    <div class="janus7-loading">
+      <h3><i class="fas fa-spinner fa-spin"></i> Engine nicht bereit</h3>
+      <p>JANUS7 Core ist noch nicht initialisiert.</p>
+    </div>
+  {{else}}
+
+  {{!-- ================================================================
+       SEKTION 1: SCENE-MAPPINGS
+       ================================================================ --}}
+  <section class="janus7-card">
+    <header class="janus7-card__header">
+      <h3 class="janus7-title"><i class="fas fa-map-marked-alt"></i> Scene-Mappings</h3>
+      <span class="janus7-muted">Weist logische Keys (z.B. "beamer", "mainHall") einer Foundry-Szene zu.</span>
+    </header>
+
+    <div class="janus7-config-grid" data-scene-rows>
+      {{#each sceneMappings}}
+      <div class="janus7-config-row" data-scene-row>
+        <input type="text"
+               class="janus7-input"
+               data-scene-key
+               value="{{this.key}}"
+               placeholder="key (z.B. beamer)" />
+        <input type="text"
+               class="janus7-input janus7-input--uuid"
+               data-scene-uuid
+               value="{{this.uuid}}"
+               placeholder="Scene UUID" />
+        <select class="janus7-select janus7-select--scene" data-scene-picker>
+          <option value="">— Szene wählen —</option>
+          {{#each ../scenes}}
+          <option value="{{this.uuid}}" {{#eq this.uuid ../uuid}}selected{{/eq}}>{{this.name}}</option>
+          {{/each}}
+        </select>
+        <button type="button"
+                class="janus-btn janus-btn--icon janus-btn--danger"
+                data-action="removeSceneMap"
+                title="Mapping entfernen">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+      {{/each}}
+
+      {{#unless sceneMappings.length}}
+      <p class="janus7-muted janus7-empty">Noch keine Mappings – "+ Zeile" klicken.</p>
+      {{/unless}}
+    </div>
+
+    <footer class="janus7-card__footer">
+      <button type="button" class="janus-btn janus-btn--secondary" data-action="addSceneMap">
+        <i class="fas fa-plus"></i> Zeile hinzufügen
+      </button>
+      <button type="button" class="janus-btn janus-btn--primary" data-action="saveSceneMaps">
+        <i class="fas fa-save"></i> Mappings speichern
+      </button>
+    </footer>
+  </section>
+
+  {{!-- ================================================================
+       SEKTION 2: FEATURE-FLAGS
+       ================================================================ --}}
+  <section class="janus7-card">
+    <header class="janus7-card__header">
+      <h3 class="janus7-title"><i class="fas fa-toggle-on"></i> Feature-Flags</h3>
+      <span class="janus7-muted">Optionale Subsysteme aktivieren/deaktivieren. Wirkt ohne Reload.</span>
+    </header>
+
+    <div class="janus7-flags-grid">
+      <label class="janus7-flag-row">
+        <input type="checkbox"
+               data-flag="atmosphere"
+               {{#if features.atmosphere}}checked{{/if}} />
+        <span class="janus7-flag-label">
+          <i class="fas fa-music"></i> Atmosphere-Subsystem
+        </span>
+        <span class="janus7-muted">Mood-Switching, Auto-Playlists</span>
+      </label>
+
+      <label class="janus7-flag-row">
+        <input type="checkbox"
+               data-flag="autoMood"
+               {{#if features.autoMood}}checked{{/if}} />
+        <span class="janus7-flag-label">
+          <i class="fas fa-robot"></i> Auto-Mood
+        </span>
+        <span class="janus7-muted">Mood automatisch nach Kalender/Szene wechseln</span>
+      </label>
+
+      <label class="janus7-flag-row">
+        <input type="checkbox"
+               data-flag="beamer"
+               {{#if features.beamer}}checked{{/if}} />
+        <span class="janus7-flag-label">
+          <i class="fas fa-tv"></i> Beamer-/Second-Screen-Modus
+        </span>
+        <span class="janus7-muted">Dedizierte Ansicht für Projektion</span>
+      </label>
+
+      <label class="janus7-flag-row">
+        <input type="checkbox"
+               data-flag="academySimulation"
+               {{#if features.academySimulation}}checked{{/if}} />
+        <span class="janus7-flag-label">
+          <i class="fas fa-graduation-cap"></i> Akademie-Simulation
+        </span>
+        <span class="janus7-muted">Kalender, Lektionen, Scoring, Social aktiv</span>
+      </label>
+    </div>
+
+    <footer class="janus7-card__footer">
+      <button type="button" class="janus-btn janus-btn--primary" data-action="saveFeatureFlags">
+        <i class="fas fa-save"></i> Feature-Flags speichern
+      </button>
+    </footer>
+  </section>
+
+  {{!-- ================================================================
+       SEKTION 3: KILL-SWITCHES (readonly – Verweis auf Foundry-Settings)
+       ================================================================ --}}
+  <section class="janus7-card">
+    <header class="janus7-card__header">
+      <h3 class="janus7-title"><i class="fas fa-power-off"></i> Subsystem-Kill-Switches</h3>
+      <span class="janus7-muted">Bearbeitung über <em>Einstellungen → Module → JANUS7</em></span>
+    </header>
+
+    <div class="janus7-flags-grid janus7-flags-grid--readonly">
+      {{#each killSwitches}}
+      <div class="janus7-flag-row janus7-flag-row--readonly">
+        <i class="fas {{#if this}}fa-check-circle janus7-ok{{else}}fa-times-circle janus7-warn{{/if}}"></i>
+        <span class="janus7-flag-label">{{@key}}</span>
+        <span class="janus7-badge {{#if this}}janus7-badge--on{{else}}janus7-badge--off{{/if}}">
+          {{#if this}}aktiv{{else}}deaktiviert{{/if}}
+        </span>
+      </div>
+      {{/each}}
+    </div>
+  </section>
+
+  {{/if}}
+</form>

@@ -1,0 +1,50 @@
+[
+  {
+    "eventId": "E_KOBOLD_GERUECHT",
+    "pool": "kobold_arc",
+    "triggerExpr": "week >= 2",
+    "title": "Gerüchte im Jahrgang",
+    "description": "Ein älterer Schüler schwört, im kleinsten Turm sei einst ein echter Kobold gebunden worden. Prüfungsdruck macht dumme Ideen plötzlich verführerisch.",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_KOBOLD_AWAKENING",
+    "pool": "kobold_arc",
+    "triggerExpr": "week >= 2",
+    "title": "Das verbotene Lachen",
+    "description": "Zwischen Staub, Regalen und einem halb verstandenen Ritual antwortet etwas mit einem Kichern, das nicht in den Raum passt.",
+    "highImpact": true
+  },
+  {
+    "eventId": "E_KOBOLD_FIRST_MEETING",
+    "pool": "kobold_arc",
+    "triggerExpr": "week >= 2",
+    "title": "Erste Begegnung mit Phexifax",
+    "description": "Der Kobold zeigt sich nur halb, spricht in Reimen und macht klar, dass Regeln gebrochen wurden.",
+    "highImpact": true
+  },
+  {
+    "eventId": "E_KOBOLD_RETURN",
+    "pool": "kobold_arc",
+    "triggerExpr": "week >= 1",
+    "title": "Die Feendomäne kehrt zurück",
+    "description": "Bei ODEM- und FLIM-FLAM-Übungen verhält sich die Magie wie beleidigt. Das alte Problem ist zurück.",
+    "highImpact": true
+  },
+  {
+    "eventId": "E_LAIODAN_OFFERS_HELP",
+    "pool": "kobold_arc",
+    "triggerExpr": "week >= 1",
+    "title": "Laiodan weiß mehr, als er zugibt",
+    "description": "Der ältere Novize Laiodan bietet Hilfe an, lässt aber erkennen, dass er dem kleinsten Turm nicht zum ersten Mal zu nah kommt.",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_KOBOLD_REBIND_RITUAL",
+    "pool": "kobold_arc",
+    "triggerExpr": "week >= 1",
+    "title": "Der feenhafte Bann",
+    "description": "Der Kobold akzeptiert keine Gewaltlogik. Nur Vertrag, Humor und korrekt formulierte Gaben bringen Ruhe.",
+    "highImpact": true
+  }
+]

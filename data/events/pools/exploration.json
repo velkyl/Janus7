@@ -1,0 +1,14 @@
+[
+  {
+    "eventId": "E_LIBRARY_DISCOVER",
+    "pool": "exploration",
+    "triggerExpr": "week >= 2",
+    "title": "Ein geheimnisvolles Buch",
+    "description": "Du entdeckst ein altes Buch mit seltsamen Runen.",
+    "highImpact": false,
+    "options": [
+      "OPT_LIB_INVESTIGATE",
+      "OPT_LIB_IGNORE"
+    ]
+  }
+]

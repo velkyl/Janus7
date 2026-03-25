@@ -1,0 +1,38 @@
+<div class="janus7-page janus7-ki-backup-manager">
+  <header class="janus7-toolbar">
+    <div class="janus7-toolbar__left">
+      <h2 class="janus7-title"><i class="fas fa-life-ring"></i> KI Backup Manager</h2>
+      <span class="janus7-muted">{{backupCount}} Backup(s)</span>
+    </div>
+    <div class="janus7-toolbar__right">
+      <button type="button" class="janus-btn" data-action="refresh"><i class="fas fa-sync"></i> Refresh</button>
+      <button type="button" class="janus-btn janus-btn--highlight" data-action="openKiRoundtrip"><i class="fas fa-brain"></i> KI Roundtrip</button>
+    </div>
+  </header>
+
+  {{#unless isGM}}
+    <div class="j7-backdrop j7-warn-banner"><i class="fas fa-exclamation-triangle"></i> Nur der GM kann Backups verwalten.</div>
+  {{/unless}}
+
+  <section class="j7-panel">
+    <h3><i class="fas fa-database"></i> Verfügbare Backups</h3>
+    {{#if backups.length}}
+      <div class="j7-backup-list">
+        {{#each backups as |item|}}
+          <article class="j7-backup-row">
+            <div>
+              <strong>{{item.name}}</strong><br>
+              <span class="j7-text-dim">{{item.fileRef}}</span>
+            </div>
+            <div class="j7-backup-row__actions">
+              <button type="button" class="janus-btn small" data-action="copyRef" data-file-ref="{{item.fileRef}}"><i class="fas fa-copy"></i> Ref</button>
+              <button type="button" class="janus-btn small" data-action="restoreBackup" data-file-ref="{{item.fileRef}}"><i class="fas fa-rotate-left"></i> Restore</button>
+            </div>
+          </article>
+        {{/each}}
+      </div>
+    {{else}}
+      <p class="j7-text-dim">Noch keine Backups vorhanden. Der Ordner wird jetzt automatisch vorbereitet; das erste echte Backup entsteht beim nächsten KI-Import.</p>
+    {{/if}}
+  </section>
+</div>

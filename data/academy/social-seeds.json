@@ -1,0 +1,299 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "schema": "janus7:academy:social-seeds:v1",
+    "count": 29
+  },
+  "relationships": [
+    {
+      "fromId": "NPC_SIRDON_KOSMAAR",
+      "toId": "NPC_JIRDAN_FELENIUS",
+      "attitude": 22,
+      "tags": [
+        "faculty",
+        "trust"
+      ],
+      "note": "Leitungsduo mit gewachsener Kollegialität."
+    },
+    {
+      "fromId": "NPC_JIRDAN_FELENIUS",
+      "toId": "NPC_SIRDON_KOSMAAR",
+      "attitude": 18,
+      "tags": [
+        "faculty",
+        "respect"
+      ],
+      "note": "Felenius respektiert Kosmaars Autorität."
+    },
+    {
+      "fromId": "NPC_SIRDON_KOSMAAR",
+      "toId": "NPC_KOROBAR_SYLESIUS",
+      "attitude": 6,
+      "tags": [
+        "faculty",
+        "watch"
+      ],
+      "note": "Kosmaar beobachtet Korobar aufmerksam."
+    },
+    {
+      "fromId": "NPC_KOROBAR_SYLESIUS",
+      "toId": "NPC_SIRDON_KOSMAAR",
+      "attitude": 10,
+      "tags": [
+        "faculty",
+        "respect"
+      ],
+      "note": "Korobar wahrt professionelle Distanz."
+    },
+    {
+      "fromId": "NPC_KOROBAR_SYLESIUS",
+      "toId": "NPC_MAFALDA_VON_NEERSAND",
+      "attitude": 35,
+      "tags": [
+        "tragic",
+        "history"
+      ],
+      "note": "Ehemalige Brieffreundschaft und unausgesprochene Gefühle."
+    },
+    {
+      "fromId": "NPC_MAFALDA_VON_NEERSAND",
+      "toId": "NPC_KOROBAR_SYLESIUS",
+      "attitude": 42,
+      "tags": [
+        "tragic",
+        "history"
+      ],
+      "note": "Mafalda vertraute Korobar früh."
+    },
+    {
+      "fromId": "NPC_MAFALDA_VON_NEERSAND",
+      "toId": "NPC_IRIAN_DAMARTIAN",
+      "attitude": 28,
+      "tags": [
+        "mentor",
+        "care"
+      ],
+      "note": "Mafalda förderte Irian als Außenseiter."
+    },
+    {
+      "fromId": "NPC_IRIAN_DAMARTIAN",
+      "toId": "NPC_MAFALDA_VON_NEERSAND",
+      "attitude": 31,
+      "tags": [
+        "mentor",
+        "gratitude"
+      ],
+      "note": "Irian empfand echtes Vertrauen."
+    },
+    {
+      "fromId": "NPC_IRIAN_DAMARTIAN",
+      "toId": "NPC_ELRIKA_REBENLIEB",
+      "attitude": 12,
+      "tags": [
+        "students",
+        "ally"
+      ],
+      "note": "Zweckgemeinschaft mit echtem Potenzial."
+    },
+    {
+      "fromId": "NPC_ELRIKA_REBENLIEB",
+      "toId": "NPC_IRIAN_DAMARTIAN",
+      "attitude": 18,
+      "tags": [
+        "students",
+        "ally"
+      ],
+      "note": "Elrika hält mehr von Irian als sie zugibt."
+    },
+    {
+      "fromId": "NPC_IRIAN_DAMARTIAN",
+      "toId": "NPC_SEQUIN",
+      "attitude": -34,
+      "tags": [
+        "students",
+        "rivalry"
+      ],
+      "note": "Offene Rivalität im Jahrgang."
+    },
+    {
+      "fromId": "NPC_SEQUIN",
+      "toId": "NPC_IRIAN_DAMARTIAN",
+      "attitude": -41,
+      "tags": [
+        "students",
+        "rivalry"
+      ],
+      "note": "Sequin verachtet Irians Unberechenbarkeit."
+    },
+    {
+      "fromId": "NPC_SEQUIN",
+      "toId": "NPC_ELRIKA_REBENLIEB",
+      "attitude": -16,
+      "tags": [
+        "students",
+        "jealousy"
+      ],
+      "note": "Elrikas Talent reizt Sequin."
+    },
+    {
+      "fromId": "NPC_ELRIKA_REBENLIEB",
+      "toId": "NPC_SEQUIN",
+      "attitude": -9,
+      "tags": [
+        "students",
+        "tension"
+      ],
+      "note": "Elrika bleibt höflich, aber reserviert."
+    },
+    {
+      "fromId": "NPC_QUETZEL_HALMSTAEDT",
+      "toId": "NPC_SIRDON_KOSMAAR",
+      "attitude": 14,
+      "tags": [
+        "staff",
+        "duty"
+      ],
+      "note": "Quetzel nimmt Befehle der Spektabilität ernst."
+    },
+    {
+      "fromId": "NPC_HJALGAR_EISENBART",
+      "toId": "NPC_SIRDON_KOSMAAR",
+      "attitude": 17,
+      "tags": [
+        "staff",
+        "respect"
+      ],
+      "note": "Zuverlässige Zusammenarbeit im Alltag."
+    },
+    {
+      "fromId": "NPC_ROWENA_SILBERFEDER",
+      "toId": "NPC_KOROBAR_SYLESIUS",
+      "attitude": 8,
+      "tags": [
+        "library",
+        "faculty"
+      ],
+      "note": "Pragmatische Arbeitsbeziehung."
+    },
+    {
+      "fromId": "NPC_CERYLIA_VON_SEBENWIND",
+      "toId": "NPC_SIRDON_KOSMAAR",
+      "attitude": 21,
+      "tags": [
+        "faculty",
+        "respect"
+      ],
+      "note": "Cerylia schätzt Disziplin und Methode."
+    },
+    {
+      "fromId": "NPC_SIRDON_KOSMAAR",
+      "toId": "NPC_CERYLIA_VON_SEBENWIND",
+      "attitude": 19,
+      "tags": [
+        "faculty",
+        "respect"
+      ],
+      "note": "Kosmaar hält Cerylia für verlässlich."
+    },
+    {
+      "fromId": "NPC_RODORIM_STERNENSTERN",
+      "toId": "NPC_AURIW_STURMFELS",
+      "attitude": 11,
+      "tags": [
+        "faculty",
+        "academic"
+      ],
+      "note": "Gemeinsame Fachgespräche über Sphären und Sterne."
+    },
+    {
+      "fromId": "NPC_AURIW_STURMFELS",
+      "toId": "NPC_RODORIM_STERNENSTERN",
+      "attitude": 9,
+      "tags": [
+        "faculty",
+        "academic"
+      ],
+      "note": "Kollegialer Austausch mit leichter Skepsis."
+    },
+    {
+      "fromId": "NPC_NAZIR_RAGAZA",
+      "toId": "NPC_DRACON_STURMFELS",
+      "attitude": 7,
+      "tags": [
+        "faculty",
+        "combat"
+      ],
+      "note": "Geteilte Praxisnähe im Unterricht."
+    },
+    {
+      "fromId": "NPC_MEDICA_JORINDE",
+      "toId": "NPC_ELRIKA_REBENLIEB",
+      "attitude": 13,
+      "tags": [
+        "mentor",
+        "care"
+      ],
+      "note": "Jorinde achtet auf Elrikas Zustand."
+    },
+    {
+      "fromId": "NPC_RAHJANDREA_YALLIMON",
+      "toId": "NPC_SEQUIN",
+      "attitude": 15,
+      "tags": [
+        "mentor",
+        "favor"
+      ],
+      "note": "Sequin sucht aktiv ihre Anerkennung."
+    },
+    {
+      "fromId": "NPC_TALUSA_NI_PUNIN",
+      "toId": "NPC_IRIAN_DAMARTIAN",
+      "attitude": -8,
+      "tags": [
+        "faculty",
+        "skeptic"
+      ],
+      "note": "Talusa misstraut Irians Impulsivität."
+    },
+    {
+      "fromId": "NPC_FIRUNWIN_WULFINGEN",
+      "toId": "NPC_IRIAN_DAMARTIAN",
+      "attitude": 6,
+      "tags": [
+        "faculty",
+        "potential"
+      ],
+      "note": "Sieht in Irian ungeschliffenes Potenzial."
+    },
+    {
+      "fromId": "NPC_KOROBAR_SYLESIUS",
+      "toId": "NPC_IRIAN_DAMARTIAN",
+      "attitude": 24,
+      "tags": [
+        "mentor",
+        "plot"
+      ],
+      "note": "Korobar will Irian vor Schlimmerem bewahren."
+    },
+    {
+      "fromId": "NPC_IRIAN_DAMARTIAN",
+      "toId": "NPC_KOROBAR_SYLESIUS",
+      "attitude": 14,
+      "tags": [
+        "mentor",
+        "trust"
+      ],
+      "note": "Irian erkennt Korobars Ernsthaftigkeit."
+    },
+    {
+      "fromId": "NPC_JIRDAN_FELENIUS",
+      "toId": "NPC_KOROBAR_SYLESIUS",
+      "attitude": 5,
+      "tags": [
+        "faculty",
+        "neutral"
+      ],
+      "note": "Verhaltene administrative Kooperation."
+    }
+  ]
+}

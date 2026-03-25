@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Akademie-Ereignisse (Feste, besondere Ereignisse)"
+  },
+  "events": [
+    {
+      "id": "EVT_SCHOOL_FEST_01",
+      "name": "Akademiefest des 1. Jahres",
+      "type": "social",
+      "tags": [
+        "feier",
+        "schüler"
+      ],
+      "summary": "Ein Fest zu Ehren der neuen Elevi.",
+      "locationId": "LOC_CLASSROOM_THEORY_EAST",
+      "relatedStoryThreads": [
+        "THREAD_ELEVES_INTRO"
+      ],
+      "calendarRefs": [
+        {
+          "year": 1,
+          "trimester": 1,
+          "week": 4,
+          "day": "Firunstag",
+          "phase": "Abend"
+        }
+      ]
+    },
+    {
+      "id": "E_SLINK_KOSMAAR_01",
+      "name": "Kosmaar vertraut ein erstes Geheimnis an",
+      "type": "social",
+      "tags": [
+        "social-link",
+        "mentor"
+      ],
+      "summary": "Ein erstes vertrauliches Gespräch mit Sirdon Kosmaar in der Bibliothek.",
+      "locationId": "LOC_HAUPTBIBLIOTHEK_3_EBENEN"
+    },
+    {
+      "id": "E_SLINK_KOSMAAR_02",
+      "name": "Kosmaars Schutzversprechen",
+      "type": "social",
+      "tags": [
+        "social-link",
+        "mentor"
+      ],
+      "summary": "Kosmaar gewährt Schutz und privilegierten Zugang zu verborgenem Wissen.",
+      "locationId": "LOC_HAUPTBIBLIOTHEK_3_EBENEN"
+    },
+    {
+      "id": "E_SLINK_FELENIUS_01",
+      "name": "Felenius fordert Mut",
+      "type": "social",
+      "tags": [
+        "social-link",
+        "rival"
+      ],
+      "summary": "Jirdan Felenius testet den Mut der Elevi in einem angespannten Gespräch.",
+      "locationId": "LOC_PRAKTISCHER_UEBUNGSRAUM_KAMPFZAUBER"
+    },
+    {
+      "id": "E_SLINK_FELENIUS_02",
+      "name": "Felenius gibt eine Empfehlung",
+      "type": "social",
+      "tags": [
+        "social-link",
+        "rival"
+      ],
+      "summary": "Nach bestandener Probe öffnet Felenius eine Tür zu weiterem Einfluss.",
+      "locationId": "LOC_PRAKTISCHER_UEBUNGSRAUM_KAMPFZAUBER"
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+{{!-- templates/apps/sync-panel.hbs --}}
+<div class="janus7-sync-panel-root">
+
+  {{#if notGM}}
+    <div class="janus7-loading"><h3><i class="fas fa-lock"></i> Nur GM</h3></div>
+  {{else if notReady}}
+    <div class="janus7-loading"><h3><i class="fas fa-spinner fa-spin"></i> Engine nicht bereit</h3></div>
+  {{else}}
+
+  {{!-- Tab-Leiste ---------------------------------------------------------- --}}
+  <nav class="janus7-sync-tabs">
+    {{#each tabs}}
+    <button class="janus7-sync-tab {{#eq this.key ../activeTab}}active{{/eq}}"
+            data-action="switchTab"
+            data-tab="{{this.key}}">
+      <i class="fas {{this.icon}}"></i>
+      {{this.label}}
+    </button>
+    {{/each}}
+  </nav>
+
+  {{!-- Stats-Leiste --------------------------------------------------------- --}}
+  <div class="janus7-sync-stats">
+    <span class="j7-stat j7-stat--ok">
+      <i class="fas fa-check-circle"></i> {{counts.linked}} verknüpft
+    </span>
+    <span class="j7-stat j7-stat--warn">
+      <i class="fas fa-exclamation-circle"></i> {{counts.found}} per Name
+    </span>
+    <span class="j7-stat j7-stat--compendium">
+      <i class="fas fa-book-open"></i> {{counts.compendium}} in Bibliothek
+    </span>
+    <span class="j7-stat j7-stat--error">
+      <i class="fas fa-times-circle"></i> {{counts.missing}} fehlt
+    </span>
+    {{#if counts.broken}}
+    <span class="j7-stat j7-stat--broken">
+      <i class="fas fa-unlink"></i> {{counts.broken}} defekt
+    </span>
+    {{/if}}
+    <div class="janus7-sync-stats__actions">
+      {{#if counts.compendium}}
+      <button type="button" class="janus-btn janus-btn--compendium" data-action="importAllCompendium">
+        <i class="fas fa-cloud-download-alt"></i> Alle aus Bibliothek importieren ({{counts.compendium}})
+      </button>
+      {{/if}}
+      {{#if counts.missing}}
+      <button type="button" class="janus-btn janus-btn--primary" data-action="syncAll">
+        <i class="fas fa-magic"></i> Alle fehlenden anlegen ({{counts.missing}})
+      </button>
+      {{/if}}
+      <button type="button" class="janus-btn janus-btn--secondary" data-action="rescan">
+        <i class="fas fa-sync"></i> Neu prüfen
+      </button>
+    </div>
+  </div>
+
+  {{!-- Tabelle -------------------------------------------------------------- --}}
+  {{#if scanning}}
+    <div class="janus7-loading">
+      <i class="fas fa-spinner fa-spin"></i> Prüfe Foundry-Weltbestand…
+    </div>
+  {{else if report.length}}
+
+  <div class="janus7-sync-table-wrap">
+    <table class="janus7-sync-table">
+      <thead>
+        <tr>
+          <th class="j7-th-icon"></th>
+          <th>JANUS7-ID</th>
+          <th>Name</th>
+          <th>Foundry-Name</th>
+          <th>Status</th>
+          <th class="j7-th-actions">Aktionen</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each report}}
+        <tr class="janus7-sync-row janus7-sync-row--{{this.status}}"
+            data-janus-id="{{this.id}}"
+            {{#if this.uuid}}data-foundry-uuid="{{this.uuid}}"{{/if}}
+            {{#unless (eq this.status "linked")}}data-droppable="true"{{/unless}}
+            {{#if (eq this.status "linked")}}
+              data-foundry-type="{{../activeTab}}"
+              title="Drag auf Canvas/Sidebar"
+            {{/if}}>
+
+          {{!-- Status-Icon --}}
+          <td class="janus7-sync-icon">
+            {{#if (eq this.status "linked")}}
+              <i class="fas fa-check-circle janus7-ok" title="Verknüpft"></i>
+            {{else if (eq this.status "found-by-name")}}
+              <i class="fas fa-exclamation-circle janus7-warn" title="Per Name gefunden – UUID fehlt noch"></i>
+            {{else if (eq this.status "broken")}}
+              <i class="fas fa-unlink janus7-broken" title="UUID defekt – Entität gelöscht?"></i>
+            {{else if (eq this.status "found-in-compendium")}}
+              <i class="fas fa-book-open janus7-compendium" title="In Bibliothek gefunden – noch nicht importiert"></i>
+            {{else}}
+              <i class="fas fa-times-circle janus7-error" title="Nicht in Foundry vorhanden"></i>
+            {{/if}}
+          </td>
+
+          {{!-- IDs & Namen --}}
+          <td class="janus7-sync-id janus7-muted">{{this.id}}</td>
+          <td class="janus7-sync-name">{{this.entity.name}}</td>
+          <td class="janus7-sync-foundry-name">
+            {{#if this.foundryName}}
+              <span class="janus7-badge janus7-badge--on">{{this.foundryName}}</span>
+            {{else}}
+              <span class="janus7-muted">—</span>
+            {{/if}}
+          </td>
+
+          {{!-- Hint --}}
+          <td class="janus7-sync-status">
+            {{#if (eq this.status "linked")}}
+              <span class="janus7-badge janus7-badge--on">OK</span>
+            {{else if (eq this.status "found-by-name")}}
+              <span class="janus7-badge janus7-badge--warn">Name-Match</span>
+            {{else if (eq this.status "broken")}}
+              <span class="janus7-badge janus7-badge--off" title="{{this.hint}}">Defekt</span>
+            {{else if (eq this.status "found-in-compendium")}}
+              <span class="janus7-badge janus7-badge--compendium" title="{{this.compHit.packLabel}}">
+                <i class="fas fa-book-open"></i> {{this.compHit.packLabel}}
+              </span>
+            {{else}}
+              <span class="janus7-badge janus7-badge--off">Fehlt</span>
+            {{/if}}
+          </td>
+
+          {{!-- Aktionen --}}
+          <td class="janus7-sync-actions">
+            {{#if (eq this.status "linked")}}
+              <button type="button" class="janus-btn janus-btn--icon" data-action="openEntity" title="In Foundry öffnen">
+                <i class="fas fa-external-link-alt"></i>
+              </button>
+              <button type="button" class="janus-btn janus-btn--icon janus-btn--danger" data-action="unlinkEntity" title="Verknüpfung aufheben">
+                <i class="fas fa-unlink"></i>
+              </button>
+            {{else if (eq this.status "found-by-name")}}
+              <button type="button" class="janus-btn janus-btn--primary" data-action="linkExisting" title="UUID speichern">
+                <i class="fas fa-link"></i> Verknüpfen
+              </button>
+            {{else if (eq this.status "found-in-compendium")}}
+              <button type="button" class="janus-btn janus-btn--compendium" data-action="importFromCompendium">
+                <i class="fas fa-cloud-download-alt"></i> Importieren
+              </button>
+              <button type="button" class="janus-btn janus-btn--secondary" data-action="linkExisting" title="Anderes Dokument verknüpfen">
+                <i class="fas fa-search"></i>
+              </button>
+            {{else}}
+              <button type="button" class="janus-btn janus-btn--primary" data-action="createEntity">
+                <i class="fas fa-plus"></i> Neu anlegen
+              </button>
+              <button type="button" class="janus-btn janus-btn--secondary" data-action="linkExisting" title="Vorhandene Entität suchen">
+                <i class="fas fa-search"></i>
+              </button>
+            {{/if}}
+          </td>
+        </tr>
+
+        {{!-- Hint-Zeile für nicht-LINKED --}}
+        {{#unless (eq this.status "linked")}}
+        {{#if this.hint}}
+        <tr class="janus7-sync-hint-row">
+          <td colspan="6" class="janus7-sync-hint janus7-muted">
+            <i class="fas fa-info-circle"></i> {{this.hint}}
+            {{#unless (eq this.status "linked")}}
+            <span class="janus7-muted j7-ml-sm">
+              ← Foundry-Entität hier hineinziehen um zu verknüpfen
+            </span>
+            {{/unless}}
+          </td>
+        </tr>
+        {{/if}}
+        {{/unless}}
+
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  {{else}}
+    <div class="janus7-loading">
+      <p>Keine Einträge für Tab "{{activeTab}}" gefunden.</p>
+    </div>
+  {{/if}}
+
+  {{/if}}
+</div>

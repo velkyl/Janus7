@@ -1,0 +1,82 @@
+<div class="janus7-page">
+  {{#if notReady}}
+    <div class="janus7-loading">
+      <h3><i class="fas fa-spinner fa-spin"></i> Kalender nicht bereit</h3>
+      <p>Phase-4 Simulation oder AcademyData ist noch nicht initialisiert.</p>
+    </div>
+  {{else}}
+
+  <header class="janus7-toolbar">
+    <div class="janus7-toolbar__left">
+      <h2 class="janus7-title"><i class="fas fa-calendar-alt"></i> Woche {{weekInfo.week}} · Trimester {{weekInfo.trimester}} · Jahr {{weekInfo.year}}</h2>
+    </div>
+    <div class="janus7-toolbar__right">
+      <button type="button" class="janus-btn" data-action="gotoToday"><i class="fas fa-crosshairs"></i> Heute</button>
+      <button type="button" class="janus-btn" data-action="openLessonLibrary"><i class="fas fa-book-open"></i> Lesson Library</button>
+      <button type="button" class="janus-btn" data-action="refresh"><i class="fas fa-sync"></i> Refresh</button>
+    </div>
+  </header>
+
+  <div class="janus7-two-col">
+    <section class="janus7-card">
+      <h3><i class="fas fa-th"></i> Wochenplan</h3>
+
+      <div class="janus7-table-wrap">
+        <table class="janus7-table">
+          <thead>
+            <tr>
+              <th>Phase</th>
+              {{#each dayOrder}}
+                <th>{{this}}</th>
+              {{/each}}
+            </tr>
+          </thead>
+          <tbody>
+            {{#each grid}}
+              <tr>
+                <th class="janus7-rowhead">{{phase}}</th>
+                {{#each cells}}
+                  <td class="janus7-cell {{#if isNow}}is-now{{/if}} {{#if hasEntry}}has-entry{{/if}}">
+                    <button type="button"
+                      class="janus7-cellbtn"
+                      data-action="selectSlot"
+                      data-year="{{year}}"
+                      data-trimester="{{trimester}}"
+                      data-week="{{week}}"
+                      data-day="{{day}}"
+                      data-phase="{{phase}}">
+                      <span class="janus7-cellbtn__label">{{label}}</span>
+                    </button>
+                  </td>
+                {{/each}}
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <aside class="janus7-card">
+      <h3><i class="fas fa-info-circle"></i> Slot-Details</h3>
+      {{#if selected}}
+        <div class="janus7-kv">
+          <div><strong>Tag</strong></div><div>{{selected.slotRef.day}}</div>
+          <div><strong>Phase</strong></div><div>{{selected.slotRef.phase}}</div>
+          <div><strong>Woche</strong></div><div>{{selected.slotRef.week}}</div>
+        </div>
+
+        {{#if selected.entry}}
+          <hr class="janus7-hr"/>
+          <div class="janus7-muted">Eintrag</div>
+          <pre class="janus7-pre">{{selected.entryJson}}</pre>
+        {{else}}
+          <p class="janus7-muted">Kein Eintrag in diesem Slot.</p>
+        {{/if}}
+      {{else}}
+        <p class="janus7-muted">Wähle einen Slot im Wochenplan.</p>
+      {{/if}}
+    </aside>
+  </div>
+
+  {{/if}}
+</div>

@@ -1,0 +1,165 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Janus KI Response",
+  "description": "Schema for the JANUS_KI_RESPONSE_V1 import format used by AI assistants to propose changes to a JANUS7 campaign state.",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "JANUS_KI_RESPONSE_V1",
+      "description": "The fixed version identifier for KI responses."
+    },
+    "sourceExportMeta": {
+      "type": "object",
+      "description": "Metadata copied from the original export bundle that the AI processed. Contents are not validated beyond being an object."
+    },
+    "changes": {
+      "type": "object",
+      "description": "Top-level container for arrays of updates to various academy domains.",
+      "properties": {
+        "calendarUpdates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "A patch operation to modify a calendar field.",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Dot-delimited path into the academy.calendar tree that should be modified."
+              },
+              "op": {
+                "type": "string",
+                "enum": ["replace", "append", "delete"],
+                "description": "The patch operation: replace sets the value at path, append adds to an array at path, delete removes the property."
+              },
+              "value": {
+                "description": "The new value for replace or append operations.",
+                "nullable": true
+              }
+            },
+            "required": ["path", "op"],
+            "additionalProperties": false
+          },
+          "description": "Array of calendar patch objects. Each entry describes a patch operation on the academy calendar."
+        },
+        "lessonUpdates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "A patch operation to modify lessons.",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Dot-delimited path into the academy.lessons tree that should be modified."
+              },
+              "op": {
+                "type": "string",
+                "enum": ["replace", "append", "delete"],
+                "description": "The patch operation to perform."
+              },
+              "value": {
+                "description": "The new value for replace or append operations.",
+                "nullable": true
+              }
+            },
+            "required": ["path", "op"],
+            "additionalProperties": false
+          },
+          "description": "Array of lesson patch objects."
+        },
+        "eventUpdates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "A patch operation to modify events.",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Dot-delimited path into the academy.events tree."
+              },
+              "op": {
+                "type": "string",
+                "enum": ["replace", "append", "delete"],
+                "description": "The type of patch operation."
+              },
+              "value": {
+                "description": "The new value for replace or append operations.",
+                "nullable": true
+              }
+            },
+            "required": ["path", "op"],
+            "additionalProperties": false
+          },
+          "description": "Array of event patch objects."
+        },
+        "scoringAdjustments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "A patch operation to modify scoring.",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Dot-delimited path into the academy.scoring tree."
+              },
+              "op": {
+                "type": "string",
+                "enum": ["replace", "append", "delete"],
+                "description": "Patch operation on scoring."
+              },
+              "value": {
+                "description": "New value for replace or append operations.",
+                "nullable": true
+              }
+            },
+            "required": ["path", "op"],
+            "additionalProperties": false
+          },
+          "description": "Array of scoring patch objects."
+        },
+        "socialAdjustments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "A patch operation to modify social relationships.",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Dot-delimited path into the academy.social tree."
+              },
+              "op": {
+                "type": "string",
+                "enum": ["replace", "append", "delete"],
+                "description": "Patch operation on social data."
+              },
+              "value": {
+                "description": "New value for replace or append.",
+                "nullable": true
+              }
+            },
+            "required": ["path", "op"],
+            "additionalProperties": false
+          },
+          "description": "Array of social patch objects."
+        },
+        "journalEntries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "A journal entry to append to the academy.journalEntries array.",
+            "properties": {},
+            "additionalProperties": true
+          },
+          "description": "Array of new or updated journal entries proposed by the AI. Each journal entry is appended to the journal."
+        }
+      },
+      "additionalProperties": false
+    },
+    "notes": {
+      "type": ["string", "null"],
+      "description": "Optional explanatory notes from the AI regarding its proposed changes."
+    }
+  },
+  "required": ["version", "changes"],
+  "additionalProperties": false
+}

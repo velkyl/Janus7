@@ -1,0 +1,704 @@
+/**
+ * JANUS7 Control Panel DSA5
+ * Datei: control-panel-dsa5.css
+ *
+ * Scope:
+ * - DSA5-spezifische Panel-Erweiterungen und Brückenelemente im Control Panel.
+
+ * Verantwortliche UI-Komponenten:
+ * - JanusControlPanelApp
+ * - DSA5-Bridge-Views
+ * Status:
+ * ACTIVE / Konsolidierung später prüfen
+ */
+
+/* Wrapped in CSS Cascade Layer for Foundry v13 isolation */
+@layer janus7.theme {
+
+/**
+ * JANUS7 Control Panel - DSA5 Theme (FIXED)
+ * Version zentral in module.json
+ * 
+ * WICHTIG: Dieses CSS betrifft NUR das Control Panel (.j7-control-panel)
+ * und überschreibt KEINE globalen Foundry-Styles.
+ */
+
+/* =========================================================================
+   SCOPE: Alle Styles nur auf .j7-control-panel beschränken
+   ========================================================================= */
+
+.j7-control-panel {
+  /* DSA5 Farbpalette */
+  --dsa-bg-dark: #1a0f08;
+  --dsa-bg-leather: #2b1810;
+  --dsa-bg-parchment: #f4e8d8;
+  --dsa-border-gold: #c9a961;
+  --dsa-border-dark: #4a2f1f;
+  --dsa-text-gold: #d4af37;
+  --dsa-text-light: #e8d5c4;
+  --dsa-text-dark: #2b1810;
+  --dsa-accent: #8b4513;
+  --dsa-shadow: rgba(0, 0, 0, 0.6);
+}
+
+/* =========================================================================
+   WINDOW STYLING (nur für Control Panel Window)
+   ========================================================================= */
+
+.j7-control-panel.window-app .window-header {
+  background: linear-gradient(
+    180deg,
+    var(--dsa-border-gold) 0%,
+    var(--dsa-accent) 50%,
+    var(--dsa-border-dark) 100%
+  );
+  border-bottom: 3px solid var(--dsa-border-gold);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 215, 0, 0.3),
+    0 2px 4px var(--dsa-shadow);
+}
+
+.j7-control-panel.window-app .window-title {
+  color: var(--dsa-text-light);
+  text-shadow: 
+    1px 1px 2px rgba(0, 0, 0, 0.8),
+    0 0 10px rgba(212, 175, 55, 0.3);
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* =========================================================================
+   CONTAINER & LAYOUT
+   ========================================================================= */
+
+.j7cp-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+  background: var(--dsa-bg-leather);
+  background-image:
+    linear-gradient(rgba(0,0,0,0.3), transparent 50%, rgba(0,0,0,0.2)),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.1) 2px,
+      rgba(0,0,0,0.1) 4px
+    );
+}
+
+/* =========================================================================
+   TAB NAVIGATION
+   ========================================================================= */
+
+.j7cp-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 8px 12px 0;
+  background: linear-gradient(
+    180deg,
+    var(--dsa-bg-dark) 0%,
+    var(--dsa-bg-leather) 100%
+  );
+  border-bottom: 3px solid var(--dsa-border-gold);
+  position: relative;
+}
+
+.j7cp-tabs::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--dsa-border-gold) 20%,
+    var(--dsa-border-gold) 80%,
+    transparent
+  );
+}
+
+.j7cp-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: linear-gradient(
+    180deg,
+    rgba(139, 69, 19, 0.3) 0%,
+    rgba(43, 24, 16, 0.5) 100%
+  );
+  border: 2px solid var(--dsa-border-dark);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  color: var(--dsa-text-light);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.j7cp-tab i {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.j7cp-tab:hover:not(:disabled) {
+  background: linear-gradient(
+    180deg,
+    rgba(139, 69, 19, 0.5) 0%,
+    rgba(74, 47, 31, 0.7) 100%
+  );
+  color: var(--dsa-text-gold);
+  border-color: var(--dsa-border-gold);
+  transform: translateY(-2px);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 215, 0, 0.2),
+    0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.j7cp-tab-active {
+  background: linear-gradient(
+    180deg,
+    var(--dsa-bg-parchment) 0%,
+    rgba(244, 232, 216, 0.95) 100%
+  );
+  border-color: var(--dsa-border-gold);
+  border-bottom: none;
+  color: var(--dsa-text-dark);
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  z-index: 2;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 -2px 8px rgba(212, 175, 55, 0.4),
+    0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.j7cp-tab-active i {
+  color: var(--dsa-border-gold);
+}
+
+.j7cp-tab:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(74, 47, 31, 0.5);
+}
+
+/* =========================================================================
+   CONTENT AREA
+   ========================================================================= */
+
+.j7cp-content {
+  flex: 1;
+  padding: 20px;
+  background: var(--dsa-bg-parchment);
+  background-image:
+    linear-gradient(rgba(255,255,255,0.1), transparent 50%, rgba(0,0,0,0.05)),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 20px,
+      rgba(139, 69, 19, 0.03) 20px,
+      rgba(139, 69, 19, 0.03) 21px
+    );
+  overflow-y: auto;
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-left: 1px solid var(--dsa-border-gold);
+  border-right: 1px solid var(--dsa-border-gold);
+}
+
+.j7cp-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* =========================================================================
+   SECTIONS
+   ========================================================================= */
+
+.j7cp-section {
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 3px solid var(--dsa-border-dark);
+  border-radius: 8px;
+  box-shadow: 
+    inset 0 0 0 1px rgba(201, 169, 97, 0.5),
+    0 4px 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.j7cp-section::before,
+.j7cp-section::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--dsa-border-gold);
+}
+
+.j7cp-section::before {
+  top: -2px;
+  left: -2px;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 6px;
+}
+
+.j7cp-section::after {
+  bottom: -2px;
+  right: -2px;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: 6px;
+}
+
+.j7cp-section h3 {
+  margin: 0 0 16px 0;
+  padding-bottom: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--dsa-accent);
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+  border-bottom: 2px solid var(--dsa-border-gold);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.j7cp-section h3 i {
+  color: var(--dsa-border-gold);
+}
+
+.j7cp-section-info {
+  background: rgba(201, 169, 97, 0.1);
+  border-color: var(--dsa-border-gold);
+}
+
+/* =========================================================================
+   INFO DISPLAYS
+   ========================================================================= */
+
+.j7cp-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.j7cp-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  background: rgba(139, 69, 19, 0.05);
+  border-radius: 4px;
+}
+
+.j7cp-info-item label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--dsa-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.j7cp-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--dsa-text-dark);
+}
+
+.j7cp-value-large {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--dsa-accent);
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.j7cp-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.j7cp-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(139, 69, 19, 0.2);
+}
+
+.j7cp-info-row:last-child {
+  border-bottom: none;
+}
+
+.j7cp-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--dsa-text-dark);
+}
+
+.j7cp-code {
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  padding: 4px 8px;
+  background: rgba(139, 69, 19, 0.1);
+  border: 1px solid var(--dsa-border-dark);
+  border-radius: 3px;
+  color: var(--dsa-accent);
+}
+
+/* =========================================================================
+   BADGES
+   ========================================================================= */
+
+.j7cp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 16px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.j7cp-badge-success {
+  background: linear-gradient(
+    180deg,
+    rgba(76, 175, 80, 0.9) 0%,
+    rgba(56, 142, 60, 0.9) 100%
+  );
+  color: white;
+  border: 2px solid rgba(76, 175, 80, 1);
+}
+
+.j7cp-badge-inactive {
+  background: linear-gradient(
+    180deg,
+    rgba(158, 158, 158, 0.9) 0%,
+    rgba(97, 97, 97, 0.9) 100%
+  );
+  color: white;
+  border: 2px solid rgba(158, 158, 158, 1);
+}
+
+.j7cp-badge-error {
+  background: linear-gradient(
+    180deg,
+    rgba(244, 67, 54, 0.9) 0%,
+    rgba(211, 47, 47, 0.9) 100%
+  );
+  color: white;
+  border: 2px solid rgba(244, 67, 54, 1);
+}
+
+/* =========================================================================
+   BUTTONS
+   ========================================================================= */
+
+.j7cp-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.j7cp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(
+    180deg,
+    rgba(139, 69, 19, 0.9) 0%,
+    rgba(101, 51, 13, 0.9) 100%
+  );
+  border: 2px solid var(--dsa-border-dark);
+  border-radius: 6px;
+  color: var(--dsa-text-light);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.j7cp-btn:hover:not(:disabled) {
+  background: linear-gradient(
+    180deg,
+    rgba(139, 69, 19, 1) 0%,
+    rgba(101, 51, 13, 1) 100%
+  );
+  border-color: var(--dsa-border-gold);
+  transform: translateY(-2px);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 215, 0, 0.3),
+    0 5px 10px rgba(0, 0, 0, 0.5);
+  color: var(--dsa-text-gold);
+}
+
+.j7cp-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.j7cp-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(74, 47, 31, 0.5);
+  color: rgba(232, 213, 196, 0.5);
+}
+
+.j7cp-btn-primary {
+  background: linear-gradient(
+    180deg,
+    rgba(201, 169, 97, 0.9) 0%,
+    rgba(139, 113, 62, 0.9) 100%
+  );
+  border-color: var(--dsa-border-gold);
+  color: var(--dsa-text-dark);
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.j7cp-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(
+    180deg,
+    rgba(212, 175, 55, 1) 0%,
+    rgba(201, 169, 97, 1) 100%
+  );
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 5px 15px rgba(212, 175, 55, 0.5);
+}
+
+.j7cp-btn-secondary {
+  background: linear-gradient(
+    180deg,
+    rgba(74, 47, 31, 0.8) 0%,
+    rgba(43, 24, 16, 0.8) 100%
+  );
+}
+
+.j7cp-btn-control {
+  min-width: 100px;
+  justify-content: center;
+}
+
+/* =========================================================================
+   TIME DISPLAY
+   ========================================================================= */
+
+.j7cp-time-display {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.j7cp-time-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px;
+  background: rgba(139, 69, 19, 0.1);
+  border: 2px solid var(--dsa-border-dark);
+  border-radius: 6px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.j7cp-time-item label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--dsa-accent);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* =========================================================================
+   CONTROLS & INPUTS
+   ========================================================================= */
+
+.j7cp-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+}
+
+.j7cp-control-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--dsa-text-dark);
+  min-width: 80px;
+  text-align: center;
+}
+
+.j7cp-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--dsa-text-dark);
+}
+
+.j7cp-toggle input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--dsa-accent);
+}
+
+.j7cp-toggle-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.j7cp-select {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid var(--dsa-border-dark);
+  border-radius: 4px;
+  color: var(--dsa-text-dark);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.j7cp-select:focus {
+  outline: none;
+  border-color: var(--dsa-border-gold);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    0 0 0 3px rgba(201, 169, 97, 0.3);
+}
+
+.j7cp-slider-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.j7cp-slider {
+  flex: 1;
+  height: 8px;
+  background: rgba(139, 69, 19, 0.2);
+  border: 1px solid var(--dsa-border-dark);
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+
+.j7cp-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(
+    180deg,
+    var(--dsa-border-gold) 0%,
+    var(--dsa-accent) 100%
+  );
+  border: 2px solid var(--dsa-border-dark);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.j7cp-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(
+    180deg,
+    var(--dsa-border-gold) 0%,
+    var(--dsa-accent) 100%
+  );
+  border: 2px solid var(--dsa-border-dark);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.j7cp-slider-value {
+  min-width: 60px;
+  text-align: right;
+  font-weight: 600;
+  color: var(--dsa-text-dark);
+}
+
+/* =========================================================================
+   UTILITY CLASSES
+   ========================================================================= */
+
+.j7cp-mt-2 {
+  margin-top: 12px;
+}
+
+/* =========================================================================
+   ERROR BOUNDARY
+   ========================================================================= */
+
+.j7-error-boundary {
+  padding: 20px;
+  background: rgba(244, 67, 54, 0.1);
+  border: 3px solid rgba(244, 67, 54, 0.5);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.j7-error-boundary h3 {
+  margin: 0 0 12px 0;
+  color: #c62828;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* =========================================================================
+   SCROLLBAR (nur innerhalb .j7cp-content)
+   ========================================================================= */
+
+.j7cp-content::-webkit-scrollbar {
+  width: 12px;
+}
+
+.j7cp-content::-webkit-scrollbar-track {
+  background: rgba(43, 24, 16, 0.3);
+  border: 1px solid var(--dsa-border-dark);
+}
+
+.j7cp-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    var(--dsa-accent) 0%,
+    var(--dsa-border-dark) 100%
+  );
+  border: 1px solid var(--dsa-border-gold);
+  border-radius: 6px;
+}
+
+.j7cp-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    var(--dsa-border-gold) 0%,
+    var(--dsa-accent) 100%
+  );
+}
+
+} /* end @layer janus7.theme */

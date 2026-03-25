@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Multiple-Choice-Fragenkatalog für Akademie-Prüfungen"
+  },
+  "questionSets": [
+    {
+      "id": "EXAMQ_MAG_BASICS_01",
+      "examId": "EXAM_MAG_BASICS_01",
+      "title": "Grundlagenprüfung Magietheorie – Multiple Choice",
+      "displayMode": "per-question",
+      "tags": [
+        "magie",
+        "theorie",
+        "sphären"
+      ],
+      "questions": [
+        {
+          "id": "Q1",
+          "text": "Welche Aussage über die Sphären Aventuriens ist korrekt?",
+          "multiSelect": false,
+          "difficulty": 1,
+          "topics": [
+            "sphären",
+            "theorie"
+          ],
+          "relatedSkillId": "TALENT_MAGIEKUNDE",
+          "answers": [
+            {
+              "id": "A",
+              "text": "Es gibt genau drei Sphären.",
+              "isCorrect": false,
+              "points": 0
+            },
+            {
+              "id": "B",
+              "text": "Die Niederhöllen gelten in vielen Modellen als eigene Sphäre.",
+              "isCorrect": true,
+              "points": 2
+            },
+            {
+              "id": "C",
+              "text": "Sphärenkunde ist ein körperliches Talent.",
+              "isCorrect": false,
+              "points": 0
+            },
+            {
+              "id": "D",
+              "text": "Die 2. Sphäre ist stets identisch mit dem Limbus.",
+              "isCorrect": false,
+              "points": 0
+            }
+          ],
+          "explanation": "Die Niederhöllen zählen in vielen Sphärenmodellen als eigene Ebene; Sphärenkunde ist ein Wissenstalent."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "version": "1.0.0",
+  "description": "SSOT für mondphasenbasierte Unterrichtsmodifikatoren. Geladen von DSA5MoonBridge.loadModifiers().",
+  "notes": [
+    "academicCategory: 'newmoon'|'waxing'|'fullmoon'|'waning'",
+    "fpBonus: FP-Modifier auf Würfelwürfe (via PostRoll-ActiveEffect, bridge/dsa5/advancement.js)",
+    "qsBonus: Direkt zur QS addiert nach Probe",
+    "scoringBonus: Extra-Punkte via JanusScoringEngine",
+    "Fehlende Einträge fallen auf globalModifiers zurück.",
+    "Für neue Lektionstypen einfach einen neuen Key unter lessonModifiers hinzufügen."
+  ],
+  "globalModifiers": {
+    "newmoon":  { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 0,  "description": "" },
+    "waxing":   { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 0,  "description": "" },
+    "fullmoon": { "fpBonus": 1,  "qsBonus": 0, "scoringBonus": 2,  "description": "Vollmond erhöht Konzentration" },
+    "waning":   { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 0,  "description": "" }
+  },
+  "lessonModifiers": {
+    "arcanology": {
+      "newmoon":  { "fpBonus": 1,  "qsBonus": 0, "scoringBonus": 3,  "description": "Tote Mada — Dunkelmagie-Bonus für Arkanologie" },
+      "waxing":   { "fpBonus": 1,  "qsBonus": 0, "scoringBonus": 2,  "description": "Zunehmende Mondkraft stärkt Arkanstudien" },
+      "fullmoon": { "fpBonus": 2,  "qsBonus": 1, "scoringBonus": 5,  "description": "Vollmond — ideale Lernbedingungen für Arkanologie" },
+      "waning":   { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 0,  "description": "" }
+    },
+    "magic_practice": {
+      "newmoon":  { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 0,  "description": "" },
+      "waxing":   { "fpBonus": 1,  "qsBonus": 0, "scoringBonus": 1,  "description": "Wachsende Mondenergie unterstützt Übung" },
+      "fullmoon": { "fpBonus": 2,  "qsBonus": 1, "scoringBonus": 5,  "description": "Vollmond — Astralfluss auf dem Höhepunkt" },
+      "waning":   { "fpBonus": -1, "qsBonus": 0, "scoringBonus": 0,  "description": "Abnehmender Mond — reduzierte Astralkraft" }
+    },
+    "astral_meditation": {
+      "newmoon":  { "fpBonus": 2,  "qsBonus": 1, "scoringBonus": 5,  "description": "Tote Mada — Stille begünstigt tiefe Meditation" },
+      "waxing":   { "fpBonus": 1,  "qsBonus": 0, "scoringBonus": 2,  "description": "Aufbauende Energie" },
+      "fullmoon": { "fpBonus": 2,  "qsBonus": 1, "scoringBonus": 5,  "description": "Mondkraft auf dem Höhepunkt" },
+      "waning":   { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 1,  "description": "Absinkende Energie, Reflexion" }
+    },
+    "ritual_theory": {
+      "newmoon":  { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 0,  "description": "" },
+      "waxing":   { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 0,  "description": "" },
+      "fullmoon": { "fpBonus": 1,  "qsBonus": 0, "scoringBonus": 3,  "description": "Vollmond stärkt Ritualverständnis" },
+      "waning":   { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 0,  "description": "" }
+    },
+    "alchemy": {
+      "newmoon":  { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 0,  "description": "" },
+      "waxing":   { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 1,  "description": "Mondkraft beeinflusst Extraktion" },
+      "fullmoon": { "fpBonus": 1,  "qsBonus": 0, "scoringBonus": 3,  "description": "Vollmond — optimale Destillationsbedingungen" },
+      "waning":   { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 0,  "description": "" }
+    },
+    "herbalism": {
+      "newmoon":  { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 0,  "description": "" },
+      "waxing":   { "fpBonus": 1,  "qsBonus": 0, "scoringBonus": 2,  "description": "Wachstumsphase — Kräutersammlungsbonus" },
+      "fullmoon": { "fpBonus": 1,  "qsBonus": 1, "scoringBonus": 4,  "description": "Vollmond — maximale Wirkstoffkonzentration" },
+      "waning":   { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 0,  "description": "" }
+    },
+    "default": {
+      "newmoon":  { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 0,  "description": "" },
+      "waxing":   { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 0,  "description": "" },
+      "fullmoon": { "fpBonus": 1,  "qsBonus": 0, "scoringBonus": 2,  "description": "Vollmond — erhöhte Lernkapazität" },
+      "waning":   { "fpBonus": 0,  "qsBonus": 0, "scoringBonus": 0,  "description": "" }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+
+<div class="j7-shell__view j7-shell__view--tools">
+  <div class="j7-shell__tiles">
+    {{#each tiles}}
+      <button type="button" class="j7-shell__tile" data-action="openPanel" data-panel-id="{{id}}">
+        <span class="j7-shell__tile-icon">{{icon}}</span>
+        <span class="j7-shell__tile-copy">
+          <strong>{{title}}</strong>
+          <small>{{description}}</small>
+        </span>
+      </button>
+    {{/each}}
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<form class="janus7-page">
+  {{#if notReady}}
+    <div class="janus7-loading">
+      <h3><i class="fas fa-spinner fa-spin"></i> State nicht bereit</h3>
+      <p>JANUS7 Core ist noch nicht initialisiert.</p>
+    </div>
+  {{else}}
+
+  <header class="janus7-toolbar">
+    <div class="janus7-toolbar__left">
+      <h2 class="janus7-title"><i class="fas fa-code"></i> State Inspector</h2>
+      <span class="janus7-muted">Read-only Snapshot</span>
+    </div>
+    <div class="janus7-toolbar__right">
+      <button type="button" class="janus-btn" data-action="copy"><i class="fas fa-copy"></i> Copy</button>
+      <button type="button" class="janus-btn" data-action="refresh"><i class="fas fa-sync"></i> Refresh</button>
+    </div>
+  </header>
+
+  <section class="janus7-card">
+    <textarea class="janus7-textarea" name="snapshot" readonly>{{json}}</textarea>
+  </section>
+
+  {{/if}}
+</form>

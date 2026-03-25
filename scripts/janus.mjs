@@ -1,0 +1,847 @@
+/**
+ * @file scripts/janus.mjs
+ * @module janus7
+ * @phase A1 — Single Entry Point
+ *
+ * Architekturvertrag:
+ * - DIESE Datei ist der einzige erlaubte Einstiegspunkt (module.json → esmodules).
+ * - NUR diese Datei darf Hooks.on / Hooks.once gegen Foundry-Core-Hooks registrieren.
+ * - Alle Phasen-Module werden hier als Setup-Funktionen orchestriert.
+ *
+ * Import-Regel:
+ *   core/   → darf KEINE Hooks.once('init'/'ready') mehr enthalten.
+ *   Phasen-Integrationen exportieren setupPhaseX(engine) und werden hier aufgerufen.
+ */
+
+// ─────────────────────────────────────────────────────────
+// Core Engine (Phase 1)
+// ─────────────────────────────────────────────────────────
+import { Janus7Engine, JANUS_GLOBAL, getJanus7, getJanusCore } from '../core/index.js';
+import { JanusConfig } from '../core/config.js';
+import { MODULE_ID, STATE_PATHS } from '../core/common.js';
+import { JanusCapabilities } from '../core/capabilities.js';
+import { JanusTimeReactor } from '../services/time/reactor.js';
+import { JanusCron } from '../services/cron/JanusCron.js';
+import { handleChatMessage } from '../services/chat/cli.js';
+import { SceneRegionsBridge } from '../bridges/foundry/SceneRegionsBridge.mjs';
+import { JanusControlPanelApp } from '../ui/apps/control-panel/JanusControlPanelApp.js';
+import { registerLessonDocuments, ensureLessonDocumentsReady } from './integration/phase2-document-content-integration.js';
+
+// Sidebar Tab (Foundry v13+)
+// - left scene controls are registered here during init/render lifecycle
+// - implementation is a small AppV2-based sidebar tab
+
+// ─────────────────────────────────────────────────────────
+// Re-exports for backward compatibility (game.janus7.core.*)
+// ─────────────────────────────────────────────────────────
+export { getJanus7, getJanusCore };
+
+// ─────────────────────────────────────────────────────────
+// Boot-Guard: verhindert doppelte Hook-Registrierung
+// ─────────────────────────────────────────────────────────
+const __BOOT_KEY__ = '__janus7_boot_v2__';
+globalThis[__BOOT_KEY__] ??= { registered: false };
+if (globalThis[__BOOT_KEY__].registered) {
+  console.warn('[JANUS7] Duplicate evaluation of scripts/janus.mjs – skipping hook registration.');
+}
+const _shouldRegister = !globalThis[__BOOT_KEY__].registered;
+globalThis[__BOOT_KEY__].registered = true;
+
+const __CORE_HOOKS_KEY__ = '__janus7_core_hook_ids__';
+globalThis[__CORE_HOOKS_KEY__] ??= [];
+
+function _registerCoreHook(name, fn) {
+  const id = Hooks.on(name, fn);
+  globalThis[__CORE_HOOKS_KEY__].push({ name, id });
+  return id;
+}
+
+function _cleanupCoreHooks() {
+  const entries = Array.isArray(globalThis[__CORE_HOOKS_KEY__]) ? globalThis[__CORE_HOOKS_KEY__] : [];
+  for (const entry of entries) {
+    try { Hooks.off(entry.name, entry.id); } catch (_) { /* noop */ }
+  }
+  globalThis[__CORE_HOOKS_KEY__] = [];
+}
+
+// ─────────────────────────────────────────────────────────
+// Phase Integration Loaders (dynamic, fail-safe)
+// ─────────────────────────────────────────────────────────
+
+/**
+ * Dynamically imports phase integration modules based on config flags.
+ * Each integration module must export a default setup function.
+ * @param {Janus7Engine} engine
+ * @returns {Promise<void>}
+ */
+async function loadPhaseIntegrations(engine) {
+  const logger = engine?.core?.logger;
+
+  // ─────────────────────────────────────────────────────────────────────
+  // Phase 2+3: Dependency Injection
+  // Imported here (async context) to keep core/index.js Phase-1-clean.
+  // ─────────────────────────────────────────────────────────────────────
+  try {
+    const [{ default: AcademyDataApi }, { DSA5SystemBridge }] = await Promise.all([
+      import('../academy/data-api.js'),
+      import('../bridge/dsa5/index.js'),
+    ]);
+    engine.academy ??= {};
+    engine.bridge ??= {};
+
+    engine.academy.data = new AcademyDataApi({
+      logger: engine.core.logger,
+      validator: engine.core.validator
+    });
+    if (!engine.academy.dataApi) engine.academy.dataApi = engine.academy.data;
+    engine.bridge.dsa5 = new DSA5SystemBridge({
+      logger: engine.core.logger,
+      academy: engine.academy.data
+    });
+    engine.dsa5 = engine.bridge.dsa5;
+    logger?.debug?.('[JANUS7] Phase 2+3 injiziert (AcademyDataApi, DSA5SystemBridge).');
+  } catch (err) {
+    logger?.error?.('[JANUS7] Phase 2+3 Injection fehlgeschlagen.', { message: err?.message });
+  }
+
+  const enabled = {
+    simulation: JanusConfig.get('enableSimulation') !== false,
+    quest: JanusConfig.get('enableQuestSystem') !== false,
+    atmosphere: JanusConfig.get('enableAtmosphere') !== false,
+    ui: JanusConfig.get('enableUI') !== false,
+    phase7: JanusConfig.get('enablePhase7') !== false,
+  };
+
+  logger?.info?.('[JANUS7] Phase integrations activating:', enabled);
+
+  // Phase 4: Simulation (always load; module respects enableSimulation kill-switch)
+  try {
+    await import('../academy/phase4.js');
+    logger?.debug?.('[JANUS7] Phase 4 (Simulation) loaded.');
+  } catch (err) {
+    logger?.warn?.('[JANUS7] Phase 4 failed to load.', { message: err?.message });
+  }
+
+
+  // Phase 5: Atmosphere
+  if (enabled.atmosphere) {
+    try {
+      await import('../atmosphere/phase5.js');
+      logger?.debug?.('[JANUS7] Phase 5 (Atmosphere) loaded.');
+    } catch (err) {
+      logger?.warn?.('[JANUS7] Phase 5 failed to load.', { message: err?.message });
+    }
+  }
+
+  // Phase Quest/Event System
+  if (enabled.quest) {
+    try {
+      await import('../scripts/integration/quest-system-integration.js');
+      logger?.debug?.('[JANUS7] Quest/Event integration loaded.');
+    } catch (err) {
+      logger?.warn?.('[JANUS7] Quest integration failed to load.', { message: err?.message });
+    }
+  }
+
+  // Living World: scheduler on top of calendar/date-changed hooks
+  if (enabled.simulation) {
+    try {
+      await import('../scripts/integration/phase4-living-world-integration.js');
+      logger?.debug?.('[JANUS7] Phase 4.5 (Living World) loaded.');
+    } catch (err) {
+      logger?.warn?.('[JANUS7] Phase 4.5 (Living World) failed to load.', { message: err?.message });
+    }
+  }
+
+  // Academy Progression: resources, social links, milestones, collections, activities
+  if (enabled.simulation) {
+    try {
+      await import('../scripts/integration/phase4-academy-progression-integration.js');
+      logger?.debug?.('[JANUS7] Phase 4.6 (Academy Progression) loaded.');
+    } catch (err) {
+      logger?.warn?.('[JANUS7] Phase 4.6 (Academy Progression) failed to load.', { message: err?.message });
+    }
+  }
+
+  // Phase 6: UI
+  if (enabled.ui) {
+    try {
+      await import('../scripts/integration/phase6-ui-integration.js');
+      logger?.debug?.('[JANUS7] Phase 6 (UI) loaded.');
+    } catch (err) {
+      logger?.warn?.('[JANUS7] Phase 6 failed to load.', { message: err?.message });
+    }
+
+    // Phase 4 → UI bridge: optional ChatMessage rendering for janus7EventMessage
+    // (keeps Phase 4 headless; rendering is a Phase 6 concern)
+    try {
+      await import('../scripts/integration/phase4-eventmessage-ui.js');
+      logger?.debug?.('[JANUS7] Phase 4 EventMessage UI bridge loaded.');
+    } catch (err) {
+      logger?.warn?.('[JANUS7] Phase 4 EventMessage UI bridge failed to load.', { message: err?.message });
+    }
+  }
+
+  // Phase 7: KI Roundtrip (AI = Legacy Alias, Kill-Switch via enablePhase7)
+  if (enabled.phase7) {
+
+    try {
+      await import('../scripts/integration/phase7-ki-integration.js');
+      logger?.debug?.('[JANUS7] Phase 7 (KI) loaded.');
+    } catch (err) {
+      logger?.warn?.('[JANUS7] Phase 7 (KI) failed to load.', { message: err?.message });
+    }
+  } else {
+    logger?.info?.('[JANUS7] Phase 7 disabled (enablePhase7=false).');
+  }
+
+  // Optional: Test Runner (always best-effort)
+  try {
+    await import('../scripts/integration/test-runner-integration.js');
+  } catch (_) { /* intentionally silent */ }
+
+  // ─────────────────────────────────────────────────────────────────────
+  // Graph Service Integration
+  // Load the graph service integration last so that it can rely on
+  // academy, quest and UI modules being available.  This import
+  // registers a janus7Ready hook to attach the graph to the engine.
+  try {
+    await import('../scripts/integration/graph-service-integration.js');
+    logger?.debug?.('[JANUS7] Graph service integration loaded.');
+  } catch (err) {
+    logger?.warn?.('[JANUS7] Graph service integration failed to load.', { message: err?.message });
+  }
+}
+
+
+
+
+function _readyErrMeta(err) {
+  if (err instanceof Error) return { name: err.name, message: err.message, stack: err.stack };
+  try { return { message: String(err?.message ?? err), detail: JSON.stringify(err) }; } catch { return { message: String(err) }; }
+}
+
+function runReadySanityCheck(engine) {
+  const issues = [];
+  if (game?.system?.id !== 'dsa5') {
+    issues.push(`Erwartetes System: dsa5, gefunden: ${game?.system?.id ?? 'unknown'}`);
+  }
+  try {
+    const requiredKeys = ['coreState', 'enableUI', 'enablePhase7'];
+    for (const key of requiredKeys) {
+      if (!game?.settings?.settings?.has?.(`${MODULE_ID}.${key}`)) {
+        issues.push(`Fehlendes Setting: ${MODULE_ID}.${key}`);
+      }
+    }
+  } catch (_err) {
+    issues.push('Settings-Registry konnte nicht geprüft werden.');
+  }
+  if (issues.length && game?.user?.isGM) {
+    ui.notifications?.error?.(`JANUS7 Sanity-Check fehlgeschlagen: ${issues.join(' | ')}`);
+  }
+  if (issues.length) {
+    (engine?.core?.logger ?? console).warn?.('[JANUS7] Ready sanity check failed', { issues });
+  }
+  return issues;
+}
+
+/**
+ * Optional Test Harness loader.
+ * @param {Janus7Engine} engine
+ */
+async function maybeLoadTestHarness(engine) {
+  try {
+    const [RegMod, RunMod, CatMod, BuiltinMod] = await Promise.all([
+      import('../core/test/registry.js'),
+      import('../core/test/runner.js'),
+      import('../core/test/register-catalog.js'),
+      import('../core/test/register-builtins.js'),
+    ]);
+
+    const Registry = RegMod?.default;
+    const Runner = RunMod?.default;
+    const registerCatalog = CatMod?.default;
+    const registerBuiltins = BuiltinMod?.default;
+
+    if (!Registry || !Runner || typeof registerCatalog !== 'function') {
+      throw new Error('Test harness: missing exports.');
+    }
+
+    const logger = engine.core?.logger;
+    const registry = new Registry();
+    const runner = new Runner({ registry, logger, engine });
+    engine.test = { registry, runner };
+
+    // Builtins first: register actual executable test functions.
+    if (typeof registerBuiltins === 'function') {
+      await registerBuiltins({ registry, logger, engine });
+    }
+    // Catalog second: fills gaps with metadata-only placeholders (skips existing IDs).
+    await registerCatalog({ registry, logger, engine });
+
+    logger?.info?.('[JANUS7] Test harness loaded.');
+  } catch (err) {
+    engine.core?.logger?.debug?.('[JANUS7] Test harness not available.', { message: err?.message });
+  }
+}
+
+// ─────────────────────────────────────────────────────────
+// HOOK: init  (Phase 1 bootstrap)
+// ─────────────────────────────────────────────────────────
+if (_shouldRegister) {
+  Hooks.once('init', () => {
+    try { registerLessonDocuments(); } catch (err) { console.warn('[JANUS7] registerLessonDocuments failed', err); }
+    console.log(`
+ _______________________________________________________________
+ _____ ___  _   _ _   _ ____  ______   __ __     _______ _____
+|  ___/ _ \\| | | | \\ | |  _ \\|  _ \\ \\ / / \\ \\   / |_   _|_   _|
+| |_ | | | | | | |  \\| | | | | |_) \\ V /   \\ \\ / /  | |   | |
+|  _|| |_| | |_| | |\\  | |_| |  _ < | |     \\ V /   | |   | |
+|_|   \\___/ \\___/|_| \\_|____/|_| \\_\\|_|      \\_/    |_|   |_|
+===============================================================
+JANUS7 — Academy Operating System
+`);
+
+// Register settings menu only.
+// Right sidebar integration was intentionally removed in v0.9.10.9 because
+// the full JANUS surface is exposed via the left scene controls toolbar.
+try {
+  const uiEnabled = JanusConfig.get('enableUI') !== false;
+  if (uiEnabled) {
+    try {
+      game.settings.registerMenu(MODULE_ID, 'janusControlPanel', {
+        name: 'JANUS7 Control Panel',
+        label: 'Open',
+        icon: 'fas fa-cogs',
+        type: JanusControlPanelApp,
+        restricted: true
+      });
+    } catch (err) {
+      console.warn('[JANUS7] settings.registerMenu failed:', err);
+    }
+  }
+} catch (err) {
+  console.warn('[JANUS7] Settings menu registration failed:', err); // pre-logger: console intentional
+}
+
+    const engine = new Janus7Engine();
+
+    // Expose globally immediately so integrations can reference it
+    JANUS_GLOBAL.engine = engine;
+    globalThis.janus7 = engine;
+    if (globalThis.game) globalThis.game.janus7 = engine;
+
+    // ─────────────────────────────────────────────────────────
+    // Foundry Core Hook Delegation (Architekturvertrag)
+    // ─────────────────────────────────────────────────────────
+    // Keep Core-Hooks ONLY here; delegate into the system bridge if present.
+    _registerCoreHook('modifyTokenAttribute', (data, updates) => {
+      try {
+        const hb = engine?.bridge?.dsa5?.hooks;
+        if (hb?.handleModifyTokenAttribute) hb.handleModifyTokenAttribute(data, updates);
+      } catch (_e) {
+        // avoid crashing the host hook
+      }
+    });
+
+    // Stubs so nothing crashes if Phase 4+ is not yet loaded
+    engine.simulation = engine.simulation ?? {};
+    engine.simulation.calendar = engine.simulation.calendar ?? null;
+
+    // Null test stubs (replaced by test harness if loaded)
+    engine.test = engine.test ?? {
+      registry: { register() {}, get() { return null; }, list() { return []; } },
+      runner: { async runAll() { return []; } }
+    };
+
+    // Phase 1: Core Init
+    try {
+      engine.init();
+    } catch (err) {
+      (engine?.core?.logger ?? console).error?.('[JANUS7] Engine init failed (Phase 1).', { message: err?.message, stack: err?.stack });
+    }
+
+    // Director uses game.janus7.calendar.* – set up a live proxy so it routes
+    // to the engine that is attached by Phase 4 (academy/phase4.js).
+    // ---------------------------------------------------------------------------
+    const _calendar = () => engine.simulation?.calendar ?? engine.academy?.calendar ?? null;
+    engine.calendar = {
+      get currentDay()       { return _calendar()?.currentDay ?? null; },
+      get currentWeek()      { return _calendar()?.currentWeek ?? null; },
+      get currentTrimester() { return _calendar()?.currentTrimester ?? null; },
+      get currentYear()      { return _calendar()?.currentYear ?? null; },
+      getCurrentSlotRef: (...a) => _calendar()?.getCurrentSlotRef?.(...a) ?? null,
+      advanceSlot:       (...a) => _calendar()?.advanceSlot?.(...a),
+      advancePhase:      (...a) => _calendar()?.advancePhase?.(...a),
+      advanceDay:        (...a) => _calendar()?.advanceDay?.(...a),
+      setSlot: async (di, si) => {
+        const cal = _calendar();
+        if (cal?.setSlot) return cal.setSlot(di, si);
+        const state = engine?.core?.state;
+        if (state) await state.transaction(() => {
+          state.set(STATE_PATHS.TIME_SLOT_INDEX, Number(si) || 0);
+          state.set(STATE_PATHS.TIME_DAY_INDEX,  Number(di) || 0);
+        });
+      },
+      resetToStart: async () => {
+        const cal = _calendar();
+        if (cal?.resetToStart) return cal.resetToStart();
+        const state = engine?.core?.state;
+        if (state) await state.transaction(() => {
+          state.set(STATE_PATHS.TIME_YEAR, 1039); state.set(STATE_PATHS.TIME_TRIMESTER, 1);
+          state.set(STATE_PATHS.TIME_WEEK, 1);    state.set(STATE_PATHS.TIME_DAY_INDEX, 0);
+          state.set(STATE_PATHS.TIME_SLOT_INDEX, 0);
+          state.set(STATE_PATHS.TIME_DAY_NAME, 'Praiosstag'); state.set(STATE_PATHS.TIME_SLOT_NAME, 'Morgens');
+        });
+      },
+    };
+
+    // Back-compat aliases
+    engine.engine  = engine;
+
+    // Pre-ready chain: test harness + phase integrations (async, not awaited)
+    JANUS_GLOBAL.preReady = (async () => {
+      await loadPhaseIntegrations(engine);
+    })();
+
+    // Cleanup on world close
+    Hooks.once('closingWorld', () => {
+      try { engine.cleanup(); } catch (_) {}
+      try { _cleanupCoreHooks(); } catch (_) {}
+      try { globalThis[__BOOT_KEY__].registered = false; } catch (_) {}
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────
+  // HOOK: ready (Phase 1→6 finalize)
+  // ─────────────────────────────────────────────────────────
+  Hooks.once('ready', async () => {
+    const engine = JANUS_GLOBAL.engine;
+    if (!engine) return;
+    const log = engine?.core?.logger ?? console;
+
+    try {
+      log.debug?.('[JANUS7] ready.pipeline start');
+      await (JANUS_GLOBAL.preReady ?? Promise.resolve());
+      log.debug?.('[JANUS7] ready.step preReady ok');
+    } catch (err) {
+      log.error?.('[JANUS7] ready.step preReady failed', _readyErrMeta(err));
+      ui.notifications?.error?.('JANUS7 Pre-Ready fehlgeschlagen. Details in der Konsole.');
+      return;
+    }
+
+    try {
+      runReadySanityCheck(engine);
+      log.debug?.('[JANUS7] ready.step sanity ok');
+    } catch (err) {
+      log.warn?.('[JANUS7] ready.step sanity failed', _readyErrMeta(err));
+    }
+
+    try {
+      if (typeof engine?.ready === 'function') {
+        await engine.ready();
+      } else {
+        log.warn?.('[JANUS7] Engine nicht verfügbar – Init übersprungen');
+      }
+      log.debug?.('[JANUS7] ready.step engine.ready ok');
+    } catch (err) {
+      log.error?.('[JANUS7] ready.step engine.ready failed', _readyErrMeta(err));
+      ui.notifications?.error?.('JANUS7 konnte engine.ready() nicht vollständig abschließen. Details in der Konsole.');
+      return;
+    }
+
+    if (!engine.capabilities) {
+      try {
+        engine.capabilities = new JanusCapabilities(engine);
+        Object.freeze(engine.capabilities);
+        if (globalThis.game?.janus7) globalThis.game.janus7.capabilities = engine.capabilities;
+        log.info?.('[JANUS7] capabilities layer registered');
+      } catch (capErr) {
+        log.warn?.('[JANUS7] capabilities init failed', _readyErrMeta(capErr));
+      }
+    }
+
+    if (JanusConfig.get('enablePhase7') !== false && !engine?.ki?.exportBundle) {
+      try {
+        const mod = await import('../scripts/integration/phase7-ki-integration.js');
+        mod?.attachPhase7Ki?.(engine);
+        log.debug?.('[JANUS7] Phase 7 KI attach ensured after ready.');
+      } catch (phase7Err) {
+        log.warn?.('[JANUS7] Phase 7 KI attach ensure failed', _readyErrMeta(phase7Err));
+      }
+    }
+
+    if (!engine._timeReactor) {
+      try {
+        engine._timeReactor = new JanusTimeReactor(engine);
+        engine._timeReactor.register();
+        engine.services ??= {};
+        engine.services.time ??= {};
+        engine.services.time.reactor = engine._timeReactor;
+        engine.time ??= {};
+        engine.time.reactor = engine._timeReactor;
+        log.info?.('[JANUS7] TimeReactor registered');
+      } catch (reactorErr) {
+        log.warn?.('[JANUS7] TimeReactor init failed', _readyErrMeta(reactorErr));
+      }
+    }
+
+    if (!engine._cron) {
+      try {
+        const cronWeekly    = (() => { try { return game.settings.get('janus7', 'cronWeeklyEnabled')    !== false; } catch { return true; } })();
+        const cronTrimester = (() => { try { return game.settings.get('janus7', 'cronTrimesterEnabled') !== false; } catch { return true; } })();
+        engine._cron = new JanusCron({ engine, logger: engine.core?.logger, builtinWeekly: cronWeekly, builtinTrimester: cronTrimester });
+        engine._cron.register();
+        engine.services ??= {};
+        engine.services.cron = engine._cron;
+        engine.cron = engine._cron;
+        log.info?.(`[JANUS7] JanusCron registered (weekly=${cronWeekly}, trimester=${cronTrimester})`);
+      } catch (cronErr) {
+        log.warn?.('[JANUS7] JanusCron init failed', _readyErrMeta(cronErr));
+      }
+    }
+
+try {
+  const docSync = await ensureLessonDocumentsReady(engine, { forceSync: false });
+  engine.documents ??= {};
+  engine.documents.lesson = engine.academy?.documents?.lessons ?? { subtype: 'janus7.lesson' };
+  log.info?.(`[JANUS7] Lesson documents ready (created=${docSync?.created ?? 0}, updated=${docSync?.updated ?? 0}).`);
+} catch (lessonDocErr) {
+  log.warn?.('[JANUS7] Lesson document sync failed', _readyErrMeta(lessonDocErr));
+}
+
+    if (!engine._sceneRegionsBridge) {
+      try {
+        engine._sceneRegionsBridge = new SceneRegionsBridge(engine);
+        engine._sceneRegionsBridge.register();
+        engine.bridges ??= {};
+        engine.bridges.foundry ??= {};
+        engine.bridges.foundry.sceneRegions = engine._sceneRegionsBridge;
+        engine.bridges.sceneRegions = engine._sceneRegionsBridge;
+        log.info?.('[JANUS7] SceneRegionsBridge registered');
+      } catch (bridgeErr) {
+        log.warn?.('[JANUS7] SceneRegionsBridge init failed', _readyErrMeta(bridgeErr));
+      }
+    }
+
+    log.debug?.('[JANUS7] ready.pipeline complete');
+  });
+
+  // ─────────────────────────────────────────────────────────
+  // HOOK: getSceneControlButtons — zentralisiert hier (Phase A3)
+  // Architecture contract marker for tests: Hooks.on('getSceneControlButtons' ... ) lives here.
+  // Vorher in scripts/integration/phase6-ui-integration.js
+  // ─────────────────────────────────────────────────────────
+  _registerCoreHook('getSceneControlButtons', (controls) => {
+    if (!game.user?.isGM) return;
+    try {
+      const engine = JANUS_GLOBAL.engine;
+      const logger = JANUS_GLOBAL.engine?.core?.logger ?? console;
+      const i18n = game?.i18n;
+      const localize = (key, fallback) => i18n?.localize?.(key) ?? fallback ?? key;
+
+      const isObject = (value) => !!value && (typeof value === 'object') && !Array.isArray(value);
+      const getTopLevelControls = (value) => {
+        if (Array.isArray(value)) return value;
+        if (isObject(value?.controls)) return value.controls;
+        if (Array.isArray(value?.controls)) return value.controls;
+        if (isObject(value?.items)) return value.items;
+        if (Array.isArray(value?.items)) return value.items;
+        if (isObject(value?.data)) return value.data;
+        if (Array.isArray(value?.data)) return value.data;
+        return value;
+      };
+      const top = getTopLevelControls(controls);
+      const isRecord = isObject(top);
+      const isList = Array.isArray(top);
+      if (!isRecord && !isList) return;
+
+      const getControlSet = (...names) => {
+        if (isRecord) {
+          for (const name of names) {
+            if (top[name]) return top[name];
+          }
+          return null;
+        }
+        return top.find((c) => names.includes(c?.name)) ?? null;
+      };
+
+      const getToolsContainer = (controlSet) => {
+        if (!controlSet) return null;
+        if (isObject(controlSet.tools)) return controlSet.tools;
+        if (Array.isArray(controlSet.tools)) return controlSet.tools;
+        controlSet.tools = isRecord ? {} : [];
+        return controlSet.tools;
+      };
+
+      const addTool = (tools, tool) => {
+        if (!tools) return;
+        if (Array.isArray(tools)) {
+          const exists = tools.some((t) => t?.name === tool.name);
+          if (!exists) tools.push(tool);
+          return;
+        }
+        if (!tools[tool.name]) tools[tool.name] = tool;
+      };
+
+const openControlPanel = async () => {
+  try {
+    const uiReg = game?.janus7?.ui;
+    if (uiReg?.openShell) return uiReg.openShell();
+    if (uiReg?.openControlPanel) return uiReg.openControlPanel();
+    const { JanusShellApp } = await import('../ui/apps/JanusShellApp.js');
+    return JanusShellApp.showSingleton();
+  } catch (err) {
+    logger.error?.('[JANUS7] Scene control openControlPanel fehlgeschlagen:', { message: err?.message });
+  }
+};
+
+const openUiApp = async (key, label = key) => {
+  try {
+    return game?.janus7?.ui?.open?.(key);
+  } catch (err) {
+    logger.error?.(`[JANUS7] Scene control ${label} fehlgeschlagen:`, { message: err?.message });
+  }
+};
+
+const openQuestJournal = async () => {
+  try {
+    const mod = await import('../scripts/ui/quest-journal.js');
+    new mod.JanusQuestJournal().render({ force: true, focus: true });
+    return true;
+  } catch (err) {
+    logger.error?.('[JANUS7] Scene control questJournal fehlgeschlagen:', { message: err?.message });
+    ui.notifications?.error?.('Quest-Journal konnte nicht geöffnet werden.');
+    return false;
+  }
+};
+
+const runTool = (fn) => (event) => {
+  event?.preventDefault?.();
+  void fn();
+};
+
+const toolVisible = !!game?.user?.isGM;
+
+const janusToolsRecord = {
+  openControlPanel: {
+    name: 'openControlPanel',
+    title: localize('JANUS7.Menu.ControlPanel.Label', 'Steuerzentrale öffnen'),
+    icon: 'fas fa-cogs',
+    order: 0,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(openControlPanel)
+  },
+  openAcademyOverview: {
+    name: 'openAcademyOverview',
+    title: 'Academy Overview öffnen',
+    icon: 'fas fa-university',
+    order: 1,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(() => openUiApp('academyOverview', 'academyOverview'))
+  },
+  openScoringView: {
+    name: 'openScoringView',
+    title: 'Scoring öffnen',
+    icon: 'fas fa-trophy',
+    order: 2,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(() => openUiApp('scoringView', 'scoringView'))
+  },
+  openSocialView: {
+    name: 'openSocialView',
+    title: 'Social View öffnen',
+    icon: 'fas fa-users',
+    order: 3,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(() => openUiApp('socialView', 'socialView'))
+  },
+  openAtmosphereDJ: {
+    name: 'openAtmosphereDJ',
+    title: 'Atmosphere DJ öffnen',
+    icon: 'fas fa-music',
+    order: 4,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(() => openUiApp('atmosphereDJ', 'atmosphereDJ'))
+  },
+  openQuestJournal: {
+    name: 'openQuestJournal',
+    title: 'Quest-Journal öffnen',
+    icon: 'fas fa-book-open',
+    order: 5,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(openQuestJournal)
+  },
+  openSyncPanel: {
+    name: 'openSyncPanel',
+    title: 'Sync Panel öffnen',
+    icon: 'fas fa-link',
+    order: 6,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(() => openUiApp('syncPanel', 'syncPanel'))
+  },
+  openStateInspector: {
+    name: 'openStateInspector',
+    title: 'State Inspector öffnen',
+    icon: 'fas fa-database',
+    order: 7,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(() => openUiApp('stateInspector', 'stateInspector'))
+  },
+  openConfigPanel: {
+    name: 'openConfigPanel',
+    title: 'Config Panel öffnen',
+    icon: 'fas fa-sliders-h',
+    order: 8,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(() => openUiApp('configPanel', 'configPanel'))
+  },
+  openAcademyDataStudio: {
+    name: 'openAcademyDataStudio',
+    title: 'Academy Data Studio öffnen',
+    icon: 'fas fa-edit',
+    order: 9,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(() => openUiApp('academyDataStudio', 'academyDataStudio'))
+  },
+  openSessionPrep: {
+    name: 'openSessionPrep',
+    title: localize('JANUS7.UI.OpenSessionPrepWizard', 'Session Prep Wizard öffnen'),
+    icon: 'fas fa-wand-magic-sparkles',
+    order: 10,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(() => openUiApp('sessionPrepWizard', 'sessionPrepWizard'))
+  },
+  openCommandCenter: {
+    name: 'openCommandCenter',
+    title: 'Power Tools öffnen',
+    icon: 'fas fa-terminal',
+    order: 11,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(() => openUiApp('commandCenter', 'commandCenter'))
+  },
+  openKiBackupManager: {
+    name: 'openKiBackupManager',
+    title: 'KI-Backups öffnen',
+    icon: 'fas fa-life-ring',
+    order: 12,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(() => openUiApp('kiBackupManager', 'kiBackupManager'))
+  },
+  openKiRoundtrip: {
+    name: 'openKiRoundtrip',
+    title: 'KI Roundtrip öffnen',
+    icon: 'fas fa-brain',
+    order: 13,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(() => openUiApp('kiRoundtrip', 'kiRoundtrip'))
+  },
+  openTestResults: {
+    name: 'openTestResults',
+    title: 'Test Results öffnen',
+    icon: 'fas fa-vial',
+    order: 14,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(() => openUiApp('testResults', 'testResults'))
+  },
+  openGuidedManualTests: {
+    name: 'openGuidedManualTests',
+    title: 'Guided Manual Tests öffnen',
+    icon: 'fas fa-route',
+    order: 15,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(() => openUiApp('guidedManualTests', 'guidedManualTests'))
+  }
+};
+
+if (isRecord) {
+  top.janus7 ??= {
+    name: 'janus7',
+    title: localize('JANUS7.Sidebar.Title', 'JANUS7'),
+    icon: 'fas fa-university',
+    visible: toolVisible,
+    activeTool: 'openControlPanel',
+    tools: janusToolsRecord
+  };
+  top.janus7.tools ??= {};
+  for (const [toolName, toolData] of Object.entries(janusToolsRecord)) {
+    top.janus7.tools[toolName] = toolData;
+  }
+  top.janus7.visible = toolVisible;
+  top.janus7.activeTool ??= 'openControlPanel';
+} else if (isList) {
+  const existing = getControlSet('janus7');
+  if (!existing) {
+    top.push({
+      name: 'janus7',
+      title: localize('JANUS7.Sidebar.Title', 'JANUS7'),
+      icon: 'fas fa-university',
+      visible: toolVisible,
+      layer: null,
+      activeTool: 'openControlPanel',
+      tools: Object.values(janusToolsRecord)
+    });
+  } else {
+    existing.title = localize('JANUS7.Sidebar.Title', 'JANUS7');
+    existing.icon = 'fas fa-university';
+    existing.visible = toolVisible;
+    existing.layer = null;
+    existing.activeTool = existing.activeTool ?? 'openControlPanel';
+    existing.tools = Object.values(janusToolsRecord);
+  }
+}
+
+      try {
+        engine?.ui?.onSceneControls?.(controls);
+      } catch (errInner) {
+        logger.warn?.('[JANUS7] ui.onSceneControls delegation failed:', { message: errInner?.message });
+      }
+    } catch (err) {
+      (JANUS_GLOBAL.engine?.core?.logger ?? console).warn?.('[JANUS7] getSceneControlButtons Fehler:', { message: err?.message });
+    }
+  });
+
+  // ─────────────────────────────────────────────────────────
+  // HOOK: updateWorldTime — zentralisiert hier (Sprint B)
+  // Architecture contract marker for tests: Hooks.on('updateWorldTime' ... ) lives here.
+  // Delegiert an engine.time.onWorldTimeUpdated(...)
+  // ─────────────────────────────────────────────────────────
+  _registerCoreHook('updateWorldTime', (...args) => {
+    try {
+      const engine = JANUS_GLOBAL.engine;
+      engine?.time?.onWorldTimeUpdated?.(...args);
+      engine?.bridge?.dsa5?.moon?.onWorldTimeUpdated?.(args[0]);
+    } catch (err) {
+(JANUS_GLOBAL.engine?.core?.logger ?? console).warn?.('[JANUS7] updateWorldTime delegation failed:', { message: err?.message });
+    }
+  });
+
+  // ─────────────────────────────────────────────────────────
+  // HOOK: chatMessage — JANUS7 Chat-CLI (/janus ...)
+  // GM-only in der Praxis (Commands enforzen Permissions intern).
+  // Gibt false zurück wenn Befehl konsumiert, damit Nachricht nicht gepostet wird.
+  // ─────────────────────────────────────────────────────────
+  _registerCoreHook('chatMessage', (chatLog, message, options) => {
+    try {
+      return handleChatMessage(chatLog, message, options);
+    } catch (err) {
+      (JANUS_GLOBAL.engine?.core?.logger ?? console).warn?.('[JANUS7] chatMessage handler error', { message: err?.message });
+    }
+  });
+}

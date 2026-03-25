@@ -1,0 +1,133 @@
+{
+  "title": "Janus7 KI Bundle",
+  "description": "Schema definition for the Phase 7 JANUS_EXPORT_V2 contract. The canonical export bundle contains export metadata, the full campaign_state snapshot and optional academy/reference sections for deeper KI workflows.",
+  "type": "object",
+  "required": [
+    "version",
+    "meta",
+    "campaign_state"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "enum": [
+        "JANUS_EXPORT_V2"
+      ],
+      "description": "Canonical export contract identifier."
+    },
+    "meta": {
+      "type": "object",
+      "description": "Export metadata for auditing and staleness checks.",
+      "required": [
+        "version",
+        "schemaVersion",
+        "exportedAt",
+        "world",
+        "moduleVersion"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Current JANUS7 module version."
+        },
+        "schemaVersion": {
+          "type": "string",
+          "description": "Version of the export contract schema."
+        },
+        "exportedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Timestamp when the export was created.",
+          "nullable": true
+        },
+        "world": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Foundry world identifier, if available.",
+          "nullable": true
+        },
+        "moduleVersion": {
+          "type": "string",
+          "description": "Alias of the active JANUS7 module version."
+        },
+        "stateVersion": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Version stored inside state.meta.version.",
+          "nullable": true
+        },
+        "exportMode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Selected export depth (lite/week/full).",
+          "nullable": true
+        }
+      }
+    },
+    "campaign_state": {
+      "type": "object",
+      "description": "Full JANUS7 state snapshot at export time.",
+      "required": [
+        "time",
+        "meta"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "time": {
+          "type": "object",
+          "description": "Current time slice from the state."
+        },
+        "meta": {
+          "type": "object",
+          "description": "State metadata."
+        }
+      }
+    },
+    "academy": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Optional enriched academy subtree for week/full exports.",
+      "additionalProperties": true,
+      "nullable": true
+    },
+    "references": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Optional cross-reference registry for KI usage.",
+      "additionalProperties": true,
+      "nullable": true
+    },
+    "knowledge_links": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Optional knowledge-link registry for KI usage.",
+      "additionalProperties": true,
+      "nullable": true
+    },
+    "art": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Optional art reference block for full exports.",
+      "additionalProperties": true,
+      "nullable": true
+    }
+  }
+}

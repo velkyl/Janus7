@@ -1,0 +1,87 @@
+<form class="janus7-page">
+  {{#if notReady}}
+    <div class="janus7-loading">
+      <h3><i class="fas fa-spinner fa-spin"></i> Social nicht bereit</h3>
+      <p>Phase-4 Simulation ist noch nicht initialisiert.</p>
+    </div>
+  {{else}}
+
+  <header class="janus7-toolbar">
+    <div class="janus7-toolbar__left">
+      <h2 class="janus7-title"><i class="fas fa-comments"></i> Social</h2>
+    </div>
+    <div class="janus7-toolbar__right">
+      <button type="button" class="janus-btn" data-action="refresh"><i class="fas fa-sync"></i> Refresh</button>
+    </div>
+  </header>
+
+  <section class="janus7-card">
+    <h3><i class="fas fa-exchange-alt"></i> Beziehung</h3>
+
+    <div class="janus7-grid2">
+      <div class="janus7-formrow">
+        <label>Von (NPC/SC)</label>
+        <select name="fromId">
+          <optgroup label="NPCs">
+            {{#each npcs}}
+              <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </optgroup>
+          <optgroup label="SCs">
+            {{#each pcs}}
+              <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="janus7-formrow">
+        <label>Zu (NPC/SC)</label>
+        <select name="toId">
+          <optgroup label="SCs">
+            {{#each pcs}}
+              <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </optgroup>
+          <optgroup label="NPCs">
+            {{#each npcs}}
+              <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </optgroup>
+        </select>
+      </div>
+    </div>
+
+    <div class="janus7-kpi">
+      <div class="kpi">
+        <div class="kpi__label">Attitude</div>
+        <div class="kpi__value">{{attitude}}</div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi__label">Anpassen</div>
+        <div class="kpi__actions">
+          <button type="button" class="janus-btn" data-action="adjust" data-delta="-1">-1</button>
+          <button type="button" class="janus-btn" data-action="adjust" data-delta="+1">+1</button>
+          <button type="button" class="janus-btn" data-action="adjust" data-delta="+5">+5</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="janus7-card">
+    <h3><i class="fas fa-list"></i> Ausgehende Beziehungen</h3>
+    <div class="janus7-table-wrap">
+      <table class="janus7-table">
+        <thead><tr><th>Zu</th><th class="num">Wert</th></tr></thead>
+        <tbody>
+          {{#each outgoing}}
+            <tr><td>{{toName}}</td><td class="num">{{value}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  {{/if}}
+</form>

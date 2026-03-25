@@ -1,0 +1,119 @@
+/**
+ * JANUS7 App Scopes
+ * Datei: janus7-app-scopes.css
+ *
+ * Scope:
+ * - Welle 3: app-spezifische Scope- und Bleed-Reduktion.
+ * - Kein visuelles Redesign, nur Container-Grenzen und sichere Defaults.
+ *
+ * Verantwortliche UI-Komponenten:
+ * - Control Panel
+ * - Shell
+ * - Test Results
+ * - Scoring View
+ *
+ * Status:
+ * ACTIVE
+ */
+
+.janus7-app,
+.janus7-app * {
+  box-sizing: border-box;
+}
+
+.janus7-app :where(button, input, select, textarea) {
+  font: inherit;
+}
+
+.janus7-control-panel :where(.tab, .tab-content),
+.j7-control-panel :where(.tab, .tab-content),
+.janus-shell-app :where(.tab, .tab-content),
+.j7-test-harness :where(.tab, .tab-content),
+.scoring-view :where(.tab, .tab-content) {
+  all: revert-layer;
+}
+
+.janus7-control-panel .j7-btn-row,
+.j7-test-harness .j7-btn-row,
+.scoring-view .j7-btn-row {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.j7-test-harness code,
+.janus7-control-panel code,
+.scoring-view code,
+.janus-shell-app code {
+  word-break: break-word;
+}
+
+.j7-test-harness .j7-test-group-body,
+.janus7-control-panel .janus7-grid,
+.scoring-view .scoring-grid {
+  min-width: 0;
+}
+
+
+.janus7-app .window-content {
+  min-width: 0;
+}
+
+.j7-test-harness,
+.janus7-control-panel,
+.janus-shell-app,
+.scoring-view {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.j7-test-harness .j7-test-row,
+.j7-test-harness .j7-suite-card,
+.janus-shell-app .j7-shell__card,
+.janus-shell-app .j7-shell__panel,
+.janus7-control-panel .janus7-card,
+.scoring-view .scoring-card {
+  min-width: 0;
+}
+
+.j7-test-harness .j7-test-main,
+.janus-shell-app .j7-shell__content,
+.janus7-control-panel .janus7-grid > *,
+.scoring-view .scoring-grid > * {
+  min-width: 0;
+}
+
+
+/* Welle 3 Fortsetzung: harte Container-Grenzen für AppV2-Fenster */
+.application.janus7-app,
+.application.janus7-app .window-content,
+.application.janus7-app section.window-content {
+  min-width: 0;
+  min-height: 0;
+}
+
+.application.janus7-app .window-content {
+  overflow: auto;
+}
+
+.application.janus7-app :where(.standard-form, form, section, article, aside, nav, div) {
+  min-width: 0;
+}
+
+.janus-shell-app .j7-shell__sidebar,
+.janus-shell-app .j7-shell__content,
+.janus-shell-app .j7-shell__panelHost {
+  min-width: 0;
+}
+
+.janus7-sidebar,
+.janus7-sidebar .j7-sidebar-sections,
+.janus7-sidebar .janus7-sidebar-btn-group {
+  min-width: 0;
+}
+
+.janus7-sidebar button.control > span,
+.janus7-sidebar button.control .label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

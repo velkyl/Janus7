@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Extracurricular-Aufgaben zum Freischalten von Zaubern/Fähigkeiten",
+    "schema": "janus7:academy:assignments:v1"
+  },
+  "assignments": [
+    {
+      "id": "ASSIGN_FELENIUS_01",
+      "issuerId": "NPC_JIRDAN_FELENIUS",
+      "title": "Felenius' Feuerprobe",
+      "description": "Bevor ich euch lehre, das reine Feuer des Ignifaxius zu formen, müsst ihr die Hitze verstehen. Bringt mir zwei Phiolen Feuerschlick aus den Katakomben und übersteht eine Nachtwache am großen Kessel.",
+      "unlocks": {
+        "type": "spell",
+        "targetId": "SPELL_IGNIFAXIUS"
+      },
+      "objectives": [
+        {
+          "id": "obj_1",
+          "type": "collect_item",
+          "targetItemName": "Feuerschlick",
+          "requiredAmount": 2
+        },
+        {
+          "id": "obj_2",
+          "type": "complete_event",
+          "targetEventId": "E_ALCHEMY_NIGHT_WATCH"
+        }
+      ],
+      "rewards": {
+        "ap": 2,
+        "effectIds": [
+          "rel_felenius_plus2",
+          "house_points_plus5"
+        ]
+      }
+    }
+  ]
+}

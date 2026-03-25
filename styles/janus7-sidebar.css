@@ -1,0 +1,175 @@
+/**
+ * JANUS7 Sidebar / Scene Controls
+ * Datei: janus7-sidebar.css
+ *
+ * Scope:
+ * - Styles für Scene Controls, Sidebar-nahe Einstiege und Tooling-Oberflächen.
+
+ * Verantwortliche UI-Komponenten:
+ * - Scene Controls
+ * - Sidebar-nahe Entry Points
+ * Status:
+ * ACTIVE
+ */
+
+/*
+ * JANUS7 Sidebar Tab Styles
+ * File: styles/janus7-sidebar.css
+ * Scope: ausschließlich innerhalb des JANUS7-Sidebar-Tabs.
+ */
+@layer janus7.sidebar {
+
+.janus7-sidebar {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: var(--color-text-dark-primary, #1f1a14);
+  background: color-mix(in srgb, var(--color-bg, #f5f1e6) 86%, white);
+}
+
+.j7-sidebar-shell { box-sizing: border-box; }
+
+.j7-sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.8rem;
+  border-bottom: 1px solid var(--color-border-dark-1, rgba(0,0,0,0.18));
+  background: color-mix(in srgb, var(--color-bg-option, rgba(255,255,255,0.6)) 88%, white);
+  flex-shrink: 0;
+}
+
+.janus7-sidebar .header-title {
+  margin: 0;
+  font-family: var(--font-primary, inherit);
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--color-text-dark-heading, #241d14);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.janus7-sidebar .janus7-sidebar-version {
+  margin-left: auto;
+  font-size: 0.72rem;
+  opacity: 0.72;
+  color: var(--color-text-dark-secondary, #4b443d);
+  font-family: var(--font-mono, monospace);
+  user-select: none;
+}
+
+.j7-sidebar-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0.75rem;
+  overflow-y: auto;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.j7-sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.65rem;
+  border: 1px solid var(--color-border-dark-1, rgba(0,0,0,0.16));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--color-bg-option, rgba(255,255,255,0.75)) 94%, white);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
+.j7-sidebar-section-title {
+  margin: 0 0 0.1rem 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-dark-secondary, #4b443d);
+}
+
+.janus7-sidebar .janus7-sidebar-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.janus7-sidebar button.control {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: rgba(255,255,255,0.78);
+  color: var(--color-text-dark-primary, #1f1a14);
+  font-family: var(--font-primary, inherit);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s ease, border-color 0.12s ease, transform 0.08s ease;
+}
+
+.janus7-sidebar button.control i {
+  width: 1.05rem;
+  text-align: center;
+  opacity: 0.9;
+  flex-shrink: 0;
+  font-size: 0.95em;
+}
+
+.janus7-sidebar button.control:hover {
+  background: rgba(255,255,255,0.96);
+  border-color: rgba(0,0,0,0.18);
+}
+
+.janus7-sidebar button.control:active { transform: translateY(1px); }
+
+.janus7-sidebar button.control:focus-visible {
+  outline: 2px solid var(--color-border-highlight, #7b68ee);
+  outline-offset: 1px;
+}
+
+.janus7-sidebar button.control.active {
+  background: color-mix(in srgb, rgba(123,104,238,0.16) 70%, white);
+  border-color: rgba(123,104,238,0.35);
+  color: var(--color-text-dark-heading, #1f1830);
+}
+
+.janus7-sidebar .janus7-sidebar-actions button.control {
+  font-style: normal;
+  font-weight: 600;
+}
+
+.janus7-sidebar .notes {
+  padding: 1rem 0.85rem;
+  font-size: 0.92rem;
+  text-align: center;
+  color: var(--color-text-dark-secondary, #4b443d);
+}
+
+.janus7-sidebar-fallback {
+  padding: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.janus7-sidebar-fallback button {
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.j7-sidebar-sections {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-dark-2, rgba(0,0,0,0.28)) transparent;
+}
+
+@media (max-width: 1100px) {
+  .janus7-sidebar button.control { font-size: 0.85rem; padding: 0.45rem 0.55rem; }
+  .j7-sidebar-sections { padding: 0.55rem; }
+}
+
+} /* end @layer janus7.sidebar */

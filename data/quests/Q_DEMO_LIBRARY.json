@@ -1,0 +1,52 @@
+{
+  "questId": "Q_DEMO_LIBRARY",
+  "title": "Bibliotheksgeheimnis",
+  "description": "Ein altes Buch in der Bibliothek enthält ein Rätsel, das auf einen verborgenen Raum hinweist.",
+  "category": "uncategorized",
+  "tags": [
+    "demo",
+    "mystery"
+  ],
+  "startNodeId": "QN_LIBRARY_START",
+  "nodes": [
+    {
+      "nodeId": "QN_LIBRARY_START",
+      "type": "event",
+      "eventId": "E_LIBRARY_DISCOVER",
+      "nextNodeId": "QN_LIBRARY_INVESTIGATE",
+      "failforwardNodeId": null
+    },
+    {
+      "nodeId": "QN_LIBRARY_INVESTIGATE",
+      "type": "event",
+      "eventId": "E_LIBRARY_INVESTIGATE",
+      "reqExpr": "playerState.skills.lore >= 2",
+      "nextNodeId": "QN_LIBRARY_FOUND",
+      "failforwardNodeId": "QN_LIBRARY_FAIL"
+    },
+    {
+      "nodeId": "QN_LIBRARY_FOUND",
+      "type": "event",
+      "eventId": "E_LIBRARY_ARCHIVE_TRACE",
+      "nextNodeId": null,
+      "completesQuest": true,
+      "failforwardNodeId": null
+    },
+    {
+      "nodeId": "QN_LIBRARY_FAIL",
+      "type": "event",
+      "eventId": "E_MENTOR_HELP",
+      "nextNodeId": null,
+      "completesQuest": true,
+      "failforwardNodeId": null
+    }
+  ],
+  "rewards": {
+    "tags": [
+      "library_secret_found"
+    ],
+    "schoolStats": {
+      "wissen": 1
+    }
+  }
+}

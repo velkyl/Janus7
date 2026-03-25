@@ -1,0 +1,45 @@
+{
+  "meta": {
+    "version": "1.1.0",
+    "description": "Akademie-Prüfungen (schriftlich, mündlich, praktisch, Multiple Choice)"
+  },
+  "exams": [
+    {
+      "id": "EXAM_MAG_BASICS_01",
+      "name": "Klausur: Grundlagen der Magietheorie",
+      "lessonIds": [
+        "LES_Y1_T2_MAGTH_01"
+      ],
+      "type": "written",
+      "tags": [
+        "magie",
+        "klausur"
+      ],
+      "summary": "Theoretische Klausur über die Grundlagen der Magietheorie.",
+      "mechanics": {
+        "skills": [
+          {
+            "systemSkillId": "TALENT_MAGIEKUNDE",
+            "weight": 2
+          }
+        ]
+      },
+      "gradingScheme": {
+        "passThreshold": 8,
+        "excellentThreshold": 14
+      },
+      "interaction": {
+        "mode": "mcq",
+        "questionSetId": "EXAMQ_MAG_BASICS_01"
+      },
+      "references": {
+        "dsa5RuleRefs": [
+          "REGELWERK: PRÜFUNGEN & WISSENSFRAGEN"
+        ],
+        "libraryItemIds": [
+          "LIB_SPHEREN_OVERVIEW"
+        ]
+      }
+    }
+  ]
+}

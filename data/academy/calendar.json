@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Akademie-Kalender (Jahrgänge, Wochen, Unterricht, Prüfungen, Events)",
+    "schema": "janus7:academy:calendar:v1",
+    "generatedAt": "2026-01-21T19:28:53Z"
+  },
+  "entries": [
+    {
+      "id": "y1_t1_w1_praios_morning",
+      "year": 1,
+      "trimester": 1,
+      "week": 1,
+      "day": "Praiosstag",
+      "phase": "Morgen",
+      "type": "lesson-slot",
+      "lessonId": "LES_MAG_BASICS_01",
+      "examId": null,
+      "eventId": null,
+      "holidayKey": null,
+      "notes": "Einführungsstunde in die Magietheorie."
+    }
+  ]
+}

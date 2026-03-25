@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "description": "SSOT für Schips-Scoring-Regeln. Geladen von JanusFateTracker.loadConfig().",
+  "notes": [
+    "Punkte werden via JanusScoringEngine.addStudentPoints() gutgeschrieben.",
+    "duringExam wird über game.janus7.academy.exams.activeExam erkannt.",
+    "'group' Schips vergeben keine Punkte an einen spezifischen Studenten (kein actorId)."
+  ],
+  "schipScoring": {
+    "personalSchipDuringExam": 5,
+    "groupSchipDuringExam": 2,
+    "personalSchipOther": 0,
+    "groupSchipOther": 0
+  },
+  "awardRules": {
+    "passed_with_distinction": {
+      "awardSchips": 1,
+      "reason": "Akademische Auszeichnung"
+    },
+    "perfect_exam": {
+      "awardSchips": 2,
+      "reason": "Makellose Prüfungsleistung (QS 6)"
+    }
+  }
+}

@@ -1,0 +1,62 @@
+<form class="janus7-page">
+  {{#if notReady}}
+    <div class="janus7-loading">
+      <h3><i class="fas fa-spinner fa-spin"></i> Atmosphere nicht bereit</h3>
+      <p>Phase-5 Atmosphere ist nicht initialisiert oder deaktiviert.</p>
+    </div>
+  {{else}}
+
+  <header class="janus7-toolbar">
+    <div class="janus7-toolbar__left">
+      <h2 class="janus7-title"><i class="fas fa-music"></i> Atmosphere DJ</h2>
+    </div>
+    <div class="janus7-toolbar__right">
+      <button type="button" class="janus-btn" data-action="stopAll"><i class="fas fa-stop"></i> Stop All</button>
+      <button type="button" class="janus-btn" data-action="refresh"><i class="fas fa-sync"></i> Refresh</button>
+    </div>
+  </header>
+
+  <section class="janus7-card">
+    <h3><i class="fas fa-sliders-h"></i> Steuerung</h3>
+
+    <div class="janus7-grid3">
+      <div class="janus7-formrow">
+        <label>Master Client</label>
+        <select name="masterClientUserId">
+          <option value="">(auto)</option>
+          {{#each users}}
+            <option value="{{id}}">{{name}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="janus7-formrow">
+        <label>Master Volume ({{volPct}}%)</label>
+        <input name="volume" type="range" min="0" max="100" value="{{volPct}}"/>
+      </div>
+
+      <div class="janus7-formrow">
+        <label>Auto</label>
+        <div class="janus7-checks">
+          <label><input name="autoCalendar" type="checkbox" {{#if status.autoFromCalendar}}checked{{/if}}/> Kalender</label>
+          <label><input name="autoEvents" type="checkbox" {{#if status.autoFromEvents}}checked{{/if}}/> Events</label>
+          <label><input name="autoLocation" type="checkbox" {{#if status.autoFromLocation}}checked{{/if}}/> Ort</label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="janus7-card">
+    <h3><i class="fas fa-th-large"></i> Moods</h3>
+    <div class="janus7-mood-grid">
+      {{#each moods}}
+        <button type="button" class="janus7-mood {{#if isActive}}is-active{{/if}}" data-action="applyMood" data-mood-id="{{id}}">
+          <div class="janus7-mood__name">{{name}}</div>
+          {{#if description}}<div class="janus7-mood__desc">{{description}}</div>{{/if}}
+        </button>
+      {{/each}}
+    </div>
+  </section>
+
+  {{/if}}
+</form>

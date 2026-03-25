@@ -1,0 +1,804 @@
+<form class="janus7-page janus7-control-panel">
+  <header class="janus7-toolbar">
+    <div class="janus7-toolbar__left">
+      <h2 class="janus7-title"><i class="fas fa-compass"></i> Director</h2>
+      <span class="janus7-muted">{{slotPosLabel}}</span>
+    </div>
+
+    <div class="janus7-toolbar__right btn-grid">
+      <button type="button" class="janus-btn" data-action="openAcademyOverview" title="Academy Übersicht"><i class="fas fa-calendar-alt"></i> Academy</button>
+      <button type="button" class="janus-btn" data-action="openLessonLibrary" title="Lesson Library"><i class="fas fa-book-open"></i> Lessons</button>
+      <button type="button" class="janus-btn" data-action="openScoring"         title="Scoring-Übersicht"><i class="fas fa-trophy"></i> Scoring</button>
+      <button type="button" class="janus-btn" data-action="openSocial"          title="Soziales Netzwerk"><i class="fas fa-users"></i> Social</button>
+      <button type="button" class="janus-btn" data-action="openAtmosphereDJ"    title="Atmosphäre & Musik"><i class="fas fa-music"></i> Atmo</button>
+      <button type="button" class="janus-btn" data-action="openQuestJournal"    title="Quest-Journal"><i class="fas fa-book-open"></i> Quests</button>
+      <button type="button" class="janus-btn" data-action="openSyncPanel"       title="Welt-Synchronisation"><i class="fas fa-link"></i> Sync</button>
+      {{#if phase7Enabled}}
+        {{#if isGM}}
+          <button type="button" class="janus-btn janus-btn--highlight" data-action="openKiRoundtrip" title="KI Roundtrip (Vollbild)"><i class="fas fa-brain"></i> KI</button>
+        {{else}}
+          <button type="button" class="janus-btn" disabled title="GM only"><i class="fas fa-brain"></i> KI</button>
+        {{/if}}
+      {{/if}}
+      <button type="button" class="janus-btn" data-action="openCommandCenter"   title="Power-User Werkzeuge & Diagnose"><i class="fas fa-terminal"></i> Power Tools</button>
+      <button type="button" class="janus-btn" data-action="openSessionPrepWizard" title="Session-Prep-Assistent"><i class="fas fa-wand-sparkles"></i> Session Prep</button>
+      <button type="button" class="janus-btn" data-action="openKiBackupManager" title="KI-Backups & Restore"><i class="fas fa-life-ring"></i> Backups</button>
+      <button type="button" class="janus-btn" data-action="openSettings"        title="Einstellungen"><i class="fas fa-cog"></i></button>
+    </div>
+  </header>
+
+  <nav class="tabs janus7-tabs" aria-label="JANUS7 Control Panel Tabs">
+    <a class="item active" data-tab="overview">   <i class="fas fa-home"></i>         Übersicht</a>
+    <a class="item"        data-tab="director">   <i class="fas fa-route"></i>        Director</a>
+    <a class="item"        data-tab="schedule">   <i class="fas fa-calendar"></i>     Stundenplan</a>
+    <a class="item"        data-tab="quests">     <i class="fas fa-book-open"></i>    Quests</a>
+    <a class="item"        data-tab="people">     <i class="fas fa-user-friends"></i> Personen</a>
+    <a class="item"        data-tab="places">     <i class="fas fa-map"></i>          Orte</a>
+    <a class="item"        data-tab="ki">         <i class="fas fa-brain"></i>        KI</a>
+    <a class="item"        data-tab="sync">       <i class="fas fa-link"></i>         Sync</a>
+    <a class="item"        data-tab="system">     <i class="fas fa-sliders-h"></i>    System</a>
+    <a class="item"        data-tab="diagnostics"><i class="fas fa-bug"></i>          Diagnose</a>
+  </nav>
+
+  <section class="janus7-tab-container">
+
+    <!-- ═══════════════════════════════════ OVERVIEW ═══════════════════════════════════ -->
+    <div class="tab active" data-tab="overview">
+      <div class="dashboard-grid">
+        <section class="janus7-card">
+          <h3><i class="fas fa-clock"></i> Zeitsteuerung</h3>
+          <div class="janus7-kv">
+            <div class="key">Slot</div><div class="val">{{slotPosLabel}}</div>
+            <div class="key">Tag</div><div class="val">{{timeBar.dayName}}</div>
+            <div class="key">Phase</div><div class="val">{{timeBar.phaseName}}</div>
+          </div>
+          <div class="btn-grid">
+            <button type="button" class="janus-btn primary" data-action="advanceSlot" data-steps="1">+1 Slot</button>
+            <button type="button" class="janus-btn"         data-action="advanceSlot" data-steps="3">+3 Slots</button>
+            <button type="button" class="janus-btn"         data-action="refreshPanel"><i class="fas fa-sync"></i> Refresh</button>
+          </div>
+        </section>
+
+        <section class="janus7-card">
+          <h3><i class="fas fa-bullseye"></i> Jetzt</h3>
+          {{#if current.hasEntry}}
+            <div class="janus7-kv">
+              <div class="key">Typ</div><div class="val">{{current.kind}}</div>
+              <div class="key">Titel</div><div class="val"><strong>{{current.title}}</strong></div>
+              <div class="key">Lehrkraft</div><div class="val">{{current.teacher}}</div>
+              <div class="key">Ort</div><div class="val">{{current.room}}</div>
+            </div>
+            {{#if current.desc}}<p class="muted">{{current.desc}}</p>{{/if}}
+          {{else}}
+            <p class="muted">Kein Eintrag für diesen Slot.</p>
+          {{/if}}
+        </section>
+
+        <section class="janus7-card">
+          <h3><i class="fas fa-sitemap"></i> Slot-Resolver</h3>
+          <div class="janus7-kv">
+            <div class="key">Status</div><div class="val">{{#if slotResolution.resolved}}OK{{else}}Fallback{{/if}}</div>
+            <div class="key">Kind</div><div class="val">{{slotResolution.kind}}</div>
+          </div>
+          {{#if slotResolution.warnings.length}}
+            <div class="janus7-scroll">
+              {{#each slotResolution.warnings}}
+                <div class="janus7-logline"><span class="tag">WARN</span><span>{{this}}</span></div>
+              {{/each}}
+            </div>
+          {{/if}}
+        </section>
+      </div>
+
+      <div class="janus7-two-col">
+        <section class="janus7-card">
+          <h3><i class="fas fa-list"></i> Heute</h3>
+          {{#if today.items.length}}
+            <div class="janus7-table-wrap">
+              <table class="janus7-table">
+                <thead><tr><th>Zeit</th><th>Typ</th><th>Titel</th><th>Ort</th></tr></thead>
+                <tbody>
+                  {{#each today.items}}
+                    <tr><td>{{time}}</td><td>{{type}}</td><td>{{title}}</td><td>{{where}}</td></tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+          {{else}}
+            <p class="muted">Keine Items für heute gefunden.</p>
+          {{/if}}
+        </section>
+
+        <section class="janus7-card">
+          <h3><i class="fas fa-diagram-project"></i> Director Kernel</h3>
+          {{#if directorRuntime.available}}
+            <div class="janus7-kv">
+              <div class="key">Lessons</div><div class="val">{{directorRuntime.lessonCount}}</div>
+              <div class="key">Events</div><div class="val">{{directorRuntime.eventCount}}</div>
+              <div class="key">Queue</div><div class="val">{{directorRuntime.queuedEventCount}}</div>
+              <div class="key">Aktive Quests</div><div class="val">{{directorRuntime.activeQuestCount}}</div>
+              <div class="key">Graph</div><div class="val">{{directorRuntime.graphNodeCount}} Nodes / {{directorRuntime.graphEdgeCount}} Edges</div>
+            </div>
+            {{#if directorRuntime.currentLessonId}}
+              <p class="muted">Aktuelle Lesson-ID: <code>{{directorRuntime.currentLessonId}}</code></p>
+            {{/if}}
+            {{#if directorRuntime.queuedEvents.length}}
+              <div class="janus7-scroll j7-mt-sm" aria-label="Queued Events">
+                {{#each directorRuntime.queuedEvents}}
+                  <div class="janus7-logline"><span class="tag">{{type}}</span><span>{{label}}</span></div>
+                {{/each}}
+              </div>
+            {{else}}
+              <p class="muted">Keine Runtime-Events in der Queue.</p>
+            {{/if}}
+            {{#if directorRuntime.activeQuests.length}}
+              <div class="janus7-scroll j7-mt-sm" aria-label="Aktive Quests">
+                {{#each directorRuntime.activeQuests}}
+                  <div class="janus7-logline"><span class="tag">{{status}}</span><span>{{label}}</span></div>
+                {{/each}}
+              </div>
+            {{/if}}
+          {{else}}
+            <p class="muted">Director Runtime Summary ist aktuell nicht verfügbar.</p>
+          {{/if}}
+          <div class="btn-grid j7-mt-sm">
+            <button type="button" class="janus-btn primary" data-action="startDirectorDay"><i class="fas fa-sun"></i> Tagesstart</button>
+            <button type="button" class="janus-btn" data-action="directorRunLesson"><i class="fas fa-chalkboard-teacher"></i> Lesson starten</button>
+            <button type="button" class="janus-btn" data-action="directorProcessQueue"><i class="fas fa-list-check"></i> Queue abarbeiten</button>
+            <button type="button" class="janus-btn" data-action="directorGenerateQuests"><i class="fas fa-scroll"></i> Quest-Ideen</button>
+            <button type="button" class="janus-btn" data-action="directorEvaluateSocial"><i class="fas fa-users"></i> Social prüfen</button>
+          </div>
+          <hr class="j7-mt-sm j7-mb-sm">
+          <h4><i class="fas fa-route"></i> Director-Workflow</h4>
+          {{#if directorWorkflow.lastAction}}
+            <p><strong>Letzter Lauf:</strong> {{directorWorkflow.lastAction}}{{#if directorWorkflow.lastRunAt}} <span class="muted">· {{directorWorkflow.lastRunAt}}</span>{{/if}}</p>
+            {{#if directorWorkflow.lastError}}
+              <p class="muted"><strong>Fehler:</strong> {{directorWorkflow.lastError}}</p>
+            {{/if}}
+            {{#if directorWorkflow.resultLines.length}}
+              <ul class="janus7-list compact">
+                {{#each directorWorkflow.resultLines}}
+                  <li>{{this}}</li>
+                {{/each}}
+              </ul>
+            {{/if}}
+          {{else}}
+            <p class="muted">Noch kein Director-Lauf in dieser Sitzung.</p>
+          {{/if}}
+          {{#if directorWorkflow.nextAction}}
+            <div class="janus7-callout j7-mt-sm">
+              <p><strong>Nächste empfohlene Aktion:</strong> {{directorWorkflow.nextAction.label}}</p>
+              <p class="muted">{{directorWorkflow.nextAction.reason}}</p>
+              <button type="button" class="janus-btn" data-action="{{directorWorkflow.nextAction.action}}"><i class="fas fa-play"></i> {{directorWorkflow.nextAction.label}}</button>
+            </div>
+          {{/if}}
+          {{#if directorWorkflow.history.length}}
+            <div class="janus7-scroll j7-mt-sm" aria-label="Director Verlauf">
+              {{#each directorWorkflow.history}}
+                <div class="janus7-logline"><span class="tag">{{#if ok}}OK{{else}}ERR{{/if}}</span><span><strong>{{label}}</strong>{{#if detail}} · {{detail}}{{/if}}</span></div>
+              {{/each}}
+            </div>
+          {{/if}}
+        </section>
+
+        <section class="janus7-card">
+          <h3><i class="fas fa-bolt"></i> Alle Oberflächen</h3>
+          <div class="btn-grid">
+            <button type="button" class="janus-btn" data-action="openAcademyOverview">  <i class="fas fa-calendar-alt"></i> Academy Overview</button>
+            <button type="button" class="janus-btn" data-action="openLessonLibrary">   <i class="fas fa-book-open"></i> Lesson Library</button>
+            <button type="button" class="janus-btn" data-action="openScoringView">      <i class="fas fa-trophy"></i>       Scoring</button>
+            <button type="button" class="janus-btn" data-action="openSocialView">       <i class="fas fa-users"></i>        Social</button>
+            <button type="button" class="janus-btn" data-action="openAtmosphereDJ">     <i class="fas fa-music"></i>        Atmosphere DJ</button>
+            <button type="button" class="janus-btn" data-action="openQuestJournal">     <i class="fas fa-book-open"></i>    Quest Journal</button>
+            <button type="button" class="janus-btn" data-action="openSyncPanel">        <i class="fas fa-link"></i>         Sync Panel</button>
+            <button type="button" class="janus-btn" data-action="openStateInspector">   <i class="fas fa-database"></i>     State Inspector</button>
+            <button type="button" class="janus-btn" data-action="openConfigPanel">      <i class="fas fa-sliders-h"></i>    Config Panel</button>
+            <button type="button" class="janus-btn" data-action="openAcademyDataStudio"><i class="fas fa-edit"></i>         Data Studio</button>
+            <button type="button" class="janus-btn" data-action="openSessionPrepWizard"><i class="fas fa-wand-sparkles"></i> Session Prep</button>
+            <button type="button" class="janus-btn" data-action="openCommandCenter">    <i class="fas fa-terminal"></i>     Power Tools</button>
+            {{#if phase7Enabled}}{{#if isGM}}
+              <button type="button" class="janus-btn janus-btn--highlight" data-action="openKiRoundtrip"><i class="fas fa-brain"></i> KI Roundtrip</button>
+            {{/if}}{{/if}}
+            <button type="button" class="janus-btn" data-action="openTroubleshooting">  <i class="fas fa-life-ring"></i>    Troubleshooting</button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════ DIRECTOR ═══════════════════════════════════ -->
+    <div class="tab" data-tab="director">
+      <div class="dashboard-grid">
+        <section class="janus7-card">
+          <h3><i class="fas fa-route"></i> Runbook</h3>
+          {{#if directorRunbook.suggestedAction}}
+            <div class="janus7-callout">
+              <p><strong>Empfohlene nächste Aktion:</strong> {{directorRunbook.suggestedAction.label}}</p>
+              <p class="muted">{{directorRunbook.suggestedAction.reason}}</p>
+              <div class="btn-grid">
+                <button type="button" class="janus-btn primary" data-action="directorRunbookNext"><i class="fas fa-play"></i> Empfehlung ausführen</button>
+                <button type="button" class="janus-btn" data-action="{{directorRunbook.suggestedAction.action}}"><i class="fas fa-bolt"></i> Direkt ausführen</button>
+              </div>
+            </div>
+          {{else}}
+            <p class="muted">Aktuell keine empfohlene nächste Aktion.</p>
+          {{/if}}
+          {{#if directorRunbook.moodSuggestion}}
+            <div class="janus7-kv j7-mt-sm">
+              <div class="key">Mood-Vorschlag</div><div class="val">{{directorRunbook.moodSuggestion.moodLabel}}</div>
+              <div class="key">Quelle</div><div class="val">{{directorRunbook.moodSuggestion.source}}</div>
+            </div>
+          {{/if}}
+        </section>
+
+        <section class="janus7-card">
+          <h3><i class="fas fa-sliders-h"></i> Director Aktionen</h3>
+          <div class="btn-grid">
+            <button type="button" class="janus-btn primary" data-action="startDirectorDay"><i class="fas fa-sun"></i> Tagesstart</button>
+            <button type="button" class="janus-btn" data-action="directorProcessQueue"><i class="fas fa-list-check"></i> Queue</button>
+            <button type="button" class="janus-btn" data-action="directorRunLesson"><i class="fas fa-chalkboard-teacher"></i> Lesson</button>
+            <button type="button" class="janus-btn" data-action="directorApplyMood"><i class="fas fa-music"></i> Stimmung</button>
+            <button type="button" class="janus-btn" data-action="directorEvaluateSocial"><i class="fas fa-users"></i> Social</button>
+            <button type="button" class="janus-btn" data-action="directorGenerateQuests"><i class="fas fa-scroll"></i> Quests</button>
+          </div>
+        </section>
+      </div>
+
+      <div class="janus7-two-col">
+        <section class="janus7-card">
+          <h3><i class="fas fa-shoe-prints"></i> Ablaufstatus</h3>
+          {{#if directorRunbook.steps.length}}
+            <div class="janus7-scroll" aria-label="Director Runbook Schritte">
+              {{#each directorRunbook.steps}}
+                <div class="janus7-logline"><span class="tag">{{status}}</span><span><strong>{{label}}</strong> · {{detail}}</span></div>
+              {{/each}}
+            </div>
+          {{else}}
+            <p class="muted">Keine Runbook-Schritte verfügbar.</p>
+          {{/if}}
+        </section>
+
+        <section class="janus7-card">
+          <h3><i class="fas fa-clipboard-list"></i> Ergebnisblöcke</h3>
+          {{#if directorWorkflow.lessonResult}}
+            <div class="janus7-kv">
+              <div class="key">Lesson</div><div class="val">{{directorWorkflow.lessonResult.title}}</div>
+              <div class="key">Lehrkraft</div><div class="val">{{directorWorkflow.lessonResult.teacher}}</div>
+              <div class="key">Ort</div><div class="val">{{directorWorkflow.lessonResult.location}}</div>
+            </div>
+          {{else}}
+            <p class="muted">Noch kein Lesson-Ergebnis in dieser Sitzung.</p>
+          {{/if}}
+          {{#if directorWorkflow.queueItems.length}}
+            <h4 class="j7-mt-sm"><i class="fas fa-list-check"></i> Queue</h4>
+            <div class="janus7-scroll">
+              {{#each directorWorkflow.queueItems}}
+                <div class="janus7-logline"><span class="tag">{{status}}</span><span>{{label}} · {{type}}</span></div>
+              {{/each}}
+            </div>
+          {{/if}}
+          {{#if directorWorkflow.questSuggestions.length}}
+            <h4 class="j7-mt-sm"><i class="fas fa-scroll"></i> Quest-Vorschläge</h4>
+            <div class="janus7-scroll">
+              {{#each directorWorkflow.questSuggestions}}
+                <div class="janus7-logline"><span class="tag">{{score}}</span><span><strong>{{label}}</strong> · {{reason}}</span></div>
+              {{/each}}
+            </div>
+          {{/if}}
+          {{#if directorWorkflow.startedQuest}}
+            <h4 class="j7-mt-sm"><i class="fas fa-flag-checkered"></i> Letzte Quest-Übernahme</h4>
+            <p><strong>{{directorWorkflow.startedQuest.title}}</strong> <span class="muted">· gestartet für {{directorWorkflow.startedQuest.actorLabel}}</span></p>
+          {{/if}}
+          {{#if directorWorkflow.socialAdvances.length}}
+            <h4 class="j7-mt-sm"><i class="fas fa-users"></i> Social-Fortschritte</h4>
+            <div class="janus7-scroll">
+              {{#each directorWorkflow.socialAdvances}}
+                <div class="janus7-logline"><span class="tag">{{#if rank}}R{{rank}}{{else}}OK{{/if}}</span><span>{{label}}{{#if arcana}} · {{arcana}}{{/if}}{{#if perkCount}} · {{perkCount}} Perks{{/if}}{{#if eventTriggerId}} · Event {{eventTriggerId}}{{/if}}</span></div>
+              {{/each}}
+            </div>
+          {{/if}}
+        </section>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════ SCHEDULE ══════════════════════════════════ -->
+    <div class="tab" data-tab="schedule">
+      <section class="janus7-card">
+        <h3><i class="fas fa-calendar"></i> Stundenplan — Slot‑Builder</h3>
+        <p class="muted">Actors, Items, Journals, Scenes hierher ziehen. „Stunde generieren" erstellt ein Journal-Entry und verknüpft es mit dem aktuellen Slot.</p>
+
+        <div class="j7-dropzone j7-dropzone--large" data-dropzone="slot-builder">
+          <div class="j7-dropzone__label">
+            <i class="fas fa-plus-circle"></i>
+            Drop-Zone: <strong>{{slotPosLabel}}</strong>
+          </div>
+          {{#if slotBuilder.items.length}}
+            <ul class="janus7-list">
+              {{#each slotBuilder.items}}
+                <li><code>{{kind}}</code> — <strong>{{label}}</strong></li>
+              {{/each}}
+            </ul>
+          {{else}}
+            <p class="muted j7-dropzone__hint">Noch keine Bausteine — Elemente aus der Seitenleiste hierher ziehen.</p>
+          {{/if}}
+        </div>
+
+        <div class="btn-grid j7-mt-sm">
+          <button type="button" class="janus-btn primary" data-action="generateSlotJournal"><i class="fas fa-file-alt"></i> Stunde generieren</button>
+          <button type="button" class="janus-btn"         data-action="clearSlotBuilder">   <i class="fas fa-trash"></i>    Leeren</button>
+        </div>
+      </section>
+
+      {{#if today.items.length}}
+        <section class="janus7-card">
+          <h3><i class="fas fa-list"></i> Tagesplan</h3>
+          <div class="janus7-table-wrap">
+            <table class="janus7-table">
+              <thead><tr><th>Zeit</th><th>Titel</th><th>Typ</th><th>Ort</th></tr></thead>
+              <tbody>
+                {{#each today.items}}
+                  <tr><td>{{time}}</td><td>{{title}}</td><td>{{type}}</td><td>{{where}}</td></tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      {{/if}}
+    </div>
+
+    <!-- ═══════════════════════════════════ QUESTS ════════════════════════════════════ -->
+    <div class="tab" data-tab="quests">
+      <section class="janus7-card">
+        <h3><i class="fas fa-book-open"></i> Quests</h3>
+        <p class="muted">Quest‑Journal öffnen oder Vorschläge aus dem aktuellen State generieren.</p>
+        <div class="btn-grid">
+          <button type="button" class="janus-btn primary" data-action="openQuestJournal">   <i class="fas fa-book-open"></i>  Quest‑Journal</button>
+          <button type="button" class="janus-btn"         data-action="openQuestSuggestions"><i class="fas fa-lightbulb"></i> Vorschläge</button>
+          <button type="button" class="janus-btn"         data-action="directorGenerateQuests"><i class="fas fa-scroll"></i> Director-Vorschläge neu bauen</button>
+        </div>
+        {{#if directorWorkflow.questSuggestions.length}}
+          <div class="janus7-scroll j7-mt-sm">
+            {{#each directorWorkflow.questSuggestions}}
+              <div class="janus7-callout j7-mb-sm">
+                <p><strong>{{label}}</strong> <span class="muted">· Score {{score}}</span></p>
+                <p class="muted">{{reason}}</p>
+                <div class="btn-grid">
+                  <button type="button" class="janus-btn primary" data-action="directorAcceptQuestSuggestion" data-quest-id="{{questId}}"><i class="fas fa-play"></i> Starten für {{actorLabel}}</button>
+                </div>
+              </div>
+            {{/each}}
+          </div>
+        {{else}}
+          <p class="muted j7-mt-sm">Noch keine Director-Questvorschläge in dieser Sitzung.</p>
+        {{/if}}
+        {{#if directorWorkflow.startedQuest}}
+          <p class="j7-mt-sm"><strong>Zuletzt übernommen:</strong> {{directorWorkflow.startedQuest.title}} <span class="muted">· {{directorWorkflow.startedQuest.actorLabel}}</span></p>
+        {{/if}}
+      </section>
+    </div>
+
+    <!-- ═══════════════════════════════════ PEOPLE ════════════════════════════════════ -->
+    <div class="tab" data-tab="people">
+      <div class="dashboard-grid">
+        <section class="janus7-card">
+          <h3><i class="fas fa-users-gear"></i> Social-Fortschritte</h3>
+          <p class="muted">Ergebnisse der letzten Director-Social-Auswertung.</p>
+          <div class="btn-grid">
+            <button type="button" class="janus-btn" data-action="directorEvaluateSocial"><i class="fas fa-users"></i> Social erneut auswerten</button>
+          </div>
+          {{#if directorWorkflow.socialAdvances.length}}
+            <div class="janus7-scroll j7-mt-sm">
+              {{#each directorWorkflow.socialAdvances}}
+                <div class="janus7-callout j7-mb-sm">
+                  <p><strong>{{label}}</strong> <span class="muted">· {{#if rank}}Rang {{rank}}{{else}}Fortschritt{{/if}}</span></p>
+                  <p class="muted">{{#if arcana}}Arcana: {{arcana}}{{/if}}{{#if perkCount}} · Perks freigeschaltet: {{perkCount}}{{/if}}{{#if eventTriggerId}} · Folgeevent: {{eventTriggerId}}{{/if}}</p>
+                  {{#if perks.length}}
+                    <p class="muted">Perk-IDs: {{#each perks}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+                  {{/if}}
+                </div>
+              {{/each}}
+            </div>
+          {{else}}
+            <p class="muted j7-mt-sm">Noch keine Social-Fortschritte protokolliert.</p>
+          {{/if}}
+        </section>
+        <section class="janus7-card">
+          <h3><i class="fas fa-chalkboard-teacher"></i> Lehrkräfte</h3>
+          <div class="j7-dropzone" data-dropzone="people" data-role="teachers">
+            <div class="j7-dropzone__label"><i class="fas fa-user-plus"></i> Actors hier ablegen (Lehrkräfte)</div>
+          </div>
+          {{#if peopleView.teachers.length}}
+            <div class="janus7-scroll">
+              {{#each peopleView.teachers}}
+                <div class="janus7-logline"><span class="tag">L</span><span><strong>{{name}}</strong></span></div>
+              {{/each}}
+            </div>
+          {{else}}
+            <p class="muted">Keine Lehrkräfte zugeordnet.</p>
+          {{/if}}
+        </section>
+
+        <section class="janus7-card">
+          <h3><i class="fas fa-user-graduate"></i> Schüler</h3>
+          <div class="j7-dropzone" data-dropzone="people" data-role="students">
+            <div class="j7-dropzone__label"><i class="fas fa-user-plus"></i> Actors hier ablegen (Schüler)</div>
+          </div>
+          {{#if peopleView.students.length}}
+            <div class="janus7-scroll">
+              {{#each peopleView.students}}
+                <div class="janus7-logline"><span class="tag">S</span><span><strong>{{name}}</strong></span></div>
+              {{/each}}
+            </div>
+          {{else}}
+            <p class="muted">Keine Schüler zugeordnet.</p>
+          {{/if}}
+        </section>
+
+        <section class="janus7-card">
+          <h3><i class="fas fa-users"></i> Weitere NPCs</h3>
+          <div class="j7-dropzone" data-dropzone="people" data-role="npcs">
+            <div class="j7-dropzone__label"><i class="fas fa-user-plus"></i> Actors hier ablegen (NPCs)</div>
+          </div>
+          {{#if peopleView.npcs.length}}
+            <div class="janus7-scroll">
+              {{#each peopleView.npcs}}
+                <div class="janus7-logline"><span class="tag">NPC</span><span><strong>{{name}}</strong></span></div>
+              {{/each}}
+            </div>
+          {{else}}
+            <p class="muted">Keine NPCs zugeordnet.</p>
+          {{/if}}
+        </section>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════ PLACES ════════════════════════════════════ -->
+    <div class="tab" data-tab="places">
+      <div class="dashboard-grid">
+        <section class="janus7-card">
+          <h3><i class="fas fa-map-marker-alt"></i> Aktiver Ort</h3>
+          <div class="janus7-kv">
+            <div class="key">Name</div><div class="val"><strong>{{locationView.activeLocationName}}</strong></div>
+            <div class="key">ID</div><div class="val">{{locationView.activeLocationId}}</div>
+            {{#if locationView.defaultMoodKey}}
+              <div class="key">Mood</div><div class="val">{{locationView.defaultMoodKey}}</div>
+            {{/if}}
+          </div>
+          <div class="j7-dropzone" data-dropzone="location" data-location-id="{{locationView.activeLocationId}}">
+            <div class="j7-dropzone__label"><i class="fas fa-link"></i> Scene / Playlist / Journal hier ablegen (Ort verknüpfen)</div>
+          </div>
+          <div class="btn-grid j7-mt-sm">
+            <button type="button" class="janus-btn" data-action="activateLocationScene" data-location-id="{{locationView.activeLocationId}}"><i class="fas fa-map"></i> Scene aktivieren</button>
+            <button type="button" class="janus-btn" data-action="applyLocationMood"     data-location-id="{{locationView.activeLocationId}}"><i class="fas fa-music"></i> Mood setzen</button>
+            <button type="button" class="janus-btn" data-action="openAtmosphereDJ"><i class="fas fa-sliders-h"></i> Atmo DJ</button>
+          </div>
+        </section>
+
+        <section class="janus7-card">
+          <h3><i class="fas fa-layer-group"></i> Alle Orte</h3>
+          {{#if locationView.locations.length}}
+            <div class="janus7-scroll">
+              {{#each locationView.locations}}
+                <div class="janus7-logline"><span class="tag">LOC</span><span>{{name}}</span><span class="muted j7-ml-sm">{{type}}</span></div>
+              {{/each}}
+            </div>
+          {{else}}
+            <p class="muted">Keine Orte in den Akademie-Daten gefunden.</p>
+          {{/if}}
+        </section>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════ KI ════════════════════════════════════════ -->
+    <div class="tab" data-tab="ki">
+      {{#if isGM}}
+        {{#if phase7Enabled}}
+          <div class="dashboard-grid">
+
+            <!-- KI CONTEXT DROP ZONE -->
+            <section class="janus7-card">
+              <h3><i class="fas fa-brain"></i> KI-Kontext</h3>
+              <p class="muted">Actors, Items, Scenes, Journals hierher ziehen — sie werden beim nächsten Export als <code>contextHints</code> angehängt und an die KI übergeben.</p>
+
+              <div class="j7-dropzone j7-dropzone--large" data-dropzone="ki-context">
+                <div class="j7-dropzone__label"><i class="fas fa-plus-circle"></i> Drop-Zone: KI-Kontext</div>
+                {{#if kiContext.items.length}}
+                  <ul class="janus7-list">
+                    {{#each kiContext.items}}
+                      <li>
+                        <span class="tag">{{kind}}</span>
+                        <strong>{{label}}</strong>
+                        <code class="muted j7-code-hint">{{uuid}}</code>
+                      </li>
+                    {{/each}}
+                  </ul>
+                {{else}}
+                  <p class="muted j7-dropzone__hint">Noch keine Elemente — Elemente aus der Seitenleiste hierher ziehen.</p>
+                {{/if}}
+              </div>
+
+              <div class="btn-grid j7-mt-sm">
+                <button type="button" class="janus-btn primary" data-action="kiExportClipboard"><i class="fas fa-clipboard"></i> Bundle kopieren</button>
+                <button type="button" class="janus-btn"         data-action="kiExportFile">      <i class="fas fa-download"></i>  Bundle exportieren</button>
+                <button type="button" class="janus-btn"         data-action="kiClearContext">    <i class="fas fa-trash"></i>     Kontext leeren</button>
+              </div>
+            </section>
+
+            <!-- KI BUNDLE PREVIEW -->
+            <section class="janus7-card">
+              <h3><i class="fas fa-file-code"></i> Bundle-Vorschau</h3>
+              <p class="muted">Aktueller Snapshot (erste 2000 Zeichen). Für den vollständigen Roundtrip das KI-Panel öffnen.</p>
+              <pre class="janus7-pre janus7-pre--scroll">{{kiContext.bundlePreview}}</pre>
+              <div class="btn-grid j7-mt-sm">
+                <button type="button" class="janus-btn primary" data-action="openKiRoundtrip"><i class="fas fa-external-link-alt"></i> KI Roundtrip öffnen</button>
+                <button type="button" class="janus-btn" data-action="openKiBackupManager"><i class="fas fa-life-ring"></i> Backups</button>
+              </div>
+            </section>
+
+            <!-- KI IMPORT SECTION -->
+            <section class="janus7-card">
+              <h3><i class="fas fa-file-import"></i> KI-Import</h3>
+              <p class="muted">KI-Antwort (JSON-Patch) hier einfügen und previewing / anwenden.</p>
+              <textarea class="j7-ki-import-textarea j7-ki-textarea" placeholder='{ "patches": [...] }' rows="6"></textarea>
+              <div class="btn-grid j7-mt-sm">
+                <button type="button" class="janus-btn"         data-action="kiPreviewImport"><i class="fas fa-eye"></i>     Preview Diff</button>
+                <button type="button" class="janus-btn primary" data-action="kiApplyImport">  <i class="fas fa-check"></i>   Anwenden</button>
+              </div>
+              <div class="j7-ki-diff-output janus7-pre j7-diff-out"></div>
+            </section>
+
+            <!-- KI IMPORT HISTORY -->
+            {{#if kiContext.history.length}}
+              <section class="janus7-card">
+                <h3><i class="fas fa-history"></i> Import-Verlauf</h3>
+                <div class="janus7-scroll">
+                  {{#each kiContext.history}}
+                    <div class="janus7-logline">
+                      <span class="tag {{#if applied}}tag--ok{{else}}tag--err{{/if}}">{{#if applied}}OK{{else}}ERR{{/if}}</span>
+                      <span>{{timestamp}}</span>
+                      <span class="muted"> — {{diffs.length}} Änderungen</span>
+                      {{#if error}}<span class="j7-text-error"> {{error}}</span>{{/if}}
+                    </div>
+                  {{/each}}
+                </div>
+              </section>
+            {{/if}}
+
+          </div>
+        {{else}}
+          <section class="janus7-card">
+            <p class="muted"><i class="fas fa-lock"></i> Phase 7 ist deaktiviert. In den Settings aktivieren: <code>enablePhase7 = true</code>.</p>
+            <button type="button" class="janus-btn" data-action="openSettings"><i class="fas fa-cog"></i> Settings öffnen</button>
+          </section>
+        {{/if}}
+      {{else}}
+        <section class="janus7-card">
+          <p class="muted"><i class="fas fa-lock"></i> KI-Funktionen sind nur für den GM verfügbar.</p>
+        </section>
+      {{/if}}
+    </div>
+
+    <!-- ═══════════════════════════════════ SYNC ══════════════════════════════════════ -->
+    <div class="tab" data-tab="sync">
+      <div class="dashboard-grid">
+        <section class="janus7-card">
+          <h3><i class="fas fa-link"></i> Welt-Synchronisation</h3>
+          <p class="muted">Abgleich zwischen JANUS7-Daten (JSON) und dem Foundry-Weltbestand.<br>Verknüpft NPCs, Orte, Playlists und Journals per UUID.</p>
+          <div class="btn-grid">
+            <button type="button" class="janus-btn primary" data-action="openSyncPanel"><i class="fas fa-external-link-alt"></i> Sync-Panel öffnen</button>
+          </div>
+        </section>
+
+        <section class="janus7-card">
+          <h3><i class="fas fa-map-pin"></i> Foundry-Links (State)</h3>
+          {{#if syncView.hasLinks}}
+            <div class="janus7-scroll">
+              {{#each syncView.links}}
+                <div class="janus7-logline">
+                  <span class="tag">{{type}}</span>
+                  <span>{{key}}</span>
+                  <code class="muted j7-code-hint"> → {{uuid}}</code>
+                </div>
+              {{/each}}
+            </div>
+          {{else}}
+            <p class="muted">Noch keine persistenten Links im State. Sync-Panel öffnen und Elemente verknüpfen.</p>
+          {{/if}}
+        </section>
+
+        <section class="janus7-card">
+          <h3><i class="fas fa-random"></i> Drag&amp;Drop</h3>
+          <p class="muted">Elemente aus der Foundry-Seitenleiste direkt in diese Oberfläche ziehen. Das Drag&amp;Drop-System fragt nach JANUS-Key und Bucket (NPCs / Orte / Playlists / Journals / Items).</p>
+          <p class="muted">Spezielle Drop-Zonen (Personen, Orte, Stundenplan, KI) verknüpfen automatisch ohne Dialog.</p>
+        </section>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════ SYSTEM ════════════════════════════════════ -->
+    <div class="tab" data-tab="system">
+      <div class="dashboard-grid">
+        <section class="janus7-card">
+          <h3><i class="fas fa-toggle-on"></i> Kill Switches</h3>
+          <div class="janus7-table-wrap">
+            <table class="janus7-table">
+              <tbody>
+                <tr><td>Simulation</td> <td>{{#if system.enableSimulation}}✅{{else}}❌{{/if}}</td></tr>
+                <tr><td>Atmosphere</td> <td>{{#if system.enableAtmosphere}}✅{{else}}❌{{/if}}</td></tr>
+                <tr><td>UI</td>         <td>{{#if system.enableUI}}✅{{else}}❌{{/if}}</td></tr>
+                <tr><td>Quest Engine</td><td>{{#if system.enableQuestSystem}}✅{{else}}❌{{/if}}</td></tr>
+                <tr><td>Phase 7</td>    <td>{{#if phase7Enabled}}✅{{else}}❌{{/if}}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="janus7-card">
+          <h3><i class="fas fa-vial"></i> Tests</h3>
+          <div class="btn-grid">
+            <button type="button" class="janus-btn" data-action="openTestResults">   Smoke Tests</button>
+            <button type="button" class="janus-btn" data-action="runCatalogConsole">Catalog → Console</button>
+            <button type="button" class="janus-btn" data-action="runCatalogWindow"> Catalog → Window</button>
+          </div>
+        </section>
+
+        <section class="janus7-card">
+          <h3><i class="fas fa-cog"></i> Konfiguration</h3>
+          <div class="btn-grid">
+            <button type="button" class="janus-btn" data-action="openStateInspector">   <i class="fas fa-database"></i>  State Inspector</button>
+            <button type="button" class="janus-btn" data-action="openConfigPanel">      <i class="fas fa-sliders-h"></i> Config Panel</button>
+            <button type="button" class="janus-btn" data-action="openAcademyDataStudio"><i class="fas fa-edit"></i>      Data Studio</button>
+            <button type="button" class="janus-btn" data-action="openSessionPrepWizard"><i class="fas fa-wand-sparkles"></i> Session Prep</button>
+            <button type="button" class="janus-btn" data-action="openSettings">         <i class="fas fa-cog"></i>       Foundry Settings</button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════ DIAGNOSTICS ══════════════════════════════ -->
+    <div class="tab" data-tab="diagnostics">
+      <div class="dashboard-grid">
+        <section class="janus7-card janus7-card--diagnostic">
+          <h3><i class="fas fa-info-circle"></i> Build & State</h3>
+          <div class="janus7-kv">
+            <div class="key">Modul</div>        <div class="val">{{diagnosticsView.build.moduleId}}</div>
+            <div class="key">Version</div>      <div class="val">{{diagnosticsView.build.moduleVersion}}</div>
+            <div class="key">State-Version</div><div class="val">{{diagnosticsView.build.stateVersion}}</div>
+            <div class="key">Schema</div>       <div class="val">{{diagnosticsView.build.stateSchemaVersion}}</div>
+            <div class="key">Foundry</div>      <div class="val">{{diagnosticsView.build.foundryVersion}}</div>
+            <div class="key">System</div>       <div class="val">{{diagnosticsView.build.systemVersion}}</div>
+            <div class="key">Erzeugt</div>      <div class="val">{{diagnosticsView.generatedAt}}</div>
+          </div>
+          <div class="btn-grid j7-mt-sm">
+            <button type="button" class="janus-btn" data-action="refreshDiagnostics"><i class="fas fa-rotate-right"></i> Diagnose aktualisieren</button>
+            <button type="button" class="janus-btn" data-action="copyDiagnosticsReport"><i class="fas fa-clipboard"></i> Diagnose kopieren</button>
+            <button type="button" class="janus-btn" data-action="copyDiagnosticSnapshot"><i class="fas fa-camera"></i> Snapshot kopieren</button>
+          </div>
+        </section>
+
+        <section class="janus7-card janus7-card--diagnostic">
+          <h3><i class="fas fa-satellite-dish"></i> Runtime & Sync</h3>
+          <div class="janus7-kv">
+            <div class="key">Simulation</div>  <div class="val"><span class="j7-status-pill {{#if system.simulationReady}}is-ok{{else}}is-warn{{/if}}">{{#if system.simulationReady}}ready{{else}}not ready{{/if}}</span></div>
+            <div class="key">Atmosphere</div>  <div class="val"><span class="j7-status-pill {{#if system.atmosphereReady}}is-ok{{else}}is-warn{{/if}}">{{#if system.atmosphereReady}}ready{{else}}not ready{{/if}}</span></div>
+            <div class="key">UI</div>          <div class="val"><span class="j7-status-pill {{#if system.uiReady}}is-ok{{else}}is-warn{{/if}}">{{#if system.uiReady}}ready{{else}}not ready{{/if}}</span></div>
+            <div class="key">Quests</div>      <div class="val"><span class="j7-status-pill {{#if system.questReady}}is-ok{{else}}is-warn{{/if}}">{{#if system.questReady}}ready{{else}}not ready{{/if}}</span></div>
+            <div class="key">Socket</div>      <div class="val"><span class="j7-status-pill {{#if diagnosticsView.sync.socketDeclared}}is-ok{{else}}is-warn{{/if}}">{{#if diagnosticsView.sync.socketDeclared}}declared{{else}}missing{{/if}}</span> · {{#if diagnosticsView.sync.socketAvailable}}available{{else}}unavailable{{/if}}</div>
+            <div class="key">DSA5 Sync</div>   <div class="val">{{#if diagnosticsView.sync.syncWithDSA5Calendar}}aktiv{{else}}aus{{/if}}</div>
+            <div class="key">Aktiver Ort</div> <div class="val">{{diagnosticsView.sync.activeLocationId}}</div>
+          </div>
+          <div class="btn-grid j7-mt-sm">
+            <button type="button" class="janus-btn" data-action="openSyncPanel"><i class="fas fa-link"></i> Sync Panel</button>
+            <button type="button" class="janus-btn" data-action="openStateInspector"><i class="fas fa-database"></i> State Inspector</button>
+          </div>
+        </section>
+
+        <section class="janus7-card janus7-card--diagnostic">
+          <h3><i class="fas fa-brain"></i> Phase 7 / Recovery</h3>
+          <div class="janus7-kv">
+            <div class="key">Phase 7</div>        <div class="val"><span class="j7-status-pill {{#if diagnosticsView.phase7.enabled}}is-ok{{else}}is-warn{{/if}}">{{#if diagnosticsView.phase7.enabled}}enabled{{else}}disabled{{/if}}</span></div>
+            <div class="key">KI API</div>         <div class="val"><span class="j7-status-pill {{#if diagnosticsView.phase7.apiReady}}is-ok{{else}}is-warn{{/if}}">{{#if diagnosticsView.phase7.apiReady}}ready{{else}}missing{{/if}}</span></div>
+            <div class="key">Import-Historie</div><div class="val">{{diagnosticsView.phase7.importHistoryCount}}</div>
+            <div class="key">Backups</div>        <div class="val">{{diagnosticsView.phase7.backupCount}}</div>
+            <div class="key">Letzter Import</div><div class="val">{{diagnosticsView.phase7.lastImportStatus}}</div>
+            <div class="key">Letztes Backup</div><div class="val">{{diagnosticsView.phase7.lastBackupRef}}</div>
+          </div>
+          <div class="btn-grid j7-mt-sm">
+            {{#if phase7Enabled}}{{#if isGM}}
+              <button type="button" class="janus-btn janus-btn--highlight" data-action="openKiRoundtrip"><i class="fas fa-brain"></i> KI Roundtrip</button>
+            {{/if}}{{/if}}
+            <button type="button" class="janus-btn" data-action="openCommandCenter"><i class="fas fa-terminal"></i> Power Tools</button>
+          </div>
+        </section>
+
+
+        <section class="janus7-card janus7-card--diagnostic">
+          <h3><i class="fas fa-diagram-project"></i> Graph & Cache</h3>
+          <div class="janus7-kv">
+            <div class="key">Verfügbar</div><div class="val"><span class="j7-status-pill {{#if diagnosticsView.graph.available}}is-ok{{else}}is-warn{{/if}}">{{#if diagnosticsView.graph.available}}ready{{else}}missing{{/if}}</span></div>
+            <div class="key">Dirty</div><div class="val"><span class="j7-status-pill {{#if diagnosticsView.graph.dirty}}is-warn{{else}}is-ok{{/if}}">{{#if diagnosticsView.graph.dirty}}dirty{{else}}clean{{/if}}</span></div>
+            <div class="key">Nodes / Edges</div><div class="val">{{diagnosticsView.graph.nodes}} / {{diagnosticsView.graph.edges}}</div>
+            <div class="key">Cache Size</div><div class="val">{{diagnosticsView.graph.cache.size}}</div>
+            <div class="key">Hits / Misses</div><div class="val">{{diagnosticsView.graph.cache.hits}} / {{diagnosticsView.graph.cache.misses}}</div>
+            <div class="key">Invalidations</div><div class="val">{{diagnosticsView.graph.cache.invalidations}}</div>
+            <div class="key">Letzter Build</div><div class="val">{{diagnosticsView.graph.lastBuildAt}}</div>
+          </div>
+          <div class="btn-grid j7-mt-sm">
+            <button type="button" class="janus-btn" data-action="graphInvalidate"><i class="fas fa-broom"></i> Cache invalidieren</button>
+            <button type="button" class="janus-btn" data-action="graphRebuild"><i class="fas fa-arrows-rotate"></i> Graph neu aufbauen</button>
+          </div>
+        </section>
+
+        <section class="janus7-card janus7-card--diagnostic">
+          <h3><i class="fas fa-vial"></i> Test & Logging</h3>
+          <div class="janus7-kv">
+            <div class="key">Testergebnisse</div> <div class="val">{{diagnosticsView.tests.totalResults}}</div>
+            <div class="key">Importfehler</div>  <div class="val">{{diagnosticsView.tests.importFailed}}</div>
+            <div class="key">Letzter Lauf</div>  <div class="val">{{diagnosticsView.tests.lastRunAt}}</div>
+            <div class="key">Log-Level</div>     <div class="val">{{diagnosticsView.logger.debugLevel}}</div>
+          </div>
+          {{#if diagnosticsView.logger.recentWarnings.length}}
+            <div class="janus7-scroll j7-mt-sm" aria-label="Letzte Warnungen">
+              {{#each diagnosticsView.logger.recentWarnings}}
+                <div class="janus7-logline"><span class="tag">{{level}}</span><span>{{message}}</span></div>
+              {{/each}}
+            </div>
+          {{else}}
+            <p class="muted">Keine aktuellen Warnungen im Logger-Speicher.</p>
+          {{/if}}
+          <div class="btn-grid j7-mt-sm">
+            <button type="button" class="janus-btn" data-action="openTestResults"><i class="fas fa-vial"></i> Test Results</button>
+            <button type="button" class="janus-btn" data-action="openGuidedManualTests"><i class="fas fa-route"></i> Guided Manual</button>
+            <button type="button" class="janus-btn" data-action="runCatalogWindow"><i class="fas fa-play"></i> Catalog starten</button>
+          </div>
+        </section>
+      </div>
+
+      <div class="janus7-two-col j7-mt-sm">
+        <section class="janus7-card janus7-card--diagnostic">
+          <h3><i class="fas fa-file-alt"></i> AI Context Preview</h3>
+          {{#if diagnosticsView.snapshotGeneratedAt}}<p class="muted">Snapshot: {{diagnosticsView.snapshotGeneratedAt}}</p>{{/if}}
+          <pre class="janus7-pre">{{aiPreviewJson}}</pre>
+          <div class="btn-grid j7-mt-sm">
+            <button type="button" class="janus-btn" data-action="copyAiContext"><i class="fas fa-clipboard"></i> AI Context kopieren</button>
+            <button type="button" class="janus-btn" data-action="copyState"><i class="fas fa-clipboard-check"></i> State kopieren</button>
+          </div>
+        </section>
+
+        <section class="janus7-card janus7-card--diagnostic">
+          <h3><i class="fas fa-triangle-exclamation"></i> Warnungen & Hinweise</h3>
+          {{#if diagnosticsView.warnings.length}}
+            <div class="janus7-scroll" aria-label="Warnungen und Hinweise">
+              {{#each diagnosticsView.warnings}}
+                <div class="janus7-logline"><span class="tag">WARN</span><span>{{this}}</span></div>
+              {{/each}}
+            </div>
+          {{else}}
+            <p class="muted">Keine offenen Warnhinweise.</p>
+          {{/if}}
+
+          {{#if diagnosticsView.ui.lastUiError}}
+            <div class="j7-inline-alert is-warn j7-mt-sm">
+              <strong>Letzter UI-Fehler:</strong> {{diagnosticsView.ui.lastUiError.message}}
+            </div>
+          {{/if}}
+
+          {{#if diagnosticsView.modules.activeOptionalModules.length}}
+            <div class="j7-module-chip-list j7-mt-sm" aria-label="Aktive optionale Module">
+              {{#each diagnosticsView.modules.activeOptionalModules}}
+                <span class="j7-module-chip" title="{{title}}">{{id}}</span>
+              {{/each}}
+            </div>
+          {{else}}
+            <p class="muted">Keine optionalen Zusatzmodule erkannt.</p>
+          {{/if}}
+
+          <div class="btn-grid j7-mt-sm">
+            <button type="button" class="janus-btn" data-action="openTroubleshooting"><i class="fas fa-life-ring"></i> Troubleshooting</button>
+            <button type="button" class="janus-btn" data-action="openCommandCenter"><i class="fas fa-terminal"></i> Power Tools</button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+  </section>
+</form>

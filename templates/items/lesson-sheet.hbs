@@ -1,0 +1,41 @@
+<form class="janus7-lesson-sheet flexcol" autocomplete="off">
+  <header class="sheet-header flexrow">
+    <img class="profile" src="{{img}}" data-edit="img" title="Bild" height="72" width="72"/>
+    <div class="header-fields flexcol">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Lesson Name"/></h1>
+      <div class="janus7-grid janus7-grid-3col">
+        <label>Lesson ID <input type="text" name="system.lessonId" value="{{system.lessonId}}"/></label>
+        <label>Fach <input type="text" name="system.subject" value="{{system.subject}}"/></label>
+        <label>Dauer (Slots) <input type="number" min="1" name="system.durationSlots" value="{{system.durationSlots}}"/></label>
+      </div>
+    </div>
+  </header>
+
+  <section class="sheet-body flexcol">
+    <div class="janus7-grid janus7-grid-2col">
+      <label>Lehrer NPC ID <input type="text" name="system.teacherNpcId" value="{{system.teacherNpcId}}"/></label>
+      <label>Lehrer UUID <input type="text" name="system.teacherUuid" value="{{system.teacherUuid}}"/></label>
+      <label>Ort ID <input type="text" name="system.locationId" value="{{system.locationId}}"/></label>
+      <label>Ort UUID <input type="text" name="system.locationUuid" value="{{system.locationUuid}}"/></label>
+      <label>Jahr Min <input type="number" name="system.yearMin" value="{{system.yearMin}}"/></label>
+      <label>Jahr Max <input type="number" name="system.yearMax" value="{{system.yearMax}}"/></label>
+      <label>Schwierigkeit <input type="text" name="system.difficulty" value="{{system.difficulty}}"/></label>
+      <label>Tags (CSV) <input type="text" name="system.tags" value="{{system.tags}}"/></label>
+    </div>
+
+    <label>Zusammenfassung</label>
+    <textarea name="system.summary" rows="6">{{system.summary}}</textarea>
+
+    <label>Mechanics (JSON)</label>
+    <textarea name="system.mechanicsJson" rows="8">{{prettyMechanics}}</textarea>
+
+    <label>Scoring Impact (JSON)</label>
+    <textarea name="system.scoringJson" rows="6">{{prettyScoring}}</textarea>
+
+    <label>References (JSON)</label>
+    <textarea name="system.referencesJson" rows="6">{{prettyReferences}}</textarea>
+
+    <label>Source Snapshot (JSON)</label>
+    <textarea name="system.sourceJson" rows="8">{{prettySource}}</textarea>
+  </section>
+</form>

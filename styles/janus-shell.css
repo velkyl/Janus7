@@ -1,0 +1,348 @@
+/**
+ * JANUS7 Shell
+ * Datei: janus-shell.css
+ *
+ * Scope:
+ * - Styles für die modulare Shell/Beamer-Ansicht und Panel-Layouts.
+
+ * Verantwortliche UI-Komponenten:
+ * - JanusShellApp
+ * - Shell Panels
+ * Status:
+ * ACTIVE
+ */
+
+
+.janus7-shell {
+  --j7s-bg: #0f1117;
+  --j7s-surface: #171b24;
+  --j7s-surface-2: #1d2330;
+  --j7s-card: #1a1f2b;
+  --j7s-border: #2b3342;
+  --j7s-text: #e8ebf5;
+  --j7s-muted: #98a2b8;
+  --j7s-accent: #5d79ff;
+  --j7s-accent-soft: rgba(93,121,255,.15);
+  --j7s-success: #45d483;
+  color: var(--j7s-text);
+}
+
+.janus7-shell .window-content {
+  background: var(--j7s-bg);
+  padding: 0;
+  overflow: hidden;
+}
+
+.j7-shell__root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 680px;
+  background: var(--j7s-bg);
+  color: var(--j7s-text);
+}
+
+.j7-shell__header {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto minmax(240px, auto);
+  gap: 16px;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--j7s-border);
+  background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0));
+}
+
+.j7-shell__brand-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--j7s-accent);
+  letter-spacing: .02em;
+}
+
+.j7-shell__brand-meta,
+.j7-shell__status-pill,
+.j7-shell__nav-copy small,
+.j7-shell__card-head p,
+.j7-shell__panel-head p,
+.j7-shell__tile-copy small {
+  color: var(--j7s-muted);
+}
+
+.j7-shell__status {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.j7-shell__status-pill {
+  background: var(--j7s-surface);
+  border: 1px solid var(--j7s-border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.j7-shell__status-pill--accent {
+  border-color: var(--j7s-accent);
+  color: var(--j7s-accent);
+  background: var(--j7s-accent-soft);
+}
+
+.j7-shell__header-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.j7-shell__quick,
+.j7-shell__command,
+.j7-shell__nav,
+.j7-shell__btn,
+.j7-shell__tile,
+.j7-shell__panel-close {
+  border: 1px solid var(--j7s-border);
+  background: var(--j7s-surface);
+  color: var(--j7s-text);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .12s ease;
+}
+
+.j7-shell__quick:hover,
+.j7-shell__command:hover,
+.j7-shell__nav:hover,
+.j7-shell__btn:hover,
+.j7-shell__tile:hover,
+.j7-shell__panel-close:hover {
+  border-color: var(--j7s-accent);
+  background: var(--j7s-surface-2);
+}
+
+.j7-shell__quick {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.j7-shell__command {
+  padding: 7px 12px;
+  font-size: 12px;
+  color: var(--j7s-muted);
+}
+
+.j7-shell__flash {
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--j7s-border);
+  background: rgba(69,212,131,.08);
+  color: var(--j7s-success);
+  font-size: 12px;
+}
+
+.j7-shell__body {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr) 360px;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.j7-shell__sidebar {
+  padding: 14px;
+  border-right: 1px solid var(--j7s-border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(255,255,255,.015);
+}
+
+.j7-shell__nav {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 10px;
+  padding: 12px;
+  text-align: left;
+}
+
+.j7-shell__nav.is-active {
+  border-color: var(--j7s-accent);
+  background: var(--j7s-accent-soft);
+  box-shadow: inset 0 0 0 1px rgba(93,121,255,.15);
+}
+
+.j7-shell__nav-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.j7-shell__content,
+.j7-shell__panelHost {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 16px;
+}
+
+.j7-shell__content {
+  background: linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,0));
+}
+
+.j7-shell__panelHost {
+  border-left: 1px solid var(--j7s-border);
+  background: rgba(255,255,255,.015);
+}
+
+.j7-shell__view {
+  display: grid;
+  gap: 14px;
+}
+
+.j7-shell__card,
+.j7-shell__panel {
+  border: 1px solid var(--j7s-border);
+  background: var(--j7s-card);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.16);
+}
+
+.j7-shell__card-head,
+.j7-shell__panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.j7-shell__card-head h3,
+.j7-shell__panel-head h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.j7-shell__metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.j7-shell__metric {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--j7s-surface);
+  border: 1px solid var(--j7s-border);
+}
+
+.j7-shell__metric span {
+  display: block;
+  font-size: 11px;
+  color: var(--j7s-muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 4px;
+}
+
+.j7-shell__metric strong {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--j7s-text);
+}
+
+.j7-shell__card-actions,
+.j7-shell__panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.j7-shell__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.j7-shell__btn--primary {
+  background: var(--j7s-accent-soft);
+  border-color: rgba(93,121,255,.35);
+  color: #dce4ff;
+}
+
+.j7-shell__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.j7-shell__list-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  background: var(--j7s-surface);
+  border: 1px solid var(--j7s-border);
+  border-radius: 10px;
+}
+
+.j7-shell__tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.j7-shell__tile {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 10px;
+  padding: 14px;
+  text-align: left;
+  min-height: 110px;
+}
+
+.j7-shell__tile-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.j7-shell__tile-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.j7-shell__panel-head {
+  margin-bottom: 8px;
+}
+
+.j7-shell__panel-close {
+  width: 34px;
+  height: 34px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.j7-shell__panel-summary {
+  color: var(--j7s-muted);
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+@media (max-width: 1200px) {
+  .j7-shell__body {
+    grid-template-columns: 230px minmax(0, 1fr);
+  }
+  .j7-shell__panelHost {
+    grid-column: 1 / -1;
+    border-left: none;
+    border-top: 1px solid var(--j7s-border);
+  }
+}

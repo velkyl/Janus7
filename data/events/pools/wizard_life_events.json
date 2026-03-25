@@ -1,0 +1,1202 @@
+[
+  {
+    "eventId": "E_WIZ_0000_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 6",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Beschwörung (Dämonen) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0000_STUDY_A",
+      "OPT_E_WIZ_0000_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0001_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 13",
+    "title": "Verbotenes Wissen: Nekromantie",
+    "description": "Khurman bietet dir an, nachts im Westturm einen verbotenen Text über Nekromantie zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0001_MORAL_A",
+      "OPT_E_WIZ_0001_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0002_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 6",
+    "title": "Ein potentieller Vertrauter: Fuchs",
+    "description": "Du findest ein verletztes Tier: Ein Fuchs. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0002_FAMILIAR_A",
+      "OPT_E_WIZ_0002_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0003_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 14",
+    "title": "Ein potentieller Vertrauter: Schwarze Katze",
+    "description": "Du findest ein verletztes Tier: Ein Schwarze Katze. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0003_FAMILIAR_A",
+      "OPT_E_WIZ_0003_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0004_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 9",
+    "title": "Verbotenes Wissen: Divination (Hellsicht)",
+    "description": "Sequin bietet dir an, nachts im Großer Speisesaal einen verbotenen Text über Divination (Hellsicht) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0004_MORAL_A",
+      "OPT_E_WIZ_0004_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0005_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 5",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Beschwörung (Dämonen) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0005_STUDY_A",
+      "OPT_E_WIZ_0005_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0006_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 13",
+    "title": "Verbotenes Wissen: Heilung (Balsam)",
+    "description": "Jess bietet dir an, nachts im Ritualplatz im Hof einen verbotenen Text über Heilung (Balsam) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0006_MORAL_A",
+      "OPT_E_WIZ_0006_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0007_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 11",
+    "title": "Verbotenes Wissen: Illusion & Verwandlung",
+    "description": "Durgan bietet dir an, nachts im Geheimlabor einen verbotenen Text über Illusion & Verwandlung zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0007_MORAL_A",
+      "OPT_E_WIZ_0007_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0008_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 8",
+    "title": "Ein potentieller Vertrauter: Feuersalamander",
+    "description": "Du findest ein verletztes Tier: Ein Feuersalamander. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0008_FAMILIAR_A",
+      "OPT_E_WIZ_0008_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0009_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 15",
+    "title": "Verbotenes Wissen: Nekromantie",
+    "description": "Durgan bietet dir an, nachts im Astral-Observatorium einen verbotenen Text über Nekromantie zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0009_MORAL_A",
+      "OPT_E_WIZ_0009_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0010_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 12",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Elementarismus (Feuer/Erde) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0010_STUDY_A",
+      "OPT_E_WIZ_0010_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0011_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 12",
+    "title": "Verbotenes Wissen: Beschwörung (Dämonen)",
+    "description": "Petra bietet dir an, nachts im Alte Bibliothek einen verbotenen Text über Beschwörung (Dämonen) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0011_MORAL_A",
+      "OPT_E_WIZ_0011_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0012_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 14",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Heilung (Balsam) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0012_STUDY_A",
+      "OPT_E_WIZ_0012_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0013_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 14",
+    "title": "Provokation im Geheimlabor",
+    "description": "Dein ewiger Rivale Yelina stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Nekromantie seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0013_RIVALRY_A",
+      "OPT_E_WIZ_0013_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0014_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 12",
+    "title": "Verbotenes Wissen: Divination (Hellsicht)",
+    "description": "Khurman bietet dir an, nachts im Astral-Observatorium einen verbotenen Text über Divination (Hellsicht) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0014_MORAL_A",
+      "OPT_E_WIZ_0014_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0015_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 7",
+    "title": "Provokation im Astral-Observatorium",
+    "description": "Dein ewiger Rivale Durgan stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Heilung (Balsam) seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0015_RIVALRY_A",
+      "OPT_E_WIZ_0015_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0016_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 10",
+    "title": "Provokation im Astral-Observatorium",
+    "description": "Dein ewiger Rivale Petra stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Illusion & Verwandlung seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0016_RIVALRY_A",
+      "OPT_E_WIZ_0016_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0017_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 11",
+    "title": "Ein potentieller Vertrauter: Rabe",
+    "description": "Du findest ein verletztes Tier: Ein Rabe. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0017_FAMILIAR_A",
+      "OPT_E_WIZ_0017_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0018_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 13",
+    "title": "Ein potentieller Vertrauter: Schwarze Katze",
+    "description": "Du findest ein verletztes Tier: Ein Schwarze Katze. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0018_FAMILIAR_A",
+      "OPT_E_WIZ_0018_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0019_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 13",
+    "title": "Verbotenes Wissen: Elementarismus (Feuer/Erde)",
+    "description": "Thorn bietet dir an, nachts im Großer Speisesaal einen verbotenen Text über Elementarismus (Feuer/Erde) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0019_MORAL_A",
+      "OPT_E_WIZ_0019_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0020_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 9",
+    "title": "Verbotenes Wissen: Illusion & Verwandlung",
+    "description": "Karla bietet dir an, nachts im Alte Bibliothek einen verbotenen Text über Illusion & Verwandlung zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0020_MORAL_A",
+      "OPT_E_WIZ_0020_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0021_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 12",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Divination (Hellsicht) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0021_STUDY_A",
+      "OPT_E_WIZ_0021_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0022_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 5",
+    "title": "Verbotenes Wissen: Nekromantie",
+    "description": "Eldric bietet dir an, nachts im Großer Speisesaal einen verbotenen Text über Nekromantie zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0022_MORAL_A",
+      "OPT_E_WIZ_0022_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0023_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 8",
+    "title": "Verbotenes Wissen: Divination (Hellsicht)",
+    "description": "Khurman bietet dir an, nachts im Westturm einen verbotenen Text über Divination (Hellsicht) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0023_MORAL_A",
+      "OPT_E_WIZ_0023_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0024_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 5",
+    "title": "Provokation im Astral-Observatorium",
+    "description": "Dein ewiger Rivale Rowena stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Beschwörung (Dämonen) seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0024_RIVALRY_A",
+      "OPT_E_WIZ_0024_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0025_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 12",
+    "title": "Verbotenes Wissen: Heilung (Balsam)",
+    "description": "Yelina bietet dir an, nachts im Dozenten-Quartiere einen verbotenen Text über Heilung (Balsam) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0025_MORAL_A",
+      "OPT_E_WIZ_0025_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0026_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 13",
+    "title": "Verbotenes Wissen: Nekromantie",
+    "description": "Thorn bietet dir an, nachts im Dachboden einen verbotenen Text über Nekromantie zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0026_MORAL_A",
+      "OPT_E_WIZ_0026_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0027_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 8",
+    "title": "Verbotenes Wissen: Nekromantie",
+    "description": "Karla bietet dir an, nachts im Dozenten-Quartiere einen verbotenen Text über Nekromantie zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0027_MORAL_A",
+      "OPT_E_WIZ_0027_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0028_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 14",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Nekromantie an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0028_STUDY_A",
+      "OPT_E_WIZ_0028_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0029_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 5",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Nekromantie an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0029_STUDY_A",
+      "OPT_E_WIZ_0029_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0030_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 12",
+    "title": "Ein potentieller Vertrauter: Rabe",
+    "description": "Du findest ein verletztes Tier: Ein Rabe. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0030_FAMILIAR_A",
+      "OPT_E_WIZ_0030_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0031_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 15",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Elementarismus (Feuer/Erde) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0031_STUDY_A",
+      "OPT_E_WIZ_0031_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0032_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 11",
+    "title": "Provokation im Verborgener Kerker",
+    "description": "Dein ewiger Rivale Durgan stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Beschwörung (Dämonen) seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0032_RIVALRY_A",
+      "OPT_E_WIZ_0032_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0033_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 5",
+    "title": "Ein potentieller Vertrauter: Rabe",
+    "description": "Du findest ein verletztes Tier: Ein Rabe. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0033_FAMILIAR_A",
+      "OPT_E_WIZ_0033_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0034_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 13",
+    "title": "Verbotenes Wissen: Divination (Hellsicht)",
+    "description": "Karla bietet dir an, nachts im Westturm einen verbotenen Text über Divination (Hellsicht) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0034_MORAL_A",
+      "OPT_E_WIZ_0034_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0035_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 14",
+    "title": "Verbotenes Wissen: Nekromantie",
+    "description": "Karla bietet dir an, nachts im Alte Bibliothek einen verbotenen Text über Nekromantie zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0035_MORAL_A",
+      "OPT_E_WIZ_0035_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0036_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 14",
+    "title": "Ein potentieller Vertrauter: Schwarze Katze",
+    "description": "Du findest ein verletztes Tier: Ein Schwarze Katze. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0036_FAMILIAR_A",
+      "OPT_E_WIZ_0036_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0037_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 7",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Nekromantie an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0037_STUDY_A",
+      "OPT_E_WIZ_0037_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0038_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 10",
+    "title": "Provokation im Kräutergarten",
+    "description": "Dein ewiger Rivale Petra stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Divination (Hellsicht) seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0038_RIVALRY_A",
+      "OPT_E_WIZ_0038_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0039_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 5",
+    "title": "Verbotenes Wissen: Divination (Hellsicht)",
+    "description": "Yelina bietet dir an, nachts im Ritualplatz im Hof einen verbotenen Text über Divination (Hellsicht) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0039_MORAL_A",
+      "OPT_E_WIZ_0039_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0040_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 14",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Beschwörung (Dämonen) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0040_STUDY_A",
+      "OPT_E_WIZ_0040_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0041_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 11",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Nekromantie an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0041_STUDY_A",
+      "OPT_E_WIZ_0041_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0042_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 5",
+    "title": "Provokation im Studenten-Schlafsaal",
+    "description": "Dein ewiger Rivale Eldric stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Illusion & Verwandlung seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0042_RIVALRY_A",
+      "OPT_E_WIZ_0042_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0043_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 11",
+    "title": "Ein potentieller Vertrauter: Feuersalamander",
+    "description": "Du findest ein verletztes Tier: Ein Feuersalamander. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0043_FAMILIAR_A",
+      "OPT_E_WIZ_0043_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0044_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 6",
+    "title": "Provokation im Kräutergarten",
+    "description": "Dein ewiger Rivale Gale stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Beschwörung (Dämonen) seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0044_RIVALRY_A",
+      "OPT_E_WIZ_0044_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0045_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 10",
+    "title": "Ein potentieller Vertrauter: Feuersalamander",
+    "description": "Du findest ein verletztes Tier: Ein Feuersalamander. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0045_FAMILIAR_A",
+      "OPT_E_WIZ_0045_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0046_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 7",
+    "title": "Provokation im Alte Bibliothek",
+    "description": "Dein ewiger Rivale Eldric stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Illusion & Verwandlung seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0046_RIVALRY_A",
+      "OPT_E_WIZ_0046_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0047_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 12",
+    "title": "Ein potentieller Vertrauter: Fuchs",
+    "description": "Du findest ein verletztes Tier: Ein Fuchs. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0047_FAMILIAR_A",
+      "OPT_E_WIZ_0047_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0048_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 15",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Divination (Hellsicht) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0048_STUDY_A",
+      "OPT_E_WIZ_0048_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0049_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 6",
+    "title": "Provokation im Dachboden",
+    "description": "Dein ewiger Rivale Jess stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Beschwörung (Dämonen) seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0049_RIVALRY_A",
+      "OPT_E_WIZ_0049_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0050_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 12",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Beschwörung (Dämonen) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0050_STUDY_A",
+      "OPT_E_WIZ_0050_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0051_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 8",
+    "title": "Provokation im Verborgener Kerker",
+    "description": "Dein ewiger Rivale Karla stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Illusion & Verwandlung seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0051_RIVALRY_A",
+      "OPT_E_WIZ_0051_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0052_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 7",
+    "title": "Ein potentieller Vertrauter: Fuchs",
+    "description": "Du findest ein verletztes Tier: Ein Fuchs. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0052_FAMILIAR_A",
+      "OPT_E_WIZ_0052_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0053_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 13",
+    "title": "Provokation im Geheimlabor",
+    "description": "Dein ewiger Rivale Durgan stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Divination (Hellsicht) seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0053_RIVALRY_A",
+      "OPT_E_WIZ_0053_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0054_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 5",
+    "title": "Ein potentieller Vertrauter: Rabe",
+    "description": "Du findest ein verletztes Tier: Ein Rabe. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0054_FAMILIAR_A",
+      "OPT_E_WIZ_0054_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0055_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 7",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Heilung (Balsam) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0055_STUDY_A",
+      "OPT_E_WIZ_0055_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0056_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 11",
+    "title": "Provokation im Studenten-Schlafsaal",
+    "description": "Dein ewiger Rivale Khurman stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Heilung (Balsam) seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0056_RIVALRY_A",
+      "OPT_E_WIZ_0056_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0057_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 8",
+    "title": "Provokation im Dozenten-Quartiere",
+    "description": "Dein ewiger Rivale Rowena stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Heilung (Balsam) seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0057_RIVALRY_A",
+      "OPT_E_WIZ_0057_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0058_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 8",
+    "title": "Provokation im Dachboden",
+    "description": "Dein ewiger Rivale Khurman stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Heilung (Balsam) seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0058_RIVALRY_A",
+      "OPT_E_WIZ_0058_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0059_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 13",
+    "title": "Ein potentieller Vertrauter: Rabe",
+    "description": "Du findest ein verletztes Tier: Ein Rabe. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0059_FAMILIAR_A",
+      "OPT_E_WIZ_0059_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0060_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 7",
+    "title": "Ein potentieller Vertrauter: Eule",
+    "description": "Du findest ein verletztes Tier: Ein Eule. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0060_FAMILIAR_A",
+      "OPT_E_WIZ_0060_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0061_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 14",
+    "title": "Verbotenes Wissen: Beschwörung (Dämonen)",
+    "description": "Rowena bietet dir an, nachts im Verborgener Kerker einen verbotenen Text über Beschwörung (Dämonen) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0061_MORAL_A",
+      "OPT_E_WIZ_0061_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0062_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 13",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Elementarismus (Feuer/Erde) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0062_STUDY_A",
+      "OPT_E_WIZ_0062_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0063_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 14",
+    "title": "Verbotenes Wissen: Beschwörung (Dämonen)",
+    "description": "Karla bietet dir an, nachts im Westturm einen verbotenen Text über Beschwörung (Dämonen) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0063_MORAL_A",
+      "OPT_E_WIZ_0063_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0064_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 14",
+    "title": "Verbotenes Wissen: Divination (Hellsicht)",
+    "description": "Alrik bietet dir an, nachts im Studenten-Schlafsaal einen verbotenen Text über Divination (Hellsicht) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0064_MORAL_A",
+      "OPT_E_WIZ_0064_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0065_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 8",
+    "title": "Verbotenes Wissen: Illusion & Verwandlung",
+    "description": "Eldric bietet dir an, nachts im Alte Bibliothek einen verbotenen Text über Illusion & Verwandlung zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0065_MORAL_A",
+      "OPT_E_WIZ_0065_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0066_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 12",
+    "title": "Verbotenes Wissen: Divination (Hellsicht)",
+    "description": "Yelina bietet dir an, nachts im Gildehaus der Grauen einen verbotenen Text über Divination (Hellsicht) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0066_MORAL_A",
+      "OPT_E_WIZ_0066_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0067_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 5",
+    "title": "Provokation im Gildehaus der Grauen",
+    "description": "Dein ewiger Rivale Karla stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Illusion & Verwandlung seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0067_RIVALRY_A",
+      "OPT_E_WIZ_0067_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0068_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 11",
+    "title": "Provokation im Westturm",
+    "description": "Dein ewiger Rivale Khurman stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Heilung (Balsam) seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0068_RIVALRY_A",
+      "OPT_E_WIZ_0068_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0069_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 7",
+    "title": "Ein potentieller Vertrauter: Feuersalamander",
+    "description": "Du findest ein verletztes Tier: Ein Feuersalamander. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0069_FAMILIAR_A",
+      "OPT_E_WIZ_0069_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0070_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 8",
+    "title": "Verbotenes Wissen: Divination (Hellsicht)",
+    "description": "Jess bietet dir an, nachts im Dachboden einen verbotenen Text über Divination (Hellsicht) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0070_MORAL_A",
+      "OPT_E_WIZ_0070_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0071_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 6",
+    "title": "Verbotenes Wissen: Nekromantie",
+    "description": "Rowena bietet dir an, nachts im Geheimlabor einen verbotenen Text über Nekromantie zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0071_MORAL_A",
+      "OPT_E_WIZ_0071_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0072_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 14",
+    "title": "Verbotenes Wissen: Elementarismus (Feuer/Erde)",
+    "description": "Sequin bietet dir an, nachts im Katakomben einen verbotenen Text über Elementarismus (Feuer/Erde) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0072_MORAL_A",
+      "OPT_E_WIZ_0072_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0073_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 13",
+    "title": "Verbotenes Wissen: Heilung (Balsam)",
+    "description": "Durgan bietet dir an, nachts im Kräutergarten einen verbotenen Text über Heilung (Balsam) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0073_MORAL_A",
+      "OPT_E_WIZ_0073_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0074_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 10",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Beschwörung (Dämonen) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0074_STUDY_A",
+      "OPT_E_WIZ_0074_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0075_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 12",
+    "title": "Verbotenes Wissen: Illusion & Verwandlung",
+    "description": "Khurman bietet dir an, nachts im Großer Speisesaal einen verbotenen Text über Illusion & Verwandlung zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0075_MORAL_A",
+      "OPT_E_WIZ_0075_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0076_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 6",
+    "title": "Ein potentieller Vertrauter: Schwarze Katze",
+    "description": "Du findest ein verletztes Tier: Ein Schwarze Katze. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0076_FAMILIAR_A",
+      "OPT_E_WIZ_0076_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0077_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 8",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Illusion & Verwandlung an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0077_STUDY_A",
+      "OPT_E_WIZ_0077_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0078_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 6",
+    "title": "Provokation im Nordturm",
+    "description": "Dein ewiger Rivale Alrik stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Illusion & Verwandlung seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0078_RIVALRY_A",
+      "OPT_E_WIZ_0078_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0079_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 11",
+    "title": "Ein potentieller Vertrauter: Kröte",
+    "description": "Du findest ein verletztes Tier: Ein Kröte. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0079_FAMILIAR_A",
+      "OPT_E_WIZ_0079_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0080_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 13",
+    "title": "Provokation im Ritualplatz im Hof",
+    "description": "Dein ewiger Rivale Petra stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Divination (Hellsicht) seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0080_RIVALRY_A",
+      "OPT_E_WIZ_0080_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0081_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 14",
+    "title": "Ein potentieller Vertrauter: Fuchs",
+    "description": "Du findest ein verletztes Tier: Ein Fuchs. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0081_FAMILIAR_A",
+      "OPT_E_WIZ_0081_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0082_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 9",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Divination (Hellsicht) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0082_STUDY_A",
+      "OPT_E_WIZ_0082_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0083_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 6",
+    "title": "Provokation im Kräutergarten",
+    "description": "Dein ewiger Rivale Alrik stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Heilung (Balsam) seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0083_RIVALRY_A",
+      "OPT_E_WIZ_0083_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0084_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 13",
+    "title": "Provokation im Verborgener Kerker",
+    "description": "Dein ewiger Rivale Alrik stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Illusion & Verwandlung seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0084_RIVALRY_A",
+      "OPT_E_WIZ_0084_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0085_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 12",
+    "title": "Ein potentieller Vertrauter: Fuchs",
+    "description": "Du findest ein verletztes Tier: Ein Fuchs. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0085_FAMILIAR_A",
+      "OPT_E_WIZ_0085_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0086_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 13",
+    "title": "Provokation im Ritualplatz im Hof",
+    "description": "Dein ewiger Rivale Karla stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Illusion & Verwandlung seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0086_RIVALRY_A",
+      "OPT_E_WIZ_0086_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0087_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 5",
+    "title": "Ein potentieller Vertrauter: Fuchs",
+    "description": "Du findest ein verletztes Tier: Ein Fuchs. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0087_FAMILIAR_A",
+      "OPT_E_WIZ_0087_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0088_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 12",
+    "title": "Verbotenes Wissen: Heilung (Balsam)",
+    "description": "Sequin bietet dir an, nachts im Dachboden einen verbotenen Text über Heilung (Balsam) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0088_MORAL_A",
+      "OPT_E_WIZ_0088_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0089_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 7",
+    "title": "Verbotenes Wissen: Divination (Hellsicht)",
+    "description": "Alrik bietet dir an, nachts im Großer Speisesaal einen verbotenen Text über Divination (Hellsicht) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0089_MORAL_A",
+      "OPT_E_WIZ_0089_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0090_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 5",
+    "title": "Ein potentieller Vertrauter: Eule",
+    "description": "Du findest ein verletztes Tier: Ein Eule. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0090_FAMILIAR_A",
+      "OPT_E_WIZ_0090_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0091_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 12",
+    "title": "Verbotenes Wissen: Nekromantie",
+    "description": "Alrik bietet dir an, nachts im Dachboden einen verbotenen Text über Nekromantie zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0091_MORAL_A",
+      "OPT_E_WIZ_0091_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0092_RIVALRY",
+    "pool": "social_minor",
+    "triggerExpr": "1d20 > 11",
+    "title": "Provokation im Dachboden",
+    "description": "Dein ewiger Rivale Rowena stellt dich vor der ganzen Klasse bloß und behauptet, deine Fähigkeiten in Divination (Hellsicht) seien lächerlich.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0092_RIVALRY_A",
+      "OPT_E_WIZ_0092_RIVALRY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0093_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 11",
+    "title": "Ein potentieller Vertrauter: Fuchs",
+    "description": "Du findest ein verletztes Tier: Ein Fuchs. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0093_FAMILIAR_A",
+      "OPT_E_WIZ_0093_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0094_MORAL",
+    "pool": "nacht",
+    "triggerExpr": "1d20 > 15",
+    "title": "Verbotenes Wissen: Beschwörung (Dämonen)",
+    "description": "Jess bietet dir an, nachts im Verborgener Kerker einen verbotenen Text über Beschwörung (Dämonen) zu studieren. Es könnte mächtig sein, aber auch gefährlich.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_WIZ_0094_MORAL_A",
+      "OPT_E_WIZ_0094_MORAL_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0095_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 7",
+    "title": "Ein potentieller Vertrauter: Kröte",
+    "description": "Du findest ein verletztes Tier: Ein Kröte. Es scheint eine starke magische Aura zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0095_FAMILIAR_A",
+      "OPT_E_WIZ_0095_FAMILIAR_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0096_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 6",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Heilung (Balsam) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0096_STUDY_A",
+      "OPT_E_WIZ_0096_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0097_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 6",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Divination (Hellsicht) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0097_STUDY_A",
+      "OPT_E_WIZ_0097_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0098_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 5",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Elementarismus (Feuer/Erde) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0098_STUDY_A",
+      "OPT_E_WIZ_0098_STUDY_B"
+    ]
+  },
+  {
+    "eventId": "E_WIZ_0099_STUDY",
+    "pool": "morgen",
+    "triggerExpr": "1d20 > 7",
+    "title": "Die harte Prüfung des Master Durgan",
+    "description": "Master Durgan fordert dich unerwartet auf, die Grundmatrix der Beschwörung (Dämonen) an die Tafel zu skizzieren.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_WIZ_0099_STUDY_A",
+      "OPT_E_WIZ_0099_STUDY_B"
+    ]
+  }
+]
