@@ -23,7 +23,7 @@
  * - File list is embedded at build-time (generatedAt: 2026-01-21T19:52:55Z).
  */
 
-const MODULE_ID = "janus7";
+const MODULE_ID = "Janus7";
 const STATE_KEY = "state";
 const FILE_INDEX = [
   "academy/calendar.js",

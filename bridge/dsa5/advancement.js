@@ -424,7 +424,7 @@ export class DSA5AdvancementBridge {
       const page = journal.pages?.find((p) => p.type === 'dsaaptracker');
       if (!page) return;
 
-      const key = `janus_${Date.now()}_${Math.random().toString(16).slice(2, 6)}`;
+      const key = `janus_${Date.now()}_${foundry.utils.randomID(4)}`;
       const existing = page.system?.entries ?? {};
 
       const entry = {

@@ -1,6 +1,6 @@
 (async () => {
   try {
-    const { getDsa5, isDsa5Active } = await import("/modules/janus7/bridge/dsa5/index.js");
+    const { getDsa5, isDsa5Active } = await import("/modules/Janus7/bridge/dsa5/index.js");
 
     // --- JANUS7 DSA5 Bridge helpers (auto-injected) ---
     const __janus7Core = game?.janus7?.core;
@@ -27,7 +27,7 @@
  * - Behält die bestehende Runner-UX/Funktionalität (Snippets, PASS/FAIL/SKIP, Export, Abbruch) bei
  */
   const RUNNER_VERSION = "JANUS7_TESTRUNNER_FULLCATALOG_v1.6";
-  const MODULE_ID = "janus7";
+  const MODULE_ID = "Janus7";
   let ABORT_ALL = false;
 
   // --- TEST DEFINITIONEN (voller Katalog) ---

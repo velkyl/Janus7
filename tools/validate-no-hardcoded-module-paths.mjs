@@ -16,7 +16,7 @@ function walk(dir) {
     if (entry.isDirectory()) walk(full);
     else if (exts.has(path.extname(entry.name))) {
       const txt = fs.readFileSync(full, 'utf8');
-      if (txt.includes('modules/janus7/')) errors.push(rel);
+      if (txt.includes('modules/Janus7/')) errors.push(rel);
     }
   }
 }

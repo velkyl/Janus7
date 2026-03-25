@@ -27,7 +27,7 @@ export default {
     const response = {
       version: 'JANUS_KI_RESPONSE_V1',
       sourceExportMeta: {
-        moduleVersion: game?.modules?.get?.('janus7')?.version ?? engine?.core?.state?.getPath?.('meta.version') ?? null,
+        moduleVersion: game?.modules?.get?.('Janus7')?.version ?? engine?.core?.state?.getPath?.('meta.version') ?? null,
       },
       changes: {
         calendarUpdates: [

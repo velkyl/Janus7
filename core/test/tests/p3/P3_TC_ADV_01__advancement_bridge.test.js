@@ -75,6 +75,32 @@ console.log('Leistbar?', canAfford);
       `,
     },
     {
+      title: '4b. getAdvanceCost — Edge Cases (Max Stufe & ungültige Kategorie)',
+      code: `
+const bridge = game.janus7.bridge.dsa5;
+
+// Edge Case 1: Max Stufe erreicht (z.B. Wert 25 in DSA5)
+const maxItem = { system: { StF: { value: 'B' }, talentValue: { value: 25 } } };
+const maxCost = bridge.advancement.getAdvanceCost(maxItem);
+console.log('Kosten bei Max-Stufe (25):', maxCost);
+console.assert(maxCost === null, 'Bei max Stufe sollte null zurückgegeben werden');
+
+// Edge Case 2: Ungültige Kategorie
+const invalidCatItem = { system: { StF: { value: 'Z' }, talentValue: { value: 5 } } };
+const invalidCatCost = bridge.advancement.getAdvanceCost(invalidCatItem);
+console.log('Kosten bei ungültiger Kategorie (Z):', invalidCatCost);
+console.assert(invalidCatCost === null, 'Bei ungültiger Kategorie sollte null zurückgegeben werden');
+
+// Edge Case 3: Negativer Talentwert (außerhalb des Arrays)
+const negativeItem = { system: { StF: { value: 'B' }, talentValue: { value: -2 } } };
+const negativeCost = bridge.advancement.getAdvanceCost(negativeItem);
+console.log('Kosten bei negativem Wert (-2):', negativeCost);
+console.assert(negativeCost === null, 'Bei negativem Startwert (Index < 0) sollte null zurückgegeben werden');
+
+console.log('✅ getAdvanceCost Edge Cases erfolgreich validiert');
+      `,
+    },
+    {
       title: '5. advanceItem — Talent steigern',
       code: `
 const actor = ((game.actors.getName('Testmagier') ?? game.actors.contents.find(a => a.type === 'character') ?? game.actors.contents[0]) ?? game.actors.contents.find(a => a.type === 'character') ?? game.actors.contents[0]);
@@ -154,6 +180,9 @@ console.table(results.map(r => ({
   validation: [
     'calculateAdvancementCost(0, "B") === 2',
     'calculateAdvancementCost(13, "B") === 6',
+    'getAdvanceCost: gibt null zurück, wenn Stufe >= Max',
+    'getAdvanceCost: gibt null zurück, wenn Kategorie ungültig ist',
+    'getAdvanceCost: gibt null zurück, wenn Startwert negativ ist',
     'awardXp: actor.system.details.experience.total += amount',
     'advanceItem: item.system.talentValue.value += 1, experience.spent += cost',
     'canAffordAdvancement: false wenn free < cost',

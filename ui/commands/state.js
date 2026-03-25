@@ -112,7 +112,7 @@ export const stateCommands = {
 
       const snapshot = {
         exportedAt: new Date().toISOString(),
-        moduleVersion: game?.modules?.get?.('janus7')?.version ?? 'unknown',
+        moduleVersion: game?.modules?.get?.('Janus7')?.version ?? 'unknown',
         lessons: academyData.listLessonIds?.(999)?.map?.((id) => academyData.getLesson?.(id)).filter(Boolean) ?? [],
         npcs:    academyData.listNpcIds?.(999)?.map?.((id) => academyData.getNpc?.(id)).filter(Boolean) ?? [],
         locations: academyData.listLocationIds?.(999)?.map?.((id) => academyData.getLocation?.(id)).filter(Boolean) ?? [],

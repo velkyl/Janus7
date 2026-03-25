@@ -97,7 +97,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     const time = this._getStateTime();
     const activeView = getView(this._viewId) ?? getView('director');
     return {
-      moduleVersion: game?.modules?.get?.('janus7')?.version ?? 'unknown',
+      moduleVersion: game?.modules?.get?.('Janus7')?.version ?? 'unknown',
       worldTitle: game?.world?.title ?? game?.world?.id ?? 'World',
       dayName: time?.dayName ?? time?.day ?? '—',
       phaseName: time?.phase ?? time?.slotName ?? '—',

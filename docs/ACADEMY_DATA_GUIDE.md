@@ -38,4 +38,4 @@ Empfohlen:
 2. Im Log sollten `AcademyDataApi: Ready` und keine harten Fehler erscheinen.
 3. Bei Warnungen: betroffene Datei/ID korrigieren.
 
-Optional: eigenes Makro, das `game.modules.get("janus7")...` / `AcademyDataApi.validateIntegrity()` aufruft.
+Optional: eigenes Makro, das `game.modules.get("Janus7")...` / `AcademyDataApi.validateIntegrity()` aufruft.
