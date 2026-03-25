@@ -203,11 +203,67 @@ export class CompendiumLibrary {
    * @returns {Promise<Map<string, CompendiumHit|null>>}
    */
   async findBatch(names, docType, opts = {}) {
+    const { itemType, allowFuzzy = false, preferPack } = opts;
+
     // Index einmal bauen, dann alle lokal auflösen
-    await this.buildIndex(docType);
+    const index = await this.buildIndex(docType);
+
+    // 1. Vorab filtern
+    const filtered = itemType
+      ? index.filter(h => !h.itemType || h.itemType === itemType)
+      : index;
+
+    // 2. Schnelle Lookup-Maps für exakte Treffer aufbauen
+    // Wir iterieren rückwärts, damit die früher im Index stehenden (höhere Priorität)
+    // die späteren überschreiben und am Ende im Map gewinnen, WENN wir Map.set normal nutzen?
+    // Besser: Wir iterieren vorwärts und setzen nur, wenn noch nicht vorhanden.
+    const exactDsa5 = new Map();
+    const exactAny = new Map();
+
+    for (const h of filtered) {
+      const lowerName = h.name.toLowerCase();
+
+      // DSA5 Packs
+      if (h.isDsa5 && !exactDsa5.has(lowerName)) {
+        exactDsa5.set(lowerName, h);
+      }
+
+      // Alle Packs
+      if (!exactAny.has(lowerName)) {
+        exactAny.set(lowerName, h);
+      }
+    }
+
     const result = new Map();
     for (const name of names) {
-      result.set(name, await this.findInCompendium(name, docType, opts));
+      const needle = String(name ?? '').trim().toLowerCase();
+      if (!needle || !docType) {
+        result.set(name, null);
+        continue;
+      }
+
+      // 1. Exakter Match in DSA5-Pack (O(1))
+      let hit = exactDsa5.get(needle);
+
+      // 2. Exakter Match in beliebigem Pack (O(1))
+      if (!hit) hit = exactAny.get(needle);
+
+      // 3. Bevorzugtes Pack anwenden wenn mehrere Treffer (O(N) Fallback)
+      if (!hit && preferPack) {
+        hit = filtered.find(h => h.packId === preferPack &&
+          h.name.toLowerCase().includes(needle));
+      }
+
+      // 4. Fuzzy (contains) (O(N) Fallback)
+      if (!hit && allowFuzzy) {
+        hit = filtered.find(h => h.name.toLowerCase().includes(needle));
+      }
+
+      if (hit) {
+        hit = { ...hit, isExact: hit.name.toLowerCase() === needle };
+      }
+
+      result.set(name, hit ?? null);
     }
     return result;
   }
