@@ -1463,6 +1463,18 @@
         3
       ],
       "hasRun": false
+    },
+    {
+      "id": "P3-TC-15",
+      "title": "DSA5ConditionBridge Contract",
+      "importPath": "./tests/p3/P3_TC_15__dsa5_condition_bridge.test.js",
+      "suiteClass": "binding",
+      "kind": "auto",
+      "phase": 3,
+      "phases": [
+        3
+      ],
+      "hasRun": false
     }
   ]
 }
