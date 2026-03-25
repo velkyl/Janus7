@@ -1,0 +1,103 @@
+{
+  "id": "janus7",
+  "title": "JANUS7 – Academy Operating System",
+  "version": "0.9.12.42",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13.351"
+  },
+  "authors": [
+    {
+      "name": "Thomas (JANUS7 Development)",
+      "url": "https://github.com/janus7/janus7"
+    }
+  ],
+  "description": "Hybrid-first academy management system for DSA5 magic academy campaigns. Features: State Management, Calendar, Simulation Engine, Quest & Event System, DSA5 Bridge, Atmosphere Control, Control Panel UI. Includes modular JANUS Shell UI layer.",
+  "esmodules": [
+    "scripts/janus.mjs"
+  ],
+  "styles": [
+    "styles/janus7-layers.css",
+    "styles/janus7-ui-bundle.css"
+  ],
+  "templates": [
+    "templates/apps/academy-overview.hbs",
+    "templates/apps/atmosphere-dj.hbs",
+    "templates/apps/command-center.hbs",
+    "templates/apps/config-panel.hbs",
+    "templates/apps/control-panel.hbs",
+    "templates/apps/guided-manual-tests.hbs",
+    "templates/apps/ki-backup-manager.hbs",
+    "templates/apps/ki-roundtrip.hbs",
+    "templates/apps/lesson-library.hbs",
+    "templates/apps/scoring-view.hbs",
+    "templates/apps/session-prep-wizard.hbs",
+    "templates/apps/social-view.hbs",
+    "templates/apps/state-inspector.hbs",
+    "templates/apps/sync-panel.hbs",
+    "templates/apps/test-results.hbs",
+    "templates/items/lesson-sheet.hbs",
+    "templates/quest-system/dev-panel.hbs",
+    "templates/quest-system/event-popup.hbs",
+    "templates/quest-system/quest-journal-header.hbs",
+    "templates/quest-system/quest-journal.hbs",
+    "templates/shell/janus-shell.hbs",
+    "templates/shell/panels/default-panel.hbs",
+    "templates/shell/views/academy.hbs",
+    "templates/shell/views/director.hbs",
+    "templates/shell/views/tools.hbs",
+    "templates/sidebar/janus-sidebar.hbs"
+  ],
+  "languages": [
+    {
+      "lang": "de",
+      "name": "Deutsch",
+      "path": "lang/de.json"
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "dsa5",
+        "type": "system",
+        "compatibility": {
+          "minimum": "7.0.0",
+          "verified": "7.5.0",
+          "maximum": "7.5.0"
+        }
+      }
+    ]
+  },
+  "flags": {
+    "hotReload": {
+      "extensions": [
+        "css",
+        "hbs",
+        "json"
+      ],
+      "paths": [
+        "styles",
+        "templates",
+        "data"
+      ]
+    }
+  },
+  "url": "https://github.com/janus7/janus7",
+  "manifest": "https://github.com/janus7/janus7/releases/latest/download/module.json",
+  "download": "https://github.com/janus7/janus7/releases/latest/download/janus7.zip",
+  "readme": "https://github.com/janus7/janus7/blob/main/README.md",
+  "changelog": "https://github.com/janus7/janus7/blob/main/CHANGELOG.md",
+  "bugs": "https://github.com/janus7/janus7/issues",
+  "license": "PRIVATE - See LICENSE file",
+  "socket": true,
+  "documentTypes": {
+    "Item": {
+      "lesson": {}
+    }
+  }
+}

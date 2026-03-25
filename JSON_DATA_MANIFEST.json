@@ -1,0 +1,23 @@
+{
+  "pack": "JANUS7_WELLE2_CONTENTPACK",
+  "generatedAt": "2026-03-09T18:00:00Z",
+  "forModule": "JANUS7_v0.9.10.9+",
+  "basedOn": "AkademieJSON.zip",
+  "contents": {
+    "lessons_added": 15,
+    "locations_added": 7,
+    "library_items_added": 8,
+    "npcs_added": 8,
+    "calendar_entries_added": 19,
+    "quests_added": 6,
+    "events_added_or_wired": 44,
+    "options_added": 48
+  },
+  "focus": [
+    "Academagia-Flair",
+    "Life-of-a-Wizard-Alltag",
+    "Studium/Wahlpflicht",
+    "Zirkel & Intrigen",
+    "Ambient Event Pools"
+  ]
+}

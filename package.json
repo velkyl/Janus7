@@ -1,0 +1,16 @@
+{
+  "name": "janus7",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate:json": "node tools/validate-json.mjs",
+    "validate:security": "node tools/validate-security.mjs",
+    "validate": "npm run validate:json && npm run validate:academy && npm run validate:security && npm run validate:imports && npm run validate:test-registry && npm run validate:test-manifest && npm run validate:no-hardcoded-module-paths",
+    "validate:imports": "node tools/validate-imports.mjs",
+    "validate:test-manifest": "node tools/validate-test-manifest.mjs",
+    "validate:test-registry": "node tools/validate-test-registry.mjs",
+    "validate:no-hardcoded-module-paths": "node tools/validate-no-hardcoded-module-paths.mjs",
+    "validate:academy": "node tools/validate-academy-data.mjs"
+  },
+  "version": "0.9.12.42"
+}
