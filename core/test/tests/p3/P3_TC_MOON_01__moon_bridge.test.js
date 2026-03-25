@@ -107,7 +107,7 @@ export default {
       };
 
       await bridge.loadModifiers(mockModifiers);
-      
+
       // HINWEIS: Hier prüfen, ob die Methode getLessonModifier oder getMoonLessonModifier heißt!
       const mod = bridge.getLessonModifier ? bridge.getLessonModifier('arcanology') : bridge.getMoonLessonModifier('arcanology');
 
