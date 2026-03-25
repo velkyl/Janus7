@@ -1451,6 +1451,18 @@
       "id": "P7-TC-09",
       "title": "KI preflight accepts minimal valid response shape",
       "importPath": "./tests/p7/P7_TC_09__ki_preflight_valid_shape.test.js"
+    },
+    {
+      "id": "P3-TC-14",
+      "title": "DSA5Resolver Contract",
+      "importPath": "./tests/p3/P3_TC_14__dsa5_resolver_contract.test.js",
+      "suiteClass": "binding",
+      "kind": "auto",
+      "phase": 3,
+      "phases": [
+        3
+      ],
+      "hasRun": false
     }
   ]
 }

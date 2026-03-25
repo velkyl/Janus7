@@ -59,6 +59,7 @@ export const BUILTIN_AUTO_MODULES = [
   './tests/p3/P3_TC_SOCIAL_01__personae_social_sync.test.js',
   './tests/p3/P3_TC_TIMED_01__timed_conditions.test.js',
   './tests/p3/P3_TRAD_TC_01__tradition_circle_mapping.test.js',
+  './tests/p3/P3_TC_14__dsa5_resolver_contract.test.js',
 
   // Phase 4
   './tests/p4/P4_TC_01__calendar_progression.test.js',
