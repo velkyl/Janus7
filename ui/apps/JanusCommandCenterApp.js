@@ -493,9 +493,13 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(foundry.ap
       : all;
 
     this._spotlightIdx = -1;
+    container.innerHTML = ''; // Clear container
 
     if (!filtered.length) {
-      container.innerHTML = `<div class="j7-spotlight-empty">Keine Befehle gefunden für „${q.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}"</div>`;
+      const emptyDiv = document.createElement('div');
+      emptyDiv.className = 'j7-spotlight-empty';
+      emptyDiv.textContent = `Keine Befehle gefunden für „${q}”`;
+      container.appendChild(emptyDiv);
       return;
     }
 
@@ -507,30 +511,50 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(foundry.ap
       groups.set(item.categoryId, g);
     }
 
-    let html = '';
     for (const [, group] of groups) {
-      html += `<div class="j7-spotlight-group-label">${group.label}</div>`;
+      const groupLabelDiv = document.createElement('div');
+      groupLabelDiv.className = 'j7-spotlight-group-label';
+      groupLabelDiv.textContent = group.label;
+      container.appendChild(groupLabelDiv);
+
       for (const cmd of group.items) {
         const unavail = !cmd.available;
-        html += `<div class="j7-spotlight-item ${unavail ? 'is-unavailable' : ''}"
-                   role="option"
-                   data-command-id="${cmd.id}"
-                   ${unavail ? 'aria-disabled="true"' : 'tabindex="-1"'}>
-          <i class="fas ${cmd.icon}"></i>
-          <span class="j7-spotlight-item-label">${cmd.label}</span>
-          <span class="j7-spotlight-item-cat">${group.label}</span>
-        </div>`;
-      }
-    }
-    container.innerHTML = html;
 
-    // Click handler auf Einträge
-    for (const item of container.querySelectorAll('.j7-spotlight-item:not(.is-unavailable)')) {
-      item.addEventListener('click', () => {
-        const cmdId = item.dataset.commandId;
-        this._closeSpotlight();
-        this._executeCommandById(cmdId);
-      });
+        const itemDiv = document.createElement('div');
+        itemDiv.className = `j7-spotlight-item ${unavail ? 'is-unavailable' : ''}`.trim();
+        itemDiv.setAttribute('role', 'option');
+        itemDiv.dataset.commandId = cmd.id;
+        if (unavail) {
+          itemDiv.setAttribute('aria-disabled', 'true');
+        } else {
+          itemDiv.setAttribute('tabindex', '-1');
+        }
+
+        const iconI = document.createElement('i');
+        const iconClasses = `fas ${cmd.icon || ''}`.trim().split(/\s+/);
+        iconI.classList.add(...iconClasses);
+        itemDiv.appendChild(iconI);
+
+        const labelSpan = document.createElement('span');
+        labelSpan.className = 'j7-spotlight-item-label';
+        labelSpan.textContent = cmd.label;
+        itemDiv.appendChild(labelSpan);
+
+        const catSpan = document.createElement('span');
+        catSpan.className = 'j7-spotlight-item-cat';
+        catSpan.textContent = group.label;
+        itemDiv.appendChild(catSpan);
+
+        container.appendChild(itemDiv);
+
+        if (!unavail) {
+          itemDiv.addEventListener('click', () => {
+            const cmdId = itemDiv.dataset.commandId;
+            this._closeSpotlight();
+            this._executeCommandById(cmdId);
+          });
+        }
+      }
     }
   }
 
