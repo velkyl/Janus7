@@ -597,6 +597,18 @@
       "hasRun": true
     },
     {
+      "id": "P3-TC-FATE-02",
+      "title": "Fate Bridge: Edge Cases for _onActorUpdate",
+      "importPath": "./tests/p3/P3_TC_FATE_02__fate_bridge_edge_cases.test.js",
+      "suiteClass": "auto",
+      "kind": "auto",
+      "phase": 3,
+      "phases": [
+        3
+      ],
+      "hasRun": true
+    },
+    {
       "id": "P3-TC-01",
       "title": "DSA5 Roll-API funktioniert",
       "importPath": "./tests/p3/P3_TC_01__dsa5_roll_api_funktioniert.test.js",
