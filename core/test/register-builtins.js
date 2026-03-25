@@ -127,6 +127,7 @@ export const BUILTIN_AUTO_MODULES = [
   './tests/p7/P7_TC_07__ki_patch_apply.test.js',
   './tests/p7/P7_TC_08__ki_preflight_invalid_version.test.js',
   './tests/p7/P7_TC_09__ki_preflight_valid_shape.test.js',
+  './tests/p7/P7_TC_10__ki_import_rejects_empty_patches.test.js',
   './tests/p7/P7_TC_A1__permission_enforced.test.js',
   './tests/p7/P7_TC_A2__ui_history_refresh_manual.test.js',
   './tests/p7/P7_TC_A3__export_uses_saveDataToFile.test.js',

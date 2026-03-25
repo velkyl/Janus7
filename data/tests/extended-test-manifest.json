@@ -575,6 +575,16 @@
       "hasRun": true
     },
     {
+      "id": "P2-TC-07",
+      "title": "Academy extended schemas validate core domains",
+      "importPath": "./tests/p2/P2_TC_07__academy_extended_schemas.test.js"
+    },
+    {
+      "id": "P2-TC-08",
+      "title": "Academy reference integrity diagnostics are emitted",
+      "importPath": "./tests/p2/P2_TC_08__academy_reference_integrity_diagnostics.test.js"
+    },
+    {
       "id": "P3-GC-TC-01",
       "title": "GroupCheck Bridge: showGroupCheckMessage erstellt Chat-Nachricht",
       "importPath": "./tests/p3/P3_GC_TC_01__group_check_bridge.test.js",
@@ -652,6 +662,18 @@
       "id": "P3-TC-13",
       "title": "Scene regions bridge registered",
       "importPath": "./tests/p3/P3_TC_13__scene_regions_bridge_registered.test.js",
+      "suiteClass": "binding",
+      "kind": "auto",
+      "phase": 3,
+      "phases": [
+        3
+      ],
+      "hasRun": false
+    },
+    {
+      "id": "P3-TC-14",
+      "title": "DSA5Resolver Contract",
+      "importPath": "./tests/p3/P3_TC_14__dsa5_resolver_contract.test.js",
       "suiteClass": "binding",
       "kind": "auto",
       "phase": 3,
@@ -989,6 +1011,30 @@
       "hasRun": true
     },
     {
+      "id": "P6_TC_04__permissions",
+      "title": "P6_TC_04__permissions",
+      "importPath": "./tests/p6/P6_TC_04__permissions.test.js",
+      "suiteClass": "manual",
+      "kind": "manual",
+      "phase": 6,
+      "phases": [
+        6
+      ],
+      "hasRun": true
+    },
+    {
+      "id": "P6_TC_06__i18n",
+      "title": "P6_TC_06__i18n",
+      "importPath": "./tests/p6/P6_TC_06__i18n.test.js",
+      "suiteClass": "manual",
+      "kind": "manual",
+      "phase": 6,
+      "phases": [
+        6
+      ],
+      "hasRun": true
+    },
+    {
       "id": "P6-TC-01",
       "title": "ControlPanel öffnet und schließt",
       "importPath": "./tests/p6/P6_TC_01__control_panel_oeffnet.test.js",
@@ -1183,11 +1229,11 @@
       "hasRun": false
     },
     {
-      "id": "P6_TC_04__permissions",
-      "title": "P6_TC_04__permissions",
-      "importPath": "./tests/p6/P6_TC_04__permissions.test.js",
-      "suiteClass": "manual",
-      "kind": "manual",
+      "id": "P6-TC-20",
+      "title": "Shell app is registered in the JANUS UI registry",
+      "importPath": "./tests/p6/P6_TC_20__shell_app_registered.test.js",
+      "suiteClass": "binding",
+      "kind": "auto",
       "phase": 6,
       "phases": [
         6
@@ -1195,11 +1241,23 @@
       "hasRun": true
     },
     {
-      "id": "P6_TC_06__i18n",
-      "title": "P6_TC_06__i18n",
-      "importPath": "./tests/p6/P6_TC_06__i18n.test.js",
-      "suiteClass": "manual",
-      "kind": "manual",
+      "id": "P6-TC-21",
+      "title": "Shell template contains modular view and panel actions",
+      "importPath": "./tests/p6/P6_TC_21__shell_template_actions_present.test.js",
+      "suiteClass": "binding",
+      "kind": "auto",
+      "phase": 6,
+      "phases": [
+        6
+      ],
+      "hasRun": true
+    },
+    {
+      "id": "P6-TC-22",
+      "title": "Shell panel registry is seeded with core panels",
+      "importPath": "./tests/p6/P6_TC_22__shell_panel_registry_seeded.test.js",
+      "suiteClass": "binding",
+      "kind": "auto",
       "phase": 6,
       "phases": [
         6
@@ -1275,6 +1333,28 @@
       "phase": null,
       "phases": [],
       "hasRun": true
+    },
+    {
+      "id": "P7-TC-08",
+      "title": "KI preflight rejects unsupported response versions",
+      "importPath": "./tests/p7/P7_TC_08__ki_preflight_invalid_version.test.js"
+    },
+    {
+      "id": "P7-TC-09",
+      "title": "KI preflight accepts minimal valid response shape",
+      "importPath": "./tests/p7/P7_TC_09__ki_preflight_valid_shape.test.js"
+    },
+    {
+      "id": "P7-TC-10",
+      "title": "KI import rejects empty or invalid patches",
+      "importPath": "./tests/p7/P7_TC_10__ki_import_rejects_empty_patches.test.js",
+      "suiteClass": "extended-auto",
+      "kind": "auto",
+      "phase": 7,
+      "phases": [
+        7
+      ],
+      "hasRun": false
     },
     {
       "id": "P7-TC-A1",
@@ -1395,74 +1475,6 @@
       "phase": null,
       "phases": [],
       "hasRun": true
-    },
-    {
-      "id": "P6-TC-20",
-      "title": "Shell app is registered in the JANUS UI registry",
-      "importPath": "./tests/p6/P6_TC_20__shell_app_registered.test.js",
-      "suiteClass": "binding",
-      "kind": "auto",
-      "phase": 6,
-      "phases": [
-        6
-      ],
-      "hasRun": true
-    },
-    {
-      "id": "P6-TC-21",
-      "title": "Shell template contains modular view and panel actions",
-      "importPath": "./tests/p6/P6_TC_21__shell_template_actions_present.test.js",
-      "suiteClass": "binding",
-      "kind": "auto",
-      "phase": 6,
-      "phases": [
-        6
-      ],
-      "hasRun": true
-    },
-    {
-      "id": "P6-TC-22",
-      "title": "Shell panel registry is seeded with core panels",
-      "importPath": "./tests/p6/P6_TC_22__shell_panel_registry_seeded.test.js",
-      "suiteClass": "binding",
-      "kind": "auto",
-      "phase": 6,
-      "phases": [
-        6
-      ],
-      "hasRun": true
-    },
-    {
-      "id": "P2-TC-07",
-      "title": "Academy extended schemas validate core domains",
-      "importPath": "./tests/p2/P2_TC_07__academy_extended_schemas.test.js"
-    },
-    {
-      "id": "P2-TC-08",
-      "title": "Academy reference integrity diagnostics are emitted",
-      "importPath": "./tests/p2/P2_TC_08__academy_reference_integrity_diagnostics.test.js"
-    },
-    {
-      "id": "P7-TC-08",
-      "title": "KI preflight rejects unsupported response versions",
-      "importPath": "./tests/p7/P7_TC_08__ki_preflight_invalid_version.test.js"
-    },
-    {
-      "id": "P7-TC-09",
-      "title": "KI preflight accepts minimal valid response shape",
-      "importPath": "./tests/p7/P7_TC_09__ki_preflight_valid_shape.test.js"
-    },
-    {
-      "id": "P3-TC-14",
-      "title": "DSA5Resolver Contract",
-      "importPath": "./tests/p3/P3_TC_14__dsa5_resolver_contract.test.js",
-      "suiteClass": "binding",
-      "kind": "auto",
-      "phase": 3,
-      "phases": [
-        3
-      ],
-      "hasRun": false
     }
   ]
 }
