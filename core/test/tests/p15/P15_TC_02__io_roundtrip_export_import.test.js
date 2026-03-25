@@ -8,7 +8,7 @@
  */
 
 function _randTag() {
-  return `rt_${Math.random().toString(16).slice(2, 10)}_${Date.now()}`;
+  return `rt_${foundry.utils.randomID(8)}_${Date.now()}`;
 }
 
 export default {

@@ -123,6 +123,7 @@ export async function ensureLessonDocumentsReady(engine, { forceSync = false } =
   const byLessonId = new Map(existing.map((i) => [i.getFlag(JANUS_LESSON_FLAG_SCOPE, 'lessonId') ?? i.system?.lessonId, i]));
   let created = 0;
   let updated = 0;
+  const toUpdate = [];
 
   const toCreate = [];
   const toUpdate = [];
@@ -163,6 +164,13 @@ export async function ensureLessonDocumentsReady(engine, { forceSync = false } =
   if (toUpdate.length > 0) {
     await Item.updateDocuments(toUpdate);
     updated += toUpdate.length;
+      toUpdate.push({ _id: existingDoc.id, ...data });
+      updated += 1;
+    }
+  }
+
+  if (toUpdate.length > 0) {
+    await Item.updateDocuments(toUpdate);
   }
 
   engine.academy ??= {};
