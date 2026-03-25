@@ -443,7 +443,7 @@ export class JanusSyncEngine {
    * @returns {Promise<Actor>}
    */
   async createActorFromNPC(npcData, opts = {}) {
-    if (!game.user.isGM) throw new Error('Nur GM darf Actors anlegen.');
+    if (!game.user?.isGM) throw new Error('Nur GM darf Actors anlegen.');
 
     // Auto-folder (JANUS7 / Actors / NSCs) unless explicitly provided.
     let folderId = opts.folderId ?? null;
@@ -508,7 +508,7 @@ export class JanusSyncEngine {
    * @returns {Promise<Scene>}
    */
   async createSceneFromLocation(locData, opts = {}) {
-    if (!game.user.isGM) throw new Error('Nur GM darf Szenen anlegen.');
+    if (!game.user?.isGM) throw new Error('Nur GM darf Szenen anlegen.');
 
     // Auto-folder (JANUS7 / Scenes / Orte) unless explicitly provided.
     let folderId = opts.folderId ?? null;
@@ -563,7 +563,7 @@ export class JanusSyncEngine {
    * @returns {Promise<Playlist>}
    */
   async createPlaylist(plData) {
-    if (!game.user.isGM) throw new Error('Nur GM darf Playlists anlegen.');
+    if (!game.user?.isGM) throw new Error('Nur GM darf Playlists anlegen.');
 
     // Auto-folder (JANUS7 / Playlists / Musik) by default.
     const resolved = await this._folders.ensureFor({ docType: 'Playlist', kind: 'music' });
@@ -719,7 +719,7 @@ export class JanusSyncEngine {
    * @returns {Promise<Item>}
    */
   async createItemFromRecipe(recipeData, opts = {}) {
-    if (!game.user.isGM) throw new Error('Nur GM darf Items anlegen.');
+    if (!game.user?.isGM) throw new Error('Nur GM darf Items anlegen.');
 
     // Auto-folder (JANUS7 / Items / Alchemie) unless explicitly provided.
     let folderId = opts.folderId ?? null;
@@ -794,7 +794,7 @@ export class JanusSyncEngine {
    * @returns {Promise<JournalEntry>}
    */
   async createJournalFromLibrary(libData, opts = {}) {
-    if (!game.user.isGM) throw new Error('Nur GM darf Journal-Einträge anlegen.');
+    if (!game.user?.isGM) throw new Error('Nur GM darf Journal-Einträge anlegen.');
 
     // Auto-folder (JANUS7 / Journals / Bibliothek) unless explicitly provided.
     let folderId = opts.folderId ?? null;
@@ -837,7 +837,7 @@ export class JanusSyncEngine {
    * @returns {Promise<JournalEntry>}
    */
   async createJournalFromLesson(lessonData, opts = {}) {
-    if (!game.user.isGM) throw new Error('Nur GM darf Journal-Einträge anlegen.');
+    if (!game.user?.isGM) throw new Error('Nur GM darf Journal-Einträge anlegen.');
 
     // Auto-folder (JANUS7 / Journals / Unterricht) unless explicitly provided.
     let folderId = opts.folderId ?? null;

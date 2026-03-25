@@ -42,8 +42,8 @@ export function deepFreeze(obj) {
 }
 
 export function clone(value) {
-  if (globalThis.foundry?.utils?.duplicate) return foundry.utils.duplicate(value);
-  return value === undefined ? undefined : JSON.parse(JSON.stringify(value));
+  if (value === undefined) return undefined;
+  return foundry.utils.deepClone(value);
 }
 
 export function unready(label, fallback) {

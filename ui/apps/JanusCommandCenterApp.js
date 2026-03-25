@@ -495,7 +495,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(foundry.ap
     this._spotlightIdx = -1;
 
     if (!filtered.length) {
-      container.innerHTML = `<div class="j7-spotlight-empty">Keine Befehle gefunden für „${q}"</div>`;
+      container.innerHTML = `<div class="j7-spotlight-empty">Keine Befehle gefunden für „${q.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}"</div>`;
       return;
     }
 
