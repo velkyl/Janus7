@@ -1463,6 +1463,18 @@
         3
       ],
       "hasRun": false
+    },
+    {
+      "id": "P3-TC-15",
+      "title": "JANUS_TO_DSA5_CONDITION_MAP Contract",
+      "importPath": "./tests/p3/P3_TC_15__janus_to_dsa5_condition_map.test.js",
+      "suiteClass": "binding",
+      "kind": "auto",
+      "phase": 3,
+      "phases": [
+        3
+      ],
+      "hasRun": false
     }
   ]
 }
