@@ -12,7 +12,7 @@ JANUS7 ist ein mehrschichtiges Foundry-Modul für eine langfristige Zauberakadem
 - **Experimentell / intern:** einzelne Debug-/Test-Apps, manuelle Testpfade, Legacy-Wrapper, einige Import-/Restore-Kantenfälle.
 
 ## Schnellstart
-1. ZIP nach `FoundryVTT/Data/modules/janus7/` entpacken.
+1. ZIP nach `FoundryVTT/Data/modules/Janus7/` entpacken.
 2. Foundry neu laden und **JANUS7** aktivieren.
 3. Shell öffnen:
    - Scene Controls / JANUS-Button oder

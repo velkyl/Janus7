@@ -61,7 +61,7 @@
       "date": "2026-03-11",
       "type": "stabilization-paths-tests-cleanup",
       "notes": [
-        "Hardcodierte modules/janus7-Pfade in Kernpfaden (Academy, DSA5-Bridge, KI-Import, Test-Loader, zentrale UI-Apps) auf zentrale Resolver umgestellt.",
+        "Hardcodierte modules/Janus7-Pfade in Kernpfaden (Academy, DSA5-Bridge, KI-Import, Test-Loader, zentrale UI-Apps) auf zentrale Resolver umgestellt.",
         "Extended-Test-Manifest auf reale Test-IDs/-Importpfade neu ausgerichtet; zusätzliche Validierungsskripte für Imports, Manifest und Registry ergänzt.",
         "Fehlende Datei data/academy/social-seeds.json ergänzt und Legacy-AI-Aliasse auf stille Reexports ohne Top-Level-Warnspam reduziert."
       ]

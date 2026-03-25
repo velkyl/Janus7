@@ -8,7 +8,7 @@ Dieses Handbuch erklärt **wie JANUS7 in Foundry bedient wird**: Bedienlogik, Wo
 Es ersetzt **nicht** die Entwicklerdokumentation (Architektur/Code), sondern ist die **Alltagsanleitung**.
 
 > **Wichtig (SSOT):**
-> - **Build-/Modulversion**: `game.modules.get('janus7')?.version` (bzw. `module.json`)
+> - **Build-/Modulversion**: `game.modules.get('Janus7')?.version` (bzw. `module.json`)
 > - **State-Version**: `state.meta.version` bedeutet „State zuletzt gespeichert unter Modulversion X“.
 >   Das ist **nicht** die laufende Build-Version.
 
@@ -251,7 +251,7 @@ Checkliste:
 - Oder: Fehler im Render/Template.
 
 ### 9.3 „Versionen wirken unterschiedlich (0.9.9.x)“
-- Build-Version aus `game.modules.get('janus7')?.version`.
+- Build-Version aus `game.modules.get('Janus7')?.version`.
 - State-Version ist historisch.
 
 ### 9.4 „Drag & Drop geht nicht“
