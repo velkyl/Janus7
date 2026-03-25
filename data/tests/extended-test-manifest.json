@@ -722,8 +722,8 @@
       "id": "P3-TC-MOON-01",
       "title": "Moon Bridge: Mondphasen lesen, Modifikatoren, Phasenwechsel-Hook",
       "importPath": "./tests/p3/P3_TC_MOON_01__moon_bridge.test.js",
-      "suiteClass": "manual",
-      "kind": "manual",
+      "suiteClass": "extended-auto",
+      "kind": "auto",
       "phase": 3,
       "phases": [
         3
