@@ -5,6 +5,11 @@
  */
 export class JanusAssetResolver {
   static moduleId() {
+    try {
+      const url = new URL(import.meta.url);
+      const match = url.pathname.match(/\/modules\/([^/]+)\//);
+      if (match) return match[1];
+    } catch (_) {}
     return 'janus7';
   }
 
