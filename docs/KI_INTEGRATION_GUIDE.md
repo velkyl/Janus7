@@ -1,47 +1,40 @@
-# JANUS7 KI-Integration Guide
+﻿# JANUS7 KI-Integration Guide
 
-**Modul-Version:** 0.9.12.43  
-**Phase:** 7 – KI-Roundtrip  
+**Modul-Version:** 0.9.12.44  
+**Phase:** 7 - KI-Roundtrip  
 **Datum:** 2026-03-25
 
 ---
 
-## Übersicht
+## Uebersicht
 
-Phase 7 implementiert den vollständigen Export/Import-Roundtrip zwischen JANUS7 und externen
-LLMs (Claude, ChatGPT, Gemini). Der Kampagnenzustand wird als strukturiertes JSON-Bundle
-exportiert, durch ein LLM verarbeitet und als Patch-Response zurückgespielt.
+Phase 7 implementiert den Export/Import-Roundtrip zwischen JANUS7 und externen LLMs.
+Der Kampagnenzustand wird als strukturiertes JSON-Bundle exportiert, ausserhalb von Foundry verarbeitet
+und als Patch-Response wieder ueber Preview/Apply zurueckgefuehrt.
 
-**API-Einstiegspunkt:**
+**API-Einstiegspunkte:**
 
 ```js
-game.janus7.ki        // Phase-7-Namespace (SSOT)
-game.janus7.ai        // Legacy-Alias → delegiert an .ki
+game.janus7.ki        // kanonischer Namespace
+game.janus7.ai        // Legacy-Alias -> delegiert an .ki
 ```
 
 ---
 
 ## Workflow
 
-```
+```text
 GM: exportBundle(opts)
-        ↓
-  JANUS_EXPORT_V2 (JSON)
-        ↓
-  LLM-Verarbeitung (Claude / ChatGPT / Gemini)
-        ↓
-  JANUS_KI_RESPONSE_V1 (JSON-Patch)
-        ↓
-GM: preflightImport → previewImport → applyImport
-        ↓
-  State-Update (transaktional, Backup davor)
+        -> JANUS_EXPORT_V2
+        -> LLM-Verarbeitung
+        -> JANUS_KI_RESPONSE_V1
+        -> preflightImport -> previewImport -> applyImport
+        -> transaktionales State-Update (mit Backup davor)
 ```
 
 ---
 
-## 1. Export
-
-### Methode
+## Export
 
 ```js
 const bundle = game.janus7.ki.exportBundle({ mode: 'lite' });
@@ -51,201 +44,167 @@ const bundle = game.janus7.ki.exportBundle({ mode: 'lite' });
 
 | Modus | Inhalt | Wann verwenden |
 |-------|--------|----------------|
-| `lite` | `campaign_state` + Zeitstempel-Meta | Schnelle Session-Briefings |
-| `week` | + `academy` (Kalender, Lektionen, Events) | Wochenplanung, NPC-Verhalten |
-| `full` | + `references` + `knowledge_links` + `art` | Tiefe Analyse, Langzeitplanung |
+| `lite` | `campaign_state` + Meta | kurze Briefings |
+| `week` | + `academy` | Wochenplanung, Slot-/Lehrkontext |
+| `full` | + `references`, `knowledge_links`, `art` | tiefere Analyse und Langzeitplanung |
 
-### In die Outbox schreiben
+### Outbox / Download
 
 ```js
 await game.janus7.ki.exportToOutbox({ mode: 'week' });
-// Schreibt in: worlds/<worldId>/janus7/io/outbox/
+await game.janus7.ki.exportToOutbox({ mode: 'week', storage: 'world' });
 ```
 
-### Struktur des Exports (JANUS_EXPORT_V2)
+Standard ist Browser-Download via `saveDataToFile`. Mit `storage: 'world'` wird in `worlds/<worldId>/janus7/io/outbox/` geschrieben.
+
+### Export-Struktur (Kurzfassung)
 
 ```json
 {
   "version": "JANUS_EXPORT_V2",
   "meta": {
-    "version": "0.9.12.43",
+    "version": "0.9.12.44",
     "schemaVersion": "2",
-    "exportedAt": "2026-03-20T14:00:00Z",
+    "exportedAt": "2026-03-25T14:00:00Z",
     "world": "punin-akademie",
-    "moduleVersion": "0.9.12.43",
+    "moduleVersion": "0.9.12.44",
     "stateVersion": "...",
     "exportMode": "week"
   },
-  "campaign_state": { "time": {}, "meta": {}, "academy": {} },
-  "academy":        { "calendar": {}, "lessons": {}, "events": {} },
-  "references":     null,
+  "campaign_state": {},
+  "academy": {},
+  "references": null,
   "knowledge_links": null,
-  "art":            null
+  "art": null
 }
 ```
 
 ---
 
-## 2. LLM-Verarbeitung
-
-### Prompt-Templates laden
+## LLM-Verarbeitung
 
 ```js
-const prompt = game.janus7.ki.prompts.claude({ instructions: 'Plane die nächste Semesterwoche.' });
-const bundle  = game.janus7.ki.exportBundle({ mode: 'week' });
-
-// → prompt + JSON.stringify(bundle) an das LLM übergeben
+const prompt = game.janus7.ki.prompts.chatgpt({ instructions: 'Plane die naechste Semesterwoche.' });
+const bundle = game.janus7.ki.exportBundle({ mode: 'week' });
 ```
 
-Verfügbare Templates: `prompts.claude()`, `prompts.chatgpt()`, `prompts.gemini()`
+Verfuegbar sind `prompts.chatgpt()`, `prompts.claude()` und `prompts.gemini()`.
+Die Templates instruieren das LLM, ausschliesslich `JANUS_KI_RESPONSE_V1`-konformes JSON zurueckzugeben.
 
-Die Templates sind in `phase7/ki/prompts.js` definiert. Sie instruieren das LLM,
-ausschließlich `JANUS_KI_RESPONSE_V1`-konformes JSON zurückzugeben.
-
-### Erwartetes LLM-Output-Format
-
-Siehe [EXPORT_FORMAT_V2.md](./EXPORT_FORMAT_V2.md) für das vollständige Schema.
-Kurzfassung:
-
-```json
-{
-  "version": "JANUS_KI_RESPONSE_V1",
-  "sourceExportMeta": { /* meta aus dem Export */ },
-  "changes": {
-    "calendarUpdates":   [],
-    "lessonUpdates":     [],
-    "eventUpdates":      [],
-    "scoringAdjustments": [],
-    "socialAdjustments": [],
-    "journalEntries":    []
-  },
-  "notes": "Begründung der Änderungen"
-}
-```
-
-**Kritisch:** IDs in Patch-Operationen müssen **verbatim** aus dem Export übernommen werden.
-Abweichende IDs erzeugen verwaiste State-Einträge.
+**Wichtig:** IDs in Patch-Operationen muessen unveraendert aus dem Export uebernommen werden.
 
 ---
 
-## 3. Import
+## Import
 
-### Preflight (Validierung ohne Preview)
+### Preflight
 
 ```js
 const result = await game.janus7.ki.preflightImport(responseJson, { mode: 'strict' });
-// { valid: true, summary: [...] } oder wirft JanusKiResponseInvalidError
 ```
 
-### Preview (Diff-Vorschau)
+Prueft Version, Schema und semantische Regeln, ohne einen Diff oder State-Write auszufuehren.
+
+### Preview
 
 ```js
 const preview = await game.janus7.ki.previewImport(responseJson, { mode: 'strict' });
-// Array von Change-Objekten mit id, domain, op, path, value, status
 ```
 
-### Apply (Schreiben in den State)
+Liefert Change-Objekte fuer Review und selektive Uebernahme.
+
+### Apply
 
 ```js
-// Alle Änderungen anwenden:
 await game.janus7.ki.applyImport(responseJson);
-
-// Nur ausgewählte IDs:
 await game.janus7.ki.applyImport(responseJson, { selectedIds: ['calendarUpdates::0::time.week'] });
 ```
 
-`applyImport` ist **GM-only**. Bei Ausführung durch Nicht-GM wird `JanusKiPermissionError` geworfen.
+`applyImport()` ist **GM-only** und erzeugt vor dem Schreiben automatisch ein Backup.
 
-Vor jedem Apply wird automatisch ein State-Backup angelegt.
-
-### Import-Modi
-
-| Modus | Verhalten bei unbekannten Keys |
-|-------|-------------------------------|
-| `strict` | Unbekannte Felder → Fehler |
-| `lenient` | Unbekannte Felder → ignoriert |
-
----
-
-## 4. KI Roundtrip App (UI)
-
-Öffnen über:
-- Command Center → „KI Roundtrip"
-- Console: `game.janus7.ui.open('kiRoundtrip')`
-
-**Workflow in der UI:**
-
-1. Export-Modus wählen → **Exportieren** → Bundle erscheint in der Textarea
-2. Bundle an LLM geben, Response hineinkopieren
-3. **Preview** → Diff-Liste mit Checkboxen
-4. Änderungen selektiv oder gesamt übernehmen → **Apply Selected / Apply All**
-
-Wenn die Textarea seit dem letzten Preview verändert wurde, blockiert Apply und fordert
-einen neuen Preview-Durchlauf.
-
----
-
-## 5. Backup & Recovery
-
-Backups liegen unter: `worlds/<worldId>/janus7/io/backups/`  
-Rotation: die letzten **5** Backups werden behalten.
+### Inbox-Import
 
 ```js
-// Backups auflisten
+await game.janus7.ki.importFromInbox('ki_response.json', { mode: 'strict' });
+```
+
+`importFromInbox()` arbeitet auf World-Storage. Wenn eine Dateiliste verfuegbar ist, wird die Inbox vor dem Fetch vorgeprueft.
+
+### Modi
+
+| Modus | Verhalten |
+|-------|-----------|
+| `strict` | unbekannte Felder -> Fehler |
+| `lenient` | unbekannte Felder -> ignoriert |
+
+---
+
+## KI Roundtrip App (UI)
+
+Oeffnen ueber:
+- Shell / Tool-Links
+- Command Center
+- Konsole: `game.janus7.ui.open('kiRoundtrip')`
+
+Workflow in der UI:
+1. Export-Modus waehlen -> **Exportieren**
+2. Bundle ans LLM geben, Response zurueck in die Textarea
+3. **Preview** -> Diff-Liste mit Checkboxen
+4. **Apply Selected** oder **Apply All**
+
+Wenn die Textarea seit dem letzten Preview veraendert wurde, blockiert Apply und verlangt einen neuen Preview-Durchlauf.
+
+---
+
+## Backup & Recovery
+
+Backups liegen unter `worlds/<worldId>/janus7/io/backups/`.
+Rotation: letzte **5** Backups.
+
+```js
 const backups = await game.janus7.ki.listBackups();
 console.table(backups);
-
-// Backup wiederherstellen
 await game.janus7.ki.restoreBackup(backups[0].fileRef, { validate: false });
 ```
 
-`restoreBackup` ist **GM-only** und ersetzt den gesamten `campaign_state`.
+`restoreBackup()` ist **GM-only** und ersetzt den gesamten `campaign_state`.
 
 ---
 
-## 6. Import-History
+## Import-History
 
 ```js
 const history = game.janus7.ki.getImportHistory();
-// Array: [{ timestamp, applied, summary, backup, error }]
 ```
+
+Rueckgabe: Array mit Eintraegen wie `{ timestamp, applied, summary, backup, error }`.
 
 ---
 
-## 7. Hooks
+## Hooks
 
 | Hook | Zeitpunkt | Payload |
 |------|-----------|---------|
-| `janus7KiExportCreated` | Nach erfolgreichem Export | `{ bundle, mode }` |
-| `janus7KiImportPreviewed` | Nach Preview-Durchlauf | `{ summary }` |
-| `janus7KiImportApplied` | Nach erfolgreichem Apply | `{ summary, backup }` |
-| `janus7KiImportFailed` | Bei Fehler in Apply | `{ error }` |
+| `janus7.ki.exported` (Legacy-Alias: `janus7KiExported`) | nach erfolgreichem Export | `{ mode, meta, bundleVersion }` |
+| `janus7.ki.import.applied` (Legacy-Alias: `janus7KiImportApplied`) | nach erfolgreichem Apply | `{ timestamp, summary, backupFile, backupPath }` |
+
+Preview und Preflight liefern ihre Ergebnisse aktuell ueber Rueckgabewerte der API; dafuer wird kein eigener kanonischer Hook emittiert.
 
 ---
 
-## 8. Fehlertypen
+## Sicherheitshinweise
 
-| Klasse | Wann |
-|--------|------|
-| `JanusKiBundleInvalidError` | Export-Bundle entspricht nicht JANUS_EXPORT_V2 |
-| `JanusKiResponseInvalidError` | Response entspricht nicht JANUS_KI_RESPONSE_V1 |
-| `JanusKiDiffConflictError` | Apply ohne vorigen Preview versucht |
-| `JanusKiPermissionError` | Nicht-GM versucht Apply/Restore |
-
----
-
-## 9. Sicherheitshinweise
-
-- Alle Imports werden vor dem Apply gegen das JSON-Schema validiert.
-- Pfade in Patch-Operationen werden auf relative Pfade ohne `..` geprüft.
-- Erlaubte Operationen: `replace`, `append`, `delete`.
-- Jeder Apply-Lauf ist transaktional (Rollback bei Fehler).
-- Das LLM hat keinen direkten Foundry-Zugriff – alle Änderungen laufen durch den Director.
+- Alle Imports werden vor Preview/Apply gegen das JSON-Schema validiert.
+- Patch-Pfade werden auf unsichere Segmente geprueft.
+- Erlaubte Operationen bleiben auf den Importvertrag begrenzt.
+- Jeder Apply-Lauf ist transaktional.
+- Das LLM hat keinen direkten Foundry-Zugriff; Aenderungen laufen durch Preflight, Diff/Import-Service und transaktionale State-Schreibpfade.
 
 ---
 
 ## Verwandte Dokumente
 
-- [EXPORT_FORMAT_V2.md](./EXPORT_FORMAT_V2.md) – Schema-Referenz für Export und Response
-- [KI_PROMPT_TEMPLATE.md](./KI_PROMPT_TEMPLATE.md) – Copy-Paste-Vorlagen für LLM-Sitzungen
-- [KI_HANDOVER.md](./KI_HANDOVER.md) – Briefing für KI-Assistenten (Architektur-Überblick)
+- `docs/EXPORT_FORMAT_V2.md`
+- `docs/KI_PROMPT_TEMPLATE.md`
+- `docs/KI_HANDOVER.md`
+- `docs/KI_STABILITY.md`

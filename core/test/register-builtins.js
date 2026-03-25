@@ -42,6 +42,7 @@ export const BUILTIN_AUTO_MODULES = [
   './tests/p2/P2_TC_06__ort_beschreibungen_mehrsprachig.test.js',
   './tests/p2/P2_TC_07__academy_extended_schemas.test.js',
   './tests/p2/P2_TC_08__academy_reference_integrity_diagnostics.test.js',
+  './tests/p2/P2_TC_09__exam_question_sets_resolvable.test.js',
 
   // Phase 3
   './tests/p3/P3_GC_TC_01__group_check_bridge.test.js',

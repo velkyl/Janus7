@@ -1,3 +1,4 @@
+import { STATE_PATHS } from './common.js';
 import { emitHook, HOOKS } from './hooks/emitter.js';
 
 /**
@@ -208,6 +209,78 @@ export class JanusDirector {
   async saveState(opts = {}) {
     this._assertGM();
     return this.state.save({ force: !!opts.force });
+  }
+
+  /**
+   * Fügt einen Actor dedupliziert in academy.roster.<role> ein.
+   *
+   * @param {'teachers'|'students'|'npcs'} role
+   * @param {string} actorUuid
+   * @param {Object} [opts={}]
+   * @returns {Promise<{role:string, actorUuid:string, added:boolean, count:number}>}
+   */
+  async addActorToRoster(role, actorUuid, opts = {}) {
+    this._assertGM();
+    const normalizedRole = String(role ?? '').trim();
+    const normalizedActorUuid = String(actorUuid ?? '').trim();
+    if (!['teachers', 'students', 'npcs'].includes(normalizedRole)) {
+      throw new Error(`Ungültige roster-Rolle: ${normalizedRole || '<leer>'}`);
+    }
+    if (!normalizedActorUuid) {
+      throw new Error('actorUuid ist erforderlich.');
+    }
+
+    return this.batch(({ get, set }) => {
+      const roster = foundry.utils.deepClone(get(STATE_PATHS.ACADEMY_ROSTER) ?? {});
+      roster.teachers = Array.isArray(roster.teachers) ? roster.teachers : [];
+      roster.students = Array.isArray(roster.students) ? roster.students : [];
+      roster.npcs = Array.isArray(roster.npcs) ? roster.npcs : [];
+
+      const bucket = roster[normalizedRole];
+      const added = !bucket.includes(normalizedActorUuid);
+      if (added) bucket.push(normalizedActorUuid);
+      set(STATE_PATHS.ACADEMY_ROSTER, roster);
+      return {
+        role: normalizedRole,
+        actorUuid: normalizedActorUuid,
+        added,
+        count: bucket.length,
+      };
+    }, opts);
+  }
+
+  /**
+   * Registriert ein Slot-Journal im Kampagnenstate.
+   *
+   * @param {string} slotKey
+   * @param {{journalUuid:string, items?:any[], createdAt?:string}} entry
+   * @param {Object} [opts={}]
+   * @returns {Promise<{slotKey:string, entry:object}>}
+   */
+  async registerSlotJournal(slotKey, entry = {}, opts = {}) {
+    this._assertGM();
+    const normalizedSlotKey = String(slotKey ?? '').trim();
+    if (!normalizedSlotKey) {
+      throw new Error('slotKey ist erforderlich.');
+    }
+
+    const journalUuid = String(entry?.journalUuid ?? '').trim();
+    if (!journalUuid) {
+      throw new Error('entry.journalUuid ist erforderlich.');
+    }
+
+    const normalizedEntry = {
+      journalUuid,
+      items: Array.isArray(entry?.items) ? foundry.utils.deepClone(entry.items) : [],
+      createdAt: String(entry?.createdAt ?? new Date().toISOString()),
+    };
+
+    return this.batch(({ get, set }) => {
+      const slotJournals = foundry.utils.deepClone(get(STATE_PATHS.ACADEMY_SLOT_JOURNALS) ?? {});
+      slotJournals[normalizedSlotKey] = normalizedEntry;
+      set(STATE_PATHS.ACADEMY_SLOT_JOURNALS, slotJournals);
+      return { slotKey: normalizedSlotKey, entry: normalizedEntry };
+    }, opts);
   }
 
   // ---------------------------------------------------------------------------

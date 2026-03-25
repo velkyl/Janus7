@@ -1,15 +1,15 @@
-# JANUS7 – Nutzerhandbuch (v0.9.12.43)
+﻿# JANUS7 â€“ Nutzerhandbuch (v0.9.12.44)
 
 **Stand:** 2026-03-25  
 **Foundry:** v13+  
 **Zielgruppe:** Spielleitung (GM) und fortgeschrittene Nutzer (Debug/IO optional)
 
-Dieses Handbuch erklärt **wie JANUS7 in Foundry bedient wird**: Bedienlogik, Workflows, UI‑Apps, typische Fehlerbilder.
+Dieses Handbuch erklÃ¤rt **wie JANUS7 in Foundry bedient wird**: Bedienlogik, Workflows, UIâ€‘Apps, typische Fehlerbilder.
 Es ersetzt **nicht** die Entwicklerdokumentation (Architektur/Code), sondern ist die **Alltagsanleitung**.
 
 > **Wichtig (SSOT):**
 > - **Build-/Modulversion**: `game.modules.get('Janus7')?.version` (bzw. `module.json`)
-> - **State-Version**: `state.meta.version` bedeutet „State zuletzt gespeichert unter Modulversion X“.
+> - **State-Version**: `state.meta.version` bedeutet â€žState zuletzt gespeichert unter Modulversion Xâ€œ.
 >   Das ist **nicht** die laufende Build-Version.
 
 ---
@@ -17,18 +17,18 @@ Es ersetzt **nicht** die Entwicklerdokumentation (Architektur/Code), sondern ist
 ## 1. Grundprinzipien
 
 ### 1.1 Rollen und Rechte
-- **GM**: volle Steuerung (Director/Control Panel, Import/Export, Tests, Kill‑Switches).
-- **Spieler**: je nach Konfiguration Sicht auf bestimmte Journals/Übersichten, in der Regel **keine** Admin‑Aktionen.
+- **GM**: volle Steuerung (Director/Control Panel, Import/Export, Tests, Killâ€‘Switches).
+- **Spieler**: je nach Konfiguration Sicht auf bestimmte Journals/Ãœbersichten, in der Regel **keine** Adminâ€‘Aktionen.
 
-Viele Aktionen sind bewusst **GM‑only** (z. B. KI‑Import/Apply, TestRunner, System‑Toggles).
+Viele Aktionen sind bewusst **GMâ€‘only** (z. B. KIâ€‘Import/Apply, TestRunner, Systemâ€‘Toggles).
 
-### 1.2 „Was ist JANUS7“ in 30 Sekunden
-JANUS7 ist ein **Akademie‑Betriebssystem**: Zeit/Termine, Unterricht, Quests/Events, Social/Roster, Scoring (Häuser/Zirkel), Atmosphäre (Moods/Audio) plus **SSOT‑State** und eine **UI** zum Steuern.
+### 1.2 â€žWas ist JANUS7â€œ in 30 Sekunden
+JANUS7 ist ein **Akademieâ€‘Betriebssystem**: Zeit/Termine, Unterricht, Quests/Events, Social/Roster, Scoring (HÃ¤user/Zirkel), AtmosphÃ¤re (Moods/Audio) plus **SSOTâ€‘State** und eine **UI** zum Steuern.
 
 ### 1.3 SSOT und Persistenz
-- JANUS7 hält einen **zentralen State** (Campaign State). Änderungen über UI/Commands werden in diesen State geschrieben.
-- Der State wird gespeichert, sobald er als „dirty“ markiert und persistiert wird.
-- Import/Export und Sync‑Features dienen dazu, State und Foundry‑Dokumente (Scenes/Journals/Playlists/Actors) konsistent zu halten.
+- JANUS7 hÃ¤lt einen **zentralen State** (Campaign State). Ã„nderungen Ã¼ber UI/Commands werden in diesen State geschrieben.
+- Der State wird gespeichert, sobald er als â€ždirtyâ€œ markiert und persistiert wird.
+- Import/Export und Syncâ€‘Features dienen dazu, State und Foundryâ€‘Dokumente (Scenes/Journals/Playlists/Actors) konsistent zu halten.
 
 ---
 
@@ -37,33 +37,33 @@ JANUS7 ist ein **Akademie‑Betriebssystem**: Zeit/Termine, Unterricht, Quests/E
 ### 2.1 Installation (Kurz)
 Siehe **`docs/INSTALLATION.md`**.
 
-### 2.2 Modul starten und „läuft es?“ prüfen
-1) Welt laden → als GM einloggen.
-2) Öffne den **JANUS7 Director / Control Panel**.
-3) Öffne das **Command Center**.
-4) Führe (wenn du sicher gehen willst) den **Testkatalog** aus.
+### 2.2 Modul starten und â€žlÃ¤uft es?â€œ prÃ¼fen
+1) Welt laden â†’ als GM einloggen.
+2) Ã–ffne den **JANUS7 Director / Control Panel**.
+3) Ã–ffne das **Command Center**.
+4) FÃ¼hre (wenn du sicher gehen willst) den **Testkatalog** aus.
 
-Wenn UI leer ist oder Aktionen „nichts tun“: siehe Abschnitt **9 Troubleshooting**.
+Wenn UI leer ist oder Aktionen â€žnichts tunâ€œ: siehe Abschnitt **9 Troubleshooting**.
 
 ---
 
-## 3. Die wichtigsten Oberflächen
+## 3. Die wichtigsten OberflÃ¤chen
 
-JANUS7 bringt mehrere **UI‑Apps**. Die zentrale Steuerung ist der **Director (Control Panel)**.
+JANUS7 bringt mehrere **UIâ€‘Apps**. Die zentrale Steuerung ist der **Director (Control Panel)**.
 
 ### 3.1 Director / Control Panel (Zentrale)
-Der Director ist die GM‑Schaltzentrale. Er bündelt:
-- Zeitsteuerung und „Jetzt“-Anzeige
-- Slot‑Builder (Stunden/Slots aus Bausteinen)
-- Quests (Journal + Vorschläge)
+Der Director ist die GMâ€‘Schaltzentrale. Er bÃ¼ndelt:
+- Zeitsteuerung und â€žJetztâ€œ-Anzeige
+- Slotâ€‘Builder (Stunden/Slots aus Bausteinen)
+- Quests (Journal + VorschlÃ¤ge)
 - People (Roster / Zuordnungen)
-- Places (Orte/Verknüpfungen/Moods)
+- Places (Orte/VerknÃ¼pfungen/Moods)
 - KI Roundtrip (Phase 7, wenn aktiviert)
-- Sync (Verknüpfungen Foundry ↔ JANUS)
-- System (Tests, Kill‑Switches, Config)
-- Diagnostics (Build‑Info, Engine‑Status)
+- Sync (VerknÃ¼pfungen Foundry â†” JANUS)
+- System (Tests, Killâ€‘Switches, Config)
+- Diagnostics (Buildâ€‘Info, Engineâ€‘Status)
 
-**Tabs (Soll‑Design):**
+**Tabs (Sollâ€‘Design):**
 - `overview`
 - `schedule`
 - `quests`
@@ -74,61 +74,61 @@ Der Director ist die GM‑Schaltzentrale. Er bündelt:
 - `system`
 - `diagnostics`
 
-> Tipp: Wenn du dich nur an *eine* Oberfläche gewöhnst: **Director**.
+> Tipp: Wenn du dich nur an *eine* OberflÃ¤che gewÃ¶hnst: **Director**.
 
 ### 3.2 Command Center
-Das Command Center ist das „Terminal mit Buttons“.
+Das Command Center ist das â€žTerminal mit Buttonsâ€œ.
 - Es bietet kategorisierte Aktionen (Diagnose, Daten, IO, System, Tests, etc.).
-- Es ist ideal, um Dinge reproduzierbar auszuführen (und sich nicht durch Tabs zu klicken).
+- Es ist ideal, um Dinge reproduzierbar auszufÃ¼hren (und sich nicht durch Tabs zu klicken).
 
 ### 3.3 Academy Overview
-Die Academy Overview dient als **Übersicht** (typisch: Woche/Slots, Navigation, Statusanzeigen). Je nach Build kann sie auch Slot‑Setzen/Navigation unterstützen.
+Die Academy Overview dient als **Ãœbersicht** (typisch: Woche/Slots, Navigation, Statusanzeigen). Je nach Build kann sie auch Slotâ€‘Setzen/Navigation unterstÃ¼tzen.
 
 ### 3.4 Scoring View
-Scoring verwaltet **Zirkel/Häuser** und Punkte.
-- Zirkel/Häuser anlegen
+Scoring verwaltet **Zirkel/HÃ¤user** und Punkte.
+- Zirkel/HÃ¤user anlegen
 - Punkte vergeben
 - Leaderboard anzeigen
 
 ### 3.5 Social View
-Social verwaltet Beziehungen/NPC‑Kontext.
-- Zuordnung von Lehrern/Schülern/NSCs
-- (Optional) Beziehung/Attitude‑Logik, Auswertung
+Social verwaltet Beziehungen/NPCâ€‘Kontext.
+- Zuordnung von Lehrern/SchÃ¼lern/NSCs
+- (Optional) Beziehung/Attitudeâ€‘Logik, Auswertung
 
 ### 3.6 Atmosphere DJ
 Atmosphere DJ steuert Moods/Audio:
-- Mood auswählen
-- Volumes/Kanäle
-- Auto‑Flags / Trigger
+- Mood auswÃ¤hlen
+- Volumes/KanÃ¤le
+- Autoâ€‘Flags / Trigger
 
 ### 3.7 State Inspector
-Read‑Only Blick in den State (Debug). Perfekt, um zu prüfen:
-- „Ist mein Klick überhaupt im State angekommen?“
-- „Welche Keys/IDs existieren?“
+Readâ€‘Only Blick in den State (Debug). Perfekt, um zu prÃ¼fen:
+- â€žIst mein Klick Ã¼berhaupt im State angekommen?â€œ
+- â€žWelche Keys/IDs existieren?â€œ
 
 ### 3.8 Config Panel / Sync Panel
-- **Config Panel**: Feature‑Flags, Mapping‑Einstellungen, Systemparameter.
-- **Sync Panel**: Verknüpfung und Abgleich zwischen JANUS‑State und Foundry‑Dokumenten.
+- **Config Panel**: Featureâ€‘Flags, Mappingâ€‘Einstellungen, Systemparameter.
+- **Sync Panel**: VerknÃ¼pfung und Abgleich zwischen JANUSâ€‘State und Foundryâ€‘Dokumenten.
 
 ---
 
 ## 4. Zeit & Kalender bedienen
 
-JANUS7 verwendet ein Akademie‑Zeitmodell (Year/Trimester/Week/Day/Slot). Es gibt zwei typische Nutzungsarten:
+JANUS7 verwendet ein Akademieâ€‘Zeitmodell (Year/Trimester/Week/Day/Slot). Es gibt zwei typische Nutzungsarten:
 
-### 4.1 „Wir spielen live“ (Session‑Betrieb)
-- Zu Beginn: „Jetzt“ korrekt setzen.
-- Während der Session: Slots/Phasen/Tag fortschreiben.
+### 4.1 â€žWir spielen liveâ€œ (Sessionâ€‘Betrieb)
+- Zu Beginn: â€žJetztâ€œ korrekt setzen.
+- WÃ¤hrend der Session: Slots/Phasen/Tag fortschreiben.
 - Bei Szenenwechsel: Orte/Moods passend setzen.
 
-### 4.2 „Ich plane vor“ (Prep‑Betrieb)
+### 4.2 â€žIch plane vorâ€œ (Prepâ€‘Betrieb)
 - Woche/Trimester setzen
-- Slots mit Unterricht/Events füllen
-- Quest‑Vorschläge prüfen und aktivieren
+- Slots mit Unterricht/Events fÃ¼llen
+- Questâ€‘VorschlÃ¤ge prÃ¼fen und aktivieren
 
 ### 4.3 Bedienmuster
-Je nach UI‑Stand:
-- Im Director‑Tab `overview`/`schedule` existieren Buttons für `+1 Slot`, `+1 Phase`, `+1 Tag`.
+Je nach UIâ€‘Stand:
+- Im Directorâ€‘Tab `overview`/`schedule` existieren Buttons fÃ¼r `+1 Slot`, `+1 Phase`, `+1 Tag`.
 - Alternativ im Command Center entsprechende Commands.
 
 **Konsole (optional):**
@@ -141,27 +141,27 @@ await game.janus7.commands.setSlot({ dayIndex: 0, slotIndex: 2 });
 
 ---
 
-## 5. Stundenplan & Slot‑Builder (Schedule)
+## 5. Stundenplan & Slotâ€‘Builder (Schedule)
 
-Der Slot‑Builder ist dafür gedacht, aus mehreren Elementen (Bausteinen) eine „Stunde“ / einen Slot zusammenzustellen und daraus z. B. ein Journal zu generieren.
+Der Slotâ€‘Builder ist dafÃ¼r gedacht, aus mehreren Elementen (Bausteinen) eine â€žStundeâ€œ / einen Slot zusammenzustellen und daraus z. B. ein Journal zu generieren.
 
 ### 5.1 Grundidee
-- Du sammelst Inhalte (Lehrstoff, Szene, NPCs, Orte, Notizen) in einer Builder‑Liste.
-- Dann generierst du daraus ein **Journal** oder einen **verknüpften Termin**.
+- Du sammelst Inhalte (Lehrstoff, Szene, NPCs, Orte, Notizen) in einer Builderâ€‘Liste.
+- Dann generierst du daraus ein **Journal** oder einen **verknÃ¼pften Termin**.
 
 ### 5.2 Drag & Drop (Soll)
-Im Director sind Drop‑Zonen vorgesehen:
-- `slot-builder` → Elemente landen in der Builder‑Liste
-- `people` → Zuordnung zu Rollen (Lehrer/Schüler/NSCs)
-- `location` → Orte/Szenen/Playlists/Journals verlinken
-- `ki-context` → Kontext‑Hints sammeln
+Im Director sind Dropâ€‘Zonen vorgesehen:
+- `slot-builder` â†’ Elemente landen in der Builderâ€‘Liste
+- `people` â†’ Zuordnung zu Rollen (Lehrer/SchÃ¼ler/NSCs)
+- `location` â†’ Orte/Szenen/Playlists/Journals verlinken
+- `ki-context` â†’ Kontextâ€‘Hints sammeln
 
-Wenn Drag & Drop in deinem Build noch nicht vollständig „schön“ ist: siehe **9.4**.
+Wenn Drag & Drop in deinem Build noch nicht vollstÃ¤ndig â€žschÃ¶nâ€œ ist: siehe **9.4**.
 
 ### 5.3 Generierung: Journal/Termin
-Der konkrete Ablauf hängt davon ab, welche Generator‑Funktionen im Build freigeschaltet sind.
+Der konkrete Ablauf hÃ¤ngt davon ab, welche Generatorâ€‘Funktionen im Build freigeschaltet sind.
 Erwarte:
-- Builder‑Liste → „Erzeugen“ → Journal wird angelegt
+- Builderâ€‘Liste â†’ â€žErzeugenâ€œ â†’ Journal wird angelegt
 - Slot/Termin bekommt Verweise (Journal, Scene, People, Mood)
 
 ---
@@ -170,132 +170,133 @@ Erwarte:
 
 ### 6.1 Ziel
 Quests geben dem Akademiealltag Struktur:
-- Aufgaben, Aufträge, Prüfungen, Gerüchte, Beziehungen
-- Vorschläge abhängig vom aktuellen State (Zeit, Trimester, Roster, Orte)
+- Aufgaben, AuftrÃ¤ge, PrÃ¼fungen, GerÃ¼chte, Beziehungen
+- VorschlÃ¤ge abhÃ¤ngig vom aktuellen State (Zeit, Trimester, Roster, Orte)
 
-### 6.2 Quest‑Journal öffnen
-Im Director gibt es eine Aktion „Quest‑Journal öffnen“.
+### 6.2 Questâ€‘Journal Ã¶ffnen
+Im Director gibt es eine Aktion â€žQuestâ€‘Journal Ã¶ffnenâ€œ.
 
-### 6.3 Quest‑Vorschläge
-Im Director existiert eine Aktion „Quest‑Vorschläge“.
-- Erwartung: JANUS7 generiert Vorschläge aus State‑Parametern.
-- Vorschläge sollten als **Textfelder** erscheinen (damit du überschreiben kannst).
+### 6.3 Questâ€‘VorschlÃ¤ge
+Im Director existiert eine Aktion â€žQuestâ€‘VorschlÃ¤geâ€œ.
+- Erwartung: JANUS7 generiert VorschlÃ¤ge aus Stateâ€‘Parametern.
+- VorschlÃ¤ge sollten als **Textfelder** erscheinen (damit du Ã¼berschreiben kannst).
 
 ### 6.4 Lifecycle (typisch)
-- Vorschlag → Aktivieren
-- Aktiv → Fortschritt/Notizen
-- Erledigt → Archiv
+- Vorschlag â†’ Aktivieren
+- Aktiv â†’ Fortschritt/Notizen
+- Erledigt â†’ Archiv
 
 ---
 
-## 7. Scoring (Zirkel/Häuser)
+## 7. Scoring (Zirkel/HÃ¤user)
 
-### 7.1 Zirkel/Häuser anlegen
-1) Öffne **Scoring View**.
-2) „Zirkel/Haus anlegen“.
+### 7.1 Zirkel/HÃ¤user anlegen
+1) Ã–ffne **Scoring View**.
+2) â€žZirkel/Haus anlegenâ€œ.
 3) **ID/Name** vergeben (kurz, stabil).
-4) Optional: Initial‑Score.
+4) Optional: Initialâ€‘Score.
 
-**Empfehlung für IDs:**
+**Empfehlung fÃ¼r IDs:**
 - Keine Leerzeichen
 - Stabil (wird als Key gespeichert)
 - Beispiel: `Haus_Feuerturm`, `Zirkel_Smaragd`
 
 ### 7.2 Punkte vergeben
-- Zirkel auswählen
+- Zirkel auswÃ¤hlen
 - Punkte/Grund setzen
 - Speichern
 
 ### 7.3 Typische Fehler
-- „Zirkel existiert nicht“ → ID falsch geschrieben oder noch nicht angelegt.
-- „Punkte verschwinden“ → State nicht gespeichert (siehe 9).
+- â€žZirkel existiert nichtâ€œ â†’ ID falsch geschrieben oder noch nicht angelegt.
+- â€žPunkte verschwindenâ€œ â†’ State nicht gespeichert (siehe 9).
 
 ---
 
 ## 8. People & Places
 
 ### 8.1 People (Roster)
-Ziel: Lehrkräfte/Schüler/NSCs als **Roster** im State halten.
+Ziel: LehrkrÃ¤fte/SchÃ¼ler/NSCs als **Roster** im State halten.
 
 Typischer Flow:
-1) Director → Tab `people`
-2) Actors (Lehrer/Schüler/NSCs) hineinziehen
+1) Director â†’ Tab `people`
+2) Actors (Lehrer/SchÃ¼ler/NSCs) hineinziehen
 3) Rollen zuweisen
 
 ### 8.2 Places (Orte)
-Ziel: Orte mit Foundry‑Dokumenten verbinden:
+Ziel: Orte mit Foundryâ€‘Dokumenten verbinden:
 - Scene
 - Playlist / Audio
 - Journal
 - Default Mood
 
 Typischer Flow:
-1) Director → Tab `places`
+1) Director â†’ Tab `places`
 2) Scene/Playlist/Journal per Drag&Drop zuordnen
 3) Default Mood setzen
 
 ---
 
-## 9. Troubleshooting (Nutzer‑Sicht)
+## 9. Troubleshooting (Nutzerâ€‘Sicht)
 
-### 9.1 „UI öffnet, aber zeigt keine Daten“
+### 9.1 â€žUI Ã¶ffnet, aber zeigt keine Datenâ€œ
 Checkliste:
 1) Bist du **GM**?
 2) Ist `game.janus7` vorhanden?
-3) Ist der State geladen (State Inspector öffnen)?
-4) Gibt es Fehlermeldungen in der Browser‑Konsole?
+3) Ist der State geladen (State Inspector Ã¶ffnen)?
+4) Gibt es Fehlermeldungen in der Browserâ€‘Konsole?
 
-### 9.2 „Buttons tun nichts“
-- Häufigste Ursache: Aktion ist GM‑only.
-- Oder: Feature‑Flag deaktiviert.
+### 9.2 â€žButtons tun nichtsâ€œ
+- HÃ¤ufigste Ursache: Aktion ist GMâ€‘only.
+- Oder: Featureâ€‘Flag deaktiviert.
 - Oder: Fehler im Render/Template.
 
-### 9.3 „Versionen wirken unterschiedlich (0.9.9.x)“
+### 9.3 â€žVersionen wirken unterschiedlich (0.9.9.x)â€œ
 - Build-Version aus `game.modules.get('Janus7')?.version`.
 - State-Version ist historisch.
 
-### 9.4 „Drag & Drop geht nicht“
-- Manche Drop‑Zonen sind nur aktiv, wenn du exakt den richtigen Dokument‑Typ dropst (Actor vs Scene vs Playlist).
-- Prüfe, ob du aus der Sidebar den richtigen Typ ziehst.
-- Wenn es weiterhin nicht geht: Konsole prüfen (Fehler beim drop‑Handler).
+### 9.4 â€žDrag & Drop geht nichtâ€œ
+- Manche Dropâ€‘Zonen sind nur aktiv, wenn du exakt den richtigen Dokumentâ€‘Typ dropst (Actor vs Scene vs Playlist).
+- PrÃ¼fe, ob du aus der Sidebar den richtigen Typ ziehst.
+- Wenn es weiterhin nicht geht: Konsole prÃ¼fen (Fehler beim dropâ€‘Handler).
 
 ### 9.5 Wenn gar nichts mehr geht
-- TestRunner ausführen (Full Catalog), Ergebnis anschauen.
+- TestRunner ausfÃ¼hren (Full Catalog), Ergebnis anschauen.
 - `docs/TROUBLESHOOTING.md` nutzen.
 
 ---
 
 ## 10. Praxis-Workflows
 
-### 10.1 Session‑Start (GM)
-1) Director öffnen
-2) Diagnostics: Engine‑Status ok?
-3) Zeit „Jetzt“ setzen
+### 10.1 Sessionâ€‘Start (GM)
+1) Director Ã¶ffnen
+2) Diagnostics: Engineâ€‘Status ok?
+3) Zeit â€žJetztâ€œ setzen
 4) Orte/Moods vorbereiten
-5) Quests prüfen (was ist heute dran?)
+5) Quests prÃ¼fen (was ist heute dran?)
 
 ### 10.2 Unterricht/Slot planen
-1) Schedule/Slot‑Builder öffnen
+1) Schedule/Slotâ€‘Builder Ã¶ffnen
 2) Bausteine sammeln (Lehrstoff, NPC, Ort, Notizen)
 3) Journal erzeugen
 4) Slot verlinken (Scene/Mood/People)
 
 ### 10.3 Scoring nach Szenen
-1) Scoring View öffnen
-2) Zirkel wählen
+1) Scoring View Ã¶ffnen
+2) Zirkel wÃ¤hlen
 3) Award/Punkte vergeben
 
 ---
 
 ## 11. Glossar
-- **Director**: Zentrale GM‑UI (Control Panel)
+- **Director**: Zentrale GMâ€‘UI (Control Panel)
 - **Slot**: Zeiteinheit im Tagesplan (z. B. Unterrichtsstunde)
-- **Phase**: gröbere Einteilung (z. B. Morgen/Mittag/Abend)
-- **Roster**: People‑Liste im State (Lehrer/Schüler/NSCs)
-- **Mood**: Atmosphere‑Kontext (Audio/Playlist/Theme)
+- **Phase**: grÃ¶bere Einteilung (z. B. Morgen/Mittag/Abend)
+- **Roster**: Peopleâ€‘Liste im State (Lehrer/SchÃ¼ler/NSCs)
+- **Mood**: Atmosphereâ€‘Kontext (Audio/Playlist/Theme)
 - **SSOT**: Single Source of Truth (State + Modulversion)
 
 ---
 
-## 12. Änderungslog des Handbuchs
-- v0.9.9.24: Erstfassung „komplettes Handbuch ohne Bilder“ (Workflows + UI‑Orientierung)
+## 12. Ã„nderungslog des Handbuchs
+- v0.9.9.24: Erstfassung â€žkomplettes Handbuch ohne Bilderâ€œ (Workflows + UIâ€‘Orientierung)
+

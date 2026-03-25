@@ -22,6 +22,8 @@ export const STATE_PATHS = Object.freeze({
   SCORING: 'academy.scoring',
   SCORING_DAILY_SNAPSHOTS: 'academy.scoring.dailySnapshots',
   ACADEMY: 'academy',
+  ACADEMY_ROSTER: 'academy.roster',
+  ACADEMY_SLOT_JOURNALS: 'academy.slotJournals',
   ACADEMY_QUESTS: 'academy.quests',
   ACADEMY_SOCIAL: 'academy.social',
   ACADEMY_JOURNAL_ENTRIES: 'academy.journalEntries',

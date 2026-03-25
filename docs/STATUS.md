@@ -1,32 +1,32 @@
-# STATUS — v0.9.12.43
+﻿# STATUS - v0.9.12.44
 
 # JANUS7 Status
 
-**Module Version (SSOT: module.json):** 0.9.12.43  
+**Module Version (SSOT: module.json):** 0.9.12.44  
 **Stand:** 2026-03-25  
 **Foundry Zielplattform:** v13+ (ESM, ApplicationV2)
 
 ## Kurzlage
 - **Produktiv nutzbar:** Core/State, AcademyDataApi, DSA5-Bridge, Kalender, Social, Scoring-Basis, Quest-Basis, Shell-Frontdoor, KI-Backup/Preview.
-- **Teilweise umgesetzt:** Shell-Cutover der Alt-Apps, Panel-Migration, Data Studio, Session Prep, einige Editor-Flows.
-- **Experimentell / intern:** einzelne Diagnose-/Debug-Apps, Legacy-Wrapper, Guided-Manual-Hilfsflüsse.
+- **Teilweise umgesetzt:** Shell-Cutover der Alt-Apps, Panel-Migration, Data Studio, Session Prep, einzelne Editor-Flows.
+- **Experimentell / intern:** Diagnose-/Debug-Apps, Guided-Manual-Hilfsfluesse, einzelne Legacy-Wrapper.
 
 ## Reifegrad
-JANUS7 ist technisch stabil und für den Kampagnenbetrieb nutzbar. Die Welle-4-Härtung trennt jetzt die shipped Built-in-Tests sauber in Auto- und Manual-Buckets, ohne die vollständige Sichtbarkeit des Testbestands zu verlieren.
+JANUS7 ist technisch stabil und fuer den Kampagnenbetrieb nutzbar. Die aktuelle Haertung repariert echte Runtime-Drift in UI-, Bridge- und Datenpfaden statt nur Dokumentationstexte nachzuziehen.
 
-## Wichtige Änderungen in 0.9.12.43
-- Kern-Dokumente und Release-Metadaten wurden wieder an die Runtime-SSOT aus `module.json` angeglichen.
-- Die CI prüft jetzt die echten Repo-Validatoren statt eines nicht lauffähigen npm-Publish-Workflows.
-- Runtime-Hooks werden dedupliziert registriert, und das Engine-Cleanup räumt alle registrierten Hook-Buckets konsistent auf.
-- Mehrere Integrationen lauschen jetzt auf kanonische `HOOKS.*`-Topics statt auf verstreute Legacy-Aliasnamen.
+## Wichtige Aenderungen in 0.9.12.44
+- Control Panel schreibt `academy.roster` und `academy.slotJournals` wieder ueber Director-APIs statt ueber einen defekten Direkt-Write auf den State.
+- `AcademyDataApi` liest Exam-MCQ-Daten wieder aus dem realen `questionSets`-Root der shipped `exam-questions.json`.
+- DSA5-Bridge und System-Commands nutzen wieder konsistente Actor-/Skill-Pfade (`getNpc()`, `getActorByName()`, `bridge.rollSkill(...)`).
+- API-, KI-, Release- und Status-Dokumente wurden auf den tatsaechlichen Runtime-Stand gezogen.
 
 ## Welle-Status
 - **Welle 2:** abgeschlossen
 - **Welle 3:** abgeschlossen
 - **Welle 4:** Release-Hardening technisch abgeschlossen; Live-Abnahme in Foundry bleibt sinnvoll
 
-## Prüfschritte nach dem Update
-1. Foundry zeigt `0.9.12.43` als Modulversion.
-2. Test-Registry lädt ohne Importfehler.
-3. Test-UI weist Auto- und Manual-Bestand getrennt aus.
-4. Shell und Kern-Apps öffnen stabil.
+## Pruefschritte nach dem Update
+1. Foundry zeigt `0.9.12.44` als Modulversion.
+2. Shell und Kern-Apps oeffnen stabil.
+3. Test-Registry laedt ohne Importfehler.
+4. Exam-/MCQ-Workflows finden ihre Fragekataloge wieder.

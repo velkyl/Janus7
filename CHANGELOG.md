@@ -1,3 +1,13 @@
+## v0.9.12.44 - Director Write Fixes + Exam Question Sets + Bridge/API Sync
+
+### Fixed
+- UI: Control Panel schreibt `academy.roster` und `academy.slotJournals` wieder ueber Director-APIs statt ueber einen defekten Direkt-Write auf den State
+- DATA: `AcademyDataApi` liest MCQ-Pruefungsfragen wieder aus `questionSets`, passend zu `data/academy/exam-questions.json`
+- BRIDGE: Academy-NPC-Resolution nutzt `getNpc()`/`getNPC()` robust und exponiert Actor-Lookup per Name
+- COMMANDS: `bridgeActorLookup` und `bridgeRollTest` nutzen wieder die reale oeffentliche Bridge-API (`actorName`, `skillName`, `bridge.rollSkill(...)`)
+- TEST: Regression fuer Exam-Question-Set-Aufloesung registriert
+- DOKU: Release-, Status-, KI- und API-Dokumente auf den tatsaechlichen Runtime-Stand synchronisiert
+
 ## v0.9.12.43 - Version Sync + CI Repair + Hook Runtime Cleanup
 
 ### Fixed

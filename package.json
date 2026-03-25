@@ -14,5 +14,5 @@
     "validate:academy": "node tools/validate-academy-data.mjs",
     "validate:versions": "node tools/validate-version-sync.mjs"
   },
-  "version": "0.9.12.43"
+  "version": "0.9.12.44"
 }

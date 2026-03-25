@@ -145,13 +145,14 @@ export function getExam(id) {
 export function getExamQuestionSets() {
   const cache = getAcademyCache();
   if (!cache) throw new Error('AcademyDataApi not initialized. Call AcademyDataApi.init() first.');
-  return cache.examQuestions?.questions ?? [];
+  return cache.examQuestions?.questionSets ?? cache.examQuestions?.questions ?? [];
 }
 
 export function getExamQuestionSet(id) {
   const cache = getAcademyCache();
   if (!cache) throw new Error('AcademyDataApi not initialized. Call AcademyDataApi.init() first.');
-  return (cache.examQuestions?.questions ?? []).find((row) => row.id === id) ?? null;
+  const questionSets = cache.examQuestions?.questionSets ?? cache.examQuestions?.questions ?? [];
+  return questionSets.find((row) => row.id === id) ?? null;
 }
 
 export function getLibraryItems() {

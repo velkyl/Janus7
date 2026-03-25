@@ -1,11 +1,11 @@
-
+﻿
 # JANUS7 UI Shell Layer
 
-Stand: v0.9.12.43
+Stand: v0.9.12.44
 
 ## Ziel
-Additive, modulare Oberfläche innerhalb von JANUS7.
-Sie ergänzt die bestehenden Einzel-Apps und ersetzt sie nicht abrupt.
+Additive, modulare OberflÃ¤che innerhalb von JANUS7.
+Sie ergÃ¤nzt die bestehenden Einzel-Apps und ersetzt sie nicht abrupt.
 
 ## Architektur
 - `ui/apps/JanusShellApp.js`
@@ -14,20 +14,20 @@ Sie ergänzt die bestehenden Einzel-Apps und ersetzt sie nicht abrupt.
   - Panel-State (`scoring`, `social`, `diagnostics`, ...)
 - `ui/layer/view-registry.js`
   - registriert die drei Haupt-Views
-  - jede View baut ihr Modell über `build(engine)`
+  - jede View baut ihr Modell Ã¼ber `build(engine)`
 - `ui/layer/panel-registry.js`
   - registriert Panels als Metadaten + Builder
-  - neue Panels werden hier additiv ergänzt
+  - neue Panels werden hier additiv ergÃ¤nzt
 - `ui/layer/action-router.js`
-  - Action-Dispatch für Commands, App-Öffnungen und Panel-Aktionen
+  - Action-Dispatch fÃ¼r Commands, App-Ã–ffnungen und Panel-Aktionen
 - `ui/layer/bridge.js`
-  - hängt die Shell als `engine.uiLayer.openShell()` ein
+  - hÃ¤ngt die Shell als `engine.uiLayer.openShell()` ein
   - registriert einen Scene-Control-Button
 
 ## Erweiterung
 ### Neues Panel
-1. Definition in `ui/layer/panel-registry.js` ergänzen
-2. optional `build(engine)` hinzufügen
+1. Definition in `ui/layer/panel-registry.js` ergÃ¤nzen
+2. optional `build(engine)` hinzufÃ¼gen
 3. Buttons/Aktionen konfigurieren
 
 ### Neue View
@@ -38,4 +38,5 @@ Sie ergänzt die bestehenden Einzel-Apps und ersetzt sie nicht abrupt.
 ## Zugriff
 - `game.janus7.ui.open('shell')`
 - `game.janus7.uiLayer.openShell()`
-- Scene Controls: `JANUS Shell öffnen`
+- Scene Controls: `JANUS Shell Ã¶ffnen`
+

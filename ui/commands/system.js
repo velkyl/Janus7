@@ -294,6 +294,7 @@ async openKiBackupManager(_dataset = {}) {
     
     const engine = _engine();
     const bridge = engine?.bridge?.dsa5;
+    if (!bridge) throw new Error('DSA5 Bridge not available');
     const actorName = dataset.actorName || await JanusUI.prompt({ 
       title: 'Actor Lookup', 
       label: 'Actor Name' 
@@ -302,7 +303,7 @@ async openKiBackupManager(_dataset = {}) {
     if (!actorName) return { cancelled: true };
     
     return await _wrap('bridgeActorLookup', async () => {
-      const actor = await bridge.actors.getActorByName(actorName);
+      const actor = await (bridge.actors?.getActorByName?.(actorName) ?? bridge.getActorByName?.(actorName) ?? null);
       if (actor) {
         _log().debug?.('Actor found:', actor);
         ui.notifications.info(`Actor found: ${actor.name}`);
@@ -321,6 +322,7 @@ async openKiBackupManager(_dataset = {}) {
     
     const engine = _engine();
     const bridge = engine?.bridge?.dsa5;
+    if (!bridge) throw new Error('DSA5 Bridge not available');
     const skillName = dataset.skillName || 'Sinnesschärfe';
     const actorId = dataset.actorId || game.user.character?.uuid;
     
@@ -330,7 +332,7 @@ async openKiBackupManager(_dataset = {}) {
     }
     
     return await _wrap('bridgeRollTest', async () => {
-      const result = await bridge.rolls.rollSkill(actorId, skillName);
+      const result = await bridge.rollSkill(actorId, skillName);
       ui.notifications.info(`Roll: ${skillName} → ${result.success ? 'Success' : 'Failure'}`);
       return { result };
     });

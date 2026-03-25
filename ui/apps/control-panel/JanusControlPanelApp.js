@@ -496,15 +496,16 @@ export class JanusControlPanelApp extends HandlebarsApplicationMixin(JanusBaseAp
     if (doc.documentName !== 'Actor') { ui.notifications?.warn?.('Hier sind nur Actors erlaubt.'); return; }
     const role = dz?.dataset?.role;
     if (!['teachers', 'students', 'npcs'].includes(role)) return;
-    const e    = resolveEngine(this);
-    const next = foundry.utils.deepClone(e?.core?.state?.get?.() ?? {});
-    next.academy ??= {};
-    next.academy.roster ??= { teachers: [], students: [], npcs: [] };
-    next.academy.roster[role] ??= [];
+    const e = resolveEngine(this);
+    const director = e?.core?.director ?? e?.director;
     const uuid = doc.uuid;
-    if (!next.academy.roster[role].includes(uuid)) next.academy.roster[role].push(uuid);
-    await e?.core?.state?.set?.(next);
-    ui.notifications?.info?.(`Zuordnung gespeichert: ${role} ← ${doc.name}`);
+    if (!director?.addActorToRoster) { ui.notifications?.error?.('Director-API für Roster-Mutation nicht verfügbar.'); return; }
+    const result = await director.addActorToRoster(role, uuid, { save: true });
+    ui.notifications?.info?.(
+      result?.added === false
+        ? `Zuordnung bereits vorhanden: ${role} ← ${doc.name}`
+        : `Zuordnung gespeichert: ${role} ← ${doc.name}`
+    );
     this.render({ force: true });
   }
 
@@ -651,13 +652,18 @@ export class JanusControlPanelApp extends HandlebarsApplicationMixin(JanusBaseAp
     if (!je?.uuid) { ui.notifications?.error?.('Journal konnte nicht erstellt werden.'); return false; }
 
     const sync = e?.core?.sync ?? e?.sync;
-    if (sync?.linkEntity) await sync.linkEntity(slotKey, je.uuid, { type: 'journals', saveState: true });
+    if (sync?.linkEntity) await sync.linkEntity(slotKey, je.uuid, { type: 'journals', saveState: false });
 
-    const next = foundry.utils.deepClone(e?.core?.state?.get?.() ?? st);
-    next.academy ??= {};
-    next.academy.slotJournals ??= {};
-    next.academy.slotJournals[slotKey] = { journalUuid: je.uuid, items: items.slice(), createdAt: new Date().toISOString() };
-    await e?.core?.state?.set?.(next);
+    const director = e?.core?.director ?? e?.director;
+    if (!director?.registerSlotJournal) {
+      ui.notifications?.error?.('Director-API für Slot-Journal-Mutation nicht verfügbar.');
+      return false;
+    }
+    await director.registerSlotJournal(slotKey, {
+      journalUuid: je.uuid,
+      items: items.slice(),
+      createdAt: new Date().toISOString(),
+    }, { save: true });
 
     ui.notifications?.info?.(`Journal erstellt & verknüpft: ${slotKey}`);
     this._slotBuilder = [];

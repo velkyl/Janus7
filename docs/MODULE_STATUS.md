@@ -1,13 +1,13 @@
-# Update 0.9.12.43
+﻿# Update 0.9.12.44
 
-## Änderungen seit 0.9.12.42
+## Aenderungen seit 0.9.12.43
 
-- DOKU: README, Index, Status, Installation, KI- und Release-Dokumente auf `0.9.12.43` synchronisiert
-- CI: GitHub-Workflow validiert jetzt das Repo statt eines kaputten npm-Publish-/`npm ci`-Pfads
-- ARCH: gemeinsame Runtime-Hook-Hilfe eingeführt; Engine-Cleanup räumt alle `_*HookIds`-Buckets auf
-- GC: mehrere Ready-/Domain-Hooks auf kanonische `HOOKS.*`-Topics umgestellt; Legacy-Alias-Nutzung reduziert
+- FIX: Control Panel routet People- und Slot-Journal-Mutationen wieder ueber Director-APIs statt ueber einen kaputten Direkt-Write auf den State.
+- FIX: Exam-MCQ-Fragensaetze werden wieder aus der realen Datenstruktur `questionSets` geladen.
+- FIX: DSA5-Bridge/System-Commands sind bei Actor-Lookup und Skill-Rolls wieder auf denselben Public-API-Vertrag ausgerichtet.
+- DOKU: API-, KI-, Release- und Statusdokumente beschreiben jetzt die tatsaechlich vorhandenen Hooks, Parameter und bekannten offenen Punkte.
 
-## Gesamtstatus (0.9.12.43)
+## Gesamtstatus (0.9.12.44)
 
 | Phase | Status |
 |-------|--------|
@@ -17,12 +17,13 @@
 | P3 DSA5 Bridge | ✅ Done (Moon/Fate/Advancement/TimedCond/PostRoll/Social/Tradition) |
 | P4 Simulation | ✅ Done |
 | P5 Atmosphere | ✅ Done |
-| P6 UI / Shell | ✅ Done |
-| P7 KI-Integration | ✅ Done (Roundtrip, Preflight, Backup) |
+| P6 UI / Shell | ✅ Done, mit laufendem Shell-Cutover |
+| P7 KI-Integration | ✅ Done (Roundtrip, Preflight, Backup, Restore) |
 | P8 Backlog | ⏳ In Progress |
 
 ## Bekannte offene Punkte
 
-- KI-Import: Dateiexistenzprüfung vor fetch() nur best-effort (Verzeichnis wird angelegt, Datei nicht vorab geprüft)
-- Weltabhängigkeiten: Actor-UUID-Mappings für NPCs müssen weltseitig konfiguriert werden
-- P1-TC-05: Idempotent-Set-Optimierung bewusst zurückgestellt (SKIP)
+- Weltabhaengigkeiten: Actor-UUID-Mappings fuer Academy-NPCs bleiben eine Welt-/Content-Aufgabe.
+- UI-Cutover: Shell ist die bevorzugte Frontdoor; einige Legacy-Wrapper und Alias-Keys bleiben vorerst aus Kompatibilitaetsgruenden aktiv.
+- Teststatus: Repo-Validatoren und Kataloge sind vorhanden; eine Live-Abnahme in Foundry bleibt weiterhin sinnvoll.
+- P1-TC-05: Idempotent-Set-Optimierung ist weiterhin bewusst als SKIP markiert.

@@ -86,7 +86,7 @@ export class DSA5ActorBridge {
   /**
    * Liefert einen Actor für eine Akademie-NPC-ID.
    *
-   * - nutzt AcademyDataApi.getNPC(id)
+   * - nutzt AcademyDataApi.getNpc(id) bzw. Legacy-Alias getNPC(id)
    * - bevorzugt actorUuid (fromUuid)
    * - Fallback: actorKey → Suche in Welt-Actors
    *
@@ -96,17 +96,41 @@ export class DSA5ActorBridge {
   async resolveFromAcademyNpcId(npcId) {
     this.assertAvailable();
 
-    if (!this.academy || typeof this.academy.getNPC !== 'function') {
+    const getNpc = this.academy?.getNpc ?? this.academy?.getNPC ?? null;
+    if (!this.academy || typeof getNpc !== 'function') {
       this.logger?.warn?.('DSA5ActorBridge: AcademyDataApi nicht konfiguriert.');
       throw new DSA5ResolveError('Akademie-Daten stehen nicht zur Verfügung.', { npcId });
     }
 
-    const npc = this.academy.getNPC(npcId);
+    const npc = getNpc.call(this.academy, npcId);
     if (!npc) {
       throw new DSA5ResolveError('Akademie-NPC wurde nicht gefunden.', { npcId });
     }
 
     return this.resolveFromNpc(npc);
+  }
+
+  /**
+   * Findet einen Actor über ID oder Namen.
+   *
+   * @param {string} actorRef
+   * @returns {Promise<Actor|null>}
+   */
+  async getActorByName(actorRef) {
+    this.assertAvailable();
+
+    const ref = String(actorRef ?? '').trim();
+    if (!ref) return null;
+
+    const direct = game.actors?.get?.(ref);
+    if (direct) return direct;
+
+    const byName = game.actors?.getName?.(ref);
+    if (byName) return byName;
+
+    const wanted = ref.toLocaleLowerCase('de-DE');
+    const actors = game.actors ? Array.from(game.actors.values()) : [];
+    return actors.find((actor) => String(actor?.name ?? '').trim().toLocaleLowerCase('de-DE') === wanted) ?? null;
   }
 
   /**

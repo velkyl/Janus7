@@ -1,25 +1,25 @@
-# JANUS7 Export-Format V2
+﻿# JANUS7 Export-Format V2
 
 **Schema-Version:** 2  
-**Modul-Version:** 0.9.12.43  
+**Modul-Version:** 0.9.12.44  
 **Datum:** 2026-03-25
 
 ---
 
-## Überblick
+## Ãœberblick
 
-Phase 7 verwendet zwei Formate für den KI-Roundtrip:
+Phase 7 verwendet zwei Formate fÃ¼r den KI-Roundtrip:
 
 | Format | Richtung | Identifier |
 |--------|----------|------------|
-| **JANUS_EXPORT_V2** | JANUS7 → LLM | Export-Bundle |
-| **JANUS_KI_RESPONSE_V1** | LLM → JANUS7 | Patch-Response |
+| **JANUS_EXPORT_V2** | JANUS7 â†’ LLM | Export-Bundle |
+| **JANUS_KI_RESPONSE_V1** | LLM â†’ JANUS7 | Patch-Response |
 
 Schemata liegen unter `phase7/contract/`.
 
 ---
 
-## JANUS_EXPORT_V2 – Export-Bundle
+## JANUS_EXPORT_V2 â€“ Export-Bundle
 
 ### Pflichtfelder
 
@@ -48,7 +48,7 @@ Schemata liegen unter `phase7/contract/`.
 |------|-------|--------|
 | `academy` | `week`, `full` | Kalender, Lektionen, Events, Scoring, Social |
 | `references` | `full` | NPC-Index, Orte, Kompetenzen |
-| `knowledge_links` | `full` | Verknüpfte Wissens-Graphen |
+| `knowledge_links` | `full` | VerknÃ¼pfte Wissens-Graphen |
 | `art` | `full` | Bild-/Asset-Referenzen |
 
 ### academy-Teilbaum (Beispiel)
@@ -70,7 +70,7 @@ Schemata liegen unter `phase7/contract/`.
     }
   },
   "events": {
-    "event_prüfung_01": { "id": "event_prüfung_01", "type": "exam", "week": 14 }
+    "event_prÃ¼fung_01": { "id": "event_prÃ¼fung_01", "type": "exam", "week": 14 }
   },
   "scoring": { "kreis_a": 78, "kreis_b": 65 },
   "social": { "npc_braxan__player_mira": { "value": 2, "label": "respektvoll" } }
@@ -79,9 +79,9 @@ Schemata liegen unter `phase7/contract/`.
 
 ---
 
-## JANUS_KI_RESPONSE_V1 – Patch-Response
+## JANUS_KI_RESPONSE_V1 â€“ Patch-Response
 
-Das LLM gibt ausschließlich dieses Format zurück. Keine Prosa, kein Markdown-Wrapper.
+Das LLM gibt ausschlieÃŸlich dieses Format zurÃ¼ck. Keine Prosa, kein Markdown-Wrapper.
 
 ### Vollstruktur
 
@@ -115,11 +115,11 @@ Alle Arrays in `changes` enthalten Patch-Objekte der Form:
 
 | Feld | Typ | Pflicht | Beschreibung |
 |------|-----|---------|--------------|
-| `path` | string | ✅ | Relativer Pfad im Domänenbaum (kein `..`, kein `/`) |
-| `op` | `replace`\|`append`\|`delete` | ✅ | Patch-Operation |
+| `path` | string | âœ… | Relativer Pfad im DomÃ¤nenbaum (kein `..`, kein `/`) |
+| `op` | `replace`\|`append`\|`delete` | âœ… | Patch-Operation |
 | `value` | any | bei `replace`/`append` | Neuer Wert |
 
-### Erlaubte Pfad-Präfixe je Domäne
+### Erlaubte Pfad-PrÃ¤fixe je DomÃ¤ne
 
 | Change-Array | Pfad-Wurzel |
 |---|---|
@@ -128,14 +128,14 @@ Alle Arrays in `changes` enthalten Patch-Objekte der Form:
 | `eventUpdates` | `academy.events.*` |
 | `scoringAdjustments` | `academy.scoring.*` |
 | `socialAdjustments` | `academy.social.*` |
-| `journalEntries` | direkt als Objekt (kein path nötig) |
+| `journalEntries` | direkt als Objekt (kein path nÃ¶tig) |
 
-### Beispiel – eine Lektion updaten
+### Beispiel â€“ eine Lektion updaten
 
 ```json
 {
   "version": "JANUS_KI_RESPONSE_V1",
-  "sourceExportMeta": { "exportedAt": "2026-03-25T14:00:00Z", "world": "punin-akademie", "moduleVersion": "0.9.12.43" },
+  "sourceExportMeta": { "exportedAt": "2026-03-25T14:00:00Z", "world": "punin-akademie", "moduleVersion": "0.9.12.44" },
   "changes": {
     "calendarUpdates": [],
     "lessonUpdates": [
@@ -147,7 +147,7 @@ Alle Arrays in `changes` enthalten Patch-Objekte der Form:
       {
         "path": "lesson_alchemy_01.notes",
         "op": "replace",
-        "value": "Schüler haben Destillationsgrundlagen gemeistert."
+        "value": "SchÃ¼ler haben Destillationsgrundlagen gemeistert."
       }
     ],
     "eventUpdates": [],
@@ -162,11 +162,11 @@ Alle Arrays in `changes` enthalten Patch-Objekte der Form:
     "journalEntries": [
       {
         "week": 12,
-        "entry": "Kreis A schließt Alchemie-Grundkurs ab. Braxan zufrieden."
+        "entry": "Kreis A schlieÃŸt Alchemie-Grundkurs ab. Braxan zufrieden."
       }
     ]
   },
-  "notes": "Lektion abgeschlossen, Scoring angepasst, Journaleintrag hinzugefügt."
+  "notes": "Lektion abgeschlossen, Scoring angepasst, Journaleintrag hinzugefÃ¼gt."
 }
 ```
 
@@ -174,22 +174,22 @@ Alle Arrays in `changes` enthalten Patch-Objekte der Form:
 
 ## Validierungsregeln
 
-Der Importer prüft in dieser Reihenfolge:
+Der Importer prÃ¼ft in dieser Reihenfolge:
 
-1. **Schema-Check** – Response entspricht `phase7/contract/JanusKiResponse.schema.json`
-2. **Version-Check** – `version === 'JANUS_KI_RESPONSE_V1'`
-3. **Semantik-Check** – Pfade relativ, keine `..`, erlaubte Ops
-4. **Stale-Check** (optional) – `sourceExportMeta.exportedAt` nicht älter als konfigurierter Schwellwert
-5. **Transaktionaler Apply** – Schreiben in State; Rollback bei Fehler
+1. **Schema-Check** â€“ Response entspricht `phase7/contract/JanusKiResponse.schema.json`
+2. **Version-Check** â€“ `version === 'JANUS_KI_RESPONSE_V1'`
+3. **Semantik-Check** â€“ Pfade relativ, keine `..`, erlaubte Ops
+4. **Stale-Check** (optional) â€“ `sourceExportMeta.exportedAt` nicht Ã¤lter als konfigurierter Schwellwert
+5. **Transaktionaler Apply** â€“ Schreiben in State; Rollback bei Fehler
 
 ---
 
-## ID-Kritikalität
+## ID-KritikalitÃ¤t
 
-**IDs müssen verbatim aus dem Export übernommen werden.**
+**IDs mÃ¼ssen verbatim aus dem Export Ã¼bernommen werden.**
 
 Das LLM darf keine IDs erfinden oder umbenennen. Falsche IDs erzeugen verwaiste
-State-Einträge, die weder Fehler werfen noch sichtbar sind – ein stiller Datenverlust.
+State-EintrÃ¤ge, die weder Fehler werfen noch sichtbar sind â€“ ein stiller Datenverlust.
 
 Korrekt:
 ```json
@@ -215,5 +215,6 @@ Falsch:
 
 ## Verwandte Dokumente
 
-- [KI_INTEGRATION_GUIDE.md](./KI_INTEGRATION_GUIDE.md) – Vollständiger Workflow
-- [KI_PROMPT_TEMPLATE.md](./KI_PROMPT_TEMPLATE.md) – Copy-Paste für LLM-Sitzungen
+- [KI_INTEGRATION_GUIDE.md](./KI_INTEGRATION_GUIDE.md) â€“ VollstÃ¤ndiger Workflow
+- [KI_PROMPT_TEMPLATE.md](./KI_PROMPT_TEMPLATE.md) â€“ Copy-Paste fÃ¼r LLM-Sitzungen
+
