@@ -1511,11 +1511,6 @@
       "hasRun": true
     },
     {
-      "id": "P3-TC-COND-01",
-      "title": "DSA5 condition IDs contract",
-      "importPath": "./tests/p3/P3_TC_COND_01__dsa5_condition_ids.test.js"
-    },
-    {
       "id": "P3-TC-15",
       "title": "DSA5ConditionBridge Contract",
       "importPath": "./tests/p3/P3_TC_15__dsa5_condition_bridge.test.js",
