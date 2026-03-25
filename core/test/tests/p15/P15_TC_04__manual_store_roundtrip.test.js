@@ -13,7 +13,7 @@ import {
 } from '../../manual-store.js';
 
 function randId() {
-  return `manual_${Math.random().toString(16).slice(2, 10)}_${Date.now()}`;
+  return `manual_${foundry.utils.randomID(8)}_${Date.now()}`;
 }
 
 export default {

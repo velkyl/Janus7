@@ -183,6 +183,7 @@ export const BUILTIN_MANUAL_MODULES = [
   './tests/sec/SEC_TC_01__import_validiert_alle_felder.test.js',
   './tests/sec/SEC_TC_02__keine_script_injection_in_ui.test.js',
   './tests/sec/SEC_TC_03__keine_dsa5_actor_manipulation_ohne_berechtigung.test.js',
+  './tests/sec/SEC_TC_04__secure_randomness.test.js',
 ];
 
 export const BUILTIN_TEST_MODULES = [
