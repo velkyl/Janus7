@@ -8,7 +8,14 @@
 - Tests dürfen den Init/Ready-Flow nie unterbrechen.
 
 ## Einstieg
-- Settings → Module Settings → **JANUS7 Test Harness** öffnen.
+- Bevorzugt über **Command Center** oder **Test Results** öffnen.
+- Konsole:
+  - `await game.janus7.test.openResults()`
+  - `await game.janus7.test.runCatalog({ openWindow: true })`
+
+Hinweis:
+- Der produktive Einstieg ist der integrierte, lazy-geladene Runner aus `scripts/integration/test-runner-integration.js`.
+- `ui/apps/JanusSettingsTestHarnessApp.js` ist nur ein Wrapper für ein optionales Devtools-Bundle und kein verlässlicher Primärpfad im Produktions-Release.
 
 ## Batch-Regel
 - `kind: "manual"` wird im Batch **SKIP** (Anzeige in UI, aber keine automatische PASS/FAIL Bewertung).

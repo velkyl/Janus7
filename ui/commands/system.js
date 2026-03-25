@@ -325,6 +325,12 @@ async openKiBackupManager(_dataset = {}) {
     if (!bridge) throw new Error('DSA5 Bridge not available');
     const skillName = dataset.skillName || 'Sinnesschärfe';
     const actorId = dataset.actorId || game.user.character?.uuid;
+    const modifierRaw = dataset.modifier;
+    const rollOptions = {};
+    if (modifierRaw !== undefined && modifierRaw !== null && `${modifierRaw}`.trim() !== '') {
+      const modifier = Number(modifierRaw);
+      if (Number.isFinite(modifier)) rollOptions.modifier = modifier;
+    }
     
     if (!actorId) {
       ui.notifications.warn('No actor selected');
@@ -332,7 +338,7 @@ async openKiBackupManager(_dataset = {}) {
     }
     
     return await _wrap('bridgeRollTest', async () => {
-      const result = await bridge.rollSkill(actorId, skillName);
+      const result = await bridge.rollSkill(actorId, skillName, rollOptions);
       ui.notifications.info(`Roll: ${skillName} → ${result.success ? 'Success' : 'Failure'}`);
       return { result };
     });
