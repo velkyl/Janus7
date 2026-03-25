@@ -371,13 +371,34 @@ export class DSA5SystemBridge {
     const { source = 'items', learnedOnly = false } = options;
     // Phase-3 Vertrag: stabil, dedupliziert, sortiert.
     let items = [];
-    if (source === 'items' || source === 'both') {
-      const arr = actor?.items ? Array.from(actor.items.values()) : [];
-      items.push(...arr);
+    let actorSpells = [];
+
+    if (actor?.items) {
+      actorSpells = Array.from(actor.items.values()).filter((i) => String(i?.type ?? '').toLowerCase() === 'spell');
     }
-    // Compendium-Quelle ist Phase-3 optional (dsa5 packs variieren); daher nur placeholder.
+
+    if (source === 'items' || source === 'both') {
+      items.push(...actorSpells);
+    }
+
+    // Compendium-Quelle: learned spells aus Pack-Index auflösen (abhängig von dsa5-Struktur)
     if (source === 'compendium' || source === 'both') {
-      // TODO Phase 4+: learned spells aus Pack-Index auflösen (abhängig von dsa5-Struktur)
+      if (this.packs) {
+        await this.packs.ensureIndex({ documentName: 'Item' });
+        for (const embeddedSpell of actorSpells) {
+          try {
+            const hit = await this.packs.findByName(embeddedSpell.name, { type: 'spell' });
+            if (hit?.uuid) {
+              const compendiumItem = await this.resolver.resolveItem(hit.uuid);
+              if (compendiumItem) {
+                items.push(compendiumItem);
+              }
+            }
+          } catch (e) {
+            this.logger?.warn?.('[JANUS7][DSA5][getActorSpells] packs lookup failed', { spellName: embeddedSpell.name, error: e });
+          }
+        }
+      }
     }
     // Filter
     items = items.filter((i) => String(i?.type ?? '').toLowerCase() === 'spell');
