@@ -1538,6 +1538,18 @@
         3
       ],
       "hasRun": false
+    },
+    {
+      "id": "P3-TC-COND-01",
+      "title": "DSA5 Condition IDs Export",
+      "importPath": "./tests/p3/P3_TC_COND_01__dsa5_condition_ids.test.js",
+      "suiteClass": "binding",
+      "kind": "auto",
+      "phase": 3,
+      "phases": [
+        3
+      ],
+      "hasRun": false
     }
   ]
 }
