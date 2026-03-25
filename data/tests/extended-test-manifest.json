@@ -15,6 +15,16 @@
       "hasRun": true
     },
     {
+      "id": "SEC-TC-04",
+      "title": "Secure Randomness in Bridge Keys",
+      "importPath": "./tests/sec/SEC_TC_04__secure_randomness.test.js",
+      "suiteClass": "extended-auto",
+      "kind": "auto",
+      "phase": 3,
+      "phases": [3],
+      "hasRun": true
+    },
+    {
       "id": "INT-TC-02",
       "title": "KI-Roundtrip: Export → Edit → Import",
       "importPath": "./tests/int/INT_TC_02__ki_roundtrip_export_edit_import.test.js",
