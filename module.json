@@ -9,7 +9,7 @@
   "authors": [
     {
       "name": "Thomas (JANUS7 Development)",
-      "url": "https://github.com/janus7/janus7"
+      "url": "https://github.com/janus7"
     }
   ],
   "description": "Hybrid-first academy management system for DSA5 magic academy campaigns. Features: State Management, Calendar, Simulation Engine, Quest & Event System, DSA5 Bridge, Atmosphere Control, Control Panel UI. Includes modular JANUS Shell UI layer.",
