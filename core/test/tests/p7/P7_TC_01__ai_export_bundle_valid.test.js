@@ -5,7 +5,7 @@ import { moduleAssetPath } from '../../../common.js';
  * This test exercises the Phase 7 export API. It ensures that the
  * engine exposes an `ai.exportBundle()` function which returns a
  * structured object. The returned bundle must validate against the
- * published schema located at `modules/janus7/phase7/contract/JanusKiBundle.schema.json`.
+ * published schema located at `modules/Janus7/phase7/contract/JanusKiBundle.schema.json`.
  */
 
 export default {

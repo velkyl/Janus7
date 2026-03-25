@@ -163,12 +163,12 @@ P3-TC-12  ✅ Error Handling (Typed Errors) - VALIDIERT
 
 | Deliverable                                | Status      | Anmerkung                                  |
 |--------------------------------------------|-------------|--------------------------------------------|
-| modules/janus7/systems/dsa5/index.js       | ✅ Vorhanden | DSA5SystemBridge implementiert             |
-| modules/janus7/systems/dsa5/rolls.js       | ✅ Vorhanden | DSA5RollApi mit Normalisierung             |
-| modules/janus7/systems/dsa5/actors.js      | ✅ Vorhanden | DSA5ActorBridge + Academy-NPC-Resolution   |
-| modules/janus7/systems/dsa5/items.js       | ✅ Vorhanden | DSA5ItemBridge mit ensureSpellOnActor      |
-| modules/janus7/systems/dsa5/packs.js       | ✅ Vorhanden | DSA5PacksIndex mit buildIndex/findByName   |
-| modules/janus7/systems/dsa5/diagnostics.js | ✅ Vorhanden | runDsa5BridgeDiagnostics                   |
+| modules/Janus7/systems/dsa5/index.js       | ✅ Vorhanden | DSA5SystemBridge implementiert             |
+| modules/Janus7/systems/dsa5/rolls.js       | ✅ Vorhanden | DSA5RollApi mit Normalisierung             |
+| modules/Janus7/systems/dsa5/actors.js      | ✅ Vorhanden | DSA5ActorBridge + Academy-NPC-Resolution   |
+| modules/Janus7/systems/dsa5/items.js       | ✅ Vorhanden | DSA5ItemBridge mit ensureSpellOnActor      |
+| modules/Janus7/systems/dsa5/packs.js       | ✅ Vorhanden | DSA5PacksIndex mit buildIndex/findByName   |
+| modules/Janus7/systems/dsa5/diagnostics.js | ✅ Vorhanden | runDsa5BridgeDiagnostics                   |
 | DSA5_BRIDGE_API.md                         | ⛔ FEHLEND   | Dokumentation nicht als separates File     |
 
 **Hinweis:** API ist via JSDoc dokumentiert, aber dedizierte API-Doku fehlt.

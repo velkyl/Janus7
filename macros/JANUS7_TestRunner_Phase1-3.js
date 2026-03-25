@@ -252,7 +252,7 @@ if (USE_DETERMINISTIC_ROLLS) {
 
   const summary = {
     exportedAt: NOW.toISOString(),
-    moduleVersion: game.modules.get('janus7')?.version ?? null,
+    moduleVersion: game.modules.get('Janus7')?.version ?? null,
     system: game.system?.id ?? null,
     counts: {
       ok: results.filter((r) => r.Status === 'OK').length,

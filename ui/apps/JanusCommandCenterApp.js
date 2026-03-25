@@ -92,7 +92,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(foundry.ap
     context.commandCategories = this._getCommandCategories();
     context.selectedCategory = this._selectedCategory || 'all';
     context.beamerMode = this._beamerMode;
-    context.systemVersion = game.modules?.get?.('janus7')?.version ?? '?';
+    context.systemVersion = game.modules?.get?.('Janus7')?.version ?? '?';
     
     return context;
   }

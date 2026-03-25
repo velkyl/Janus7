@@ -12,7 +12,7 @@
  *   // or: await JanusTestCatalog.run();
  */
 
-const MODULE_ID = 'janus7';
+const MODULE_ID = 'Janus7';
 
 /**
  * Run a single test assertion.

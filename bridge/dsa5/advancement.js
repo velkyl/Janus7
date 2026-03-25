@@ -428,6 +428,7 @@ export class DSA5AdvancementBridge {
 
       const key = `janus_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`;
 
+      const key = `janus_${Date.now()}_${foundry.utils.randomID(4)}`;
       const existing = page.system?.entries ?? {};
 
       const entry = {

@@ -86,10 +86,7 @@ export class DSA5JournalBridge {
       return null;
     }
 
-
-
-    const key = `janus_persona_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`;
-
+    const key = `janus_persona_${Date.now()}_${foundry.utils.randomID(4)}`;
     const existing = page.system?.personae ?? {};
 
     const newPersona = {
@@ -178,10 +175,7 @@ export class DSA5JournalBridge {
       return null;
     }
 
-
-
-    const key      = `janus_ap_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`;
-
+    const key      = `janus_ap_${Date.now()}_${foundry.utils.randomID(4)}`;
     const existing = page.system?.entries ?? {};
 
     const entry = {

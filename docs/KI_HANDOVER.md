@@ -10,7 +10,7 @@ Zweck: Kurzbriefing für KI-Assistenz (Architektur, SSOT, Qualitäts-Gates). Kei
 
 ## 1) SSOT & Versionierung
 
-- **Runtime/Build-Version:** `game.modules.get("janus7").version` (SSOT: `module.json`)
+- **Runtime/Build-Version:** `game.modules.get("Janus7").version` (SSOT: `module.json`)
 - **State-Version:** `state.meta.version` (unter welcher Version der State zuletzt gespeichert wurde)
 - Dokumentation: Einstieg über `docs/INDEX.md` (Altstände liegen unter `docs/_archive/ (nur im Repo; im Release-ZIP nicht enthalten)`).
 

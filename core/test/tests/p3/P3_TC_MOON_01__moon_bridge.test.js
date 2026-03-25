@@ -77,7 +77,7 @@ export default {
       bridge.register();
 
       // 3. Test: Current Moon Status (Simulate Full Moon at day 14 -> time 1400)
-      simulatedWorldTime = 1400;
+      simulatedWorldTime = 1400; 
       const currentStatus = bridge.getCurrentMoonStatus();
       if (!currentStatus) {
         ok = false;
