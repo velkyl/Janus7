@@ -56,6 +56,7 @@ export const BUILTIN_AUTO_MODULES = [
   './tests/p3/P3_TC_BUFF_01__postroll_teacher_bonus.test.js',
   './tests/p3/P3_TC_FATE_01__fate_bridge.test.js',
   './tests/p3/P3_TC_MOON_01__moon_bridge.test.js',
+  './tests/p3/P3_TC_MOON_02__moon_bridge_constants.test.js',
   './tests/p3/P3_TC_SOCIAL_01__personae_social_sync.test.js',
   './tests/p3/P3_TC_TIMED_01__timed_conditions.test.js',
   './tests/p3/P3_TRAD_TC_01__tradition_circle_mapping.test.js',
