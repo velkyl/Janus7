@@ -587,12 +587,22 @@
     {
       "id": "P2-TC-07",
       "title": "Academy extended schemas validate core domains",
-      "importPath": "./tests/p2/P2_TC_07__academy_extended_schemas.test.js"
+      "importPath": "./tests/p2/P2_TC_07__academy_extended_schemas.test.js",
+      "suiteClass": "extended-auto",
+      "kind": "auto",
+      "phase": null,
+      "phases": [],
+      "hasRun": true
     },
     {
       "id": "P2-TC-08",
       "title": "Academy reference integrity diagnostics are emitted",
-      "importPath": "./tests/p2/P2_TC_08__academy_reference_integrity_diagnostics.test.js"
+      "importPath": "./tests/p2/P2_TC_08__academy_reference_integrity_diagnostics.test.js",
+      "suiteClass": "extended-auto",
+      "kind": "auto",
+      "phase": null,
+      "phases": [],
+      "hasRun": true
     },
     {
       "id": "P2-TC-09",
@@ -1381,12 +1391,22 @@
     {
       "id": "P7-TC-08",
       "title": "KI preflight rejects unsupported response versions",
-      "importPath": "./tests/p7/P7_TC_08__ki_preflight_invalid_version.test.js"
+      "importPath": "./tests/p7/P7_TC_08__ki_preflight_invalid_version.test.js",
+      "suiteClass": "extended-auto",
+      "kind": "auto",
+      "phase": null,
+      "phases": [],
+      "hasRun": true
     },
     {
       "id": "P7-TC-09",
       "title": "KI preflight accepts minimal valid response shape",
-      "importPath": "./tests/p7/P7_TC_09__ki_preflight_valid_shape.test.js"
+      "importPath": "./tests/p7/P7_TC_09__ki_preflight_valid_shape.test.js",
+      "suiteClass": "extended-auto",
+      "kind": "auto",
+      "phase": null,
+      "phases": [],
+      "hasRun": true
     },
     {
       "id": "P7-TC-10",

@@ -34,9 +34,15 @@ export class JanusLessonItemSheet extends ItemSheetBase {
   async _updateObject(event, formData) {
     const expanded = foundry.utils.expandObject(formData);
     const system = expanded.system ?? {};
-    const parseJson = (value, fallback) => {
+    const parseErrors = [];
+    const parseJson = (value, fallback, label) => {
       if (!value || !String(value).trim()) return fallback;
-      try { return JSON.parse(value); } catch (_err) { return fallback; }
+      try {
+        return JSON.parse(value);
+      } catch (err) {
+        parseErrors.push(`${label}: ${err?.message ?? String(err)}`);
+        return fallback;
+      }
     };
     system.tags = String(system.tags ?? '')
       .split(',')
@@ -45,10 +51,16 @@ export class JanusLessonItemSheet extends ItemSheetBase {
     system.yearMin = Number.isFinite(Number(system.yearMin)) ? Number(system.yearMin) : null;
     system.yearMax = Number.isFinite(Number(system.yearMax)) ? Number(system.yearMax) : null;
     system.durationSlots = Math.max(1, Number(system.durationSlots) || 1);
-    system.mechanics = parseJson(system.mechanicsJson, system.mechanics ?? {});
-    system.scoringImpact = parseJson(system.scoringJson, system.scoringImpact ?? {});
-    system.references = parseJson(system.referencesJson, system.references ?? {});
-    system.source = parseJson(system.sourceJson, system.source ?? {});
+    system.mechanics = parseJson(system.mechanicsJson, system.mechanics ?? {}, 'Mechanics JSON');
+    system.scoringImpact = parseJson(system.scoringJson, system.scoringImpact ?? {}, 'Scoring JSON');
+    system.references = parseJson(system.referencesJson, system.references ?? {}, 'References JSON');
+    system.source = parseJson(system.sourceJson, system.source ?? {}, 'Source JSON');
+    if (parseErrors.length) {
+      const itemName = this.item?.name ?? 'lesson';
+      const message = `Lesson sheet update aborted for "${itemName}": ${parseErrors.join(' | ')}`;
+      ui?.notifications?.error?.(`[JANUS7] ${message}`);
+      throw new Error(message);
+    }
     delete system.mechanicsJson;
     delete system.scoringJson;
     delete system.referencesJson;

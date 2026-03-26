@@ -198,7 +198,10 @@ async function loadPhaseIntegrations(engine) {
   // Optional: Test Runner (always best-effort)
   try {
     await import('../scripts/integration/test-runner-integration.js');
-  } catch (_) { /* intentionally silent */ }
+    logger?.debug?.('[JANUS7] Test runner integration loaded.');
+  } catch (err) {
+    logger?.warn?.('[JANUS7] Test runner integration failed to load.', { message: err?.message });
+  }
 
   // ─────────────────────────────────────────────────────────────────────
   // Graph Service Integration

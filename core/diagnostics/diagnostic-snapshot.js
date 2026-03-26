@@ -5,6 +5,10 @@ export function buildDiagnosticSnapshot(engine) {
   const graphCache = graph?.diagnostics?.cache?.() ?? graph?.cache?.snapshot?.() ?? null;
   const lastReport = engine?.diagnostics?.getLastReport?.() ?? null;
   const academyValidation = engine?.academy?.data?.validation ?? engine?.academy?.data?.getValidation?.() ?? null;
+  const academyReferenceDiagnostics = academyValidation?.academyReferenceDiagnostics ?? academyValidation ?? null;
+  const optionalLoadWarnings = Array.isArray(academyValidation?.optionalLoadWarnings)
+    ? academyValidation.optionalLoadWarnings.slice(0, 10)
+    : [];
 
   return {
     moduleId: engine?.moduleId ?? 'janus7',
@@ -34,7 +38,8 @@ export function buildDiagnosticSnapshot(engine) {
       health: lastReport?.health ?? null,
       warnings: Array.isArray(lastReport?.warnings) ? lastReport.warnings.slice(0, 10) : [],
       recentChecks: Array.isArray(lastReport?.checks) ? lastReport.checks.slice(0, 10) : [],
-      academyValidation: academyValidation?.academyReferenceDiagnostics ?? academyValidation ?? null
+      academyValidation: academyReferenceDiagnostics,
+      optionalLoadWarnings
     },
     ui: {
       openWindows: Object.keys(globalThis.ui?.windows ?? {}).length,

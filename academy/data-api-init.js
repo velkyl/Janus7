@@ -47,16 +47,30 @@ export async function initAcademyData() {
 
   validateAcademyDatasets(core.validator, lessons, npcs, calendar, locations, events);
 
+  const optionalLoadWarnings = [];
+  const loadOptionalDataset = async (loader, rel, { label = rel, fallback = null } = {}) => {
+    try {
+      return await loader(rel);
+    } catch (err) {
+      optionalLoadWarnings.push({
+        label,
+        file: rel,
+        message: err?.message ?? String(err),
+      });
+      return fallback;
+    }
+  };
+
   let questIndex = [];
   let eventIndex = [];
   let effectIndex = [];
   let poolIndex = [];
   let eventOptions = [];
-  try { questIndex = await loadDataJson('quests/quest-index.json'); } catch (err) { log.warn('Quests index missing (phase2 optional)', err); }
-  try { eventIndex = await loadDataJson('events/event-index.json'); } catch (err) { log.warn('Events index missing (phase2 optional)', err); }
-  try { poolIndex = await loadDataJson('events/pool-index.json'); } catch (err) { log.warn('Pool index missing (phase2 optional)', err); }
-  try { eventOptions = await loadDataJson('events/options.json'); } catch (err) { log.warn('Event options missing (phase2 optional)', err); }
-  try { effectIndex = await loadDataJson('academy/effects/effect-index.json'); } catch (err) { log.warn('Effects index missing (phase2 optional)', err); }
+  questIndex = await loadOptionalDataset(loadDataJson, 'quests/quest-index.json', { label: 'questIndex', fallback: [] });
+  eventIndex = await loadOptionalDataset(loadDataJson, 'events/event-index.json', { label: 'eventIndex', fallback: [] });
+  poolIndex = await loadOptionalDataset(loadDataJson, 'events/pool-index.json', { label: 'poolIndex', fallback: [] });
+  eventOptions = await loadOptionalDataset(loadDataJson, 'events/options.json', { label: 'eventOptions', fallback: [] });
+  effectIndex = await loadOptionalDataset(loadDataJson, 'academy/effects/effect-index.json', { label: 'effectIndex', fallback: [] });
 
   let spellCurriculum = null;
   let spellsIndex = null;
@@ -69,20 +83,20 @@ export async function initAcademyData() {
   let examQuestions = null;
   let subjects = null;
   let apAwards = null;
-  try { spellCurriculum = await loadJson('spell-curriculum.json'); } catch (_e) {}
-  try { spellsIndex = await loadJson('spells-index.json'); } catch (_e) {}
-  try { alchemyRecipes = await loadJson('alchemy-recipes.json'); } catch (_e) {}
-  try { lessonGenerator = await loadJson('lesson-generator.json'); } catch (_e) {}
-  try { calendarTemplate = await loadJson('calendar-template.json'); } catch (_e) {}
-  try { teachingSessions = await loadJson('teaching-sessions.json'); } catch (_e) {}
-  try { circles = await loadJson('circles.json'); } catch (_e) {}
-  try { exams = await loadJson('exams.json'); } catch (_e) {}
-  try { examQuestions = await loadJson('exam-questions.json'); } catch (_e) {}
-  try { subjects = await loadJson('subjects.json'); } catch (_e) {}
-  try { apAwards = await loadJson('ap-awards.json'); } catch (_e) {}
+  spellCurriculum = await loadOptionalDataset(loadJson, 'spell-curriculum.json', { label: 'spellCurriculum' });
+  spellsIndex = await loadOptionalDataset(loadJson, 'spells-index.json', { label: 'spellsIndex' });
+  alchemyRecipes = await loadOptionalDataset(loadJson, 'alchemy-recipes.json', { label: 'alchemyRecipes' });
+  lessonGenerator = await loadOptionalDataset(loadJson, 'lesson-generator.json', { label: 'lessonGenerator' });
+  calendarTemplate = await loadOptionalDataset(loadJson, 'calendar-template.json', { label: 'calendarTemplate' });
+  teachingSessions = await loadOptionalDataset(loadJson, 'teaching-sessions.json', { label: 'teachingSessions' });
+  circles = await loadOptionalDataset(loadJson, 'circles.json', { label: 'circles' });
+  exams = await loadOptionalDataset(loadJson, 'exams.json', { label: 'exams' });
+  examQuestions = await loadOptionalDataset(loadJson, 'exam-questions.json', { label: 'examQuestions' });
+  subjects = await loadOptionalDataset(loadJson, 'subjects.json', { label: 'subjects' });
+  apAwards = await loadOptionalDataset(loadJson, 'ap-awards.json', { label: 'apAwards' });
 
   let library = null;
-  try { library = await loadJson('library.json'); } catch (_e) {}
+  library = await loadOptionalDataset(loadJson, 'library.json', { label: 'library' });
 
   const extensionFiles = Object.freeze({
     assignments: 'academy/extensions/assignments.json',
@@ -100,7 +114,7 @@ export async function initAcademyData() {
   });
   const extensions = {};
   for (const [key, rel] of Object.entries(extensionFiles)) {
-    try { extensions[key] = await loadDataJson(rel); } catch (_e) { extensions[key] = null; }
+    extensions[key] = await loadOptionalDataset(loadDataJson, rel, { label: `extension:${key}` });
   }
   validateExtendedDatasets(extensions);
 
@@ -146,6 +160,12 @@ export async function initAcademyData() {
     collections: extensions?.collections,
   }, { strict: false }) ?? null;
   logReferenceDiagnostics(log, academyReferenceDiagnostics);
+  if (optionalLoadWarnings.length) {
+    log.warn('Optional academy datasets unavailable', {
+      count: optionalLoadWarnings.length,
+      datasets: optionalLoadWarnings,
+    });
+  }
 
   const cache = deepFreeze({
     lessons,
@@ -171,7 +191,7 @@ export async function initAcademyData() {
     subjects,
     apAwards,
     extensions,
-    validation: { academyReferenceDiagnostics },
+    validation: { academyReferenceDiagnostics, optionalLoadWarnings },
   });
   setAcademyCache(cache);
 
