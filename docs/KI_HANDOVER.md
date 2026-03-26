@@ -1,4 +1,4 @@
-﻿# JANUS7 KI-HANDOVER
+# JANUS7 KI-HANDOVER
 
 **Modul-Version:** 0.9.12.44  
 **Foundry:** v13+  

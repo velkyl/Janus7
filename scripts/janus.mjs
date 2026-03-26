@@ -369,9 +369,18 @@ try {
     // Back-compat aliases
     engine.engine  = engine;
 
-    // Pre-ready chain: phase integrations (async, not awaited)
+    // Pre-ready chain: phase integrations (async, stored as promise).
+    // Awaited in Hooks.once('ready') before engine.ready() runs – garantiert
+    // dass alle Phase-Integrationen vollständig geladen sind, bevor ready() aufgerufen wird.
+    const _preReadyStart = Date.now();
     JANUS_GLOBAL.preReady = (async () => {
       await loadPhaseIntegrations(engine);
+      const elapsed = Date.now() - _preReadyStart;
+      if (elapsed > 5000) {
+        (engine?.core?.logger ?? console).warn?.(
+          `[JANUS7] loadPhaseIntegrations dauerte ${elapsed}ms – Ladezeit ungewöhnlich hoch.`
+        );
+      }
     })();
 
     // Cleanup on world close
@@ -493,6 +502,39 @@ try {
         log.warn?.('[JANUS7] SceneRegionsBridge init failed', _readyErrMeta(bridgeErr));
       }
     }
+
+    // ─────────────────────────────────────────────────────────
+    // Academy JSON Hot-Reload (Foundry hotReload Hook)
+    // Wenn JSON-Dateien im data/-Verzeichnis via Foundry Hot-Reload geändert werden,
+    // wird der Academy-Cache invalidiert und neu geladen.
+    // Voraussetzung: module.json flags.hotReload.extensions enthält 'json'
+    // ─────────────────────────────────────────────────────────
+    _registerCoreHook('hotReload', async ({ path: reloadPath } = {}) => {
+      try {
+        // Nur reagieren wenn es eine Academy JSON-Datei ist
+        const isAcademyJson = typeof reloadPath === 'string'
+          && reloadPath.includes('/data/')
+          && reloadPath.endsWith('.json')
+          && !reloadPath.includes('/tests/');
+        if (!isAcademyJson) return;
+
+        const engine = JANUS_GLOBAL.engine;
+        const reloadLog = engine?.core?.logger ?? console;
+        reloadLog.info?.(`[JANUS7] Hot-Reload: Academy JSON geändert (${reloadPath}) → Cache invalidieren`);
+
+        const { default: AcademyDataApi } = await import('../academy/data-api.js');
+        AcademyDataApi.resetCache();
+        await AcademyDataApi.init();
+
+        // Downstream-Systeme informieren
+        Hooks.callAll('janus7.academy.data.reloaded', { source: 'hotReload', path: reloadPath });
+        reloadLog.info?.('[JANUS7] Academy-Daten neu geladen (Hot-Reload abgeschlossen).');
+      } catch (hotReloadErr) {
+        (JANUS_GLOBAL.engine?.core?.logger ?? console).warn?.(
+          '[JANUS7] Academy Hot-Reload fehlgeschlagen', { message: hotReloadErr?.message }
+        );
+      }
+    });
 
     log.debug?.('[JANUS7] ready.pipeline complete');
   });

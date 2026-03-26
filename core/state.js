@@ -39,17 +39,44 @@ const UNSET_PATH = foundry?.utils?.unsetProperty
     return true;
   });
 
+// ─── Legacy-Path-Alias Sunset-Konfiguration ───────────────────────────────────
+//
+// Format: [legacyPrefix, canonicalPrefix]
+// Alle Reads/Writes über legacy Paths werden still umgeleitet UND gewarnt.
+// Sunset-Plan: Aliase bleiben bis v1.0 aktiv, danach können sie entfernt werden.
+// Tracking: Jede Warning enthält den Call-Site-Pfad für einfache Suche.
+//
 const LEGACY_PATH_ALIASES = Object.freeze([
   ['academy.quests', 'questStates'],
   ['scoring', 'academy.scoring'],
 ]);
 
-function normalizeStatePathAlias(path) {
+// Intern: Set der bereits gewarnten Paths (pro Session, verhindert Spam)
+const _warnedLegacyPaths = new Set();
+
+function normalizeStatePathAlias(path, { warnLogger } = {}) {
   const source = String(path ?? '').trim();
   if (!source) return source;
   for (const [legacyPrefix, canonicalPrefix] of LEGACY_PATH_ALIASES) {
-    if (source === legacyPrefix) return canonicalPrefix;
-    if (source.startsWith(legacyPrefix + '.')) return canonicalPrefix + source.slice(legacyPrefix.length);
+    if (source === legacyPrefix || source.startsWith(legacyPrefix + '.')) {
+      const canonical = source === legacyPrefix
+        ? canonicalPrefix
+        : canonicalPrefix + source.slice(legacyPrefix.length);
+
+      // Sunset-Warning: einmalig pro Legacy-Path pro Session
+      if (!_warnedLegacyPaths.has(source)) {
+        _warnedLegacyPaths.add(source);
+        const msg = `[JANUS7] State: Veralteter Pfad "${source}" → nutze stattdessen "${canonical}". `
+          + `Dieser Alias wird in v1.0 entfernt.`;
+        if (warnLogger?.warn) {
+          warnLogger.warn(msg);
+        } else {
+          console.warn(msg);
+        }
+      }
+
+      return canonical;
+    }
   }
   return source;
 }
@@ -676,7 +703,7 @@ migrateState(stateObj = this._state) {
    * @returns {*}
    */
   get(path = "") {
-    const canonicalPath = normalizeStatePathAlias(path);
+    const canonicalPath = normalizeStatePathAlias(path, { warnLogger: this.logger });
     const value = canonicalPath ? foundry.utils.getProperty(this._state, canonicalPath) : this._state;
     if (value && typeof value === "object") return foundry.utils.deepClone(value);
     return value;
@@ -695,7 +722,7 @@ migrateState(stateObj = this._state) {
    * @param {string} path
    */
   getPath(path) {
-    const canonicalPath = normalizeStatePathAlias(path);
+    const canonicalPath = normalizeStatePathAlias(path, { warnLogger: this.logger });
     if (!canonicalPath) return this._state;
     return foundry.utils.getProperty(this._state, canonicalPath);
   }
@@ -707,7 +734,7 @@ migrateState(stateObj = this._state) {
    * @returns {any} Neuer Wert
    */
   set(path, value) {
-    const canonicalPath = normalizeStatePathAlias(path);
+    const canonicalPath = normalizeStatePathAlias(path, { warnLogger: this.logger });
     const oldValue = this.getPath(canonicalPath);
     foundry.utils.setProperty(this._state, canonicalPath, value);
     this._touchMeta();
@@ -731,7 +758,7 @@ migrateState(stateObj = this._state) {
    * @returns {boolean}
    */
   unset(path) {
-    const source = normalizeStatePathAlias(path);
+    const source = normalizeStatePathAlias(path, { warnLogger: this.logger });
     if (!source) return false;
     const parts = source.split('.').filter(Boolean);
     if (!parts.length) return false;

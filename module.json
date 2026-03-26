@@ -67,8 +67,7 @@
         "type": "system",
         "compatibility": {
           "minimum": "7.0.0",
-          "verified": "7.5.0",
-          "maximum": "7.5.0"
+          "verified": "7.5.0"
         }
       }
     ]

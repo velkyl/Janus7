@@ -1,4 +1,4 @@
-﻿# JANUS7 Release-Uebersicht
+# JANUS7 Release-Uebersicht
 
 Aktuelle Version: **0.9.12.44** (2026-03-25)
 

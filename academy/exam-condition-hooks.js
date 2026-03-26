@@ -168,8 +168,23 @@ export class JanusExamConditionHooks {
    * @private
    */
   async _applyConditionsForStatus(actorRef, statusId, examId, examDef = null) {
+    if (!statusId) {
+      this.logger?.warn?.(`${MODULE_ABBREV} | ExamConditionHooks | Kein statusId übergeben`, { actorRef, examId });
+      return;
+    }
+
     // examDef kann eigene conditionRules definieren → überschreibt EXAM_OUTCOME_CONDITIONS
     const rules = examDef?.conditionRules ?? EXAM_OUTCOME_CONDITIONS;
+
+    // Explizit prüfen ob der statusId überhaupt bekannt ist – verhindert TypeError bei .forEach
+    if (!(statusId in rules)) {
+      this.logger?.warn?.(
+        `${MODULE_ABBREV} | ExamConditionHooks | Unbekannte statusId – kein Condition-Mapping vorhanden`,
+        { statusId, examId, actorRef, knownIds: Object.keys(rules) }
+      );
+      return;
+    }
+
     const conditions = rules[statusId] ?? [];
 
     if (!conditions.length) {
