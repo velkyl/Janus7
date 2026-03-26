@@ -27,7 +27,7 @@
 - Empfohlen: immer Preview → selektive Auswahl → Apply als GM.
 
 ## 5. Diagnose / Tests
-- `runHealthCheck()` prüft Kernbereiche.
+- `runHealthCheck()` delegiert auf `engine.diagnostics.report()` und behandelt optionale Subsysteme wie Atmosphere als `DISABLED`/`OPTIONAL` statt pauschal als Fehler.
 - Der Test-Harness trennt Binding-/Auto-/Manual-Tests.
 - Academy-Daten können zusätzlich über den CLI-Validator und Referenzintegrität geprüft werden.
 - Schema- und Referenzfehler werden bewusst aussagekräftig geloggt.

@@ -1,3 +1,5 @@
+import { MODULE_ID } from '../../../common.js';
+
 export default {
   id: "P1-TC-02",
   title: "State-Registrierung erfolgreich",
@@ -9,7 +11,7 @@ export default {
     const engine = ctx?.engine ?? game?.janus7;
     if (!engine?.core?.state) return { ok: false, summary: "engine.core.state fehlt" };
 
-    const key = "janus7.coreState";
+    const key = `${MODULE_ID}.coreState`;
     const hasSetting = game?.settings?.settings?.has?.(key) ?? false;
 
     if (!hasSetting) {

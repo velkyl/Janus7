@@ -103,6 +103,9 @@ function _sanitizeStateCandidate(candidate) {
   const clone = foundry.utils.deepClone(_unwrapStateEnvelope(candidate));
 
   // Remove test-only payloads from real exports/imports.
+  // Runtime service containers like `simulation` do not belong into the
+  // persisted core state and would fail schema validation on roundtrips.
+  delete clone.simulation;
   delete clone.test;
   delete clone._testMarker;
   delete clone.__tests;

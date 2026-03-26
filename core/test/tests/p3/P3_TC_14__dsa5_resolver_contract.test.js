@@ -1,6 +1,51 @@
 import { DSA5Resolver } from '../../../../bridge/dsa5/resolver.js';
 import { DSA5ResolveError } from '../../../../bridge/dsa5/errors.js';
 
+function patchProperty(target, key, value, patches) {
+  if (!target) return false;
+  const hadOwn = Object.prototype.hasOwnProperty.call(target, key);
+  const descriptor = Object.getOwnPropertyDescriptor(target, key);
+  const originalValue = target[key];
+
+  try {
+    target[key] = value;
+  } catch (_err) {
+    if (!descriptor?.configurable) return false;
+    Object.defineProperty(target, key, {
+      configurable: true,
+      writable: true,
+      value
+    });
+  }
+
+  patches.push({ target, key, hadOwn, descriptor, originalValue });
+  return true;
+}
+
+function restorePatchedProperties(patches) {
+  for (const patch of [...patches].reverse()) {
+    const { target, key, hadOwn, descriptor, originalValue } = patch;
+    try {
+      if (descriptor) {
+        Object.defineProperty(target, key, descriptor);
+        if ('value' in descriptor) target[key] = originalValue;
+        continue;
+      }
+      if (hadOwn) {
+        target[key] = originalValue;
+      } else {
+        delete target[key];
+      }
+    } catch (_err) {
+      try {
+        target[key] = originalValue;
+      } catch (_) {
+        // ignore restore failure in tests
+      }
+    }
+  }
+}
+
 export default {
   id: 'P3-TC-14',
   title: 'DSA5Resolver Contract',
@@ -15,37 +60,36 @@ export default {
       error: (msg, ...args) => logs.push({ level: 'error', msg, args })
     };
 
-    // Mocking Foundry Globals
-    const originalGame = globalThis.game;
-    const originalCanvas = globalThis.canvas;
-    const originalFromUuid = globalThis.fromUuid;
-
     const mockDocs = new Map();
     const mockPacks = new Map();
+    const patches = [];
 
-    globalThis.game = {
-      packs: {
-        get: (id) => mockPacks.get(id)
-      },
-      actors: {
-        get: (id) => Array.from(mockDocs.values()).find(d => d.documentName === 'Actor' && d._id === id)
-      }
-    };
+    const gameObj = globalThis.game;
+    const canvasObj = globalThis.canvas;
+    if (!gameObj?.packs || !gameObj?.actors || !canvasObj?.tokens) {
+      return { ok: true, status: 'SKIP', summary: 'SKIP: Foundry globals packs/actors/tokens nicht verfügbar' };
+    }
 
-    globalThis.canvas = {
-      tokens: {
-        get: (id) => {
-          const doc = mockDocs.get(id);
-          // Simple mock: if it has an actor property, we treat it as a token in this test
-          return doc?.actor ? doc : null;
-        }
-      }
-    };
-
-    globalThis.fromUuid = async (uuid) => {
+    const patchedGamePacks = patchProperty(gameObj.packs, 'get', (id) => mockPacks.get(id), patches);
+    const patchedGameActors = patchProperty(
+      gameObj.actors,
+      'get',
+      (id) => Array.from(mockDocs.values()).find((d) => d.documentName === 'Actor' && d._id === id),
+      patches
+    );
+    const patchedCanvasTokens = patchProperty(canvasObj.tokens, 'get', (id) => {
+      const doc = mockDocs.get(id);
+      return doc?.actor ? doc : null;
+    }, patches);
+    const patchedFromUuid = patchProperty(globalThis, 'fromUuid', async (uuid) => {
       if (uuid === 'fail') throw new Error('UUID Fail');
       return mockDocs.get(uuid) ?? null;
-    };
+    }, patches);
+
+    if (!patchedGamePacks || !patchedGameActors || !patchedCanvasTokens || !patchedFromUuid) {
+      restorePatchedProperties(patches);
+      return { ok: true, status: 'SKIP', summary: 'SKIP: Foundry globals konnten nicht sicher gepatcht werden' };
+    }
 
     try {
       const resolver = new DSA5Resolver({ logger: mockLogger });
@@ -126,9 +170,7 @@ export default {
 
       return { ok: true, summary: 'DSA5Resolver contract verified' };
     } finally {
-      globalThis.game = originalGame;
-      globalThis.canvas = originalCanvas;
-      globalThis.fromUuid = originalFromUuid;
+      restorePatchedProperties(patches);
     }
   }
 };

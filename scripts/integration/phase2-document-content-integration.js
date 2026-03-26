@@ -143,7 +143,7 @@ async function migrateLegacyLessonDocuments(folder) {
   });
 
   if (updates.length > 0) {
-    await Item.updateDocuments(updates, { diff: false });
+    await Item.updateDocuments(updates, { diff: false, recursive: false });
   }
 
   return { migrated: updates.length };

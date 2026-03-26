@@ -1,4 +1,11 @@
 import { moduleAssetPath } from '../../../common.js';
+
+function stripJsComments(source = '') {
+  return String(source)
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/(^|[^:])\/\/.*$/gm, '$1');
+}
+
 export default {
   id: 'P1-TC-11',
   title: 'Architecture Contract: Foundry-Core-Hooks bleiben im Single Entry Point',
@@ -8,12 +15,16 @@ export default {
   whereToFind: 'modules/Janus7/scripts/janus.mjs',
   async run(_ctx) {
     try {
-      const [janusTxt, phase4Txt, questTxt, moonTxt] = await Promise.all([
+      const [janusTxtRaw, phase4TxtRaw, questTxtRaw, moonTxtRaw] = await Promise.all([
         fetch(moduleAssetPath('scripts/janus.mjs')).then(r => r.text()),
         fetch(moduleAssetPath('academy/phase4.js')).then(r => r.text()),
         fetch(moduleAssetPath('scripts/integration/quest-system-integration.js')).then(r => r.text()),
         fetch(moduleAssetPath('bridge/dsa5/moon.js')).then(r => r.text())
       ]);
+      const janusTxt = stripJsComments(janusTxtRaw);
+      const phase4Txt = stripJsComments(phase4TxtRaw);
+      const questTxt = stripJsComments(questTxtRaw);
+      const moonTxt = stripJsComments(moonTxtRaw);
 
       const mustContain = [
         "Hooks.on('getSceneControlButtons'",

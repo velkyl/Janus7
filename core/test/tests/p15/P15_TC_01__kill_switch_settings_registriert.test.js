@@ -1,3 +1,5 @@
+import { MODULE_ID } from '../../../common.js';
+
 /**
  * P15_TC_01 — Kill-Switch Settings sind registriert
  *
@@ -15,7 +17,7 @@ export default {
   whereToFind: "game.settings.get('janus7', <key>)",
   async run({ ctx }) {
     const engine = ctx?.engine;
-    const ns = "janus7";
+    const ns = MODULE_ID;
 
     if (!engine?.config?.KILL_SWITCHES) {
       return { ok: false, summary: "engine.config.KILL_SWITCHES fehlt" };

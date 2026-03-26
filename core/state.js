@@ -304,7 +304,7 @@ migrateState(stateObj = this._state) {
   let changed = false;
 
   // Strip legacy/transport wrappers that must never live inside the canonical state.
-  for (const k of ['version', 'state', 'ui', 'changed']) {
+  for (const k of ['version', 'state', 'ui', 'changed', 'simulation']) {
     if (Object.prototype.hasOwnProperty.call(stateObj, k)) {
       delete stateObj[k];
       changed = true;

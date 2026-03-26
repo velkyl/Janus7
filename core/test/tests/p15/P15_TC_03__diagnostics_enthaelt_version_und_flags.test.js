@@ -11,7 +11,7 @@ export default {
   title: "Diagnostics enthält Version & Flags",
   phases: [15],
   kind: "automated",
-  expected: "Diagnostics Report beinhaltet eine Modulversion und einen Settings/Flags-Snapshot.",
+  expected: "Diagnostics Report beinhaltet eine Modulversion, einen Settings/Flags-Snapshot und der Health-Command liefert denselben Report konvergent aus.",
   whereToFind: "engine.diagnostics.report()",
   async run({ ctx }) {
     const engine = ctx?.engine;
@@ -43,6 +43,34 @@ export default {
       return { ok: false, summary: `meta.settings fehlen: ${missing.join(", ")}` };
     }
 
-    return { ok: true, summary: `OK (moduleVersion=${mv})` };
+    const notes = [`moduleVersion=${mv}`];
+    const healthCommand = engine?.commands?.runHealthCheck;
+    if (typeof healthCommand === "function" && game?.user?.isGM) {
+      const cmd = await healthCommand({});
+      if (cmd?.success !== true) {
+        return { ok: false, summary: "commands.runHealthCheck() fehlgeschlagen" };
+      }
+
+      const commandReport = cmd?.data?.report;
+      if (!commandReport || typeof commandReport !== "object") {
+        return { ok: false, summary: "commands.runHealthCheck() liefert keinen Diagnostics-Report" };
+      }
+
+      if (commandReport.health !== rep.health) {
+        return {
+          ok: false,
+          summary: `Health-Drift zwischen diagnostics.report (${rep.health}) und commands.runHealthCheck (${commandReport.health})`
+        };
+      }
+
+      const commandResults = cmd?.data?.results;
+      if (!commandResults || typeof commandResults !== "object") {
+        return { ok: false, summary: "commands.runHealthCheck() liefert keine strukturierte Result-Map" };
+      }
+
+      notes.push(`commandHealth=${commandReport.health}`);
+    }
+
+    return { ok: true, summary: `OK (${notes.join(", ")})`, notes };
   },
 };

@@ -149,23 +149,89 @@ async openKiBackupManager(_dataset = {}) {
     const engine = _engine();
     
     return await _wrap('runHealthCheck', async () => {
+      const diagnosticsFn =
+        engine?.diagnostics?.report
+        ?? engine?.diagnostics?.run
+        ?? engine?.capabilities?.state?.runHealthCheck;
+      if (typeof diagnosticsFn !== 'function') {
+        throw new Error('Diagnostics report unavailable');
+      }
+
+      const report = await diagnosticsFn({ notify: false, verbose: false });
+      if (!report || typeof report !== 'object') {
+        throw new Error('Diagnostics report unavailable');
+      }
+
+      const serviceReport =
+        engine?.serviceRegistry?.getReport?.()
+        ?? engine?.services?.registry?.getReport?.()
+        ?? { ready: [], pending: [], uptime: {} };
+      const readyServices = new Set(serviceReport?.ready ?? []);
+      const errorSummary = engine?.errors?.getSummary?.()
+        ?? { totalErrors: 0, totalWarnings: 0, byPhase: {}, latest: [] };
+
+      const subsystemStatus = (enabled, available, { disabled = 'DISABLED', present = 'OK', absent = 'OPTIONAL' } = {}) => {
+        if (enabled === false) return disabled;
+        return available ? present : absent;
+      };
+
       const results = {
         core: { status: engine?.core ? 'OK' : 'MISSING' },
         state: { status: engine?.core?.state ? 'OK' : 'MISSING' },
-        calendar: { status: engine?.academy?.calendar ? 'OK' : 'MISSING' },
-        bridge: { status: engine?.bridge?.dsa5 ? 'OK' : 'MISSING' },
-        quests: { status: engine?.academy?.quests ? 'OK' : 'MISSING' },
-        atmosphere: { status: engine?.atmosphere ? 'OK' : 'MISSING' }
+        diagnostics: {
+          status: String(report?.health ?? 'unknown').toUpperCase(),
+          checks: Array.isArray(report?.checks) ? report.checks.length : 0,
+          warnings: Number(report?.summary?.warn ?? 0),
+          failures: Number(report?.summary?.fail ?? 0)
+        },
+        calendar: {
+          status: subsystemStatus(
+            JanusConfig.isSubsystemEnabled('simulation'),
+            Boolean(engine?.simulation?.calendar ?? engine?.academy?.calendar),
+            { absent: 'UNVERIFIED' }
+          )
+        },
+        bridge: {
+          status: game?.system?.id === 'dsa5'
+            ? (engine?.bridge?.dsa5 || readyServices.has('bridge.dsa5') ? 'OK' : 'MISSING')
+            : 'N/A'
+        },
+        quests: {
+          status: subsystemStatus(
+            JanusConfig.isSubsystemEnabled('quests'),
+            Boolean(engine?.simulation?.quests ?? engine?.academy?.quests),
+            { absent: 'UNVERIFIED' }
+          )
+        },
+        atmosphere: {
+          status: subsystemStatus(
+            JanusConfig.isSubsystemEnabled('atmosphere'),
+            Boolean(engine?.atmosphere),
+            { absent: 'OPTIONAL' }
+          )
+        },
+        runtimeIssues: {
+          status: Number(errorSummary?.totalErrors ?? 0) > 0
+            ? 'ERRORS'
+            : (Number(errorSummary?.totalWarnings ?? 0) > 0 ? 'WARN' : 'OK'),
+          errors: Number(errorSummary?.totalErrors ?? 0),
+          warnings: Number(errorSummary?.totalWarnings ?? 0)
+        }
       };
       
-      const allOk = Object.values(results).every(r => r.status === 'OK');
+      const health = String(report?.health ?? 'unknown');
+      const allOk = health === 'ok';
+      const notifyLevel = health === 'fail' ? 'error' : (health === 'warn' ? 'warn' : 'info');
+      const summaryText = health === 'ok'
+        ? 'All Systems OK'
+        : (health === 'warn' ? 'Warnings Present' : 'Issues Found');
       
       console.table(results);
-      ui.notifications[allOk ? 'info' : 'warn'](
-        `Health Check: ${allOk ? 'All Systems OK' : 'Issues Found'}`
+      ui.notifications[notifyLevel](
+        `Health Check: ${summaryText}`
       );
       
-      return { results, allOk };
+      return { results, allOk, health, report };
     });
   },
 
