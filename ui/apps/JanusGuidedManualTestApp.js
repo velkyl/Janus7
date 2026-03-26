@@ -302,7 +302,103 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     return true;
   }
 
+  _notesForTest(testId) {
+    if (testId && testId === this._selectedId) return this._notesValue();
+    return String(this._manualResults?.[testId]?.notes ?? '').trim();
+  }
+
+  _guidedProgress(test = null) {
+    const current = test ?? this._selectedTest();
+    if (!current) return null;
+
+    const guide = this._guideFor(current);
+    const checks = toArray(guide?.preconditions).map((check, idx) => {
+      const id = check.id ?? `check-${idx + 1}`;
+      const stored = this._checkState(current.id, id);
+      const status = String(stored?.status ?? 'OPEN').toUpperCase();
+      return {
+        id,
+        status,
+        ok: status === 'OK',
+        failed: status === 'FAIL'
+      };
+    });
+
+    const steps = toArray(guide?.steps).map((step, idx) => {
+      const id = step.id ?? `step-${idx + 1}`;
+      const stored = this._stepState(current.id, id);
+      const status = String(stored?.status ?? 'OPEN').toUpperCase();
+      const satisfied = step?.action ? status === 'OK' : (status === 'DONE' || status === 'OK');
+      return {
+        id,
+        status,
+        failed: status === 'FAIL',
+        satisfied
+      };
+    });
+
+    const evidenceCount = this._currentEvidence(current.id).length;
+    const touched = evidenceCount > 0
+      || checks.some((entry) => entry.status !== 'OPEN')
+      || steps.some((entry) => entry.status !== 'OPEN');
+    const checksSatisfied = checks.every((entry) => entry.ok);
+    const stepsSatisfied = steps.every((entry) => entry.satisfied);
+    const blockingFailures = [
+      ...checks.filter((entry) => entry.failed).map((entry) => `check:${entry.id}`),
+      ...steps.filter((entry) => entry.failed).map((entry) => `step:${entry.id}`)
+    ];
+
+    return {
+      testId: current.id,
+      totalChecks: checks.length,
+      totalSteps: steps.length,
+      okChecks: checks.filter((entry) => entry.ok).length,
+      okSteps: steps.filter((entry) => entry.satisfied).length,
+      evidenceCount,
+      touched,
+      checksSatisfied,
+      stepsSatisfied,
+      blockingFailures,
+      readyForAutoPass: touched && blockingFailures.length === 0 && checksSatisfied && stepsSatisfied
+    };
+  }
+
+  _buildAutoPassNote(progress) {
+    return `[GUIDED AUTO ${GUIDED_HARNESS_VERSION}] Preconditions OK (${progress?.okChecks ?? 0}/${progress?.totalChecks ?? 0}), Schritte vollständig (${progress?.okSteps ?? 0}/${progress?.totalSteps ?? 0}), Evidence=${progress?.evidenceCount ?? 0}`;
+  }
+
+  async _adoptReadyGuidedTests({ tests = null, render = true, force = false } = {}) {
+    const candidates = Array.isArray(tests) && tests.length ? tests : this._tests;
+    const adopted = [];
+
+    for (const test of candidates) {
+      if (!test?.id) continue;
+      const existingStatus = String(this._manualResults?.[test.id]?.status ?? '').trim().toUpperCase();
+      if (existingStatus && !force) continue;
+
+      const progress = this._guidedProgress(test);
+      if (!progress?.readyForAutoPass) continue;
+
+      const notes = [this._notesForTest(test.id), this._buildAutoPassNote(progress)].filter(Boolean).join(' | ');
+      await writeManualTestResult(test.id, {
+        status: 'PASS',
+        notes,
+        evidence: this._currentEvidence(test.id)
+      }, test);
+
+      adopted.push({ id: test.id, title: test.title, notes, progress });
+    }
+
+    if (adopted.length) {
+      await this._loadManualResults();
+      if (render) await this.render(true);
+    }
+
+    return adopted;
+  }
+
   async _finishIfComplete() {
+    await this._adoptReadyGuidedTests({ render: false });
     const counts = this._buildCounts();
     if (counts.pending > 0 || this._completed) return;
     this._completed = true;
@@ -332,6 +428,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     };
     this._appendEvidence(test.id, buildEvidenceRecord('check', checkId, check.label, { ...result, data: result?.details ?? null }));
     this._lastRun = { kind: 'check', id: checkId, summary: result?.summary ?? '' };
+    await this._adoptReadyGuidedTests({ tests: [test], render: false });
     await this.render(true);
   }
 
@@ -370,6 +467,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
         preview: step.help || ''
       });
       this._lastRun = { kind: 'step', id: stepId, summary: 'Vom Nutzer bestätigt' };
+      await this._adoptReadyGuidedTests({ tests: [test], render: false });
       await this.render(true);
       return;
     }
@@ -384,6 +482,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     };
     this._appendEvidence(test.id, buildEvidenceRecord('step', stepId, step.label, result));
     this._lastRun = { kind: 'step', id: stepId, summary: result?.summary ?? '' };
+    await this._adoptReadyGuidedTests({ tests: [test], render: false });
     await this.render(true);
   }
 
@@ -471,6 +570,10 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
   static async onVerifyCatalog() {
     const engine = game?.janus7 ?? this._getEngine();
     if (!engine?.test?.runCatalog) return ui.notifications?.warn?.(this._t('JANUS7.GuidedManual.CatalogUnavailable', 'Testkatalog nicht verfügbar.'));
+    const adopted = await this._adoptReadyGuidedTests({ render: false });
+    if (adopted.length) {
+      ui.notifications?.info?.(`${adopted.length} Guided-Ergebnisse als PASS übernommen.`);
+    }
     const data = await engine.test.runCatalog({ openWindow: true });
     const counts = this._buildCounts();
     const summary = data?.summary ?? {};
@@ -557,6 +660,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
   }
 
   async close(options = {}) {
+    await this._adoptReadyGuidedTests({ render: false });
     if (!this._completed && this._completionResolver) {
       this._completionResolver({
         completed: false,
