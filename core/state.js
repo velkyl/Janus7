@@ -736,6 +736,9 @@ migrateState(stateObj = this._state) {
   set(path, value) {
     const canonicalPath = normalizeStatePathAlias(path, { warnLogger: this.logger });
     const oldValue = this.getPath(canonicalPath);
+    if (deepEqualJson(oldValue, value)) {
+      return this.getPath(canonicalPath);
+    }
     foundry.utils.setProperty(this._state, canonicalPath, value);
     this._touchMeta();
 
