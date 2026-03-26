@@ -1,5 +1,13 @@
 import { moduleTemplatePath } from '../../core/common.js';
-import { JANUS_LESSON_SUBTYPE, JANUS_LESSON_DEFAULT_IMG } from '../../scripts/documents/lesson-constants.js';
+import {
+  JANUS_LESSON_DEFAULT_IMG,
+  JANUS_LESSON_FLAG_SCOPE,
+  JANUS_LESSON_SHEET_CLASS,
+  JANUS_LESSON_SUBTYPE,
+  buildLessonBookSystemData,
+  buildLessonFlagData,
+  getLessonPayload
+} from '../../scripts/documents/lesson-constants.js';
 
 const ItemSheetBase = foundry?.appv1?.sheets?.ItemSheet ?? foundry?.applications?.sheets?.ItemSheet ?? null;
 
@@ -17,23 +25,23 @@ export class JanusLessonItemSheet extends ItemSheetBase {
     });
   }
 
-  getData(options={}) {
+  getData(options = {}) {
     const data = super.getData(options);
-    const item = this.item;
+    const lesson = getLessonPayload(this.item);
     data.lessonType = JANUS_LESSON_SUBTYPE;
-    data.system = item.system ?? {};
-    data.img = item.img || JANUS_LESSON_DEFAULT_IMG;
-    data.yearRange = [item.system?.yearMin ?? '', item.system?.yearMax ?? ''];
-    data.prettyMechanics = JSON.stringify(item.system?.mechanics ?? {}, null, 2);
-    data.prettyScoring = JSON.stringify(item.system?.scoringImpact ?? {}, null, 2);
-    data.prettyReferences = JSON.stringify(item.system?.references ?? {}, null, 2);
-    data.prettySource = JSON.stringify(item.system?.source ?? {}, null, 2);
+    data.system = lesson;
+    data.img = this.item.img || JANUS_LESSON_DEFAULT_IMG;
+    data.yearRange = [lesson.yearMin ?? '', lesson.yearMax ?? ''];
+    data.prettyMechanics = JSON.stringify(lesson.mechanics ?? {}, null, 2);
+    data.prettyScoring = JSON.stringify(lesson.scoringImpact ?? {}, null, 2);
+    data.prettyReferences = JSON.stringify(lesson.references ?? {}, null, 2);
+    data.prettySource = JSON.stringify(lesson.source ?? {}, null, 2);
     return data;
   }
 
-  async _updateObject(event, formData) {
+  async _updateObject(_event, formData) {
     const expanded = foundry.utils.expandObject(formData);
-    const system = expanded.system ?? {};
+    const lesson = foundry.utils.mergeObject(getLessonPayload(this.item), expanded.system ?? {}, { inplace: false, recursive: true });
     const parseErrors = [];
     const parseJson = (value, fallback, label) => {
       if (!value || !String(value).trim()) return fallback;
@@ -44,29 +52,47 @@ export class JanusLessonItemSheet extends ItemSheetBase {
         return fallback;
       }
     };
-    system.tags = String(system.tags ?? '')
+
+    lesson.tags = String(lesson.tags ?? '')
       .split(',')
-      .map((t) => t.trim())
+      .map((tag) => tag.trim())
       .filter(Boolean);
-    system.yearMin = Number.isFinite(Number(system.yearMin)) ? Number(system.yearMin) : null;
-    system.yearMax = Number.isFinite(Number(system.yearMax)) ? Number(system.yearMax) : null;
-    system.durationSlots = Math.max(1, Number(system.durationSlots) || 1);
-    system.mechanics = parseJson(system.mechanicsJson, system.mechanics ?? {}, 'Mechanics JSON');
-    system.scoringImpact = parseJson(system.scoringJson, system.scoringImpact ?? {}, 'Scoring JSON');
-    system.references = parseJson(system.referencesJson, system.references ?? {}, 'References JSON');
-    system.source = parseJson(system.sourceJson, system.source ?? {}, 'Source JSON');
+    lesson.yearMin = Number.isFinite(Number(lesson.yearMin)) ? Number(lesson.yearMin) : null;
+    lesson.yearMax = Number.isFinite(Number(lesson.yearMax)) ? Number(lesson.yearMax) : null;
+    lesson.durationSlots = Math.max(1, Number(lesson.durationSlots) || 1);
+    lesson.mechanics = parseJson(lesson.mechanicsJson, lesson.mechanics ?? {}, 'Mechanics JSON');
+    lesson.scoringImpact = parseJson(lesson.scoringJson, lesson.scoringImpact ?? {}, 'Scoring JSON');
+    lesson.references = parseJson(lesson.referencesJson, lesson.references ?? {}, 'References JSON');
+    lesson.source = parseJson(lesson.sourceJson, lesson.source ?? {}, 'Source JSON');
+
     if (parseErrors.length) {
       const itemName = this.item?.name ?? 'lesson';
       const message = `Lesson sheet update aborted for "${itemName}": ${parseErrors.join(' | ')}`;
       ui?.notifications?.error?.(`[JANUS7] ${message}`);
       throw new Error(message);
     }
-    delete system.mechanicsJson;
-    delete system.scoringJson;
-    delete system.referencesJson;
-    delete system.sourceJson;
-    expanded.system = system;
-    return this.item.update(expanded);
+
+    delete lesson.mechanicsJson;
+    delete lesson.scoringJson;
+    delete lesson.referencesJson;
+    delete lesson.sourceJson;
+
+    return this.item.update({
+      name: expanded.name ?? this.item.name,
+      img: expanded.img ?? this.item.img ?? JANUS_LESSON_DEFAULT_IMG,
+      system: buildLessonBookSystemData(lesson, this.item.system ?? {}),
+      flags: foundry.utils.mergeObject(foundry.utils.deepClone(this.item.flags ?? {}), {
+        core: {
+          ...(this.item.flags?.core ?? {}),
+          sheetClass: JANUS_LESSON_SHEET_CLASS
+        },
+        [JANUS_LESSON_FLAG_SCOPE]: buildLessonFlagData(lesson, {
+          origin: this.item.getFlag(JANUS_LESSON_FLAG_SCOPE, 'origin') ?? 'manual',
+          sourceVersion: this.item.getFlag(JANUS_LESSON_FLAG_SCOPE, 'sourceVersion') ?? game.modules?.get(JANUS_LESSON_FLAG_SCOPE)?.version ?? 'unknown',
+          legacyType: this.item.getFlag(JANUS_LESSON_FLAG_SCOPE, 'legacyType') ?? null
+        })
+      }, { inplace: false, recursive: true })
+    }, { diff: false });
   }
 }
 

@@ -1,7 +1,19 @@
 import { emitHook, HOOKS } from '../../core/hooks/emitter.js';
 import { MODULE_ID } from '../../core/common.js';
-import JanusLessonDataModel from '../documents/JanusLessonDataModel.js';
-import { JANUS_LESSON_DEFAULT_IMG, JANUS_LESSON_FLAG_SCOPE, JANUS_LESSON_FOLDER_NAME, JANUS_LESSON_SUBTYPE } from '../documents/lesson-constants.js';
+import {
+  JANUS_LESSON_DEFAULT_IMG,
+  JANUS_LESSON_FLAG_SCOPE,
+  JANUS_LESSON_FOLDER_NAME,
+  JANUS_LESSON_ITEM_TYPE,
+  JANUS_LESSON_SHEET_CLASS,
+  JANUS_LESSON_SUBTYPE,
+  buildLessonBookSystemData,
+  buildLessonFlagData,
+  getLessonFlagBlock,
+  getLessonPayload,
+  isJanusLessonDocument,
+  isLegacyLessonItemType
+} from '../documents/lesson-constants.js';
 import { JanusLessonItemSheet } from '../../ui/apps/JanusLessonItemSheet.js';
 
 function getStateNpcMap(engine) {
@@ -26,7 +38,7 @@ function toLocationUuid(engine, lesson) {
   return String(raw).startsWith('Scene.') ? String(raw) : `Scene.${raw}`;
 }
 
-function lessonSystemData(engine, lesson) {
+function lessonPayload(engine, lesson) {
   return {
     lessonId: lesson.id,
     subject: lesson.subject ?? '',
@@ -48,23 +60,104 @@ function lessonSystemData(engine, lesson) {
   };
 }
 
+function getLessonDocuments() {
+  return game.items?.filter?.((item) => isJanusLessonDocument(item)) ?? [];
+}
+
+function buildLessonDocumentData({ payload, source = {}, folderId = null, extraFlags = {} } = {}) {
+  const flags = getLessonFlagBlock(source);
+  const sourceFlags = foundry.utils.deepClone(source?.flags ?? {});
+  const moduleFlags = buildLessonFlagData(payload, {
+    origin: extraFlags.origin ?? flags.origin ?? 'manual',
+    sourceVersion: extraFlags.sourceVersion ?? flags.sourceVersion ?? game.modules?.get(MODULE_ID)?.version ?? 'unknown',
+    legacyType: extraFlags.legacyType ?? flags.legacyType ?? null
+  });
+
+  return {
+    name: source?.name ?? payload.lessonId ?? 'Lesson',
+    type: JANUS_LESSON_ITEM_TYPE,
+    img: source?.img ?? JANUS_LESSON_DEFAULT_IMG,
+    folder: source?.folder ?? folderId ?? null,
+    system: buildLessonBookSystemData(payload, source?.system ?? {}),
+    flags: foundry.utils.mergeObject(sourceFlags, {
+      core: {
+        ...(source?.flags?.core ?? {}),
+        sheetClass: JANUS_LESSON_SHEET_CLASS
+      },
+      [JANUS_LESSON_FLAG_SCOPE]: moduleFlags
+    }, { inplace: false, recursive: true })
+  };
+}
+
 async function ensureLessonFolder() {
   const existing = game.folders?.find((f) => f.type === 'Item' && f.name === JANUS_LESSON_FOLDER_NAME);
   if (existing) return existing;
   return Folder.create({ name: JANUS_LESSON_FOLDER_NAME, type: 'Item', color: '#5a7cb8' });
 }
 
-export function registerLessonDocuments() {
-  CONFIG.Item.dataModels ??= {};
-  CONFIG.Item.dataModels[JANUS_LESSON_SUBTYPE] = JanusLessonDataModel;
+async function migrateLegacyLessonDocuments(folder) {
+  const seen = new Set();
+  const candidates = [];
+  const addCandidate = (document) => {
+    if (!document) return;
+    const source = document?._source ?? document;
+    const id = source?._id ?? document?.id ?? null;
+    if (!id || seen.has(id)) return;
+    const flags = getLessonFlagBlock(source);
+    const needsMigration = isLegacyLessonItemType(source?.type)
+      || ((source?.type === JANUS_LESSON_ITEM_TYPE) && (flags?.subtype === JANUS_LESSON_SUBTYPE) && (source?.flags?.core?.sheetClass !== JANUS_LESSON_SHEET_CLASS))
+      || ((source?.type === JANUS_LESSON_ITEM_TYPE) && flags?.lessonId && !flags?.lessonData);
+    if (!needsMigration) return;
+    seen.add(id);
+    candidates.push(document);
+  };
 
+  for (const id of Array.from(game.items?.invalidDocumentIds ?? [])) {
+    try {
+      addCandidate(game.items.get(id, { invalid: true }));
+    } catch (_err) {
+      // Ignore ids that vanished while the world was initializing.
+    }
+  }
+
+  for (const item of getLessonDocuments()) addCandidate(item);
+
+  const updates = candidates.map((document) => {
+    const source = document?._source ?? document;
+    const flags = getLessonFlagBlock(source);
+    const payload = getLessonPayload(source);
+    if (!payload.lessonId) payload.lessonId = foundry.utils.randomID();
+    return {
+      _id: source?._id ?? document?.id,
+      ...buildLessonDocumentData({
+        payload,
+        source,
+        folderId: folder?.id ?? null,
+        extraFlags: {
+          origin: flags.origin ?? (isLegacyLessonItemType(source?.type) ? 'migrated-legacy-type' : 'manual'),
+          sourceVersion: flags.sourceVersion ?? game.modules?.get(MODULE_ID)?.version ?? 'unknown',
+          legacyType: isLegacyLessonItemType(source?.type) ? String(source.type) : (flags.legacyType ?? null)
+        }
+      })
+    };
+  });
+
+  if (updates.length > 0) {
+    await Item.updateDocuments(updates, { diff: false });
+  }
+
+  return { migrated: updates.length };
+}
+
+export function registerLessonDocuments() {
   try {
     const DSC = foundry.applications?.apps?.DocumentSheetConfig ?? globalThis.DocumentSheetConfig;
     if (DSC?.registerSheet) {
       DSC.registerSheet(Item, MODULE_ID, JanusLessonItemSheet, {
-        types: [JANUS_LESSON_SUBTYPE],
+        types: [JANUS_LESSON_ITEM_TYPE],
         label: 'JANUS Lesson',
-        makeDefault: true
+        makeDefault: false,
+        canBeDefault: false
       });
       return;
     }
@@ -72,9 +165,9 @@ export function registerLessonDocuments() {
 
   try {
     Items.registerSheet(MODULE_ID, JanusLessonItemSheet, {
-      types: [JANUS_LESSON_SUBTYPE],
+      types: [JANUS_LESSON_ITEM_TYPE],
       label: 'JANUS Lesson',
-      makeDefault: true
+      makeDefault: false
     });
   } catch (err) {
     console.warn('[JANUS7] Lesson sheet registration failed', err);
@@ -83,33 +176,37 @@ export function registerLessonDocuments() {
 
 export async function createEmptyLessonDocument() {
   const folder = await ensureLessonFolder();
+  const lessonId = foundry.utils.randomID();
+  const payload = {
+    lessonId,
+    subject: '',
+    teacherNpcId: '',
+    teacherUuid: '',
+    locationId: '',
+    locationUuid: '',
+    yearMin: null,
+    yearMax: null,
+    durationSlots: 1,
+    difficulty: 'normal',
+    summary: '',
+    tags: [],
+    mechanics: {},
+    scoringImpact: {},
+    references: {},
+    source: {}
+  };
   return Item.create({
     name: 'Neue Lesson',
-    type: JANUS_LESSON_SUBTYPE,
+    type: JANUS_LESSON_ITEM_TYPE,
     img: JANUS_LESSON_DEFAULT_IMG,
     folder: folder?.id,
-    system: {
-      lessonId: foundry.utils.randomID(),
-      subject: '',
-      teacherNpcId: '',
-      teacherUuid: '',
-      locationId: '',
-      locationUuid: '',
-      yearMin: null,
-      yearMax: null,
-      durationSlots: 1,
-      difficulty: 'normal',
-      summary: '',
-      tags: [],
-      mechanics: {},
-      scoringImpact: {},
-      references: {},
-      source: {}
-    },
+    system: buildLessonBookSystemData(payload),
     flags: {
+      core: {
+        sheetClass: JANUS_LESSON_SHEET_CLASS
+      },
       [JANUS_LESSON_FLAG_SCOPE]: {
-        lessonId: foundry.utils.randomID(),
-        origin: 'manual'
+        ...buildLessonFlagData(payload, { origin: 'manual' })
       }
     }
   });
@@ -119,37 +216,36 @@ export async function ensureLessonDocumentsReady(engine, { forceSync = false } =
   const academyData = engine?.academy?.data ?? engine?.academy?.dataApi ?? game?.janus7?.academy?.data ?? null;
   const lessons = academyData?.getLessons?.() ?? [];
   const folder = await ensureLessonFolder();
-  const existing = game.items.filter((i) => i.type === JANUS_LESSON_SUBTYPE);
-  const byLessonId = new Map(existing.map((i) => [i.getFlag(JANUS_LESSON_FLAG_SCOPE, 'lessonId') ?? i.system?.lessonId, i]));
+  const migration = await migrateLegacyLessonDocuments(folder);
+  const existing = getLessonDocuments();
+  const byLessonId = new Map(existing.map((item) => [getLessonPayload(item).lessonId, item]));
   let created = 0;
   let updated = 0;
   const toCreate = [];
   const toUpdate = [];
 
   for (const lesson of lessons) {
-    const data = {
-      name: lesson.name || lesson.id,
-      type: JANUS_LESSON_SUBTYPE,
-      img: JANUS_LESSON_DEFAULT_IMG,
-      folder: folder?.id,
-      system: lessonSystemData(engine, lesson),
-      flags: {
-        [JANUS_LESSON_FLAG_SCOPE]: {
-          lessonId: lesson.id,
-          origin: 'academy-data',
-          sourceVersion: game.modules?.get(MODULE_ID)?.version ?? 'unknown'
-        }
-      }
-    };
-
+    const payload = lessonPayload(engine, lesson);
     const existingDoc = byLessonId.get(lesson.id);
+    const data = buildLessonDocumentData({
+      payload,
+      source: existingDoc?._source ?? {},
+      folderId: folder?.id ?? null,
+      extraFlags: {
+        origin: 'academy-data',
+        sourceVersion: game.modules?.get(MODULE_ID)?.version ?? 'unknown'
+      }
+    });
+
     if (!existingDoc) {
+      data.name = lesson.name || lesson.id;
       toCreate.push(data);
       continue;
     }
 
     if (forceSync) {
       data._id = existingDoc.id;
+      data.name = lesson.name || lesson.id;
       toUpdate.push(data);
     }
   }
@@ -167,14 +263,16 @@ export async function ensureLessonDocumentsReady(engine, { forceSync = false } =
   engine.academy ??= {};
   engine.academy.documents ??= {};
   engine.academy.documents.lessons = {
+    itemType: JANUS_LESSON_ITEM_TYPE,
     subtype: JANUS_LESSON_SUBTYPE,
-    list: () => game.items.filter((i) => i.type === JANUS_LESSON_SUBTYPE),
-    getByLessonId: (lessonId) => game.items.find((i) => i.type === JANUS_LESSON_SUBTYPE && (i.getFlag(JANUS_LESSON_FLAG_SCOPE, 'lessonId') === lessonId || i.system?.lessonId === lessonId)) ?? null,
+    sheetClass: JANUS_LESSON_SHEET_CLASS,
+    list: () => getLessonDocuments(),
+    getByLessonId: (lessonId) => getLessonDocuments().find((item) => getLessonPayload(item).lessonId === lessonId) ?? null,
     ensureReady: (opts = {}) => ensureLessonDocumentsReady(engine, opts)
   };
 
-  emitHook(HOOKS.LESSON_DOCUMENTS_READY, { created, updated, total: game.items.filter((i) => i.type === JANUS_LESSON_SUBTYPE).length });
-  return { created, updated };
+  emitHook(HOOKS.LESSON_DOCUMENTS_READY, { created, updated, migrated: migration.migrated, total: getLessonDocuments().length });
+  return { created, updated, migrated: migration.migrated };
 }
 
 export default { registerLessonDocuments, ensureLessonDocumentsReady, createEmptyLessonDocument };

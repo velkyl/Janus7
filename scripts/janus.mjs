@@ -26,6 +26,7 @@ import { handleChatMessage } from '../services/chat/cli.js';
 import { SceneRegionsBridge } from '../bridges/foundry/SceneRegionsBridge.mjs';
 import { JanusControlPanelApp } from '../ui/apps/control-panel/JanusControlPanelApp.js';
 import { registerLessonDocuments, ensureLessonDocumentsReady } from './integration/phase2-document-content-integration.js';
+import { JANUS_LESSON_ITEM_TYPE, JANUS_LESSON_SHEET_CLASS, JANUS_LESSON_SUBTYPE } from './documents/lesson-constants.js';
 
 // Sidebar Tab (Foundry v13+)
 // - left scene controls are registered here during init/render lifecycle
@@ -531,7 +532,11 @@ try {
 try {
   const docSync = await ensureLessonDocumentsReady(engine, { forceSync: false });
   engine.documents ??= {};
-  engine.documents.lesson = engine.academy?.documents?.lessons ?? { subtype: 'janus7.lesson' };
+  engine.documents.lesson = engine.academy?.documents?.lessons ?? {
+    itemType: JANUS_LESSON_ITEM_TYPE,
+    subtype: JANUS_LESSON_SUBTYPE,
+    sheetClass: JANUS_LESSON_SHEET_CLASS
+  };
   _markReady(engine, 'documents.lesson', engine.documents.lesson);
   log.info?.(`[JANUS7] Lesson documents ready (created=${docSync?.created ?? 0}, updated=${docSync?.updated ?? 0}).`);
 } catch (lessonDocErr) {

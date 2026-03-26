@@ -2,7 +2,7 @@ import { moduleTemplatePath } from '../../core/common.js';
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 import { JanusBaseApp } from '../core/base-app.js';
 import { ensureLessonDocumentsReady, createEmptyLessonDocument } from '../../scripts/integration/phase2-document-content-integration.js';
-import { JANUS_LESSON_SUBTYPE } from '../../scripts/documents/lesson-constants.js';
+import { JANUS_LESSON_SUBTYPE, getLessonPayload, isJanusLessonDocument } from '../../scripts/documents/lesson-constants.js';
 
 export class JanusLessonLibraryApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   static _instance = null;
@@ -16,7 +16,7 @@ export class JanusLessonLibraryApp extends HandlebarsApplicationMixin(JanusBaseA
     id: 'janus7-lesson-library',
     classes: ['janus7-app', 'janus7-lesson-library'],
     position: { width: 980, height: 760, top: 80, left: 110 },
-    window: { title: 'JANUS7 · Lesson Library', icon: 'fas fa-book-open', resizable: true },
+    window: { title: 'JANUS7 - Lesson Library', icon: 'fas fa-book-open', resizable: true },
     actions: {
       refresh: async function() { this.render({ force: true }); },
       migrate: async function() {
@@ -47,17 +47,20 @@ export class JanusLessonLibraryApp extends HandlebarsApplicationMixin(JanusBaseA
   }
 
   async _prepareContext(_options) {
-    const docs = game.items?.filter((i) => i.type === JANUS_LESSON_SUBTYPE) ?? [];
+    const docs = game.items?.filter((item) => isJanusLessonDocument(item)) ?? [];
     const entries = docs
-      .map((item) => ({
-        uuid: item.uuid,
-        name: item.name,
-        subject: item.system?.subject || '—',
-        teacherNpcId: item.system?.teacherNpcId || '—',
-        year: [item.system?.yearMin ?? '—', item.system?.yearMax ?? '—'].join('–'),
-        duration: item.system?.durationSlots ?? 1,
-        lessonId: item.system?.lessonId || item.getFlag?.('janus7', 'lessonId') || '—'
-      }))
+      .map((item) => {
+        const lesson = getLessonPayload(item);
+        return {
+          uuid: item.uuid,
+          name: item.name,
+          subject: lesson.subject || '-',
+          teacherNpcId: lesson.teacherNpcId || '-',
+          year: [lesson.yearMin ?? '-', lesson.yearMax ?? '-'].join(' - '),
+          duration: lesson.durationSlots ?? 1,
+          lessonId: lesson.lessonId || '-'
+        };
+      })
       .sort((a, b) => String(a.subject).localeCompare(String(b.subject), 'de'));
 
     return {
