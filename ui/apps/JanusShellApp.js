@@ -29,7 +29,7 @@ function mapActions(actions = []) {
 export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   static DEFAULT_OPTIONS = {
     id: 'janus7-shell',
-    classes: ['janus7-app', 'janus7-shell'],
+    classes: ['janus7-app', 'janus7-shell', 'janus-shell-app'],
     position: { width: 1320, height: 860, left: 40, top: 40 },
     window: {
       title: 'JANUS7 · Shell Layer',

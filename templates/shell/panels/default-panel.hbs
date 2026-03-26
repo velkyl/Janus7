@@ -1,11 +1,10 @@
-
 <div class="j7-shell__panel">
   <header class="j7-shell__panel-head">
     <div>
-      <h3>{{panel.icon}} {{panel.title}}</h3>
+      <h3><i class="{{panel.icon}} j7-shell__panel-icon" aria-hidden="true"></i><span>{{panel.title}}</span></h3>
       <p>{{panel.description}}</p>
     </div>
-    <button type="button" class="j7-shell__panel-close" data-action="closePanel" aria-label="Panel schließen">×</button>
+    <button type="button" class="j7-shell__panel-close" data-action="closePanel" aria-label="Panel schliessen">&times;</button>
   </header>
 
   <div class="j7-shell__panel-summary">{{panel.summary}}</div>

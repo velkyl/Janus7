@@ -1,5 +1,5 @@
 
-<section class="j7-shell__root" aria-label="JANUS7 Shell Layer">
+<section class="j7-shell__root janus-shell-app" aria-label="JANUS7 Shell Layer">
   <header class="j7-shell__header">
     <div class="j7-shell__brand">
       <div class="j7-shell__brand-title">JANUS7</div>
@@ -13,7 +13,7 @@
     <div class="j7-shell__header-actions">
       {{#each header.quickPanels}}
         <button type="button" class="j7-shell__quick" data-action="openPanel" data-panel-id="{{id}}" title="{{title}}">
-          <span class="j7-shell__quick-icon">{{icon}}</span>
+          <i class="{{icon}} j7-shell__quick-icon" aria-hidden="true"></i>
         </button>
       {{/each}}
       <button type="button" class="j7-shell__command" data-action="togglePalette">{{shellPaletteHint}}</button>
@@ -32,7 +32,7 @@
                 data-action="selectView"
                 data-view-id="{{id}}"
                 aria-pressed="{{#if isActive}}true{{else}}false{{/if}}">
-          <span class="j7-shell__nav-icon">{{icon}}</span>
+          <i class="{{icon}} j7-shell__nav-icon" aria-hidden="true"></i>
           <span class="j7-shell__nav-copy">
             <strong>{{title}}</strong>
             <small>{{description}}</small>

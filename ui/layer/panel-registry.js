@@ -1,4 +1,3 @@
-
 /**
  * JANUS7 UI Layer - Panel Registry
  * Additive registry for the modular shell layer.
@@ -13,7 +12,7 @@ export function registerPanel(definition = {}) {
   const normalized = {
     id,
     title: definition.title ?? id,
-    icon: definition.icon ?? '■',
+    icon: definition.icon ?? 'fas fa-circle-dot',
     group: definition.group ?? 'tools',
     quick: definition.quick === true,
     appKey: definition.appKey ?? null,
@@ -80,7 +79,7 @@ function buildSocialPanel(engine) {
       { label: 'Status', value: engine?.academy?.social ? 'Aktiv' : 'Fehlt' }
     ],
     items: links.slice(0, 6).map((edge) => ({
-      label: `${edge?.from ?? edge?.source ?? '?'} → ${edge?.to ?? edge?.target ?? '?'}`,
+      label: `${edge?.from ?? edge?.source ?? '?'} -> ${edge?.to ?? edge?.target ?? '?'}`,
       value: edge?.attitude ?? edge?.weight ?? '—'
     }))
   };
@@ -188,7 +187,7 @@ const PANEL_DEFINITIONS = [
   {
     id: 'scoring',
     title: 'Scoring',
-    icon: '🏆',
+    icon: 'fas fa-trophy',
     group: 'director',
     quick: true,
     appKey: 'scoringView',
@@ -202,7 +201,7 @@ const PANEL_DEFINITIONS = [
   {
     id: 'social',
     title: 'Social',
-    icon: '👥',
+    icon: 'fas fa-users',
     group: 'director',
     quick: true,
     appKey: 'socialView',
@@ -216,7 +215,7 @@ const PANEL_DEFINITIONS = [
   {
     id: 'atmosphere',
     title: 'Atmosphäre',
-    icon: '🎵',
+    icon: 'fas fa-music',
     group: 'director',
     quick: true,
     appKey: 'atmosphereDJ',
@@ -231,7 +230,7 @@ const PANEL_DEFINITIONS = [
   {
     id: 'quests',
     title: 'Quests',
-    icon: '📜',
+    icon: 'fas fa-scroll',
     group: 'director',
     quick: true,
     appKey: null,
@@ -246,7 +245,7 @@ const PANEL_DEFINITIONS = [
   {
     id: 'ki',
     title: 'KI Roundtrip',
-    icon: '🤖',
+    icon: 'fas fa-brain',
     group: 'tools',
     quick: true,
     appKey: 'kiRoundtrip',
@@ -261,7 +260,7 @@ const PANEL_DEFINITIONS = [
   {
     id: 'sync',
     title: 'Sync',
-    icon: '🔗',
+    icon: 'fas fa-link',
     group: 'tools',
     quick: true,
     appKey: 'syncPanel',
@@ -276,7 +275,7 @@ const PANEL_DEFINITIONS = [
   {
     id: 'stateInspector',
     title: 'State Inspector',
-    icon: '💾',
+    icon: 'fas fa-database',
     group: 'tools',
     appKey: 'stateInspector',
     description: 'State-Inspektion und Debug-Einsicht.',
@@ -290,7 +289,7 @@ const PANEL_DEFINITIONS = [
   {
     id: 'config',
     title: 'Konfiguration',
-    icon: '⚙️',
+    icon: 'fas fa-sliders',
     group: 'tools',
     appKey: 'configPanel',
     description: 'Konfigurationsoberflächen und Mapping.',
@@ -303,7 +302,7 @@ const PANEL_DEFINITIONS = [
   {
     id: 'diagnostics',
     title: 'Diagnostik',
-    icon: '🔍',
+    icon: 'fas fa-stethoscope',
     group: 'tools',
     appKey: 'commandCenter',
     description: 'Graph, Cache, Fehler und Betriebszustand.',
@@ -318,7 +317,7 @@ const PANEL_DEFINITIONS = [
   {
     id: 'sessionPrep',
     title: 'Session Prep',
-    icon: '✨',
+    icon: 'fas fa-wand-magic-sparkles',
     group: 'tools',
     appKey: 'sessionPrepWizard',
     description: 'Vorbereitung der nächsten Session.',
@@ -331,7 +330,7 @@ const PANEL_DEFINITIONS = [
   {
     id: 'tests',
     title: 'Tests',
-    icon: '🧪',
+    icon: 'fas fa-flask-vial',
     group: 'tools',
     appKey: 'testResults',
     description: 'Runner, Results und Guided Tests.',
@@ -345,7 +344,7 @@ const PANEL_DEFINITIONS = [
   {
     id: 'backups',
     title: 'Backups',
-    icon: '🧰',
+    icon: 'fas fa-life-ring',
     group: 'tools',
     appKey: 'kiBackupManager',
     description: 'KI-Backups und Wiederherstellung.',
@@ -358,7 +357,7 @@ const PANEL_DEFINITIONS = [
   {
     id: 'dataStudio',
     title: 'Data Studio',
-    icon: '📊',
+    icon: 'fas fa-table',
     group: 'academy',
     appKey: 'academyDataStudio',
     description: 'Bearbeitung und Einsicht der Akademiedaten.',
@@ -371,7 +370,7 @@ const PANEL_DEFINITIONS = [
   {
     id: 'lessonLib',
     title: 'Lesson Library',
-    icon: '📖',
+    icon: 'fas fa-book-open',
     group: 'academy',
     appKey: 'lessonLibrary',
     description: 'Bibliothek aller Lektionen und Unterrichtsbausteine.',
@@ -384,7 +383,7 @@ const PANEL_DEFINITIONS = [
   {
     id: 'academyOverview',
     title: 'Academy Overview',
-    icon: '🏰',
+    icon: 'fas fa-calendar-alt',
     group: 'academy',
     appKey: 'academyOverview',
     description: 'Stundenplan, Wochenraster und Akademie-Overview.',

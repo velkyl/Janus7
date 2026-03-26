@@ -3,7 +3,7 @@
   <div class="j7-shell__tiles">
     {{#each tiles}}
       <button type="button" class="j7-shell__tile" data-action="openPanel" data-panel-id="{{id}}">
-        <span class="j7-shell__tile-icon">{{icon}}</span>
+        <i class="{{icon}} j7-shell__tile-icon" aria-hidden="true"></i>
         <span class="j7-shell__tile-copy">
           <strong>{{title}}</strong>
           <small>{{description}}</small>

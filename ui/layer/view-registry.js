@@ -1,4 +1,3 @@
-
 import { getPanels } from './panel-registry.js';
 
 const VIEW_REGISTRY = new Map();
@@ -9,7 +8,7 @@ export function registerView(definition = {}) {
   const normalized = {
     id,
     title: definition.title ?? id,
-    icon: definition.icon ?? '■',
+    icon: definition.icon ?? 'fas fa-circle-dot',
     description: definition.description ?? '',
     build: typeof definition.build === 'function' ? definition.build : (() => ({ cards: [] }))
   };
@@ -36,7 +35,7 @@ function buildDirectorView(engine) {
     cards: [
       {
         title: 'Zeitkontrolle',
-        icon: '⏱️',
+        icon: 'fas fa-clock',
         description: 'Direkte Zeitsteuerung über Director/Commands.',
         metrics: [
           { label: 'Tag', value: time?.dayName ?? time?.day ?? '—' },
@@ -52,7 +51,7 @@ function buildDirectorView(engine) {
       },
       {
         title: 'Director Runtime',
-        icon: '🧭',
+        icon: 'fas fa-compass-drafting',
         description: 'Workflow, Runbook und Betriebsmodi.',
         metrics: [
           { label: 'Director', value: engine?.core?.director ? 'Aktiv' : 'Fehlt' },
@@ -66,7 +65,7 @@ function buildDirectorView(engine) {
       },
       {
         title: 'Atmosphäre & Graph',
-        icon: '🎼',
+        icon: 'fas fa-wave-square',
         description: 'Laufende Stimmungs- und Graph-Indikatoren.',
         metrics: [
           { label: 'Nodes', value: graph?.nodes ?? graph?.nodeCount ?? 0 },
@@ -99,7 +98,7 @@ function buildAcademyView(engine) {
     cards: [
       {
         title: 'Akademie-Woche',
-        icon: '🗓️',
+        icon: 'fas fa-calendar-days',
         description: 'Heutige Einträge und Raster-Einstieg.',
         metrics: [
           { label: 'Einträge heute', value: dayEntries.length },
@@ -116,7 +115,7 @@ function buildAcademyView(engine) {
       },
       {
         title: 'Akademie-Daten',
-        icon: '📚',
+        icon: 'fas fa-book',
         description: 'Schnellzugriff auf Datendomänen.',
         metrics: [
           { label: 'Lektionen', value: lessons.length },
@@ -125,12 +124,12 @@ function buildAcademyView(engine) {
         ],
         actions: [
           { kind: 'openPanel', panelId: 'dataStudio', label: 'Data Studio', icon: 'fas fa-table' },
-          { kind: 'openPanel', panelId: 'lessonLib', label: 'Lesson Library', icon: 'fas fa-book' }
+          { kind: 'openPanel', panelId: 'lessonLib', label: 'Lesson Library', icon: 'fas fa-book-open' }
         ]
       },
       {
         title: 'Sozial & Wertung',
-        icon: '🏛️',
+        icon: 'fas fa-people-group',
         description: 'Brücke zu Social und Scoring.',
         actions: [
           { kind: 'openPanel', panelId: 'social', label: 'Social', icon: 'fas fa-users' },
@@ -157,7 +156,7 @@ function buildToolsView(_engine) {
 registerView({
   id: 'director',
   title: 'Director',
-  icon: '🧭',
+  icon: 'fas fa-compass',
   description: 'Standardansicht für Leitung, Zeit und Runtime.',
   build: buildDirectorView
 });
@@ -165,7 +164,7 @@ registerView({
 registerView({
   id: 'academy',
   title: 'Akademie',
-  icon: '🏰',
+  icon: 'fas fa-school',
   description: 'Setup-Ansicht für Stundenplan, Orte und Daten.',
   build: buildAcademyView
 });
@@ -173,7 +172,7 @@ registerView({
 registerView({
   id: 'tools',
   title: 'Werkzeuge',
-  icon: '🔧',
+  icon: 'fas fa-screwdriver-wrench',
   description: 'Werkzeuge, Panels und technische Subsysteme.',
   build: buildToolsView
 });

@@ -269,9 +269,9 @@
   min-width: 160px;
   background: var(--j7-surface);
 }
-.kpi__label { font-size: var(--j7-font-xs); color: var(--j7-text-dim); }
-.kpi__value { font-size: 1.4rem; font-weight: 700; margin-top: 2px; }
-.kpi__actions { display: flex; gap: var(--j7-gap-sm); flex-wrap: wrap; margin-top: 6px; }
+.janus7-app .kpi__label { font-size: var(--j7-font-xs); color: var(--j7-text-dim); }
+.janus7-app .kpi__value { font-size: 1.4rem; font-weight: 700; margin-top: 2px; }
+.janus7-app .kpi__actions { display: flex; gap: var(--j7-gap-sm); flex-wrap: wrap; margin-top: 6px; }
 
 /* --- KV Pairs / Details --------------------------------------------------- */
 .janus7-kv { display: grid; grid-template-columns: 120px 1fr; gap: 4px 10px; font-size: var(--j7-font-sm); }
@@ -354,7 +354,7 @@
   cursor: pointer;
 }
 .janus-toggle input[type="checkbox"] { transform: scale(1.1); }
-.hint { color: var(--j7-text-dim); font-size: var(--j7-font-sm); margin: 0 0 0.5rem 0; }
+.janus7-app .hint { color: var(--j7-text-dim); font-size: var(--j7-font-sm); margin: 0 0 0.5rem 0; }
 
 /* --- Control Panel specifics ---------------------------------------------- */
 .janus7-app .dashboard-grid {
@@ -377,7 +377,7 @@
   background: var(--j7-surface);
   margin-bottom: var(--j7-gap);
 }
-.btn-grid { display: flex; gap: var(--j7-gap-sm); flex-wrap: wrap; }
+.janus7-app .btn-grid { display: flex; gap: var(--j7-gap-sm); flex-wrap: wrap; }
 .janus7-app .diagnostics-pre {
   white-space: pre-wrap;
   font-family: var(--j7-font-mono);
@@ -389,7 +389,7 @@
   border-radius: var(--j7-radius);
   background: var(--j7-surface-3);
 }
-.muted { color: var(--j7-text-dim); font-size: var(--j7-font-sm); }
+.janus7-app .muted { color: var(--j7-text-dim); font-size: var(--j7-font-sm); }
 
 /* Control Panel: inline table (legacy) */
 .janus7-tab-container table:not(.janus7-table) {
@@ -448,8 +448,8 @@
 }
 
 .command-category { margin-bottom: var(--j7-gap-lg); }
-.category-header h3 { margin: 0 0 4px 0; font-size: 1rem; }
-.category-description { margin: 0 0 var(--j7-gap-sm) 0; font-size: var(--j7-font-sm); color: var(--j7-text-dim); font-style: italic; }
+.janus7-app .category-header h3 { margin: 0 0 4px 0; font-size: 1rem; }
+.janus7-app .category-description { margin: 0 0 var(--j7-gap-sm) 0; font-size: var(--j7-font-sm); color: var(--j7-text-dim); font-style: italic; }
 
 .janus7-app .category-commands {
   display: grid;
@@ -475,7 +475,7 @@
 }
 .command-button.unavailable { opacity: 0.35; cursor: not-allowed; }
 .command-button i { font-size: 1.3rem; }
-.command-label { font-size: var(--j7-font-sm); text-align: center; line-height: 1.2; }
+.janus7-app .command-label { font-size: var(--j7-font-sm); text-align: center; line-height: 1.2; }
 .janus7-app .unavailable-badge {
   position: absolute; top: 4px; right: 4px;
   padding: 1px 6px;
@@ -493,7 +493,7 @@
   border-top: 1px solid var(--j7-border);
   text-align: center;
 }
-.version-info { margin: 0; font-size: var(--j7-font-xs); color: var(--j7-text-dim); }
+.janus7-app .version-info { margin: 0; font-size: var(--j7-font-xs); color: var(--j7-text-dim); }
 
 /* --- Test Harness --------------------------------------------------------- */
 .j7-test-harness { padding: var(--j7-gap); }
@@ -958,8 +958,8 @@
 }
 
 /* Tag variants */
-.tag--ok  { background: #1a4a1a !important; color: #6ef56e !important; }
-.tag--err { background: #4a1a1a !important; color: #f56e6e !important; }
+.janus7-app .tag--ok  { background: #1a4a1a !important; color: #6ef56e !important; }
+.janus7-app .tag--err { background: #4a1a1a !important; color: #f56e6e !important; }
 
 /* Scrollable pre block */
 .janus7-pre--scroll {
