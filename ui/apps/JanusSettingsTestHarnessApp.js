@@ -57,14 +57,34 @@ export class JanusSettingsTestHarnessApp extends ApplicationV2 {
   async _renderHTML(_context, _options) {
     const div = document.createElement('div');
     div.style.cssText = 'padding:1.5rem;font-family:var(--font-primary,sans-serif)';
-    div.innerHTML = `
-      <p><strong>JANUS7 Devtools Test Harness</strong> ist nicht installiert.</p>
-      <p style="margin-top:.75rem;opacity:.75;font-size:.9em">
-        Das Devtools-Bundle (<code>devtools/test-harness/</code>) ist ein optionaler
-        Entwickler-Artefakt und nicht im Produktions-Release enthalten.<br><br>
-        Nutze stattdessen: <code>game.janus7.test.runner</code> oder
-        den integrierten Test-Katalog im <strong>Command Center</strong>.
-      </p>`;
+
+    const p1 = document.createElement('p');
+    const s1 = document.createElement('strong');
+    s1.textContent = 'JANUS7 Devtools Test Harness';
+    p1.appendChild(s1);
+    p1.append(' ist nicht installiert.');
+    div.appendChild(p1);
+
+    const p2 = document.createElement('p');
+    p2.style.cssText = 'margin-top:.75rem;opacity:.75;font-size:.9em';
+    p2.append('Das Devtools-Bundle (');
+    const c1 = document.createElement('code');
+    c1.textContent = 'devtools/test-harness/';
+    p2.appendChild(c1);
+    p2.append(') ist ein optionaler Entwickler-Artefakt und nicht im Produktions-Release enthalten.');
+    p2.appendChild(document.createElement('br'));
+    p2.appendChild(document.createElement('br'));
+    p2.append('Nutze stattdessen: ');
+    const c2 = document.createElement('code');
+    c2.textContent = 'game.janus7.test.runner';
+    p2.appendChild(c2);
+    p2.append(' oder den integrierten Test-Katalog im ');
+    const s2 = document.createElement('strong');
+    s2.textContent = 'Command Center';
+    p2.appendChild(s2);
+    p2.append('.');
+    div.appendChild(p2);
+
     return div;
   }
 

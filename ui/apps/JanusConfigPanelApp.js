@@ -120,12 +120,31 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
     const row = document.createElement('div');
     row.className = 'janus7-config-row';
     row.setAttribute('data-scene-row', '');
-    row.innerHTML = `
-      <input type="text" class="janus7-input" data-scene-key placeholder="key (z.B. beamer)" />
-      <input type="text" class="janus7-input" data-scene-uuid placeholder="Scene UUID" />
-      <button type="button" class="janus-btn janus-btn--icon" data-action="removeSceneMap" title="Entfernen">
-        <i class="fas fa-trash"></i>
-      </button>`;
+
+    const keyInput = document.createElement('input');
+    keyInput.type = 'text';
+    keyInput.className = 'janus7-input';
+    keyInput.setAttribute('data-scene-key', '');
+    keyInput.placeholder = 'key (z.B. beamer)';
+    row.appendChild(keyInput);
+
+    const uuidInput = document.createElement('input');
+    uuidInput.type = 'text';
+    uuidInput.className = 'janus7-input';
+    uuidInput.setAttribute('data-scene-uuid', '');
+    uuidInput.placeholder = 'Scene UUID';
+    row.appendChild(uuidInput);
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'janus-btn janus-btn--icon';
+    removeBtn.dataset.action = 'removeSceneMap';
+    removeBtn.title = 'Entfernen';
+    const trashIcon = document.createElement('i');
+    trashIcon.className = 'fas fa-trash';
+    removeBtn.appendChild(trashIcon);
+    row.appendChild(removeBtn);
+
     container.appendChild(row);
   }
 

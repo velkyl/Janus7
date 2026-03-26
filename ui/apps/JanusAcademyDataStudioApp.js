@@ -418,7 +418,13 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     root.className = 'janus7-app janus7-page j7-data-studio';
 
     if (!game?.user?.isGM) {
-      root.innerHTML = `<div class="j7-data-studio__empty"><strong>GM only.</strong> Nur der GM kann den Data Studio verwenden.</div>`;
+      const gmOnly = document.createElement('div');
+      gmOnly.className = 'j7-data-studio__empty';
+      const gmStrong = document.createElement('strong');
+      gmStrong.textContent = 'GM only.';
+      gmOnly.appendChild(gmStrong);
+      gmOnly.append(' Nur der GM kann den Data Studio verwenden.');
+      root.appendChild(gmOnly);
       return root;
     }
 
@@ -433,27 +439,81 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     const left = document.createElement('div');
     left.className = 'j7-data-studio__panel j7-data-studio__panel--list';
 
-    const domainOptions = DOMAINS.map((entry) => `<option value="${entry.id}" ${entry.id === domain.id ? 'selected' : ''}>${entry.label}</option>`).join('');
-    left.innerHTML = `
-      <div class="j7-data-studio__row">
-        <i class="fas ${domain.icon}"></i>
-        <select data-j7="domain" class="janus7-textarea j7-data-studio__input j7-data-studio__input--compact">${domainOptions}</select>
-        <select data-j7="mode" class="janus7-textarea j7-data-studio__input j7-data-studio__input--compact">
-          <option value="form" ${this._editorMode === 'form' ? 'selected' : ''}>Formular</option>
-          <option value="json" ${this._editorMode === 'json' ? 'selected' : ''}>JSON</option>
-        </select>
-      </div>
-      <div class="j7-data-studio__row">
-        <input data-j7="filter" type="text" aria-label="Filter records" placeholder="Filter (Name/ID)" value="${this._escape(this._filter)}" class="janus7-textarea j7-data-studio__input j7-data-studio__input--compact" />
-        <button data-j7="new" class="j7-btn" title="Neuen Datensatz anlegen" aria-label="Neuen Datensatz anlegen"><i class="fas fa-plus"></i></button>
-        <button data-j7="seed" class="j7-btn" title="Seed Import (Journals + Items)" aria-label="Seed Import (Journals + Items)"><i class="fas fa-seedling"></i></button>
-      </div>
-      <div class="j7-data-studio__meta">
-        <span>Managed Records: <strong>${docs.length}</strong></span>
-        <span>SSOT: <code>flags.${MODULE_ID}.data</code></span>
-      </div>
-      <div data-j7="list" class="j7-data-studio__list"></div>
-    `;
+    const topRow = document.createElement('div');
+    topRow.className = 'j7-data-studio__row';
+    const domainIcon = document.createElement('i');
+    domainIcon.className = `fas ${domain.icon}`;
+    topRow.appendChild(domainIcon);
+    const domainSelect = document.createElement('select');
+    domainSelect.dataset.j7 = 'domain';
+    domainSelect.className = 'janus7-textarea j7-data-studio__input j7-data-studio__input--compact';
+    for (const entry of DOMAINS) {
+      const opt = document.createElement('option');
+      opt.value = entry.id;
+      opt.selected = entry.id === domain.id;
+      opt.textContent = entry.label;
+      domainSelect.appendChild(opt);
+    }
+    topRow.appendChild(domainSelect);
+    const modeSelect = document.createElement('select');
+    modeSelect.dataset.j7 = 'mode';
+    modeSelect.className = 'janus7-textarea j7-data-studio__input j7-data-studio__input--compact';
+    for (const [val, label] of [['form', 'Formular'], ['json', 'JSON']]) {
+      const opt = document.createElement('option');
+      opt.value = val;
+      opt.selected = this._editorMode === val;
+      opt.textContent = label;
+      modeSelect.appendChild(opt);
+    }
+    topRow.appendChild(modeSelect);
+    left.appendChild(topRow);
+
+    const filterRow = document.createElement('div');
+    filterRow.className = 'j7-data-studio__row';
+    const filterInput = document.createElement('input');
+    filterInput.dataset.j7 = 'filter';
+    filterInput.type = 'text';
+    filterInput.setAttribute('aria-label', 'Filter records');
+    filterInput.placeholder = 'Filter (Name/ID)';
+    filterInput.value = this._filter;
+    filterInput.className = 'janus7-textarea j7-data-studio__input j7-data-studio__input--compact';
+    filterRow.appendChild(filterInput);
+    const newBtn = document.createElement('button');
+    newBtn.dataset.j7 = 'new';
+    newBtn.className = 'j7-btn';
+    newBtn.title = 'Neuen Datensatz anlegen';
+    newBtn.setAttribute('aria-label', 'Neuen Datensatz anlegen');
+    newBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-plus' }));
+    filterRow.appendChild(newBtn);
+    const seedBtn = document.createElement('button');
+    seedBtn.dataset.j7 = 'seed';
+    seedBtn.className = 'j7-btn';
+    seedBtn.title = 'Seed Import (Journals + Items)';
+    seedBtn.setAttribute('aria-label', 'Seed Import (Journals + Items)');
+    seedBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-seedling' }));
+    filterRow.appendChild(seedBtn);
+    left.appendChild(filterRow);
+
+    const metaDiv = document.createElement('div');
+    metaDiv.className = 'j7-data-studio__meta';
+    const recordsSpan = document.createElement('span');
+    recordsSpan.append('Managed Records: ');
+    const recordsStrong = document.createElement('strong');
+    recordsStrong.textContent = String(docs.length);
+    recordsSpan.appendChild(recordsStrong);
+    metaDiv.appendChild(recordsSpan);
+    const ssotSpan = document.createElement('span');
+    ssotSpan.append('SSOT: ');
+    const ssotCode = document.createElement('code');
+    ssotCode.textContent = `flags.${MODULE_ID}.data`;
+    ssotSpan.appendChild(ssotCode);
+    metaDiv.appendChild(ssotSpan);
+    left.appendChild(metaDiv);
+
+    const listDiv = document.createElement('div');
+    listDiv.dataset.j7 = 'list';
+    listDiv.className = 'j7-data-studio__list';
+    left.appendChild(listDiv);
 
     const list = left.querySelector('[data-j7="list"]');
     for (const doc of docs) {
@@ -464,10 +524,17 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
       button.type = 'button';
       button.dataset.uuid = doc.uuid;
       button.className = `j7-btn j7-data-studio__record${isSelected ? ' is-selected' : ''}`;
-      button.innerHTML = `
-        <div class="j7-data-studio__title">${this._escape(doc.name)}</div>
-        <div class="j7-data-studio__subtitle"><code>${this._escape(flags?.janusId ?? '')}</code> · ${this._escape(badge)}</div>
-      `;
+      const titleDiv = document.createElement('div');
+      titleDiv.className = 'j7-data-studio__title';
+      titleDiv.textContent = doc.name;
+      button.appendChild(titleDiv);
+      const subtitleDiv = document.createElement('div');
+      subtitleDiv.className = 'j7-data-studio__subtitle';
+      const janusIdCode = document.createElement('code');
+      janusIdCode.textContent = flags?.janusId ?? '';
+      subtitleDiv.appendChild(janusIdCode);
+      subtitleDiv.append(` · ${badge}`);
+      button.appendChild(subtitleDiv);
       list.appendChild(button);
     }
 
@@ -475,68 +542,207 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     right.className = 'j7-data-studio__panel j7-data-studio__panel--detail';
 
     if (!activeData) {
-      right.innerHTML = `
-        <div class="j7-data-studio__empty">
-          <p><strong>Kein Record ausgewählt.</strong></p>
-          <p>Links über <i class="fas fa-plus"></i> einen Draft anlegen oder über <i class="fas fa-seedling"></i> die verwalteten World-Dokumente erzeugen.</p>
-          <p class="j7-data-studio__hint">Angezeigt werden verwaltete Journals und Items mit <code>flags.${MODULE_ID}.managed=true</code> und <code>dataType</code>. Items werden bevorzugt.</p>
-        </div>`;
+      const emptyDiv = document.createElement('div');
+      emptyDiv.className = 'j7-data-studio__empty';
+      const ep1 = document.createElement('p');
+      const ep1Strong = document.createElement('strong');
+      ep1Strong.textContent = 'Kein Record ausgewählt.';
+      ep1.appendChild(ep1Strong);
+      emptyDiv.appendChild(ep1);
+      const ep2 = document.createElement('p');
+      ep2.append('Links über ');
+      ep2.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-plus' }));
+      ep2.append(' einen Draft anlegen oder über ');
+      ep2.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-seedling' }));
+      ep2.append(' die verwalteten World-Dokumente erzeugen.');
+      emptyDiv.appendChild(ep2);
+      const ep3 = document.createElement('p');
+      ep3.className = 'j7-data-studio__hint';
+      ep3.append('Angezeigt werden verwaltete Journals und Items mit ');
+      const managedCode = document.createElement('code');
+      managedCode.textContent = `flags.${MODULE_ID}.managed=true`;
+      ep3.appendChild(managedCode);
+      ep3.append(' und ');
+      const dataTypeCode = document.createElement('code');
+      dataTypeCode.textContent = 'dataType';
+      ep3.appendChild(dataTypeCode);
+      ep3.append('. Items werden bevorzugt.');
+      emptyDiv.appendChild(ep3);
+      right.appendChild(emptyDiv);
     } else {
       const flags = this._moduleFlags(selected) ?? { janusId: activeData?.id ?? '', dataType: domain.id };
-      const editorHtml = (this._editorMode === 'form' && this._supportsForm(domain.id))
-        ? this._renderForm(domain.id, activeData)
-        : `<textarea data-j7="json" spellcheck="false" class="janus7-textarea j7-data-studio__json">${this._escape(JSON.stringify(activeData ?? {}, null, 2))}</textarea>`;
       const docLabel = selected?.documentName === 'Item' ? 'Item' : (selected?.documentName === 'JournalEntry' ? 'Journal' : 'Draft');
-      const linkHtml = linkSpec ? `
-            <div class="j7-data-studio__section-label">Foundry-Verknüpfung</div>
-            <div class="j7-data-studio__notes">
-              <p><strong>Ziel:</strong> ${this._escape(linkSpec.label)}</p>
-              <p><strong>Status:</strong> ${linkedDoc ? 'verknüpft' : (linkedUuid ? 'UUID vorhanden, Dokument fehlt' : 'nicht verknüpft')}</p>
-              <p><strong>UUID:</strong> <code>${this._escape(linkedUuid ?? '—')}</code></p>
-              <p><strong>Dokument:</strong> ${this._escape(linkedDoc?.name ?? '—')}</p>
-              <div data-j7="link-dropzone" class="j7-data-studio__empty" style="min-height:96px; border-style:dashed;">
-                <p><strong>${this._escape(linkSpec.label)} hier ablegen</strong></p>
-                <p class="j7-data-studio__hint">Drag & Drop aus der Foundry-Sidebar. Die Verknüpfung läuft über denselben Sync-Pfad wie die automatische Synchronisierung.</p>
-              </div>
-              <div class="j7-data-studio__row">
-                ${linkedDoc ? `<button data-j7="open-link" class="j7-btn"><i class="fas fa-up-right-from-square"></i> ${this._escape(linkSpec.label)} öffnen</button>` : ''}
-                ${linkedUuid ? `<button data-j7="unlink-link" class="j7-btn"><i class="fas fa-link-slash"></i> Verknüpfung lösen</button>` : ''}
-              </div>
-            </div>
-      ` : '';
 
-      right.innerHTML = `
-        <div class="j7-data-studio__row j7-data-studio__row--spread">
-          <div>
-            <div class="j7-data-studio__title j7-data-studio__title--lg">${this._escape(this._displayName(activeData))}</div>
-            <div class="j7-data-studio__subtitle">ID: <code>${this._escape(flags?.janusId ?? activeData?.id ?? '')}</code> · Type: <code>${this._escape(flags?.dataType ?? domain.id)}</code> · Doc: <code>${this._escape(docLabel)}</code></div>
-          </div>
-          <div class="j7-data-studio__row">
-            ${selected ? `<button data-j7="open" class="j7-btn"><i class="fas fa-up-right-from-square"></i> Open ${this._escape(docLabel)}</button>` : ''}
-            <button data-j7="save" class="j7-btn"><i class="fas fa-save"></i> Save</button>
-          </div>
-        </div>
-        <div class="j7-data-studio__split">
-          <div class="j7-data-studio__column">
-            <div class="j7-data-studio__section-label">${this._editorMode === 'form' ? 'Formularmodus' : 'JSON / Expertenmodus'}</div>
-            ${editorHtml}
-          </div>
-          <div class="j7-data-studio__column">
-            <div class="j7-data-studio__section-label">Hinweise</div>
-            <div class="j7-data-studio__notes">
-              <p><strong>Regeln:</strong></p>
-              <ul>
-                <li>Speichern erzeugt bzw. aktualisiert Journal und Item gemeinsam.</li>
-                <li>Items sind der bevorzugte Edit-Container im Studio.</li>
-                <li>SSOT bleibt <code>flags.${MODULE_ID}.data</code>.</li>
-                <li>AcademyDataApi Cache wird nach Save/Seed neu geladen.</li>
-              </ul>
-              <p class="j7-data-studio__hint">Bei komplexen Domänen mischt der Formmodus normale Felder mit gezielten JSON-Feldern für verschachtelte Strukturen, damit nicht alles im reinen Roh-JSON landen muss.</p>
-            </div>
-          </div>
-        </div>
-        ${linkHtml}
-      `;
+      // Header row
+      const headerRow = document.createElement('div');
+      headerRow.className = 'j7-data-studio__row j7-data-studio__row--spread';
+      const headerInfo = document.createElement('div');
+      const recordTitle = document.createElement('div');
+      recordTitle.className = 'j7-data-studio__title j7-data-studio__title--lg';
+      recordTitle.textContent = this._displayName(activeData);
+      headerInfo.appendChild(recordTitle);
+      const recordSubtitle = document.createElement('div');
+      recordSubtitle.className = 'j7-data-studio__subtitle';
+      recordSubtitle.append('ID: ');
+      const idCode = document.createElement('code');
+      idCode.textContent = flags?.janusId ?? activeData?.id ?? '';
+      recordSubtitle.appendChild(idCode);
+      recordSubtitle.append(' · Type: ');
+      const typeCode = document.createElement('code');
+      typeCode.textContent = flags?.dataType ?? domain.id;
+      recordSubtitle.appendChild(typeCode);
+      recordSubtitle.append(' · Doc: ');
+      const docLabelCode = document.createElement('code');
+      docLabelCode.textContent = docLabel;
+      recordSubtitle.appendChild(docLabelCode);
+      headerInfo.appendChild(recordSubtitle);
+      headerRow.appendChild(headerInfo);
+      const headerBtns = document.createElement('div');
+      headerBtns.className = 'j7-data-studio__row';
+      if (selected) {
+        const openBtn = document.createElement('button');
+        openBtn.dataset.j7 = 'open';
+        openBtn.className = 'j7-btn';
+        openBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-up-right-from-square' }));
+        openBtn.append(` Open ${docLabel}`);
+        headerBtns.appendChild(openBtn);
+      }
+      const saveBtn = document.createElement('button');
+      saveBtn.dataset.j7 = 'save';
+      saveBtn.className = 'j7-btn';
+      saveBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-save' }));
+      saveBtn.append(' Save');
+      headerBtns.appendChild(saveBtn);
+      headerRow.appendChild(headerBtns);
+      right.appendChild(headerRow);
+
+      // Split: editor column + notes column
+      const splitDiv = document.createElement('div');
+      splitDiv.className = 'j7-data-studio__split';
+
+      const editorCol = document.createElement('div');
+      editorCol.className = 'j7-data-studio__column';
+      const editorLabel = document.createElement('div');
+      editorLabel.className = 'j7-data-studio__section-label';
+      editorLabel.textContent = this._editorMode === 'form' ? 'Formularmodus' : 'JSON / Expertenmodus';
+      editorCol.appendChild(editorLabel);
+      if (this._editorMode === 'form' && this._supportsForm(domain.id)) {
+        // _renderForm returns an HTML string where all user data goes through esc()
+        editorCol.insertAdjacentHTML('beforeend', this._renderForm(domain.id, activeData));
+      } else {
+        const jsonTextarea = document.createElement('textarea');
+        jsonTextarea.dataset.j7 = 'json';
+        jsonTextarea.spellcheck = false;
+        jsonTextarea.className = 'janus7-textarea j7-data-studio__json';
+        jsonTextarea.textContent = JSON.stringify(activeData ?? {}, null, 2);
+        editorCol.appendChild(jsonTextarea);
+      }
+      splitDiv.appendChild(editorCol);
+
+      const notesCol = document.createElement('div');
+      notesCol.className = 'j7-data-studio__column';
+      const notesLabel = document.createElement('div');
+      notesLabel.className = 'j7-data-studio__section-label';
+      notesLabel.textContent = 'Hinweise';
+      notesCol.appendChild(notesLabel);
+      const notesDiv = document.createElement('div');
+      notesDiv.className = 'j7-data-studio__notes';
+      const rulesP = document.createElement('p');
+      const rulesStrong = document.createElement('strong');
+      rulesStrong.textContent = 'Regeln:';
+      rulesP.appendChild(rulesStrong);
+      notesDiv.appendChild(rulesP);
+      const ul = document.createElement('ul');
+      for (const text of [
+        'Speichern erzeugt bzw. aktualisiert Journal und Item gemeinsam.',
+        'Items sind der bevorzugte Edit-Container im Studio.',
+        null,
+        'AcademyDataApi Cache wird nach Save/Seed neu geladen.'
+      ]) {
+        const li = document.createElement('li');
+        if (text === null) {
+          li.append('SSOT bleibt ');
+          const ssotLiCode = document.createElement('code');
+          ssotLiCode.textContent = `flags.${MODULE_ID}.data`;
+          li.appendChild(ssotLiCode);
+          li.append('.');
+        } else {
+          li.textContent = text;
+        }
+        ul.appendChild(li);
+      }
+      notesDiv.appendChild(ul);
+      const hintP = document.createElement('p');
+      hintP.className = 'j7-data-studio__hint';
+      hintP.textContent = 'Bei komplexen Domänen mischt der Formmodus normale Felder mit gezielten JSON-Feldern für verschachtelte Strukturen, damit nicht alles im reinen Roh-JSON landen muss.';
+      notesDiv.appendChild(hintP);
+      notesCol.appendChild(notesDiv);
+      splitDiv.appendChild(notesCol);
+      right.appendChild(splitDiv);
+
+      // Link section (conditional)
+      if (linkSpec) {
+        const linkSectionLabel = document.createElement('div');
+        linkSectionLabel.className = 'j7-data-studio__section-label';
+        linkSectionLabel.textContent = 'Foundry-Verknüpfung';
+        right.appendChild(linkSectionLabel);
+        const linkNotes = document.createElement('div');
+        linkNotes.className = 'j7-data-studio__notes';
+        const mkInfoP = (labelText, valueText) => {
+          const p = document.createElement('p');
+          const s = document.createElement('strong');
+          s.textContent = `${labelText}:`;
+          p.appendChild(s);
+          p.append(` ${valueText}`);
+          return p;
+        };
+        linkNotes.appendChild(mkInfoP('Ziel', linkSpec.label));
+        linkNotes.appendChild(mkInfoP('Status', linkedDoc ? 'verknüpft' : (linkedUuid ? 'UUID vorhanden, Dokument fehlt' : 'nicht verknüpft')));
+        const uuidP = document.createElement('p');
+        const uuidStrong = document.createElement('strong');
+        uuidStrong.textContent = 'UUID:';
+        uuidP.appendChild(uuidStrong);
+        uuidP.append(' ');
+        const uuidCode = document.createElement('code');
+        uuidCode.textContent = linkedUuid ?? '—';
+        uuidP.appendChild(uuidCode);
+        linkNotes.appendChild(uuidP);
+        linkNotes.appendChild(mkInfoP('Dokument', linkedDoc?.name ?? '—'));
+        const dropzone = document.createElement('div');
+        dropzone.dataset.j7 = 'link-dropzone';
+        dropzone.className = 'j7-data-studio__empty';
+        dropzone.style.cssText = 'min-height:96px; border-style:dashed;';
+        const dropP1 = document.createElement('p');
+        const dropStrong = document.createElement('strong');
+        dropStrong.textContent = `${linkSpec.label} hier ablegen`;
+        dropP1.appendChild(dropStrong);
+        dropzone.appendChild(dropP1);
+        const dropP2 = document.createElement('p');
+        dropP2.className = 'j7-data-studio__hint';
+        dropP2.textContent = 'Drag & Drop aus der Foundry-Sidebar. Die Verknüpfung läuft über denselben Sync-Pfad wie die automatische Synchronisierung.';
+        dropzone.appendChild(dropP2);
+        linkNotes.appendChild(dropzone);
+        const linkBtnRow = document.createElement('div');
+        linkBtnRow.className = 'j7-data-studio__row';
+        if (linkedDoc) {
+          const openLinkBtn = document.createElement('button');
+          openLinkBtn.dataset.j7 = 'open-link';
+          openLinkBtn.className = 'j7-btn';
+          openLinkBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-up-right-from-square' }));
+          openLinkBtn.append(` ${linkSpec.label} öffnen`);
+          linkBtnRow.appendChild(openLinkBtn);
+        }
+        if (linkedUuid) {
+          const unlinkBtn = document.createElement('button');
+          unlinkBtn.dataset.j7 = 'unlink-link';
+          unlinkBtn.className = 'j7-btn';
+          unlinkBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-link-slash' }));
+          unlinkBtn.append(' Verknüpfung lösen');
+          linkBtnRow.appendChild(unlinkBtn);
+        }
+        linkNotes.appendChild(linkBtnRow);
+        right.appendChild(linkNotes);
+      }
     }
 
     root.appendChild(left);

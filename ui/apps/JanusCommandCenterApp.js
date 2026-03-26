@@ -427,20 +427,51 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(foundry.ap
     overlay.className = 'j7-spotlight-overlay';
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
-    overlay.innerHTML = `
-      <div class="j7-spotlight-panel">
-        <div class="j7-spotlight-input-wrap">
-          <i class="fas fa-search"></i>
-          <input type="text" class="j7-spotlight-input" placeholder="Befehl suchen…" autocomplete="off" spellcheck="false">
-          <span class="j7-spotlight-hint"><kbd>↑↓</kbd> <kbd>↵</kbd> <kbd>Esc</kbd></span>
-        </div>
-        <div class="j7-spotlight-results" role="listbox"></div>
-        <div class="j7-spotlight-footer">
-          <span><kbd>↑</kbd><kbd>↓</kbd> Navigieren</span>
-          <span><kbd>↵</kbd> Ausführen</span>
-          <span><kbd>Esc</kbd> Schließen</span>
-        </div>
-      </div>`;
+    const panel = document.createElement('div');
+    panel.className = 'j7-spotlight-panel';
+
+    const inputWrap = document.createElement('div');
+    inputWrap.className = 'j7-spotlight-input-wrap';
+    const searchIcon = document.createElement('i');
+    searchIcon.className = 'fas fa-search';
+    inputWrap.appendChild(searchIcon);
+    const searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.className = 'j7-spotlight-input';
+    searchInput.placeholder = 'Befehl suchen…';
+    searchInput.autocomplete = 'off';
+    searchInput.spellcheck = false;
+    inputWrap.appendChild(searchInput);
+    const hintSpan = document.createElement('span');
+    hintSpan.className = 'j7-spotlight-hint';
+    for (const key of ['↑↓', '↵', 'Esc']) {
+      const kbd = document.createElement('kbd');
+      kbd.textContent = key;
+      hintSpan.appendChild(kbd);
+      if (key !== 'Esc') hintSpan.append(' ');
+    }
+    inputWrap.appendChild(hintSpan);
+    panel.appendChild(inputWrap);
+
+    const resultsDiv = document.createElement('div');
+    resultsDiv.className = 'j7-spotlight-results';
+    resultsDiv.setAttribute('role', 'listbox');
+    panel.appendChild(resultsDiv);
+
+    const footer = document.createElement('div');
+    footer.className = 'j7-spotlight-footer';
+    for (const [keys, label] of [['↑↓', 'Navigieren'], ['↵', 'Ausführen'], ['Esc', 'Schließen']]) {
+      const span = document.createElement('span');
+      for (const k of keys.split('')) {
+        const kbd = document.createElement('kbd');
+        kbd.textContent = k;
+        span.appendChild(kbd);
+      }
+      span.append(` ${label}`);
+      footer.appendChild(span);
+    }
+    panel.appendChild(footer);
+    overlay.appendChild(panel);
 
     this._spotlightEl = overlay;
     this._spotlightIdx = -1;
@@ -493,7 +524,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(foundry.ap
       : all;
 
     this._spotlightIdx = -1;
-    container.innerHTML = ''; // Clear container
+    container.replaceChildren(); // Clear container
 
     if (!filtered.length) {
       const emptyDiv = document.createElement('div');
