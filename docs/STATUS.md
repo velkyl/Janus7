@@ -1,4 +1,4 @@
-﻿# STATUS - v0.9.12.44
+# STATUS - v0.9.12.44
 
 # JANUS7 Status
 

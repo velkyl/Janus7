@@ -1,4 +1,4 @@
-﻿# Update 0.9.12.44
+# Update 0.9.12.44
 
 ## Aenderungen seit 0.9.12.43
 
