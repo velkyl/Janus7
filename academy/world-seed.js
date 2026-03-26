@@ -3,11 +3,11 @@
  * @module janus7/academy
  * @phase 2
  *
- * Seed Importer: module JSON -> Foundry JournalEntries (structured flags)
+ * Seed Importer: module JSON -> Foundry world documents (structured flags)
  *
  * Design rules:
  * - SSOT stays structured JSON in flags.
- * - Journal text is a view (rendered from flags.data).
+ * - Journal text / Item description are views (rendered from flags.data).
  * - Idempotent by default (mode: "merge").
  * - GM-only.
  */
@@ -15,6 +15,9 @@
 import { MODULE_ID } from '../core/common.js';
 import { JanusConfig } from '../core/config.js';
 import { JanusFolderService } from '../core/folder-service.js';
+
+const MANAGED_ACADEMY_ITEM_TYPE = 'book';
+const MANAGED_ACADEMY_ITEM_IMG = 'icons/svg/book.svg';
 
 function _escapeHtml(s) {
   return String(s ?? '')
@@ -33,6 +36,48 @@ async function _fetchAcademyJson(file) {
 }
 
 function _nowIso() { return new Date().toISOString(); }
+
+function _buildManagedBookSystemData(record, { kind, dataType } = {}) {
+  const summary = record?.summary ?? record?.description ?? '';
+  return {
+    description: {
+      value: renderAcademyRecord(kind, record)
+    },
+    gmdescription: {
+      value: ''
+    },
+    category: String(dataType ?? kind ?? ''),
+    author: String(record?.teacherNpcId ?? record?.author ?? ''),
+    pages: String(record?.durationSlots ?? ''),
+    releaseDate: '',
+    language: '',
+    quality: 0,
+    rule: '',
+    legality: 0,
+    availability: '',
+    format: 0,
+    exemplarType: 0,
+    otherNames: '',
+    exemplar: '',
+    storage: '',
+    special: String(record?.id ?? ''),
+    price: {
+      value: 0
+    },
+    quantity: {
+      value: 1
+    },
+    weight: {
+      value: 0
+    },
+    effect: {
+      value: String(summary),
+      attributes: ''
+    },
+    parent_id: '',
+    tradeLocked: false
+  };
+}
 
 function _renderJsonBlock(data) {
   try {
@@ -153,6 +198,19 @@ async function _findExistingJournalById(janusId) {
   return journals.find(j => (j?.flags?.[MODULE_ID]?.janusId === janusId)) ?? null;
 }
 
+async function _findExistingItemById(janusId) {
+  try {
+    const uuid = game?.settings?.get?.(MODULE_ID, 'entityUUIDs')?.[janusId] ?? null;
+    if (uuid) {
+      const doc = await (globalThis.fromUuid?.(uuid) ?? globalThis.fromUuidSync?.(uuid));
+      if (doc?.documentName === 'Item') return doc;
+    }
+  } catch { /* ignore */ }
+
+  const items = game?.items?.contents ?? [];
+  return items.find((item) => item?.flags?.[MODULE_ID]?.janusId === janusId) ?? null;
+}
+
 async function _upsertJournalRecord({ kind, dataType, record, folderSvc, mode }) {
   const id = String(record?.id ?? '').trim();
   if (!id) throw new Error('SeedImport: record.id missing');
@@ -234,6 +292,76 @@ async function _upsertJournalRecord({ kind, dataType, record, folderSvc, mode })
   return { id, status: 'updated', uuid: existing.uuid };
 }
 
+function _itemKindForRecord(kind, dataType) {
+  if (dataType === 'spellCurriculum') return 'curriculum';
+  if (dataType === 'spellsIndex') return 'spell';
+  if (dataType === 'library-item') return 'library';
+  if (dataType === 'calendar') return 'calendar';
+  if (['lesson', 'npc', 'location', 'event', 'library', 'curriculum', 'spell', 'calendar'].includes(String(kind ?? ''))) {
+    return kind;
+  }
+  return 'misc';
+}
+
+async function _upsertItemRecord({ kind, dataType, record, folderSvc, mode }) {
+  const id = String(record?.id ?? '').trim();
+  if (!id) throw new Error('SeedImport: record.id missing');
+
+  const existing = await _findExistingItemById(id);
+  if (existing && mode === 'merge') {
+    return { id, status: 'skipped', uuid: existing.uuid };
+  }
+
+  const itemKind = _itemKindForRecord(kind, dataType);
+  const folder = await folderSvc.ensureFor({ docType: 'Item', kind: itemKind });
+  const flags = {
+    [MODULE_ID]: {
+      janusId: id,
+      dataType,
+      managed: true,
+      kind: itemKind,
+      sourceKind: kind,
+      folderKey: folder.folderKey ?? null,
+      source: { kind: 'seed', moduleVersion: game?.modules?.get?.(MODULE_ID)?.version ?? 'unknown' },
+      seededAt: _nowIso(),
+      syncedAt: _nowIso(),
+      data: record,
+    }
+  };
+
+  const itemData = {
+    name: record?.name ?? record?.title ?? id,
+    type: MANAGED_ACADEMY_ITEM_TYPE,
+    img: MANAGED_ACADEMY_ITEM_IMG,
+    folder: folder.folderId ?? null,
+    system: _buildManagedBookSystemData(record, { kind, dataType }),
+    flags,
+  };
+
+  if (!existing) {
+    const item = await Item.create(itemData);
+    if (!item) throw new Error(`SeedImport: Item create failed for ${id}`);
+    try {
+      await game?.janus7?.sync?.linkEntity?.(id, item.uuid, { type: 'items' });
+    } catch { /* optional */ }
+    return { id, status: 'created', uuid: item.uuid };
+  }
+
+  await existing.update({
+    name: itemData.name,
+    img: itemData.img,
+    folder: itemData.folder,
+    system: itemData.system,
+    flags: { ...existing.flags, ...flags },
+  }, { diff: false });
+
+  try {
+    await game?.janus7?.sync?.linkEntity?.(id, existing.uuid, { type: 'items' });
+  } catch { /* optional */ }
+
+  return { id, status: 'updated', uuid: existing.uuid };
+}
+
 /**
  * Seed-import the canonical academy datasets into Foundry Journals.
  * @param {{ mode?: 'merge'|'overwrite' }} opts
@@ -262,6 +390,10 @@ export async function seedImportAcademyToJournals(opts = {}) {
     created: 0,
     updated: 0,
     skipped: 0,
+    documents: {
+      journals: { created: 0, updated: 0, skipped: 0 },
+      items: { created: 0, updated: 0, skipped: 0 },
+    },
     results: [],
   };
 
@@ -296,11 +428,27 @@ export async function seedImportAcademyToJournals(opts = {}) {
   }
 
   for (const w of work) {
-    const r = await _upsertJournalRecord({ ...w, folderSvc, mode });
-    report.results.push(r);
-    if (r.status === 'created') report.created += 1;
-    else if (r.status === 'updated') report.updated += 1;
-    else report.skipped += 1;
+    const journalResult = await _upsertJournalRecord({ ...w, folderSvc, mode });
+    const itemResult = await _upsertItemRecord({ ...w, folderSvc, mode });
+    report.results.push({
+      id: w.record?.id ?? null,
+      dataType: w.dataType,
+      journal: journalResult,
+      item: itemResult,
+    });
+
+    for (const [bucket, result] of [['journals', journalResult], ['items', itemResult]]) {
+      if (result.status === 'created') {
+        report.created += 1;
+        report.documents[bucket].created += 1;
+      } else if (result.status === 'updated') {
+        report.updated += 1;
+        report.documents[bucket].updated += 1;
+      } else {
+        report.skipped += 1;
+        report.documents[bucket].skipped += 1;
+      }
+    }
   }
 
   // Persist seed metadata (for audit + future migrations).
@@ -324,9 +472,9 @@ const MANAGED_DOMAIN_META = {
   location: { kind: 'location', dataType: 'location' },
   event: { kind: 'event', dataType: 'event' },
   calendar: { kind: 'calendar', dataType: 'calendar' },
-  spellCurriculum: { kind: 'spellCurriculum', dataType: 'spellCurriculum' },
-  spellsIndex: { kind: 'spellsIndex', dataType: 'spellsIndex' },
-  'library-item': { kind: 'library-item', dataType: 'library-item' },
+  spellCurriculum: { kind: 'curriculum', dataType: 'spellCurriculum' },
+  spellsIndex: { kind: 'spell', dataType: 'spellsIndex' },
+  'library-item': { kind: 'library', dataType: 'library-item' },
   library: { kind: 'library', dataType: 'library' },
 };
 
@@ -336,6 +484,20 @@ export async function upsertManagedAcademyRecord({ domainId, record, mode = 'ove
   if (!meta) throw new Error(`Unsupported domain: ${domainId}`);
   const folderSvc = new JanusFolderService({ config: JanusConfig, logger: game?.janus7?.core?.logger ?? console });
   return _upsertJournalRecord({
+    kind: meta.kind,
+    dataType: meta.dataType,
+    record,
+    folderSvc,
+    mode,
+  });
+}
+
+export async function upsertManagedAcademyItemRecord({ domainId, record, mode = 'overwrite' } = {}) {
+  if (!game?.user?.isGM) throw new Error('GM only');
+  const meta = MANAGED_DOMAIN_META[String(domainId ?? '').trim()];
+  if (!meta) throw new Error(`Unsupported domain: ${domainId}`);
+  const folderSvc = new JanusFolderService({ config: JanusConfig, logger: game?.janus7?.core?.logger ?? console });
+  return _upsertItemRecord({
     kind: meta.kind,
     dataType: meta.dataType,
     record,

@@ -44,6 +44,13 @@ const MAP = {
   Item: {
     root: [ROOT, 'Items'],
     kinds: {
+      lesson:     ['Unterricht'],
+      library:    ['Bibliothek'],
+      curriculum: ['Lehrpl\u00E4ne'],
+      npc:        ['NSCs'],
+      location:   ['Orte'],
+      event:      ['Chronik'],
+      calendar:   ['Kalender'],
       alchemy:    ['Alchemie'],
       spell:      ['Zauber'],
       equipment:  ['Ausrüstung'],

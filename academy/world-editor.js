@@ -6,7 +6,7 @@
 import { MODULE_ID } from '../core/common.js';
 import { clone } from './data-api-store.js';
 import { collectAcademyWorldOverrides } from './world-overrides.js';
-import { upsertManagedAcademyRecord } from './world-seed.js';
+import { upsertManagedAcademyItemRecord, upsertManagedAcademyRecord } from './world-seed.js';
 
 export const EDITABLE_DOMAIN_MAP = Object.freeze({
   lesson: { dataType: 'lesson', requiresId: true },
@@ -20,15 +20,24 @@ export const EDITABLE_DOMAIN_MAP = Object.freeze({
   calendar: { dataType: 'calendar', requiresId: false },
 });
 
-export function listManagedJournalDocs(domainId) {
+function _listManagedDocs(collection, domainId, documentName) {
   const meta = EDITABLE_DOMAIN_MAP[String(domainId ?? '').trim()];
   if (!meta) return [];
-  const docs = (globalThis.game?.journal?.contents ?? []).filter((journal) => {
-    const flags = journal?.flags?.[MODULE_ID] ?? null;
+  const docs = (collection ?? []).filter((doc) => {
+    const flags = doc?.flags?.[MODULE_ID] ?? null;
     return !!(flags?.managed && String(flags?.dataType ?? '') === meta.dataType && flags?.data && typeof flags.data === 'object');
   });
-  docs.sort((a, b) => String(a?.name ?? '').localeCompare(String(b?.name ?? '')));
-  return docs;
+  return docs
+    .map((doc) => ({ ...doc, documentName: doc?.documentName ?? documentName }))
+    .sort((a, b) => String(a?.name ?? '').localeCompare(String(b?.name ?? '')));
+}
+
+export function listManagedJournalDocs(domainId) {
+  return _listManagedDocs(globalThis.game?.journal?.contents ?? [], domainId, 'JournalEntry');
+}
+
+export function listManagedItemDocs(domainId) {
+  return _listManagedDocs(globalThis.game?.items?.contents ?? [], domainId, 'Item');
 }
 
 export function defaultRecordName(domainId, record) {
@@ -71,19 +80,35 @@ export function loadWorldOverrides() {
 }
 
 export function listManagedRecords(domainId) {
-  return listManagedJournalDocs(domainId).map((doc) => ({
+  const byKey = new Map();
+  const docs = [
+    ...listManagedJournalDocs(domainId),
+    ...listManagedItemDocs(domainId),
+  ];
+
+  for (const doc of docs) {
+    const flags = doc?.flags?.[MODULE_ID] ?? {};
+    const key = flags?.janusId ?? `${flags?.dataType ?? domainId}:${doc?.name ?? doc?.id ?? doc?.uuid}`;
+    const current = byKey.get(key);
+    if (!current || doc?.documentName === 'Item') byKey.set(key, doc);
+  }
+
+  return Array.from(byKey.values()).map((doc) => ({
     uuid: doc.uuid,
     id: doc?.flags?.[MODULE_ID]?.janusId ?? null,
     name: doc?.name ?? '',
     domainId,
     dataType: doc?.flags?.[MODULE_ID]?.dataType ?? null,
+    documentName: doc?.documentName ?? null,
     data: clone(doc?.flags?.[MODULE_ID]?.data ?? null),
     doc,
   }));
 }
 
 export function getManagedRecordByUuid(uuid) {
-  const doc = (globalThis.game?.journal?.contents ?? []).find((entry) => entry?.uuid === uuid) ?? null;
+  const doc = (globalThis.game?.items?.contents ?? []).find((entry) => entry?.uuid === uuid)
+    ?? (globalThis.game?.journal?.contents ?? []).find((entry) => entry?.uuid === uuid)
+    ?? null;
   if (!doc) return null;
   const flags = doc?.flags?.[MODULE_ID] ?? {};
   return {
@@ -92,6 +117,7 @@ export function getManagedRecordByUuid(uuid) {
     name: doc?.name ?? '',
     domainId: flags?.dataType ?? null,
     dataType: flags?.dataType ?? null,
+    documentName: doc?.documentName ?? null,
     data: clone(flags?.data ?? null),
     doc,
   };
@@ -116,6 +142,7 @@ export async function saveManagedRecord({ domainId, record, mode = 'overwrite', 
     prepared.name = defaultRecordName(domainId, prepared);
   }
   const result = await upsertManagedAcademyRecord({ domainId, record: prepared, mode });
+  const itemResult = await upsertManagedAcademyItemRecord({ domainId, record: prepared, mode });
   if (typeof onReload === 'function') await onReload();
-  return result;
+  return { journal: result, item: itemResult };
 }

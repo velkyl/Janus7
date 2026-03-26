@@ -17,7 +17,9 @@ import { MODULE_ID } from '../core/common.js';
 /**
  * Collect world-provided academy records.
  *
- * We store full record JSON in `JournalEntry.flags[MODULE_ID].data`.
+ * We store full record JSON in managed document flags:
+ * - `JournalEntry.flags[MODULE_ID].data`
+ * - `Item.flags[MODULE_ID].data`
  * The importer/editor marks docs with:
  * - managed: true
  * - dataType: e.g. 'lesson' | 'npc' | 'location' | 'event' | ...
@@ -39,25 +41,34 @@ export function collectAcademyWorldOverrides() {
     library: null,
   };
 
+  const applyDoc = (doc) => {
+    const f = doc?.flags?.[MODULE_ID] ?? null;
+    if (!f?.managed) return;
+    const dt = String(f.dataType ?? '').trim();
+    const data = f.data ?? null;
+    if (!data || typeof data !== 'object') return;
+
+    if (dt === 'lesson') out.lessons.push(data);
+    else if (dt === 'npc') out.npcs.push(data);
+    else if (dt === 'location') out.locations.push(data);
+    else if (dt === 'event') out.events.push(data);
+    else if (dt === 'calendar') out.calendar = data;
+
+    else if (dt === 'spellCurriculum') out.spellCurriculum = data;
+    else if (dt === 'spellsIndex') out.spellsIndex = data;
+    else if (dt === 'library-item') out.libraryItems.push(data);
+    else if (dt === 'library') out.library = data;
+  };
+
   try {
     const journals = globalThis.game?.journal?.contents ?? [];
     for (const j of journals) {
-      const f = j?.flags?.[MODULE_ID] ?? null;
-      if (!f?.managed) continue;
-      const dt = String(f.dataType ?? '').trim();
-      const data = f.data ?? null;
-      if (!data || typeof data !== 'object') continue;
+      applyDoc(j);
+    }
 
-      if (dt === 'lesson') out.lessons.push(data);
-      else if (dt === 'npc') out.npcs.push(data);
-      else if (dt === 'location') out.locations.push(data);
-      else if (dt === 'event') out.events.push(data);
-      else if (dt === 'calendar') out.calendar = data;
-
-      else if (dt === 'spellCurriculum') out.spellCurriculum = data;
-      else if (dt === 'spellsIndex') out.spellsIndex = data;
-      else if (dt === 'library-item') out.libraryItems.push(data);
-      else if (dt === 'library') out.library = data;
+    const items = globalThis.game?.items?.contents ?? [];
+    for (const item of items) {
+      applyDoc(item);
     }
   } catch {
     // best-effort: overrides are optional
