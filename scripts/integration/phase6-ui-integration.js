@@ -32,6 +32,8 @@ registerRuntimeHook('janus7:ready:phase6-ui', HOOKS.ENGINE_READY, (engine) => {
   try {
     engine.commands = engine.commands ?? JanusCommands;
     engine.ui = engine.ui ?? JanusUI;
+    engine?.markServiceReady?.('ui.commands', engine.commands);
+    engine?.markServiceReady?.('ui.router', engine.ui);
 
     // Mirror to game.janus7 for safety (hot reload, partial init, etc.).
     if (game?.janus7) {
@@ -39,6 +41,7 @@ registerRuntimeHook('janus7:ready:phase6-ui', HOOKS.ENGINE_READY, (engine) => {
       game.janus7.ui = game.janus7.ui ?? JanusUI;
     }
   } catch (err) {
+    engine?.recordWarning?.('phase6.ui', 'attach', err);
     (engine?.core?.logger ?? console).warn?.('[JANUS7][Phase6] Failed to attach UI/Commands to engine:', err);
   }
 });

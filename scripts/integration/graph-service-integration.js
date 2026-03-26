@@ -19,8 +19,10 @@ registerRuntimeHook('janus7:ready:graph-service', HOOKS.ENGINE_READY, async (eng
       logger
     });
     await engine?.graph?.build?.({ force: true });
+    engine?.markServiceReady?.('graph', engine?.graph);
     logger?.debug?.('[JANUS7] Graph service integration completed');
   } catch (err) {
+    engine?.recordWarning?.('graph', 'integration', err);
     logger?.warn?.('[JANUS7] Graph service integration failed', { message: err?.message });
   }
 });

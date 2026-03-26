@@ -68,8 +68,10 @@ export function attachPhase7Ki(engine) {
     }
 
     logger?.debug?.('[JANUS7][Phase7] KI integration attached.');
+    engine?.markServiceReady?.('phase7.ki', engine.ki);
     return engine.ki;
   } catch (err) {
+    engine?.recordWarning?.('phase7.ki', 'attach', err);
     (engine?.core?.logger ?? console).warn?.('[JANUS7][Phase7] KI integration failed', err);
     return null;
   }

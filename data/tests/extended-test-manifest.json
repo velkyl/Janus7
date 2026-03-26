@@ -257,6 +257,18 @@
       "hasRun": false
     },
     {
+      "id": "P15-TC-17",
+      "title": "Diagnostic snapshot exposes services and aggregated issues",
+      "importPath": "./tests/p15/P15_TC_17__diagnostic_snapshot_services_and_errors.test.js",
+      "suiteClass": "binding",
+      "kind": "auto",
+      "phase": 15,
+      "phases": [
+        15
+      ],
+      "hasRun": false
+    },
+    {
       "id": "P15-TC-01",
       "title": "Kill-Switch Settings sind registriert",
       "importPath": "./tests/p15/P15_TC_01__kill_switch_settings_registriert.test.js",

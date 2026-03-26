@@ -101,6 +101,7 @@ async function loadPhaseIntegrations(engine) {
     engine.dsa5 = engine.bridge.dsa5;
     logger?.debug?.('[JANUS7] Phase 2+3 injiziert (AcademyDataApi, DSA5SystemBridge).');
   } catch (err) {
+    _recordIssue(engine, 'phase2-3', 'dependency-injection', err, 'error');
     logger?.error?.('[JANUS7] Phase 2+3 Injection fehlgeschlagen.', { message: err?.message });
   }
 
@@ -119,6 +120,7 @@ async function loadPhaseIntegrations(engine) {
     await import('../academy/phase4.js');
     logger?.debug?.('[JANUS7] Phase 4 (Simulation) loaded.');
   } catch (err) {
+    _recordIssue(engine, 'phase4', 'module-load', err);
     logger?.warn?.('[JANUS7] Phase 4 failed to load.', { message: err?.message });
   }
 
@@ -129,6 +131,7 @@ async function loadPhaseIntegrations(engine) {
       await import('../atmosphere/phase5.js');
       logger?.debug?.('[JANUS7] Phase 5 (Atmosphere) loaded.');
     } catch (err) {
+      _recordIssue(engine, 'phase5', 'module-load', err);
       logger?.warn?.('[JANUS7] Phase 5 failed to load.', { message: err?.message });
     }
   }
@@ -139,6 +142,7 @@ async function loadPhaseIntegrations(engine) {
       await import('../scripts/integration/quest-system-integration.js');
       logger?.debug?.('[JANUS7] Quest/Event integration loaded.');
     } catch (err) {
+      _recordIssue(engine, 'quest', 'module-load', err);
       logger?.warn?.('[JANUS7] Quest integration failed to load.', { message: err?.message });
     }
   }
@@ -149,6 +153,7 @@ async function loadPhaseIntegrations(engine) {
       await import('../scripts/integration/phase4-living-world-integration.js');
       logger?.debug?.('[JANUS7] Phase 4.5 (Living World) loaded.');
     } catch (err) {
+      _recordIssue(engine, 'phase4.5', 'module-load', err);
       logger?.warn?.('[JANUS7] Phase 4.5 (Living World) failed to load.', { message: err?.message });
     }
   }
@@ -159,6 +164,7 @@ async function loadPhaseIntegrations(engine) {
       await import('../scripts/integration/phase4-academy-progression-integration.js');
       logger?.debug?.('[JANUS7] Phase 4.6 (Academy Progression) loaded.');
     } catch (err) {
+      _recordIssue(engine, 'phase4.6', 'module-load', err);
       logger?.warn?.('[JANUS7] Phase 4.6 (Academy Progression) failed to load.', { message: err?.message });
     }
   }
@@ -169,6 +175,7 @@ async function loadPhaseIntegrations(engine) {
       await import('../scripts/integration/phase6-ui-integration.js');
       logger?.debug?.('[JANUS7] Phase 6 (UI) loaded.');
     } catch (err) {
+      _recordIssue(engine, 'phase6', 'module-load', err);
       logger?.warn?.('[JANUS7] Phase 6 failed to load.', { message: err?.message });
     }
 
@@ -178,6 +185,7 @@ async function loadPhaseIntegrations(engine) {
       await import('../scripts/integration/phase4-eventmessage-ui.js');
       logger?.debug?.('[JANUS7] Phase 4 EventMessage UI bridge loaded.');
     } catch (err) {
+      _recordIssue(engine, 'phase4-eventmessage-ui', 'module-load', err);
       logger?.warn?.('[JANUS7] Phase 4 EventMessage UI bridge failed to load.', { message: err?.message });
     }
   }
@@ -189,6 +197,7 @@ async function loadPhaseIntegrations(engine) {
       await import('../scripts/integration/phase7-ki-integration.js');
       logger?.debug?.('[JANUS7] Phase 7 (KI) loaded.');
     } catch (err) {
+      _recordIssue(engine, 'phase7', 'module-load', err);
       logger?.warn?.('[JANUS7] Phase 7 (KI) failed to load.', { message: err?.message });
     }
   } else {
@@ -200,6 +209,7 @@ async function loadPhaseIntegrations(engine) {
     await import('../scripts/integration/test-runner-integration.js');
     logger?.debug?.('[JANUS7] Test runner integration loaded.');
   } catch (err) {
+    _recordIssue(engine, 'test.runner', 'module-load', err);
     logger?.warn?.('[JANUS7] Test runner integration failed to load.', { message: err?.message });
   }
 
@@ -212,6 +222,7 @@ async function loadPhaseIntegrations(engine) {
     await import('../scripts/integration/graph-service-integration.js');
     logger?.debug?.('[JANUS7] Graph service integration loaded.');
   } catch (err) {
+    _recordIssue(engine, 'graph', 'module-load', err);
     logger?.warn?.('[JANUS7] Graph service integration failed to load.', { message: err?.message });
   }
 }
@@ -222,6 +233,26 @@ async function loadPhaseIntegrations(engine) {
 function _readyErrMeta(err) {
   if (err instanceof Error) return { name: err.name, message: err.message, stack: err.stack };
   try { return { message: String(err?.message ?? err), detail: JSON.stringify(err) }; } catch { return { message: String(err) }; }
+}
+
+function _markReady(engine, key, instance) {
+  if (!key || instance == null) return instance ?? null;
+  try {
+    engine?.markServiceReady?.(key, instance);
+  } catch (_) {
+    // readiness tracking must never block runtime
+  }
+  return instance;
+}
+
+function _recordIssue(engine, phase, context, err, severity = 'warn') {
+  try {
+    if (severity === 'warn') engine?.recordWarning?.(phase, context, err);
+    else engine?.recordError?.(phase, context, err, severity);
+  } catch (_) {
+    // diagnostics aggregation must never block runtime
+  }
+  return err;
 }
 
 function runReadySanityCheck(engine) {
@@ -331,6 +362,7 @@ try {
     try {
       engine.init();
     } catch (err) {
+      _recordIssue(engine, 'core', 'init', err, 'error');
       (engine?.core?.logger ?? console).error?.('[JANUS7] Engine init failed (Phase 1).', { message: err?.message, stack: err?.stack });
     }
 
@@ -407,15 +439,20 @@ try {
       await (JANUS_GLOBAL.preReady ?? Promise.resolve());
       log.debug?.('[JANUS7] ready.step preReady ok');
     } catch (err) {
+      _recordIssue(engine, 'ready.pipeline', 'preReady', err, 'error');
       log.error?.('[JANUS7] ready.step preReady failed', _readyErrMeta(err));
       ui.notifications?.error?.('JANUS7 Pre-Ready fehlgeschlagen. Details in der Konsole.');
       return;
     }
 
     try {
-      runReadySanityCheck(engine);
+      const sanityIssues = runReadySanityCheck(engine);
+      if (sanityIssues.length) {
+        _recordIssue(engine, 'ready.pipeline', 'sanity', sanityIssues.join(' | '));
+      }
       log.debug?.('[JANUS7] ready.step sanity ok');
     } catch (err) {
+      _recordIssue(engine, 'ready.pipeline', 'sanity', err);
       log.warn?.('[JANUS7] ready.step sanity failed', _readyErrMeta(err));
     }
 
@@ -427,6 +464,7 @@ try {
       }
       log.debug?.('[JANUS7] ready.step engine.ready ok');
     } catch (err) {
+      _recordIssue(engine, 'ready.pipeline', 'engine.ready', err, 'error');
       log.error?.('[JANUS7] ready.step engine.ready failed', _readyErrMeta(err));
       ui.notifications?.error?.('JANUS7 konnte engine.ready() nicht vollständig abschließen. Details in der Konsole.');
       return;
@@ -437,8 +475,10 @@ try {
         engine.capabilities = new JanusCapabilities(engine);
         Object.freeze(engine.capabilities);
         if (globalThis.game?.janus7) globalThis.game.janus7.capabilities = engine.capabilities;
+        _markReady(engine, 'core.capabilities', engine.capabilities);
         log.info?.('[JANUS7] capabilities layer registered');
       } catch (capErr) {
+        _recordIssue(engine, 'core.capabilities', 'init', capErr);
         log.warn?.('[JANUS7] capabilities init failed', _readyErrMeta(capErr));
       }
     }
@@ -449,6 +489,7 @@ try {
         mod?.attachPhase7Ki?.(engine);
         log.debug?.('[JANUS7] Phase 7 KI attach ensured after ready.');
       } catch (phase7Err) {
+        _recordIssue(engine, 'phase7', 'attach-ensure', phase7Err);
         log.warn?.('[JANUS7] Phase 7 KI attach ensure failed', _readyErrMeta(phase7Err));
       }
     }
@@ -462,8 +503,10 @@ try {
         engine.services.time.reactor = engine._timeReactor;
         engine.time ??= {};
         engine.time.reactor = engine._timeReactor;
+        _markReady(engine, 'services.time.reactor', engine._timeReactor);
         log.info?.('[JANUS7] TimeReactor registered');
       } catch (reactorErr) {
+        _recordIssue(engine, 'services.time.reactor', 'init', reactorErr);
         log.warn?.('[JANUS7] TimeReactor init failed', _readyErrMeta(reactorErr));
       }
     }
@@ -477,8 +520,10 @@ try {
         engine.services ??= {};
         engine.services.cron = engine._cron;
         engine.cron = engine._cron;
+        _markReady(engine, 'services.cron', engine._cron);
         log.info?.(`[JANUS7] JanusCron registered (weekly=${cronWeekly}, trimester=${cronTrimester})`);
       } catch (cronErr) {
+        _recordIssue(engine, 'services.cron', 'init', cronErr);
         log.warn?.('[JANUS7] JanusCron init failed', _readyErrMeta(cronErr));
       }
     }
@@ -487,8 +532,10 @@ try {
   const docSync = await ensureLessonDocumentsReady(engine, { forceSync: false });
   engine.documents ??= {};
   engine.documents.lesson = engine.academy?.documents?.lessons ?? { subtype: 'janus7.lesson' };
+  _markReady(engine, 'documents.lesson', engine.documents.lesson);
   log.info?.(`[JANUS7] Lesson documents ready (created=${docSync?.created ?? 0}, updated=${docSync?.updated ?? 0}).`);
 } catch (lessonDocErr) {
+  _recordIssue(engine, 'documents.lesson', 'sync', lessonDocErr);
   log.warn?.('[JANUS7] Lesson document sync failed', _readyErrMeta(lessonDocErr));
 }
 
@@ -500,8 +547,10 @@ try {
         engine.bridges.foundry ??= {};
         engine.bridges.foundry.sceneRegions = engine._sceneRegionsBridge;
         engine.bridges.sceneRegions = engine._sceneRegionsBridge;
+        _markReady(engine, 'bridges.foundry.sceneRegions', engine._sceneRegionsBridge);
         log.info?.('[JANUS7] SceneRegionsBridge registered');
       } catch (bridgeErr) {
+        _recordIssue(engine, 'bridges.foundry.sceneRegions', 'init', bridgeErr);
         log.warn?.('[JANUS7] SceneRegionsBridge init failed', _readyErrMeta(bridgeErr));
       }
     }

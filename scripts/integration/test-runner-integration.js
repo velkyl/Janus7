@@ -62,6 +62,7 @@ async function ensureHarness(engine) {
     openGuidedManualTests: engine.test?.openGuidedManualTests,
     manual: engine.test?.manual
   };
+  engine?.markServiceReady?.('test.harness', _harness);
   logger?.info?.('[JANUS7] Test harness lazy-loaded.');
   return _harness;
 }
@@ -144,12 +145,14 @@ registerRuntimeHook('janus7:ready:test-runner', HOOKS.ENGINE_READY, (engine) => 
   engine.test.manual = {
     runGuided: openGuidedManualTests
   };
+  engine?.markServiceReady?.('test.api', engine.test);
   try {
     const enabled = game.settings.get(MODULE_ID, 'enableTestRunner');
     if (enabled && game.user.isGM) {
       (engine?.core?.logger ?? console).info?.('[JANUS7] Test Runner auto-run disabled for lazy-loading; use the UI or console to start tests manually.');
     }
   } catch (err) {
+    engine?.recordWarning?.('test.runner', 'setting-check', err);
     (engine?.core?.logger ?? console).warn?.('[JANUS7] Test Runner setting check failed:', err.message);
   }
 });

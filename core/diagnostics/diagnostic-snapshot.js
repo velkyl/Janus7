@@ -9,6 +9,11 @@ export function buildDiagnosticSnapshot(engine) {
   const optionalLoadWarnings = Array.isArray(academyValidation?.optionalLoadWarnings)
     ? academyValidation.optionalLoadWarnings.slice(0, 10)
     : [];
+  const serviceReport = engine?.serviceRegistry?.getReport?.()
+    ?? engine?.services?.registry?.getReport?.()
+    ?? { ready: [], pending: [], uptime: {} };
+  const errorSummary = engine?.errors?.getSummary?.()
+    ?? { totalErrors: 0, totalWarnings: 0, byPhase: {}, latest: [] };
 
   return {
     moduleId: engine?.moduleId ?? 'janus7',
@@ -41,6 +46,8 @@ export function buildDiagnosticSnapshot(engine) {
       academyValidation: academyReferenceDiagnostics,
       optionalLoadWarnings
     },
+    services: serviceReport,
+    errors: errorSummary,
     ui: {
       openWindows: Object.keys(globalThis.ui?.windows ?? {}).length,
       isGM: !!game?.user?.isGM,

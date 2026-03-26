@@ -74,6 +74,44 @@ export class Janus7Engine {
 
     /** Zentraler Error-Aggregator für Engine-weites Fehler-Tracking */
     this.errors = new JanusErrorAggregator();
+    this.services = {
+      registry: this.serviceRegistry
+    };
+  }
+
+  markServiceReady(key, instance) {
+    if (!key || instance == null) return instance ?? null;
+    try {
+      this.services ??= {};
+      this.services.registry = this.serviceRegistry;
+      this.serviceRegistry?.markReady?.(key, instance);
+    } catch (_err) {
+      // registry visibility must never block runtime
+    }
+    return instance;
+  }
+
+  markServiceUnavailable(key) {
+    if (!key) return null;
+    try {
+      this.serviceRegistry?.markUnavailable?.(key);
+    } catch (_err) {
+      // registry visibility must never block runtime
+    }
+    return null;
+  }
+
+  recordError(phase, context, err, severity = 'error') {
+    try {
+      this.errors?.record?.(phase, context, err, severity);
+    } catch (_err) {
+      // diagnostics aggregation must never block runtime
+    }
+    return err;
+  }
+
+  recordWarning(phase, context, err) {
+    return this.recordError(phase, context, err, 'warn');
   }
 
   /**
@@ -148,6 +186,14 @@ export class Janus7Engine {
       }
     };
 
+    this.markServiceReady('core.logger', this.core.logger);
+    this.markServiceReady('core.config', this.core.config);
+    this.markServiceReady('core.state', this.core.state);
+    this.markServiceReady('core.validator', this.core.validator);
+    this.markServiceReady('core.io', this.core.io);
+    this.markServiceReady('core.director', this.core.director);
+    this.markServiceReady('core.folderService', this.core.folderService);
+
     // NOTE: AcademyDataApi (Phase 2) and DSA5SystemBridge (Phase 3) are no longer
     // instantiated here. They are injected by scripts/janus.mjs after init() to
     // preserve Phase-1 isolation. Access via engine.academy.data and engine.bridge.dsa5.
@@ -208,6 +254,11 @@ export class Janus7Engine {
       this.atmosphere?.controller?.destroy?.();
     } catch (_) { /* noop */ }
 
+    const readyServices = this.serviceRegistry?.getReport?.()?.ready ?? [];
+    for (const key of readyServices) {
+      this.markServiceUnavailable(key);
+    }
+
     this.core?.logger?.info?.('JANUS7 Engine cleanup complete');
   }
 
@@ -228,11 +279,16 @@ export class Janus7Engine {
     if (this.academy?.data?.init) {
       try {
         await this.academy.data.init();
+        this.markServiceReady('academy.data', this.academy.data);
         this.core.logger?.debug?.('[JANUS7] ready.step academy.data.init ok');
       } catch (err) {
+        this.recordWarning('academy.data', 'init', err);
+        this.markServiceUnavailable('academy.data');
         this.core.logger?.warn?.('[JANUS7] academy.data init fehlgeschlagen – Ready läuft degradiert weiter.', _janusErrMeta(err));
       }
     } else {
+      this.recordWarning('academy.data', 'init', 'academy.data unavailable during ready');
+      this.markServiceUnavailable('academy.data');
       this.core.logger?.warn?.('[JANUS7] academy.data nicht verfügbar, Ready läuft degradiert weiter.');
     }
 
@@ -273,8 +329,11 @@ export class Janus7Engine {
     // Phase 3: DSA5 Bridge initialisieren (nur wenn System dsa5)
     try {
       await this.bridge.dsa5?.init?.();
+      this.markServiceReady('bridge.dsa5', this.bridge.dsa5);
       this.core.logger?.debug?.('[JANUS7] ready.step bridge.dsa5.init ok');
     } catch (err) {
+      this.recordWarning('bridge.dsa5', 'init', err);
+      this.markServiceUnavailable('bridge.dsa5');
       this.core.logger?.warn?.('DSA5SystemBridge init fehlgeschlagen', _janusErrMeta(err));
     }
     // Phase 6 Safety Net: ensure UI + Commands are attached when enableUI=true.
@@ -288,8 +347,10 @@ export class Janus7Engine {
             const cmdMod = await import('../ui/commands/index.js');
             const cmds = cmdMod?.JanusCommands ?? cmdMod?.default;
             if (cmds) this.commands = cmds;
+            if (this.commands) this.markServiceReady('ui.commands', this.commands);
             if (game?.janus7 && !game.janus7.commands && this.commands) game.janus7.commands = this.commands;
           } catch (err) {
+            this.recordWarning('phase6.ui', 'commands-fallback-attach', err);
             this.core.logger?.warn?.('[Phase6] Commands attach failed', err);
           }
         }
@@ -299,13 +360,16 @@ export class Janus7Engine {
             const uiMod = await import('../ui/index.js');
             const uiRouter = uiMod?.JanusUI ?? uiMod?.default;
             if (uiRouter) this.ui = uiRouter;
+            if (this.ui) this.markServiceReady('ui.router', this.ui);
             if (game?.janus7 && !game.janus7.ui && this.ui) game.janus7.ui = this.ui;
           } catch (err) {
+            this.recordWarning('phase6.ui', 'router-fallback-attach', err);
             this.core.logger?.warn?.('[Phase6] UI attach failed', err);
           }
         }
       }
     } catch (err) {
+      this.recordWarning('phase6.ui', 'fallback-attach', err);
       this.core.logger?.warn?.('[Phase6] UI/Commands fallback attach failed', err);
     }
 
@@ -314,6 +378,7 @@ export class Janus7Engine {
         await this.core.director.onReady();
         this.core.logger?.debug?.('[JANUS7] ready.step director.onReady ok');
       } catch (err) {
+        this.recordWarning('core.director', 'onReady', err);
         this.core.logger?.warn?.('[JANUS7] director.onReady failed', _janusErrMeta(err));
       }
     }
@@ -322,9 +387,11 @@ export class Janus7Engine {
     try {
       const { JanusSyncEngine } = await import('./sync-engine.js');
       this.sync = new JanusSyncEngine({ logger: this.core.logger });
+      this.markServiceReady('sync.engine', this.sync);
       if (game?.janus7) game.janus7.sync = this.sync;
       this.core.logger?.debug?.('[JANUS7] ready.step sync-engine ok');
     } catch (err) {
+      this.recordWarning('sync.engine', 'attach', err);
       this.core.logger?.warn?.('[Sync] JanusSyncEngine attach failed', _janusErrMeta(err));
     }
 
@@ -375,6 +442,7 @@ export class Janus7Engine {
       emitHook(HOOKS.ENGINE_READY, this);
       this.core.logger?.debug?.('[JANUS7] ready.step emit ENGINE_READY ok');
     } catch (err) {
+      this.recordError('hooks.runtime', 'emit.engineReady', err);
       this.core.logger?.error?.('Fehler beim janus7Ready-Hook', _janusErrMeta(err));
     }
   }

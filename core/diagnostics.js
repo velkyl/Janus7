@@ -424,9 +424,23 @@ export async function runJanusDiagnostics(engine, { notify = true, edgeCases = f
       return [];
     }
   })();
+  const serviceReport = engine?.serviceRegistry?.getReport?.()
+    ?? engine?.services?.registry?.getReport?.()
+    ?? { ready: [], pending: [], uptime: {} };
+  const errorSummary = engine?.errors?.getSummary?.()
+    ?? { totalErrors: 0, totalWarnings: 0, byPhase: {}, latest: [] };
   const importFailedCount = Array.isArray(engine?.test?.results)
     ? engine.test.results.filter((r) => String(r?.status ?? '').toUpperCase() === 'IMPORT_FAILED').length
     : 0;
+  if ((errorSummary.totalErrors ?? 0) > 0 || (errorSummary.totalWarnings ?? 0) > 0) {
+    push(
+      'runtime.issues',
+      false,
+      `Runtime issues recorded: errors=${errorSummary.totalErrors ?? 0}, warnings=${errorSummary.totalWarnings ?? 0}`,
+      errorSummary,
+      'warn'
+    );
+  }
   report.sections = {
     build: {
       moduleId: report.meta.moduleId,
@@ -464,6 +478,8 @@ export async function runJanusDiagnostics(engine, { notify = true, edgeCases = f
         message: entry.message
       }))
     },
+    services: serviceReport,
+    errors: errorSummary,
     modules: {
       activeOptionalModules
     },

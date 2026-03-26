@@ -154,6 +154,7 @@ export const BUILTIN_AUTO_MODULES = [
   './tests/p15/P15_TC_14__graph_cache_contract.test.js',
   './tests/p15/P15_TC_15__diagnostic_snapshot_contract.test.js',
   './tests/p15/P15_TC_16__control_panel_diagnostics_context.test.js',
+  './tests/p15/P15_TC_17__diagnostic_snapshot_services_and_errors.test.js',
 
   // Phase 16
   './tests/p16/P16_TC_01__apps_registriert.test.js',

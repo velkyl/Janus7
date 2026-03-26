@@ -108,6 +108,9 @@ registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (en
     engine.calendar = calendar;
     engine.scoring  = scoring;
     engine.social   = social;
+    engine?.markServiceReady?.('simulation.calendar', calendar);
+    engine?.markServiceReady?.('simulation.scoring', scoring);
+    engine?.markServiceReady?.('simulation.social', social);
 
     // ── Neue Phase-4-Engines (Audit v3) ────────────────────────────────────
     const bridge  = engine?.bridge?.dsa5 ?? null;
@@ -117,8 +120,10 @@ registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (en
       const socialSync = new JanusSocialSync({ bridge, socialEngine: social, academyData, logger });
       safeRegister(socialSync, 'socialSync');
       engine.academy.socialSync = socialSync;
+      engine?.markServiceReady?.('academy.socialSync', socialSync);
       logger?.debug?.('[JANUS7] Phase 4: JanusSocialSync verdrahtet (nach bridge-Init).');
     } catch (syncErr) {
+      engine?.recordWarning?.('phase4', 'socialSync.init', syncErr);
       logger?.warn?.('[JANUS7] Phase 4: JanusSocialSync init fehlgeschlagen (non-fatal)', { err: syncErr?.message });
     }
 
@@ -156,6 +161,7 @@ registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (en
       } catch { /* non-fatal */ }
       safeRegister(lessonBuffManager, 'lessonBuffManager');
     } else {
+      engine?.recordWarning?.('phase4', 'bridge.missing', 'DSA5 bridge unavailable for extended simulation');
       logger?.warn?.('[JANUS7] Phase 4: DSA5-Bridge nicht verfügbar. Erweiterte Simulation läuft degradiert.');
     }
 
@@ -172,6 +178,10 @@ registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (en
         })
       : null;
     engine.academy.lessonBuffManager = lessonBuffManager;
+    engine?.markServiceReady?.('academy.learningProgress', learningProgress);
+    engine?.markServiceReady?.('academy.fateTracker', fateTracker);
+    engine?.markServiceReady?.('academy.circleAssignment', circleAssignment);
+    engine?.markServiceReady?.('academy.lessonBuffManager', lessonBuffManager);
 
     // ExamConditionHooks: verbindet Prüfungsergebnisse mit Timed Conditions
     let examConditionHooks = null;
@@ -180,8 +190,10 @@ registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (en
         examConditionHooks = new JanusExamConditionHooks({ bridge, logger });
         examConditionHooks.register();
         engine.academy.examConditionHooks = examConditionHooks;
+        engine?.markServiceReady?.('academy.examConditionHooks', examConditionHooks);
         logger?.debug?.('[JANUS7] Phase 4: JanusExamConditionHooks verdrahtet.');
       } catch (echErr) {
+        engine?.recordWarning?.('phase4', 'examConditionHooks.init', echErr);
         logger?.warn?.('[JANUS7] Phase 4: JanusExamConditionHooks init fehlgeschlagen (non-fatal)', { err: echErr?.message });
       }
     }
@@ -220,6 +232,9 @@ registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (en
       engine.academy.exams         = exams;
       engine.academy.lessons       = lessons;
       engine.academy.rollConnector = rollConnector;
+      engine?.markServiceReady?.('academy.exams', exams);
+      engine?.markServiceReady?.('academy.lessons', lessons);
+      engine?.markServiceReady?.('academy.rollConnector', rollConnector);
 
       // Compatibility aliases
       engine.exams   = exams;
@@ -227,11 +242,13 @@ registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (en
 
       logger?.debug?.('[JANUS7] Phase 4: exams/lessons/rollConnector verdrahtet.');
     } catch (connErr) {
+      engine?.recordWarning?.('phase4', 'rollConnector.init', connErr);
       logger?.warn?.('[JANUS7] Phase 4: RollScoringConnector init fehlgeschlagen (non-fatal)', { err: connErr?.message });
     }
 
     logger?.debug?.('[JANUS7] Phase 4 Simulation initialisiert (calendar/scoring/social/learningProgress/fateTracker/circleAssignment/lessonBuffManager).');
   } catch (err) {
+    engine?.recordError?.('phase4', 'integration', err);
     baseLogger.error?.('[JANUS7] Phase 4 Integration failed:', err);
   }
 });
