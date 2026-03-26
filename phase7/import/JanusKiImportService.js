@@ -535,8 +535,11 @@ export class JanusKiImportService {
       };
     } catch (err) {
       const errors = [];
-      if (Array.isArray(err?.details?.errors) && err.details.errors.length) {
-        for (const entry of err.details.errors) {
+      const detailedErrors = Array.isArray(err?.errors) && err.errors.length
+        ? err.errors
+        : (Array.isArray(err?.details?.errors) && err.details.errors.length ? err.details.errors : []);
+      if (detailedErrors.length) {
+        for (const entry of detailedErrors) {
           if (!entry) continue;
           if (typeof entry === 'string') errors.push(entry);
           else errors.push(entry.message ?? entry.instancePath ?? JSON.stringify(entry));
@@ -545,7 +548,7 @@ export class JanusKiImportService {
       if (!errors.length) errors.push(err?.message ?? String(err));
       return {
         ok: false,
-        errors,
+        errors: this._normalizePreflightErrors(errors),
         summary: []
       };
     }
@@ -756,6 +759,27 @@ export class JanusKiImportService {
       }
       target.push({ path: rawPath || fullPath, before, after, value });
     }
+  }
+
+  _normalizePreflightErrors(errors = []) {
+    const normalized = [];
+    for (const rawEntry of errors) {
+      const message = String(rawEntry ?? '').trim();
+      if (!message) continue;
+
+      if (/root\.changes\.journalEntries\[\d+\].*(darf nicht null sein|muss ein Objekt sein)/i.test(message)) {
+        normalized.push('journalEntries muss Objekte enthalten.');
+        continue;
+      }
+      if (/root\.changes\.calendarUpdates\[\d+\].*(darf nicht null sein|muss ein Objekt sein)/i.test(message)) {
+        normalized.push('calendarUpdates enthält ungültige Patch-Objekte.');
+        continue;
+      }
+
+      normalized.push(message);
+    }
+
+    return [...new Set(normalized)];
   }
 
   async _renderImportSummaryChat({ housePointChanges = [], relationChanges = [] } = {}) {

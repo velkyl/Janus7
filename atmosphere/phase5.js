@@ -47,6 +47,7 @@ registerRuntimeHook('janus7:ready:atmosphere-phase5', HOOKS.ENGINE_READY, (engin
     });
 
     engine.atmosphere.controller = controller;
+    engine.markServiceReady?.('atmosphere.controller', controller);
 
     // Convenience API: game.janus7.atmosphere.*
     engine.atmosphere.init = (opts = {}) => controller.init(opts);
@@ -117,6 +118,8 @@ registerRuntimeHook('janus7:ready:atmosphere-phase5', HOOKS.ENGINE_READY, (engin
     // Auto-init (harmlos, no-op wenn disabled)
     controller.init().catch((err) => logger?.error?.('Atmosphere init() fehlgeschlagen', err));
   } catch (err) {
+    engine?.markServiceUnavailable?.('atmosphere.controller');
+    engine?.recordWarning?.('phase5', 'engine-ready-attach', err);
     (engine?.core?.logger ?? console).error?.('[JANUS7] Phase 5 Registrierung fehlgeschlagen', err);
     // no hard fail: Phase 5 darf die Engine nicht blockieren
   }

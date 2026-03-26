@@ -27,12 +27,26 @@ export default {
       const moonTxt = stripJsComments(moonTxtRaw);
 
       const mustContain = [
-        "Hooks.on('getSceneControlButtons'",
-        "Hooks.on('updateWorldTime'"
+        {
+          label: 'getSceneControlButtons',
+          needles: [
+            "Hooks.on('getSceneControlButtons'",
+            '_registerCoreHook(\'getSceneControlButtons\'',
+            '_registerCoreHook("getSceneControlButtons"'
+          ]
+        },
+        {
+          label: 'updateWorldTime',
+          needles: [
+            "Hooks.on('updateWorldTime'",
+            '_registerCoreHook(\'updateWorldTime\'',
+            '_registerCoreHook("updateWorldTime"'
+          ]
+        }
       ];
-      for (const needle of mustContain) {
-        if (!janusTxt.includes(needle)) {
-          return { ok: false, summary: `scripts/janus.mjs missing expected hook: ${needle}` };
+      for (const entry of mustContain) {
+        if (!entry.needles.some((needle) => janusTxt.includes(needle))) {
+          return { ok: false, summary: `scripts/janus.mjs missing expected hook: Hooks.on('${entry.label}'` };
         }
       }
 

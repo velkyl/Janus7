@@ -67,7 +67,7 @@ export function emitHook(topic, payload) {
   _inFlight.add(topic);
   try {
     // Payload mit Metadaten anreichern (nur bei Objekten, nicht bei primitiven Werten)
-    const enriched = (payload !== null && typeof payload === 'object' && !Array.isArray(payload))
+    const enriched = (payload !== null && typeof payload === 'object' && !Array.isArray(payload) && topic !== HOOKS.ENGINE_READY)
       ? { ...payload, _meta: { topic, emittedAt: Date.now() } }
       : payload;
 
