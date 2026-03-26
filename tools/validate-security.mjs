@@ -14,17 +14,9 @@ const allowedNewFunction = new Set([
 const allowedEval = new Set([]);
 
 // innerHTML-Zuweisungen: Whitelist für Foundry-Core-Interop wo geprüft sicher.
-// Neue Einträge erfordern eine explizite Begründung (Review durchgeführt am 2026-03-26):
-const allowedInnerHTML = new Set([
-  // JanusAcademyDataStudioApp: alle user-controlled Inhalte gehen durch this._escape()
-  path.join('ui', 'apps', 'JanusAcademyDataStudioApp.js'),
-  // JanusCommandCenterApp: Spotlight-Template ist statisch; container.innerHTML='' ist ein Clear
-  path.join('ui', 'apps', 'JanusCommandCenterApp.js'),
-  // JanusConfigPanelApp: Statische Input-Zeile ohne user-controlled Inhalt
-  path.join('ui', 'apps', 'JanusConfigPanelApp.js'),
-  // JanusSettingsTestHarnessApp: Statischer Fehler-Hinweis ohne user-controlled Inhalt
-  path.join('ui', 'apps', 'JanusSettingsTestHarnessApp.js'),
-]);
+// Neue Einträge erfordern eine explizite Begründung.
+// Alle bisherigen Einträge wurden auf createElement/textContent migriert (2026-03-26).
+const allowedInnerHTML = new Set([]);
 
 // ─── Datei-Scan ───────────────────────────────────────────────────────────────
 
