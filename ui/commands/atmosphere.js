@@ -9,6 +9,10 @@
 import { _checkPermission, _engine, _toNum, _wrap } from './_shared.js';
 import { JanusUI } from '../helpers.js';
 
+function _isAtmosphereEnabled(engine) {
+  return !!engine?.core?.state?.get?.('features.atmosphere.enabled');
+}
+
 export const atmosphereCommands = {
 
   // -------------------------------------------------------------------------
@@ -53,6 +57,7 @@ export const atmosphereCommands = {
     if (!_checkPermission('setAtmosphereVolume')) return { success: false, cancelled: true };
 
     const engine = _engine();
+    if (!_isAtmosphereEnabled(engine)) return { success: false, cancelled: true, data: { reason: 'disabled' } };
     const volume = _toNum(dataset.volume, 0.7);
     return await _wrap('setAtmosphereVolume', async () => {
       const ok = await engine?.atmosphere?.setMasterVolume?.(volume, { broadcast: true });
@@ -65,6 +70,7 @@ export const atmosphereCommands = {
     if (!_checkPermission('applyMood')) return { success: false, cancelled: true };
 
     const engine = _engine();
+    if (!_isAtmosphereEnabled(engine)) return { success: false, cancelled: true, data: { reason: 'disabled' } };
     const moodId = dataset.moodId || null;
     if (!moodId) return { cancelled: true };
     return await _wrap('applyMood', async () => {
@@ -78,6 +84,7 @@ export const atmosphereCommands = {
     if (!_checkPermission('stopAtmosphere')) return { success: false, cancelled: true };
 
     const engine = _engine();
+    if (!_isAtmosphereEnabled(engine)) return { success: false, cancelled: true, data: { reason: 'disabled' } };
     return await _wrap('stopAtmosphere', async () => {
       const ok = await engine?.atmosphere?.stopAll?.({ broadcast: true });
       if (!ok) throw new Error('Atmosphere.stopAll fehlgeschlagen');
