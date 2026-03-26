@@ -26,6 +26,14 @@ function mapActions(actions = []) {
   }));
 }
 
+function mapViewCards(cards = []) {
+  return cards.map((card, cardIndex) => ({
+    ...card,
+    cardIndex,
+    actions: mapActions(card.actions ?? [])
+  }));
+}
+
 export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   static DEFAULT_OPTIONS = {
     id: 'janus7-shell',
@@ -117,12 +125,12 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     try {
       return await renderHbsTemplate(path, {
         view,
-        cards: model.cards ?? [],
+        cards: mapViewCards(model.cards ?? []),
         tiles: model.tiles ?? []
       });
     } catch (_) {
       const fallback = moduleTemplatePath('shell/views/director.hbs');
-      return renderHbsTemplate(fallback, { view, cards: model.cards ?? [], tiles: model.tiles ?? [] });
+      return renderHbsTemplate(fallback, { view, cards: mapViewCards(model.cards ?? []), tiles: model.tiles ?? [] });
     }
   }
 
@@ -198,11 +206,17 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     event?.preventDefault?.();
     const panelId = target?.dataset?.panelId ?? null;
     const actionIndex = Number(target?.dataset?.actionIndex ?? -1);
+    const cardIndex = Number(target?.dataset?.cardIndex ?? -1);
     let descriptor = null;
 
     if (panelId) {
       const panel = getPanel(panelId);
       descriptor = panel?.actions?.[actionIndex] ?? null;
+    } else if (Number.isInteger(cardIndex) && cardIndex >= 0 && Number.isInteger(actionIndex) && actionIndex >= 0) {
+      const engine = this._getEngine?.() ?? game?.janus7 ?? null;
+      const view = getView(this._viewId) ?? getView('director');
+      const model = view?.build?.(engine) ?? { cards: [] };
+      descriptor = model?.cards?.[cardIndex]?.actions?.[actionIndex] ?? null;
     } else if (target?.dataset?.viewId) {
       descriptor = { kind: 'setView', viewId: target.dataset.viewId };
     }

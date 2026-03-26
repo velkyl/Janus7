@@ -18,7 +18,7 @@ if (!ItemSheetBase) {
 export class JanusLessonItemSheet extends ItemSheetBase {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ['janus7', 'sheet', 'lesson-item-sheet'],
+      classes: ['janus7-app', 'janus7', 'sheet', 'lesson-item-sheet'],
       width: 760,
       height: 680,
       template: moduleTemplatePath('templates/items/lesson-sheet.hbs')

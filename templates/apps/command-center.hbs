@@ -12,12 +12,12 @@
       <span class="janus7-title">Command Center</span>
     </div>
     <div class="janus7-toolbar__right">
-      <button class="j7-btn j7-btn-ghost" data-action="openSpotlight" title="Spotlight Search (Ctrl+K)">
+      <button type="button" class="j7-btn j7-btn-ghost" data-action="openSpotlight" title="Spotlight Search (Ctrl+K)">
         <i class="fas fa-search"></i>
         <span>Suche</span>
         <kbd>Ctrl+K</kbd>
       </button>
-      <button class="j7-beamer-toggle" data-action="toggleBeamerMode" title="Beamer-Modus">
+      <button type="button" class="j7-beamer-toggle" data-action="toggleBeamerMode" title="Beamer-Modus">
         <i class="fas fa-video"></i>
         Beamer
       </button>
@@ -33,12 +33,12 @@
 
   {{!-- Kategorie-Filter --}}
   <div class="command-center-filters" role="tablist">
-    <button class="filter-button {{#if (eq selectedCategory 'all')}}active{{/if}}"
+    <button type="button" class="filter-button {{#if (eq selectedCategory 'all')}}active{{/if}}"
       data-action="filterCategory" data-category-id="all" role="tab">
       <i class="fas fa-list"></i> Alle
     </button>
     {{#each commandCategories as |category|}}
-      <button class="filter-button {{#if (eq ../selectedCategory category.id)}}active{{/if}}"
+      <button type="button" class="filter-button {{#if (eq ../selectedCategory category.id)}}active{{/if}}"
         data-action="filterCategory" data-category-id="{{category.id}}" role="tab">
         <i class="fas {{category.icon}}"></i> {{category.label}}
       </button>
@@ -67,7 +67,7 @@
           </div>
           <div class="category-commands">
             {{#each category.commands as |command|}}
-              <button class="command-button {{#unless command.available}}unavailable{{/unless}}"
+              <button type="button" class="command-button {{#unless command.available}}unavailable{{/unless}}"
                 data-action="executeCommand"
                 data-command-id="{{command.id}}"
                 title="{{command.label}}"

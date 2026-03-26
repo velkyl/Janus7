@@ -59,11 +59,34 @@
 }
 
 .j7-test-harness,
-.janus7-control-panel,
 .janus-shell-app,
 .scoring-view {
   min-width: 0;
   overflow-wrap: anywhere;
+}
+
+.janus7-control-panel {
+  min-width: 0;
+}
+
+.janus7-control-panel :where(.janus7-title, .janus7-muted, .janus7-kv .val, .janus7-kv .key, .janus7-table td, .janus7-table th, .janus7-logline span, .janus7-callout p, .janus-btn, .item) {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+#notifications :where(li, .notification, .notification-pip) {
+  width: auto;
+  min-width: 0;
+  max-width: min(36rem, calc(100vw - 3rem));
+  overflow-wrap: break-word;
+  word-break: normal;
+  text-shadow: none;
+}
+
+#notifications :where(button, a) {
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .j7-test-harness .j7-test-row,

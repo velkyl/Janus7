@@ -108,18 +108,20 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     const esc = (v) => this._escape(v ?? '');
     const row = (label, name, value, type = 'text') => `
       <label class="j7-data-studio__field"><span>${label}</span><input data-j7-form="${name}" type="${type}" value="${esc(value)}" class="janus7-textarea j7-data-studio__input" /></label>`;
+    const textareaRow = (label, name, value) => `
+      <label class="j7-data-studio__field j7-data-studio__field--wide"><span>${label}</span><textarea data-j7-form="${name}" class="janus7-textarea j7-data-studio__input">${esc(value)}</textarea></label>`;
 
     if (domainId === 'lesson') {
-      return `<div class="j7-data-studio__form">${row('ID', 'id', record.id)}${row('Name', 'name', record.name)}${row('Fach', 'subject', record.subject)}${row('Dozent (NPC-ID)', 'teacherNpcId', record.teacherNpcId)}${row('Dauer Slots', 'durationSlots', record.durationSlots ?? 1, 'number')}<label class="j7-data-studio__field"><span>Zusammenfassung</span><textarea data-j7-form="summary" class="janus7-textarea j7-data-studio__input">${esc(record.summary)}</textarea></label></div>`;
+      return `<div class="j7-data-studio__form">${row('ID', 'id', record.id)}${row('Name', 'name', record.name)}${row('Fach', 'subject', record.subject)}${row('Dozent (NPC-ID)', 'teacherNpcId', record.teacherNpcId)}${row('Dauer Slots', 'durationSlots', record.durationSlots ?? 1, 'number')}${textareaRow('Zusammenfassung', 'summary', record.summary)}</div>`;
     }
     if (domainId === 'npc') {
       return `<div class="j7-data-studio__form">${row('ID', 'id', record.id)}${row('Name', 'name', record.name)}${row('Rolle', 'role', record.role)}${row('Untertitel', 'profile.subtitle', record?.profile?.subtitle ?? '')}<label class="j7-data-studio__field"><span>Rollentext</span><textarea data-j7-form="profile.roleText" class="janus7-textarea j7-data-studio__input">${esc(record?.profile?.roleText ?? '')}</textarea></label><label class="j7-data-studio__field"><span>Aussehen</span><textarea data-j7-form="profile.sections.Aussehen" class="janus7-textarea j7-data-studio__input">${esc(record?.profile?.sections?.Aussehen ?? '')}</textarea></label><label class="j7-data-studio__field"><span>Persönlichkeit</span><textarea data-j7-form="profile.sections.Persönlichkeit" class="janus7-textarea j7-data-studio__input">${esc(record?.profile?.sections?.Persönlichkeit ?? '')}</textarea></label></div>`;
     }
     if (domainId === 'location') {
-      return `<div class="j7-data-studio__form">${row('ID', 'id', record.id)}${row('Name', 'name', record.name)}${row('Typ', 'type', record.type)}${row('Zone', 'zone', record.zone)}<label class="j7-data-studio__field"><span>Zusammenfassung</span><textarea data-j7-form="summary" class="janus7-textarea j7-data-studio__input">${esc(record.summary)}</textarea></label></div>`;
+      return `<div class="j7-data-studio__form">${row('ID', 'id', record.id)}${row('Name', 'name', record.name)}${row('Typ', 'type', record.type)}${row('Zone', 'zone', record.zone)}${textareaRow('Zusammenfassung', 'summary', record.summary)}</div>`;
     }
     if (domainId === 'event') {
-      return `<div class="j7-data-studio__form">${row('ID', 'id', record.id)}${row('Name', 'name', record.name)}${row('Typ', 'type', record.type)}<label class="j7-data-studio__field"><span>Zusammenfassung</span><textarea data-j7-form="summary" class="janus7-textarea j7-data-studio__input">${esc(record.summary)}</textarea></label></div>`;
+      return `<div class="j7-data-studio__form">${row('ID', 'id', record.id)}${row('Name', 'name', record.name)}${row('Typ', 'type', record.type)}${textareaRow('Zusammenfassung', 'summary', record.summary)}</div>`;
     }
     return `<div class="j7-data-studio__empty"><p><strong>Formularmodus noch nicht verfügbar.</strong></p><p>Für ${this._escape(domainId)} steht aktuell der JSON-/Expertenmodus bereit.</p></div>`;
   }
@@ -148,7 +150,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
 
   async _renderHTML(_context, _options) {
     const root = document.createElement('div');
-    root.className = 'janus7-app j7-data-studio';
+    root.className = 'janus7-app janus7-page j7-data-studio';
 
     if (!game?.user?.isGM) {
       root.innerHTML = `<div class="j7-data-studio__empty"><strong>GM only.</strong> Nur der GM kann den Data Studio verwenden.</div>`;
@@ -192,6 +194,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
       const isSel = d.uuid === this._selectedUuid;
       const btn = document.createElement('button');
       btn.className = 'j7-btn';
+      btn.type = 'button';
       btn.dataset.uuid = d.uuid;
       btn.className = `j7-btn j7-data-studio__record${isSel ? ' is-selected' : ''}`;
       btn.innerHTML = `

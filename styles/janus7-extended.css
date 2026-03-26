@@ -70,16 +70,16 @@
   gap: 4px;
   padding: 2px 8px;
   border-radius: 4px;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.7);
+  background: linear-gradient(180deg, rgba(250, 246, 238, 0.98), rgba(232, 219, 193, 0.98));
+  border: 1px solid var(--j7-border, rgba(102, 72, 34, 0.24));
+  color: var(--j7-text-dim, #6d5a44);
   cursor: pointer;
   font-size: 0.75rem;
   transition: background 0.2s;
 }
 .janus7-app .j7-beamer-toggle:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: rgba(249, 242, 227, 0.98);
+  color: var(--j7-text, #2d2216);
 }
 .janus7-app.j7-beamer-mode .j7-beamer-toggle {
   background: rgba(212, 175, 55, 0.2);
@@ -94,10 +94,10 @@
 
 .janus7-app .j7-backdrop,
 .j7-control-panel .j7-backdrop {
-  background-color: rgba(15, 10, 10, 0.75);
-  color: #f0ebd8;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background-color: rgba(241, 231, 208, 0.96);
+  color: var(--j7-text, #2d2216);
+  text-shadow: none;
+  border: 1px solid var(--j7-border, rgba(102, 72, 34, 0.24));
   padding: 0.75rem;
   border-radius: 6px;
   /* Kein backdrop-filter blur — zu teuer für GPU bei vielen Elementen */
@@ -112,10 +112,10 @@
 
 /* Lesbarkeits-Fix für allgemeine janus7-cards auf DSA5-Theme */
 .j7-control-panel .j7-content-box {
-  background-color: rgba(15, 10, 10, 0.72);
-  color: #e8d5c4;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-  border: 1px solid rgba(201, 169, 97, 0.25);
+  background-color: rgba(248, 242, 227, 0.94);
+  color: var(--j7-text, #2d2216);
+  text-shadow: none;
+  border: 1px solid var(--j7-border, rgba(102, 72, 34, 0.24));
   padding: 0.6rem 0.75rem;
   border-radius: 4px;
 }
@@ -219,9 +219,9 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* Erzwinge lesbare Farbe in allen J7-Textelementen (defensiv) */
-.janus7-app .j7-text-primary { color: var(--j7-text, #e0e0e0); }
-.janus7-app .j7-text-dim     { color: var(--j7-text-dim, rgba(255,255,255,0.65)); }
-.janus7-app .j7-text-gold    { color: #d4af37; text-shadow: 0 0 4px rgba(0,0,0,0.6); }
+.janus7-app .j7-text-primary { color: var(--j7-text, #2f2417); }
+.janus7-app .j7-text-dim     { color: var(--j7-text-dim, #6b5a44); }
+.janus7-app .j7-text-gold    { color: var(--j7-accent, #9a6a21); text-shadow: none; }
 .janus7-app .j7-text-success { color: #66bb6a; }
 .janus7-app .j7-text-warn    { color: #ffa726; }
 .janus7-app .j7-text-danger  { color: #ef5350; }
@@ -385,10 +385,10 @@
 }
 .janus7-app .j7-library-search-input {
   flex: 1;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--j7-border, rgba(255,255,255,0.15));
+  background: rgba(251, 246, 238, 0.98);
+  border: 1px solid var(--j7-border, rgba(121, 93, 57, 0.2));
   border-radius: 6px;
-  color: var(--j7-text, #e0e0e0);
+  color: var(--j7-text, #2f2417);
   padding: 6px 10px;
   font-size: 0.875rem;
   transition: border-color 0.15s;
@@ -512,9 +512,7 @@
   padding: 0 0 0.5rem;
 }
 
-.j7-search-icon {
-  color: rgba(255, 255, 255, 0.3);
-}
+.j7-search-icon { color: var(--j7-text-dim, #6b5a44); }
 
 .j7-category-heading {
   margin: 0 0 0.25rem;
@@ -528,6 +526,17 @@
 .command-center-footer.j7-text-dim {
   font-size: 0.75rem;
   text-align: right;
+}
+
+.janus7-app .j7-btn-ghost {
+  background: rgba(252, 247, 239, 0.92);
+  border: 1px solid var(--j7-border);
+  color: var(--j7-text);
+}
+
+.janus7-app .j7-btn-ghost:hover {
+  border-color: var(--j7-accent);
+  background: color-mix(in srgb, var(--j7-accent) 8%, rgba(252, 247, 239, 0.92));
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -780,8 +789,38 @@
 /* v0.9.11.1 — Lesson document UI */
 .janus7-lesson-library .janus-table { width: 100%; border-collapse: collapse; }
 .janus7-lesson-library .janus-table th,
-.janus7-lesson-library .janus-table td { padding: 6px 8px; border-bottom: 1px solid var(--color-border-light-secondary, #444); text-align: left; }
-.lesson-item-sheet textarea { width: 100%; min-height: 5rem; font-family: var(--font-monospace, monospace); }
+.janus7-lesson-library .janus-table td { padding: 6px 8px; border-bottom: 1px solid var(--j7-border, rgba(102, 72, 34, 0.24)); text-align: left; }
+.lesson-item-sheet .window-content { padding: 0; }
+.lesson-item-sheet .sheet-header,
+.lesson-item-sheet .sheet-body {
+  background: linear-gradient(180deg, rgba(251, 247, 239, 0.98), rgba(239, 228, 204, 0.96));
+  border: 1px solid var(--j7-border, rgba(102, 72, 34, 0.24));
+  border-radius: 12px;
+  padding: 12px;
+}
+.lesson-item-sheet textarea {
+  width: 100%;
+  min-height: 5rem;
+  font-family: var(--font-monospace, monospace);
+  background: rgba(255, 251, 245, 0.96);
+  color: var(--j7-text, #2d2216);
+  border: 1px solid var(--j7-border, rgba(102, 72, 34, 0.24));
+}
+.lesson-item-sheet .sheet-header { align-items: flex-start; gap: 12px; }
+.lesson-item-sheet .sheet-body { gap: 12px; margin-top: 12px; }
+.lesson-item-sheet h1.charname { margin: 0; }
+.lesson-item-sheet label {
+  display: grid;
+  gap: 4px;
+  color: var(--j7-text-dim, #6d5a44);
+}
+.lesson-item-sheet .profile {
+  border: 1px solid var(--j7-border, rgba(102, 72, 34, 0.24));
+  border-radius: 10px;
+  background: rgba(255, 251, 245, 0.96);
+  padding: 4px;
+}
+.lesson-item-sheet .header-fields { gap: 10px; }
 .lesson-item-sheet .janus7-grid { display: grid; gap: 8px; }
 .lesson-item-sheet .janus7-grid-2col { grid-template-columns: repeat(2, minmax(0,1fr)); }
 .lesson-item-sheet .janus7-grid-3col { grid-template-columns: repeat(3, minmax(0,1fr)); }

@@ -34,7 +34,7 @@
             {{#if panelId}}
               <button type="button" class="j7-shell__btn" data-action="openPanel" data-panel-id="{{panelId}}"><i class="{{icon}}"></i>{{label}}</button>
             {{else}}
-              <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-panel-id="" data-action-index="{{@index}}">
+              <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-action-index="{{actionIndex}}" data-card-index="{{../cardIndex}}">
                 <i class="{{icon}}"></i>{{label}}
               </button>
             {{/if}}

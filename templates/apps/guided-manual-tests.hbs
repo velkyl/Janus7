@@ -19,7 +19,10 @@
             <button type="button" class="j7-manual-list__item {{#if selected}}is-selected{{/if}} {{statusClass}}" data-action="selectTest" data-test-id="{{id}}">
               <span class="j7-manual-list__idx">{{idx}}</span>
               <span class="j7-manual-list__main">
-                <span class="j7-manual-list__title"><code>{{id}}</code> {{title}}</span>
+                <span class="j7-manual-list__title">
+                  <span class="j7-manual-list__code"><code>{{id}}</code></span>
+                  <span class="j7-manual-list__text">{{title}}</span>
+                </span>
                 <span class="j7-manual-list__meta">{{statusIcon}} {{statusLabel}} · {{phaseText}}{{#if evidenceCount}} · {{evidenceCount}} {{localize 'JANUS7.GuidedManual.EvidenceShort'}}{{/if}}</span>
               </span>
             </button>

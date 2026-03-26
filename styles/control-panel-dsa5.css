@@ -847,7 +847,9 @@
 }
 
 .j7-control-panel .janus7-control-panel .dashboard-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 14px;
+  align-items: start;
 }
 
 .j7-control-panel .janus7-control-panel .janus7-two-col {
@@ -882,7 +884,7 @@
 }
 
 .j7-control-panel .janus7-control-panel .janus7-kv {
-  grid-template-columns: minmax(110px, 150px) minmax(0, 1fr);
+  grid-template-columns: minmax(84px, 118px) minmax(0, 1fr);
   gap: 6px 12px;
 }
 
@@ -898,6 +900,9 @@
   min-width: 0;
   color: var(--dsa-text-dark);
   font-weight: 500;
+  line-height: 1.45;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .j7-control-panel .janus7-control-panel .muted,

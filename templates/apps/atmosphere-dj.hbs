@@ -1,4 +1,4 @@
-<form class="janus7-page">
+<form class="janus7-page j7-atmo-surface">
   {{#if notReady}}
     <div class="janus7-loading">
       <h3><i class="fas fa-spinner fa-spin"></i> Atmosphere nicht bereit</h3>
@@ -17,15 +17,35 @@
   </header>
 
   <section class="janus7-card">
-    <h3><i class="fas fa-sliders-h"></i> Steuerung</h3>
+    <div class="j7-card-head">
+      <div class="j7-card-head__copy">
+        <h3><i class="fas fa-sliders-h"></i> Steuerung</h3>
+        <p class="j7-card-head__hint">Master-Client, Lautst&auml;rke und automatische Quellen zentral steuern.</p>
+      </div>
+    </div>
 
-    <div class="janus7-grid3">
+    <div class="j7-status-grid">
+      <div class="kpi">
+        <div class="kpi__label">Aktiver Mood</div>
+        <div class="kpi__value">{{#if activeMoodId}}{{activeMoodId}}{{else}}-{{/if}}</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__label">Master Client</div>
+        <div class="kpi__value">{{#if masterClientUserId}}{{masterClientUserId}}{{else}}Auto{{/if}}</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__label">Auto-Quellen</div>
+        <div class="kpi__value">{{#if status.autoFromCalendar}}K{{/if}}{{#if status.autoFromEvents}}E{{/if}}{{#if status.autoFromLocation}}O{{/if}}{{#unless status.autoFromCalendar}}{{#unless status.autoFromEvents}}{{#unless status.autoFromLocation}}Aus{{/unless}}{{/unless}}{{/unless}}</div>
+      </div>
+    </div>
+
+    <div class="j7-form-grid-3">
       <div class="janus7-formrow">
         <label>Master Client</label>
         <select name="masterClientUserId">
-          <option value="">(auto)</option>
+          <option value="" {{#unless masterClientUserId}}selected{{/unless}}>(auto)</option>
           {{#each users}}
-            <option value="{{id}}">{{name}}</option>
+            <option value="{{id}}" {{#if (eq id ../masterClientUserId)}}selected{{/if}}>{{name}}</option>
           {{/each}}
         </select>
       </div>
@@ -37,7 +57,7 @@
 
       <div class="janus7-formrow">
         <label>Auto</label>
-        <div class="janus7-checks">
+        <div class="j7-toggle-list">
           <label><input name="autoCalendar" type="checkbox" {{#if status.autoFromCalendar}}checked{{/if}}/> Kalender</label>
           <label><input name="autoEvents" type="checkbox" {{#if status.autoFromEvents}}checked{{/if}}/> Events</label>
           <label><input name="autoLocation" type="checkbox" {{#if status.autoFromLocation}}checked{{/if}}/> Ort</label>
@@ -47,7 +67,12 @@
   </section>
 
   <section class="janus7-card">
-    <h3><i class="fas fa-th-large"></i> Moods</h3>
+    <div class="j7-card-head">
+      <div class="j7-card-head__copy">
+        <h3><i class="fas fa-th-large"></i> Moods</h3>
+        <p class="j7-card-head__hint">Direkter Zugriff auf alle bekannten Atmosph&auml;ren.</p>
+      </div>
+    </div>
     <div class="janus7-mood-grid">
       {{#each moods}}
         <button type="button" class="janus7-mood {{#if isActive}}is-active{{/if}}" data-action="applyMood" data-mood-id="{{id}}">

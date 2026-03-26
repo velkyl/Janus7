@@ -25,7 +25,7 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
   static DEFAULT_OPTIONS = {
     id: 'janus7-scoring-view',
     tag: 'section',
-    classes: ['janus7', 'app', 'scoring-view'],
+    classes: ['janus7-app', 'janus7', 'app', 'scoring-view'],
     window: {
       title: 'JANUS7 — Scoring',
       resizable: true,

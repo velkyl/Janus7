@@ -1,16 +1,17 @@
-<form class="janus7-page">
+<form class="janus7-page j7-scoring-surface">
   {{#if notReady}}
     <div class="janus7-loading j7-loading-box">
       <h3><i class="fas fa-spinner fa-spin"></i> Scoring nicht bereit</h3>
-      <p>Phase-4 Simulation ist noch nicht initialisiert. Bitte warte einen Moment und öffne die Ansicht erneut.</p>
+      <p>Phase-4-Simulation ist noch nicht initialisiert. Bitte warte einen Moment und &ouml;ffne die Ansicht erneut.</p>
     </div>
   {{else}}
 
   {{#if stateOnly}}
     <div class="j7-warn-box">
-      <i class="fas fa-exclamation-triangle"></i> Phase-4-Simulation nicht geladen – Anzeige direkt aus State.
+      <i class="fas fa-exclamation-triangle"></i> Phase-4-Simulation nicht geladen - Anzeige direkt aus State.
     </div>
   {{/if}}
+
   <header class="janus7-toolbar">
     <div class="janus7-toolbar__left">
       <h2 class="janus7-title"><i class="fas fa-star"></i> Scoring</h2>
@@ -22,7 +23,11 @@
 
   <div class="janus7-two-col">
     <section class="janus7-card">
-        <h3 class="j7-heading-flush"><i class="fas fa-trophy"></i> Zirkel / Häuser</h3>
+      <div class="j7-card-head">
+        <div class="j7-card-head__copy">
+          <h3 class="j7-heading-flush"><i class="fas fa-trophy"></i> Zirkel / H&auml;user</h3>
+          <p class="j7-card-head__hint">&Uuml;bersicht der Wertungstr&auml;ger und manueller Zugriff auf Punktevergaben.</p>
+        </div>
         <button type="button" class="janus-btn" data-action="createCircle">
           <i class="fas fa-plus"></i> Neu
         </button>
@@ -37,7 +42,7 @@
                 <td>{{name}}</td>
                 <td class="num">{{score}}</td>
                 <td class="num">
-                  <button type="button" class="janus-btn" data-action="deleteCircle" data-circle-id="{{id}}" title="Löschen">
+                  <button type="button" class="janus-btn" data-action="deleteCircle" data-circle-id="{{id}}" title="L&ouml;schen">
                     <i class="fas fa-trash"></i>
                   </button>
                 </td>
@@ -49,34 +54,48 @@
 
       <hr class="janus7-hr"/>
 
-      <h4>Manuell vergeben</h4>
-      <div class="janus7-formrow">
-        <label>Zirkel</label>
-        <select name="circleId" {{#unless circles.length}}disabled{{/unless}}>
-          {{#each circles}}
-            <option value="{{id}}">{{name}}</option>
-          {{/each}}
-        </select>
+      <div class="j7-panel-form">
+        <div class="j7-panel-form__header">
+          <h4>Manuell vergeben</h4>
+          <p class="j7-card-head__hint">Direkter Award-Pfad f&uuml;r GM-Eingriffe.</p>
+        </div>
+        <div class="j7-form-grid-2">
+          <div class="janus7-formrow">
+            <label>Zirkel</label>
+            <select name="circleId" {{#unless circles.length}}disabled{{/unless}}>
+              {{#each circles}}
+                <option value="{{id}}">{{name}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="janus7-formrow">
+            <label>Amount</label>
+            <input name="circleAmount" type="number" value="5" step="1"/>
+          </div>
+        </div>
+        <div class="janus7-formrow">
+          <label>Grund</label>
+          <input name="circleReason" type="text" value="Gute Leistung"/>
+        </div>
+        <div class="j7-form-actions">
+          <button type="button" class="janus-btn primary" data-action="awardCircle" {{#unless circles.length}}disabled{{/unless}}>
+            <i class="fas fa-plus"></i> Vergeben
+          </button>
+        </div>
       </div>
-      <div class="janus7-formrow">
-        <label>Amount</label>
-        <input name="circleAmount" type="number" value="5" step="1"/>
-      </div>
-      <div class="janus7-formrow">
-        <label>Grund</label>
-        <input name="circleReason" type="text" value="Gute Leistung"/>
-      </div>
-      <button type="button" class="janus-btn primary" data-action="awardCircle">
-        <i class="fas fa-plus"></i> Vergeben
-      </button>
     </section>
 
     <aside class="janus7-card">
-      <h3><i class="fas fa-user-graduate"></i> Schüler (Top 20)</h3>
+      <div class="j7-card-head">
+        <div class="j7-card-head__copy">
+          <h3><i class="fas fa-user-graduate"></i> Sch&uuml;ler (Top 20)</h3>
+          <p class="j7-card-head__hint">Top-Wertung und manuelle Sch&uuml;lerpunkte in einer Ansicht.</p>
+        </div>
+      </div>
 
       <div class="janus7-table-wrap">
         <table class="janus7-table">
-          <thead><tr><th>Schüler</th><th class="num">Score</th></tr></thead>
+          <thead><tr><th>Schueler</th><th class="num">Score</th></tr></thead>
           <tbody>
             {{#each students}}
               <tr>
@@ -93,44 +112,56 @@
 
       <hr class="janus7-hr"/>
 
-      <h4>Schülerpunkte vergeben</h4>
-      <div class="janus7-formrow">
-        <label>Schüler</label>
-        <select name="studentId">
-          {{#each pcOptions}}
-            <option value="{{id}}">{{name}}</option>
-          {{/each}}
-        </select>
+      <div class="j7-panel-form">
+        <div class="j7-panel-form__header">
+          <h4>Sch&uuml;lerpunkte vergeben</h4>
+          <p class="j7-card-head__hint">Schneller Eingriff f&uuml;r Unterricht, Verhalten oder Sonderf&auml;lle.</p>
+        </div>
+        <div class="j7-form-grid-2">
+          <div class="janus7-formrow">
+            <label>Sch&uuml;ler</label>
+            <select name="studentId" {{#unless pcOptions.length}}disabled{{/unless}}>
+              {{#each pcOptions}}
+                <option value="{{id}}">{{name}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="janus7-formrow">
+            <label>Amount</label>
+            <input name="studentAmount" type="number" value="1" step="1"/>
+          </div>
+        </div>
+        <div class="janus7-formrow">
+          <label>Grund</label>
+          <input name="studentReason" type="text" value="Engagiert im Unterricht"/>
+        </div>
+        <div class="j7-form-actions">
+          <button type="button" class="janus-btn primary" data-action="awardStudent" {{#unless pcOptions.length}}disabled{{/unless}}>
+            <i class="fas fa-plus"></i> Vergeben
+          </button>
+        </div>
       </div>
-      <div class="janus7-formrow">
-        <label>Amount</label>
-        <input name="studentAmount" type="number" value="1" step="1"/>
-      </div>
-      <div class="janus7-formrow">
-        <label>Grund</label>
-        <input name="studentReason" type="text" value="Engagiert im Unterricht"/>
-      </div>
-      <button type="button" class="janus-btn primary" data-action="awardStudent">
-        <i class="fas fa-plus"></i> Vergeben
-      </button>
 
       <hr class="janus7-hr"/>
 
       <h3><i class="fas fa-history"></i> Letzte Vergaben</h3>
       <div class="janus7-scroll">
-        {{#each lastAwards}}
-          <div class="janus7-logline">
-            <span class="tag">{{type}}</span>
-            <strong>{{targetName}}</strong>
-            <span class="num">{{delta}}</span>
-            <span class="muted">{{reason}}</span>
-          </div>
-        {{/each}}
+        {{#if lastAwards.length}}
+          {{#each lastAwards}}
+            <div class="janus7-logline">
+              <span class="tag">{{type}}</span>
+              <strong>{{targetName}}</strong>
+              <span class="num">{{delta}}</span>
+              <span class="muted">{{reason}}</span>
+            </div>
+          {{/each}}
+        {{else}}
+          <div class="j7-empty-state">Noch keine Vergaben protokolliert.</div>
+        {{/if}}
       </div>
     </aside>
   </div>
 
-  {{!-- Snapshot-Trend (tägliche Verlaufshistorie) --}}
   {{#if snapshots.hasData}}
   <section class="janus7-card j7-card-mt">
     <h3><i class="fas fa-chart-line"></i> Zirkel-Trend (letzte {{snapshots.rows.length}} Tage)</h3>
@@ -142,13 +173,13 @@
             {{#each snapshots.circleIds}}
               <th class="num" colspan="2">{{this}}</th>
             {{/each}}
-            <th>Bester Schüler</th>
+            <th>Bester Sch&uuml;ler</th>
           </tr>
           <tr>
             <th></th>
             {{#each snapshots.circleIds}}
               <th class="num j7-th-dim">Pts</th>
-              <th class="num j7-th-dim">Δ</th>
+              <th class="num j7-th-dim">Delta</th>
             {{/each}}
             <th></th>
           </tr>
@@ -164,13 +195,13 @@
                     {{#if delta}}
                       <span class="{{trendClass}}">{{trend}} {{deltaAbs}}</span>
                     {{else}}
-                      <span class="janus7-trend-flat">—</span>
+                      <span class="janus7-trend-flat">-</span>
                     {{/if}}
                   </td>
                 {{/with}}
               {{/each}}
               <td class="muted j7-text-sm">
-                {{#if topStudent}}{{topStudent.studentId}} ({{topStudent.score}}){{else}}—{{/if}}
+                {{#if topStudent}}{{topStudent.studentId}} ({{topStudent.score}}){{else}}-{{/if}}
               </td>
             </tr>
           {{/each}}
@@ -178,7 +209,7 @@
       </table>
     </div>
     <p class="muted j7-hint-text">
-      <i class="fas fa-info-circle"></i> Snapshots werden täglich beim Tagwechsel automatisch gespeichert (max. 30).
+      <i class="fas fa-info-circle"></i> Snapshots werden t&auml;glich beim Tagwechsel automatisch gespeichert (max. 30).
     </p>
   </section>
   {{/if}}

@@ -408,6 +408,16 @@ export class JanusControlPanelApp extends HandlebarsApplicationMixin(JanusBaseAp
     }
   }
 
+  _applyDynamicUiTokens(root = this.element) {
+    if (!root?.querySelectorAll) return;
+
+    root.querySelectorAll('code').forEach((el) => {
+      const text = el.textContent?.trim?.() ?? '';
+      if (!text) return;
+      if (!el.getAttribute('title')) el.setAttribute('title', text);
+    });
+  }
+
   // ═══════════════════════════════════════════════════════════════════════════
   // Drag & Drop
   // ═══════════════════════════════════════════════════════════════════════════

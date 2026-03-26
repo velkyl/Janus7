@@ -1,39 +1,49 @@
-<section class="janus7-lesson-library flexcol">
-  <header class="flexrow" style="gap:8px; align-items:center; margin-bottom:8px;">
-    <button type="button" class="janus-btn" data-action="refresh"><i class="fas fa-sync"></i> Refresh</button>
-    <button type="button" class="janus-btn" data-action="migrate"><i class="fas fa-file-import"></i> Sync JSON → Items</button>
-    <button type="button" class="janus-btn" data-action="createLesson"><i class="fas fa-plus"></i> Neue Lesson</button>
-    <span style="margin-left:auto; opacity:.8;">{{count}} Lesson-Dokumente · Typ {{subtype}}</span>
+<section class="janus7-lesson-library janus7-page">
+  <header class="janus7-toolbar">
+    <div class="janus7-toolbar__left">
+      <i class="fas fa-book-open"></i>
+      <span class="janus7-title">Lesson Library</span>
+      <span class="janus7-muted">{{count}} Lesson-Dokumente · Typ {{subtype}}</span>
+    </div>
+    <div class="janus7-toolbar__right">
+      <button type="button" class="janus-btn" data-action="refresh"><i class="fas fa-sync"></i> Refresh</button>
+      <button type="button" class="janus-btn" data-action="migrate"><i class="fas fa-file-import"></i> Sync JSON → Items</button>
+      <button type="button" class="janus-btn janus-btn--primary" data-action="createLesson"><i class="fas fa-plus"></i> Neue Lesson</button>
+    </div>
   </header>
 
-  <table class="janus-table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Fach</th>
-        <th>Teacher</th>
-        <th>Jahr</th>
-        <th>Dauer</th>
-        <th>Lesson ID</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#if entries.length}}
-        {{#each entries}}
+  <section class="janus7-card">
+    <div class="janus7-table-wrap">
+      <table class="janus7-table">
+        <thead>
           <tr>
-            <td>{{this.name}}</td>
-            <td>{{this.subject}}</td>
-            <td>{{this.teacherNpcId}}</td>
-            <td>{{this.year}}</td>
-            <td>{{this.duration}}</td>
-            <td><code>{{this.lessonId}}</code></td>
-            <td><button type="button" class="janus-btn" data-action="openLesson" data-uuid="{{this.uuid}}"><i class="fas fa-pen"></i> Öffnen</button></td>
+            <th>Name</th>
+            <th>Fach</th>
+            <th>Teacher</th>
+            <th>Jahr</th>
+            <th>Dauer</th>
+            <th>Lesson ID</th>
+            <th></th>
           </tr>
-        {{/each}}
-      {{else}}
-        <tr><td colspan="7">Noch keine Lesson-Dokumente vorhanden.</td></tr>
-      {{/if}}
-    </tbody>
-  </table>
+        </thead>
+        <tbody>
+          {{#if entries.length}}
+            {{#each entries}}
+              <tr>
+                <td>{{this.name}}</td>
+                <td>{{this.subject}}</td>
+                <td>{{this.teacherNpcId}}</td>
+                <td>{{this.year}}</td>
+                <td>{{this.duration}}</td>
+                <td><code>{{this.lessonId}}</code></td>
+                <td><button type="button" class="janus-btn" data-action="openLesson" data-uuid="{{this.uuid}}"><i class="fas fa-pen"></i> Öffnen</button></td>
+              </tr>
+            {{/each}}
+          {{else}}
+            <tr><td colspan="7" class="janus7-muted">Noch keine Lesson-Dokumente vorhanden.</td></tr>
+          {{/if}}
+        </tbody>
+      </table>
+    </div>
+  </section>
 </section>
