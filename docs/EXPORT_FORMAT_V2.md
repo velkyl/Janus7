@@ -1,4 +1,4 @@
-﻿# JANUS7 Export-Format V2
+# JANUS7 Export-Format V2
 
 **Schema-Version:** 2  
 **Modul-Version:** 0.9.12.44  

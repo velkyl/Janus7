@@ -1011,6 +1011,102 @@ export class JanusSyncEngine {
   }
 
   /**
+   * UUID-Reconciliation-Audit: Vergleicht alle drei Persistierungs-Schichten
+   * (Legacy-Overlay, foundryLinks-State, actors.npcs/pcs-State) auf Divergenzen.
+   *
+   * Gibt einen Report zurück mit:
+   * - divergent: Keys die in mehreren Schichten mit unterschiedlichen UUIDs vorhanden sind
+   * - overlayOnly: Keys die nur im Legacy-Overlay, aber nicht im SSOT-State vorhanden sind
+   * - stateOnly: Keys die im State, aber nicht im Overlay vorhanden sind
+   * - consistent: Anzahl der übereinstimmenden Einträge
+   *
+   * @returns {{ divergent: object[], overlayOnly: string[], stateOnly: string[], consistent: number, totalChecked: number }}
+   */
+  auditUuidLayers() {
+    const report = {
+      divergent: [],
+      overlayOnly: [],
+      stateOnly: [],
+      consistent: 0,
+      totalChecked: 0,
+    };
+
+    try {
+      const overlay = this.getUUIDOverlay();
+      const st = game?.janus7?.core?.state;
+      if (!st) {
+        this._logger?.warn?.('[SyncEngine] auditUuidLayers: State nicht verfügbar – Audit übersprungen');
+        return report;
+      }
+
+      const foundryLinks = st.getPath?.('foundryLinks') ?? {};
+      const actorsNpcs = st.getPath?.('actors.npcs') ?? {};
+      const actorsPcs = st.getPath?.('actors.pcs') ?? {};
+
+      // Alle Keys aus allen Schichten sammeln
+      const allKeys = new Set([
+        ...Object.keys(overlay),
+        ...Object.values(foundryLinks).flatMap(m => (m && typeof m === 'object') ? Object.keys(m) : []),
+        ...Object.keys(actorsNpcs),
+        ...Object.keys(actorsPcs),
+      ]);
+
+      for (const key of allKeys) {
+        report.totalChecked++;
+        const normalKey = normalizeJanusId(key);
+
+        const uuidInOverlay = overlay[key] ?? overlay[normalKey] ?? null;
+
+        // State foundryLinks: durchsuche alle Typen
+        let uuidInState = null;
+        for (const typeMap of Object.values(foundryLinks)) {
+          if (typeMap && typeof typeMap === 'object') {
+            const val = typeMap[key] ?? typeMap[normalKey];
+            if (val) { uuidInState = val; break; }
+          }
+        }
+
+        // actors.npcs / actors.pcs Compatibility-Layer
+        const uuidInActors = actorsNpcs[key] ?? actorsNpcs[normalKey]
+                          ?? actorsPcs[key]  ?? actorsPcs[normalKey]  ?? null;
+
+        // Alle vorhandenen UUIDs (ohne null)
+        const present = [
+          uuidInOverlay && { layer: 'overlay',      uuid: uuidInOverlay },
+          uuidInState   && { layer: 'foundryLinks',  uuid: uuidInState   },
+          uuidInActors  && { layer: 'actors',        uuid: uuidInActors  },
+        ].filter(Boolean);
+
+        if (present.length === 0) continue;
+
+        const uniqueUuids = new Set(present.map(p => p.uuid));
+        if (uniqueUuids.size > 1) {
+          // Divergenz: verschiedene UUIDs in verschiedenen Schichten
+          report.divergent.push({ key, entries: present });
+        } else if (present.length === 1) {
+          if (present[0].layer === 'overlay') report.overlayOnly.push(key);
+          else report.stateOnly.push(key);
+        } else {
+          report.consistent++;
+        }
+      }
+
+      if (report.divergent.length > 0) {
+        this._logger?.warn?.('[SyncEngine] UUID-Audit: Divergenzen gefunden', {
+          count: report.divergent.length,
+          keys: report.divergent.map(d => d.key),
+        });
+      } else {
+        this._logger?.info?.(`[SyncEngine] UUID-Audit: ${report.consistent} konsistente, ${report.overlayOnly.length} nur-Overlay, ${report.stateOnly.length} nur-State Einträge`);
+      }
+    } catch (err) {
+      this._logger?.error?.('[SyncEngine] auditUuidLayers fehlgeschlagen', { message: err?.message });
+    }
+
+    return report;
+  }
+
+  /**
    * Registriert das UUID-Overlay-Setting. Wird von JanusConfig.registerSettings() aufgerufen.
    * @static
    */

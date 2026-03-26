@@ -28,6 +28,8 @@ import { buildDiagnosticSnapshot } from './diagnostics/diagnostic-snapshot.js';
 import { installUiWriteGuard } from './guards/ui-write-guard.js';
 import { JanusFolderService } from './folder-service.js';
 import { cleanupEngineHookBuckets, listEngineHookBuckets } from './hooks/runtime.js';
+import { JanusServiceRegistry } from './services/service-registry.js';
+import { JanusErrorAggregator } from './error-aggregator.js';
 // ---------------------------------------------------------------------------
 // Boot-Guard (Hardening)
 // Verhindert doppelte Hook-Registrierung bei Reloads / Session-Reconnects.
@@ -66,6 +68,12 @@ export class Janus7Engine {
     this.bridge = {
       dsa5: null
     };
+
+    /** Service-Readiness-Registry – ersetzt verteilte Null-Guards */
+    this.serviceRegistry = new JanusServiceRegistry();
+
+    /** Zentraler Error-Aggregator für Engine-weites Fehler-Tracking */
+    this.errors = new JanusErrorAggregator();
   }
 
   /**

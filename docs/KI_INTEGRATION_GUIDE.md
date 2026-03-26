@@ -1,4 +1,4 @@
-﻿# JANUS7 KI-Integration Guide
+# JANUS7 KI-Integration Guide
 
 **Modul-Version:** 0.9.12.44  
 **Phase:** 7 - KI-Roundtrip  

@@ -1,13 +1,22 @@
 /**
+ * @file scripts/integration/phase4-eventmessage-ui.js
+ * @phase 6 (UI-Concern)
+ *
  * Phase 4 → Phase 6 UI bridge
  *
  * Purpose:
- * - Keep Phase 4 headless: it emits HOOKS.EVENT_MESSAGE payloads.
- * - If enabled (client setting), render those payloads as ChatMessages.
+ * - Keep Phase 4 headless: it only emits internal HOOKS.EVENT_MESSAGE payloads.
+ * - This file (Phase 6 concern) listens to those payloads and renders ChatMessages.
  *
  * Architecture:
- * - Uses the canonical JANUS hook HOOKS.EVENT_MESSAGE (NOT a Foundry core hook).
- * - Foundry core hooks remain centralized in scripts/janus.mjs.
+ * - ONLY loaded when enableUI=true (Phase 6 gate in scripts/janus.mjs).
+ * - Uses ONLY internal JANUS hooks (HOOKS.EVENT_MESSAGE, HOOKS.ENGINE_READY, HOOKS.DATE_CHANGED).
+ *   NEVER registers Foundry core hooks directly – those stay in scripts/janus.mjs.
+ * - Imports ONLY from Phase ≤1 modules (core/hooks, core/config) — no Phase 4 imports.
+ *   Phase-Isolation-Vertrag: Phase N darf nur Phase ≤N importieren.
+ *
+ * Data flow:
+ *   Phase 4 engine → emitHook(HOOKS.EVENT_MESSAGE) → this file → ChatMessage.create()
  */
 
 import { JanusConfig } from '../../core/config.js';

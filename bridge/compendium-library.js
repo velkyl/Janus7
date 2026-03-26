@@ -83,6 +83,16 @@ export class CompendiumLibrary {
       return this._indexCache.get(docType) ?? [];
     }
 
+    // Guard: packs sind nur nach dem Foundry 'ready' Hook verfügbar.
+    // Wenn buildIndex zu früh aufgerufen wird, ist game.packs leer oder undefined.
+    // In diesem Fall wird NICHT gecacht, damit spätere Aufrufe den echten Index aufbauen.
+    if (!game?.packs?.size) {
+      this._logger.warn?.(
+        `[CompLib] buildIndex(${docType}) zu früh aufgerufen – game.packs noch nicht verfügbar. Ergebnis wird nicht gecacht.`
+      );
+      return [];
+    }
+
     const hits = [];
     const packs = Array.from(game?.packs ?? []);
 

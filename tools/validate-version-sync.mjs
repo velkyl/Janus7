@@ -5,6 +5,19 @@ const root = process.cwd();
 const moduleJsonPath = path.join(root, 'module.json');
 const moduleVersion = JSON.parse(fs.readFileSync(moduleJsonPath, 'utf8')).version;
 
+// ─── BOM-Detection Helper ─────────────────────────────────────────────────────
+// UTF-8-BOM (EF BB BF) verhindert dass Regex-Marker am Dateianfang erkannt werden.
+// Alle geprüften Dateien müssen BOM-frei sein.
+
+function hasBOM(filePath) {
+  try {
+    const buf = fs.readFileSync(filePath);
+    return buf.length >= 3 && buf[0] === 0xEF && buf[1] === 0xBB && buf[2] === 0xBF;
+  } catch (_) {
+    return false;
+  }
+}
+
 const checks = [
   { file: 'package.json', regex: /"version":\s*"([^"]+)"/, label: 'package.json version' },
   { file: 'VERSION.json', regex: /"version":\s*"([^"]+)"/, label: 'VERSION.json version' },
@@ -29,6 +42,12 @@ for (const check of checks) {
   const filePath = path.join(root, check.file);
   if (!fs.existsSync(filePath)) {
     findings.push(`[VERSION] missing file: ${check.file}`);
+    continue;
+  }
+
+  // BOM-Check: BOM zerstört Regex-Marker am Dateianfang → Frühwarnung statt silent miss
+  if (hasBOM(filePath)) {
+    findings.push(`[VERSION] UTF-8-BOM in ${check.file} entfernen – verhindert Versions-Marker-Erkennung`);
     continue;
   }
 
