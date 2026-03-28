@@ -131,10 +131,10 @@
           {{!-- Aktionen --}}
           <td class="janus7-sync-actions">
             {{#if (eq this.status "linked")}}
-              <button type="button" class="janus-btn janus-btn--icon" data-action="openEntity" title="In Foundry öffnen">
+              <button type="button" class="janus-btn janus-btn--icon" data-action="openEntity" title="In Foundry öffnen" aria-label="In Foundry öffnen">
                 <i class="fas fa-external-link-alt"></i>
               </button>
-              <button type="button" class="janus-btn janus-btn--icon janus-btn--danger" data-action="unlinkEntity" title="Verknüpfung aufheben">
+              <button type="button" class="janus-btn janus-btn--icon janus-btn--danger" data-action="unlinkEntity" title="Verknüpfung aufheben" aria-label="Verknüpfung aufheben">
                 <i class="fas fa-unlink"></i>
               </button>
             {{else if (eq this.status "found-by-name")}}
@@ -145,14 +145,14 @@
               <button type="button" class="janus-btn janus-btn--compendium" data-action="importFromCompendium">
                 <i class="fas fa-cloud-download-alt"></i> Importieren
               </button>
-              <button type="button" class="janus-btn janus-btn--secondary" data-action="linkExisting" title="Anderes Dokument verknüpfen">
+              <button type="button" class="janus-btn janus-btn--secondary" data-action="linkExisting" title="Anderes Dokument verknüpfen" aria-label="Anderes Dokument verknüpfen">
                 <i class="fas fa-search"></i>
               </button>
             {{else}}
               <button type="button" class="janus-btn janus-btn--primary" data-action="createEntity">
                 <i class="fas fa-plus"></i> Neu anlegen
               </button>
-              <button type="button" class="janus-btn janus-btn--secondary" data-action="linkExisting" title="Vorhandene Entität suchen">
+              <button type="button" class="janus-btn janus-btn--secondary" data-action="linkExisting" title="Vorhandene Entität suchen" aria-label="Vorhandene Entität suchen">
                 <i class="fas fa-search"></i>
               </button>
             {{/if}}

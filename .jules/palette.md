@@ -1,0 +1,3 @@
+## 2024-05-19 - Adding Accessible Names to Icon-Only Buttons
+**Learning:** Found that icon-only buttons in Foundry VTT application templates (e.g. `sync-panel.hbs`) rely heavily on `title` attributes for tooltips but often lack `aria-label`s. Without `aria-label`s, screen readers may announce unhelpful content or nothing at all for these buttons, creating a significant accessibility barrier.
+**Action:** When adding or reviewing icon-only actions (like those using FontAwesome icons such as `<i class="fas fa-external-link-alt"></i>`), always explicitly set an `aria-label` matching the `title` attribute.
