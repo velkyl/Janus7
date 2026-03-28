@@ -218,98 +218,123 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
   }
 
   _renderForm(domainId, record = {}) {
-    const esc = (value) => this._escape(value ?? '');
-    const row = (label, name, value, type = 'text') => `
-      <label class="j7-data-studio__field"><span>${label}</span><input data-j7-form="${name}" type="${type}" value="${esc(value)}" class="janus7-textarea j7-data-studio__input" /></label>`;
-    const textareaRow = (label, name, value) => `
-      <label class="j7-data-studio__field j7-data-studio__field--wide"><span>${label}</span><textarea data-j7-form="${name}" class="janus7-textarea j7-data-studio__input">${esc(value)}</textarea></label>`;
+    const formDiv = document.createElement('div');
+    formDiv.className = 'j7-data-studio__form';
+
+    const createRow = (label, name, value, type = 'text') => {
+      const labelEl = document.createElement('label');
+      labelEl.className = 'j7-data-studio__field';
+      const span = document.createElement('span');
+      span.textContent = label;
+      labelEl.appendChild(span);
+      const input = document.createElement('input');
+      input.dataset.j7Form = name;
+      input.type = type;
+      input.value = value ?? '';
+      input.className = 'janus7-textarea j7-data-studio__input';
+      labelEl.appendChild(input);
+      return labelEl;
+    };
+
+    const createTextareaRow = (label, name, value) => {
+      const labelEl = document.createElement('label');
+      labelEl.className = 'j7-data-studio__field j7-data-studio__field--wide';
+      const span = document.createElement('span');
+      span.textContent = label;
+      labelEl.appendChild(span);
+      const textarea = document.createElement('textarea');
+      textarea.dataset.j7Form = name;
+      textarea.className = 'janus7-textarea j7-data-studio__input';
+      textarea.value = value ?? '';
+      labelEl.appendChild(textarea);
+      return labelEl;
+    };
 
     if (domainId === 'lesson') {
-      return `<div class="j7-data-studio__form">
-        ${row('ID', 'id', record.id)}
-        ${row('Name', 'name', record.name)}
-        ${row('Fach', 'subject', record.subject)}
-        ${row('Dozent (NPC-ID)', 'teacherNpcId', record.teacherNpcId)}
-        ${row('Dauer Slots', 'durationSlots', record.durationSlots ?? 1, 'number')}
-        ${textareaRow('Zusammenfassung', 'summary', record.summary)}
-      </div>`;
+      formDiv.appendChild(createRow('ID', 'id', record.id));
+      formDiv.appendChild(createRow('Name', 'name', record.name));
+      formDiv.appendChild(createRow('Fach', 'subject', record.subject));
+      formDiv.appendChild(createRow('Dozent (NPC-ID)', 'teacherNpcId', record.teacherNpcId));
+      formDiv.appendChild(createRow('Dauer Slots', 'durationSlots', record.durationSlots ?? 1, 'number'));
+      formDiv.appendChild(createTextareaRow('Zusammenfassung', 'summary', record.summary));
+      return formDiv;
     }
 
     if (domainId === 'npc') {
-      return `<div class="j7-data-studio__form">
-        ${row('ID', 'id', record.id)}
-        ${row('Name', 'name', record.name)}
-        ${row('Rolle', 'role', record.role)}
-        ${row('Tags (CSV)', 'tagsCsv', Array.isArray(record?.tags) ? record.tags.join(', ') : '')}
-        ${row('Untertitel', 'profile.subtitle', record?.profile?.subtitle ?? '')}
-        ${textareaRow('Rollentext', 'profile.roleText', record?.profile?.roleText ?? '')}
-        ${textareaRow('Aussehen', 'profile.sections.Aussehen', record?.profile?.sections?.Aussehen ?? '')}
-        ${textareaRow('Persönlichkeit', 'profile.sections.Persönlichkeit', record?.profile?.sections?.Persönlichkeit ?? '')}
-      </div>`;
+      formDiv.appendChild(createRow('ID', 'id', record.id));
+      formDiv.appendChild(createRow('Name', 'name', record.name));
+      formDiv.appendChild(createRow('Rolle', 'role', record.role));
+      formDiv.appendChild(createRow('Tags (CSV)', 'tagsCsv', Array.isArray(record?.tags) ? record.tags.join(', ') : ''));
+      formDiv.appendChild(createRow('Untertitel', 'profile.subtitle', record?.profile?.subtitle ?? ''));
+      formDiv.appendChild(createTextareaRow('Rollentext', 'profile.roleText', record?.profile?.roleText ?? ''));
+      formDiv.appendChild(createTextareaRow('Aussehen', 'profile.sections.Aussehen', record?.profile?.sections?.Aussehen ?? ''));
+      formDiv.appendChild(createTextareaRow('Persönlichkeit', 'profile.sections.Persönlichkeit', record?.profile?.sections?.Persönlichkeit ?? ''));
+      return formDiv;
     }
 
     if (domainId === 'location') {
-      return `<div class="j7-data-studio__form">
-        ${row('ID', 'id', record.id)}
-        ${row('Name', 'name', record.name)}
-        ${row('Typ', 'type', record.type)}
-        ${row('Zone', 'zone', record.zone)}
-        ${textareaRow('Zusammenfassung', 'summary', record.summary)}
-      </div>`;
+      formDiv.appendChild(createRow('ID', 'id', record.id));
+      formDiv.appendChild(createRow('Name', 'name', record.name));
+      formDiv.appendChild(createRow('Typ', 'type', record.type));
+      formDiv.appendChild(createRow('Zone', 'zone', record.zone));
+      formDiv.appendChild(createTextareaRow('Zusammenfassung', 'summary', record.summary));
+      return formDiv;
     }
 
     if (domainId === 'event') {
-      return `<div class="j7-data-studio__form">
-        ${row('ID', 'id', record.id)}
-        ${row('Name', 'name', record.name)}
-        ${row('Typ', 'type', record.type)}
-        ${textareaRow('Zusammenfassung', 'summary', record.summary)}
-      </div>`;
+      formDiv.appendChild(createRow('ID', 'id', record.id));
+      formDiv.appendChild(createRow('Name', 'name', record.name));
+      formDiv.appendChild(createRow('Typ', 'type', record.type));
+      formDiv.appendChild(createTextareaRow('Zusammenfassung', 'summary', record.summary));
+      return formDiv;
     }
 
     if (domainId === 'library-item') {
-      return `<div class="j7-data-studio__form">
-        ${row('ID', 'id', record.id)}
-        ${row('Titel', 'title', record.title ?? record.name ?? '')}
-        ${row('Typ', 'type', record.type ?? '')}
-        ${row('Tags (CSV)', 'tagsCsv', Array.isArray(record?.tags) ? record.tags.join(', ') : '')}
-        ${textareaRow('Zusammenfassung', 'summary', record.summary ?? '')}
-        ${textareaRow('Knowledge Hooks (JSON)', 'knowledgeHooksJson', JSON.stringify(record?.knowledgeHooks ?? [], null, 2))}
-      </div>`;
+      formDiv.appendChild(createRow('ID', 'id', record.id));
+      formDiv.appendChild(createRow('Titel', 'title', record.title ?? record.name ?? ''));
+      formDiv.appendChild(createRow('Typ', 'type', record.type ?? ''));
+      formDiv.appendChild(createRow('Tags (CSV)', 'tagsCsv', Array.isArray(record?.tags) ? record.tags.join(', ') : ''));
+      formDiv.appendChild(createTextareaRow('Zusammenfassung', 'summary', record.summary ?? ''));
+      formDiv.appendChild(createTextareaRow('Knowledge Hooks (JSON)', 'knowledgeHooksJson', JSON.stringify(record?.knowledgeHooks ?? [], null, 2)));
+      return formDiv;
     }
 
     if (domainId === 'spellCurriculum') {
       const payload = foundry.utils.deepClone(record ?? {});
       delete payload.id;
       delete payload.name;
-      return `<div class="j7-data-studio__form">
-        ${row('ID', 'id', record.id ?? 'ACADEMY_SPELL_CURRICULUM')}
-        ${row('Name', 'name', record.name ?? 'Zauber-Lehrplan')}
-        ${textareaRow('Inhalt (JSON ohne id/name)', 'payloadJson', JSON.stringify(payload, null, 2))}
-      </div>`;
+      formDiv.appendChild(createRow('ID', 'id', record.id ?? 'ACADEMY_SPELL_CURRICULUM'));
+      formDiv.appendChild(createRow('Name', 'name', record.name ?? 'Zauber-Lehrplan'));
+      formDiv.appendChild(createTextareaRow('Inhalt (JSON ohne id/name)', 'payloadJson', JSON.stringify(payload, null, 2)));
+      return formDiv;
     }
 
     if (domainId === 'spellsIndex') {
       const payload = foundry.utils.deepClone(record ?? {});
       delete payload.id;
       delete payload.name;
-      return `<div class="j7-data-studio__form">
-        ${row('ID', 'id', record.id ?? 'ACADEMY_SPELLS_INDEX')}
-        ${row('Name', 'name', record.name ?? 'Zauberindex')}
-        ${textareaRow('Inhalt (JSON ohne id/name)', 'payloadJson', JSON.stringify(payload, null, 2))}
-      </div>`;
+      formDiv.appendChild(createRow('ID', 'id', record.id ?? 'ACADEMY_SPELLS_INDEX'));
+      formDiv.appendChild(createRow('Name', 'name', record.name ?? 'Zauberindex'));
+      formDiv.appendChild(createTextareaRow('Inhalt (JSON ohne id/name)', 'payloadJson', JSON.stringify(payload, null, 2)));
+      return formDiv;
     }
 
     if (domainId === 'calendar') {
-      return `<div class="j7-data-studio__form">
-        ${row('ID', 'id', record.id ?? 'ACADEMY_CALENDAR')}
-        ${row('Name', 'name', record.name ?? 'Kalender (Academy)')}
-        ${textareaRow('Meta (JSON)', 'metaJson', JSON.stringify(record?.meta ?? {}, null, 2))}
-        ${textareaRow('Entries (JSON)', 'entriesJson', JSON.stringify(record?.entries ?? [], null, 2))}
-      </div>`;
+      formDiv.appendChild(createRow('ID', 'id', record.id ?? 'ACADEMY_CALENDAR'));
+      formDiv.appendChild(createRow('Name', 'name', record.name ?? 'Kalender (Academy)'));
+      formDiv.appendChild(createTextareaRow('Meta (JSON)', 'metaJson', JSON.stringify(record?.meta ?? {}, null, 2)));
+      formDiv.appendChild(createTextareaRow('Entries (JSON)', 'entriesJson', JSON.stringify(record?.entries ?? [], null, 2)));
+      return formDiv;
     }
 
-    return `<div class="j7-data-studio__empty"><p><strong>Formularmodus noch nicht verfügbar.</strong></p></div>`;
+    const emptyDiv = document.createElement('div');
+    emptyDiv.className = 'j7-data-studio__empty';
+    const emptyP = document.createElement('p');
+    const emptyStrong = document.createElement('strong');
+    emptyStrong.textContent = 'Formularmodus noch nicht verfügbar.';
+    emptyP.appendChild(emptyStrong);
+    emptyDiv.appendChild(emptyP);
+    return emptyDiv;
   }
 
   _collectFormData(root, seed = {}) {
@@ -627,8 +652,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
       editorLabel.textContent = this._editorMode === 'form' ? 'Formularmodus' : 'JSON / Expertenmodus';
       editorCol.appendChild(editorLabel);
       if (this._editorMode === 'form' && this._supportsForm(domain.id)) {
-        // _renderForm returns an HTML string where all user data goes through esc()
-        editorCol.insertAdjacentHTML('beforeend', this._renderForm(domain.id, activeData));
+        editorCol.appendChild(this._renderForm(domain.id, activeData));
       } else {
         const jsonTextarea = document.createElement('textarea');
         jsonTextarea.dataset.j7 = 'json';

@@ -1,0 +1,4 @@
+## 2025-02-18 - [Fix DOM XSS Vulnerability in UI Form Rendering]
+**Vulnerability:** XSS vulnerability through use of `insertAdjacentHTML('beforeend', ...)` with user-controlled form data directly injected via HTML interpolation strings.
+**Learning:** Even though the codebase flags `innerHTML` and enforces the use of DOM Element API via `validate-security.mjs`, developers can still bypass the linting checks by using similar APIs like `insertAdjacentHTML`.
+**Prevention:** Extend security validation tools to block `insertAdjacentHTML`, `outerHTML` and `document.write`. Always enforce the use of `document.createElement()`, `element.className`, and `.appendChild()` when rendering UI components to ensure variables are safely sanitized by the browser engine as plain text nodes or proper DOM element attributes.
