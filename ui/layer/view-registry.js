@@ -1,7 +1,7 @@
 import { getPanels } from './panel-registry.js';
 import { JanusSessionPrepService } from '../../phase8/session-prep/JanusSessionPrepService.js';
-import { buildLocationsView, buildPeopleView, buildKiContext, buildSyncView, buildSystemView } from '../apps/control-panel/context-builders.js';
-import { prepareDirectorRuntimeSummary, buildDirectorRunbookView, buildDirectorWorkflowView } from '../apps/control-panel/director-context.js';
+import { buildLocationsView, buildPeopleView, buildKiContext, buildSyncView, buildSystemView } from './context-builders.js';
+import { prepareDirectorRuntimeSummary, buildDirectorRunbookView, buildDirectorWorkflowView } from './director-context.js';
 
 const VIEW_REGISTRY = new Map();
 
@@ -27,7 +27,7 @@ export function getViews() {
   return [...VIEW_REGISTRY.values()];
 }
 
-function buildDirectorView(engine) {
+function buildDirectorView(engine, app) {
   const state = engine?.core?.state;
   const time = state?.get?.('time') ?? {};
   const workflow = engine?.core?.director?.workflow?.getRuntimeContext?.() ?? engine?.core?.director?.getWorkflowContext?.() ?? {};
