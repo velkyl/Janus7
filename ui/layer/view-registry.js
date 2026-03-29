@@ -1,4 +1,5 @@
 import { getPanels } from './panel-registry.js';
+import { JanusSessionPrepService } from '../../phase8/session-prep/JanusSessionPrepService.js';
 
 const VIEW_REGISTRY = new Map();
 
@@ -175,6 +176,36 @@ registerView({
   icon: 'fas fa-screwdriver-wrench',
   description: 'Werkzeuge, Panels und technische Subsysteme.',
   build: buildToolsView
+});
+
+async function buildSessionPrepView(engine) {
+  if (!engine) return { notReady: true };
+  const service = new JanusSessionPrepService({ engine, logger: engine?.core?.logger ?? console });
+  const report = await service.buildReport({ horizonSlots: 3 });
+  
+  const current = report.currentSlot ?? {};
+  return {
+    isGM: !!game?.user?.isGM,
+    generatedAt: report.generatedAt ?? new Date().toISOString(),
+    slotRef: report.slotRef ?? {},
+    suggestions: report.suggestions ?? [],
+    currentLessons: current.lessons ?? [],
+    currentExams: current.exams ?? [],
+    currentEvents: current.events ?? [],
+    upcoming: report.upcoming ?? [],
+    quests: report.quests ?? { total: 0, items: [] },
+    activeLocation: report.activeLocation ?? null,
+    diagnostics: report.diagnostics ?? { health: 'unknown', warnings: [] },
+    contentSeeds: report.contentSeeds ?? [],
+  };
+}
+
+registerView({
+  id: 'sessionPrep',
+  title: 'Session Prep',
+  icon: 'fas fa-wand-magic-sparkles',
+  description: 'Vorbereitung und Planung der nächsten Session.',
+  build: buildSessionPrepView
 });
 
 export default {

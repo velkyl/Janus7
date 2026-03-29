@@ -11,7 +11,6 @@ import { JanusGuidedManualTestApp } from './apps/JanusGuidedManualTestApp.js';
 import { JanusConfigPanelApp } from './apps/JanusConfigPanelApp.js';
 import { JanusSyncPanelApp } from './apps/JanusSyncPanelApp.js';
 import { JanusAcademyDataStudioApp } from './apps/JanusAcademyDataStudioApp.js';
-import { JanusSessionPrepWizardApp } from './apps/JanusSessionPrepWizardApp.js';
 import { JanusKiBackupManagerApp } from './apps/JanusKiBackupManagerApp.js';
 import { JanusKiRoundtripApp } from './apps/ki-roundtrip/JanusKiRoundtripApp.js';
 import { JanusLessonLibraryApp } from './apps/JanusLessonLibraryApp.js';
@@ -45,7 +44,6 @@ export const JanusUI = {
     shell: JanusShellApp,
     JanusShellApp,
     lessons: JanusLessonLibraryApp,
-    sessionPrepWizard: JanusSessionPrepWizardApp,
     kiBackupManager: JanusKiBackupManagerApp,
     // Legacy alias key: keeps older macros functional, but UI does not expose it
     aiRoundtrip: JanusKiRoundtripApp,

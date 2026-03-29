@@ -5,38 +5,38 @@
       <span class="janus7-title">Session Prep Wizard</span>
     </div>
     <div class="janus7-toolbar__right">
-      <button type="button" class="janus-btn" data-action="refresh"><i class="fas fa-sync"></i> Refresh</button>
-      <button type="button" class="janus-btn" data-action="openAcademyOverview"><i class="fas fa-calendar-week"></i> Übersicht</button>
-      <button type="button" class="janus-btn" data-action="openAtmosphereDJ"><i class="fas fa-music"></i> Atmosphäre</button>
-      <button type="button" class="janus-btn" data-action="openAcademyDataStudio"><i class="fas fa-edit"></i> Data Studio</button>
-      <button type="button" class="janus-btn" data-action="openKiRoundtrip"><i class="fas fa-brain"></i> KI</button>
-      <button type="button" class="janus-btn" data-action="openKiBackupManager"><i class="fas fa-life-ring"></i> Backups</button>
+      <button type="button" class="janus-btn" data-action="executeShellAction" data-view-id="sessionPrep" title="Report neu generieren"><i class="fas fa-sync"></i> Refresh</button>
+      <button type="button" class="janus-btn" data-action="executeShellAction" data-app-key="academyOverview"><i class="fas fa-calendar-week"></i> Übersicht</button>
+      <button type="button" class="janus-btn" data-action="executeShellAction" data-app-key="atmosphereDJ"><i class="fas fa-music"></i> Atmosphäre</button>
+      <button type="button" class="janus-btn" data-action="executeShellAction" data-app-key="academyDataStudio"><i class="fas fa-edit"></i> Data Studio</button>
+      <button type="button" class="janus-btn" data-action="executeShellAction" data-app-key="kiRoundtrip"><i class="fas fa-brain"></i> KI</button>
+      <button type="button" class="janus-btn" data-action="executeShellAction" data-app-key="kiBackupManager"><i class="fas fa-life-ring"></i> Backups</button>
     </div>
   </div>
 
-  {{#unless isGM}}
+  {{#unless view.isGM}}
     <div class="j7-backdrop j7-warn-banner"><i class="fas fa-exclamation-triangle"></i> Nur der GM kann den Session Prep Wizard sinnvoll nutzen.</div>
   {{/unless}}
 
   <section class="j7-panel j7-session-prep__hero">
     <div>
       <h3><i class="fas fa-clock"></i> Aktueller Stand</h3>
-      <p><strong>Woche {{slotRef.week}}</strong> · {{slotRef.day}} · {{slotRef.phase}}</p>
-      <p class="j7-text-dim">Generiert: {{generatedAt}}</p>
+      <p><strong>Woche {{view.slotRef.week}}</strong> · {{view.slotRef.day}} · {{view.slotRef.phase}}</p>
+      <p class="j7-text-dim">Generiert: {{view.generatedAt}}</p>
     </div>
     <div>
       <h4><i class="fas fa-map-marker-alt"></i> Aktiver Ort</h4>
-      {{#if activeLocation}}
-        <p><strong>{{activeLocation.name}}</strong></p>
-        <p class="j7-text-dim">Mood: {{activeLocation.defaultMoodKey}}</p>
+      {{#if view.activeLocation}}
+        <p><strong>{{view.activeLocation.name}}</strong></p>
+        <p class="j7-text-dim">Mood: {{view.activeLocation.defaultMoodKey}}</p>
       {{else}}
         <p class="j7-text-dim">Kein aktiver Ort gesetzt.</p>
       {{/if}}
     </div>
     <div>
       <h4><i class="fas fa-stethoscope"></i> Technik</h4>
-      <p><strong>{{diagnostics.health}}</strong></p>
-      <p class="j7-text-dim">Warnungen: {{diagnostics.warnings.length}}</p>
+      <p><strong>{{view.diagnostics.health}}</strong></p>
+      <p class="j7-text-dim">Warnungen: {{view.diagnostics.warnings.length}}</p>
     </div>
   </section>
 
@@ -44,7 +44,7 @@
     <section class="j7-panel">
       <h3><i class="fas fa-list-check"></i> Priorisierte To-dos</h3>
       <div class="j7-checklist">
-        {{#each suggestions as |item|}}
+        {{#each view.suggestions as |item|}}
           <article class="j7-checklist__item">
             <div class="j7-checklist__icon"><i class="fas {{item.icon}}"></i></div>
             <div>
@@ -59,7 +59,7 @@
     <section class="j7-panel">
       <h3><i class="fas fa-hourglass-half"></i> Nächste Slots</h3>
       <div class="j7-session-prep__timeline">
-        {{#each upcoming as |slot|}}
+        {{#each view.upcoming as |slot|}}
           <article class="j7-timeline-card">
             <header>
               <strong>{{slot.slotRef.day}} · {{slot.slotRef.phase}}</strong>
@@ -80,7 +80,7 @@
   <section class="j7-panel">
     <h3><i class="fas fa-feather-pointed"></i> On-the-fly Content Seeds</h3>
     <div class="j7-seed-grid">
-      {{#each contentSeeds as |seed|}}
+      {{#each view.contentSeeds as |seed|}}
         <article class="j7-seed-card">
           <header>
             <strong>{{seed.title}}</strong>
@@ -97,30 +97,30 @@
       <h3><i class="fas fa-book"></i> Aktueller Slot</h3>
       <h4>Lessons</h4>
       <ul class="j7-plain-list">
-        {{#if currentLessons.length}}
-          {{#each currentLessons as |item|}}<li>{{item.title}} {{#if item.teacher}}<span class="j7-text-dim">· {{item.teacher}}</span>{{/if}}</li>{{/each}}
+        {{#if view.currentLessons.length}}
+          {{#each view.currentLessons as |item|}}<li>{{item.title}} {{#if item.teacher}}<span class="j7-text-dim">· {{item.teacher}}</span>{{/if}}</li>{{/each}}
         {{else}}<li class="j7-text-dim">Keine Lektionen</li>{{/if}}
       </ul>
       <h4>Exams</h4>
       <ul class="j7-plain-list">
-        {{#if currentExams.length}}
-          {{#each currentExams as |item|}}<li>{{item.title}}</li>{{/each}}
+        {{#if view.currentExams.length}}
+          {{#each view.currentExams as |item|}}<li>{{item.title}}</li>{{/each}}
         {{else}}<li class="j7-text-dim">Keine Prüfungen</li>{{/if}}
       </ul>
       <h4>Events</h4>
       <ul class="j7-plain-list">
-        {{#if currentEvents.length}}
-          {{#each currentEvents as |item|}}<li>{{item.title}}</li>{{/each}}
+        {{#if view.currentEvents.length}}
+          {{#each view.currentEvents as |item|}}<li>{{item.title}}</li>{{/each}}
         {{else}}<li class="j7-text-dim">Keine Events</li>{{/if}}
       </ul>
     </section>
 
     <section class="j7-panel">
       <h3><i class="fas fa-scroll"></i> Offene Quests</h3>
-      <p><strong>{{quests.total}}</strong> aktive Quest(s)</p>
+      <p><strong>{{view.quests.total}}</strong> aktive Quest(s)</p>
       <ul class="j7-plain-list">
-        {{#if quests.items.length}}
-          {{#each quests.items as |item|}}
+        {{#if view.quests.items.length}}
+          {{#each view.quests.items as |item|}}
             <li>
               <strong>{{item.title}}</strong><br>
               <span class="j7-text-dim">{{item.actorId}} · Node: {{item.currentNodeTitle}}</span>
@@ -135,14 +135,14 @@
     <section class="j7-panel">
       <h3><i class="fas fa-triangle-exclamation"></i> Diagnostics</h3>
       <ul class="j7-plain-list">
-        {{#if diagnostics.warnings.length}}
-          {{#each diagnostics.warnings as |warn|}}<li>{{warn}}</li>{{/each}}
+        {{#if view.diagnostics.warnings.length}}
+          {{#each view.diagnostics.warnings as |warn|}}<li>{{warn}}</li>{{/each}}
         {{else}}
           <li class="j7-text-dim">Keine aktuellen Warnungen.</li>
         {{/if}}
       </ul>
       <div class="j7-session-prep__footer-actions">
-        <button type="button" class="janus-btn" data-action="openCommandCenter"><i class="fas fa-terminal"></i> Power Tools</button>
+        <button type="button" class="janus-btn" data-action="executeShellAction" data-app-key="commandCenter"><i class="fas fa-terminal"></i> Power Tools</button>
       </div>
     </section>
   </div>

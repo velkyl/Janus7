@@ -1,4 +1,3 @@
-
 import { moduleTemplatePath } from '../../core/common.js';
 import { JanusBaseApp } from '../core/base-app.js';
 import { getPanel, getQuickPanels, getPanels } from '../layer/panel-registry.js';
@@ -49,7 +48,8 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       openPanel: JanusShellApp.onOpenPanel,
       closePanel: JanusShellApp.onClosePanel,
       executeShellAction: JanusShellApp.onExecuteShellAction,
-      togglePalette: JanusShellApp.onTogglePalette
+      togglePalette: JanusShellApp.onTogglePalette,
+      copySeed: JanusShellApp.onCopySeed
     }
   };
 
@@ -63,6 +63,20 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this._activePanelId = options.panelId ?? null;
     this._paletteOpen = false;
     this._lastActionResult = null;
+  }
+
+  static async onCopySeed(event, target) {
+    event?.preventDefault?.();
+    const box = target?.closest?.('.j7-seed-card');
+    const textarea = box?.querySelector?.('textarea');
+    const value = textarea?.value ?? textarea?.textContent ?? '';
+    if (!value) return;
+    try {
+      await navigator?.clipboard?.writeText?.(value);
+      ui?.notifications?.info?.('Textbaustein kopiert.');
+    } catch (_err) {
+      ui?.notifications?.warn?.('Fehler beim Kopieren.');
+    }
   }
 
   static showSingleton(options = {}) {
@@ -120,7 +134,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
 
   async _renderViewHtml(engine) {
     const view = getView(this._viewId) ?? getView('director');
-    const model = view?.build?.(engine) ?? { cards: [] };
+    const model = await view?.build?.(engine) ?? { cards: [] };
     const path = moduleTemplatePath(`shell/views/${view.id}.hbs`);
     try {
       return await renderHbsTemplate(path, {
@@ -219,6 +233,10 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       descriptor = model?.cards?.[cardIndex]?.actions?.[actionIndex] ?? null;
     } else if (target?.dataset?.viewId) {
       descriptor = { kind: 'setView', viewId: target.dataset.viewId };
+    } else if (target?.dataset?.appKey) {
+      descriptor = { kind: 'openApp', appKey: target.dataset.appKey };
+    } else if (target?.dataset?.command) {
+      descriptor = { kind: 'command', command: target.dataset.command, dataset: target.dataset };
     }
 
     if (!descriptor) return;

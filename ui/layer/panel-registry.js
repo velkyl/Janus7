@@ -323,7 +323,7 @@ const PANEL_DEFINITIONS = [
     description: 'Vorbereitung der nächsten Session.',
     summary: 'Brücke zum Session-Prep-Wizard.',
     actions: [
-      { kind: 'openApp', appKey: 'sessionPrepWizard', label: 'Prep Wizard öffnen', icon: 'fas fa-wand-magic-sparkles' }
+      { kind: 'setView', viewId: 'sessionPrep', label: 'Prep Wizard öffnen', icon: 'fas fa-wand-magic-sparkles' }
     ],
     build: () => ({})
   },
