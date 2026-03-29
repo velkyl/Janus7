@@ -1,0 +1,73 @@
+<div class="j7-shell__view j7-shell__view--people">
+  
+  <div class="janus7-two-col">
+    <!-- Teachers -->
+    <article class="j7-shell__card">
+      <header class="j7-shell__card-head">
+        <div>
+          <h3><i class="fas fa-chalkboard-teacher j7-shell__card-icon" aria-hidden="true"></i><span>Lehrkräfte</span></h3>
+        </div>
+      </header>
+      <div class="j7-shell__metrics">
+        <div class="j7-dropzone j7-dropzone--medium" data-dropzone="people" data-role="teachers">
+          <div class="j7-dropzone__label"><i class="fas fa-user-plus"></i> Actors hier ablegen</div>
+        </div>
+        {{#if peopleView.teachers.length}}
+          <ul class="janus7-list j7-mt-sm">
+            {{#each peopleView.teachers}}
+              <li><span class="tag">L</span> <strong>{{name}}</strong></li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <p class="muted">Keine Lehrkräfte zugeordnet.</p>
+        {{/if}}
+      </div>
+    </article>
+
+    <!-- Students -->
+    <article class="j7-shell__card">
+      <header class="j7-shell__card-head">
+        <div>
+          <h3><i class="fas fa-user-graduate j7-shell__card-icon" aria-hidden="true"></i><span>Schüler</span></h3>
+        </div>
+      </header>
+      <div class="j7-shell__metrics">
+        <div class="j7-dropzone j7-dropzone--medium" data-dropzone="people" data-role="students">
+          <div class="j7-dropzone__label"><i class="fas fa-user-plus"></i> Actors hier ablegen</div>
+        </div>
+        {{#if peopleView.students.length}}
+          <ul class="janus7-list j7-mt-sm">
+            {{#each peopleView.students}}
+              <li><span class="tag">S</span> <strong>{{name}}</strong></li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <p class="muted">Keine Schüler zugeordnet.</p>
+        {{/if}}
+      </div>
+    </article>
+    
+    <!-- NPCs -->
+    <article class="j7-shell__card">
+      <header class="j7-shell__card-head">
+        <div>
+          <h3><i class="fas fa-users j7-shell__card-icon" aria-hidden="true"></i><span>Weitere NPCs</span></h3>
+        </div>
+      </header>
+      <div class="j7-shell__metrics">
+        <div class="j7-dropzone j7-dropzone--medium" data-dropzone="people" data-role="npcs">
+          <div class="j7-dropzone__label"><i class="fas fa-user-plus"></i> Actors hier ablegen</div>
+        </div>
+        {{#if peopleView.npcs.length}}
+          <ul class="janus7-list j7-mt-sm">
+            {{#each peopleView.npcs}}
+              <li><span class="tag">NPC</span> <strong>{{name}}</strong></li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <p class="muted">Keine NPCs zugeordnet.</p>
+        {{/if}}
+      </div>
+    </article>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="j7-shell__view j7-shell__view--places">
+
+  <div class="janus7-two-col">
+    <!-- Active Ort -->
+    <article class="j7-shell__card">
+      <header class="j7-shell__card-head">
+        <div>
+          <h3><i class="fas fa-map-marker-alt j7-shell__card-icon" aria-hidden="true"></i><span>Aktiver Ort</span></h3>
+          <p>Hier legst du Szenen ab um sie zu verknüpfen</p>
+        </div>
+      </header>
+      <div class="j7-shell__metrics">
+        <div class="j7-shell__metric"><span>Name</span><strong>{{locationView.activeLocationName}}</strong></div>
+        <div class="j7-shell__metric"><span>ID</span><strong>{{locationView.activeLocationId}}</strong></div>
+        <div class="j7-shell__metric"><span>Mood</span><strong>{{locationView.defaultMoodKey}}</strong></div>
+
+        <div class="j7-dropzone j7-dropzone--medium j7-mt-sm" data-dropzone="location" data-location-id="{{locationView.activeLocationId}}">
+          <div class="j7-dropzone__label"><i class="fas fa-link"></i> Scene/Playlist/Journal hier ablegen</div>
+        </div>
+      </div>
+
+      <div class="j7-shell__card-actions j7-mt-sm">
+        <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-command="activateLocationScene" data-dataset-location-id="{{locationView.activeLocationId}}"><i class="fas fa-map"></i> Scene aktivieren</button>
+        <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-command="applyLocationMood" data-dataset-location-id="{{locationView.activeLocationId}}"><i class="fas fa-music"></i> Mood setzen</button>
+      </div>
+    </article>
+
+    <!-- Alle Orte -->
+    <article class="j7-shell__card">
+      <header class="j7-shell__card-head">
+        <div>
+          <h3><i class="fas fa-layer-group j7-shell__card-icon" aria-hidden="true"></i><span>Alle Orte</span></h3>
+        </div>
+      </header>
+      <div class="j7-shell__listj7-shell__metrics">
+        {{#if locationView.locations.length}}
+          <ul class="janus7-list j7-mt-sm">
+            {{#each locationView.locations}}
+              <li><span class="tag">LOC</span> <strong>{{name}}</strong> <span class="muted j7-ml-sm">{{type}}</span></li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <p class="muted">Keine Orte in den Akademie-Daten gefunden.</p>
+        {{/if}}
+      </div>
+    </article>
+  </div>
+</div>

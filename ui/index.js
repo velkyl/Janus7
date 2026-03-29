@@ -1,5 +1,4 @@
 // janus7/ui/index.js
-import { JanusControlPanelApp } from './apps/control-panel/JanusControlPanelApp.js';
 import { JanusAcademyOverviewApp } from './apps/JanusAcademyOverviewApp.js';
 import { JanusScoringViewApp } from './apps/JanusScoringViewApp.js';
 import { JanusSocialViewApp } from './apps/JanusSocialViewApp.js';
@@ -35,7 +34,7 @@ const _sceneControlContributors = [];
 
 export const JanusUI = {
   apps: {
-    controlPanel: JanusControlPanelApp,
+    controlPanel: JanusShellApp,
     academyOverview: JanusAcademyOverviewApp,
     scoringView: JanusScoringViewApp,
     socialView: JanusSocialViewApp,

@@ -1,5 +1,7 @@
 import { getPanels } from './panel-registry.js';
 import { JanusSessionPrepService } from '../../phase8/session-prep/JanusSessionPrepService.js';
+import { buildLocationsView, buildPeopleView, buildKiContext, buildSyncView, buildSystemView } from '../apps/control-panel/context-builders.js';
+import { prepareDirectorRuntimeSummary, buildDirectorRunbookView, buildDirectorWorkflowView } from '../apps/control-panel/director-context.js';
 
 const VIEW_REGISTRY = new Map();
 
@@ -32,6 +34,16 @@ function buildDirectorView(engine) {
   const diagnostics = engine?.diagnostics?.snapshot?.() ?? {};
   const graph = diagnostics?.graph ?? {};
   const cache = graph?.cache ?? {};
+  
+  const { directorSummary, directorRuntime } = prepareDirectorRuntimeSummary({ engine, logger: engine?.core?.logger ?? console });
+  const directorWorkflow = buildDirectorWorkflowView({
+    directorWorkflow: app?._directorWorkflow ?? {},
+    directorRuntime,
+    engine,
+    questCandidates: []
+  });
+  const directorRunbook = buildDirectorRunbookView(directorRuntime, directorWorkflow);
+
   return {
     cards: [
       {
@@ -78,7 +90,12 @@ function buildDirectorView(engine) {
           { kind: 'openPanel', panelId: 'diagnostics', label: 'Diagnostik', icon: 'fas fa-heart-pulse' }
         ]
       }
-    ]
+    ],
+    // The director.hbs template expects these props:
+    directorSummary,
+    directorRuntime,
+    directorWorkflow,
+    directorRunbook
   };
 }
 
@@ -141,6 +158,38 @@ function buildAcademyView(engine) {
   };
 }
 
+function buildScheduleView(engine, app) {
+  const slotBuilderItems = app?._slotBuilder ?? [];
+  return {
+    slotBuilder: { items: slotBuilderItems }
+  };
+}
+
+function buildPeopleViewLocal(engine, app) {
+  const state = engine?.core?.state?.get?.() ?? {};
+  const peopleView = buildPeopleView({ state, actors: game?.actors });
+  return { peopleView };
+}
+
+function buildPlacesViewLocal(engine, app) {
+  const state = engine?.core?.state?.get?.() ?? {};
+  const { locations, locationView } = buildLocationsView({ state, academyData: engine?.academy?.data });
+  return { locations, locationView };
+}
+
+async function buildSystemViewLocal(engine, app) {
+  const state = engine?.core?.state?.get?.() ?? {};
+  const kiContext = await buildKiContext({ app, engine, isGM: game?.user?.isGM, phase7Enabled: true });
+  const syncView = buildSyncView({ state });
+  const system = buildSystemView({ engine });
+  
+  return {
+    kiContext,
+    syncView,
+    system
+  };
+}
+
 function buildToolsView(_engine) {
   const toolPanels = getPanels().filter((panel) => ['tools', 'academy', 'director'].includes(panel.group));
   return {
@@ -168,6 +217,38 @@ registerView({
   icon: 'fas fa-school',
   description: 'Setup-Ansicht für Stundenplan, Orte und Daten.',
   build: buildAcademyView
+});
+
+registerView({
+  id: 'schedule',
+  title: 'Stundenplan',
+  icon: 'fas fa-calendar-days',
+  description: 'Slot-Builder und Kalenderverwaltung.',
+  build: buildScheduleView
+});
+
+registerView({
+  id: 'people',
+  title: 'Akteure (NSCs)',
+  icon: 'fas fa-users',
+  description: 'Drag & Drop Roster für Lehrer, Schüler & NSCs.',
+  build: buildPeopleViewLocal
+});
+
+registerView({
+  id: 'places',
+  title: 'Ortschaften',
+  icon: 'fas fa-map-location-dot',
+  description: 'Szenen-Zuweisung & Locations.',
+  build: buildPlacesViewLocal
+});
+
+registerView({
+  id: 'system',
+  title: 'System & KI',
+  icon: 'fas fa-microchip',
+  description: 'Diagnostik, Sync-Engine und KI-Snapshotting.',
+  build: buildSystemViewLocal
 });
 
 registerView({
