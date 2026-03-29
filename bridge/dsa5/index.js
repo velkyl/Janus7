@@ -31,6 +31,7 @@ import { DSA5HooksBridge } from './hooks-bridge.js';
 import { DSA5DamageBridge } from './damage.js';
 import { DSA5ItemFactoryBridge, itemTypeFromSystemSkillId, nameFromSystemSkillId } from './item-factory.js';
 import { AcademyLibraryService } from './library-service.js';
+import { DSA5CraftingBridge } from './crafting.js';
 
 // ─── Neue Sub-Bridges (Phase 3 Audit, Aufgaben 1-8) ──────────────────────────
 import { DSA5GroupCheckBridge } from './group-check.js';
@@ -94,6 +95,7 @@ export class DSA5SystemBridge {
     this.damage       = new DSA5DamageBridge({ logger: this.logger });
     this.itemFactory  = new DSA5ItemFactoryBridge({ packs: this.packs, logger: this.logger });
     this.library      = new AcademyLibraryService({ logger: this.logger, systemId: DSA5_SYSTEM_ID });
+    this.crafting     = new DSA5CraftingBridge({ resolver: this.resolver, library: this.library, logger: this.logger });
 
     // ─── Neue Sub-Bridges v3 (Audit Aufgaben 1-8) ─────────────────────────────
     this.groupCheck   = new DSA5GroupCheckBridge({ logger: this.logger });
@@ -204,6 +206,7 @@ export class DSA5SystemBridge {
         hasDSA5Calendar:       Boolean(game?.dsa5?.apps?.WorldCalendar),
         hasItemFactory:        Boolean(game?.dsa5?.entities?.ItemFactory),
         hasItemFactoryBridge:  true, // DSA5ItemFactoryBridge immer vorhanden (inkl. Compendium-Fallback)
+        hasCraftingBridge:     true, // Stets vorhanden, sucht nach 'plant', 'poison' etc.
 
         // Sub-Bridge-Capabilities v3 (Audit 1-8)
         hasGroupCheck:         Boolean(game?.dsa5?.apps?.RequestRoll),
@@ -754,6 +757,30 @@ export class DSA5SystemBridge {
    */
   getLibraryStats() {
     return this.library.stats();
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /**
+   * Zieht zufällige Handwerks-Items aus der Library und generiert sie als Loot.
+   * @param {Actor} actor
+   * @param {string|string[]} types - 'plant', 'poison', 'recipe'
+   * @param {number} amount
+   */
+  async gatherRandomItems(actor, types, amount = 1) {
+    this.assertAvailable();
+    return this.crafting.gatherRandomItems(actor, types, amount);
+  }
+
+  /**
+   * Appliziert ein spezifisches Gift oder eine Krankheit aus der Library.
+   * @param {Actor} actor
+   * @param {string} itemName
+   * @param {string} type - 'disease' oder 'poison'
+   */
+  async applyHazard(actor, itemName, type) {
+    this.assertAvailable();
+    return this.crafting.applyHazard(actor, itemName, type);
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
