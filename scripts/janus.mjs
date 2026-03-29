@@ -24,7 +24,7 @@ import { JanusTimeReactor } from '../services/time/reactor.js';
 import { JanusCron } from '../services/cron/JanusCron.js';
 import { handleChatMessage } from '../services/chat/cli.js';
 import { SceneRegionsBridge } from '../bridges/foundry/SceneRegionsBridge.mjs';
-import { JanusControlPanelApp } from '../ui/apps/control-panel/JanusControlPanelApp.js';
+import { JanusShellApp } from '../ui/apps/JanusShellApp.js';
 import { registerLessonDocuments, ensureLessonDocumentsReady } from './integration/phase2-document-content-integration.js';
 import { JANUS_LESSON_ITEM_TYPE, JANUS_LESSON_SHEET_CLASS, JANUS_LESSON_SUBTYPE } from './documents/lesson-constants.js';
 
@@ -318,7 +318,7 @@ try {
         name: 'JANUS7 Control Panel',
         label: 'Open',
         icon: 'fas fa-cogs',
-        type: JanusControlPanelApp,
+        type: JanusShellApp,
         restricted: true
       });
     } catch (err) {

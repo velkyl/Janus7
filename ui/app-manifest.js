@@ -14,7 +14,7 @@ export const JANUS_UI_APP_STATUS = Object.freeze({
   testResults: { className: 'JanusTestResultApp', maturity: 'intern/test/debug', mode: 'debug', shell: false, editable: false, admin: true },
   guidedManualTests: { className: 'JanusGuidedManualTestApp', maturity: 'intern/test/debug', mode: 'debug', shell: false, editable: false, admin: true },
   stateInspector: { className: 'JanusStateInspectorApp', maturity: 'intern/debug', mode: 'view-only', shell: false, editable: false, admin: true },
-  controlPanel: { className: 'JanusControlPanelApp', maturity: 'legacy-bridge', mode: 'view/admin', shell: false, editable: false, admin: true },
+  controlPanel: { className: 'JanusShellApp', maturity: 'legacy-bridge', mode: 'view/admin', shell: false, editable: false, admin: true },
   settingsTestHarness: { className: 'JanusSettingsTestHarnessApp', maturity: 'intern/test/debug', mode: 'debug', shell: false, editable: false, admin: true },
   lessons: { className: 'JanusLessonLibraryApp', maturity: 'teilproduktiv', mode: 'view/workflow', shell: false, editable: true, admin: false },
   aiRoundtrip: { className: 'JanusKiRoundtripApp', maturity: 'legacy-alias', mode: 'admin/edit', shell: false, editable: true, admin: true }
