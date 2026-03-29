@@ -24,14 +24,16 @@ export class DSA5ItemBridge {
    * @param {object} deps
    * @param {import('./resolver.js').DSA5Resolver} deps.resolver
    * @param {import('./packs.js').DSA5PacksIndex} [deps.packs]
+   * @param {import('./library-service.js').AcademyLibraryService} [deps.library]
    * @param {Console} [deps.logger]
    */
-  constructor({ resolver, packs, logger } = {}) {
+  constructor({ resolver, packs, library, logger } = {}) {
     if (!resolver) {
       throw new Error('DSA5ItemBridge benötigt einen Resolver.');
     }
     this.resolver = resolver;
     this.packs = packs ?? null;
+    this.library = library ?? null;
     this.logger = logger ?? console;
 
     // Bind alle Funktionen an diese Instanz, damit "this" erhalten bleibt bei destrukturierten Aufrufen.
@@ -145,14 +147,21 @@ export class DSA5ItemBridge {
     }
 
     // 3) Reiner Name (z.B. "Ignifaxius") → über Packs-Index auflösen
-    if (!spell && typeof spellRef === 'string' && this.packs) {
+    if (!spell && typeof spellRef === 'string') {
       try {
-        const meta = await this.packs.findByName(spellRef, { type: 'spell' });
+        let meta = null;
+        if (this.library) {
+          meta = await this.library.findByName(spellRef, 'spell', { firstOnly: true });
+        } else if (this.packs) {
+          await this.packs.ensureIndex({ documentName: 'Item' });
+          meta = await this.packs.findByName(spellRef, { type: 'spell' });
+        }
+        
         if (meta?.uuid) {
           spell = await this.resolver.require('Item', meta.uuid, { type: 'spell' });
         }
       } catch (e) {
-        this.logger?.warn?.('[JANUS7][DSA5][items] ensureSpellOnActor packs lookup failed', { spellRef, error: e });
+        this.logger?.warn?.('[JANUS7][DSA5][items] ensureSpellOnActor lookup failed', { spellRef, error: e });
       }
     }
 

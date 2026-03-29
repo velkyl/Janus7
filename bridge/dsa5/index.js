@@ -85,7 +85,8 @@ export class DSA5SystemBridge {
       logger: this.logger,
     });
     this.packs = new DSA5PacksIndex({ logger: this.logger });
-    this.items = new DSA5ItemBridge({ resolver: this.resolver, packs: this.packs, logger: this.logger });
+    this.library      = new AcademyLibraryService({ logger: this.logger, systemId: DSA5_SYSTEM_ID });
+    this.items = new DSA5ItemBridge({ resolver: this.resolver, packs: this.packs, library: this.library, logger: this.logger });
 
     // ─── Neue Sub-Bridges (v2) ─────────────────────────────────────────────
     this.conditions   = new DSA5ConditionBridge({ resolver: this.resolver, logger: this.logger });
@@ -93,8 +94,7 @@ export class DSA5SystemBridge {
     this.calendarSync = new DSA5CalendarSync({ logger: this.logger });
     this.journal      = new DSA5JournalBridge({ logger: this.logger });
     this.damage       = new DSA5DamageBridge({ logger: this.logger });
-    this.itemFactory  = new DSA5ItemFactoryBridge({ packs: this.packs, logger: this.logger });
-    this.library      = new AcademyLibraryService({ logger: this.logger, systemId: DSA5_SYSTEM_ID });
+    this.itemFactory  = new DSA5ItemFactoryBridge({ packs: this.packs, library: this.library, logger: this.logger });
     this.crafting     = new DSA5CraftingBridge({ resolver: this.resolver, library: this.library, logger: this.logger });
 
     // ─── Neue Sub-Bridges v3 (Audit Aufgaben 1-8) ─────────────────────────────
@@ -340,10 +340,15 @@ export class DSA5SystemBridge {
 
     // 3) Name -> Compendium Index (erstes Match)
     try {
-      await this.packs.ensureIndex({ documentName: 'Item' });
-      const hit = await this.packs.findByName(name, { type: 'skill' });
-      if (hit?.uuid) {
-        return this.rolls.requestSkillCheck({ actorRef: actor, skillRef: hit.uuid, options });
+      let meta = null;
+      if (this.library) {
+        meta = await this.library.findByName(name, 'skill', { firstOnly: true });
+      } else if (this.packs) {
+        await this.packs.ensureIndex({ documentName: 'Item' });
+        meta = await this.packs.findByName(name, { type: 'skill' });
+      }
+      if (meta?.uuid) {
+        return this.rolls.requestSkillCheck({ actorRef: actor, skillRef: meta.uuid, options });
       }
     } catch (_e) {
       // ignore
@@ -386,20 +391,24 @@ export class DSA5SystemBridge {
 
     // Compendium-Quelle: learned spells aus Pack-Index auflösen (abhängig von dsa5-Struktur)
     if (source === 'compendium' || source === 'both') {
-      if (this.packs) {
-        await this.packs.ensureIndex({ documentName: 'Item' });
-        for (const embeddedSpell of actorSpells) {
-          try {
-            const hit = await this.packs.findByName(embeddedSpell.name, { type: 'spell' });
-            if (hit?.uuid) {
-              const compendiumItem = await this.resolver.resolveItem(hit.uuid);
-              if (compendiumItem) {
-                items.push(compendiumItem);
-              }
-            }
-          } catch (e) {
-            this.logger?.warn?.('[JANUS7][DSA5][getActorSpells] packs lookup failed', { spellName: embeddedSpell.name, error: e });
+      for (const embeddedSpell of actorSpells) {
+        try {
+          let hit = null;
+          if (this.library) {
+            hit = await this.library.findByName(embeddedSpell.name, 'spell', { firstOnly: true });
+          } else if (this.packs) {
+            await this.packs.ensureIndex({ documentName: 'Item' });
+            hit = await this.packs.findByName(embeddedSpell.name, { type: 'spell' });
           }
+          
+          if (hit?.uuid) {
+            const compendiumItem = await this.resolver.resolveItem(hit.uuid);
+            if (compendiumItem) {
+              items.push(compendiumItem);
+            }
+          }
+        } catch (e) {
+          this.logger?.warn?.('[JANUS7][DSA5][getActorSpells] packs lookup failed', { spellName: embeddedSpell.name, error: e });
         }
       }
     }

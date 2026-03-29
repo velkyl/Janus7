@@ -84,6 +84,7 @@ export class AcademyLibraryService {
    */
   listPacks({
     documentName   = null,
+    documentNames  = null,
     source         = null,
     includeDisabled = false,
     respectDSAFilter = true,
@@ -105,8 +106,9 @@ export class AcademyLibraryService {
       const isDsa5Module = (packSource === 'module' && packSys === this.systemId);
       if (!isDsa5System && !isDsa5Module) return false;
 
-      // 2) Nur Item-artige Packs, wenn wir nach Items suchen
+      // 2) Nur erlaubte Pack-Typen (Item, Actor, Scene etc.)
       if (documentName && packDoc !== documentName) return false;
+      if (documentNames && !documentNames.includes(packDoc)) return false;
 
       // 3) Quelle filtern (system / module / world)
       if (source && packSource !== source) return false;
@@ -132,10 +134,11 @@ export class AcademyLibraryService {
    *
    * @param {object} [opts]
    * @param {string}  [opts.documentName='Item']
+   * @param {string[]} [opts.documentNames]
    * @param {boolean} [opts.force=false]  erzwingt Rebuild
    * @returns {Promise<void>}
    */
-  async buildIndex({ documentName = 'Item', force = false } = {}) {
+  async buildIndex({ documentName = 'Item', documentNames = null, force = false } = {}) {
     if (this._building) {
       this.logger?.debug?.('[Library] buildIndex bereits aktiv – skip');
       return;
@@ -146,16 +149,17 @@ export class AcademyLibraryService {
     this._byUuid.clear();
     this._byKey.clear();
 
-    const packs = this.listPacks({ documentName, respectDSAFilter: true });
+    const namesToLoad = documentNames || [documentName];
+    const packs = this.listPacks({ documentNames: namesToLoad, respectDSAFilter: true });
     const start = Date.now();
     let total   = 0;
 
-    this.logger?.info?.(`[Library] Indexierung: ${packs.length} Packs (${documentName})`);
+    this.logger?.info?.(`[Library] Indexierung: ${packs.length} Packs (${namesToLoad.join(', ')})`);
 
     for (const pack of packs) {
       try {
         const index = await pack.getIndex({
-          fields: ['name', 'type', 'img', 'system.type'],
+          fields: ['name', 'type', 'img', 'system.type', 'system.price.value'],
         });
 
         const packMeta  = pack.metadata ?? {};
@@ -164,7 +168,8 @@ export class AcademyLibraryService {
 
         for (const entry of index) {
           const uuid = `Compendium.${pack.collection}.${entry._id}`;
-          const type = entry.type ?? '';
+          // Fallback if type is missing (like for Scenes)
+          const type = entry.type || (pack.documentName === 'Scene' ? 'scene' : '');
 
           /** @type {LibraryEntry} */
           const item = {
@@ -174,6 +179,8 @@ export class AcademyLibraryService {
             packageName: pkgName,
             name:        entry.name ?? '',
             type,
+            documentName: pack.documentName,
+            price:       entry.system?.price?.value || 0,
             img:         entry.img ?? null,
             _id:         entry._id,
           };
@@ -286,12 +293,28 @@ export class AcademyLibraryService {
     const key   = this._makeKey(type ?? null, name);
     const uuids = this._byKey.get(key) ?? [];
 
-    if (!uuids.length) {
+    let entries = uuids.map((u) => this._byUuid.get(u)).filter(Boolean);
+
+    // Prioritize non-core modules (like dsa5-magic-1) over dsa5-core
+    const sortEntries = (list) => {
+      list.sort((a, b) => {
+        const aCore = (a.packageName || '').includes('core');
+        const bCore = (b.packageName || '').includes('core');
+        if (aCore && !bCore) return 1;
+        if (!aCore && bCore) return -1;
+        return 0;
+      });
+      return list;
+    };
+
+    if (!entries.length) {
       // Fallback: case-insensitive substring
-      return (await this.search({ q: name, types: type ? [type] : null, limit: firstOnly ? 1 : 10 }))[0] ?? null;
+      const backup = await this.search({ q: name, types: type ? [type] : null, limit: firstOnly ? 1 : 10 });
+      sortEntries(backup);
+      return firstOnly ? (backup[0] ?? null) : backup;
     }
 
-    const entries = uuids.map((u) => this._byUuid.get(u)).filter(Boolean);
+    sortEntries(entries);
     return firstOnly ? (entries[0] ?? null) : entries;
   }
 

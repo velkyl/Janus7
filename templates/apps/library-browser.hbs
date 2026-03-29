@@ -1,0 +1,97 @@
+<div class="janus-app library-browser-container">
+  <header class="janus-header" style="flex: 0 0 auto; margin-bottom: 1rem;">
+    <h2>Director's Spotlight <small>(DSA5 Bibliothek)</small></h2>
+    <div class="search-bar" style="display: flex; gap: 0.5rem; justify-content: space-between;">
+      <input type="text" 
+             name="query" 
+             placeholder="Suchen (z.B. 'Einhorn', 'Ignifaxius', 'Wirselkraut')..." 
+             value="{{query}}"
+             autofocus 
+             style="flex: 1; padding: 0.5rem; font-size: 1.1em;" />
+      
+      <select name="typeFilter" style="padding: 0.5rem; max-width: 250px;">
+        <option value="" {{#if (eq typeFilter "")}}selected{{/if}}>Alle Kategorien</option>
+        <optgroup label="Die Welt (Karten)">
+          <option value="scene" {{#if (eq typeFilter "scene")}}selected{{/if}}>Karten & Szenen</option>
+        </optgroup>
+        <optgroup label="Bestiarium & Personen">
+          <option value="npc" {{#if (eq typeFilter "npc")}}selected{{/if}}>Nichtspieler-Charaktere (NPCs)</option>
+          <option value="creature" {{#if (eq typeFilter "creature")}}selected{{/if}}>Kreaturen & Beschwörungen</option>
+          <option value="character" {{#if (eq typeFilter "character")}}selected{{/if}}>Archetypen (Charaktere)</option>
+        </optgroup>
+        <optgroup label="Magie & Regeln">
+          <option value="spell" {{#if (eq typeFilter "spell")}}selected{{/if}}>Zauber</option>
+          <option value="liturgy" {{#if (eq typeFilter "liturgy")}}selected{{/if}}>Liturgien</option>
+          <option value="skill" {{#if (eq typeFilter "skill")}}selected{{/if}}>Fertigkeiten & SFs</option>
+          <option value="trait" {{#if (eq typeFilter "trait")}}selected{{/if}}>Besonderheiten (Traits)</option>
+        </optgroup>
+        <optgroup label="Ausrüstung & Alchemie">
+          <option value="equipment" {{#if (eq typeFilter "equipment")}}selected{{/if}}>Ausrüstung</option>
+          <option value="meleeweapon" {{#if (eq typeFilter "meleeweapon")}}selected{{/if}}>Nahkampfwaffen</option>
+          <option value="rangeweapon" {{#if (eq typeFilter "rangeweapon")}}selected{{/if}}>Fernkampfwaffen</option>
+          <option value="armor" {{#if (eq typeFilter "armor")}}selected{{/if}}>Rüstungen</option>
+          <option value="consumable" {{#if (eq typeFilter "consumable")}}selected{{/if}}>Tränke & Konsumierbares</option>
+        <optgroup label="Werkzeuge & Wissen">
+          <option value="journal" {{#if (eq typeFilter "journal")}}selected{{/if}}>Regeln & Wissen (Journals)</option>
+          <option value="macro" {{#if (eq typeFilter "macro")}}selected{{/if}}>Makros & Tools</option>
+          <option value="rolltable" {{#if (eq typeFilter "rolltable")}}selected{{/if}}>Zufallstabellen</option>
+        </optgroup>
+      </select>
+    </div>
+    
+    {{#if isBuilding}}
+      <div class="janus-flash janus-flash--info" style="margin-top: 0.5rem;">
+        <i class="fas fa-spinner fa-spin"></i> Indexiere Kompendien (dies kann beim ersten Start einen Moment dauern)...
+      </div>
+    {{else}}
+      <div class="stats" style="font-size: 0.85em; color: var(--color-text-dark-secondary); margin-top: 0.2rem;">
+        Durchsuche <strong>{{stats.entries}}</strong> Einträge in <strong>{{stats.packs}}</strong> Modulen.
+        <a href="#" data-action="refreshIndex" title="Index neu aufbauen"><i class="fas fa-sync"></i> Refresh</a>
+      </div>
+    {{/if}}
+  </header>
+
+  <main class="janus-content results-container" style="flex: 1 1 auto; overflow-y: auto;">
+    {{#if results}}
+      <ul class="janus-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.25rem;">
+        {{#each results}}
+          <li class="janus-list-item flexrow" 
+              style="align-items: center; padding: 0.5rem; background: rgba(0,0,0,0.05); border: 1px solid var(--color-border-light-1); border-radius: 4px; gap: 0.5rem;"
+              draggable="true" 
+              data-uuid="{{uuid}}"
+              data-document-name="{{documentName}}">
+            
+            <img src="{{img}}" alt="{{name}}" width="40" height="40" style="border: 1px solid #000; border-radius: 2px; flex: 0 0 40px; object-fit: cover;" />
+            <div style="flex: 1; min-width: 0;">
+              <h4 style="margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1.1em;" title="{{name}}">{{name}}</h4>
+              <div style="font-size: 0.8em; color: var(--color-text-dark-secondary);">
+                <span>{{packLabel}}</span>
+                <span style="opacity: 0.5;">({{type}})</span>
+              </div>
+            </div>
+            <div class="flexrow" style="flex: 0 0 auto; align-items: center; gap: 0.5rem;">
+              {{#if isExecutable}}
+                <button type="button" class="janus-btn janus-btn--small janus-btn--primary" data-action="executeAction" data-uuid="{{uuid}}" title="Ausführen" style="background: var(--color-primary); color: white; border: none; padding: 0.2rem 0.5rem; border-radius: 3px; cursor: pointer;">
+                  <i class="fas fa-play"></i> Run
+                </button>
+              {{/if}}
+              <button type="button" class="janus-btn janus-btn--small" data-action="openSheet" data-uuid="{{uuid}}" title="Ansehen">
+                <i class="fas fa-eye"></i> View
+              </button>
+            </div>
+          </li>
+        {{/each}}
+      </ul>
+      {{#if overflow}}
+        <div style="text-align: center; margin-top: 1rem; color: var(--color-text-dark-secondary);">
+          <i>Mehr als {{limit}} Ergebnisse gefunden. Bitte Suche verfeinern.</i>
+        </div>
+      {{/if}}
+    {{else if query}}
+      <div class="janus-empty-state" style="text-align: center; padding: 2rem; color: var(--color-text-dark-secondary);">
+        <i class="fas fa-search fa-3x" style="opacity: 0.2; margin-bottom: 1rem;"></i>
+        <p>Keine Ergebnisse gefunden für "<strong>{{query}}</strong>".</p>
+      </div>
+    {{/if}}
+  </main>
+</div>

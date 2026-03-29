@@ -1,0 +1,75 @@
+<div class="janus-app enrollment-container" style="display: flex; flex-direction: column; height: 100%;">
+  <header class="janus-header" style="flex: 0 0 auto; margin-bottom: 1rem; border-bottom: 2px solid var(--color-border-light-2); padding-bottom: 0.5rem;">
+    <h2>
+      <i class="fas fa-user-plus" style="color: var(--color-primary);"></i> 
+      Immatrikulations-Scanner
+    </h2>
+    <p style="font-style: italic; color: var(--color-text-dark-secondary); font-size: 0.9em; margin-top: -5px;">
+      Sichte Akten und generiere NSCs oder Archetypen für deine Akademie.
+    </p>
+
+    <div class="search-bar" style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+      <input type="text" 
+             name="query" 
+             placeholder="Suchen (z.B. 'Krieger', 'Magier', 'Ork')..." 
+             value="{{query}}"
+             autofocus 
+             style="flex: 1; padding: 0.5rem; font-size: 1.1em; border: 1px solid var(--color-border-light-1); border-radius: 4px;" />
+      
+      <select name="typeFilter" style="padding: 0.5rem; border-radius: 4px;">
+        <option value="npc" {{#if (eq typeFilter "npc")}}selected{{/if}}>NSC (Meisterpersonen)</option>
+        <option value="character" {{#if (eq typeFilter "character")}}selected{{/if}}>Archetypen (Charaktere)</option>
+        <option value="creature" {{#if (eq typeFilter "creature")}}selected{{/if}}>Kreaturen</option>
+        <option value="all" {{#if (eq typeFilter "all")}}selected{{/if}}>Alle Akteure</option>
+      </select>
+    </div>
+    
+    {{#if isBuilding}}
+      <div class="janus-flash janus-flash--info" style="margin-top: 0.5rem;">
+        <i class="fas fa-spinner fa-spin"></i> Akten werden aus den Archiven geholt...
+      </div>
+    {{/if}}
+  </header>
+
+  <main class="janus-content results-container" style="flex: 1 1 auto; overflow-y: auto; padding-right: 0.5rem;">
+    {{#if results}}
+      <div class="janus-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+        {{#each results}}
+          <div class="janus-card" style="display: flex; flex-direction: column; background: rgba(0,0,0,0.05); border: 1px solid var(--color-border-light-1); border-radius: 6px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            
+            <div style="display: flex; padding: 0.5rem; gap: 0.5rem; align-items: flex-start;">
+              <div style="flex: 0 0 60px; height: 60px; border-radius: 4px; overflow: hidden; border: 1px solid #000;">
+                <img src="{{img}}" alt="{{name}}" style="width: 100%; height: 100%; object-fit: top cover;" />
+              </div>
+              
+              <div style="flex: 1; min-width: 0;">
+                <h4 style="margin: 0; font-size: 1.1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--color-text-dark-primary);" title="{{name}}">{{name}}</h4>
+                <div style="font-size: 0.8em; color: var(--color-text-dark-secondary); margin-bottom: 0.2rem;">
+                  <i>{{packLabel}}</i>
+                </div>
+                <!-- Zufallsnamen-Vorschlag -->
+                <div style="font-size: 0.8em; color: var(--color-primary);">
+                  <i class="fas fa-random"></i> Klon-Name: <b>{{suggestedName}}</b>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; border-top: 1px solid rgba(0,0,0,0.1); background: rgba(0,0,0,0.02);">
+              <button type="button" class="janus-btn" data-action="openSheet" data-uuid="{{uuid}}" title="Akte ansehen" style="flex: 1; border: none; background: transparent; padding: 0.5rem; cursor: pointer; border-right: 1px solid rgba(0,0,0,0.1);">
+                <i class="fas fa-eye" style="color: var(--color-text-dark-secondary);"></i>
+              </button>
+              <button type="button" class="janus-btn janus-btn--primary" data-action="importNpc" data-uuid="{{uuid}}" title="Als neuen NSC kopieren" style="flex: 3; border: none; background: var(--color-primary); color: white; padding: 0.5rem; cursor: pointer; font-weight: bold;">
+                <i class="fas fa-download"></i> Immatrikulieren / Import 
+              </button>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    {{else if query}}
+      <div class="janus-empty-state" style="text-align: center; padding: 3rem 1rem; color: var(--color-text-dark-secondary);">
+        <i class="fas fa-user-times fa-3x" style="opacity: 0.2; margin-bottom: 1rem;"></i>
+        <p>Keine passende Akte für "<strong>{{query}}</strong>" im Archiv gefunden.</p>
+      </div>
+    {{/if}}
+  </main>
+</div>

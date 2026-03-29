@@ -1,0 +1,60 @@
+<div class="janus-app student-archive-container">
+  <header class="janus-header" style="flex: 0 0 auto; margin-bottom: 1rem; border-bottom: 2px solid var(--color-border-light-2); padding-bottom: 0.5rem;">
+    <h2>
+      <i class="fas fa-book-reader" style="color: var(--color-text-dark-primary);"></i> 
+      Akademie-Archiv
+    </h2>
+    <p style="font-style: italic; color: var(--color-text-dark-secondary); font-size: 0.9em; margin-top: -5px;">
+      Durchsuche das Wissen der Magierakademie.
+    </p>
+
+    <div class="search-bar" style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+      <input type="text" 
+             name="query" 
+             placeholder="Suchbegriff eingeben (z.B. Hexen, Dämonen, Götter)..." 
+             value="{{query}}"
+             autofocus 
+             style="flex: 1; padding: 0.75rem; font-size: 1.2em; border: 1px solid var(--color-border-light-1); border-radius: 4px;" />
+    </div>
+    
+    {{#if isBuilding}}
+      <div class="janus-flash janus-flash--info" style="margin-top: 0.5rem;">
+        <i class="fas fa-spinner fa-spin"></i> Die Bibliothekare katalogisieren die Folianten...
+      </div>
+    {{/if}}
+  </header>
+
+  <main class="janus-content results-container" style="flex: 1 1 auto; overflow-y: auto; padding-right: 0.5rem;">
+    {{#if results}}
+      <ul class="janus-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem;">
+        {{#each results}}
+          <li class="janus-list-item flexrow" 
+              style="align-items: center; padding: 0.5rem; background: rgba(0,0,0,0.02); border: 1px solid var(--color-border-light-1); border-radius: 4px; box-shadow: inset 0 0 10px rgba(0,0,0,0.02); cursor: pointer; transition: background 0.2s;"
+              data-action="openSheet" data-uuid="{{uuid}}" title="Klicken zum Lesen">
+            
+            <img src="{{img}}" alt="{{name}}" width="48" height="48" style="border: 1px solid #000; border-radius: 4px; flex: 0 0 48px; object-fit: cover; filter: sepia(0.3);" />
+            <div style="flex: 1; min-width: 0; margin-left: 0.5rem;">
+              <h3 style="margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1.25em; font-family: 'Modesto Condensed', serif; color: var(--color-text-dark-primary);">{{name}}</h3>
+              <div style="font-size: 0.85em; color: var(--color-text-dark-secondary);">
+                <span>Quelle: {{packLabel}}</span>
+              </div>
+            </div>
+            <div style="flex: 0 0 auto; padding: 0 0.5rem;">
+              <i class="fas fa-book-open" style="color: var(--color-text-dark-secondary); font-size: 1.5em; opacity: 0.5;"></i>
+            </div>
+          </li>
+        {{/each}}
+      </ul>
+      {{#if overflow}}
+        <div style="text-align: center; margin-top: 1rem; color: var(--color-text-dark-secondary); font-style: italic;">
+          Die Bibliothekare verweisen darauf, dass es noch mehr Bücher zum Thema gibt. Bitte den Suchbegriff präzisieren.
+        </div>
+      {{/if}}
+    {{else if query}}
+      <div class="janus-empty-state" style="text-align: center; padding: 3rem 1rem; color: var(--color-text-dark-secondary);">
+        <i class="fas fa-spider fa-3x" style="opacity: 0.2; margin-bottom: 1rem;"></i>
+        <p>In den Archiven wurde nichts zu "<strong>{{query}}</strong>" gefunden.</p>
+      </div>
+    {{/if}}
+  </main>
+</div>

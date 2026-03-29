@@ -368,6 +368,62 @@ const PANEL_DEFINITIONS = [
     build: buildDataStudioPanel
   },
   {
+    id: 'libraryBrowser',
+    title: 'Director Spotlight',
+    icon: 'fas fa-search',
+    group: 'director',
+    quick: true,
+    appKey: 'libraryBrowser',
+    description: 'Globale Volltextsuche über alle DSA5-Kompendien (Zauber, NSCs, Alchemie).',
+    summary: 'Die große Bibliothek für schnelles Nachschlagen am Spieltisch.',
+    actions: [
+      { kind: 'openApp', appKey: 'libraryBrowser', label: 'Spotlight öffnen', icon: 'fas fa-search' }
+    ],
+    build: () => ({})
+  },
+  {
+    id: 'enrollmentScanner',
+    title: 'Immatrikulation (NSC Kloner)',
+    icon: 'fas fa-user-plus',
+    group: 'director',
+    quick: true,
+    appKey: 'enrollmentScanner',
+    description: 'Galerie aller NPCs, Archetypen und vorgefertigen Charaktere mit Klon-Funktion.',
+    summary: 'Spawne auf Knopfdruck neue Akademiestudenten oder Bestien.',
+    actions: [
+      { kind: 'openApp', appKey: 'enrollmentScanner', label: 'Scanner starten', icon: 'fas fa-user-plus' }
+    ],
+    build: () => ({})
+  },
+  {
+    id: 'quartermaster',
+    title: 'Akademie-Quartiermeister',
+    icon: 'fas fa-coins',
+    group: 'student',
+    quick: true,
+    appKey: 'quartermaster',
+    description: 'Kaufe Ausrüstung und Alchemie über das Budget der Akademie.',
+    summary: 'Der Waffenschmied und Alchemist der Akademie in einem.',
+    actions: [
+      { kind: 'openApp', appKey: 'quartermaster', label: 'Zum Händler gehen', icon: 'fas fa-coins' }
+    ],
+    build: () => ({})
+  },
+  {
+    id: 'studentArchive',
+    title: 'Akademie-Archiv',
+    icon: 'fas fa-book-reader',
+    group: 'student',
+    quick: true,
+    appKey: 'studentArchive',
+    description: 'Eine sichere Suchmaske für Schüler (Regeleinträge und Lore).',
+    summary: 'Das gesammelte, freigegebene Wissen der Akademie.',
+    actions: [
+      { kind: 'openApp', appKey: 'studentArchive', label: 'Archiv durchsuchen', icon: 'fas fa-book-reader' }
+    ],
+    build: () => ({})
+  },
+  {
     id: 'lessonLib',
     title: 'Lesson Library',
     icon: 'fas fa-book-open',

@@ -115,11 +115,13 @@ export class DSA5ItemFactoryBridge {
   /**
    * @param {object} deps
    * @param {import('./packs.js').DSA5PacksIndex} [deps.packs]
+   * @param {import('./library-service.js').AcademyLibraryService} [deps.library]
    * @param {Console} [deps.logger]
    */
-  constructor({ packs, logger } = {}) {
-    this.packs  = packs  ?? null;
-    this.logger = logger ?? console;
+  constructor({ packs, library, logger } = {}) {
+    this.packs   = packs   ?? null;
+    this.library = library ?? null;
+    this.logger  = logger  ?? console;
   }
 
   // ─── Lesen ───────────────────────────────────────────────────────────────
@@ -292,15 +294,19 @@ export class DSA5ItemFactoryBridge {
    * @private — Item via Compendium importieren
    */
   async _importFromCompendium(actor, systemSkillId) {
-    if (!this.packs) return null;
+    if (!this.packs && !this.library) return null;
 
     try {
       const type = itemTypeFromSystemSkillId(systemSkillId);
       const name = nameFromSystemSkillId(systemSkillId);
 
-      // Packs-Index für den entsprechenden Typ sichern
-      await this.packs.ensureIndex({ documentName: 'Item' });
-      const hit = await this.packs.findByName(name, { type });
+      let hit = null;
+      if (this.library) {
+        hit = await this.library.findByName(name, type, { firstOnly: true });
+      } else if (this.packs) {
+        await this.packs.ensureIndex({ documentName: 'Item' });
+        hit = await this.packs.findByName(name, { type });
+      }
 
       if (!hit?.uuid) {
         this.logger?.debug?.(`[ItemFactory] nicht im Compendium gefunden: ${name} (${type})`);
