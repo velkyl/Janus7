@@ -1,3 +1,4 @@
+// v2 registry cache bypass
 import { getPanels } from './panel-registry.js';
 import { JanusSessionPrepService } from '../../phase8/session-prep/JanusSessionPrepService.js';
 import { buildLocationsView, buildPeopleView, buildKiContext, buildSyncView, buildSystemView } from './context-builders.js';
