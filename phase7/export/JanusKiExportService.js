@@ -204,6 +204,25 @@ export class JanusKiExportService {
       })).filter((loc) => loc.id);
     }
 
+    const quests = safe(() => api.content?.quests ?? api.getQuests?.() ?? []);
+    if (quests.length) {
+      snapshot.quests = quests.map((q) => ({
+        id: q.questId ?? q.id,
+        title: q.title ?? q.name,
+        ...(q.startNodeId ? { startNodeId: q.startNodeId } : {}),
+        ...(q.deadlineDays ? { deadlineDays: q.deadlineDays } : {})
+      })).filter((q) => q.id);
+    }
+
+    const factions = safe(() => api.content?.factions ?? api.getFactions?.() ?? []);
+    if (factions.length) {
+      snapshot.factions = factions.map((f) => ({
+        id: f.factionId ?? f.id,
+        name: f.name,
+        ...(f.description ? { description: f.description } : {})
+      })).filter((f) => f.id);
+    }
+
     return Object.keys(snapshot).length ? snapshot : null;
   }
 

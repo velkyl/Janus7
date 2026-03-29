@@ -47,7 +47,8 @@ Format:
     "eventUpdates": [],
     "scoringAdjustments": [],
     "socialAdjustments": [],
-    "journalEntries": []
+    "journalEntries": [],
+    "questUpdates": []
   },
   "notes": "Kurze Begründung"
 }
@@ -71,6 +72,7 @@ Rules:
 - No markdown, no prose, no code fences – pure JSON only.
 - Populate sourceExportMeta with the meta section from the exportBundle verbatim.
 - Use IDs exactly as they appear in the exportBundle. Never invent new IDs.
+- For quests, provide 'questId', 'actorId' and the new 'nodeId' string in questUpdates.
 - Allowed ops: replace, append, delete.
 - Leave arrays empty if you propose no changes for that domain.
 
@@ -90,7 +92,7 @@ Task: <AUFGABE>
 Constraints:
 - Output must be valid JSON and nothing else. No markdown, no explanations outside the notes field.
 - Use exportBundle.meta verbatim for sourceExportMeta.
-- IDs must be copied exactly from the bundle. Do not fabricate IDs.
+- IDs must be copied exactly from the bundle (especially for Quests and Events). Do not fabricate IDs.
 - Allowed ops: replace, append, delete.
 - Omit empty arrays or leave them as [].
 

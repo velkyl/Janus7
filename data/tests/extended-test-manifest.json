@@ -1,4 +1,4 @@
-{
+﻿{
   "version": "2",
   "moduleVersion": "0.9.12.44",
   "generatedAt": "2026-03-26T06:35:00.000Z",
@@ -6,7 +6,7 @@
   "tests": [
     {
       "id": "INT-TC-01",
-      "title": "End-to-End: Lektion starten → abschließen",
+      "title": "End-to-End: Lektion starten â†’ abschlieÃŸen",
       "importPath": "./tests/int/INT_TC_01__end_to_end_lektion_starten_abschliessen.test.js",
       "suiteClass": "manual",
       "kind": "manual",
@@ -26,7 +26,7 @@
     },
     {
       "id": "INT-TC-02",
-      "title": "KI-Roundtrip: Export → Edit → Import",
+      "title": "KI-Roundtrip: Export â†’ Edit â†’ Import",
       "importPath": "./tests/int/INT_TC_02__ki_roundtrip_export_edit_import.test.js",
       "suiteClass": "manual",
       "kind": "manual",
@@ -66,7 +66,7 @@
     },
     {
       "id": "P0-TC-02",
-      "title": "Architekturdiagramm vollständig",
+      "title": "Architekturdiagramm vollstÃ¤ndig",
       "importPath": "./tests/p0/P0_TC_02__architekturdiagramm_vollstaendig.test.js",
       "suiteClass": "manual",
       "kind": "manual",
@@ -126,7 +126,7 @@
     },
     {
       "id": "P1-TC-05",
-      "title": "Dirty-Tracking vermeidet unnötige Saves",
+      "title": "Dirty-Tracking vermeidet unnÃ¶tige Saves",
       "importPath": "./tests/p1/P1_TC_05__dirty_tracking_vermeidet_unnoetige_saves.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -136,7 +136,7 @@
     },
     {
       "id": "P1-TC-06",
-      "title": "Logger-Level dynamisch änderbar",
+      "title": "Logger-Level dynamisch Ã¤nderbar",
       "importPath": "./tests/p1/P1_TC_06__logger_level_dynamisch_aenderbar.test.js",
       "suiteClass": "manual",
       "kind": "manual",
@@ -216,7 +216,7 @@
     },
     {
       "id": "P1-TC-14",
-      "title": "JanusCapabilities: Namespace-Vollständigkeit + Freeze",
+      "title": "JanusCapabilities: Namespace-VollstÃ¤ndigkeit + Freeze",
       "importPath": "./tests/p1/P1_TC_14__capabilities_namespace.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -226,7 +226,7 @@
     },
     {
       "id": "P1-TC-15",
-      "title": "capabilities.state.runHealthCheck() — Smoke-Test",
+      "title": "capabilities.state.runHealthCheck() â€” Smoke-Test",
       "importPath": "./tests/p1/P1_TC_15__capabilities_healthcheck_smoke.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -290,7 +290,7 @@
     },
     {
       "id": "P15-TC-03",
-      "title": "Diagnostics enthält Version & Flags",
+      "title": "Diagnostics enthÃ¤lt Version & Flags",
       "importPath": "./tests/p15/P15_TC_03__diagnostics_enthaelt_version_und_flags.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -370,7 +370,7 @@
     },
     {
       "id": "P15-TC-11",
-      "title": "Academy graph provider exposes library items and lesson→library edges",
+      "title": "Academy graph provider exposes library items and lessonâ†’library edges",
       "importPath": "./tests/p15/P15_TC_11__academy_graph_library_nodes.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -380,7 +380,7 @@
     },
     {
       "id": "P15-TC-12",
-      "title": "DSA5 index graph provider creates semantic academy→DSA5 edges",
+      "title": "DSA5 index graph provider creates semantic academyâ†’DSA5 edges",
       "importPath": "./tests/p15/P15_TC_12__graph_dsa5_semantic_edges.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -438,7 +438,7 @@
     },
     {
       "id": "P16-TC-01",
-      "title": "Alle Phase-6-Apps sind über game.janus7.ui.apps registriert",
+      "title": "Alle Phase-6-Apps sind Ã¼ber game.janus7.ui.apps registriert",
       "importPath": "./tests/p16/P16_TC_01__apps_registriert.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -458,7 +458,7 @@
     },
     {
       "id": "P16-TC-03",
-      "title": "GM-only: Schreib-Aktionen blocken für Nicht-GM (Permissions-Matrix)",
+      "title": "GM-only: Schreib-Aktionen blocken fÃ¼r Nicht-GM (Permissions-Matrix)",
       "importPath": "./tests/p16/P16_TC_03__gm_only_enforcement.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -468,7 +468,7 @@
     },
     {
       "id": "P16-TC-04",
-      "title": "JanusConfigPanelApp: sceneMappings werden über JanusConfig.set/get gespeichert",
+      "title": "JanusConfigPanelApp: sceneMappings werden Ã¼ber JanusConfig.set/get gespeichert",
       "importPath": "./tests/p16/P16_TC_04__config_panel_scene_mappings.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -478,7 +478,7 @@
     },
     {
       "id": "P16-TC-05",
-      "title": "JanusConfigPanelApp: Feature-Flags Roundtrip (set → get)",
+      "title": "JanusConfigPanelApp: Feature-Flags Roundtrip (set â†’ get)",
       "importPath": "./tests/p16/P16_TC_05__config_panel_feature_flags.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -498,7 +498,7 @@
     },
     {
       "id": "P16-TC-07",
-      "title": "JanusSocialViewApp: Beziehungsänderung geht über academy.social, nicht direkt in State",
+      "title": "JanusSocialViewApp: BeziehungsÃ¤nderung geht Ã¼ber academy.social, nicht direkt in State",
       "importPath": "./tests/p16/P16_TC_07__social_view_director_path.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -508,7 +508,7 @@
     },
     {
       "id": "P16-TC-08",
-      "title": "JanusAtmosphereDJApp: Vollständige API-Kette (controller.applyMood, listMoods, status)",
+      "title": "JanusAtmosphereDJApp: VollstÃ¤ndige API-Kette (controller.applyMood, listMoods, status)",
       "importPath": "./tests/p16/P16_TC_08__atmosphere_dj_api_chain.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -528,7 +528,7 @@
     },
     {
       "id": "P16-TC-10",
-      "title": "JanusUI.open() funktioniert für alle registrierten Phase-6-Apps",
+      "title": "JanusUI.open() funktioniert fÃ¼r alle registrierten Phase-6-Apps",
       "importPath": "./tests/p16/P16_TC_10__ui_open_all_apps.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -538,7 +538,7 @@
     },
     {
       "id": "P2-TC-01",
-      "title": "AcademyDataApi lädt Basisdaten",
+      "title": "AcademyDataApi lÃ¤dt Basisdaten",
       "importPath": "./tests/p2/P2_TC_01__json_loader_laedt_akademie_daten.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -692,7 +692,7 @@
     },
     {
       "id": "P3-TC-05",
-      "title": "Item-Bridge für Zauberformeln",
+      "title": "Item-Bridge fÃ¼r Zauberformeln",
       "importPath": "./tests/p3/P3_TC_05__item_bridge_fuer_zauberformeln.test.js",
       "suiteClass": "manual",
       "kind": "manual",
@@ -798,7 +798,7 @@
     },
     {
       "id": "P3-TC-SOCIAL-01",
-      "title": "PersonaeDramatis Social Sync: socialContact.level ↔ JanusSocialEngine",
+      "title": "PersonaeDramatis Social Sync: socialContact.level â†” JanusSocialEngine",
       "importPath": "./tests/p3/P3_TC_SOCIAL_01__personae_social_sync.test.js",
       "suiteClass": "manual",
       "kind": "manual",
@@ -914,7 +914,7 @@
     },
     {
       "id": "P4-TC-08",
-      "title": "JanusCron: Periodenauflösung daily/weekly/trimester",
+      "title": "JanusCron: PeriodenauflÃ¶sung daily/weekly/trimester",
       "importPath": "./tests/p4/P4_TC_08__cron_period_detection.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -1018,7 +1018,7 @@
     },
     {
       "id": "P4B-TC-14",
-      "title": "Phase-2-Datensätze für Social Links, Milestones und Collections geladen",
+      "title": "Phase-2-DatensÃ¤tze fÃ¼r Social Links, Milestones und Collections geladen",
       "importPath": "./tests/p4b/P4B_TC_14__academy_progression_data_loaded.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -1028,7 +1028,7 @@
     },
     {
       "id": "P4B-TC-15",
-      "title": "Academy Stats Summary verfügbar",
+      "title": "Academy Stats Summary verfÃ¼gbar",
       "importPath": "./tests/p4b/P4B_TC_15__academy_stats_summary_available.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -1068,7 +1068,7 @@
     },
     {
       "id": "P5-TC-04",
-      "title": "Overlay-UI für Beamer (optionales Feature)",
+      "title": "Overlay-UI fÃ¼r Beamer (optionales Feature)",
       "importPath": "./tests/p5/P5_TC_04__overlay_ui_fuer_beamer_optionales_feature.test.js",
       "suiteClass": "manual",
       "kind": "manual",
@@ -1102,7 +1102,7 @@
     },
     {
       "id": "P6-TC-01",
-      "title": "ControlPanel öffnet und schließt",
+      "title": "ControlPanel Ã¶ffnet und schlieÃŸt",
       "importPath": "./tests/p6/P6_TC_01__control_panel_oeffnet.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -1142,7 +1142,7 @@
     },
     {
       "id": "P6-TC-04",
-      "title": "Permissions: GM-only Aktionen sind geschützt",
+      "title": "Permissions: GM-only Aktionen sind geschÃ¼tzt",
       "importPath": "./tests/p6/P6_TC_04__quick_action_zeit_vorspulen.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -1162,7 +1162,7 @@
     },
     {
       "id": "P6-TC-07",
-      "title": "ControlPanel öffnet und schließt",
+      "title": "ControlPanel Ã¶ffnet und schlieÃŸt",
       "importPath": "./tests/p6/P6_TC_07__control_panel_open_close.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -1182,7 +1182,7 @@
     },
     {
       "id": "P6-TC-09",
-      "title": "Director Kernel setzt Tagesstart auf Slot 0 zurück",
+      "title": "Director Kernel setzt Tagesstart auf Slot 0 zurÃ¼ck",
       "importPath": "./tests/p6/P6_TC_09__director_kernel_start_day.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -1222,7 +1222,7 @@
     },
     {
       "id": "P6-TC-13",
-      "title": "ControlPanel merkt sich Director-Läufe sitzungsweit",
+      "title": "ControlPanel merkt sich Director-LÃ¤ufe sitzungsweit",
       "importPath": "./tests/p6/P6_TC_13__control_panel_director_workflow_memory.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -1252,7 +1252,7 @@
     },
     {
       "id": "P6-TC-16",
-      "title": "ControlPanel Quest-Übernahme Aktion ist registriert",
+      "title": "ControlPanel Quest-Ãœbernahme Aktion ist registriert",
       "importPath": "./tests/p6/P6_TC_16__director_quest_accept_action_registered.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -1514,7 +1514,7 @@
     },
     {
       "id": "REG-TC-03",
-      "title": "Unnötiges Save nach load() (aus Review)",
+      "title": "UnnÃ¶tiges Save nach load() (aus Review)",
       "importPath": "./tests/reg/REG_TC_03__unnoetiges_save_nach_load_aus_review.test.js",
       "suiteClass": "manual",
       "kind": "manual",
@@ -1586,6 +1586,36 @@
       "phases": [
         3
       ],
+      "hasRun": false
+    },
+    {
+      "id": "QS-TC-01",
+      "title": "Quest System Lifecycle",
+      "importPath": "./tests/qs/QS_TC_01__quest_lifecycle.test.js",
+      "suiteClass": "extended-auto",
+      "kind": "auto",
+      "phase": 4,
+      "phases": [4],
+      "hasRun": false
+    },
+    {
+      "id": "QS-TC-02",
+      "title": "Quest Event Spawning & Options",
+      "importPath": "./tests/qs/QS_TC_02__event_options.test.js",
+      "suiteClass": "extended-auto",
+      "kind": "auto",
+      "phase": 4,
+      "phases": [4],
+      "hasRun": false
+    },
+    {
+      "id": "QS-TC-03",
+      "title": "Condition Evaluator",
+      "importPath": "./tests/qs/QS_TC_03__condition_evaluator.test.js",
+      "suiteClass": "extended-auto",
+      "kind": "auto",
+      "phase": 4,
+      "phases": [4],
       "hasRun": false
     }
   ]

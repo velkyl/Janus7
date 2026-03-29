@@ -43,9 +43,28 @@ export class JanusKiDiffService {
       } else if (newVal === undefined && oldVal !== undefined) {
         changes.push({ op: 'delete', key, before: oldVal, after: undefined });
       } else {
-        const oldJson = typeof oldVal === 'object' ? JSON.stringify(oldVal) : oldVal;
-        const newJson = typeof newVal === 'object' ? JSON.stringify(newVal) : newVal;
-        if (oldJson !== newJson) changes.push({ op: 'update', key, before: oldVal, after: newVal });
+        if (Array.isArray(oldVal) && Array.isArray(newVal)) {
+          const oldStr = JSON.stringify(oldVal);
+          const newStr = JSON.stringify(newVal);
+          if (oldStr !== newStr) {
+            const maxLen = Math.max(oldVal.length, newVal.length);
+            for (let i = 0; i < maxLen; i++) {
+               const o = oldVal[i];
+               const n = newVal[i];
+               if (o === undefined && n !== undefined) changes.push({ op: 'add', key: `${key}[${i}]`, before: undefined, after: n });
+               else if (n === undefined && o !== undefined) changes.push({ op: 'delete', key: `${key}[${i}]`, before: o, after: undefined });
+               else {
+                 const oJ = typeof o === 'object' ? JSON.stringify(o) : o;
+                 const nJ = typeof n === 'object' ? JSON.stringify(n) : n;
+                 if (oJ !== nJ) changes.push({ op: 'update', key: `${key}[${i}]`, before: o, after: n });
+               }
+            }
+          }
+        } else {
+          const oldJson = typeof oldVal === 'object' ? JSON.stringify(oldVal) : oldVal;
+          const newJson = typeof newVal === 'object' ? JSON.stringify(newVal) : newVal;
+          if (oldJson !== newJson) changes.push({ op: 'update', key, before: oldVal, after: newVal });
+        }
       }
     }
     return changes;
