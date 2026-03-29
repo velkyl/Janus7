@@ -59,6 +59,14 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
     if (this._isFirstRender && this.domElement?.offsetWidth) {
       this._updatePositionSafe();
       this._applyWindowSanity();
+
+      // Hook for index progress UI updates (runs on every app derived from base)
+      this._registerHook('janusLibraryProgress', (pct) => {
+        if (!this.rendered || !this.domElement) return;
+        const pEl = this.domElement.querySelector('.index-progress-text');
+        if (pEl) pEl.innerText = `${pct}%`;
+      });
+
       this._isFirstRender = false;
     } else {
       this._applyWindowSanity();

@@ -156,7 +156,12 @@ export class AcademyLibraryService {
 
     this.logger?.info?.(`[Library] Indexierung: ${packs.length} Packs (${namesToLoad.join(', ')})`);
 
+    let currentPack = 0;
+
     for (const pack of packs) {
+      const progress = Math.round((currentPack / packs.length) * 100);
+      Hooks.callAll('janusLibraryProgress', progress);
+      
       try {
         const index = await pack.getIndex({
           fields: ['name', 'type', 'img', 'system.type', 'system.price.value'],
@@ -202,11 +207,14 @@ export class AcademyLibraryService {
 
       // UI-yield: verhindert spürbare Freezes bei vielen Packs.
       await new Promise((r) => setTimeout(r, 0));
+      currentPack++;
     }
 
     this._built       = true;
     this._lastBuildMs = Date.now();
     this._building    = false;
+    
+    Hooks.callAll('janusLibraryProgress', 100);
 
     this.logger?.info?.(`[Library] Index fertig: ${total} Einträge aus ${packs.length} Packs (${Date.now() - start}ms)`);
   }
