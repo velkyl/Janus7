@@ -1,30 +1,29 @@
-/**
+﻿/**
  * @file scripts/janus.mjs
  * @module janus7
- * @phase A1 — Single Entry Point
+ * @phase A1 â€” Single Entry Point
  *
  * Architekturvertrag:
- * - DIESE Datei ist der einzige erlaubte Einstiegspunkt (module.json → esmodules).
+ * - DIESE Datei ist der einzige erlaubte Einstiegspunkt (module.json â†’ esmodules).
  * - NUR diese Datei darf Hooks.on / Hooks.once gegen Foundry-Core-Hooks registrieren.
  * - Alle Phasen-Module werden hier als Setup-Funktionen orchestriert.
  *
  * Import-Regel:
- *   core/   → darf KEINE Hooks.once('init'/'ready') mehr enthalten.
+ *   core/   â†’ darf KEINE Hooks.once('init'/'ready') mehr enthalten.
  *   Phasen-Integrationen exportieren setupPhaseX(engine) und werden hier aufgerufen.
  */
 
-// ─────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Core Engine (Phase 1)
-// ─────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import { Janus7Engine, JANUS_GLOBAL, getJanus7, getJanusCore } from '../core/index.js';
 import { JanusConfig } from '../core/config.js';
 import { MODULE_ID, STATE_PATHS } from '../core/common.js';
 import { JanusCapabilities } from '../core/capabilities.js';
 import { JanusTimeReactor } from '../services/time/reactor.js';
 import { JanusCron } from '../services/cron/JanusCron.js';
-// FIX P2-07: handleChatMessage wurde importiert aber nie aufgerufen.
-// Der Chat-Hook wird direkt in services/chat/cli.js registriert.
-// import { handleChatMessage } from '../services/chat/cli.js'; // ENTFERNT
+import { handleChatMessage } from '../services/chat/cli.js';
+
 import { SceneRegionsBridge } from '../bridges/foundry/SceneRegionsBridge.mjs';
 import { JanusShellApp } from '../ui/apps/JanusShellApp.js';
 import { registerLessonDocuments, ensureLessonDocumentsReady } from './integration/phase2-document-content-integration.js';
@@ -34,18 +33,18 @@ import { JANUS_LESSON_ITEM_TYPE, JANUS_LESSON_SHEET_CLASS, JANUS_LESSON_SUBTYPE 
 // - left scene controls are registered here during init/render lifecycle
 // - implementation is a small AppV2-based sidebar tab
 
-// ─────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Re-exports for backward compatibility (game.janus7.core.*)
-// ─────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export { getJanus7, getJanusCore };
 
-// ─────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Boot-Guard: verhindert doppelte Hook-Registrierung
-// ─────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const __BOOT_KEY__ = '__janus7_boot_v2__';
 globalThis[__BOOT_KEY__] ??= { registered: false };
 if (globalThis[__BOOT_KEY__].registered) {
-  console.warn('[JANUS7] Duplicate evaluation of scripts/janus.mjs – skipping hook registration.');
+  console.warn('[JANUS7] Duplicate evaluation of scripts/janus.mjs â€“ skipping hook registration.');
 }
 const _shouldRegister = !globalThis[__BOOT_KEY__].registered;
 globalThis[__BOOT_KEY__].registered = true;
@@ -67,9 +66,9 @@ function _cleanupCoreHooks() {
   globalThis[__CORE_HOOKS_KEY__] = [];
 }
 
-// ─────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Phase Integration Loaders (dynamic, fail-safe)
-// ─────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /**
  * Dynamically imports phase integration modules based on config flags.
@@ -80,10 +79,10 @@ function _cleanupCoreHooks() {
 async function loadPhaseIntegrations(engine) {
   const logger = engine?.core?.logger;
 
-  // ─────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   // Phase 2+3: Dependency Injection
   // Imported here (async context) to keep core/index.js Phase-1-clean.
-  // ─────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   try {
     const [{ default: AcademyDataApi }, { DSA5SystemBridge }] = await Promise.all([
       import('../academy/data-api.js'),
@@ -182,7 +181,7 @@ async function loadPhaseIntegrations(engine) {
       logger?.warn?.('[JANUS7] Phase 6 failed to load.', { message: err?.message });
     }
 
-    // Phase 4 → UI bridge: optional ChatMessage rendering for janus7EventMessage
+    // Phase 4 â†’ UI bridge: optional ChatMessage rendering for janus7EventMessage
     // (keeps Phase 4 headless; rendering is a Phase 6 concern)
     try {
       await import('../scripts/integration/phase4-eventmessage-ui.js');
@@ -216,7 +215,7 @@ async function loadPhaseIntegrations(engine) {
     logger?.warn?.('[JANUS7] Test runner integration failed to load.', { message: err?.message });
   }
 
-  // ─────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   // Graph Service Integration
   // Load the graph service integration last so that it can rely on
   // academy, quest and UI modules being available.  This import
@@ -271,7 +270,7 @@ function runReadySanityCheck(engine) {
       }
     }
   } catch (_err) {
-    issues.push('Settings-Registry konnte nicht geprüft werden.');
+    issues.push('Settings-Registry konnte nicht geprÃ¼ft werden.');
   }
   if (issues.length && game?.user?.isGM) {
     ui.notifications?.error?.(`JANUS7 Sanity-Check fehlgeschlagen: ${issues.join(' | ')}`);
@@ -292,9 +291,9 @@ async function maybeLoadTestHarness(_engine) {
   return null;
 }
 
-// ─────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // HOOK: init  (Phase 1 bootstrap)
-// ─────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 if (_shouldRegister) {
   Hooks.once('init', () => {
     try { registerLessonDocuments(); } catch (err) { console.warn('[JANUS7] registerLessonDocuments failed', err); }
@@ -306,7 +305,7 @@ if (_shouldRegister) {
 |  _|| |_| | |_| | |\\  | |_| |  _ < | |     \\ V /   | |   | |
 |_|   \\___/ \\___/|_| \\_|____/|_| \\_\\|_|      \\_/    |_|   |_|
 ===============================================================
-JANUS7 — Academy Operating System
+JANUS7 â€” Academy Operating System
 `);
 
 // Register settings menu only.
@@ -338,9 +337,9 @@ try {
     globalThis.janus7 = engine;
     if (globalThis.game) globalThis.game.janus7 = engine;
 
-    // ─────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // Foundry Core Hook Delegation (Architekturvertrag)
-    // ─────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // Keep Core-Hooks ONLY here; delegate into the system bridge if present.
     _registerCoreHook('modifyTokenAttribute', (data, updates) => {
       try {
@@ -369,7 +368,7 @@ try {
       (engine?.core?.logger ?? console).error?.('[JANUS7] Engine init failed (Phase 1).', { message: err?.message, stack: err?.stack });
     }
 
-    // Director uses game.janus7.calendar.* – set up a live proxy so it routes
+    // Director uses game.janus7.calendar.* â€“ set up a live proxy so it routes
     // to the engine that is attached by Phase 4 (academy/phase4.js).
     // ---------------------------------------------------------------------------
     const _calendar = () => engine.simulation?.calendar ?? engine.academy?.calendar ?? null;
@@ -408,15 +407,15 @@ try {
     engine.engine  = engine;
 
     // Pre-ready chain: phase integrations (async, stored as promise).
-    // Awaited in Hooks.once('ready') before engine.ready() runs – garantiert
-    // dass alle Phase-Integrationen vollständig geladen sind, bevor ready() aufgerufen wird.
+    // Awaited in Hooks.once('ready') before engine.ready() runs â€“ garantiert
+    // dass alle Phase-Integrationen vollstÃ¤ndig geladen sind, bevor ready() aufgerufen wird.
     const _preReadyStart = Date.now();
     JANUS_GLOBAL.preReady = (async () => {
       await loadPhaseIntegrations(engine);
       const elapsed = Date.now() - _preReadyStart;
       if (elapsed > 5000) {
         (engine?.core?.logger ?? console).warn?.(
-          `[JANUS7] loadPhaseIntegrations dauerte ${elapsed}ms – Ladezeit ungewöhnlich hoch.`
+          `[JANUS7] loadPhaseIntegrations dauerte ${elapsed}ms â€“ Ladezeit ungewÃ¶hnlich hoch.`
         );
       }
     })();
@@ -429,9 +428,9 @@ try {
     });
   });
 
-  // ─────────────────────────────────────────────────────────
-  // HOOK: ready (Phase 1→6 finalize)
-  // ─────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // HOOK: ready (Phase 1â†’6 finalize)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   Hooks.once('ready', async () => {
     const engine = JANUS_GLOBAL.engine;
     if (!engine) return;
@@ -463,13 +462,13 @@ try {
       if (typeof engine?.ready === 'function') {
         await engine.ready();
       } else {
-        log.warn?.('[JANUS7] Engine nicht verfügbar – Init übersprungen');
+        log.warn?.('[JANUS7] Engine nicht verfÃ¼gbar â€“ Init Ã¼bersprungen');
       }
       log.debug?.('[JANUS7] ready.step engine.ready ok');
     } catch (err) {
       _recordIssue(engine, 'ready.pipeline', 'engine.ready', err, 'error');
       log.error?.('[JANUS7] ready.step engine.ready failed', _readyErrMeta(err));
-      ui.notifications?.error?.('JANUS7 konnte engine.ready() nicht vollständig abschließen. Details in der Konsole.');
+      ui.notifications?.error?.('JANUS7 konnte engine.ready() nicht vollstÃ¤ndig abschlieÃŸen. Details in der Konsole.');
       return;
     }
 
@@ -562,12 +561,12 @@ try {
       }
     }
 
-    // ─────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // Academy JSON Hot-Reload (Foundry hotReload Hook)
-    // Wenn JSON-Dateien im data/-Verzeichnis via Foundry Hot-Reload geändert werden,
+    // Wenn JSON-Dateien im data/-Verzeichnis via Foundry Hot-Reload geÃ¤ndert werden,
     // wird der Academy-Cache invalidiert und neu geladen.
-    // Voraussetzung: module.json flags.hotReload.extensions enthält 'json'
-    // ─────────────────────────────────────────────────────────
+    // Voraussetzung: module.json flags.hotReload.extensions enthÃ¤lt 'json'
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     _registerCoreHook('hotReload', async ({ path: reloadPath } = {}) => {
       try {
         // Nur reagieren wenn es eine Academy JSON-Datei ist
@@ -579,7 +578,7 @@ try {
 
         const engine = JANUS_GLOBAL.engine;
         const reloadLog = engine?.core?.logger ?? console;
-        reloadLog.info?.(`[JANUS7] Hot-Reload: Academy JSON geändert (${reloadPath}) → Cache invalidieren`);
+        reloadLog.info?.(`[JANUS7] Hot-Reload: Academy JSON geÃ¤ndert (${reloadPath}) â†’ Cache invalidieren`);
 
         const { default: AcademyDataApi } = await import('../academy/data-api.js');
         AcademyDataApi.resetCache();
@@ -598,11 +597,11 @@ try {
     log.debug?.('[JANUS7] ready.pipeline complete');
   });
 
-  // ─────────────────────────────────────────────────────────
-  // HOOK: getSceneControlButtons — zentralisiert hier (Phase A3)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // HOOK: getSceneControlButtons â€” zentralisiert hier (Phase A3)
   // Architecture contract marker for tests: Hooks.on('getSceneControlButtons' ... ) lives here.
   // Vorher in scripts/integration/phase6-ui-integration.js
-  // ─────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   _registerCoreHook('getSceneControlButtons', (controls) => {
     if (!game.user?.isGM) return;
     try {
@@ -682,7 +681,7 @@ const openQuestJournal = async () => {
     return true;
   } catch (err) {
     logger.error?.('[JANUS7] Scene control questJournal fehlgeschlagen:', { message: err?.message });
-    ui.notifications?.error?.('Quest-Journal konnte nicht geöffnet werden.');
+    ui.notifications?.error?.('Quest-Journal konnte nicht geÃ¶ffnet werden.');
     return false;
   }
 };
@@ -697,7 +696,7 @@ const toolVisible = !!game?.user?.isGM;
 const janusToolsRecord = {
   openControlPanel: {
     name: 'openControlPanel',
-    title: localize('JANUS7.Menu.ControlPanel.Label', 'Steuerzentrale öffnen'),
+    title: localize('JANUS7.Menu.ControlPanel.Label', 'Steuerzentrale Ã¶ffnen'),
     icon: 'fas fa-cogs',
     order: 0,
     button: true,
@@ -706,7 +705,7 @@ const janusToolsRecord = {
   },
   openAcademyOverview: {
     name: 'openAcademyOverview',
-    title: 'Academy Overview öffnen',
+    title: 'Academy Overview Ã¶ffnen',
     icon: 'fas fa-university',
     order: 1,
     button: true,
@@ -715,7 +714,7 @@ const janusToolsRecord = {
   },
   openScoringView: {
     name: 'openScoringView',
-    title: 'Scoring öffnen',
+    title: 'Scoring Ã¶ffnen',
     icon: 'fas fa-trophy',
     order: 2,
     button: true,
@@ -724,7 +723,7 @@ const janusToolsRecord = {
   },
   openSocialView: {
     name: 'openSocialView',
-    title: 'Social View öffnen',
+    title: 'Social View Ã¶ffnen',
     icon: 'fas fa-users',
     order: 3,
     button: true,
@@ -733,7 +732,7 @@ const janusToolsRecord = {
   },
   openAtmosphereDJ: {
     name: 'openAtmosphereDJ',
-    title: 'Atmosphere DJ öffnen',
+    title: 'Atmosphere DJ Ã¶ffnen',
     icon: 'fas fa-music',
     order: 4,
     button: true,
@@ -742,7 +741,7 @@ const janusToolsRecord = {
   },
   openQuestJournal: {
     name: 'openQuestJournal',
-    title: 'Quest-Journal öffnen',
+    title: 'Quest-Journal Ã¶ffnen',
     icon: 'fas fa-book-open',
     order: 5,
     button: true,
@@ -751,7 +750,7 @@ const janusToolsRecord = {
   },
   openSyncPanel: {
     name: 'openSyncPanel',
-    title: 'Sync Panel öffnen',
+    title: 'Sync Panel Ã¶ffnen',
     icon: 'fas fa-link',
     order: 6,
     button: true,
@@ -760,7 +759,7 @@ const janusToolsRecord = {
   },
   openStateInspector: {
     name: 'openStateInspector',
-    title: 'State Inspector öffnen',
+    title: 'State Inspector Ã¶ffnen',
     icon: 'fas fa-database',
     order: 7,
     button: true,
@@ -769,7 +768,7 @@ const janusToolsRecord = {
   },
   openConfigPanel: {
     name: 'openConfigPanel',
-    title: 'Config Panel öffnen',
+    title: 'Config Panel Ã¶ffnen',
     icon: 'fas fa-sliders-h',
     order: 8,
     button: true,
@@ -778,7 +777,7 @@ const janusToolsRecord = {
   },
   openAcademyDataStudio: {
     name: 'openAcademyDataStudio',
-    title: 'Academy Data Studio öffnen',
+    title: 'Academy Data Studio Ã¶ffnen',
     icon: 'fas fa-edit',
     order: 9,
     button: true,
@@ -787,7 +786,7 @@ const janusToolsRecord = {
   },
   openSessionPrep: {
     name: 'openSessionPrep',
-    title: localize('JANUS7.UI.OpenSessionPrepWizard', 'Session Prep Wizard öffnen'),
+    title: localize('JANUS7.UI.OpenSessionPrepWizard', 'Session Prep Wizard Ã¶ffnen'),
     icon: 'fas fa-wand-magic-sparkles',
     order: 10,
     button: true,
@@ -796,7 +795,7 @@ const janusToolsRecord = {
   },
   openCommandCenter: {
     name: 'openCommandCenter',
-    title: 'Power Tools öffnen',
+    title: 'Power Tools Ã¶ffnen',
     icon: 'fas fa-terminal',
     order: 11,
     button: true,
@@ -805,7 +804,7 @@ const janusToolsRecord = {
   },
   openKiBackupManager: {
     name: 'openKiBackupManager',
-    title: 'KI-Backups öffnen',
+    title: 'KI-Backups Ã¶ffnen',
     icon: 'fas fa-life-ring',
     order: 12,
     button: true,
@@ -814,7 +813,7 @@ const janusToolsRecord = {
   },
   openKiRoundtrip: {
     name: 'openKiRoundtrip',
-    title: 'KI Roundtrip öffnen',
+    title: 'KI Roundtrip Ã¶ffnen',
     icon: 'fas fa-brain',
     order: 13,
     button: true,
@@ -823,7 +822,7 @@ const janusToolsRecord = {
   },
   openTestResults: {
     name: 'openTestResults',
-    title: 'Test Results öffnen',
+    title: 'Test Results Ã¶ffnen',
     icon: 'fas fa-vial',
     order: 14,
     button: true,
@@ -832,7 +831,7 @@ const janusToolsRecord = {
   },
   openGuidedManualTests: {
     name: 'openGuidedManualTests',
-    title: 'Guided Manual Tests öffnen',
+    title: 'Guided Manual Tests Ã¶ffnen',
     icon: 'fas fa-route',
     order: 15,
     button: true,
@@ -888,11 +887,11 @@ if (isRecord) {
     }
   });
 
-  // ─────────────────────────────────────────────────────────
-  // HOOK: updateWorldTime — zentralisiert hier (Sprint B)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // HOOK: updateWorldTime â€” zentralisiert hier (Sprint B)
   // Architecture contract marker for tests: Hooks.on('updateWorldTime' ... ) lives here.
   // Delegiert an engine.time.onWorldTimeUpdated(...)
-  // ─────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   _registerCoreHook('updateWorldTime', (...args) => {
     try {
       const engine = JANUS_GLOBAL.engine;
@@ -903,11 +902,11 @@ if (isRecord) {
     }
   });
 
-  // ─────────────────────────────────────────────────────────
-  // HOOK: chatMessage — JANUS7 Chat-CLI (/janus ...)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // HOOK: chatMessage â€” JANUS7 Chat-CLI (/janus ...)
   // GM-only in der Praxis (Commands enforzen Permissions intern).
-  // Gibt false zurück wenn Befehl konsumiert, damit Nachricht nicht gepostet wird.
-  // ─────────────────────────────────────────────────────────
+  // Gibt false zurÃ¼ck wenn Befehl konsumiert, damit Nachricht nicht gepostet wird.
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   _registerCoreHook('chatMessage', (chatLog, message, options) => {
     try {
       return handleChatMessage(chatLog, message, options);
@@ -916,3 +915,4 @@ if (isRecord) {
     }
   });
 }
+

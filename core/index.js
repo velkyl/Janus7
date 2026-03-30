@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file core/index.js
  * @module janus7
  * @phase 1
@@ -7,13 +7,14 @@
  * Initialisiert den Core (State, Logger, Validator) und registriert zentrale Entry-Points.
  *
  * Architektur:
- * - Diese Datei ist Teil von Phase 1 und darf nur Abhängigkeiten zu Phasen <= 1 haben.
- * - Öffentliche Funktionen/Exports sind JSDoc-dokumentiert, damit JANUS7 langfristig wartbar bleibt.
+ * - Diese Datei ist Teil von Phase 1 und darf nur AbhÃ¤ngigkeiten zu Phasen <= 1 haben.
+ * - Ã–ffentliche Funktionen/Exports sind JSDoc-dokumentiert, damit JANUS7 langfristig wartbar bleibt.
  *
  * Hinweis:
  * - Keine deprecated Foundry APIs (v13+).
  */
-// bootstrapJanusIntegrations removed: phase loading is now handled by scripts/janus.mjs (Single Entry Point)
+// bootstrapJanusIntegrations is a deprecated compatibility shim in core/phase-bootstrap.js.
+// Internal phase loading is handled exclusively by scripts/janus.mjs (Single Entry Point).
 
 import { MODULE_ID, MODULE_ABBREV, MODULE_TITLE } from './common.js';
 import { JanusLogger } from './logger.js';
@@ -39,7 +40,7 @@ import { JanusErrorAggregator } from './error-aggregator.js';
 
 
 /**
- * Zentrale Engine-Klasse für JANUS7.
+ * Zentrale Engine-Klasse fÃ¼r JANUS7.
  */
 
 function _janusErrMeta(err) {
@@ -69,10 +70,10 @@ export class Janus7Engine {
       dsa5: null
     };
 
-    /** Service-Readiness-Registry – ersetzt verteilte Null-Guards */
+    /** Service-Readiness-Registry â€“ ersetzt verteilte Null-Guards */
     this.serviceRegistry = new JanusServiceRegistry();
 
-    /** Zentraler Error-Aggregator für Engine-weites Fehler-Tracking */
+    /** Zentraler Error-Aggregator fÃ¼r Engine-weites Fehler-Tracking */
     this.errors = new JanusErrorAggregator();
     this.services = {
       registry: this.serviceRegistry
@@ -121,7 +122,7 @@ export class Janus7Engine {
     JanusConfig.registerSettings();
     JanusStateCore.registerSetting();
 
-    // Settings registered — Phase 1 contract fulfilled.
+    // Settings registered â€” Phase 1 contract fulfilled.
 
     this.core.logger = new JanusLogger(MODULE_ABBREV);
     JanusConfig.applyToLogger(this.core.logger);
@@ -232,8 +233,8 @@ export class Janus7Engine {
   }
 
   /**
-   * Entfernt alle von höheren Phasen registrierten Hooks.
-   * Iteriert über alle Engine-Felder nach dem Muster `_*HookIds` und
+   * Entfernt alle von hÃ¶heren Phasen registrierten Hooks.
+   * Iteriert Ã¼ber alle Engine-Felder nach dem Muster `_*HookIds` und
    * ruft `Hooks.off()` auf. Wird beim Engine-Shutdown / Reload aufgerufen.
    */
   cleanupPhaseHooks() {
@@ -244,7 +245,7 @@ export class Janus7Engine {
 
   /**
    * Zentrales Cleanup bei Engine-Shutdown oder Modul-Reload.
-   * Räumt Phase-Hooks auf, stoppt den Atmosphere-Watchdog etc.
+   * RÃ¤umt Phase-Hooks auf, stoppt den Atmosphere-Watchdog etc.
    */
   cleanup() {
     this.cleanupPhaseHooks();
@@ -263,7 +264,7 @@ export class Janus7Engine {
   }
 
   /**
-   * Ready-Hook (Foundry): lädt State und Academy-Daten.
+   * Ready-Hook (Foundry): lÃ¤dt State und Academy-Daten.
    */
   async ready() {
     this.core.logger?.info?.(`JANUS7 Engine v${game.modules.get(MODULE_ID)?.version} wird gestartet ...`);
@@ -284,12 +285,12 @@ export class Janus7Engine {
       } catch (err) {
         this.recordWarning('academy.data', 'init', err);
         this.markServiceUnavailable('academy.data');
-        this.core.logger?.warn?.('[JANUS7] academy.data init fehlgeschlagen – Ready läuft degradiert weiter.', _janusErrMeta(err));
+        this.core.logger?.warn?.('[JANUS7] academy.data init fehlgeschlagen â€“ Ready lÃ¤uft degradiert weiter.', _janusErrMeta(err));
       }
     } else {
       this.recordWarning('academy.data', 'init', 'academy.data unavailable during ready');
       this.markServiceUnavailable('academy.data');
-      this.core.logger?.warn?.('[JANUS7] academy.data nicht verfügbar, Ready läuft degradiert weiter.');
+      this.core.logger?.warn?.('[JANUS7] academy.data nicht verfÃ¼gbar, Ready lÃ¤uft degradiert weiter.');
     }
 
     // Read-only Debug Helpers (keine SSOT, nur Introspection)
@@ -437,7 +438,7 @@ export class Janus7Engine {
     if (this.core) this.core.getAiContext = this.getAiContext;
     if (game?.janus7) game.janus7.getAiContext = this.getAiContext;
 
-        // Engine-Ready Hook — routed through central emitter (also fires legacy 'janus7Ready')
+        // Engine-Ready Hook â€” routed through central emitter (also fires legacy 'janus7Ready')
     try {
       emitHook(HOOKS.ENGINE_READY, this);
       this.core.logger?.debug?.('[JANUS7] ready.step emit ENGINE_READY ok');
@@ -449,9 +450,9 @@ export class Janus7Engine {
 }
 
 
-// ─────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // JANUS_GLOBAL: shared engine reference (set by scripts/janus.mjs)
-// ─────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /**
  * Shared engine container.
  * Populated by the single entry point (scripts/janus.mjs) during Hooks.once('init').
@@ -481,3 +482,4 @@ export function getJanusCore() {
 export function getJanus7() {
   return JANUS_GLOBAL.engine;
 }
+

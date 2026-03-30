@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file core/state.js
  * @module janus7
  * @phase 1
@@ -7,8 +7,8 @@
  * State-Engine: versionierter, persistenter Zustand mit Transaktionen und Rollback.
  *
  * Architektur:
- * - Diese Datei ist Teil von Phase 1 und darf nur Abhängigkeiten zu Phasen <= 1 haben.
- * - Öffentliche Funktionen/Exports sind JSDoc-dokumentiert, damit JANUS7 langfristig wartbar bleibt.
+ * - Diese Datei ist Teil von Phase 1 und darf nur AbhÃ¤ngigkeiten zu Phasen <= 1 haben.
+ * - Ã–ffentliche Funktionen/Exports sind JSDoc-dokumentiert, damit JANUS7 langfristig wartbar bleibt.
  *
  * Hinweis:
  * - Keine deprecated Foundry APIs (v13+).
@@ -39,14 +39,14 @@ const UNSET_PATH = foundry?.utils?.unsetProperty
     return true;
   });
 
-// ─── Legacy-Path-Alias Sunset-Konfiguration ───────────────────────────────────
+// â”€â”€â”€ Legacy-Path-Alias Sunset-Konfiguration â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 //
 // Format: [legacyPath, canonicalPath]
 // Read/Write auf den legacyPath wird auf den canonicalPath umgeleitet (mit Warning).
 //
-// WICHTIG: Die Map-Richtung ist [LEGACY → CANONICAL]:
-//   'academy.quests'  → 'questStates'  (questStates ist der SSOT-Root per v0.9.12+)
-//   'scoring'         → 'academy.scoring' (academy.scoring ist der kanonische Pfad)
+// WICHTIG: Die Map-Richtung ist [LEGACY â†’ CANONICAL]:
+//   'academy.quests'  â†’ 'questStates'  (questStates ist der SSOT-Root per v0.9.12+)
+//   'scoring'         â†’ 'academy.scoring' (academy.scoring ist der kanonische Pfad)
 //
 // Sunset-Plan: Aliase bleiben bis v1.0 aktiv, danach entfernen.
 //
@@ -70,7 +70,7 @@ function normalizeStatePathAlias(path, { warnLogger } = {}) {
       // Sunset-Warning: einmalig pro Legacy-Path pro Session
       if (!_warnedLegacyPaths.has(source)) {
         _warnedLegacyPaths.add(source);
-        const msg = `[JANUS7] State: Veralteter Pfad "${source}" → nutze stattdessen "${canonical}". `
+        const msg = `[JANUS7] State: Veralteter Pfad "${source}" â†’ nutze stattdessen "${canonical}". `
           + `Dieser Alias wird in v1.0 entfernt.`;
         if (warnLogger?.warn) {
           warnLogger.warn(msg);
@@ -98,7 +98,7 @@ function isPlainMap(value) {
 }
 
 /**
- * Default-World-State für JANUS7.
+ * Default-World-State fÃ¼r JANUS7.
  * Wird bei der ersten Initialisierung in game.settings geschrieben.
  */
 const DEFAULT_STATE = {
@@ -128,10 +128,10 @@ const DEFAULT_STATE = {
     autoFromEvents: false,
     autoFromLocation: false,
 
-    // Lautstärke
+    // LautstÃ¤rke
     masterVolume: 1.0,
 
-    // Pause/Resume Snapshot (flüchtig, aber im SSOT gehalten für Hybrid)
+    // Pause/Resume Snapshot (flÃ¼chtig, aber im SSOT gehalten fÃ¼r Hybrid)
     paused: {
       isPaused: false,
       moodId: null,
@@ -146,13 +146,13 @@ const DEFAULT_STATE = {
     cooldownMs: 5000,
     minDurationMs: 30000,
 
-    // Temporäre Overrides (Event > Location > Calendar)
+    // TemporÃ¤re Overrides (Event > Location > Calendar)
     overrideMoodId: null,
     overrideUntil: null,
     overrideSource: null,
     eventOverrideMs: 600000
   },
-  // Zeitmodell – Phase 3 nutzt noch eine vereinfachte Struktur.
+  // Zeitmodell â€“ Phase 3 nutzt noch eine vereinfachte Struktur.
   time: {
     year: 1039,
     month: 1,
@@ -216,24 +216,24 @@ const DEFAULT_STATE = {
 
 /**
  * Zentraler World-State von JANUS7.
- * Lädt und speichert den Zustand über game.settings,
+ * LÃ¤dt und speichert den Zustand Ã¼ber game.settings,
  * bietet Transaction-Support mit Rollback und path-basierten Zugriff.
  */
 /**
  * JanusStateCore
  *
  * @description
- * Öffentliche API von JANUS7.
- * Diese Funktion/Klasse ist Teil der stabilen Oberfläche
+ * Ã–ffentliche API von JANUS7.
+ * Diese Funktion/Klasse ist Teil der stabilen OberflÃ¤che
  * und wird durch den Testkatalog abgesichert.
  *
  * @remarks
  * - Keine UI-Seiteneffekte
- * - Keine direkten Zugriffe auf Foundry- oder dsa5-Interna außerhalb definierter APIs
- * - Änderungen hier erfordern Anpassungen im Testkatalog
+ * - Keine direkten Zugriffe auf Foundry- oder dsa5-Interna auÃŸerhalb definierter APIs
+ * - Ã„nderungen hier erfordern Anpassungen im Testkatalog
  */
 export class JanusStateCore {
-  /** @type {Promise<void>} Privat für Transaktions-Queueing */
+  /** @type {Promise<void>} Privat fÃ¼r Transaktions-Queueing */
   #lock = Promise.resolve();
 
   /**
@@ -247,7 +247,7 @@ export class JanusStateCore {
     this._dirty = false;
     this.logger = logger ?? console;
     // Testkatalog Phase 1 erwartet explizit: game.settings.get('janus7','coreState')
-    // Wir halten zusätzlich einen Legacy-Key 'state' für Migration älterer Worlds.
+    // Wir halten zusÃ¤tzlich einen Legacy-Key 'state' fÃ¼r Migration Ã¤lterer Worlds.
     this.settingsKey = 'coreState';
     this.legacySettingsKey = 'state';
   }
@@ -256,7 +256,7 @@ export class JanusStateCore {
    * Registrierung des World-Settings in Foundry.
    */
   static registerSetting() {
-    // Primär-Key (Testkatalog): coreState
+    // PrimÃ¤r-Key (Testkatalog): coreState
     game.settings.register(MODULE_ID, 'coreState', {
       name: 'JANUS7.State.Name',
       hint: 'JANUS7.State.Hint',
@@ -266,7 +266,7 @@ export class JanusStateCore {
       default: DEFAULT_STATE
     });
 
-    // Legacy-Key für bestehende Worlds (Migration aus JANUS7 <= 0.3.6.1)
+    // Legacy-Key fÃ¼r bestehende Worlds (Migration aus JANUS7 <= 0.3.6.1)
     // Registrierung nur, wenn noch nicht vorhanden.
     try {
       if (!game.settings.settings.has(`${MODULE_ID}.state`)) {
@@ -280,7 +280,7 @@ export class JanusStateCore {
         });
       }
     } catch (_e) {
-      // defensiv – in sehr frühen init-Phasen kann settings Map anders aussehen
+      // defensiv â€“ in sehr frÃ¼hen init-Phasen kann settings Map anders aussehen
     }
   }
 
@@ -296,18 +296,18 @@ export class JanusStateCore {
 
   /** True sobald load() abgeschlossen und _state gesetzt ist. */
   get loaded() { return this._ready === true && this._state != null; }
-  /** Alias für Rückwärtskompatibilität. */
+  /** Alias fÃ¼r RÃ¼ckwÃ¤rtskompatibilitÃ¤t. */
   get isLoaded() { return this.loaded; }
 
 /**
  * Migriert/normalisiert den geladenen State auf das erwartete Schema.
- * - Ergänzt fehlende Felder non-destructive (überschreibt keine vorhandenen Werte)
- * - Markiert den State als dirty, wenn Änderungen vorgenommen wurden
+ * - ErgÃ¤nzt fehlende Felder non-destructive (Ã¼berschreibt keine vorhandenen Werte)
+ * - Markiert den State als dirty, wenn Ã„nderungen vorgenommen wurden
  * @param {any} [stateObj] Optional: ein State-Objekt; default ist der interne State.
  * @returns {{changed: boolean, state: any}}
  */
-// NOTE (P3-05): migrateState() mutiert das übergebene Objekt direkt (in-place).
-// Nie einen gemeinsamen Referenz-Clone übergeben, wenn das Original unberührt bleiben soll.
+// NOTE (P3-05): migrateState() mutiert das Ã¼bergebene Objekt direkt (in-place).
+// Nie einen gemeinsamen Referenz-Clone Ã¼bergeben, wenn das Original unberÃ¼hrt bleiben soll.
 migrateState(stateObj = this._state) {
   if (!stateObj) return { changed: false, state: stateObj };
   let changed = false;
@@ -502,7 +502,7 @@ migrateState(stateObj = this._state) {
     }
     if (!deepEqualJson(legacyRootScoring, canonicalScoring)) changed = true;
 
-    // Legacy location aliases → canonical academy.currentLocationId
+    // Legacy location aliases â†’ canonical academy.currentLocationId
     const currentLocationRaw = foundry.utils.getProperty(stateObj, 'academy.currentLocationId');
     const legacyActiveLocation = foundry.utils.getProperty(stateObj, 'academy.activeLocationId');
     const legacyCalendarLocation = foundry.utils.getProperty(stateObj, 'academy.calendar.activeLocationId');
@@ -595,7 +595,7 @@ migrateState(stateObj = this._state) {
   ];
 
   for (const p of nullPathCleanup) {
-    if (foundry.utils.getProperty(p) === null) {
+    if (foundry.utils.getProperty(stateObj, p) === null) {
       UNSET_PATH(stateObj, p);
       changed = true;
     }
@@ -606,14 +606,14 @@ migrateState(stateObj = this._state) {
 }
 
   /**
-   * Lädt den State aus game.settings oder legt einen neuen an.
-   * Speichert nur dann zurück, wenn es sich um eine Neuinitialisierung handelt.
+   * LÃ¤dt den State aus game.settings oder legt einen neuen an.
+   * Speichert nur dann zurÃ¼ck, wenn es sich um eine Neuinitialisierung handelt.
    * @returns {Promise<void>}
    */
   async load() {
     if (this._ready && this._state) return;
 
-    // --- Pre-Load-Backup (flüchtig im Client) ---
+    // --- Pre-Load-Backup (flÃ¼chtig im Client) ---
     try {
       const storedSetting = game.settings.get(MODULE_ID, this.settingsKey);
       if (storedSetting) {
@@ -626,8 +626,8 @@ migrateState(stateObj = this._state) {
       }
     } catch (_err) { /* no-op: backup should not block boot */ }
 
-    // 1) Primär-State (coreState)
-    // FIX P0-01: game.settings.get() ist SYNCHRON — kein await verwenden.
+    // 1) PrimÃ¤r-State (coreState)
+    // FIX P0-01: game.settings.get() ist SYNCHRON â€” kein await verwenden.
     let stored = game.settings.get(MODULE_ID, this.settingsKey);
     let loadedFromLegacy = false;
     // 2) Migration: falls coreState leer ist, versuche Legacy-Key 'state'
@@ -638,7 +638,7 @@ migrateState(stateObj = this._state) {
           stored = legacy;
           loadedFromLegacy = true;
           this._legacySyncPending = true;
-          this.logger?.info?.('JanusStateCore: Legacy-State gefunden (state) – migriere nach coreState.');
+          this.logger?.info?.('JanusStateCore: Legacy-State gefunden (state) â€“ migriere nach coreState.');
           this._dirty = true;
         }
       } catch (_e) {
@@ -656,7 +656,7 @@ migrateState(stateObj = this._state) {
       this._state.meta.updatedAt = now;
 
 // --- Schema-Migration (non-destructive) ---
-// Ergänzt fehlende Felder, damit spätere Phasen (Scoring/Display/Trimester) nicht blockieren.
+// ErgÃ¤nzt fehlende Felder, damit spÃ¤tere Phasen (Scoring/Display/Trimester) nicht blockieren.
 
       this._dirty = true;
       isNew = true;
@@ -671,16 +671,16 @@ migrateState(stateObj = this._state) {
       }
     }
 
-    // Schema-Migration für neue *und* bestehende States
+    // Schema-Migration fÃ¼r neue *und* bestehende States
     // WICHTIG: migrateState() markiert nur "changed". Ohne _dirty bleibt die Migration unsaved
-    // und meta.version driftet weiter (z.B. bleibt auf 0.9.9.6 obwohl Modul höher ist).
+    // und meta.version driftet weiter (z.B. bleibt auf 0.9.9.6 obwohl Modul hÃ¶her ist).
     const mig = this.migrateState();
     if (mig?.changed) {
       this._dirty = true;
       this._state = mig.state ?? this._state;
     }
 
-    // Meta-Timestamps sicherstellen (Migration älterer States)
+    // Meta-Timestamps sicherstellen (Migration Ã¤lterer States)
     if (!this._state.meta) this._state.meta = {};
     if (typeof this._state.meta.createdAt !== 'string') {
       this._state.meta.createdAt = new Date().toISOString();
@@ -699,7 +699,7 @@ migrateState(stateObj = this._state) {
       try {
         await this.save({ force: true });
       } catch (err) {
-        this.logger?.warn?.('JanusStateCore.load(): Persistenz beim Boot fehlgeschlagen – arbeite mit In-Memory-State weiter.', {
+        this.logger?.warn?.('JanusStateCore.load(): Persistenz beim Boot fehlgeschlagen â€“ arbeite mit In-Memory-State weiter.', {
           message: err?.message ?? String(err),
           stack: err?.stack ?? null,
           force: true,
@@ -708,12 +708,12 @@ migrateState(stateObj = this._state) {
       }
     }
 
-    // Canonical hook — routed through central emitter (also fires legacy alias)
+    // Canonical hook â€” routed through central emitter (also fires legacy alias)
     emitHook(HOOKS.STATE_LOADED, { state: this._state, isNew });
   }
 
   /**
-   * Gibt den kompletten State zurück.
+   * Gibt den kompletten State zurÃ¼ck.
    * ACHTUNG: Nur read-only verwenden oder explizit clonen.
    */
 
@@ -767,7 +767,7 @@ migrateState(stateObj = this._state) {
     foundry.utils.setProperty(this._state, canonicalPath, value);
     this._touchMeta();
 
-    // Canonical hook — routed through central emitter (also fires legacy alias)
+    // Canonical hook â€” routed through central emitter (also fires legacy alias)
     emitHook(HOOKS.STATE_CHANGED, {
       path: canonicalPath,
       oldValue,
@@ -829,7 +829,7 @@ migrateState(stateObj = this._state) {
     this._state = foundry.utils.deepClone(newState);
     this._touchMeta();
 
-    // Canonical hook — routed through central emitter (also fires legacy alias)
+    // Canonical hook â€” routed through central emitter (also fires legacy alias)
     emitHook(HOOKS.STATE_REPLACED, {
       oldState,
       newState: this._state
@@ -878,16 +878,16 @@ migrateState(stateObj = this._state) {
       this.logger?.warn?.('JanusStateCore.save(): migrateState vor Persist fehlgeschlagen.', err);
     }
 
-    // Tests (JanusTestHarness) dürfen den World-State nicht verändern.
+    // Tests (JanusTestHarness) dÃ¼rfen den World-State nicht verÃ¤ndern.
     // Statt Methoden zur Laufzeit auszutauschen (was mit gebundenen Referenzen
-    // kollidieren kann), schalten wir Persistenz über ein Flag ab.
+    // kollidieren kann), schalten wir Persistenz Ã¼ber ein Flag ab.
     if (this._suppressPersist) {
-      this.logger?.debug?.('JanusStateCore.save(): Persistenz ist unterdrückt (Testlauf).', { force });
+      this.logger?.debug?.('JanusStateCore.save(): Persistenz ist unterdrÃ¼ckt (Testlauf).', { force });
       return this._state;
     }
 
     // autoSave respektieren, wenn nicht forciert.
-    // WICHTIG: Beim forcierten Boot-Save darf fehlende/frühe Config-Auflösung die
+    // WICHTIG: Beim forcierten Boot-Save darf fehlende/frÃ¼he Config-AuflÃ¶sung die
     // komplette Ready-Pipeline nicht blockieren.
     let autoSave = true;
     if (!force) {
@@ -901,7 +901,7 @@ migrateState(stateObj = this._state) {
       }
 
       if (!autoSave) {
-        this.logger?.warn?.('JanusStateCore.save(): autoSave ist deaktiviert, Speichern übersprungen.', {
+        this.logger?.warn?.('JanusStateCore.save(): autoSave ist deaktiviert, Speichern Ã¼bersprungen.', {
           dirty: this._dirty
         });
         return this._state;
@@ -932,7 +932,7 @@ migrateState(stateObj = this._state) {
       force
     });
 
-    // Canonical hook — routed through central emitter (also fires legacy alias)
+    // Canonical hook â€” routed through central emitter (also fires legacy alias)
     emitHook(HOOKS.STATE_SAVED, { state: this._state });
     this._emitCampaignStateUpdated({ source: 'save', state: this._state });
 
@@ -940,7 +940,7 @@ migrateState(stateObj = this._state) {
   }
 
   /**
-   * Führt eine State-Mutation mit Rollback-Support aus.
+   * FÃ¼hrt eine State-Mutation mit Rollback-Support aus.
    *
    * @template T
    * @param {function(JanusStateCore): (T|Promise<T>)} mutator
@@ -971,8 +971,8 @@ migrateState(stateObj = this._state) {
         this._state = snapshot;
         this._dirty = wasDirty;
 
-        // Kontrollierte Rollbacks (Tests/No-Op) sollen die Konsole nicht zumüllen.
-        // Der Test-Harness wirft bewusst einen Sentinel-Error, um Änderungen sauber zurückzudrehen.
+        // Kontrollierte Rollbacks (Tests/No-Op) sollen die Konsole nicht zumÃ¼llen.
+        // Der Test-Harness wirft bewusst einen Sentinel-Error, um Ã„nderungen sauber zurÃ¼ckzudrehen.
         const isTestRollback = (e) => {
           const msg = String(e?.message ?? '');
           const name = String(e?.name ?? '');
@@ -992,20 +992,20 @@ migrateState(stateObj = this._state) {
         };
 
         if (isTestRollback(err)) {
-          if (!opts?.silent) this.logger?.debug?.('State-Transaktion: Test-Rollback ausgeführt (kein Fehler).');
+          if (!opts?.silent) this.logger?.debug?.('State-Transaktion: Test-Rollback ausgefÃ¼hrt (kein Fehler).');
           return undefined;
         }
 
         if (isExpectedRollback(err)) {
-          if (!opts?.silent) this.logger?.debug?.('State-Transaktion: erwarteter Rollback ausgeführt.', { message: err?.message, name: err?.name });
+          if (!opts?.silent) this.logger?.debug?.('State-Transaktion: erwarteter Rollback ausgefÃ¼hrt.', { message: err?.message, name: err?.name });
           throw err;
         }
 
-        if (!opts?.silent) this.logger?.error?.('State-Transaktion fehlgeschlagen. Änderungen zurückgesetzt.', err);
+        if (!opts?.silent) this.logger?.error?.('State-Transaktion fehlgeschlagen. Ã„nderungen zurÃ¼ckgesetzt.', err);
         throw err;
       }
     } finally {
-      // Lock freigeben für nächsten in der Queue
+      // Lock freigeben fÃ¼r nÃ¤chsten in der Queue
       unlock();
     }
   }
@@ -1013,3 +1013,4 @@ migrateState(stateObj = this._state) {
   /** @returns {boolean} */
   get isReady() { return !!this._ready; }
 }
+

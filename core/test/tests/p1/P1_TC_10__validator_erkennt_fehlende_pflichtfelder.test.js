@@ -3,7 +3,7 @@ export default {
   title: "Validator erkennt fehlende Pflichtfelder",
   phases: [1],
   kind: "auto",
-  expected: "validator.validateState() oder IO-Import muss fehlende meta/time erkennen.",
+  expected: "validator.validateState() erkennt fehlende Root-Felder und akzeptiert den kanonischen State ohne root.scoring.",
   whereToFind: "game.janus7.core.validator",
   async run(ctx) {
     const engine = ctx?.engine ?? game?.janus7;
@@ -25,9 +25,19 @@ export default {
     delete bad.meta;
 
     if (hasValidate) {
-      const res = validator.validateState(bad);
-      const ok = res?.valid === false;
-      return { ok, summary: ok ? "Validator meldet fehlende meta" : "Validator akzeptiert invalide Daten" };
+      const invalidRes = validator.validateState(bad);
+      const canonicalRes = validator.validateState(good);
+      const rejectsMissingMeta = invalidRes?.valid === false;
+      const acceptsCanonical = canonicalRes?.valid === true;
+      const ok = rejectsMissingMeta && acceptsCanonical;
+      return {
+        ok,
+        summary: ok ? "Validator lehnt fehlende Pflichtfelder ab und akzeptiert den kanonischen State" : "Validator-Vertrag fuer invalid/canonical State verletzt",
+        notes: [
+          `invalidErrors=${(invalidRes?.errors ?? []).join(' | ') || 'none'}`,
+          `canonicalErrors=${(canonicalRes?.errors ?? []).join(' | ') || 'none'}`
+        ]
+      };
     }
 
     let blocked = false;

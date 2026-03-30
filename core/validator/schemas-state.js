@@ -1,15 +1,15 @@
-/**
+﻿/**
  * @file core/validator/schemas-state.js
  * @module janus7
  * @phase 1
  *
- * State-Schema-Definitionen für den JANUS7 Core-State.
+ * State-Schema-Definitionen fÃ¼r den JANUS7 Core-State.
  * Ausgelagert aus core/validator.js (war: 1291 Zeilen God-Object).
  *
  * Importiert von: core/validator/index.js
  */
 
-// ─── Shared Sub-Schemas ───────────────────────────────────────────────────────
+// â”€â”€â”€ Shared Sub-Schemas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const SCORE_VALUE_SCHEMA = {
   anyOf: [
@@ -38,11 +38,11 @@ export const SCORING_ROOT_SCHEMA = {
   }
 };
 
-// ─── Core State Schema ────────────────────────────────────────────────────────
+// â”€â”€â”€ Core State Schema â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const STATE_SCHEMA = {
   type: 'object',
-  required: ['time', 'meta', 'academy', 'actors', 'scoring', 'display'],
+  required: ['time', 'meta', 'academy', 'actors', 'display'],
   additionalProperties: false,
   properties: {
     meta: {
@@ -220,3 +220,4 @@ export const STATE_SCHEMA = {
     }
   }
 };
+
