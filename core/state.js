@@ -476,9 +476,9 @@ migrateState(stateObj = this._state) {
 
     // Time is required and must not be null
   ensure('time', {});
-    // Keep year sane (validator requires >= 1000)
-    const year = Number(foundry.utils.getProperty(stateObj, 'time.year'));
-    if (!Number.isFinite(year) || year < 1000) {
+    // Keep year sane (validator requires >= 1000); ensure integer, enforce plausible range.
+    const year = Math.trunc(Number(foundry.utils.getProperty(stateObj, 'time.year')));
+    if (!Number.isFinite(year) || year < 1000 || year > 2000) {
       foundry.utils.setProperty(stateObj, 'time.year', 1039);
       changed = true;
     }
@@ -760,6 +760,10 @@ migrateState(stateObj = this._state) {
    */
   set(path, value) {
     const canonicalPath = normalizeStatePathAlias(path, { warnLogger: this.logger });
+    const _setParts = (canonicalPath ?? '').split('.').filter(Boolean);
+    if (_setParts.some((p) => ['__proto__', 'prototype', 'constructor'].includes(p))) {
+      throw new Error(`JanusStateCore.set(): Unsicherer Pfad: ${canonicalPath}`);
+    }
     const oldValue = this.getPath(canonicalPath);
     if (deepEqualJson(oldValue, value)) {
       return this.getPath(canonicalPath);
@@ -786,7 +790,11 @@ migrateState(stateObj = this._state) {
    * @returns {boolean}
    */
   unset(path) {
-    const source = normalizeStatePathAlias(path, { warnLogger: this.logger });
+    const _rawPath = String(path ?? '');
+    if (['__proto__', 'constructor', 'prototype'].some((p) => _rawPath.includes(p))) {
+      throw new Error(`JanusStateCore.unset(): Unsicherer Pfad (raw): ${_rawPath}`);
+    }
+    const source = normalizeStatePathAlias(_rawPath, { warnLogger: this.logger });
     if (!source) return false;
     const parts = source.split('.').filter(Boolean);
     if (!parts.length) return false;

@@ -152,6 +152,7 @@ export class JanusScoringEngine {
    * @param {string} reason
    * @param {AwardOptions} [options]
    * @returns {Promise<number>} Neuer Punktestand des Zirkels.
+   * @throws {Error} Wenn circleId fehlt (Validierungsfehler)
    */
   async addCirclePoints(circleId, amount, reason, options = {}) {
     const normalizedId = this._normalizeId(circleId);
@@ -174,29 +175,34 @@ export class JanusScoringEngine {
 
     let newScore = 0;
 
-    await this.state.transaction((state) => {
-      const scoring = this._ensureScoringRoot(state);
-      const circles = scoring.circles;
+    try {
+      await this.state.transaction((state) => {
+        const scoring = this._ensureScoringRoot(state);
+        const circles = scoring.circles;
 
-      const prev = Number(circles[normalizedId] ?? 0);
-      newScore = prev + delta;
-      circles[normalizedId] = newScore;
+        const prev = Number(circles[normalizedId] ?? 0);
+        newScore = prev + delta;
+        circles[normalizedId] = newScore;
 
-      const history = scoring.lastAwarded ?? [];
-      history.push({
-        timestamp: now,
-        source,
-        amount: delta,
-        targetType: 'circle',
-        targetId: normalizedId,
-        reason: reason ?? '',
-        meta,
+        const history = scoring.lastAwarded ?? [];
+        history.push({
+          timestamp: now,
+          source,
+          amount: delta,
+          targetType: 'circle',
+          targetId: normalizedId,
+          reason: reason ?? '',
+          meta,
+        });
+        this._trimHistory(history);
+        scoring.lastAwarded = history;
+
+        state.set(STATE_PATHS.SCORING, scoring);
       });
-      this._trimHistory(history);
-      scoring.lastAwarded = history;
-
-      state.set(STATE_PATHS.SCORING, scoring);
-    });
+    } catch (err) {
+      this.logger?.error?.('[JANUS7] addCirclePoints-Transaktion fehlgeschlagen', { circleId: normalizedId, amount: delta, err: err?.message });
+      throw err;
+    }
 
     this._fireScoreChangedHook({
       targetType: 'circle',
@@ -249,29 +255,34 @@ export class JanusScoringEngine {
 
     let newScore = 0;
 
-    await this.state.transaction((state) => {
-      const scoring = this._ensureScoringRoot(state);
-      const students = scoring.students;
+    try {
+      await this.state.transaction((state) => {
+        const scoring = this._ensureScoringRoot(state);
+        const students = scoring.students;
 
-      const prev = Number(students[normalizedId] ?? 0);
-      newScore = prev + delta;
-      students[normalizedId] = newScore;
+        const prev = Number(students[normalizedId] ?? 0);
+        newScore = prev + delta;
+        students[normalizedId] = newScore;
 
-      const history = scoring.lastAwarded ?? [];
-      history.push({
-        timestamp: now,
-        source,
-        amount: delta,
-        targetType: 'student',
-        targetId: normalizedId,
-        reason: reason ?? '',
-        meta,
+        const history = scoring.lastAwarded ?? [];
+        history.push({
+          timestamp: now,
+          source,
+          amount: delta,
+          targetType: 'student',
+          targetId: normalizedId,
+          reason: reason ?? '',
+          meta,
+        });
+        this._trimHistory(history);
+        scoring.lastAwarded = history;
+
+        state.set(STATE_PATHS.SCORING, scoring);
       });
-      this._trimHistory(history);
-      scoring.lastAwarded = history;
-
-      state.set(STATE_PATHS.SCORING, scoring);
-    });
+    } catch (err) {
+      this.logger?.error?.('[JANUS7] addStudentPoints-Transaktion fehlgeschlagen', { studentId: normalizedId, amount: delta, err: err?.message });
+      throw err;
+    }
 
     this._fireScoreChangedHook({
       targetType: 'student',
@@ -328,6 +339,10 @@ export class JanusScoringEngine {
     const source = examResults.source ?? 'exam';
 
     for (const [circleId, amount] of Object.entries(circleImpact)) {
+      if (!Number.isFinite(Number(amount))) {
+        this.logger?.warn?.(`[JANUS7] applyExamImpact: Nicht-numerischer Wert für Circle '${circleId}': ${amount} — übersprungen`);
+        continue;
+      }
       await this.addCirclePoints(circleId, amount, reason, {
         source,
         meta: { examId: examDef?.id ?? null },
@@ -335,6 +350,10 @@ export class JanusScoringEngine {
     }
 
     for (const [studentId, amount] of Object.entries(studentImpact)) {
+      if (!Number.isFinite(Number(amount))) {
+        this.logger?.warn?.(`[JANUS7] applyExamImpact: Nicht-numerischer Wert für Student '${studentId}': ${amount} — übersprungen`);
+        continue;
+      }
       await this.addStudentPoints(studentId, amount, reason, {
         source,
         meta: { examId: examDef?.id ?? null },

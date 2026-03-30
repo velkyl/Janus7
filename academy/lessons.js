@@ -66,7 +66,7 @@ export class JanusLessonsEngine {
   /**
    * Liefert eine Lesson nach ID.
    * @param {string} id
-   * @returns {any|null}
+   * @returns {Object|null} Lektion oder null wenn nicht gefunden (kein Throw)
    */
   getLesson(id) {
     if (!id) return null;

@@ -91,7 +91,17 @@ export function validateAcademyDatasets(validator, lessons, npcs, calendar, loca
     required: ['meta', 'lessons'],
     properties: {
       meta: { type: 'object' },
-      lessons: { type: 'array', items: { type: 'object', required: ['id', 'name'] } },
+      lessons: {
+        type: 'array',
+        items: {
+          type: 'object',
+          required: ['id', 'name'],
+          properties: {
+            id:   { type: 'string', minLength: 1 },
+            name: { type: 'string', minLength: 1 },
+          },
+        },
+      },
     },
   }, 'lessons');
 
@@ -100,7 +110,17 @@ export function validateAcademyDatasets(validator, lessons, npcs, calendar, loca
     required: ['meta', 'npcs'],
     properties: {
       meta: { type: 'object' },
-      npcs: { type: 'array', items: { type: 'object', required: ['id', 'name'] } },
+      npcs: {
+        type: 'array',
+        items: {
+          type: 'object',
+          required: ['id', 'name'],
+          properties: {
+            id:   { type: 'string', minLength: 1 },
+            name: { type: 'string', minLength: 1 },
+          },
+        },
+      },
     },
   }, 'npcs');
 
@@ -109,7 +129,16 @@ export function validateAcademyDatasets(validator, lessons, npcs, calendar, loca
     required: ['meta', 'entries'],
     properties: {
       meta: { type: 'object' },
-      entries: { type: 'array', items: { type: 'object', required: ['id', 'year', 'trimester', 'week', 'day', 'phase'] } },
+      entries: {
+        type: 'array',
+        items: {
+          type: 'object',
+          required: ['id', 'year', 'trimester', 'week', 'day', 'phase'],
+          properties: {
+            id: { type: 'string', minLength: 1 },
+          },
+        },
+      },
     },
   }, 'calendar');
 
@@ -118,7 +147,17 @@ export function validateAcademyDatasets(validator, lessons, npcs, calendar, loca
     required: ['meta', 'locations'],
     properties: {
       meta: { type: 'object' },
-      locations: { type: 'array', items: { type: 'object', required: ['id', 'name'] } },
+      locations: {
+        type: 'array',
+        items: {
+          type: 'object',
+          required: ['id', 'name'],
+          properties: {
+            id:   { type: 'string', minLength: 1 },
+            name: { type: 'string', minLength: 1 },
+          },
+        },
+      },
     },
   }, 'locations');
 
@@ -127,7 +166,18 @@ export function validateAcademyDatasets(validator, lessons, npcs, calendar, loca
     required: ['meta', 'events'],
     properties: {
       meta: { type: 'object' },
-      events: { type: 'array', items: { type: 'object', required: ['id', 'name', 'type'] } },
+      events: {
+        type: 'array',
+        items: {
+          type: 'object',
+          required: ['id', 'name', 'type'],
+          properties: {
+            id:   { type: 'string', minLength: 1 },
+            name: { type: 'string', minLength: 1 },
+            type: { type: 'string', minLength: 1 },
+          },
+        },
+      },
     },
   }, 'events');
 

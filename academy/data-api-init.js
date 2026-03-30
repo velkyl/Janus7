@@ -27,13 +27,19 @@ export async function initAcademyData() {
   }
   const log = core.logger.child('academy:data');
 
-  const [lessons, npcs, calendar, locations, events] = await Promise.all([
-    loadJson('lessons.json'),
-    loadJson('npcs.json'),
-    loadJson('calendar.json'),
-    loadJson('locations.json'),
-    loadJson('events.json'),
-  ]);
+  let lessons, npcs, calendar, locations, events;
+  try {
+    [lessons, npcs, calendar, locations, events] = await Promise.all([
+      loadJson('lessons.json'),
+      loadJson('npcs.json'),
+      loadJson('calendar.json'),
+      loadJson('locations.json'),
+      loadJson('events.json'),
+    ]);
+  } catch (err) {
+    log.error('[JANUS7] Kern-Datensatz konnte nicht geladen werden', { err: err?.message ?? err });
+    throw new Error(`JANUS7: Academy-Initialisierung fehlgeschlagen — Kern-JSON fehlt oder ist beschädigt. Ursache: ${err?.message ?? err}`);
+  }
 
   const world = loadWorldOverrides();
   if (world?.lessons?.length) lessons.lessons = applyWorldOverrides(lessons.lessons, world.lessons);

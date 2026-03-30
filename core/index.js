@@ -430,7 +430,10 @@ export class Janus7Engine {
         };
       }
       if (!opts?.includeDiagnostics) {
-        try { delete snapshot.state?.diagnostics; } catch (_) {}
+        try { delete snapshot.state?.diagnostics; } catch (err) {
+          // non-fatal — Initialisierungsschritt übersprungen
+          this.logger?.debug?.('[JANUS7] Initialisierungsschritt fehlgeschlagen (non-fatal)', { err: err?.message });
+        }
       }
       return snapshot;
     };
