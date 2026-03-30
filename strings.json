@@ -1,0 +1,2112 @@
+[
+  {
+    "file": "templates/apps/academy-overview.hbs",
+    "text": "Kalender nicht bereit",
+    "match": "> Kalender nicht bereit<"
+  },
+  {
+    "file": "templates/apps/academy-overview.hbs",
+    "text": "Phase-4 Simulation oder AcademyData ist noch nicht initialisiert.",
+    "match": ">Phase-4 Simulation oder AcademyData ist noch nicht initialisiert.<"
+  },
+  {
+    "file": "templates/apps/academy-overview.hbs",
+    "text": "Heute",
+    "match": "> Heute<"
+  },
+  {
+    "file": "templates/apps/academy-overview.hbs",
+    "text": "Lesson Library",
+    "match": "> Lesson Library<"
+  },
+  {
+    "file": "templates/apps/academy-overview.hbs",
+    "text": "Refresh",
+    "match": "> Refresh<"
+  },
+  {
+    "file": "templates/apps/academy-overview.hbs",
+    "text": "Wochenplan",
+    "match": "> Wochenplan<"
+  },
+  {
+    "file": "templates/apps/academy-overview.hbs",
+    "text": "Phase",
+    "match": ">Phase<"
+  },
+  {
+    "file": "templates/apps/academy-overview.hbs",
+    "text": "Slot-Details",
+    "match": "> Slot-Details<"
+  },
+  {
+    "file": "templates/apps/academy-overview.hbs",
+    "text": "Tag",
+    "match": ">Tag<"
+  },
+  {
+    "file": "templates/apps/academy-overview.hbs",
+    "text": "Phase",
+    "match": ">Phase<"
+  },
+  {
+    "file": "templates/apps/academy-overview.hbs",
+    "text": "Woche",
+    "match": ">Woche<"
+  },
+  {
+    "file": "templates/apps/academy-overview.hbs",
+    "text": "Eintrag",
+    "match": ">Eintrag<"
+  },
+  {
+    "file": "templates/apps/academy-overview.hbs",
+    "text": "Kein Eintrag in diesem Slot.",
+    "match": ">Kein Eintrag in diesem Slot.<"
+  },
+  {
+    "file": "templates/apps/academy-overview.hbs",
+    "text": "Wähle einen Slot im Wochenplan.",
+    "match": ">Wähle einen Slot im Wochenplan.<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Atmosphere nicht bereit",
+    "match": "> Atmosphere nicht bereit<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Phase-5 Atmosphere ist nicht initialisiert oder deaktiviert.",
+    "match": ">Phase-5 Atmosphere ist nicht initialisiert oder deaktiviert.<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Atmosphere DJ",
+    "match": "> Atmosphere DJ<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Stop All",
+    "match": "> Stop All<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Refresh",
+    "match": "> Refresh<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Steuerung",
+    "match": "> Steuerung<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Master-Client, Lautst&auml;rke und automatische Quellen zentral steuern.",
+    "match": ">Master-Client, Lautst&auml;rke und automatische Quellen zentral steuern.<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Aktiver Mood",
+    "match": ">Aktiver Mood<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Master Client",
+    "match": ">Master Client<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Auto-Quellen",
+    "match": ">Auto-Quellen<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Master Client",
+    "match": ">Master Client<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "(auto)",
+    "match": ">(auto)<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Auto",
+    "match": ">Auto<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Kalender",
+    "match": "> Kalender<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Events",
+    "match": "> Events<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Ort",
+    "match": "> Ort<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Moods",
+    "match": "> Moods<"
+  },
+  {
+    "file": "templates/apps/atmosphere-dj.hbs",
+    "text": "Direkter Zugriff auf alle bekannten Atmosph&auml;ren.",
+    "match": ">Direkter Zugriff auf alle bekannten Atmosph&auml;ren.<"
+  },
+  {
+    "file": "templates/apps/command-center.hbs",
+    "text": "Command Center",
+    "match": ">Command Center<"
+  },
+  {
+    "file": "templates/apps/command-center.hbs",
+    "text": "Suche",
+    "match": ">Suche<"
+  },
+  {
+    "file": "templates/apps/command-center.hbs",
+    "text": "Ctrl+K",
+    "match": ">Ctrl+K<"
+  },
+  {
+    "file": "templates/apps/command-center.hbs",
+    "text": "Beamer",
+    "match": ">\n        Beamer\n      <"
+  },
+  {
+    "file": "templates/apps/command-center.hbs",
+    "text": "Alle",
+    "match": "> Alle\n    <"
+  },
+  {
+    "file": "templates/apps/command-center.hbs",
+    "text": "Ctrl+K",
+    "match": ">Ctrl+K<"
+  },
+  {
+    "file": "templates/apps/command-center.hbs",
+    "text": "Spotlight",
+    "match": "> Spotlight\n  <"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Kein Zugriff",
+    "match": "> Kein Zugriff<"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Nur der GM kann die Konfiguration bearbeiten.",
+    "match": ">Nur der GM kann die Konfiguration bearbeiten.<"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Engine nicht bereit",
+    "match": "> Engine nicht bereit<"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "JANUS7 Core ist noch nicht initialisiert.",
+    "match": ">JANUS7 Core ist noch nicht initialisiert.<"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Scene-Mappings",
+    "match": "> Scene-Mappings<"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Weist logische Keys (z.B. \"beamer\", \"mainHall\") einer Foundry-Szene zu.",
+    "match": ">Weist logische Keys (z.B. \"beamer\", \"mainHall\") einer Foundry-Szene zu.<"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "— Szene wählen —",
+    "match": ">— Szene wählen —<"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Noch keine Mappings – \"+ Zeile\" klicken.",
+    "match": ">Noch keine Mappings – \"+ Zeile\" klicken.<"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Zeile hinzufügen",
+    "match": "> Zeile hinzufügen\n      <"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Mappings speichern",
+    "match": "> Mappings speichern\n      <"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Feature-Flags",
+    "match": "> Feature-Flags<"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Optionale Subsysteme aktivieren/deaktivieren. Wirkt ohne Reload.",
+    "match": ">Optionale Subsysteme aktivieren/deaktivieren. Wirkt ohne Reload.<"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Atmosphere-Subsystem",
+    "match": "> Atmosphere-Subsystem\n        <"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Mood-Switching, Auto-Playlists",
+    "match": ">Mood-Switching, Auto-Playlists<"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Auto-Mood",
+    "match": "> Auto-Mood\n        <"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Mood automatisch nach Kalender/Szene wechseln",
+    "match": ">Mood automatisch nach Kalender/Szene wechseln<"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Beamer-/Second-Screen-Modus",
+    "match": "> Beamer-/Second-Screen-Modus\n        <"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Dedizierte Ansicht für Projektion",
+    "match": ">Dedizierte Ansicht für Projektion<"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Akademie-Simulation",
+    "match": "> Akademie-Simulation\n        <"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Kalender, Lektionen, Scoring, Social aktiv",
+    "match": ">Kalender, Lektionen, Scoring, Social aktiv<"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Feature-Flags speichern",
+    "match": "> Feature-Flags speichern\n      <"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Subsystem-Kill-Switches",
+    "match": "> Subsystem-Kill-Switches<"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Bearbeitung über",
+    "match": ">Bearbeitung über <"
+  },
+  {
+    "file": "templates/apps/config-panel.hbs",
+    "text": "Einstellungen → Module → JANUS7",
+    "match": ">Einstellungen → Module → JANUS7<"
+  },
+  {
+    "file": "templates/apps/enrollment-scanner.hbs",
+    "text": "Immatrikulations-Scanner",
+    "match": "> \n      Immatrikulations-Scanner\n    <"
+  },
+  {
+    "file": "templates/apps/enrollment-scanner.hbs",
+    "text": "Sichte Akten und generiere NSCs oder Archetypen für deine Akademie.",
+    "match": ">\n      Sichte Akten und generiere NSCs oder Archetypen für deine Akademie.\n    <"
+  },
+  {
+    "file": "templates/apps/enrollment-scanner.hbs",
+    "text": "NSC (Meisterpersonen)",
+    "match": ">NSC (Meisterpersonen)<"
+  },
+  {
+    "file": "templates/apps/enrollment-scanner.hbs",
+    "text": "Archetypen (Charaktere)",
+    "match": ">Archetypen (Charaktere)<"
+  },
+  {
+    "file": "templates/apps/enrollment-scanner.hbs",
+    "text": "Kreaturen",
+    "match": ">Kreaturen<"
+  },
+  {
+    "file": "templates/apps/enrollment-scanner.hbs",
+    "text": "Alle Akteure",
+    "match": ">Alle Akteure<"
+  },
+  {
+    "file": "templates/apps/enrollment-scanner.hbs",
+    "text": "- Akten werden aus den Archiven geholt...",
+    "match": "> - Akten werden aus den Archiven geholt...\n      <"
+  },
+  {
+    "file": "templates/apps/enrollment-scanner.hbs",
+    "text": "Klon-Name:",
+    "match": "> Klon-Name: <"
+  },
+  {
+    "file": "templates/apps/enrollment-scanner.hbs",
+    "text": "Immatrikulieren / Import",
+    "match": "> Immatrikulieren / Import \n              <"
+  },
+  {
+    "file": "templates/apps/enrollment-scanner.hbs",
+    "text": "Keine passende Akte für \"",
+    "match": ">Keine passende Akte für \"<"
+  },
+  {
+    "file": "templates/apps/enrollment-scanner.hbs",
+    "text": "\" im Archiv gefunden.",
+    "match": ">\" im Archiv gefunden.<"
+  },
+  {
+    "file": "templates/apps/guided-manual-tests.hbs",
+    "text": "PASS",
+    "match": ">PASS<"
+  },
+  {
+    "file": "templates/apps/guided-manual-tests.hbs",
+    "text": "FAIL",
+    "match": ">FAIL<"
+  },
+  {
+    "file": "templates/apps/guided-manual-tests.hbs",
+    "text": "SKIP",
+    "match": ">SKIP<"
+  },
+  {
+    "file": "templates/apps/guided-manual-tests.hbs",
+    "text": "PASS",
+    "match": "> PASS<"
+  },
+  {
+    "file": "templates/apps/guided-manual-tests.hbs",
+    "text": "FAIL",
+    "match": "> FAIL<"
+  },
+  {
+    "file": "templates/apps/guided-manual-tests.hbs",
+    "text": "SKIP",
+    "match": "> SKIP<"
+  },
+  {
+    "file": "templates/apps/ki-backup-manager.hbs",
+    "text": "KI Backup Manager",
+    "match": "> KI Backup Manager<"
+  },
+  {
+    "file": "templates/apps/ki-backup-manager.hbs",
+    "text": "Refresh",
+    "match": "> Refresh<"
+  },
+  {
+    "file": "templates/apps/ki-backup-manager.hbs",
+    "text": "KI Roundtrip",
+    "match": "> KI Roundtrip<"
+  },
+  {
+    "file": "templates/apps/ki-backup-manager.hbs",
+    "text": "Nur der GM kann Backups verwalten.",
+    "match": "> Nur der GM kann Backups verwalten.<"
+  },
+  {
+    "file": "templates/apps/ki-backup-manager.hbs",
+    "text": "Verfügbare Backups",
+    "match": "> Verfügbare Backups<"
+  },
+  {
+    "file": "templates/apps/ki-backup-manager.hbs",
+    "text": "Ref",
+    "match": "> Ref<"
+  },
+  {
+    "file": "templates/apps/ki-backup-manager.hbs",
+    "text": "Restore",
+    "match": "> Restore<"
+  },
+  {
+    "file": "templates/apps/ki-backup-manager.hbs",
+    "text": "Noch keine Backups vorhanden. Der Ordner wird jetzt automatisch vorbereitet; das erste echte Backup entsteht beim nächsten KI-Import.",
+    "match": ">Noch keine Backups vorhanden. Der Ordner wird jetzt automatisch vorbereitet; das erste echte Backup entsteht beim nächsten KI-Import.<"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "KI Bundle Export",
+    "match": ">KI Bundle Export<"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Lite",
+    "match": ">\n          Lite\n        <"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Week",
+    "match": ">\n          Week\n        <"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Full",
+    "match": ">\n          Full\n        <"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Kopieren",
+    "match": "> Kopieren\n        <"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Download",
+    "match": "> Download\n        <"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Modus:",
+    "match": ">\n        Modus: <"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Diff Preview",
+    "match": ">Diff Preview<"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Regulären Unterricht simulieren &amp; Montage-Slot erzeugen?",
+    "match": ">\n          Regulären Unterricht simulieren &amp; Montage-Slot erzeugen?\n        <"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Diffs:",
+    "match": ">Diffs: <"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Ausgewählt:",
+    "match": ">Ausgewählt: <"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "· autoCorrected",
+    "match": "> · autoCorrected<"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "· missingReference",
+    "match": "> · missingReference<"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "· invalidSkill",
+    "match": "> · invalidSkill<"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "KI-Talent:",
+    "match": ">KI-Talent: <"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Keine Änderungen (oder noch kein Preview).",
+    "match": ">Keine Änderungen (oder noch kein Preview).<"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Preview",
+    "match": "> Preview\n        <"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Alle",
+    "match": "> Alle\n        <"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Keine",
+    "match": "> Keine\n        <"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Nur markierte",
+    "match": "> Nur markierte\n        <"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Importieren",
+    "match": "> Importieren\n        <"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Import from Inbox",
+    "match": ">Import from Inbox<"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Load",
+    "match": ">Load<"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Browse…",
+    "match": ">Browse…<"
+  },
+  {
+    "file": "templates/apps/ki-roundtrip.hbs",
+    "text": "Import History",
+    "match": ">Import History<"
+  },
+  {
+    "file": "templates/apps/lesson-library.hbs",
+    "text": "Lesson Library",
+    "match": ">Lesson Library<"
+  },
+  {
+    "file": "templates/apps/lesson-library.hbs",
+    "text": "Refresh",
+    "match": "> Refresh<"
+  },
+  {
+    "file": "templates/apps/lesson-library.hbs",
+    "text": "Sync JSON → Items",
+    "match": "> Sync JSON → Items<"
+  },
+  {
+    "file": "templates/apps/lesson-library.hbs",
+    "text": "Neue Lesson",
+    "match": "> Neue Lesson<"
+  },
+  {
+    "file": "templates/apps/lesson-library.hbs",
+    "text": "Name",
+    "match": ">Name<"
+  },
+  {
+    "file": "templates/apps/lesson-library.hbs",
+    "text": "Fach",
+    "match": ">Fach<"
+  },
+  {
+    "file": "templates/apps/lesson-library.hbs",
+    "text": "Teacher",
+    "match": ">Teacher<"
+  },
+  {
+    "file": "templates/apps/lesson-library.hbs",
+    "text": "Jahr",
+    "match": ">Jahr<"
+  },
+  {
+    "file": "templates/apps/lesson-library.hbs",
+    "text": "Dauer",
+    "match": ">Dauer<"
+  },
+  {
+    "file": "templates/apps/lesson-library.hbs",
+    "text": "Lesson ID",
+    "match": ">Lesson ID<"
+  },
+  {
+    "file": "templates/apps/lesson-library.hbs",
+    "text": "Öffnen",
+    "match": "> Öffnen<"
+  },
+  {
+    "file": "templates/apps/lesson-library.hbs",
+    "text": "Noch keine Lesson-Dokumente vorhanden.",
+    "match": ">Noch keine Lesson-Dokumente vorhanden.<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Director's Spotlight",
+    "match": ">Director's Spotlight <"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "(DSA5 Bibliothek)",
+    "match": ">(DSA5 Bibliothek)<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Alle Kategorien",
+    "match": ">Alle Kategorien<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Karten & Szenen",
+    "match": ">Karten & Szenen<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Nichtspieler-Charaktere (NPCs)",
+    "match": ">Nichtspieler-Charaktere (NPCs)<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Kreaturen & Beschwörungen",
+    "match": ">Kreaturen & Beschwörungen<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Archetypen (Charaktere)",
+    "match": ">Archetypen (Charaktere)<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Zauber",
+    "match": ">Zauber<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Liturgien",
+    "match": ">Liturgien<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Fertigkeiten & SFs",
+    "match": ">Fertigkeiten & SFs<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Besonderheiten (Traits)",
+    "match": ">Besonderheiten (Traits)<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Ausrüstung",
+    "match": ">Ausrüstung<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Nahkampfwaffen",
+    "match": ">Nahkampfwaffen<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Fernkampfwaffen",
+    "match": ">Fernkampfwaffen<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Rüstungen",
+    "match": ">Rüstungen<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Tränke & Konsumierbares",
+    "match": ">Tränke & Konsumierbares<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Regeln & Wissen (Journals)",
+    "match": ">Regeln & Wissen (Journals)<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Makros & Tools",
+    "match": ">Makros & Tools<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Zufallstabellen",
+    "match": ">Zufallstabellen<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "- Indexiere Kompendien (dies kann beim ersten Start einen Moment dauern)...",
+    "match": "> - Indexiere Kompendien (dies kann beim ersten Start einen Moment dauern)...\n      <"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Durchsuche",
+    "match": ">\n        Durchsuche <"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Einträge in",
+    "match": "> Einträge in <"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Modulen.",
+    "match": "> Modulen.\n        <"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Refresh",
+    "match": "> Refresh<"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Run",
+    "match": "> Run\n                <"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "View",
+    "match": "> View\n              <"
+  },
+  {
+    "file": "templates/apps/library-browser.hbs",
+    "text": "Keine Ergebnisse gefunden für \"",
+    "match": ">Keine Ergebnisse gefunden für \"<"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Der Quartiermeister",
+    "match": "> \n        Der Quartiermeister\n      <"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Das Ausrüstungs- und Wirtschafts-Register der Akademie.",
+    "match": ">\n        Das Ausrüstungs- und Wirtschafts-Register der Akademie.\n      <"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Aktiver Einkäufer",
+    "match": ">Aktiver Einkäufer<"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Ausrüstung & Tools",
+    "match": ">Ausrüstung & Tools<"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Nahkampfwaffen",
+    "match": ">Nahkampfwaffen<"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Fernkampfwaffen",
+    "match": ">Fernkampfwaffen<"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Rüstungen",
+    "match": ">Rüstungen<"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Alchemie (Tränke/Salben)",
+    "match": ">Alchemie (Tränke/Salben)<"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Herbarium (Pflanzen)",
+    "match": ">Herbarium (Pflanzen)<"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Gifte & Toxine",
+    "match": ">Gifte & Toxine<"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "- Die Lagerbestände in den Kellern werden geprüft...",
+    "match": "> - Die Lagerbestände in den Kellern werden geprüft...\n    <"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Gegenstand",
+    "match": ">Gegenstand<"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Typ",
+    "match": ">Typ<"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Vorgeschlagener Preis",
+    "match": ">Vorgeschlagener Preis<"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Aktion",
+    "match": ">Aktion<"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Kaufen",
+    "match": "> Kaufen\n                  <"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Muster",
+    "match": "> Muster\n                  <"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "Der Quartiermeister hat \"",
+    "match": ">Der Quartiermeister hat \"<"
+  },
+  {
+    "file": "templates/apps/quartermaster.hbs",
+    "text": "\" aktuell nicht auf Lager.",
+    "match": ">\" aktuell nicht auf Lager.<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Scoring nicht bereit",
+    "match": "> Scoring nicht bereit<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Phase-4-Simulation ist noch nicht initialisiert. Bitte warte einen Moment und &ouml;ffne die Ansicht erneut.",
+    "match": ">Phase-4-Simulation ist noch nicht initialisiert. Bitte warte einen Moment und &ouml;ffne die Ansicht erneut.<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Phase-4-Simulation nicht geladen - Anzeige direkt aus State.",
+    "match": "> Phase-4-Simulation nicht geladen - Anzeige direkt aus State.\n    <"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Scoring",
+    "match": "> Scoring<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Refresh",
+    "match": "> Refresh<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Zirkel / H&auml;user",
+    "match": "> Zirkel / H&auml;user<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "&Uuml;bersicht der Wertungstr&auml;ger und manueller Zugriff auf Punktevergaben.",
+    "match": ">&Uuml;bersicht der Wertungstr&auml;ger und manueller Zugriff auf Punktevergaben.<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Neu",
+    "match": "> Neu\n        <"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Name",
+    "match": ">Name<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Punkte",
+    "match": ">Punkte<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Manuell vergeben",
+    "match": ">Manuell vergeben<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Direkter Award-Pfad f&uuml;r GM-Eingriffe.",
+    "match": ">Direkter Award-Pfad f&uuml;r GM-Eingriffe.<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Zirkel",
+    "match": ">Zirkel<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Amount",
+    "match": ">Amount<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Grund",
+    "match": ">Grund<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Vergeben",
+    "match": "> Vergeben\n          <"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Sch&uuml;ler (Top 20)",
+    "match": "> Sch&uuml;ler (Top 20)<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Top-Wertung und manuelle Sch&uuml;lerpunkte in einer Ansicht.",
+    "match": ">Top-Wertung und manuelle Sch&uuml;lerpunkte in einer Ansicht.<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Schueler",
+    "match": ">Schueler<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Score",
+    "match": ">Score<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Sch&uuml;lerpunkte vergeben",
+    "match": ">Sch&uuml;lerpunkte vergeben<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Schneller Eingriff f&uuml;r Unterricht, Verhalten oder Sonderf&auml;lle.",
+    "match": ">Schneller Eingriff f&uuml;r Unterricht, Verhalten oder Sonderf&auml;lle.<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Sch&uuml;ler",
+    "match": ">Sch&uuml;ler<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Amount",
+    "match": ">Amount<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Grund",
+    "match": ">Grund<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Vergeben",
+    "match": "> Vergeben\n          <"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Letzte Vergaben",
+    "match": "> Letzte Vergaben<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Noch keine Vergaben protokolliert.",
+    "match": ">Noch keine Vergaben protokolliert.<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Datum",
+    "match": ">Datum<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Bester Sch&uuml;ler",
+    "match": ">Bester Sch&uuml;ler<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Pts",
+    "match": ">Pts<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Delta",
+    "match": ">Delta<"
+  },
+  {
+    "file": "templates/apps/scoring-view.hbs",
+    "text": "Snapshots werden t&auml;glich beim Tagwechsel automatisch gespeichert (max. 30).",
+    "match": "> Snapshots werden t&auml;glich beim Tagwechsel automatisch gespeichert (max. 30).\n    <"
+  },
+  {
+    "file": "templates/apps/social-view.hbs",
+    "text": "Social nicht bereit",
+    "match": "> Social nicht bereit<"
+  },
+  {
+    "file": "templates/apps/social-view.hbs",
+    "text": "Phase-4 Simulation ist noch nicht initialisiert.",
+    "match": ">Phase-4 Simulation ist noch nicht initialisiert.<"
+  },
+  {
+    "file": "templates/apps/social-view.hbs",
+    "text": "Social",
+    "match": "> Social<"
+  },
+  {
+    "file": "templates/apps/social-view.hbs",
+    "text": "Refresh",
+    "match": "> Refresh<"
+  },
+  {
+    "file": "templates/apps/social-view.hbs",
+    "text": "Beziehung",
+    "match": "> Beziehung<"
+  },
+  {
+    "file": "templates/apps/social-view.hbs",
+    "text": "Attitude zwischen Akteuren lesen und direkt anpassen.",
+    "match": ">Attitude zwischen Akteuren lesen und direkt anpassen.<"
+  },
+  {
+    "file": "templates/apps/social-view.hbs",
+    "text": "Von (NPC/SC)",
+    "match": ">Von (NPC/SC)<"
+  },
+  {
+    "file": "templates/apps/social-view.hbs",
+    "text": "Zu (NPC/SC)",
+    "match": ">Zu (NPC/SC)<"
+  },
+  {
+    "file": "templates/apps/social-view.hbs",
+    "text": "Attitude",
+    "match": ">Attitude<"
+  },
+  {
+    "file": "templates/apps/social-view.hbs",
+    "text": "Anpassen",
+    "match": ">Anpassen<"
+  },
+  {
+    "file": "templates/apps/social-view.hbs",
+    "text": "Ausgehende Beziehungen",
+    "match": "> Ausgehende Beziehungen<"
+  },
+  {
+    "file": "templates/apps/social-view.hbs",
+    "text": "Alle aktuell bekannten Zielwerte des gew&auml;hlten Ausgangscharakters.",
+    "match": ">Alle aktuell bekannten Zielwerte des gew&auml;hlten Ausgangscharakters.<"
+  },
+  {
+    "file": "templates/apps/social-view.hbs",
+    "text": "Wert",
+    "match": ">Wert<"
+  },
+  {
+    "file": "templates/apps/social-view.hbs",
+    "text": "Keine ausgehenden Beziehungen f&uuml;r die aktuelle Auswahl gefunden.",
+    "match": ">Keine ausgehenden Beziehungen f&uuml;r die aktuelle Auswahl gefunden.<"
+  },
+  {
+    "file": "templates/apps/state-inspector.hbs",
+    "text": "State nicht bereit",
+    "match": "> State nicht bereit<"
+  },
+  {
+    "file": "templates/apps/state-inspector.hbs",
+    "text": "JANUS7 Core ist noch nicht initialisiert.",
+    "match": ">JANUS7 Core ist noch nicht initialisiert.<"
+  },
+  {
+    "file": "templates/apps/state-inspector.hbs",
+    "text": "State Inspector",
+    "match": "> State Inspector<"
+  },
+  {
+    "file": "templates/apps/state-inspector.hbs",
+    "text": "Read-only Snapshot",
+    "match": ">Read-only Snapshot<"
+  },
+  {
+    "file": "templates/apps/state-inspector.hbs",
+    "text": "Copy",
+    "match": "> Copy<"
+  },
+  {
+    "file": "templates/apps/state-inspector.hbs",
+    "text": "Refresh",
+    "match": "> Refresh<"
+  },
+  {
+    "file": "templates/apps/student-archive.hbs",
+    "text": "Akademie-Archiv",
+    "match": "> \n      Akademie-Archiv\n    <"
+  },
+  {
+    "file": "templates/apps/student-archive.hbs",
+    "text": "Durchsuche das Wissen der Magierakademie.",
+    "match": ">\n      Durchsuche das Wissen der Magierakademie.\n    <"
+  },
+  {
+    "file": "templates/apps/student-archive.hbs",
+    "text": "- Die Bibliothekare katalogisieren die Folianten...",
+    "match": "> - Die Bibliothekare katalogisieren die Folianten...\n      <"
+  },
+  {
+    "file": "templates/apps/student-archive.hbs",
+    "text": "Die Bibliothekare verweisen darauf, dass es noch mehr Bücher zum Thema gibt. Bitte den Suchbegriff präzisieren.",
+    "match": ">\n          Die Bibliothekare verweisen darauf, dass es noch mehr Bücher zum Thema gibt. Bitte den Suchbegriff präzisieren.\n        <"
+  },
+  {
+    "file": "templates/apps/student-archive.hbs",
+    "text": "In den Archiven wurde nichts zu \"",
+    "match": ">In den Archiven wurde nichts zu \"<"
+  },
+  {
+    "file": "templates/apps/student-archive.hbs",
+    "text": "\" gefunden.",
+    "match": ">\" gefunden.<"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "Nur GM",
+    "match": "> Nur GM<"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "Engine nicht bereit",
+    "match": "> Engine nicht bereit<"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "Neu prüfen",
+    "match": "> Neu prüfen\n      <"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "Prüfe Foundry-Weltbestand…",
+    "match": "> Prüfe Foundry-Weltbestand…\n    <"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "JANUS7-ID",
+    "match": ">JANUS7-ID<"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "Name",
+    "match": ">Name<"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "Foundry-Name",
+    "match": ">Foundry-Name<"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "Status",
+    "match": ">Status<"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "Aktionen",
+    "match": ">Aktionen<"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "Name-Match",
+    "match": ">Name-Match<"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "Defekt",
+    "match": ">Defekt<"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "Fehlt",
+    "match": ">Fehlt<"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "Verknüpfen",
+    "match": "> Verknüpfen\n              <"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "Importieren",
+    "match": "> Importieren\n              <"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "Neu anlegen",
+    "match": "> Neu anlegen\n              <"
+  },
+  {
+    "file": "templates/apps/sync-panel.hbs",
+    "text": "← Foundry-Entität hier hineinziehen um zu verknüpfen",
+    "match": ">\n              ← Foundry-Entität hier hineinziehen um zu verknüpfen\n            <"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Tests werden ausgeführt…",
+    "match": ">Tests werden ausgeführt…<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Gesamt",
+    "match": ">Gesamt<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Auto aktiv",
+    "match": ">Auto aktiv<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "PASS",
+    "match": ">PASS<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "FAIL",
+    "match": ">FAIL<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "ERROR",
+    "match": ">ERROR<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Importfehler",
+    "match": ">Importfehler<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Manuell",
+    "match": ">Manuell<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Katalog",
+    "match": ">Katalog<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Erneut ausführen",
+    "match": "> Erneut ausführen<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Guided Manual",
+    "match": "> Guided Manual<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Report kopieren",
+    "match": "> Report kopieren<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Bug Report kopieren",
+    "match": "> Bug Report kopieren<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Version:",
+    "match": ">Version:<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Sichtbar:",
+    "match": ">Sichtbar:<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Zuletzt:",
+    "match": ">Zuletzt:<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Phase",
+    "match": ">Phase\n      <"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Klasse",
+    "match": ">Klasse\n      <"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Status",
+    "match": ">Status\n      <"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Anwenden",
+    "match": "> Anwenden<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Reset",
+    "match": "> Reset<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Quelle:",
+    "match": ">Quelle: <"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Keine Testergebnisse vorhanden.",
+    "match": ">Keine Testergebnisse vorhanden.<"
+  },
+  {
+    "file": "templates/apps/test-results.hbs",
+    "text": "Tests starten",
+    "match": "> Tests starten\n      <"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "Lesson ID",
+    "match": ">Lesson ID <"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "Fach",
+    "match": ">Fach <"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "Dauer (Slots)",
+    "match": ">Dauer (Slots) <"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "Lehrer NPC ID",
+    "match": ">Lehrer NPC ID <"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "Lehrer UUID",
+    "match": ">Lehrer UUID <"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "Ort ID",
+    "match": ">Ort ID <"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "Ort UUID",
+    "match": ">Ort UUID <"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "Jahr Min",
+    "match": ">Jahr Min <"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "Jahr Max",
+    "match": ">Jahr Max <"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "Schwierigkeit",
+    "match": ">Schwierigkeit <"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "Tags (CSV)",
+    "match": ">Tags (CSV) <"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "Zusammenfassung",
+    "match": ">Zusammenfassung<"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "Mechanics (JSON)",
+    "match": ">Mechanics (JSON)<"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "Scoring Impact (JSON)",
+    "match": ">Scoring Impact (JSON)<"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "References (JSON)",
+    "match": ">References (JSON)<"
+  },
+  {
+    "file": "templates/items/lesson-sheet.hbs",
+    "text": "Source Snapshot (JSON)",
+    "match": ">Source Snapshot (JSON)<"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Content",
+    "match": "> Content<"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Content",
+    "match": "> Content<"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Quests",
+    "match": "> Quests<"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Quests",
+    "match": "> Quests<"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Event Spawning",
+    "match": "> Event Spawning<"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Spawn",
+    "match": "> Spawn\n              <"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Quest Starting",
+    "match": "> Quest Starting<"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Start",
+    "match": "> Start\n              <"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Effect Application",
+    "match": "> Effect Application<"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Apply",
+    "match": "> Apply\n              <"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "State Inspector",
+    "match": "> State Inspector<"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Player State",
+    "match": ">Player State<"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Quest States",
+    "match": ">Quest States<"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Event States",
+    "match": ">Event States<"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Reset State",
+    "match": "> Reset State\n          <"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Export State",
+    "match": "> Export State\n          <"
+  },
+  {
+    "file": "templates/quest-system/dev-panel.hbs",
+    "text": "Kein Character gefunden",
+    "match": ">Kein Character gefunden<"
+  },
+  {
+    "file": "templates/quest-system/event-popup.hbs",
+    "text": "Refresh",
+    "match": "> Refresh<"
+  },
+  {
+    "file": "templates/quest-system/event-popup.hbs",
+    "text": "Optionen",
+    "match": ">Optionen<"
+  },
+  {
+    "file": "templates/quest-system/event-popup.hbs",
+    "text": "Keine Optionen verfügbar",
+    "match": "> Keine Optionen verfügbar<"
+  },
+  {
+    "file": "templates/quest-system/event-popup.hbs",
+    "text": "Schließen",
+    "match": ">Schließen<"
+  },
+  {
+    "file": "templates/quest-system/event-popup.hbs",
+    "text": "Aktive Quests",
+    "match": "> Aktive Quests<"
+  },
+  {
+    "file": "templates/quest-system/event-popup.hbs",
+    "text": "Keine aktiven Quests für diesen Akteur.",
+    "match": ">Keine aktiven Quests für diesen Akteur.<"
+  },
+  {
+    "file": "templates/quest-system/event-popup.hbs",
+    "text": "Ungelesene Gerüchte",
+    "match": "> Ungelesene Gerüchte<"
+  },
+  {
+    "file": "templates/quest-system/event-popup.hbs",
+    "text": "Keine neuen Gerüchte.",
+    "match": ">Keine neuen Gerüchte.<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal-header.hbs",
+    "text": "Quest Journal",
+    "match": "> Quest Journal<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal-header.hbs",
+    "text": "Refresh",
+    "match": "> Refresh<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal.hbs",
+    "text": "Aktive Quests",
+    "match": ">Aktive Quests<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal.hbs",
+    "text": "Verfügbar",
+    "match": ">Verfügbar<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal.hbs",
+    "text": "Abgeschlossen",
+    "match": ">Abgeschlossen<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal.hbs",
+    "text": "Neue Gerüchte",
+    "match": ">Neue Gerüchte<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal.hbs",
+    "text": "Fraktionen",
+    "match": ">Fraktionen<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal.hbs",
+    "text": "Aktueller Ort",
+    "match": ">Aktueller Ort<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal.hbs",
+    "text": "Aktive Quests",
+    "match": "> Aktive Quests<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal.hbs",
+    "text": "Verfügbare Quests",
+    "match": "> Verfügbare Quests<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal.hbs",
+    "text": "Starten",
+    "match": "> Starten<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal.hbs",
+    "text": "Abgeschlossene Quests",
+    "match": "> Abgeschlossene Quests<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal.hbs",
+    "text": "Abgeschlossen",
+    "match": "> Abgeschlossen<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal.hbs",
+    "text": "Gerüchtebrett",
+    "match": "> Gerüchtebrett<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal.hbs",
+    "text": "Keine Gerüchte vorhanden.",
+    "match": ">Keine Gerüchte vorhanden.<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal.hbs",
+    "text": "Häuser & Zirkel",
+    "match": "> Häuser & Zirkel<"
+  },
+  {
+    "file": "templates/quest-system/quest-journal.hbs",
+    "text": "Keine Fraktionen geladen.",
+    "match": ">Keine Fraktionen geladen.<"
+  },
+  {
+    "file": "templates/shell/janus-shell.hbs",
+    "text": "JANUS7",
+    "match": ">JANUS7<"
+  },
+  {
+    "file": "templates/shell/panels/default-panel.hbs",
+    "text": "&times;",
+    "match": ">&times;<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Runbook",
+    "match": ">Runbook<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Workflow & Tagesablauf",
+    "match": ">Workflow & Tagesablauf<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Nächste Aktion:",
+    "match": ">Nächste Aktion:<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Fortsetzen",
+    "match": "> Fortsetzen<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Ausführen",
+    "match": "> Ausführen<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Aktuell keine Runbook Empfehlung.",
+    "match": ">Aktuell keine Runbook Empfehlung.<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Mood Suggestion",
+    "match": ">Mood Suggestion<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Tagesstart",
+    "match": "> Tagesstart<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Queue Run",
+    "match": "> Queue Run<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Lesson Run",
+    "match": "> Lesson Run<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Mood Apply",
+    "match": "> Mood Apply<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Letzte Ereignisse",
+    "match": ">Letzte Ereignisse<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Aus dem Workflow Runbook",
+    "match": ">Aus dem Workflow Runbook<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "SOCIAL",
+    "match": ">SOCIAL<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Keine neuen Social Fortschritte in dieser Sitzung.",
+    "match": ">Keine neuen Social Fortschritte in dieser Sitzung.<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Neue Quest:",
+    "match": ">Neue Quest:<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Quests generieren",
+    "match": "> Quests generieren<"
+  },
+  {
+    "file": "templates/shell/views/director.hbs",
+    "text": "Social Checks",
+    "match": "> Social Checks<"
+  },
+  {
+    "file": "templates/shell/views/people.hbs",
+    "text": "Lehrkräfte",
+    "match": ">Lehrkräfte<"
+  },
+  {
+    "file": "templates/shell/views/people.hbs",
+    "text": "Actors hier ablegen",
+    "match": "> Actors hier ablegen<"
+  },
+  {
+    "file": "templates/shell/views/people.hbs",
+    "text": "Keine Lehrkräfte zugeordnet.",
+    "match": ">Keine Lehrkräfte zugeordnet.<"
+  },
+  {
+    "file": "templates/shell/views/people.hbs",
+    "text": "Schüler",
+    "match": ">Schüler<"
+  },
+  {
+    "file": "templates/shell/views/people.hbs",
+    "text": "Actors hier ablegen",
+    "match": "> Actors hier ablegen<"
+  },
+  {
+    "file": "templates/shell/views/people.hbs",
+    "text": "Keine Schüler zugeordnet.",
+    "match": ">Keine Schüler zugeordnet.<"
+  },
+  {
+    "file": "templates/shell/views/people.hbs",
+    "text": "Weitere NPCs",
+    "match": ">Weitere NPCs<"
+  },
+  {
+    "file": "templates/shell/views/people.hbs",
+    "text": "Actors hier ablegen",
+    "match": "> Actors hier ablegen<"
+  },
+  {
+    "file": "templates/shell/views/people.hbs",
+    "text": "NPC",
+    "match": ">NPC<"
+  },
+  {
+    "file": "templates/shell/views/people.hbs",
+    "text": "Keine NPCs zugeordnet.",
+    "match": ">Keine NPCs zugeordnet.<"
+  },
+  {
+    "file": "templates/shell/views/places.hbs",
+    "text": "Aktiver Ort",
+    "match": ">Aktiver Ort<"
+  },
+  {
+    "file": "templates/shell/views/places.hbs",
+    "text": "Hier legst du Szenen ab um sie zu verknüpfen",
+    "match": ">Hier legst du Szenen ab um sie zu verknüpfen<"
+  },
+  {
+    "file": "templates/shell/views/places.hbs",
+    "text": "Name",
+    "match": ">Name<"
+  },
+  {
+    "file": "templates/shell/views/places.hbs",
+    "text": "Mood",
+    "match": ">Mood<"
+  },
+  {
+    "file": "templates/shell/views/places.hbs",
+    "text": "Scene/Playlist/Journal hier ablegen",
+    "match": "> Scene/Playlist/Journal hier ablegen<"
+  },
+  {
+    "file": "templates/shell/views/places.hbs",
+    "text": "Scene aktivieren",
+    "match": "> Scene aktivieren<"
+  },
+  {
+    "file": "templates/shell/views/places.hbs",
+    "text": "Mood setzen",
+    "match": "> Mood setzen<"
+  },
+  {
+    "file": "templates/shell/views/places.hbs",
+    "text": "Alle Orte",
+    "match": ">Alle Orte<"
+  },
+  {
+    "file": "templates/shell/views/places.hbs",
+    "text": "LOC",
+    "match": ">LOC<"
+  },
+  {
+    "file": "templates/shell/views/places.hbs",
+    "text": "Keine Orte in den Akademie-Daten gefunden.",
+    "match": ">Keine Orte in den Akademie-Daten gefunden.<"
+  },
+  {
+    "file": "templates/shell/views/schedule.hbs",
+    "text": "Slot-Builder",
+    "match": ">Slot-Builder<"
+  },
+  {
+    "file": "templates/shell/views/schedule.hbs",
+    "text": "Actors, Orten, Journals oder Items hier ablegen und danach \"Stunde generieren\" drücken.",
+    "match": ">Actors, Orten, Journals oder Items hier ablegen und danach \"Stunde generieren\" drücken.<"
+  },
+  {
+    "file": "templates/shell/views/schedule.hbs",
+    "text": "Drop-Zone:",
+    "match": ">\n            Drop-Zone: <"
+  },
+  {
+    "file": "templates/shell/views/schedule.hbs",
+    "text": "Noch keine Bausteine — Elemente aus der Seitenleiste hierher ziehen.",
+    "match": ">Noch keine Bausteine — Elemente aus der Seitenleiste hierher ziehen.<"
+  },
+  {
+    "file": "templates/shell/views/schedule.hbs",
+    "text": "Stunde generieren",
+    "match": "> Stunde generieren<"
+  },
+  {
+    "file": "templates/shell/views/schedule.hbs",
+    "text": "Leeren",
+    "match": "> Leeren<"
+  },
+  {
+    "file": "templates/shell/views/schedule.hbs",
+    "text": "Heutiger Plan",
+    "match": ">Heutiger Plan<"
+  },
+  {
+    "file": "templates/shell/views/schedule.hbs",
+    "text": "Akademie-Tagesansicht",
+    "match": ">Akademie-Tagesansicht<"
+  },
+  {
+    "file": "templates/shell/views/schedule.hbs",
+    "text": "Der vollumfängliche Stundenplan ist Teil des Academy-Dashboards.",
+    "match": ">Der vollumfängliche Stundenplan ist Teil des Academy-Dashboards.<"
+  },
+  {
+    "file": "templates/shell/views/schedule.hbs",
+    "text": "Academy Overview öffnen",
+    "match": "> Academy Overview öffnen<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Session Prep Wizard",
+    "match": ">Session Prep Wizard<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Refresh",
+    "match": "> Refresh<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Übersicht",
+    "match": "> Übersicht<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Atmosphäre",
+    "match": "> Atmosphäre<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Data Studio",
+    "match": "> Data Studio<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Backups",
+    "match": "> Backups<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Nur der GM kann den Session Prep Wizard sinnvoll nutzen.",
+    "match": "> Nur der GM kann den Session Prep Wizard sinnvoll nutzen.<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Aktueller Stand",
+    "match": "> Aktueller Stand<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Aktiver Ort",
+    "match": "> Aktiver Ort<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Kein aktiver Ort gesetzt.",
+    "match": ">Kein aktiver Ort gesetzt.<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Technik",
+    "match": "> Technik<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Priorisierte To-dos",
+    "match": "> Priorisierte To-dos<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Nächste Slots",
+    "match": "> Nächste Slots<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "On-the-fly Content Seeds",
+    "match": "> On-the-fly Content Seeds<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Kopieren",
+    "match": "> Kopieren<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Aktueller Slot",
+    "match": "> Aktueller Slot<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Lessons",
+    "match": ">Lessons<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Keine Lektionen",
+    "match": ">Keine Lektionen<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Exams",
+    "match": ">Exams<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Keine Prüfungen",
+    "match": ">Keine Prüfungen<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Events",
+    "match": ">Events<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Keine Events",
+    "match": ">Keine Events<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Offene Quests",
+    "match": "> Offene Quests<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "aktive Quest(s)",
+    "match": "> aktive Quest(s)<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Keine aktiven Quests.",
+    "match": ">Keine aktiven Quests.<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Diagnostics",
+    "match": "> Diagnostics<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Keine aktuellen Warnungen.",
+    "match": ">Keine aktuellen Warnungen.<"
+  },
+  {
+    "file": "templates/shell/views/sessionPrep.hbs",
+    "text": "Power Tools",
+    "match": "> Power Tools<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "KI-Kontext (Phase 7)",
+    "match": ">KI-Kontext (Phase 7)<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "Actors, Items, Scenes hierher ziehen für den nächsten Export.",
+    "match": ">Actors, Items, Scenes hierher ziehen für den nächsten Export.<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "Drop-Zone: KI-Kontext",
+    "match": "> Drop-Zone: KI-Kontext<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "Elemente aus der Seitenleiste hierher ziehen.",
+    "match": ">Elemente aus der Seitenleiste hierher ziehen.<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "KI Bundle kopieren",
+    "match": "> KI Bundle kopieren<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "Kontext leeren",
+    "match": "> Kontext leeren<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "Kill Switches",
+    "match": ">Kill Switches<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "Aktuelle Modul-Stati.",
+    "match": ">Aktuelle Modul-Stati.<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "Simulation",
+    "match": ">Simulation<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "Atmosphere",
+    "match": ">Atmosphere<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "Quest Engine",
+    "match": ">Quest Engine<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "State Inspector",
+    "match": "> State Inspector<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "Command Center",
+    "match": "> Command Center<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "Diagnostics Panel",
+    "match": "> Diagnostics Panel<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "Foundry-Links (Sync)",
+    "match": ">Foundry-Links (Sync)<"
+  },
+  {
+    "file": "templates/shell/views/system.hbs",
+    "text": "Noch keine persistenten Links im State.",
+    "match": ">Noch keine persistenten Links im State.<"
+  }
+]
