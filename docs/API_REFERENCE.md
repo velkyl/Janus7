@@ -1,4 +1,4 @@
-﻿# API_REFERENCE - JANUS7
+# API_REFERENCE - JANUS7
 
 Diese Referenz beschreibt die oeffentlichen Runtime-Einstiegspunkte von JANUS7.
 Massgeblich sind die tatsaechlich exponierten Namespaces in `core/`, `bridge/`, `phase7/` und `ui/index.js`.
@@ -135,12 +135,21 @@ Bevorzugte produktive Einstiegspunkte:
 - `shell`
 - `academyOverview`
 - `scoringView`
-- `lessonLibrary`
 - `kiRoundtrip`
 - `kiBackupManager`
+- `lessonLibrary`
 - `sessionPrepWizard`
 - `syncPanel`
 - `configPanel`
+
+Weitere verfuegbare Apps:
+- `socialView`
+- `atmosphereDJ`
+- `academyDataStudio`
+- `libraryBrowser`
+- `studentArchive`
+- `enrollmentScanner`
+- `quartermaster`
 
 Legacy/Debug/Alias:
 - `controlPanel`
@@ -218,8 +227,12 @@ Kanonische Hooks kommen aus `core/hooks/topics.js`.
 Beispiele:
 - `janus7.date.changed`
 - `janus7.scoring.changed`
+- `janus7.quest.started`
+- `janus7.event.option.selected`
 - `janus7.ki.exported`
 - `janus7.ki.import.applied`
+- `janus7.academy.data.reloaded`
+- `janus7.dsa5.index.updated`
 
 Legacy-Alias-Namen koennen parallel existieren, neue Integrationen sollen aber die kanonischen Topics verwenden.
 
@@ -246,5 +259,6 @@ Internal APIs ohne Garantie:
 
 ---
 
-**API Documentation Version:** 0.9.12.44  
-**Last Updated:** 2026-03-25
+**API Documentation Version:** 0.9.12.46
+**Last Updated:** 2026-03-30
+

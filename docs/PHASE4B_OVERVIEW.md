@@ -1,247 +1,97 @@
-# Phase 4b — Quest & Event System: Übersicht
+# Phase 4b - Quest & Event System: Uebersicht
 
-**Status:** ✅ ABGESCHLOSSEN
-**Version:** 0.9.12.29
-**Integration:** Erweiterung von Phase 4 (Academy Simulation)
-
----
-
-## Was ist Phase 4b?
-
-Phase 4b führt ein **story-getriebenes Quest-System** mit node-basierter Progression und ein **dynamisches Event-System** mit bedingten Optionen ein. Es nutzt alle Phase-4-Engines (Kalender, Scoring, Social) und Phase-3 (DSA5-Proben) als Basis.
+**Status:** stabil integriert
+**Runtime-Stand:** 0.9.12.46
+**Letzte Doku-Synchronisation:** 2026-03-30
 
 ---
 
-## Komponenten-Übersicht
+## Einordnung
 
-```
-scripts/academy/
-├── quests/
-│   └── quest-engine.js          ← JanusQuestEngine
-├── events/
-│   └── event-engine.js          ← JanusEventsEngineExtended
-├── conditions/
-│   ├── condition-evaluator.js   ← JanusConditionEvaluator
-│   └── context-provider.js      ← JanusConditionContextProvider
-├── effects/
-│   ├── effect-adapter.js        ← JanusEffectAdapter
-│   └── effect-applier.js        ← applyEffectIds()
-└── content/
-    ├── content-registry.js      ← JanusContentRegistry
-    └── expression/
-        └── parser.js            ← parseExpr, parseCheckExpr
-```
+Phase 4b ist kein geplanter Zukunftsblock mehr, sondern Teil des laufenden Produktstands. Das Quest- und Event-System ist in die Runtime integriert, nutzt den zentralen State-Core und greift fuer DSA5-spezifische Operationen ueber die Bridge zu.
+
+Die Kernlogik verteilt sich heute auf zwei Ebenen:
+- `scripts/academy/*` enthaelt Quest-/Event-/Condition-/Effect-Bausteine.
+- `academy/*` enthaelt produktive Fassaden, Reader und Runtime-Integrationen fuer den laufenden Modulbetrieb.
 
 ---
 
-## 4b.1 Quest Engine
+## Kernbausteine
 
-**Datei:** `scripts/academy/quests/quest-engine.js`
+### Quest-System
 
-Node-basierte Quests mit drei Knotentypen:
+Relevante Runtime-Dateien:
+- `scripts/academy/quests/quest-engine.js`
+- `scripts/integration/quest-system-integration.js`
+- `academy/content-registry.js`
 
-| Knotentyp | Beschreibung |
-|---|---|
-| `event` | Triggert ein spezifisches Event |
-| `check` | Verzweigung: success/failure/failforward |
-| `effect` | Wendet State-Änderungen an |
+Oeffentliche Laufzeitpfade:
+- `game.janus7.academy.quests`
+- `game.janus7.commands.startQuest(...)`
+- `game.janus7.commands.completeQuest(...)`
 
-### Quests starten und fortschreiten
+Typische Aufgaben:
+- Quests starten und fortschreiben
+- Node-Uebergaenge und Outcomes verwalten
+- Quest-State im zentralen State-Core spiegeln
 
-```javascript
-const quests = game.janus7.academy.quests;
+### Event-System
 
-// Quest starten
-await quests.startQuest('Q_DEMO_LIBRARY', { actorId: 'Actor.xyz123' });
+Relevante Runtime-Dateien:
+- `scripts/academy/events/event-engine.js`
+- `academy/events.js`
+- `scripts/integration/quest-system-integration.js`
 
-// Zu nächstem Knoten fortschreiten
-await quests.progressToNode('Q_DEMO', 'QN_NEXT', { actorId: 'Actor.xyz' });
+Typische Aufgaben:
+- Events aus Pools aufloesen
+- Optionen praesentieren
+- Effekte und Folgepfade ausloesen
 
-// Quest abschließen
-await quests.completeQuest('Q_DEMO', { actorId: 'Actor.xyz' });
+### Conditions / Effects
 
-// Aktive Quests auflisten
-const active = quests.listQuests({ actorId: 'Actor.xyz', status: 'active' });
-```
+Relevante Runtime-Dateien:
+- `scripts/academy/conditions/condition-evaluator.js`
+- `scripts/academy/conditions/context-provider.js`
+- `scripts/academy/effects/effect-adapter.js`
+- `scripts/academy/effects/effect-applier.js`
 
-### Quest-State (in `game.janus7.core.state`)
-
-```
-state.questStates
-  └── [actorId]
-        └── [questId]
-              ├── status:        'active' | 'completed' | 'failed'
-              ├── currentNodeId: string
-              ├── startedAt:     ISO-Timestamp
-              └── history:       [{ nodeId, timestamp, outcome }]
-```
-
-### Hooks
-
-```javascript
-Hooks.on('janus7QuestStarted',     ({ questId, actorId, quest }) => { ... });
-Hooks.on('janus7QuestNodeChanged', ({ questId, actorId, nodeId, outcome }) => { ... });
-Hooks.on('janus7QuestCompleted',   ({ questId, actorId, result }) => { ... });
-```
+Architekturregel:
+- DSA5-Proben oder Actor-bezogene Logik laufen nicht direkt gegen `game.dsa5`, sondern ueber die JANUS7-Bridge.
 
 ---
 
-## 4b.2 Event Engine
+## State- und Hook-Anbindung
 
-**Datei:** `scripts/academy/events/event-engine.js`
+Kanonische Hook-Topics kommen aus `core/hooks/topics.js`.
+Wichtige Topics fuer Phase 4b:
+- `janus7.quest.system.ready`
+- `janus7.quest.started`
+- `janus7.quest.node.changed`
+- `janus7.quest.completed`
+- `janus7.event.shown`
+- `janus7.event.option.selected`
+- `janus7.effects.applied`
 
-```javascript
-const events = game.janus7.academy.events;
-
-// Zufälliges Event aus Pool spawnen
-const event = await events.spawnFromPool('exploration', { actorId: 'Actor.xyz' });
-
-// Event mit Optionen präsentieren
-const presentation = await events.presentEvent('E_LIBRARY_DISCOVER', {
-  actorId: 'Actor.xyz'
-});
-// presentation: { event, options: [{ optionId, label, available, requiresCheck }] }
-
-// Option auswählen und Effekte anwenden
-const result = await events.selectOption('OPT_INVESTIGATE', {
-  actorId: 'Actor.xyz'
-});
-// result: { success, effects: [...], nextNodeId: 'QN_NEXT' | null }
-```
-
-### Hooks
-
-```javascript
-Hooks.on('janus7EventShown',          ({ eventId, actorId, options }) => { ... });
-Hooks.on('janus7EventOptionSelected', ({ eventId, optionId, result }) => { ... });
-```
+Die alten CamelCase-Hooknamen bleiben nur als Alias-Schicht fuer Kompatibilitaet erhalten.
 
 ---
 
-## 4b.3 Condition Evaluator
+## Datenquellen
 
-**Datei:** `scripts/academy/conditions/condition-evaluator.js`
+Phase 4b ist datengetrieben. Relevante Bereiche:
+- Quest-/Event-Definitionen unter `data/academy/` und den zugehoerigen Indizes
+- Read-/Lookup-Schicht ueber `academy/data-api.js`
+- Content-Registries fuer Quest/Event/Effect-Aufloesung
 
-Wertet Bedingungsausdrücke aus:
-
-```javascript
-const evaluator = game.janus7.academy.conditions;
-
-// Logischer Ausdruck
-const canEnter = await evaluator.evaluate(
-  'playerState.skills.lore >= 2',
-  { actorId: 'Actor.xyz' }
-);
-
-// DSA5-Probe
-const passed = await evaluator.evaluate(
-  'CHECK(Magiekunde, 15)',
-  { actorId: 'Actor.xyz' }
-);
-
-// Kombiniert (AND/OR)
-await evaluator.evaluate(
-  'playerState.energy > 3 AND playerState.skills.lore >= 1',
-  { actorId: 'Actor.xyz' }
-);
-```
-
-**Leer-Ausdruck** (`''`) = immer `true` (keine Anforderung).
+Wichtig fuer Dokumentation und Integrationen:
+- Die Runtime-SSOT liegt bei den realen Datenstrukturen im Repo.
+- Beispielsnippets aus aelteren Dokus duerfen nicht mehr als verbindliche API-Garantie gelesen werden, wenn sie internen Pfaden oder alten Hooknamen folgen.
 
 ---
 
-## 4b.4 Effect Adapter
+## Bekannte Grenzen
 
-**Datei:** `scripts/academy/effects/effect-adapter.js`
+- Die fachliche Qualitaet von Quest-/Event-Inhalten haengt weiter von den gelieferten Daten und den Welt-Mappings ab.
+- Eine Live-Abnahme in Foundry bleibt fuer komplexe Quest- und Event-Flows sinnvoll, auch wenn die Repo-Validierung und der Testkatalog viele Drifts bereits abfangen.
+- Legacy-Docs mit Phase-4b-Beispielen koennen historische Snippets enthalten; fuer neue Integrationen sind `core/hooks/topics.js`, `ui/commands/*`, `academy/*` und `scripts/academy/*` massgeblich.
 
-Effect-Definitionen (in `data/academy/effects/`):
-
-```json
-{
-  "effectId": "stress_plus1",
-  "expr": "stress:+:1",
-  "description": "Erhöht Stress um 1"
-}
-```
-
-```javascript
-const effects = game.janus7.academy.effects;
-
-// Mehrere Effekte auf einen Actor anwenden
-const result = await effects.applyEffects(
-  ['stress_plus1', 'energy_minus2'],
-  { actorId: 'Actor.xyz', source: 'event', reason: 'Bibliothek durchsucht' }
-);
-// result: { success: true, changes: [{ effectId, from, to }] }
-```
-
-### Operator-Übersicht
-
-| Operator | Bedeutung | Beispiel |
-|---|---|---|
-| `+` | Addieren | `stress:+:1` |
-| `-` | Subtrahieren | `energy:-:2` |
-| `=` | Setzen | `lore:=:3` |
-
----
-
-## 4b.5 Content Registry
-
-**Datei:** `scripts/academy/content/content-registry.js`
-
-Zentrale In-Memory-Indices aller Quest-/Event-/Effekt-Inhalte:
-
-```javascript
-const registry = game.janus7.academy.content;
-
-// Suchen
-registry.by.quest.get('Q_DEMO_LIBRARY');
-registry.by.event.get('E_LIBRARY_DISCOVER');
-registry.by.effect.get('stress_plus1');
-
-// Validierung (gibt Fehler/Warnungen zurück)
-const report = registry.validate();
-if (report.errors.length > 0) console.error(report.errors);
-```
-
----
-
-## Datenstruktur
-
-```
-data/
-├── quests/
-│   ├── quest-index.json       ← Liste aller Quest-IDs + Metadaten
-│   └── Q_*.json               ← Einzelne Quest-Definitionen (Nodes)
-├── events/
-│   ├── event-index.json       ← Liste aller Event-IDs
-│   ├── pool-index.json        ← Pool-Definitionen
-│   ├── options.json           ← Event-Optionen
-│   └── pools/
-│       ├── exploration.json
-│       ├── social_minor.json
-│       └── ...
-└── academy/effects/
-    ├── effect-index.json
-    ├── stress_plus1.json
-    └── ...
-```
-
----
-
-## Architektur-Compliance
-
-| Prinzip | Erfüllt |
-|---|---|
-| Hybrid-First: Keine UI in Engine-Code | ✅ |
-| Data-Driven: JSON-basiert, Zero Hardcode | ✅ |
-| SSOT: State Core als zentrale Wahrheit | ✅ |
-| Modul-Agnostik: DSA5 nur via Bridge | ✅ |
-| Phase-Isolation: Keine Phase-5+-Importe | ✅ |
-
----
-
-## Verwandte Dokumente
-
-- [QUEST_SYSTEM.md](./QUEST_SYSTEM.md) — Quest-Datenformat im Detail
-- [ROADMAP.md](./ROADMAP.md) — Phase 4b im Gesamtkontext

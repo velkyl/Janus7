@@ -1,216 +1,133 @@
-# Phase 6 — UI Guide
+# Phase 6 - UI Guide
 
-**Status:** ✅ Abgeschlossen
-**Version:** 0.9.12.29+
-**Framework:** Foundry VTT ApplicationV2 (v13+)
-
----
-
-## Architektur
-
-```
-ui/
-├── index.js                ← JanusUI (Router/Registry)
-├── app-manifest.js         ← App-Status-Metadaten
-├── apps/                   ← Alle ApplicationV2-Apps
-├── commands/               ← Chat-/Konsolen-Befehle
-├── layer/                  ← Action-Router, Panel-Registry, View-Registry
-├── core/
-│   └── base-app.js         ← Basis-Klasse für alle Apps
-└── permissions.js          ← GM-Gate-Utilities
-```
+**Status:** produktiv mit laufendem Shell-Cutover
+**Runtime-Stand:** 0.9.12.46
+**Letzte Doku-Synchronisation:** 2026-03-30
 
 ---
 
-## Einstiegspunkt: JANUS Shell
+## Grundsatz
 
-Die **JanusShellApp** ist der primäre UI-Einstiegspunkt für GMs. Sie enthält drei Views:
+Phase 6 ist nicht mehr "in Arbeit" im Sinne einer offenen Grundimplementierung. Die UI-Landschaft existiert produktiv, wird aber weiterhin konsolidiert: Die Shell ist die bevorzugte Frontdoor, waehrend einzelne Alt-Apps, Debug-Werkzeuge und Alias-Einstiege aus Kompatibilitaetsgruenden weiter mitlaufen.
 
-| View | Beschreibung |
-|---|---|
-| `director` | Tages-Steuerung, Event-Queue, Quest-Vorschläge |
-| `academy` | Kalender-Übersicht, Scoring, Lektionen |
-| `tools` | Debug, Tests, State Inspector |
+UI-Dateien bleiben duenn. Fachlogik gehoert in Commands, Director, Core, Academy oder Bridge - nicht in App-Klassen oder Templates.
 
-```javascript
-// Shell öffnen
+---
+
+## Bevorzugte Einstiege
+
+Kanonischer Einstieg:
+
+```js
 game.janus7.ui.open('shell');
-// oder:
+```
+
+Weitere produktive oder teilproduktive Apps laut `ui/app-manifest.js`:
+- `academyOverview`
+- `scoringView`
+- `lessonLibrary`
+- `socialView`
+- `kiRoundtrip`
+- `kiBackupManager`
+- `configPanel`
+- `syncPanel`
+- `atmosphereDJ`
+- `academyDataStudio`
+- `libraryBrowser`
+- `studentArchive`
+- `enrollmentScanner`
+- `quartermaster`
+
+Debug-/Test-/Compat-Bereiche:
+- `commandCenter`
+- `testResults`
+- `guidedManualTests`
+- `stateInspector`
+- `controlPanel` (Legacy-Bridge auf Shell)
+- `aiRoundtrip` (Legacy-Alias auf KI-Roundtrip)
+- `lessons` (Alias auf Lesson Library)
+
+---
+
+## Router und Manifest
+
+Massgebliche Runtime-Dateien:
+- `ui/index.js`
+- `ui/app-manifest.js`
+- `ui/layer/*`
+- `templates/apps/*`
+
+Wichtige API:
+
+```js
+game.janus7.ui.open('shell');
 game.janus7.ui.openShell();
+game.janus7.ui.openControlPanel();
+game.janus7.ui.list();
+game.janus7.ui.appStatus('shell');
 ```
+
+Regeln:
+- Neue produktive Einstiege werden ueber `game.janus7.ui.open(key)` modelliert.
+- `openControlPanel()` bleibt nur als harmlose Kompatibilitaetsschicht bestehen und routed intern auf die Shell.
+- Der Reifegrad einzelner Apps wird zentral ueber `ui/app-manifest.js` beschrieben, nicht ueber verteilte Einzelannahmen.
 
 ---
 
-## Alle Apps (JanusUI.apps)
+## Commands statt UI-Logik
 
-| Key | Klasse | Reifegrad | Modus |
-|---|---|---|---|
-| `shell` | `JanusShellApp` | produktiv | view+navigation |
-| `academyOverview` | `JanusAcademyOverviewApp` | produktiv | view |
-| `scoringView` | `JanusScoringViewApp` | produktiv | edit |
-| `kiRoundtrip` | `JanusKiRoundtripApp` | produktiv | admin/edit |
-| `kiBackupManager` | `JanusKiBackupManagerApp` | produktiv | admin |
-| `lessonLibrary` | `JanusLessonLibraryApp` | teilproduktiv | view/workflow |
-| `socialView` | `JanusSocialViewApp` | teilproduktiv | edit |
-| `atmosphereDJ` | `JanusAtmosphereDJApp` | teilproduktiv | edit |
-| `academyDataStudio` | `JanusAcademyDataStudioApp` | teilproduktiv | edit/admin |
-| `sessionPrepWizard` | `JanusSessionPrepWizardApp` | teilproduktiv | admin |
-| `configPanel` | `JanusConfigPanelApp` | teilproduktiv | admin/edit |
-| `syncPanel` | `JanusSyncPanelApp` | teilproduktiv | view/admin |
-| `commandCenter` | `JanusCommandCenterApp` | intern/legacy | admin/debug |
-| `testResults` | `JanusTestResultApp` | intern/debug | debug |
-| `guidedManualTests` | `JanusGuidedManualTestApp` | intern/debug | debug |
-| `stateInspector` | `JanusStateInspectorApp` | intern/debug | view-only |
+Massgebliche Runtime-Dateien:
+- `ui/commands/index.js`
+- `ui/commands/time.js`
+- `ui/commands/state.js`
+- `ui/commands/academy.js`
+- `ui/commands/quest.js`
+- `ui/commands/system.js`
+- `ui/commands/ki.js`
+- `ui/commands/phase7.js`
+
+Praxisregel:
+- UI loest Aktionen ueber Commands, Director oder die oeffentliche Bridge aus.
+- Direkte State-Mutationen aus UI-Komponenten bleiben unerwuenscht.
+- Parametervertraege aus den Commands sind Teil der stabilen Surface und sollen in Snippets und Doku konsistent benannt werden.
 
 ---
 
-## Apps öffnen
+## Shell Layer
 
-```javascript
-// Standardweg: Key → open()
-game.janus7.ui.open('scoringView');
-game.janus7.ui.open('kiRoundtrip');
-game.janus7.ui.open('atmosphereDJ');
+Die Shell ist der bevorzugte Sammelpunkt fuer Navigation und Workflow-Orchestrierung.
 
-// Via Director-Shortcuts
-game.janus7.director.openControlPanel(); // → Shell
-game.janus7.director.openSyncPanel();
-game.janus7.director.openConfigPanel();
-game.janus7.director.openAtmosphereDJ();
+Massgebliche Dateien:
+- `ui/apps/JanusShellApp.js`
+- `templates/shell/*`
+- `ui/layer/view-registry.js`
+- `ui/layer/panel-registry.js`
+- `ui/layer/context-builders.js`
+- `ui/layer/director-context.js`
 
-// Via Scene Controls (linke Seitenleiste)
-// JANUS7-Icon → Öffnet Shell
-```
-
----
-
-## Befehlszeile (JANUS CLI)
-
-Alle Befehle sind im Chat verfügbar (Prefix `/janus`):
-
-```
-/janus help                      Liste aller Befehle
-/janus time                      Aktuelle Kalenderposition
-/janus time.advance              Tag voranschreiten
-/janus academy.status            Akademie-Zusammenfassung
-/janus scoring.leaderboard       Zirkelpunkte-Rangliste
-/janus quest.list                Aktive Quests
-/janus ki.export                 State exportieren
-/janus test.run                  Alle Tests ausführen
-```
-
-Verfügbare Befehlsgruppen (`ui/commands/`):
-
-| Datei | Befehle |
-|---|---|
-| `academy.js` | calendar, lessons, scoring, social |
-| `atmosphere.js` | enable, disable, mood |
-| `ki.js` | export, preview, apply |
-| `lesson.js` | show, context |
-| `quest.js` | list, start, progress |
-| `state.js` | get, set, reset |
-| `system.js` | status, health, diagnostics |
-| `time.js` | current, advance, reset |
+Zielbild:
+- produktive Kernablaeufe zuerst in die Shell
+- Legacy-Einstiege nur solange behalten, wie sie reale Kompatibilitaet liefern
+- keine Logikverdopplung zwischen Shell und Alt-App
 
 ---
 
-## Neue App erstellen (Vorlage)
+## Template- und Styling-Hinweise
 
-```javascript
-// ui/apps/MeineApp.js
-import { foundry } from '../../core/common.js';
+Aktive App-Templates werden in `module.json` unter `templates` registriert. Produktive App-Templates liegen heute vor allem unter `templates/apps/` und Shell-Templates unter `templates/shell/`.
 
-export class MeineApp extends foundry.applications.api.ApplicationV2 {
-  static DEFAULT_OPTIONS = {
-    id: 'janus7-meine-app',
-    position: { width: 600, height: 400 },
-    window: { title: 'Meine App', icon: 'fas fa-star' }
-  };
+Styling:
+- `styles/janus7-layers.css`
+- `styles/janus7-ui-bundle.css`
 
-  static PARTS = {
-    main: { template: 'modules/Janus7/templates/apps/meine-app.hbs' }
-  };
-
-  async _prepareContext(opts = {}) {
-    const state = game.janus7.core.state;
-    return {
-      currentSlot: game.janus7.director.time.getRef(),
-      someData: state.get('academy.someKey')
-    };
-  }
-
-  static showSingleton(opts = {}) {
-    const existing = Object.values(ui.windows)
-      .find(w => w instanceof MeineApp);
-    if (existing) { existing.render({ force: true }); return existing; }
-    return new MeineApp(opts);
-  }
-}
-```
-
-App in `ui/index.js` und `ui/app-manifest.js` registrieren.
+Wichtige Regel:
+- Neue UI-Arbeit muss mit den registrierten Templates und den real geladenen Styles arbeiten. Verwaiste Template- oder CSS-Annahmen aus aelteren Dokus gelten nicht als Ist-Stand.
 
 ---
 
-## GM-Gate
+## Restrisiken
 
-Alle schreibenden UI-Aktionen sind hinter einem GM-Gate:
+- Der Shell-Cutover ist funktional weit, aber nicht in jedem Altpfad vollstaendig abgeschlossen.
+- Legacy-Wrapper bleiben bewusst vorhanden; neue Features sollten sie nicht weiter ausbauen.
+- Endgueltige Nutzungsqualitaet einzelner Flows muss weiterhin in Foundry live geprueft werden.
 
-```javascript
-// ui/permissions.js
-import { assertGM } from '../ui/permissions.js';
-
-async _onClickSave(event) {
-  assertGM(); // Wirft Error wenn nicht GM
-  await game.janus7.director.set('some.path', newValue);
-}
-```
-
-**Regel:** Die UI darf `core.state` **niemals direkt** mutieren. Alle Mutations laufen über `game.janus7.director`.
-
----
-
-## Handlebars-Templates
-
-Templates liegen unter `templates/apps/`. Jede App hat eine `.hbs`-Datei.
-
-```handlebars
-{{! templates/apps/meine-app.hbs }}
-<section class="janus7-app meine-app">
-  <header>
-    <h2>{{localize "JANUS7.MeineApp.Title"}}</h2>
-  </header>
-  <div class="content">
-    {{#if someData}}
-      <p>{{someData}}</p>
-    {{else}}
-      <p class="hint">{{localize "JANUS7.Common.NoData"}}</p>
-    {{/if}}
-  </div>
-</section>
-```
-
----
-
-## Lokalisierung
-
-Alle UI-Texte kommen aus `lang/de.json` / `lang/en.json`:
-
-```json
-{
-  "JANUS7.MeineApp.Title": "Meine App"
-}
-```
-
-```javascript
-game.i18n.localize('JANUS7.MeineApp.Title');
-// Im Template: {{localize "JANUS7.MeineApp.Title"}}
-```
-
----
-
-## Verwandte Dokumente
-
-- [TECHNICAL_HANDBOOK.md](./TECHNICAL_HANDBOOK.md) — App-Typen und Datenflusss
-- [ARCHITECTURE.md](./ARCHITECTURE.md) — Phase-Isolation-Regeln
-- [API_REFERENCE.md](./API_REFERENCE.md) — game.janus7 Public API

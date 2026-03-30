@@ -1,21 +1,22 @@
 # JANUS7 Release Manual Tests
 
-Version: **0.9.12.29**
+Version: **0.9.12.46**
+Letzte Doku-Synchronisation: 2026-03-30
 
-Diese Tests prüfen kritische Systemflüsse, die nur teilweise automatisierbar sind.
+Diese Tests pruefen kritische Systemfluesse, die nur teilweise automatisierbar sind. Fuer die gefuehrte Variante ist nach Moeglichkeit der Guided Manual Harness zu verwenden; diese Datei bleibt die kompakte Release-Checkliste.
 
 ---
 
 # INT-TC-01
 
-## Lektion starten → abschließen
+## Lektion starten -> abschliessen
 
 ### Schritte
 
-1. Akademie öffnen
+1. Academy Overview oder Shell oeffnen
 2. Lektion starten
-3. Probe ausführen
-4. Lektion abschließen
+3. Probe ausfuehren
+4. Lektion abschliessen
 
 ### Erwartetes Ergebnis
 
@@ -25,9 +26,7 @@ Diese Tests prüfen kritische Systemflüsse, die nur teilweise automatisierbar s
 
 Result:
 
-
 PASS / FAIL
-
 
 Notes:
 
@@ -41,19 +40,19 @@ Notes:
 
 1. State exportieren
 2. JSON editieren
-3. Import durchführen
+3. `previewImport` ausfuehren
+4. Import durchfuehren
 
 ### Erwartetes Ergebnis
 
-- neue Lektion verfügbar
+- neue Lektion verfuegbar
 - Referenzen korrekt
 - keine Validierungsfehler
+- Preview und Apply zeigen konsistente Diffs
 
 Result:
 
-
 PASS / FAIL
-
 
 Notes:
 
@@ -65,18 +64,17 @@ Notes:
 
 ### Schritte
 
-1. Control Panel öffnen
+1. Shell oder Legacy-Einstieg oeffnen
 2. Location wechseln
 
 ### Erwartetes Ergebnis
 
-Beamer zeigt neue Location sofort.
+- Beamer zeigt neue Location sofort
+- es gibt keine JS-Exception im Wechselpfad
 
 Result:
 
-
 PASS / FAIL
-
 
 Notes:
 
@@ -88,12 +86,12 @@ Notes:
 
 ### Schritte
 
-1. Probe auslösen
-2. Ergebnis prüfen
+1. Probe ausloesen
+2. Ergebnis pruefen
 
 ### Erwartetes Ergebnis
 
-Roll-Result enthält:
+Roll-Result enthaelt:
 
 - success
 - quality
@@ -101,9 +99,7 @@ Roll-Result enthält:
 
 Result:
 
-
 PASS / FAIL
-
 
 Notes:
 
@@ -115,30 +111,28 @@ Notes:
 
 ### Schritte
 
-1. Atmosphere DJ öffnen
+1. Atmosphere DJ oeffnen
 2. Mood aktivieren
 
 ### Erwartetes Ergebnis
 
 - passende Playlist startet
-- Lautstärke korrekt
+- Lautstaerke korrekt
 
 Result:
 
-
 PASS / FAIL
-
 
 Notes:
 
 ---
 
-# P6 — Permissions
+# P6 - Permissions
 
 ### Schritte
 
 1. als Nicht-GM anmelden
-2. Control Panel öffnen
+2. Shell oder relevante Teil-App oeffnen
 3. GM-Aktionen versuchen
 
 ### Erwartetes Ergebnis
@@ -148,8 +142,7 @@ Notes:
 
 Result:
 
-
 PASS / FAIL
 
-
 Notes:
+

@@ -1,8 +1,8 @@
-# JANUS7 — Dokumentations-Index
+# JANUS7 - Dokumentations-Index
 
 **Modul-Version (SSOT: `module.json`):** 0.9.12.46
-**Foundry:** v13+  
-**Stand:** 2026-03-25
+**Foundry:** v13+
+**Stand:** 2026-03-30
 
 ## Einstieg
 1. `README.md`
@@ -37,12 +37,17 @@
 ## KI / Import / Export
 - `docs/KI_STABILITY.md`
 - `docs/KI_HANDOVER.md`
+- `docs/KI_INTEGRATION_GUIDE.md`
+- `docs/EXPORT_FORMAT_V2.md`
 - `docs/TECHNICAL_HANDBOOK.md` (Kapitel KI-Workflow)
 
 ## Tests / Diagnose
 - `docs/TEST_HARNESS.md`
+- `docs/GUIDED_MANUAL_HARNESS.md`
 - `docs/TESTING.md`
+- `docs/manual-tests-release.md`
 - `docs/TECHNICAL_HANDBOOK.md` (Kapitel Diagnose / Tests)
 
 ## Hinweis
-Archiv- und Legacy-Dokumente können ältere Versionsstände enthalten. Maßgeblich für den aktuellen Stand sind die oben genannten Kern-Dokumente sowie `CHANGELOG.md`, `VERSION.json`, `module.json` und `package.json`.
+Archiv-, Audit- und Wellen-Dokumente koennen bewusst aeltere Stichtage enthalten. Massgeblich fuer den aktuellen Stand sind die oben genannten Kern-Dokumente sowie `CHANGELOG.md`, `VERSION.json`, `module.json` und `package.json`.
+

@@ -3,7 +3,7 @@
 # JANUS7 Status
 
 **Module Version (SSOT: module.json):** 0.9.12.46
-**Stand:** 2026-03-25  
+**Stand:** 2026-03-30
 **Foundry Zielplattform:** v13+ (ESM, ApplicationV2)
 
 ## Kurzlage
@@ -18,7 +18,7 @@ JANUS7 ist technisch stabil und fuer den Kampagnenbetrieb nutzbar. Die aktuelle 
 - Control Panel schreibt `academy.roster` und `academy.slotJournals` wieder ueber Director-APIs statt ueber einen defekten Direkt-Write auf den State.
 - `AcademyDataApi` liest Exam-MCQ-Daten wieder aus dem realen `questionSets`-Root der shipped `exam-questions.json`.
 - DSA5-Bridge und System-Commands nutzen wieder konsistente Actor-/Skill-Pfade (`getNpc()`, `getActorByName()`, `bridge.rollSkill(...)`).
-- API-, KI-, Release- und Status-Dokumente wurden auf den tatsaechlichen Runtime-Stand gezogen.
+- API-, KI-, Release-, Status- und Roadmap-Dokumente wurden auf den tatsaechlichen Runtime-Stand gezogen.
 
 ## Welle-Status
 - **Welle 2:** abgeschlossen
@@ -30,3 +30,4 @@ JANUS7 ist technisch stabil und fuer den Kampagnenbetrieb nutzbar. Die aktuelle 
 2. Shell und Kern-Apps oeffnen stabil.
 3. Test-Registry laedt ohne Importfehler.
 4. Exam-/MCQ-Workflows finden ihre Fragekataloge wieder.
+
