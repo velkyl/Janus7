@@ -3,12 +3,46 @@
  * @module janus7/ui/commands
  * @phase 6
  *
- * Academy commands for JANUS7 Command Center.
+ * Academy commands for JANUS7 Shell / Power Tools.
  */
 
 import { _checkPermission, _engine, _toInt, _wrap } from './_shared.js';
 import { MODULE_ID } from '../../core/common.js';
 import { JanusFolderService } from '../../core/folder-service.js';
+import { JanusLocationsEngine } from '../../academy/locations-engine.js';
+
+function _resolveLocationsEngine(engine) {
+  return engine?.academy?.locations ?? new JanusLocationsEngine({
+    academyData: engine?.academy?.data ?? null,
+    state: engine?.core?.state ?? null,
+    logger: engine?.core?.logger ?? console,
+  });
+}
+
+async function _resolveSceneForLocation(location = {}) {
+  const sceneUuid = String(location?.foundry?.sceneUuid ?? location?.sceneUuid ?? '').trim();
+  if (sceneUuid) {
+    try {
+      const scene = await fromUuid(sceneUuid);
+      if (scene) return scene;
+    } catch {}
+  }
+
+  const sceneKey = String(location?.foundry?.sceneKey ?? location?.sceneKey ?? '').trim().toLowerCase();
+  const locationName = String(location?.name ?? '').trim().toLowerCase();
+  return game.scenes?.contents?.find((scene) => {
+    const name = String(scene?.name ?? '').trim().toLowerCase();
+    return (sceneKey && name === sceneKey) || (locationName && name === locationName);
+  }) ?? null;
+}
+
+function _resolveLocationMoodId(location = {}, engine = null) {
+  const explicit = String(location?.defaultMoodKey ?? location?.foundry?.defaultMoodKey ?? '').trim();
+  if (explicit) return explicit;
+  const controller = engine?.atmosphere?.controller ?? null;
+  const mood = controller?.resolveMoodForLocation?.(location?.id ?? null) ?? null;
+  return String(mood?.id ?? mood?.key ?? mood?.moodId ?? '').trim() || null;
+}
 
 export const academyCommands = {
 
@@ -68,6 +102,57 @@ export const academyCommands = {
       console.table(filtered.map(l => ({ id: l.id, name: l.name, type: l.type })));
       ui.notifications.info(`Locations: ${filtered.length}`);
       return { locations: filtered };
+    });
+  },
+
+  async activateLocationScene(dataset = {}) {
+    if (!_checkPermission('activateLocationScene')) return { success: false, cancelled: true };
+
+    const engine = _engine();
+    const locationId = String(dataset.locationId ?? dataset.datasetLocationId ?? '').trim();
+    if (!locationId) return { success: false, cancelled: true, error: 'locationId fehlt' };
+
+    return await _wrap('activateLocationScene', async () => {
+      const academyData = engine?.academy?.data ?? null;
+      const location = academyData?.getLocation?.(locationId) ?? null;
+      if (!location) throw new Error(`Ort nicht gefunden: ${locationId}`);
+
+      const locationsEngine = _resolveLocationsEngine(engine);
+      await locationsEngine.setCurrentLocation?.(locationId, { broadcast: true });
+
+      const scene = await _resolveSceneForLocation(location);
+      if (!scene) throw new Error(`Keine Foundry-Szene für ${location.name ?? locationId} gefunden`);
+
+      try { await scene.activate?.(); } catch {}
+      try { await scene.view?.(); } catch {}
+      ui.notifications.info(`Ort aktiviert: ${location.name ?? locationId}`);
+      return { locationId, sceneId: scene.id ?? null };
+    });
+  },
+
+  async applyLocationMood(dataset = {}) {
+    if (!_checkPermission('applyLocationMood')) return { success: false, cancelled: true };
+
+    const engine = _engine();
+    const locationId = String(dataset.locationId ?? dataset.datasetLocationId ?? '').trim();
+    if (!locationId) return { success: false, cancelled: true, error: 'locationId fehlt' };
+
+    return await _wrap('applyLocationMood', async () => {
+      const academyData = engine?.academy?.data ?? null;
+      const location = academyData?.getLocation?.(locationId) ?? null;
+      if (!location) throw new Error(`Ort nicht gefunden: ${locationId}`);
+
+      const locationsEngine = _resolveLocationsEngine(engine);
+      await locationsEngine.setCurrentLocation?.(locationId, { broadcast: true });
+
+      const moodId = _resolveLocationMoodId(location, engine);
+      if (!moodId) throw new Error(`Kein Mood-Key für ${location.name ?? locationId} hinterlegt`);
+
+      const ok = await engine?.atmosphere?.applyMood?.(moodId, { broadcast: true, force: true, reason: 'ui-location' });
+      if (!ok) throw new Error('Atmosphere.applyMood fehlgeschlagen');
+
+      ui.notifications.info(`Mood gesetzt: ${location.name ?? locationId}`);
+      return { locationId, moodId };
     });
   },
 

@@ -138,7 +138,7 @@ Bevorzugte produktive Einstiegspunkte:
 - `kiRoundtrip`
 - `kiBackupManager`
 - `lessonLibrary`
-- `sessionPrepWizard`
+- `sessionPrepWizard` (Shell-View-Alias auf `shell` mit `viewId: 'sessionPrep'`)
 - `syncPanel`
 - `configPanel`
 
@@ -152,15 +152,15 @@ Weitere verfuegbare Apps:
 - `quartermaster`
 
 Legacy/Debug/Alias:
-- `controlPanel`
-- `commandCenter`
+- `controlPanel` (Compat-Alias auf `shell`)
+- `commandCenter` (Debug/Power-Tools, nicht Primaerpfad)
 - `testResults`
 - `guidedManualTests`
 - `stateInspector`
-- `aiRoundtrip`
-- `lessons`
+- `aiRoundtrip` (Compat-Alias auf `kiRoundtrip`)
+- `lessons` (Compat-Alias auf `lessonLibrary`)
 
-Hinweis: `openControlPanel()` ist aus Kompatibilitaetsgruenden erhalten, routed aber auf die Shell.
+Hinweis: `openControlPanel()` ist aus Kompatibilitaetsgruenden erhalten, routed aber auf die Shell. `ui.open('controlPanel')` wird ebenfalls kanonisch auf `shell` normalisiert.
 
 ---
 

@@ -26,18 +26,44 @@
 
   <div class="j7-shell__body">
     <aside class="j7-shell__sidebar janus-shell__nav" aria-label="Views">
-      {{#each views}}
-        <button type="button"
-                class="j7-shell__nav {{#if isActive}}is-active{{/if}}"
-                data-action="selectView"
-                data-view-id="{{id}}"
-                aria-pressed="{{#if isActive}}true{{else}}false{{/if}}">
-          <i class="{{icon}} j7-shell__nav-icon" aria-hidden="true"></i>
-          <span class="j7-shell__nav-copy">
-            <strong>{{title}}</strong>
-            <small>{{description}}</small>
-          </span>
-        </button>
+      <section class="j7-shell__sidebar-section" aria-label="Shell Views">
+        <div class="j7-shell__sidebar-heading">Shell Views</div>
+        {{#each views}}
+          <button type="button"
+                  class="j7-shell__nav {{#if isActive}}is-active{{/if}}"
+                  data-action="selectView"
+                  data-view-id="{{id}}"
+                  aria-pressed="{{#if isActive}}true{{else}}false{{/if}}">
+            <i class="{{icon}} j7-shell__nav-icon" aria-hidden="true"></i>
+            <span class="j7-shell__nav-copy">
+              <strong>{{title}}</strong>
+              <small>{{description}}</small>
+            </span>
+          </button>
+        {{/each}}
+      </section>
+
+      {{#each appNavSections}}
+        <section class="j7-shell__sidebar-section" aria-label="{{title}}">
+          <div class="j7-shell__sidebar-heading">{{title}}</div>
+          {{#each items}}
+            <button type="button"
+                    class="j7-shell__nav j7-shell__nav--app {{#if isActive}}is-active{{/if}}"
+                    data-action="executeShellAction"
+                    data-app-key="{{key}}"
+                    {{#unless isAvailable}}disabled{{/unless}}>
+              <i class="{{icon}} j7-shell__nav-icon" aria-hidden="true"></i>
+              <span class="j7-shell__nav-copy">
+                <strong>{{title}}</strong>
+                <small>{{description}}</small>
+                <span class="j7-shell__nav-meta">
+                  <span class="j7-shell__badge">{{mode}}</span>
+                  <span class="j7-shell__badge j7-shell__badge--muted">{{maturity}}</span>
+                </span>
+              </span>
+            </button>
+          {{/each}}
+        </section>
       {{/each}}
     </aside>
 

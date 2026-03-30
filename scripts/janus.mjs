@@ -602,6 +602,18 @@ try {
   // Architecture contract marker for tests: Hooks.on('getSceneControlButtons' ... ) lives here.
   // Vorher in scripts/integration/phase6-ui-integration.js
   // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  _registerCoreHook('renderSceneControls', () => {
+    try {
+      JANUS_GLOBAL.engine?.uiLayer?.refreshGmQuickOverlay?.();
+    } catch (_) { /* noop */ }
+  });
+
+  _registerCoreHook('canvasReady', () => {
+    try {
+      JANUS_GLOBAL.engine?.uiLayer?.refreshGmQuickOverlay?.();
+    } catch (_) { /* noop */ }
+  });
+
   _registerCoreHook('getSceneControlButtons', (controls) => {
     if (!game.user?.isGM) return;
     try {
@@ -666,9 +678,9 @@ const openControlPanel = async () => {
   }
 };
 
-const openUiApp = async (key, label = key) => {
+const openUiApp = async (key, label = key, options = {}) => {
   try {
-    return game?.janus7?.ui?.open?.(key);
+    return game?.janus7?.ui?.open?.(key, options);
   } catch (err) {
     logger.error?.(`[JANUS7] Scene control ${label} fehlgeschlagen:`, { message: err?.message });
   }
@@ -696,7 +708,7 @@ const toolVisible = !!game?.user?.isGM;
 const janusToolsRecord = {
   openControlPanel: {
     name: 'openControlPanel',
-    title: localize('JANUS7.Menu.ControlPanel.Label', 'Steuerzentrale Ã¶ffnen'),
+    title: localize('JANUS7.Menu.ControlPanel.Label', 'JANUS Shell Ã¶ffnen'),
     icon: 'fas fa-cogs',
     order: 0,
     button: true,
@@ -786,12 +798,12 @@ const janusToolsRecord = {
   },
   openSessionPrep: {
     name: 'openSessionPrep',
-    title: localize('JANUS7.UI.OpenSessionPrepWizard', 'Session Prep Wizard Ã¶ffnen'),
+    title: localize('JANUS7.UI.OpenSessionPrepWizard', 'Session Prep Ã¶ffnen'),
     icon: 'fas fa-wand-magic-sparkles',
     order: 10,
     button: true,
     visible: toolVisible,
-    onChange: runTool(() => openUiApp('sessionPrepWizard', 'sessionPrepWizard'))
+    onChange: runTool(() => openUiApp('shell', 'sessionPrep', { viewId: 'sessionPrep' }))
   },
   openCommandCenter: {
     name: 'openCommandCenter',

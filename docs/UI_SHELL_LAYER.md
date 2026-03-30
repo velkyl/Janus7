@@ -10,10 +10,11 @@ Sie ergÃ¤nzt die bestehenden Einzel-Apps und ersetzt sie nicht abrupt.
 ## Architektur
 - `ui/apps/JanusShellApp.js`
   - Hauptfenster / Layer-Shell
-  - View-State (`director`, `academy`, `tools`)
+  - View-State (`director`, `academy`, `schedule`, `people`, `places`, `system`, `tools`, `sessionPrep`)
   - Panel-State (`scoring`, `social`, `diagnostics`, ...)
+  - dynamische Side-Nav fuer Shell-Views und registrierte Sub-Apps
 - `ui/layer/view-registry.js`
-  - registriert die drei Haupt-Views
+  - registriert die Shell-Views
   - jede View baut ihr Modell Ã¼ber `build(engine)`
 - `ui/layer/panel-registry.js`
   - registriert Panels als Metadaten + Builder
@@ -40,3 +41,21 @@ Sie ergÃ¤nzt die bestehenden Einzel-Apps und ersetzt sie nicht abrupt.
 - `game.janus7.uiLayer.openShell()`
 - Scene Controls: `JANUS Shell Ã¶ffnen`
 
+
+## Navigation
+- Die linke Side-Nav ist der kanonische Einstieg in die Shell.
+- Oben stehen immer die Shell-Views.
+- Darunter werden registrierte Sub-Apps dynamisch in die Gruppen `Arbeitsflaechen`, `GM & Admin`, `Debug & Tests` und `Legacy & Bridges` einsortiert. Sekundaere Debug-Pfade wie `commandCenter` oder `settingsTestHarness` bleiben dabei bewusst aus der prominenten Side-Nav herausgenommen.
+- Die View `Werkzeuge` rendert `Scoring`, `Social` und `Atmosphaere` jetzt als Shell-Cards im Grid statt nur als Panel-Tiles.
+- Legacy-/Alias-Einstiege bleiben erreichbar, sollen aber nicht mehr als Primaerpfad fuer neue Workflows ausgebaut werden. `controlPanel` routed kanonisch auf `shell`, `sessionPrepWizard` auf die Shell-View `sessionPrep`.
+- Scene Controls oeffnen Session Prep direkt als Shell-View; Diagnosepfade bevorzugen innerhalb der Shell den `State Inspector`, waehrend `Power Tools` nur noch ein Sekundaerpfad bleiben.
+- Session Prep zeigt erste Atmosphaere-Vorschlaege direkt in der Shell an und leitet Mood-Anwendungen ueber den bestehenden Atmosphere-Command-Pfad.
+- Session Prep baut ausserdem eine slotbasierte NSC-Besetzung aus Lessons/Exams/Events auf, ohne neue Simulationslogik in die UI zu verschieben.
+- Darauf aufbauend rendert die Shell eine kompakte Szenen-Checkliste pro Slot mit Inhalten, Besetzung, Ort und voraussichtlicher Stimmung.
+- Diese Checkliste nutzt vorhandene Commands fuer `Ort aktivieren`, `Orts-Mood` und direkte Mood-Anwendung statt eigener UI-Sonderlogik.
+- Darueber hinaus verdichtet Session Prep Lessons, Pruefungen und Events zu einer kleinen Vorbereitungsagenda mit Fokus, Skills/Checks und optionaler Lektion-Aktivierung ueber bestehende Commands.
+
+## Overlay
+- Fuer GMs wird ein kleines `GM-Quick-Access-Overlay` ueber der Szene gerendert.
+- Es zeigt Zeitkontext und Zirkelstand und bietet nur duenne Quick-Actions auf bestehende Commands/UI-Router.
+- Foundry-Core-Hooks dafuer bleiben zentral in `scripts/janus.mjs`; die DOM-Logik lebt in `ui/layer/bridge.js`.

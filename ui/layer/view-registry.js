@@ -88,8 +88,8 @@ function buildDirectorView(engine, app) {
           { label: 'Runbook', value: workflow?.runbookId ?? '—' }
         ],
         actions: [
-          { kind: 'openApp', appKey: 'controlPanel', label: 'Control Panel', icon: 'fas fa-compass-drafting' },
-          { kind: 'openApp', appKey: 'commandCenter', label: 'Command Center', icon: 'fas fa-terminal' }
+          { kind: 'openApp', appKey: 'shell', label: 'Shell', icon: 'fas fa-compass-drafting' },
+          { kind: 'openApp', appKey: 'commandCenter', label: 'Power Tools', icon: 'fas fa-terminal' }
         ]
       },
       {
@@ -206,16 +206,41 @@ async function buildSystemViewLocal(engine, app) {
   };
 }
 
-function buildToolsView(_engine) {
-  const toolPanels = getPanels().filter((panel) => ['tools', 'academy', 'director'].includes(panel.group));
+function buildPanelCards(engine, panelIds = []) {
+  return panelIds
+    .map((panelId) => {
+      const panel = getPanel(panelId);
+      if (!panel) return null;
+      const detail = panel.build?.(engine) ?? {};
+      return {
+        panelId: panel.id,
+        title: panel.title,
+        icon: panel.icon,
+        description: panel.summary ?? panel.description ?? '',
+        metrics: detail.metrics ?? [],
+        items: detail.items ?? [],
+        actions: Array.isArray(panel.actions) ? panel.actions : []
+      };
+    })
+    .filter(Boolean);
+}
+
+function buildToolsView(engine) {
   return {
-    tiles: toolPanels.map((panel) => ({
-      id: panel.id,
-      title: panel.title,
-      icon: panel.icon,
-      description: panel.description,
-      actionKind: 'openPanel'
-    }))
+    cardSections: [
+      {
+        id: 'operations',
+        title: 'Operations Deck',
+        description: 'Shell-native Zugriff auf die drei laufenden GM-Kernbereiche.',
+        cards: buildPanelCards(engine, ['scoring', 'social', 'atmosphere'])
+      },
+      {
+        id: 'workbench',
+        title: 'Werkbank',
+        description: 'Vorbereitung, Datenpflege und technische Systemarbeit.',
+        cards: buildPanelCards(engine, ['sessionPrep', 'dataStudio', 'ki', 'sync', 'diagnostics', 'stateInspector', 'config', 'tests', 'backups'])
+      }
+    ]
   };
 }
 
@@ -287,10 +312,14 @@ async function buildSessionPrepView(engine) {
       currentLessons: [],
       currentExams: [],
       currentEvents: [],
+      currentCast: [],
       upcoming: [],
+      sceneChecklist: [],
+      prepAgenda: [],
       quests: { total: 0, items: [] },
       activeLocation: null,
       diagnostics: { health: 'unknown', warnings: [] },
+      suggestedMoods: [],
       contentSeeds: [],
       unavailable: true
     };
@@ -307,10 +336,14 @@ async function buildSessionPrepView(engine) {
     currentLessons: current.lessons ?? [],
     currentExams: current.exams ?? [],
     currentEvents: current.events ?? [],
+    currentCast: report.currentCast ?? [],
     upcoming: report.upcoming ?? [],
+    sceneChecklist: report.sceneChecklist ?? [],
+    prepAgenda: report.prepAgenda ?? [],
     quests: report.quests ?? { total: 0, items: [] },
     activeLocation: report.activeLocation ?? null,
     diagnostics: report.diagnostics ?? { health: 'unknown', warnings: [] },
+    suggestedMoods: report.suggestedMoods ?? [],
     contentSeeds: report.contentSeeds ?? [],
   };
 }

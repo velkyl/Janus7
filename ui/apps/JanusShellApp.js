@@ -1,6 +1,7 @@
 import { moduleTemplatePath } from '../../core/common.js';
 import { JanusConfig } from '../../core/config.js';
 import { JanusBaseApp } from '../core/base-app.js';
+import { listJanusUiAppStatus } from '../app-manifest.js';
 import { getPanel, getQuickPanels, getPanels } from '../layer/panel-registry.js';
 import { getView, getViews } from '../layer/view-registry.js';
 import { runShellAction } from '../layer/action-router.js';
@@ -34,6 +35,70 @@ function mapViewCards(cards = []) {
     cardIndex,
     actions: mapActions(card.actions ?? [])
   }));
+}
+
+const APP_LAUNCHER_EXCLUDE = new Set(['shell', 'controlPanel', 'sessionPrepWizard', 'lessons', 'aiRoundtrip', 'commandCenter', 'settingsTestHarness']);
+
+const APP_NAV_META = Object.freeze({
+  academyOverview: { title: 'Academy Overview', icon: 'fas fa-school', description: 'Kalender, Wochenraster und Akademie-Überblick.' },
+  scoringView: { title: 'Scoring View', icon: 'fas fa-trophy', description: 'Zirkelpunkte, Wertungen und Ranglisten.' },
+  lessonLibrary: { title: 'Lesson Library', icon: 'fas fa-book-open', description: 'Lektionskatalog und Arbeitsbibliothek.' },
+  socialView: { title: 'Social View', icon: 'fas fa-users', description: 'Beziehungen, Spannungen und Sozialgraph.' },
+  atmosphereDJ: { title: 'Atmosphäre DJ', icon: 'fas fa-music', description: 'Mood-, Audio- und Overlay-Steuerung.' },
+  academyDataStudio: { title: 'Academy Data Studio', icon: 'fas fa-table', description: 'Direkter Datenzugriff für Inhalte und Kataloge.' },
+  kiRoundtrip: { title: 'KI Roundtrip', icon: 'fas fa-brain', description: 'Export, Preview und kontrollierter Import.' },
+  kiBackupManager: { title: 'KI Backups', icon: 'fas fa-life-ring', description: 'Backup- und Restore-Werkzeuge für KI-Artefakte.' },
+  configPanel: { title: 'Config Panel', icon: 'fas fa-sliders', description: 'Modulweite Konfiguration und Kill-Switches.' },
+  syncPanel: { title: 'Sync Panel', icon: 'fas fa-link', description: 'UUID-Verknüpfungen, Diagnose und Sync-Audits.' },
+  libraryBrowser: { title: 'Library Browser', icon: 'fas fa-folder-open', description: 'Bibliotheks- und Sammlungsnavigation.' },
+  studentArchive: { title: 'Student Archive', icon: 'fas fa-user-graduate', description: 'Archivierte Schüler und Verlaufsdaten.' },
+  enrollmentScanner: { title: 'Enrollment Scanner', icon: 'fas fa-id-card', description: 'Import- und Einschreibungsprüfung.' },
+  quartermaster: { title: 'Quartermaster', icon: 'fas fa-box-open', description: 'Inventar- und Versorgungswerkzeuge.' },
+  stateInspector: { title: 'State Inspector', icon: 'fas fa-database', description: 'Read-only Sicht auf den Runtime-State.' },
+  commandCenter: { title: 'Command Center', icon: 'fas fa-terminal', description: 'Legacy Power Tools für Debug und Spezialpfade.' },
+  testResults: { title: 'Test Results', icon: 'fas fa-clipboard-check', description: 'Testergebnisse und Ausführungsberichte.' },
+  guidedManualTests: { title: 'Guided Manual Tests', icon: 'fas fa-vial', description: 'Geführte manuelle Prüfschritte.' },
+  settingsTestHarness: { title: 'Settings Harness', icon: 'fas fa-flask', description: 'Spezialwerkzeug für Settings-Tests.' }
+});
+
+function classifyAppNavGroup(meta = {}) {
+  const maturity = String(meta.maturity ?? '').toLowerCase();
+  if (maturity.includes('test') || maturity.includes('debug')) return 'debug';
+  if (maturity.includes('legacy')) return 'legacy';
+  if (meta.admin) return 'admin';
+  return 'workbench';
+}
+
+function buildAppLauncherSections(currentViewId = 'director') {
+  const appRegistry = game?.janus7?.ui?.apps ?? {};
+  const groups = new Map([
+    ['workbench', { id: 'workbench', title: 'Arbeitsflächen', items: [] }],
+    ['admin', { id: 'admin', title: 'GM & Admin', items: [] }],
+    ['debug', { id: 'debug', title: 'Debug & Tests', items: [] }],
+    ['legacy', { id: 'legacy', title: 'Legacy & Bridges', items: [] }]
+  ]);
+
+  for (const meta of listJanusUiAppStatus()) {
+    if (!meta?.key || APP_LAUNCHER_EXCLUDE.has(meta.key)) continue;
+    const navMeta = APP_NAV_META[meta.key] ?? {};
+    groups.get(classifyAppNavGroup(meta))?.items.push({
+      key: meta.key,
+      icon: navMeta.icon ?? 'fas fa-window-maximize',
+      title: navMeta.title ?? meta.className ?? meta.key,
+      description: navMeta.description ?? meta.mode ?? '',
+      maturity: meta.maturity ?? 'unbekannt',
+      mode: meta.mode ?? 'n/a',
+      isAvailable: !!appRegistry?.[meta.key],
+      isActive: meta.key === 'sessionPrepWizard' ? (currentViewId === 'sessionPrep') : false
+    });
+  }
+
+  return [...groups.values()]
+    .map((group) => ({
+      ...group,
+      items: group.items.sort((a, b) => a.title.localeCompare(b.title, 'de'))
+    }))
+    .filter((group) => group.items.length > 0);
 }
 
 export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
@@ -233,11 +298,24 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
         view,
         ...model, // Spread alles, damit views z.B. slotBuilder reinbekommen
         cards: mapViewCards(model.cards ?? []),
+        cardSections: (model.cardSections ?? []).map((section) => ({
+          ...section,
+          cards: mapViewCards(section.cards ?? [])
+        })),
         tiles: model.tiles ?? []
       });
     } catch (_) {
       const fallback = moduleTemplatePath('shell/views/director.hbs');
-      return renderHbsTemplate(fallback, { view, ...model, cards: mapViewCards(model.cards ?? []), tiles: model.tiles ?? [] });
+      return renderHbsTemplate(fallback, {
+        view,
+        ...model,
+        cards: mapViewCards(model.cards ?? []),
+        cardSections: (model.cardSections ?? []).map((section) => ({
+          ...section,
+          cards: mapViewCards(section.cards ?? [])
+        })),
+        tiles: model.tiles ?? []
+      });
     }
   }
 
@@ -271,6 +349,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       isReady: !!engine,
       header,
       views,
+      appNavSections: buildAppLauncherSections(this._viewId),
       activeViewId: this._viewId,
       directorSummary,
       directorRuntime,
@@ -281,7 +360,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       panelHtml: await this._renderPanelHtml(engine),
       panelOpen: !!panel,
       panelTitle: panel?.title ?? null,
-      shellPaletteHint: 'Ctrl + K -> Command Center'
+      shellPaletteHint: 'Power Tools'
     };
   }
 
@@ -342,6 +421,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     const panelId = target?.dataset?.panelId ?? null;
     const actionIndex = Number(target?.dataset?.actionIndex ?? -1);
     const cardIndex = Number(target?.dataset?.cardIndex ?? -1);
+    const sectionId = target?.dataset?.sectionId ?? null;
     let descriptor = null;
 
     if (panelId) {
@@ -350,8 +430,13 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     } else if (Number.isInteger(cardIndex) && cardIndex >= 0 && Number.isInteger(actionIndex) && actionIndex >= 0) {
       const engine = this._getEngine?.() ?? game?.janus7 ?? null;
       const view = getView(this._viewId) ?? getView('director');
-      const model = view?.build?.(engine, this) ?? { cards: [] };
-      descriptor = model?.cards?.[cardIndex]?.actions?.[actionIndex] ?? null;
+      const model = await view?.build?.(engine, this) ?? { cards: [] };
+      if (sectionId) {
+        const section = Array.isArray(model?.cardSections) ? model.cardSections.find((entry) => entry?.id === sectionId) : null;
+        descriptor = section?.cards?.[cardIndex]?.actions?.[actionIndex] ?? null;
+      } else {
+        descriptor = model?.cards?.[cardIndex]?.actions?.[actionIndex] ?? null;
+      }
     } else if (target?.dataset?.viewId) {
       descriptor = { kind: 'setView', viewId: target.dataset.viewId };
     } else if (target?.dataset?.appKey) {

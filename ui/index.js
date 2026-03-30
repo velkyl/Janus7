@@ -31,9 +31,17 @@ let JanusSettingsTestHarnessApp = null;
  * @namespace game.janus7.ui
  */
 const _sceneControlContributors = [];
+const CANONICAL_UI_KEYS = Object.freeze({
+  controlpanel: 'shell',
+  lessons: 'lessonLibrary',
+  lessonlibrary: 'lessonLibrary',
+  sessionprepwizard: 'sessionPrepWizard',
+  airoundtrip: 'kiRoundtrip'
+});
 
 export const JanusUI = {
   apps: {
+    // Compat alias: keep older macros/tests functional while routing canonically to the shell.
     controlPanel: JanusShellApp,
     academyOverview: JanusAcademyOverviewApp,
     scoringView: JanusScoringViewApp,
@@ -50,6 +58,7 @@ export const JanusUI = {
     quartermaster: JanusQuartermasterApp,
     shell: JanusShellApp,
     JanusShellApp,
+    // Compat aliases: retained for existing macros and exports, but not preferred for new flows.
     lessons: JanusLessonLibraryApp,
     kiBackupManager: JanusKiBackupManagerApp,
     sessionPrepWizard: JanusShellApp,
@@ -64,11 +73,7 @@ export const JanusUI = {
 
   open(key, options = {}) {
     const requestedKey = String(key ?? '');
-    const normalizedKey = ({
-      lessons: 'lessonLibrary',
-      lessonlibrary: 'lessonLibrary',
-      sessionprepwizard: 'sessionPrepWizard'
-    }[requestedKey.toLowerCase()] ?? requestedKey);
+    const normalizedKey = CANONICAL_UI_KEYS[requestedKey.toLowerCase()] ?? requestedKey;
     const resolvedOptions = normalizedKey === 'sessionPrepWizard'
       ? { viewId: 'sessionPrep', ...options }
       : options;

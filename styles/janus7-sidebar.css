@@ -172,4 +172,116 @@
   .j7-sidebar-sections { padding: 0.55rem; }
 }
 
+
+.janus7-gm-overlay {
+  position: fixed;
+  top: 84px;
+  right: 16px;
+  z-index: 72;
+  width: min(320px, calc(100vw - 32px));
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(82, 57, 28, 0.28);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255, 249, 239, 0.96), rgba(236, 223, 198, 0.94));
+  box-shadow: 0 10px 26px rgba(22, 14, 8, 0.22);
+  backdrop-filter: blur(8px);
+  color: #2f2418;
+}
+
+.janus7-gm-overlay__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.janus7-gm-overlay__eyebrow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6f5a43;
+}
+
+.janus7-gm-overlay__title {
+  margin-top: 2px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #7c4d23;
+}
+
+.janus7-gm-overlay__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.janus7-gm-overlay__stat,
+.janus7-gm-overlay__circle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(255, 252, 247, 0.72);
+  border: 1px solid rgba(82, 57, 28, 0.12);
+}
+
+.janus7-gm-overlay__stat span,
+.janus7-gm-overlay__circle span {
+  font-size: 11px;
+  color: #6f5a43;
+}
+
+.janus7-gm-overlay__stat strong,
+.janus7-gm-overlay__circle strong {
+  font-size: 13px;
+  color: #2f2418;
+}
+
+.janus7-gm-overlay__circles {
+  display: grid;
+  gap: 6px;
+}
+
+.janus7-gm-overlay__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.janus7-gm-overlay__btn {
+  appearance: none;
+  border: 1px solid rgba(82, 57, 28, 0.18);
+  border-radius: 999px;
+  padding: 7px 12px;
+  background: rgba(255, 252, 247, 0.9);
+  color: #2f2418;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.janus7-gm-overlay__btn:hover {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(124, 77, 35, 0.42);
+}
+
+.janus7-gm-overlay__btn--ghost {
+  background: rgba(124, 77, 35, 0.08);
+  color: #7c4d23;
+}
+
+@media (max-width: 900px) {
+  .janus7-gm-overlay {
+    top: auto;
+    bottom: 16px;
+    right: 12px;
+    width: min(340px, calc(100vw - 24px));
+  }
+}
+
 } /* end @layer janus7.sidebar */

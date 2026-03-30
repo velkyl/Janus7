@@ -3,7 +3,7 @@
  * @module janus7/ui/commands
  * @phase 6
  *
- * System commands for JANUS7 Command Center.
+ * System commands for JANUS7 Shell / Power Tools.
  */
 
 import { _checkPermission, _engine, _log, _wrap } from './_shared.js';
@@ -66,8 +66,8 @@ async openSessionPrepWizard(_dataset = {}) {
   if (!_checkPermission('openSessionPrepWizard')) return { success: false, cancelled: true };
 
   return await _wrap('openSessionPrepWizard', async () => {
-    const app = game?.janus7?.ui?.open?.('sessionPrepWizard');
-    if (!app) throw new Error('Session Prep Wizard konnte nicht geöffnet werden');
+    const app = game?.janus7?.ui?.open?.('shell', { viewId: 'sessionPrep' });
+    if (!app) throw new Error('Session Prep konnte nicht geöffnet werden');
     return true;
   });
 },

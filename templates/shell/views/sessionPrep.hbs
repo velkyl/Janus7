@@ -2,7 +2,7 @@
   <div class="janus7-toolbar">
     <div class="janus7-toolbar__left">
       <i class="fas fa-wand-sparkles"></i>
-      <span class="janus7-title">Session Prep Wizard</span>
+      <span class="janus7-title">Session Prep</span>
     </div>
     <div class="janus7-toolbar__right">
       <button type="button" class="janus-btn" data-action="executeShellAction" data-view-id="sessionPrep" title="Report neu generieren"><i class="fas fa-sync"></i> Refresh</button>
@@ -15,7 +15,7 @@
   </div>
 
   {{#unless view.isGM}}
-    <div class="j7-backdrop j7-warn-banner"><i class="fas fa-exclamation-triangle"></i> Nur der GM kann den Session Prep Wizard sinnvoll nutzen.</div>
+    <div class="j7-backdrop j7-warn-banner"><i class="fas fa-exclamation-triangle"></i> Nur der GM kann Session Prep sinnvoll nutzen.</div>
   {{/unless}}
 
   <section class="j7-panel j7-session-prep__hero">
@@ -57,6 +57,26 @@
     </section>
 
     <section class="j7-panel">
+      <h3><i class="fas fa-music"></i> Mood-Vorschläge</h3>
+      <ul class="j7-plain-list">
+        {{#if view.suggestedMoods.length}}
+          {{#each view.suggestedMoods as |mood|}}
+            <li>
+              <strong>{{mood.label}}</strong>
+              {{#if mood.isActive}}<span class="j7-text-dim"> · aktiv</span>{{/if}}<br>
+              <span class="j7-text-dim">{{mood.source}} · {{mood.detail}}</span><br>
+              <button type="button" class="janus-btn small" data-action="executeShellAction" data-command="applyMood" data-mood-id="{{mood.id}}" {{#unless mood.isAvailable}}disabled{{/unless}}>
+                <i class="fas fa-music"></i> Mood anwenden
+              </button>
+            </li>
+          {{/each}}
+        {{else}}
+          <li class="j7-text-dim">Keine belastbaren Mood-Vorschläge aus den aktuellen Daten ableitbar.</li>
+        {{/if}}
+      </ul>
+    </section>
+
+    <section class="j7-panel">
       <h3><i class="fas fa-hourglass-half"></i> Nächste Slots</h3>
       <div class="j7-session-prep__timeline">
         {{#each view.upcoming as |slot|}}
@@ -69,12 +89,87 @@
               <li>Lessons: {{slot.lessons.length}}</li>
               <li>Exams: {{slot.exams.length}}</li>
               <li>Events: {{slot.events.length}}</li>
+              <li>NSCs: {{slot.cast.length}}</li>
             </ul>
+            {{#if slot.cast.length}}
+              <p class="j7-text-dim">{{#each slot.cast as |npc|}}{{npc.name}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+            {{/if}}
           </article>
         {{/each}}
       </div>
     </section>
   </div>
+
+
+  <section class="j7-panel">
+    <h3><i class="fas fa-clipboard-list"></i> Szenen-Checkliste</h3>
+    <div class="j7-seed-grid">
+      {{#each view.sceneChecklist as |item|}}
+        <article class="j7-seed-card">
+          <header>
+            <strong>{{item.label}}</strong>
+            <span class="j7-text-dim">{{item.slotLabel}}</span>
+          </header>
+          <p><strong>Ort:</strong> {{item.locationName}}</p>
+          <p><strong>Stimmung:</strong> {{item.moodLabel}}{{#if item.moodSource}} <span class="j7-text-dim">· {{item.moodSource}}</span>{{/if}}</p>
+          <p><strong>Inhalte:</strong> {{#if item.contentTitles.length}}{{#each item.contentTitles as |title|}}{{title}}{{#unless @last}}, {{/unless}}{{/each}}{{else}}—{{/if}}</p>
+          <p><strong>Besetzung:</strong> {{#if item.castNames.length}}{{#each item.castNames as |name|}}{{name}}{{#unless @last}}, {{/unless}}{{/each}}{{else}}—{{/if}}</p>
+          <div class="j7-session-prep__footer-actions">
+            <button type="button" class="janus-btn small" data-action="executeShellAction" data-command="activateLocationScene" data-dataset-location-id="{{item.locationId}}" {{#unless item.locationId}}disabled{{/unless}}>
+              <i class="fas fa-map"></i> Ort aktivieren
+            </button>
+            <button type="button" class="janus-btn small" data-action="executeShellAction" data-command="applyLocationMood" data-dataset-location-id="{{item.locationId}}" {{#unless item.locationId}}disabled{{/unless}}>
+              <i class="fas fa-music"></i> Orts-Mood
+            </button>
+            <button type="button" class="janus-btn small" data-action="executeShellAction" data-command="applyMood" data-mood-id="{{item.moodId}}" {{#unless item.moodId}}disabled{{/unless}}>
+              <i class="fas fa-wave-square"></i> Vorgeschlagene Stimmung
+            </button>
+          </div>
+        </article>
+      {{/each}}
+    </div>
+  </section>
+
+  <section class="j7-panel">
+    <h3><i class="fas fa-list-ul"></i> Vorbereitungsagenda</h3>
+    <div class="j7-seed-grid">
+      {{#if view.prepAgenda.length}}
+        {{#each view.prepAgenda as |item|}}
+          <article class="j7-seed-card">
+            <header>
+              <strong>{{item.slotLabel}} · {{item.typeLabel}}</strong>
+              <span class="j7-text-dim">{{item.timeLabel}}</span>
+            </header>
+            <p><strong>{{item.title}}</strong></p>
+            {{#if item.summary}}<p class="j7-text-dim">{{item.summary}}</p>{{/if}}
+            {{#if item.focus}}<p><strong>Fokus:</strong> {{item.focus}}</p>{{/if}}
+            {{#if item.teacherName}}<p><strong>Leitung:</strong> {{item.teacherName}}</p>{{/if}}
+            <p><strong>Ort:</strong> {{item.locationName}}</p>
+            <p><strong>Stimmung:</strong> {{item.moodLabel}}</p>
+            <ul class="j7-plain-list">
+              {{#each item.detailBadges as |detail|}}<li>{{detail}}</li>{{/each}}
+              {{#each item.notes as |note|}}<li class="j7-text-dim">{{note}}</li>{{/each}}
+            </ul>
+            <div class="j7-session-prep__footer-actions">
+              {{#if item.lessonId}}
+                <button type="button" class="janus-btn small" data-action="executeShellAction" data-command="lesson.start" data-lesson-id="{{item.lessonId}}">
+                  <i class="fas fa-book-open"></i> Lektion aktivieren
+                </button>
+              {{/if}}
+              <button type="button" class="janus-btn small" data-action="executeShellAction" data-command="activateLocationScene" data-dataset-location-id="{{item.locationId}}" {{#unless item.locationId}}disabled{{/unless}}>
+                <i class="fas fa-map"></i> Ort
+              </button>
+              <button type="button" class="janus-btn small" data-action="executeShellAction" data-command="applyMood" data-mood-id="{{item.moodId}}" {{#unless item.moodId}}disabled{{/unless}}>
+                <i class="fas fa-wave-square"></i> Stimmung
+              </button>
+            </div>
+          </article>
+        {{/each}}
+      {{else}}
+        <p class="j7-text-dim">Keine belastbare Vorbereitungsagenda aus den aktuellen Slot-Daten ableitbar.</p>
+      {{/if}}
+    </div>
+  </section>
 
 
   <section class="j7-panel">
@@ -112,6 +207,17 @@
         {{#if view.currentEvents.length}}
           {{#each view.currentEvents as |item|}}<li>{{item.title}}</li>{{/each}}
         {{else}}<li class="j7-text-dim">Keine Events</li>{{/if}}
+      </ul>
+      <h4>Besetzung</h4>
+      <ul class="j7-plain-list">
+        {{#if view.currentCast.length}}
+          {{#each view.currentCast as |npc|}}
+            <li>
+              <strong>{{npc.name}}</strong>
+              <span class="j7-text-dim">· {{npc.sourceType}} · {{npc.sourceLabel}}</span>
+            </li>
+          {{/each}}
+        {{else}}<li class="j7-text-dim">Keine NSC-Besetzung aus dem Slot ableitbar.</li>{{/if}}
       </ul>
     </section>
 

@@ -308,9 +308,10 @@ const PANEL_DEFINITIONS = [
     group: 'tools',
     appKey: 'commandCenter',
     description: 'Graph, Cache, Fehler und Betriebszustand.',
-    summary: 'Operative Systemdiagnose innerhalb des UI-Layers.',
+    summary: 'Operative Systemdiagnose in der Shell; Power Tools nur fuer Spezialpfade.',
     actions: [
-      { kind: 'openApp', appKey: 'commandCenter', label: 'Command Center öffnen', icon: 'fas fa-terminal' },
+      { kind: 'openApp', appKey: 'stateInspector', label: 'State Inspector öffnen', icon: 'fas fa-database' },
+      { kind: 'openApp', appKey: 'commandCenter', label: 'Power Tools öffnen', icon: 'fas fa-terminal' },
       { kind: 'panelAction', action: 'graphInvalidate', label: 'Graph-Cache leeren', icon: 'fas fa-broom' },
       { kind: 'panelAction', action: 'graphRebuild', label: 'Graph neu aufbauen', icon: 'fas fa-project-diagram' }
     ],
