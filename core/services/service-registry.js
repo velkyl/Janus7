@@ -119,7 +119,11 @@ export class JanusServiceRegistry {
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
         // Aus Waiter-Liste entfernen
-        if (idx !== -1) waiting.splice(idx, 1);
+        const waiting = this._waiters.get(key);
+        if (waiting) {
+          const idx = waiting.findIndex((w) => w.timer === timer);
+          if (idx !== -1) waiting.splice(idx, 1);
+        }
         this._cleanupWaiters(key);
 
         if (fallback !== undefined) {

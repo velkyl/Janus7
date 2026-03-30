@@ -159,9 +159,14 @@ export class DSA5GroupCheckBridge {
       const finish = (reason) => {
         if (hookId !== null) Hooks.off('updateChatMessage', hookId);
         if (intervalId !== null) clearInterval(intervalId);
-        const result = this._extractGCResult(messageId, targetQs);
-        this.logger?.info?.('JANUS7 | GroupCheck | Abgeschlossen', { reason, ...result });
-        resolve(result);
+        try {
+          const result = this._extractGCResult(messageId, targetQs);
+          this.logger?.info?.('JANUS7 | GroupCheck | Abgeschlossen', { reason, ...result });
+          resolve(result);
+        } catch (err) {
+          this.logger?.error?.('JANUS7 | GroupCheck | _extractGCResult fehlgeschlagen', { reason, err: err?.message });
+          reject(err);
+        }
       };
 
       // Lauscht auf Chat-Message-Updates (DSA5 rerenderGC schreibt flags.gc)

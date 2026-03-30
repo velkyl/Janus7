@@ -156,6 +156,9 @@ export class JanusKiImportService {
       if (this._isBlockedPathSegment(part)) {
         throw new JanusKiResponseInvalidError(`Blockiertes Pfadsegment: ${part}`);
       }
+      if (!/^[A-Za-z0-9_\-]+$/.test(part)) {
+        throw new JanusKiResponseInvalidError(`Ungueltiges Pfadsegment: ${part}`);
+      }
     }
     return parts.join('.');
   }

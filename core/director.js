@@ -514,7 +514,7 @@ export class JanusDirector {
     if (!queue.length) return { processed: [], remainingCount: 0 };
 
     const capped = Math.max(0, Number(limit ?? 0) || 0);
-    const picked = queue.slice(0, capped || queue.length);
+    const picked = queue.slice(0, capped > 0 ? capped : queue.length);
     const remaining = queue.slice(picked.length);
     await this.state.transaction(async (tx) => {
       tx.set('academy.runtimeQueuedEvents', remaining);

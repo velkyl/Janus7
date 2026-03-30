@@ -426,7 +426,7 @@ export class JanusScoringEngine {
       target:   e.target   ?? e.targetId   ?? '',
       amount:   Number(e.amount ?? 0),
       reason:   e.reason   ?? '',
-      ts:       e.ts       ?? e.timestamp  ?? null,
+      ts:       e.ts       ?? e.timestamp  ?? new Date().toISOString(),
       source:   e.source   ?? 'manual',
     }));
   }
@@ -544,17 +544,11 @@ export class JanusScoringEngine {
       }
     }
 
-    // Wenn Objekt-Werte normalisiert wurden: zurückschreiben NUR wenn der Aufrufer
-    // das Objekt per Referenz mutiert (write-Kontext). Read-only Aufrufe übergeben
-    // state direkt — wir prüfen ob wir uns NICHT innerhalb einer Transaktion befinden,
-    // um unerwünschte Hook-Feuersalven bei reinen Leseaufrufen zu vermeiden.
+    // Wenn Objekt-Werte normalisiert wurden: zurückschreiben.
+    // Innerhalb einer Transaktion (state = tx-Proxy) werden Writes gebatcht und
+    // feuern keine Hooks sofort — kein gesonderter Guard notwendig.
     if ((circlesDirty || studentsDirty) && typeof state.set === 'function') {
-      // Nur schreiben wenn nicht bereits innerhalb einer aktiven Transaktion —
-      // state.transaction() setzt intern einen Guard der hier abgefragt wird.
-      const inTransaction = typeof state._transaction !== 'undefined' && state._transaction !== null;
-      if (!inTransaction) {
-        try { state.set(STATE_PATHS.SCORING, scoring); } catch (_) { /* best-effort */ }
-      }
+      try { state.set(STATE_PATHS.SCORING, scoring); } catch (_) { /* best-effort */ }
     }
 
     return scoring;
