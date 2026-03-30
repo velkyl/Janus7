@@ -37,11 +37,17 @@ export class JanusSessionPrepService {
     const sceneChecklist = this._buildSceneChecklist({ engine, academyData, slotRef, currentSlot, currentCast, upcoming, activeLocation, suggestedMoods });
     const prepAgenda = this._buildPrepAgenda({ academyData, slotRef, currentSlot, currentCast, upcoming, sceneChecklist, questsSummary });
     const suggestions = this._buildSuggestions({ slotRef, currentSlot, upcoming, questsSummary, activeLocation, diagnosticsSummary, prepAgenda });
-    const chroniclePreview = this._collectChroniclePreview({ engine, academyData, questsSummary });
+    const chroniclePreview = this._collectChroniclePreview({ engine, academyData, questsSummary, state });
+    const socialStoryHookQueue = this._collectSocialStoryHookQueue({ state, academyData });
     const chronicleSeed = this._buildChronicleSeed({ slotRef, prepAgenda, chroniclePreview, questsSummary, activeLocation });
     const gradeEntries = this._collectGradeEntries({ engine, academyData });
     const gradeOverview = this._buildGradeOverview({ gradeEntries, academyData });
     const gradeLedger = this._buildGradeLedger({ gradeEntries, slotRef });
+    const trimesterGrades = this._buildTrimesterGrades({ gradeEntries, slotRef, academyData });
+    const reportCardDrafts = this._buildReportCardDrafts({ gradeEntries, trimesterGrades, slotRef });
+    const reportCardExportBundle = this._buildReportCardExportBundle({ reportCardDrafts, trimesterGrades, slotRef });
+    const reportCardJournalBundle = this._buildReportCardJournalBundle({ reportCardDrafts, reportCardExportBundle, slotRef });
+    const gradeExportSeeds = this._buildGradeExportSeeds({ gradeEntries, trimesterGrades, slotRef });
     const contentSeeds = new JanusContentSuggestionService({ engine, logger: this.logger }).buildSeeds({ slotRef, currentSlot, activeLocation, quests: questsSummary });
 
     return {
@@ -58,9 +64,15 @@ export class JanusSessionPrepService {
       sceneChecklist,
       prepAgenda,
       chroniclePreview,
+      socialStoryHookQueue,
       chronicleSeed,
       gradeOverview,
       gradeLedger,
+      trimesterGrades,
+      reportCardDrafts,
+      reportCardExportBundle,
+      reportCardJournalBundle,
+      gradeExportSeeds,
       contentSeeds,
       meta: {
         horizonSlots,
@@ -69,9 +81,15 @@ export class JanusSessionPrepService {
         checklistCount: sceneChecklist.length,
         prepAgendaCount: prepAgenda.length,
         chronicleCount: chroniclePreview.length,
+        socialStoryHookCount: socialStoryHookQueue.items.length,
         chronicleSeedLength: chronicleSeed.text.length,
         gradeEntryCount: gradeEntries.length,
         gradeLedgerCount: gradeLedger.items.length,
+        trimesterGradeCount: trimesterGrades.items.length,
+        reportCardDraftCount: reportCardDrafts.length,
+        reportCardExportItemCount: reportCardExportBundle?.summary?.actorCount ?? 0,
+        reportCardJournalItemCount: reportCardJournalBundle?.summary?.entryCount ?? 0,
+        gradeExportSeedCount: gradeExportSeeds.length,
         warningCount: diagnosticsSummary.warnings.length,
         suggestedMoodCount: suggestedMoods.length,
       }
@@ -390,19 +408,20 @@ export class JanusSessionPrepService {
   }
 
 
-  _collectChroniclePreview({ engine, academyData, questsSummary }) {
-    const state = engine?.core?.state ?? null;
+  _collectChroniclePreview({ engine, academyData, questsSummary, state = null }) {
+    const rootState = state ?? engine?.core?.state ?? null;
     const entries = [
-      ...this._collectQuestChronicleEntries({ state, academyData, questsSummary }),
+      ...this._collectQuestChronicleEntries({ state: rootState, academyData, questsSummary }),
       ...this._collectScoringChronicleEntries({ engine, academyData }),
-      ...this._collectExamChronicleEntries({ state, academyData }),
-      ...this._collectResourceChronicleEntries({ state, academyData }),
-      ...this._collectActivityChronicleEntries({ state, academyData }),
+      ...this._collectExamChronicleEntries({ state: rootState, academyData }),
+      ...this._collectSocialChronicleEntries({ state: rootState, academyData, questsSummary }),
+      ...this._collectResourceChronicleEntries({ state: rootState, academyData }),
+      ...this._collectActivityChronicleEntries({ state: rootState, academyData }),
     ];
 
     return entries
       .filter((entry) => entry && entry.title)
-      .sort((a, b) => this._chronicleAt(b.at) - this._chronicleAt(a.at))
+      .sort((a, b) => Number(b?.priorityScore ?? 0) - Number(a?.priorityScore ?? 0) || this._chronicleAt(b.at) - this._chronicleAt(a.at))
       .slice(0, 12)
       .map((entry) => ({ ...entry, atLabel: this._formatChronicleAt(entry.at) }));
   }
@@ -489,6 +508,110 @@ export class JanusSessionPrepService {
     return items;
   }
 
+  _buildSocialStoryHookId(entry = {}) {
+    return String(`${entry?.category ?? 'social'}:${entry?.fromId ?? 'na'}:${entry?.toId ?? 'na'}:${entry?.at ?? 'na'}:${entry?.title ?? 'event'}`)
+      .toLowerCase()
+      .replace(/[^a-z0-9:_-]+/g, '-');
+  }
+
+  _collectSocialStoryHookQueue({ state, academyData }) {
+    const root = state?.academy?.social?.storyHooks ?? {};
+    const records = root?.records ?? {};
+    const history = Array.isArray(root?.history) ? root.history : [];
+    const items = Object.values(records)
+      .filter((entry) => entry?.hookId)
+      .sort((a, b) => this._chronicleAt(b?.updatedAt ?? b?.queuedAt) - this._chronicleAt(a?.updatedAt ?? a?.queuedAt))
+      .slice(0, 8)
+      .map((entry) => ({
+        hookId: entry?.hookId ?? null,
+        title: entry?.title ?? 'Social-Story-Hook',
+        detail: entry?.detail ?? '—',
+        priorityLabel: entry?.priorityLabel ?? 'Living-World-Dynamik',
+        status: entry?.status ?? 'queued',
+        statusLabel: entry?.status === 'completed' ? 'Abgeschlossen' : (entry?.status === 'discarded' ? 'Verworfen' : 'Vorgemerkt'),
+        isQueued: (entry?.status ?? 'queued') === 'queued',
+        isCompleted: entry?.status === 'completed',
+        isDiscarded: entry?.status === 'discarded',
+        fromName: academyData?.getNpc?.(entry?.fromId)?.name ?? entry?.fromId ?? '—',
+        toName: academyData?.getNpc?.(entry?.toId)?.name ?? entry?.toId ?? '—',
+        queuedAtLabel: this._formatChronicleAt(entry?.queuedAt ?? null),
+        updatedAtLabel: this._formatChronicleAt(entry?.updatedAt ?? null),
+      }));
+
+    return {
+      items,
+      summary: {
+        total: items.length,
+        recentChanges: history.slice(0, 4).map((entry) => ({
+          actionLabel: entry?.actionLabel ?? 'Aktualisiert',
+          changedAtLabel: this._formatChronicleAt(entry?.changedAt ?? null),
+        })),
+      },
+    };
+  }
+
+  _collectSocialChronicleEntries({ state, academyData, questsSummary }) {
+    const root = state?.get?.('academy.social.livingEvents') ?? {};
+    const alumniRoot = state?.get?.('academy.alumni') ?? { records: {} };
+    const storyHookRoot = state?.get?.('academy.social.storyHooks') ?? { records: {} };
+    const history = Array.isArray(root?.history) ? root.history : [];
+    const alumniRecords = alumniRoot?.records ?? {};
+    const storyHookRecords = storyHookRoot?.records ?? {};
+    const questTitles = (questsSummary?.items ?? []).map((entry) => entry?.title).filter(Boolean);
+
+    const getAlumniRecord = (npcId) => alumniRecords?.[String(npcId ?? '').trim()] ?? null;
+
+    return history.slice(0, 6).map((entry) => {
+      const fromName = academyData?.getNpc?.(entry?.fromId)?.name ?? entry?.fromName ?? entry?.fromId ?? '—';
+      const toName = academyData?.getNpc?.(entry?.toId)?.name ?? entry?.toName ?? entry?.toId ?? '—';
+      const delta = Number(entry?.delta ?? 0);
+      const deltaLabel = `${delta > 0 ? '+' : ''}${delta}`;
+      const hookId = this._buildSocialStoryHookId(entry);
+      const fromAlumni = getAlumniRecord(entry?.fromId);
+      const toAlumni = getAlumniRecord(entry?.toId);
+      const existingHook = storyHookRecords?.[hookId] ?? null;
+      const signals = [];
+      let priorityScore = 0;
+
+      if (String(entry?.category ?? '').trim() === 'mentor-line') {
+        signals.push('Mentorenlinie');
+        priorityScore += 2;
+      }
+      if (String(entry?.category ?? '').trim() === 'peer-rivalry') {
+        signals.push('Jahrgangsrivalitaet');
+        priorityScore += 1;
+      }
+      if (fromAlumni?.status === 'mentor' || toAlumni?.status === 'mentor' || fromAlumni?.focus === 'mentor' || toAlumni?.focus === 'mentor') {
+        signals.push('Alumni-Mentorbezug');
+        priorityScore += 2;
+      }
+      if (fromAlumni?.status === 'returned' || toAlumni?.status === 'returned' || fromAlumni?.focus === 'return' || toAlumni?.focus === 'return') {
+        signals.push('Rueckkehrbezug');
+        priorityScore += 1;
+      }
+      if (questTitles.length && (String(entry?.category ?? '').trim() === 'mentor-line' || String(entry?.category ?? '').trim() === 'peer-rivalry')) {
+        signals.push(`Quest-Druck: ${questTitles[0]}`);
+        priorityScore += 1;
+      }
+
+      return {
+        category: 'social',
+        icon: 'fa-shuffle',
+        at: entry?.at ?? null,
+        title: entry?.title ?? 'Autonomes Beziehungs-Event',
+        detail: `${fromName} -> ${toName} | ${entry?.category ?? 'npc-network'} | ${deltaLabel}`,
+        hookId,
+        fromId: entry?.fromId ?? null,
+        toId: entry?.toId ?? null,
+        priorityScore,
+        priorityLabel: signals.length ? signals.join(' · ') : 'Living-World-Dynamik',
+        narrativePriority: priorityScore > 0,
+        hookQueued: !!existingHook,
+        hookStatusLabel: existingHook?.status === 'queued' ? 'Story-Hook vorgemerkt' : null,
+      };
+    });
+  }
+
   _collectResourceChronicleEntries({ state, academyData }) {
     const resourceCfg = new Map((academyData?.getResourcesConfig?.() ?? []).map((row) => [String(row?.id ?? ''), row]));
     const statCfg = new Map((academyData?.getSchoolStatsConfig?.() ?? []).map((row) => [String(row?.id ?? ''), row]));
@@ -554,23 +677,34 @@ export class JanusSessionPrepService {
   }
 
 
+  _getDefaultGradeSchemeContext(academyData) {
+    const schemeId = academyData?.getDefaultGradingSchemeId?.() ?? null;
+    const scheme = schemeId ? academyData?.getGradingScheme?.(schemeId) ?? null : null;
+    const gradeEntries = [...(Array.isArray(scheme?.grades) ? scheme.grades : [])]
+      .sort((a, b) => Number(a?.minScore ?? 0) - Number(b?.minScore ?? 0));
+    return {
+      schemeId,
+      schemeName: scheme?.name ?? '—',
+      gradeEntries,
+    };
+  }
+
+  _pickGradeFromSchemeEntries(schemeEntries, percent) {
+    const normalized = Number(percent ?? 0);
+    const sorted = [...(Array.isArray(schemeEntries) ? schemeEntries : [])]
+      .sort((a, b) => Number(a?.minScore ?? 0) - Number(b?.minScore ?? 0));
+    let chosen = sorted[0] ?? null;
+    for (const grade of sorted) {
+      if (normalized >= Number(grade?.minScore ?? 0)) chosen = grade;
+    }
+    return chosen;
+  }
+
   _collectGradeEntries({ engine, academyData }) {
     const examsEngine = engine?.academy?.exams ?? null;
     const examRoot = engine?.core?.state?.get?.(STATE_PATHS.ACADEMY_EXAM_RESULTS) ?? {};
-    const defaultSchemeId = academyData?.getDefaultGradingSchemeId?.() ?? null;
-    const defaultScheme = defaultSchemeId ? academyData?.getGradingScheme?.(defaultSchemeId) ?? null : null;
-    const defaultGradeEntries = Array.isArray(defaultScheme?.grades) ? defaultScheme.grades : [];
+    const { schemeId: defaultSchemeId, schemeName: defaultSchemeName, gradeEntries: defaultGradeEntries } = this._getDefaultGradeSchemeContext(academyData);
     const items = [];
-
-    const pickGrade = (percent) => {
-      const normalized = Number(percent ?? 0);
-      const sorted = [...defaultGradeEntries].sort((a, b) => Number(a?.minScore ?? 0) - Number(b?.minScore ?? 0));
-      let chosen = sorted[0] ?? null;
-      for (const grade of sorted) {
-        if (normalized >= Number(grade?.minScore ?? 0)) chosen = grade;
-      }
-      return chosen;
-    };
 
     for (const [actorId, exams] of Object.entries(examRoot || {})) {
       const actorName = this._resolveChronicleActorLabel(actorId, academyData) ?? actorId;
@@ -586,7 +720,7 @@ export class JanusSessionPrepService {
         const percent = grading?.percent ?? (Number.isFinite(score) && Number.isFinite(maxScore) && maxScore > 0
           ? Math.max(0, Math.min(100, (score / maxScore) * 100))
           : null);
-        const grade = percent != null ? pickGrade(percent) : null;
+        const grade = percent != null ? this._pickGradeFromSchemeEntries(defaultGradeEntries, percent) : null;
         const academicContext = latestAttempt?.meta?.academicContext ?? null;
         items.push({
           actorId,
@@ -604,7 +738,7 @@ export class JanusSessionPrepService {
           gradeColor: grade?.color ?? null,
           gradeBonus: Number.isFinite(Number(grade?.bonus)) ? Number(grade.bonus) : null,
           schemeId: defaultSchemeId,
-          schemeName: defaultScheme?.name ?? '—',
+          schemeName: defaultSchemeName,
           academicContext: academicContext ? {
             year: Number.isFinite(Number(academicContext?.year)) ? Number(academicContext.year) : null,
             trimester: Number.isFinite(Number(academicContext?.trimester)) ? Number(academicContext.trimester) : null,
@@ -695,11 +829,325 @@ export class JanusSessionPrepService {
     };
   }
 
+  _buildTrimesterGrades({ gradeEntries, slotRef, academyData }) {
+    const { schemeId, schemeName, gradeEntries: schemeEntries } = this._getDefaultGradeSchemeContext(academyData);
+    const targetYear = Number(slotRef?.year ?? 0);
+    const targetTrimester = Number(slotRef?.trimester ?? 0);
+    const grouped = new Map();
+
+    for (const entry of (gradeEntries ?? [])) {
+      const key = String(entry?.actorId ?? '').trim();
+      if (!key) continue;
+      const bucket = grouped.get(key) ?? { actorId: key, actorName: entry?.actorName ?? key, entries: [] };
+      bucket.entries.push(entry);
+      grouped.set(key, bucket);
+    }
+
+    const items = [...grouped.values()].map((bucket) => {
+      const allEntries = [...bucket.entries].sort((a, b) => this._chronicleAt(b.attemptedAt) - this._chronicleAt(a.attemptedAt));
+      const periodEntries = allEntries.filter((entry) => Number(entry?.academicContext?.year ?? 0) === targetYear && Number(entry?.academicContext?.trimester ?? 0) === targetTrimester);
+      const scopedEntries = periodEntries.length ? periodEntries : allEntries;
+      const percents = scopedEntries.map((entry) => entry?.percent).filter((value) => Number.isFinite(value));
+      const avgPercent = percents.length ? Math.round((percents.reduce((sum, value) => sum + value, 0) / percents.length) * 10) / 10 : null;
+      const finalGrade = avgPercent != null ? this._pickGradeFromSchemeEntries(schemeEntries, avgPercent) : null;
+      const latest = scopedEntries[0] ?? allEntries[0] ?? null;
+      const evidenceCount = scopedEntries.length;
+      const confidenceLabel = periodEntries.length ? 'trimesterbasiert' : 'Fallback gesamt';
+      const statusLabel = finalGrade?.id === 'fail'
+        ? 'kritisch'
+        : (evidenceCount < 2 ? 'vorlaeufig' : 'belastbar');
+      return {
+        actorId: bucket.actorId,
+        actorName: bucket.actorName,
+        finalGradeId: finalGrade?.id ?? null,
+        finalGradeLabel: finalGrade?.name ?? '—',
+        finalBonusLabel: Number.isFinite(Number(finalGrade?.bonus)) ? `${Number(finalGrade.bonus) > 0 ? '+' : ''}${Number(finalGrade.bonus)}` : '0',
+        avgPercentLabel: avgPercent != null ? `${avgPercent}%` : '—',
+        evidenceLabel: `${evidenceCount} Pruefung(en)`,
+        confidenceLabel,
+        statusLabel,
+        supportingExamsLabel: scopedEntries.slice(0, 3).map((entry) => entry?.examTitle).filter(Boolean).join(', ') || '—',
+        latestExamTitle: latest?.examTitle ?? '—',
+        latestStatusLabel: latest?.statusLabel ?? '—',
+      };
+    })
+    .sort((a, b) => {
+      const aPercent = Number.parseFloat(String(a.avgPercentLabel).replace('%', ''));
+      const bPercent = Number.parseFloat(String(b.avgPercentLabel).replace('%', ''));
+      const safeA = Number.isFinite(aPercent) ? aPercent : -1;
+      const safeB = Number.isFinite(bPercent) ? bPercent : -1;
+      return safeB - safeA || String(a.actorName).localeCompare(String(b.actorName));
+    })
+    .slice(0, 8);
+
+    return {
+      schemeId,
+      schemeName,
+      periodLabel: `Jahr ${slotRef?.year ?? '—'} · Trimester ${slotRef?.trimester ?? '—'}`,
+      items,
+      summary: {
+        actorCount: items.length,
+        criticalCount: items.filter((entry) => entry.statusLabel === 'kritisch').length,
+        provisionalCount: items.filter((entry) => entry.statusLabel === 'vorlaeufig').length,
+      },
+    };
+  }
+
+
+  _buildReportCardDrafts({ gradeEntries, trimesterGrades, slotRef }) {
+    const targetYear = Number(slotRef?.year ?? 0);
+    const targetTrimester = Number(slotRef?.trimester ?? 0);
+    const grouped = new Map();
+
+    for (const entry of (gradeEntries ?? [])) {
+      const key = String(entry?.actorId ?? '').trim();
+      if (!key) continue;
+      const bucket = grouped.get(key) ?? { actorId: key, actorName: entry?.actorName ?? key, entries: [] };
+      bucket.entries.push(entry);
+      grouped.set(key, bucket);
+    }
+
+    return (trimesterGrades?.items ?? []).map((gradeEntry) => {
+      const bucket = grouped.get(String(gradeEntry?.actorId ?? '').trim()) ?? null;
+      const allEntries = [...(bucket?.entries ?? [])].sort((a, b) => this._chronicleAt(b.attemptedAt) - this._chronicleAt(a.attemptedAt));
+      const periodEntries = allEntries.filter((entry) => Number(entry?.academicContext?.year ?? 0) === targetYear && Number(entry?.academicContext?.trimester ?? 0) === targetTrimester);
+      const scopedEntries = periodEntries.length ? periodEntries : allEntries;
+      const bestEntries = [...scopedEntries]
+        .sort((a, b) => Number(b?.percent ?? -1) - Number(a?.percent ?? -1))
+        .slice(0, 2);
+      const weakEntries = [...scopedEntries]
+        .filter((entry) => entry?.statusId === 'failed' || Number(entry?.percent ?? 0) < 60)
+        .sort((a, b) => Number(a?.percent ?? 101) - Number(b?.percent ?? 101))
+        .slice(0, 2);
+      const strengths = bestEntries.length
+        ? bestEntries.map((entry) => `${entry?.examTitle ?? 'Pruefung'} (${entry?.percent != null ? `${entry.percent}%` : entry?.statusLabel ?? '—'})`)
+        : ['Keine belastbaren Spitzenleistungen ableitbar.'];
+      const concerns = weakEntries.length
+        ? weakEntries.map((entry) => `${entry?.examTitle ?? 'Pruefung'} (${entry?.statusLabel ?? '—'})`)
+        : ['Keine akuten Leistungssorgen aus den vorliegenden Pruefungen ableitbar.'];
+      const recommendations = [];
+      if (gradeEntry?.statusLabel === 'kritisch') {
+        recommendations.push('Naechste Pruefung gezielt vorbereiten und Betreuungsbedarf pruefen.');
+      }
+      if (gradeEntry?.statusLabel === 'vorlaeufig') {
+        recommendations.push('Weitere belastbare Leistungsnachweise im aktuellen Trimester sammeln.');
+      }
+      if (!recommendations.length) {
+        recommendations.push('Leistungsniveau halten und auf die naechste Schluesselpruefung vorbereiten.');
+      }
+      const payload = {
+        type: 'janus7.reportCardDraft.v1',
+        actorId: gradeEntry?.actorId ?? null,
+        actorName: gradeEntry?.actorName ?? '—',
+        period: {
+          year: Number.isFinite(targetYear) && targetYear > 0 ? targetYear : null,
+          trimester: Number.isFinite(targetTrimester) && targetTrimester > 0 ? targetTrimester : null,
+          label: trimesterGrades?.periodLabel ?? `Jahr ${slotRef?.year ?? '—'} · Trimester ${slotRef?.trimester ?? '—'}`,
+        },
+        evaluation: {
+          finalGradeId: gradeEntry?.finalGradeId ?? null,
+          finalGradeLabel: gradeEntry?.finalGradeLabel ?? '—',
+          avgPercentLabel: gradeEntry?.avgPercentLabel ?? '—',
+          bonusLabel: gradeEntry?.finalBonusLabel ?? '0',
+          statusLabel: gradeEntry?.statusLabel ?? '—',
+          confidenceLabel: gradeEntry?.confidenceLabel ?? '—',
+          evidenceLabel: gradeEntry?.evidenceLabel ?? '—',
+        },
+        evidence: scopedEntries.slice(0, 5).map((entry) => ({
+          examId: entry?.examId ?? null,
+          examTitle: entry?.examTitle ?? '—',
+          statusId: entry?.statusId ?? null,
+          statusLabel: entry?.statusLabel ?? '—',
+          percent: entry?.percent ?? null,
+          scoreLabel: entry?.scoreLabel ?? '—',
+          attemptedAt: entry?.attemptedAt ?? null,
+          attemptedAtLabel: entry?.attemptedAtLabel ?? '—',
+        })),
+        narrative: {
+          strengths,
+          concerns,
+          recommendations,
+        },
+      };
+      return {
+        id: `report-card-draft-${gradeEntry?.actorId ?? 'unknown'}`,
+        actorId: gradeEntry?.actorId ?? null,
+        actorName: gradeEntry?.actorName ?? '—',
+        title: `Zeugnisentwurf · ${gradeEntry?.actorName ?? '—'}`,
+        statusLabel: gradeEntry?.statusLabel ?? '—',
+        finalGradeLabel: gradeEntry?.finalGradeLabel ?? '—',
+        confidenceLabel: gradeEntry?.confidenceLabel ?? '—',
+        evidenceLabel: gradeEntry?.evidenceLabel ?? '—',
+        payload,
+        text: JSON.stringify(payload, null, 2),
+      };
+    });
+  }
+
+  _buildReportCardExportBundle({ reportCardDrafts, trimesterGrades, slotRef }) {
+    const items = (reportCardDrafts ?? []).map((draft) => ({
+      draftId: draft?.id ?? null,
+      actorId: draft?.actorId ?? null,
+      actorName: draft?.actorName ?? '—',
+      finalGradeLabel: draft?.finalGradeLabel ?? '—',
+      statusLabel: draft?.statusLabel ?? '—',
+      confidenceLabel: draft?.confidenceLabel ?? '—',
+      evidenceLabel: draft?.evidenceLabel ?? '—',
+      draft: draft?.payload ?? null,
+    }));
+    const payload = {
+      type: 'janus7.reportCardExportBundle.v1',
+      generatedAt: new Date().toISOString(),
+      period: {
+        year: Number.isFinite(Number(slotRef?.year)) ? Number(slotRef.year) : null,
+        trimester: Number.isFinite(Number(slotRef?.trimester)) ? Number(slotRef.trimester) : null,
+        label: trimesterGrades?.periodLabel ?? `Jahr ${slotRef?.year ?? '—'} · Trimester ${slotRef?.trimester ?? '—'}`,
+      },
+      scheme: {
+        id: trimesterGrades?.schemeId ?? null,
+        name: trimesterGrades?.schemeName ?? '—',
+      },
+      summary: {
+        actorCount: items.length,
+        criticalCount: trimesterGrades?.summary?.criticalCount ?? 0,
+        provisionalCount: trimesterGrades?.summary?.provisionalCount ?? 0,
+      },
+      items,
+    };
+    return {
+      id: 'report-card-export-bundle',
+      title: 'Zeugnis-/Journal-Export Bundle',
+      summary: payload.summary,
+      text: JSON.stringify(payload, null, 2),
+      payload,
+    };
+  }
+
+  _buildReportCardJournalBundle({ reportCardDrafts, reportCardExportBundle, slotRef }) {
+    const periodLabel = reportCardExportBundle?.payload?.period?.label ?? `Jahr ${slotRef?.year ?? '—'} · Trimester ${slotRef?.trimester ?? '—'}`;
+    const entries = (reportCardDrafts ?? []).map((draft) => {
+      const payload = draft?.payload ?? {};
+      const strengths = Array.isArray(payload?.narrative?.strengths) ? payload.narrative.strengths : [];
+      const concerns = Array.isArray(payload?.narrative?.concerns) ? payload.narrative.concerns : [];
+      const recommendations = Array.isArray(payload?.narrative?.recommendations) ? payload.narrative.recommendations : [];
+      const evidence = Array.isArray(payload?.evidence) ? payload.evidence : [];
+      const lines = [
+        `# Zeugnisentwurf: ${draft?.actorName ?? '—'}`,
+        '',
+        `- Zeitraum: ${periodLabel}`,
+        `- Finale Note: ${draft?.finalGradeLabel ?? '—'}`,
+        `- Status: ${draft?.statusLabel ?? '—'}`,
+        `- Belastung: ${draft?.evidenceLabel ?? '—'} | ${draft?.confidenceLabel ?? '—'}`,
+        '',
+        '## Staerken',
+        ...(strengths.length ? strengths.map((entry) => `- ${entry}`) : ['- Keine belastbaren Staerken ableitbar.']),
+        '',
+        '## Risiken',
+        ...(concerns.length ? concerns.map((entry) => `- ${entry}`) : ['- Keine akuten Risiken ableitbar.']),
+        '',
+        '## Empfehlungen',
+        ...(recommendations.length ? recommendations.map((entry) => `- ${entry}`) : ['- Keine Empfehlungen ableitbar.']),
+        '',
+        '## Pruefungsnachweise',
+        ...(evidence.length ? evidence.map((entry) => `- ${entry?.examTitle ?? 'Pruefung'} | ${entry?.scoreLabel ?? '—'}${entry?.percent != null ? ` (${entry.percent}%)` : ''} | ${entry?.statusLabel ?? '—'} | ${entry?.attemptedAtLabel ?? '—'}`) : ['- Keine Nachweise vorhanden.']),
+      ];
+      return {
+        id: `report-card-journal-${draft?.actorId ?? 'unknown'}`,
+        actorId: draft?.actorId ?? null,
+        actorName: draft?.actorName ?? '—',
+        journalName: `Zeugnisse · ${periodLabel}`,
+        pageName: `${draft?.actorName ?? '—'} · Trimesterzeugnis`,
+        format: 'markdown',
+        content: lines.join('\n'),
+        flags: {
+          janus7: {
+            type: 'reportCardJournalPage.v1',
+            actorId: draft?.actorId ?? null,
+            periodLabel,
+          },
+        },
+      };
+    });
+    const payload = {
+      type: 'janus7.reportCardJournalBundle.v1',
+      generatedAt: new Date().toISOString(),
+      journalName: `Zeugnisse · ${periodLabel}`,
+      period: reportCardExportBundle?.payload?.period ?? {
+        year: Number.isFinite(Number(slotRef?.year)) ? Number(slotRef.year) : null,
+        trimester: Number.isFinite(Number(slotRef?.trimester)) ? Number(slotRef.trimester) : null,
+        label: periodLabel,
+      },
+      entries,
+    };
+    return {
+      id: 'report-card-journal-bundle',
+      title: 'Zeugnis-Journal-Bundle',
+      summary: { entryCount: entries.length },
+      text: JSON.stringify(payload, null, 2),
+      payload,
+    };
+  }
+
+  _buildGradeExportSeeds({ gradeEntries, trimesterGrades, slotRef }) {
+    const targetYear = Number(slotRef?.year ?? 0);
+    const targetTrimester = Number(slotRef?.trimester ?? 0);
+    const grouped = new Map();
+
+    for (const entry of (gradeEntries ?? [])) {
+      const key = String(entry?.actorId ?? '').trim();
+      if (!key) continue;
+      const bucket = grouped.get(key) ?? { actorId: key, actorName: entry?.actorName ?? key, entries: [] };
+      bucket.entries.push(entry);
+      grouped.set(key, bucket);
+    }
+
+    return (trimesterGrades?.items ?? []).map((gradeEntry) => {
+      const bucket = grouped.get(String(gradeEntry?.actorId ?? '').trim()) ?? null;
+      const allEntries = [...(bucket?.entries ?? [])].sort((a, b) => this._chronicleAt(b.attemptedAt) - this._chronicleAt(a.attemptedAt));
+      const periodEntries = allEntries.filter((entry) => Number(entry?.academicContext?.year ?? 0) === targetYear && Number(entry?.academicContext?.trimester ?? 0) === targetTrimester);
+      const scopedEntries = periodEntries.length ? periodEntries : allEntries;
+      const attemptLines = scopedEntries.slice(0, 5).map((entry) => {
+        const gradePart = entry?.gradeLabel ? ` | Note: ${entry.gradeLabel}` : '';
+        return `- ${entry?.examTitle ?? 'Pruefung'} | Ergebnis: ${entry?.scoreLabel ?? '—'}${entry?.percent != null ? ` (${entry.percent}%)` : ''} | Status: ${entry?.statusLabel ?? '—'}${gradePart} | Zeitpunkt: ${entry?.attemptedAtLabel ?? '—'}`;
+      });
+      const text = [
+        'JANUS7 Trimester Grade Seed',
+        `Akteur: ${gradeEntry?.actorName ?? '—'}`,
+        `Bezugsfenster: ${trimesterGrades?.periodLabel ?? `Jahr ${slotRef?.year ?? '—'} · Trimester ${slotRef?.trimester ?? '—'}`}`,
+        `Status: ${gradeEntry?.statusLabel ?? '—'}`,
+        `Finale Note: ${gradeEntry?.finalGradeLabel ?? '—'}`,
+        `Mittelwert: ${gradeEntry?.avgPercentLabel ?? '—'}`,
+        `Bonus: ${gradeEntry?.finalBonusLabel ?? '0'}`,
+        `Grundlage: ${gradeEntry?.evidenceLabel ?? '—'} | ${gradeEntry?.confidenceLabel ?? '—'}`,
+        `Unterstuetzende Pruefungen: ${gradeEntry?.supportingExamsLabel ?? '—'}`,
+        '',
+        'Pruefungsverlauf:',
+        ...(attemptLines.length ? attemptLines : ['- Keine belastbaren Pruefungseintraege vorhanden.']),
+        '',
+        'Schreibe daraus einen kompakten Trimesterbericht mit:',
+        '- 1 Satz Leistungszusammenfassung',
+        '- 1 Satz zu Staerken oder Problemen',
+        '- 2 Bullet-Points fuer naechste Foerder- oder Pruefungsschritte',
+      ].join('\n');
+
+      return {
+        id: `trimester-grade-seed-${gradeEntry?.actorId ?? 'unknown'}`,
+        actorId: gradeEntry?.actorId ?? null,
+        actorName: gradeEntry?.actorName ?? '—',
+        title: `Trimesterbericht Seed · ${gradeEntry?.actorName ?? '—'}`,
+        statusLabel: gradeEntry?.statusLabel ?? '—',
+        text,
+      };
+    });
+  }
+
   _buildChronicleSeed({ slotRef, prepAgenda, chroniclePreview, questsSummary, activeLocation }) {
+    const socialEntries = (chroniclePreview ?? []).filter((entry) => entry?.category === 'social');
     const header = [
       'JANUS7 Campaign Chronicle Seed',
       `Zeitfenster: Woche ${slotRef?.week ?? '—'} · ${slotRef?.day ?? '—'} / ${slotRef?.phase ?? '—'}`,
       `Aktiver Ort: ${activeLocation?.name ?? '—'}`,
+      `Autonome Social-Events: ${socialEntries.length}`,
       '',
     ];
 
@@ -710,6 +1158,10 @@ export class JanusSessionPrepService {
 
     const chronicleLines = (chroniclePreview ?? []).slice(0, 8).map((entry) => {
       return `- [${entry?.category ?? 'entry'}] ${entry?.title ?? '—'} :: ${entry?.detail ?? '—'}`;
+    });
+    const socialLines = socialEntries.slice(0, 4).map((entry) => {
+      const priorityPart = entry?.priorityLabel ? ` | Prioritaet: ${entry.priorityLabel}` : '';
+      return `- ${entry?.title ?? 'Social-Event'} :: ${entry?.detail ?? '—'}${priorityPart}`;
     });
 
     const questLines = (questsSummary?.items ?? []).slice(0, 4).map((quest) => {
@@ -723,6 +1175,9 @@ export class JanusSessionPrepService {
       '',
       'Chronik-Vorschau:',
       ...(chronicleLines.length ? chronicleLines : ['- Keine belastbaren Chronik-Eintraege vorhanden.']),
+      '',
+      'Autonome Social-Dynamiken:',
+      ...(socialLines.length ? socialLines : ['- Keine autonomen Social-Events im aktuellen Rueckblick.']),
       '',
       'Offene Quests:',
       ...(questLines.length ? questLines : ['- Keine aktiven Quests.']),

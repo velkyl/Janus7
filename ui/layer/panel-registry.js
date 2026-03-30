@@ -71,17 +71,26 @@ function buildScoringPanel(engine) {
 }
 
 function buildSocialPanel(engine) {
-  const graph = engine?.academy?.social?.graph ?? engine?.academy?.socialGraph ?? null;
-  const links = Array.isArray(graph?.edges) ? graph.edges : Array.isArray(graph?.relations) ? graph.relations : [];
+  const social = engine?.academy?.social ?? null;
+  const links = social?.listAllRelationships?.() ?? [];
+  const livingEvents = engine?.core?.state?.get?.('academy.social.livingEvents') ?? {};
+  const history = Array.isArray(livingEvents?.history) ? livingEvents.history : [];
+  const storyHooks = engine?.core?.state?.get?.('academy.social.storyHooks') ?? {};
+  const hookRecords = Object.values(storyHooks?.records ?? {});
+  const queuedHooks = hookRecords.filter((entry) => String(entry?.status ?? 'queued') === 'queued');
   return {
     metrics: [
       { label: 'Beziehungen', value: links.length || 0 },
-      { label: 'Status', value: engine?.academy?.social ? 'Aktiv' : 'Fehlt' }
+      { label: 'Autonome Events', value: history.length || 0 },
+      { label: 'Story-Hooks', value: queuedHooks.length || 0 }
     ],
-    items: links.slice(0, 6).map((edge) => ({
-      label: `${edge?.from ?? edge?.source ?? '?'} -> ${edge?.to ?? edge?.target ?? '?'}`,
-      value: edge?.attitude ?? edge?.weight ?? '—'
-    }))
+    items: queuedHooks.slice(0, 4).map((entry) => ({
+      label: entry?.title ?? 'Social-Story-Hook',
+      value: `${entry?.fromId ?? '?'} -> ${entry?.toId ?? '?'} · ${entry?.priorityLabel ?? 'Normal'}`
+    })).concat(history.slice(0, Math.max(0, 6 - Math.min(queuedHooks.length, 4))).map((entry) => ({
+      label: entry?.title ?? `${entry?.fromName ?? entry?.fromId ?? '?'} -> ${entry?.toName ?? entry?.toId ?? '?'}`,
+      value: `${entry?.fromName ?? entry?.fromId ?? '?'} -> ${entry?.toName ?? entry?.toId ?? '?'} (${Number(entry?.delta ?? 0) > 0 ? '+' : ''}${Number(entry?.delta ?? 0)})`
+    })))
   };
 }
 

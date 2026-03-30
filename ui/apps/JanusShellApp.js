@@ -188,6 +188,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       'janus7StateChanged',
       'janus7DateChanged',
       'janus7RelationChanged',
+      'janus7StoryHookChanged',
       'janus7Ready',
       'janusCampaignStateUpdated' // von Config-Panel
     ], 180);

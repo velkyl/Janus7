@@ -1,4 +1,4 @@
-﻿import { moduleTemplatePath } from '../../core/common.js';
+import { moduleTemplatePath } from '../../core/common.js';
 /**
  * @file ui/apps/JanusSocialViewApp.js
  * @module janus7/ui
@@ -10,6 +10,7 @@
  */
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 import { JanusBaseApp } from '../core/base-app.js';
+import { JanusCommands } from '../commands/index.js';
 
 /**
  * JanusSocialViewApp
@@ -36,7 +37,8 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
       refresh: JanusSocialViewApp.onRefresh,
       selectFrom: JanusSocialViewApp.onSelectFrom,
       selectTo: JanusSocialViewApp.onSelectTo,
-      adjust: JanusSocialViewApp.onAdjust
+      adjust: JanusSocialViewApp.onAdjust,
+      executeCommand: JanusSocialViewApp.onExecuteCommand
     }
   };
 
@@ -52,7 +54,7 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
 
   async _onRender(context, options) {
     await super._onRender(context, options);
-    this.enableAutoRefresh(['janus7RelationChanged']);
+    this.enableAutoRefresh(['janus7RelationChanged', 'janus7StoryHookChanged']);
 
     const root = this.element;
     if (!root) return;
@@ -94,10 +96,91 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
     try {
       await game.janus7?.academy?.social?.adjustAttitude?.(fromId, toId, delta, { reason: 'UI' });
       ui.notifications.info(`Beziehung angepasst: ${delta > 0 ? '+' : ''}${delta}`);
+      this.refresh();
     } catch (err) {
       this._getLogger().error?.('JANUS7 | adjustAttitude failed', err);
       ui.notifications.error(`Änderung fehlgeschlagen: ${err.message}`);
     }
+  }
+
+  static async onExecuteCommand(event, target) {
+    event?.preventDefault?.();
+    const commandId = String(target?.dataset?.commandId ?? '').trim();
+    if (!commandId) return;
+
+    const command = JanusCommands[commandId];
+    if (typeof command !== 'function') {
+      ui.notifications.error(`Command not found: ${commandId}`);
+      this._getLogger().error?.(`[JanusSocialViewApp] Command not found: ${commandId}`);
+      return;
+    }
+
+    try {
+      const dataset = { ...target.dataset };
+      const result = await command(dataset);
+      if (result?.success === false && !result?.cancelled) {
+        ui.notifications.error(`Command failed: ${commandId}`);
+      }
+      this.refresh();
+    } catch (err) {
+      this._getLogger().error?.('[JanusSocialViewApp] command execution failed', err);
+      ui.notifications.error(`Command error: ${commandId}`);
+    }
+  }
+
+  _buildStoryHookQueueView(engine, npcs = [], pcs = []) {
+    const storyHooks = engine?.core?.state?.get?.('academy.social.storyHooks') ?? {};
+    const records = Object.values(storyHooks?.records ?? {});
+    const resolveName = (id) => {
+      if (!id) return '—';
+      return npcs.find((entry) => entry.id === id)?.name
+        ?? pcs.find((entry) => entry.id === id)?.name
+        ?? id;
+    };
+    const order = { queued: 0, completed: 1, discarded: 2 };
+    const items = records
+      .map((entry) => {
+        const status = String(entry?.status ?? 'queued').trim() || 'queued';
+        return {
+          hookId: entry?.hookId ?? entry?.id ?? null,
+          title: entry?.title ?? 'Social-Story-Hook',
+          detail: entry?.detail ?? '—',
+          priorityLabel: entry?.priorityLabel ?? 'Normal',
+          status,
+          statusLabel: status === 'completed' ? 'Abgeschlossen' : status === 'discarded' ? 'Verworfen' : 'Vorgemerkt',
+          fromName: resolveName(entry?.fromId ?? null),
+          toName: resolveName(entry?.toId ?? null),
+          updatedAt: entry?.updatedAt ?? null,
+          updatedAtLabel: entry?.updatedAt ? new Date(entry.updatedAt).toLocaleString('de-DE') : '—',
+          isQueued: status === 'queued',
+          isCompleted: status === 'completed',
+          isDiscarded: status === 'discarded'
+        };
+      })
+      .sort((a, b) => {
+        const statusDelta = (order[a.status] ?? 99) - (order[b.status] ?? 99);
+        if (statusDelta !== 0) return statusDelta;
+        return String(b.updatedAt ?? '').localeCompare(String(a.updatedAt ?? ''));
+      })
+      .slice(0, 8);
+
+    const history = (Array.isArray(storyHooks?.history) ? storyHooks.history : [])
+      .slice(0, 6)
+      .map((entry) => ({
+        actionLabel: entry?.actionLabel ?? 'Hook geändert',
+        changedAtLabel: entry?.changedAt ? new Date(entry.changedAt).toLocaleString('de-DE') : '—'
+      }));
+
+    return {
+      items,
+      history,
+      summary: {
+        total: records.length,
+        queued: records.filter((entry) => String(entry?.status ?? 'queued') === 'queued').length,
+        completed: records.filter((entry) => String(entry?.status ?? 'queued') === 'completed').length,
+        discarded: records.filter((entry) => String(entry?.status ?? 'queued') === 'discarded').length,
+      }
+    };
   }
 
   async _prepareContext(_options) {
@@ -110,7 +193,6 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
     const npcs = (academyData?.getNpcs?.() ?? []).map(n => ({ id: n.id, name: n.name ?? n.id }));
     const pcs = (game.actors?.filter?.(a => a.type === 'character') ?? []).map(a => ({ id: a.id, name: a.name }));
 
-    // Default selections
     const fromId = this._fromId ?? (npcs[0]?.id ?? pcs[0]?.id ?? null);
     const toId = this._toId ?? (pcs[0]?.id ?? npcs[0]?.id ?? null);
     this._fromId = fromId;
@@ -128,6 +210,17 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
         ?? r.toId
     })).sort((a,b)=> (b.value??0)-(a.value??0));
 
+    const livingEvents = engine?.core?.state?.get?.('academy.social.livingEvents') ?? {};
+    const livingHistory = (Array.isArray(livingEvents?.history) ? livingEvents.history : []).slice(0, 8).map((entry) => ({
+      title: entry?.title ?? 'Autonomes Beziehungs-Event',
+      summary: entry?.summary ?? '—',
+      category: entry?.category ?? 'npc-network',
+      deltaLabel: `${Number(entry?.delta ?? 0) > 0 ? '+' : ''}${Number(entry?.delta ?? 0)}`,
+      pairLabel: `${entry?.fromName ?? entry?.fromId ?? '?'} -> ${entry?.toName ?? entry?.toId ?? '?'}`
+    }));
+
+    const storyHookQueue = this._buildStoryHookQueueView(engine, npcs, pcs);
+
     return {
       notReady: false,
       isGM: game.user?.isGM ?? false,
@@ -136,7 +229,9 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
       fromId,
       toId,
       attitude,
-      outgoing: outgoingView
+      outgoing: outgoingView,
+      livingHistory,
+      storyHookQueue
     };
   }
 }

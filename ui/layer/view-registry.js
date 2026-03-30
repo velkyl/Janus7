@@ -15,6 +15,18 @@ async function getSessionPrepService() {
   }
   return _sessionPrepService;
 }
+
+let _alumniService = null;
+async function getAlumniService() {
+  if (_alumniService) return _alumniService;
+  try {
+    const m = await import('../../phase8/alumni/JanusAlumniService.js');
+    _alumniService = m.JanusAlumniService;
+  } catch (_err) {
+    // Phase8 ist optional — Shell funktioniert ohne.
+  }
+  return _alumniService;
+}
 import { buildLocationsView, buildPeopleView, buildKiContext, buildSyncView, buildSystemView } from './context-builders.js';
 import { prepareDirectorRuntimeSummary, buildDirectorRunbookView, buildDirectorWorkflowView } from './director-context.js';
 
@@ -181,10 +193,14 @@ function buildScheduleView(engine, app) {
   };
 }
 
-function buildPeopleViewLocal(engine, app) {
+async function buildPeopleViewLocal(engine, app) {
   const state = engine?.core?.state?.get?.() ?? {};
   const peopleView = buildPeopleView({ state, actors: game?.actors });
-  return { peopleView };
+  const AlumniService = await getAlumniService();
+  const alumniView = AlumniService
+    ? await new AlumniService({ engine, logger: engine?.core?.logger ?? console }).getOverview()
+    : { summary: { total: 0, mentors: 0, returned: 0, inactive: 0 }, alumni: [], candidates: [], recentChanges: [] };
+  return { peopleView, alumniView };
 }
 
 function buildPlacesViewLocal(engine, app) {
@@ -320,6 +336,11 @@ async function buildSessionPrepView(engine) {
       chronicleSeed: null,
       gradeOverview: { schemeId: null, schemeName: '—', items: [], summary: { total: 0, excellent: 0, passed: 0, failed: 0 } },
       gradeLedger: { periodLabel: 'Jahr — · Trimester —', items: [], summary: { actorCount: 0, currentTrimesterTagged: 0 } },
+      trimesterGrades: { schemeId: null, schemeName: '—', periodLabel: 'Jahr — · Trimester —', items: [], summary: { actorCount: 0, criticalCount: 0, provisionalCount: 0 } },
+      reportCardDrafts: [],
+      reportCardExportBundle: null,
+      reportCardJournalBundle: null,
+      gradeExportSeeds: [],
       quests: { total: 0, items: [] },
       activeLocation: null,
       diagnostics: { health: 'unknown', warnings: [] },
@@ -348,6 +369,11 @@ async function buildSessionPrepView(engine) {
     chronicleSeed: report.chronicleSeed ?? null,
     gradeOverview: report.gradeOverview ?? { schemeId: null, schemeName: '—', items: [], summary: { total: 0, excellent: 0, passed: 0, failed: 0 } },
     gradeLedger: report.gradeLedger ?? { periodLabel: 'Jahr — · Trimester —', items: [], summary: { actorCount: 0, currentTrimesterTagged: 0 } },
+    trimesterGrades: report.trimesterGrades ?? { schemeId: null, schemeName: '—', periodLabel: 'Jahr — · Trimester —', items: [], summary: { actorCount: 0, criticalCount: 0, provisionalCount: 0 } },
+    reportCardDrafts: report.reportCardDrafts ?? [],
+    reportCardExportBundle: report.reportCardExportBundle ?? null,
+    reportCardJournalBundle: report.reportCardJournalBundle ?? null,
+    gradeExportSeeds: report.gradeExportSeeds ?? [],
     quests: report.quests ?? { total: 0, items: [] },
     activeLocation: report.activeLocation ?? null,
     diagnostics: report.diagnostics ?? { health: 'unknown', warnings: [] },

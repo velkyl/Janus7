@@ -180,6 +180,17 @@ const DEFAULT_STATE = {
     scoring: {
       circles: {},
     },
+    social: {
+      relationships: {},
+      livingEvents: {
+        history: [],
+        lastProcessedWeekKey: null
+      },
+      storyHooks: {
+        records: {},
+        history: []
+      }
+    },
     examResults: {
       // [actorUuid]: {
       //   [examId]: {
@@ -189,6 +200,10 @@ const DEFAULT_STATE = {
       //     attempts: [ ... ]
       //   }
       // }
+    },
+    alumni: {
+      records: {},
+      history: []
     },
   },
   actors: {
@@ -485,10 +500,15 @@ migrateState(stateObj = this._state) {
 
     // Required Phase-2+ blocks
     // `currentLocationId` is optional (and should be omitted when unknown).
-    ensure('academy', { examResults: {}, scoring: { circles: {} } });
+    ensure('academy', { examResults: {}, scoring: { circles: {} }, social: { relationships: {}, livingEvents: { history: [], lastProcessedWeekKey: null } } });
     ensure('academy.examResults', {});
     ensure('academy.scoring', { circles: {} });
     ensure('academy.scoring.circles', {});
+    ensure('academy.social', { relationships: {}, livingEvents: { history: [], lastProcessedWeekKey: null }, storyHooks: { records: {}, history: [] } });
+    ensure('academy.social.relationships', {});
+    ensure('academy.social.livingEvents', { history: [], lastProcessedWeekKey: null });
+    ensure('academy.social.storyHooks', { records: {}, history: [] });
+    ensure('academy.social.storyHooks.records', {});
 
     const legacyRootScoring = isPlainMap(stateObj?.scoring) ? normalizeScoringRoot(stateObj.scoring) : null;
     const academyScoring = isPlainMap(foundry.utils.getProperty(stateObj, 'academy.scoring'))

@@ -156,6 +156,162 @@ export const academyCommands = {
     });
   },
 
+
+  async registerAlumniRecord(dataset = {}) {
+    if (!_checkPermission('registerAlumniRecord')) return { success: false, cancelled: true };
+    if (!game.user?.isGM) {
+      ui.notifications.warn('Nur GM darf Alumni-Eintraege verwalten.');
+      return { success: false, error: 'GM only' };
+    }
+
+    const npcId = String(dataset.npcId ?? dataset.datasetNpcId ?? '').trim();
+    if (!npcId) return { success: false, cancelled: true, error: 'npcId fehlt' };
+
+    return await _wrap('registerAlumniRecord', async () => {
+      const engine = _engine();
+      const { JanusAlumniService } = await import('../../phase8/alumni/JanusAlumniService.js');
+      const service = new JanusAlumniService({ engine, logger: engine?.core?.logger ?? console });
+      const overview = await service.registerAlumnus({
+        npcId,
+        status: dataset.status ?? 'graduated',
+        note: dataset.note ?? '',
+        sourceExamId: dataset.sourceExamId ?? null,
+      });
+      return { ok: true, alumniTotal: overview?.summary?.total ?? 0 };
+    });
+  },
+
+  async setAlumniFocus(dataset = {}) {
+    if (!_checkPermission('setAlumniFocus')) return { success: false, cancelled: true };
+    if (!game.user?.isGM) {
+      ui.notifications.warn('Nur GM darf Alumni-Eintraege verwalten.');
+      return { success: false, error: 'GM only' };
+    }
+
+    const npcId = String(dataset.npcId ?? dataset.datasetNpcId ?? '').trim();
+    if (!npcId) return { success: false, cancelled: true, error: 'npcId fehlt' };
+
+    return await _wrap('setAlumniFocus', async () => {
+      const engine = _engine();
+      const { JanusAlumniService } = await import('../../phase8/alumni/JanusAlumniService.js');
+      const service = new JanusAlumniService({ engine, logger: engine?.core?.logger ?? console });
+      const overview = await service.setAlumniFocus({
+        npcId,
+        focus: dataset.focus ?? null,
+      });
+      return { ok: true, alumniTotal: overview?.summary?.total ?? 0 };
+    });
+  },
+
+
+  async queueSocialStoryHook(dataset = {}) {
+    if (!_checkPermission('queueSocialStoryHook')) return { success: false, cancelled: true };
+    if (!game.user?.isGM) {
+      ui.notifications.warn('Nur GM darf Social-Story-Hooks vormerken.');
+      return { success: false, error: 'GM only' };
+    }
+
+    const hookId = String(dataset.hookId ?? '').trim();
+    if (!hookId) return { success: false, cancelled: true, error: 'hookId fehlt' };
+
+    return await _wrap('queueSocialStoryHook', async () => {
+      const engine = _engine();
+      const { JanusSocialStoryHookService } = await import('../../phase8/social/JanusSocialStoryHookService.js');
+      const service = new JanusSocialStoryHookService({ engine, logger: engine?.core?.logger ?? console });
+      const root = await service.queueHook({
+        hookId,
+        title: dataset.title ?? '',
+        detail: dataset.detail ?? '',
+        priorityLabel: dataset.priorityLabel ?? '',
+        fromId: dataset.fromId ?? null,
+        toId: dataset.toId ?? null,
+        source: 'session-prep'
+      });
+      return { ok: true, queuedCount: Object.keys(root?.records ?? {}).length, summary: 'Social-Story-Hook vorgemerkt.' };
+    });
+  },
+
+
+
+  async setSocialStoryHookStatus(dataset = {}) {
+    if (!_checkPermission('setSocialStoryHookStatus')) return { success: false, cancelled: true };
+    if (!game.user?.isGM) {
+      ui.notifications.warn('Nur GM darf Social-Story-Hooks verwalten.');
+      return { success: false, error: 'GM only' };
+    }
+
+    const hookId = String(dataset.hookId ?? '').trim();
+    if (!hookId) return { success: false, cancelled: true, error: 'hookId fehlt' };
+
+    return await _wrap('setSocialStoryHookStatus', async () => {
+      const engine = _engine();
+      const { JanusSocialStoryHookService } = await import('../../phase8/social/JanusSocialStoryHookService.js');
+      const service = new JanusSocialStoryHookService({ engine, logger: engine?.core?.logger ?? console });
+      const root = await service.setHookStatus({
+        hookId,
+        status: dataset.status ?? 'queued'
+      });
+      return { ok: true, hookCount: Object.keys(root?.records ?? {}).length, summary: 'Story-Hook aktualisiert.' };
+    });
+  },
+
+
+
+  async setAlumniStatus(dataset = {}) {
+    if (!_checkPermission('setAlumniStatus')) return { success: false, cancelled: true };
+    if (!game.user?.isGM) {
+      ui.notifications.warn('Nur GM darf Alumni-Eintraege verwalten.');
+      return { success: false, error: 'GM only' };
+    }
+
+    const npcId = String(dataset.npcId ?? dataset.datasetNpcId ?? '').trim();
+    if (!npcId) return { success: false, cancelled: true, error: 'npcId fehlt' };
+
+    return await _wrap('setAlumniStatus', async () => {
+      const engine = _engine();
+      const { JanusAlumniService } = await import('../../phase8/alumni/JanusAlumniService.js');
+      const service = new JanusAlumniService({ engine, logger: engine?.core?.logger ?? console });
+      const overview = await service.setAlumniStatus({
+        npcId,
+        status: dataset.status ?? 'graduated',
+      });
+      return { ok: true, alumniTotal: overview?.summary?.total ?? 0 };
+    });
+  },
+
+
+  async exportReportCardPdf(_dataset = {}) {
+    if (!_checkPermission('exportReportCardPdf')) return { success: false, cancelled: true };
+    if (!game.user?.isGM) {
+      ui.notifications.warn('Nur GM darf Zeugnis-PDF exportieren.');
+      return { success: false, error: 'GM only' };
+    }
+
+    return await _wrap('exportReportCardPdf', async () => {
+      const engine = _engine();
+      const { JanusReportCardOutputService } = await import('../../phase8/report-cards/JanusReportCardOutputService.js');
+      const service = new JanusReportCardOutputService({ engine, logger: engine?.core?.logger ?? console });
+      const result = await service.exportPdf();
+      return { ok: true, ...result };
+    });
+  },
+
+  async writeReportCardJournals(_dataset = {}) {
+    if (!_checkPermission('writeReportCardJournals')) return { success: false, cancelled: true };
+    if (!game.user?.isGM) {
+      ui.notifications.warn('Nur GM darf Zeugnis-Journals schreiben.');
+      return { success: false, error: 'GM only' };
+    }
+
+    return await _wrap('writeReportCardJournals', async () => {
+      const engine = _engine();
+      const { JanusReportCardOutputService } = await import('../../phase8/report-cards/JanusReportCardOutputService.js');
+      const service = new JanusReportCardOutputService({ engine, logger: engine?.core?.logger ?? console });
+      const result = await service.writeJournals();
+      return { ok: true, ...result };
+    });
+  },
+
   /**
    * Browse spells
    */

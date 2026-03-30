@@ -4,6 +4,7 @@ import {
   JanusFactionSimulationEngine,
   JanusRumorSimulationEngine,
   JanusSanctuarySimulationEngine,
+  JanusSocialRelationshipSimulationEngine,
   JanusLivingWorldScheduler
 } from "../../academy/living-world.js";
 import { cleanupEngineHookBucket, registerEngineHook, registerRuntimeHook } from "../../core/hooks/runtime.js";
@@ -23,13 +24,14 @@ registerRuntimeHook('janus7:ready:living-world', HOOKS.ENGINE_READY, async (engi
     const factionEngine = new JanusFactionSimulationEngine({ state, academyData, logger });
     const rumorEngine = new JanusRumorSimulationEngine({ state, academyData, calendar, logger });
     const sanctuaryEngine = new JanusSanctuarySimulationEngine({ state, academyData, logger });
+    const socialDynamicsEngine = new JanusSocialRelationshipSimulationEngine({ state, academyData, social: engine?.academy?.social ?? engine?.simulation?.social ?? engine?.social, logger });
     const scheduler = new JanusLivingWorldScheduler({
-      state, academyData, calendar, logger, assignmentEngine, factionEngine, rumorEngine, sanctuaryEngine
+      state, academyData, calendar, logger, assignmentEngine, factionEngine, rumorEngine, sanctuaryEngine, socialDynamicsEngine
     });
 
     engine.academy = engine.academy ?? {};
     engine.simulation = engine.simulation ?? {};
-    engine.academy.livingWorld = { assignmentEngine, factionEngine, rumorEngine, sanctuaryEngine, scheduler };
+    engine.academy.livingWorld = { assignmentEngine, factionEngine, rumorEngine, sanctuaryEngine, socialDynamicsEngine, scheduler };
     engine.simulation.livingWorld = engine.academy.livingWorld;
     engine.livingWorld = engine.academy.livingWorld;
 
