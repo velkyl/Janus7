@@ -5,6 +5,7 @@ import { getPanel, getQuickPanels, getPanels } from '../layer/panel-registry.js'
 import { getView, getViews } from '../layer/view-registry.js';
 import { runShellAction } from '../layer/action-router.js';
 import { JanusUI } from '../helpers.js';
+import { prepareDirectorRuntimeSummary, buildDirectorRunbookView, buildDirectorWorkflowView } from '../layer/director-context.js';
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { renderTemplate: renderHbsTemplate } = foundry.applications.handlebars;
@@ -141,6 +142,70 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     return state?.get?.('time') ?? {};
   }
 
+  _getQuestActorCandidates() {
+    const candidates = [
+      {
+        actorId: 'party',
+        actorUuid: null,
+        actorLabel: 'Gruppe / Party',
+        type: 'party',
+        isParty: true
+      }
+    ];
+
+    for (const actor of game?.actors ?? []) {
+      const actorId = actor?.id ?? actor?.uuid ?? null;
+      if (!actorId) continue;
+      candidates.push({
+        actorId,
+        actorUuid: actor?.uuid ?? null,
+        actorLabel: actor?.name ?? actorId,
+        type: actor?.type ?? null,
+        isParty: false
+      });
+    }
+
+    return candidates;
+  }
+
+  _buildDirectorRuntimeContext() {
+    const engine = this._getEngine();
+    const director = engine?.core?.director ?? engine?.director ?? null;
+    const runtime = director?.kernel?.getRuntimeSummary?.()
+      ?? director?.getRuntimeSummary?.()
+      ?? {};
+    const prepared = prepareDirectorRuntimeSummary({ engine, logger: engine?.core?.logger ?? console });
+
+    return {
+      directorSummary: prepared?.directorSummary ?? { available: !!director },
+      directorRuntime: {
+        ...prepared?.directorRuntime,
+        ...runtime,
+        lessonCount: Number(runtime?.lessonCount ?? 0),
+        queuedEventCount: Number(runtime?.queuedEventCount ?? 0),
+        activeQuestCount: Number(runtime?.activeQuestCount ?? 0),
+        lessons: Array.isArray(runtime?.lessons) ? runtime.lessons : [],
+        queuedEvents: Array.isArray(runtime?.queuedEvents) ? runtime.queuedEvents : [],
+        activeQuests: Array.isArray(runtime?.activeQuests) ? runtime.activeQuests : []
+      }
+    };
+  }
+
+  _buildDirectorWorkflowView(directorRuntime = null) {
+    return buildDirectorWorkflowView({
+      directorWorkflow: this._directorWorkflow ?? {},
+      directorRuntime: directorRuntime ?? this._buildDirectorRuntimeContext().directorRuntime,
+      engine: this._getEngine(),
+      questCandidates: this._getQuestActorCandidates()
+    });
+  }
+
+  _buildDirectorRunbookView(directorRuntime = null, directorWorkflow = null) {
+    const runtime = directorRuntime ?? this._buildDirectorRuntimeContext().directorRuntime;
+    const workflow = directorWorkflow ?? this._buildDirectorWorkflowView(runtime);
+    return buildDirectorRunbookView(runtime, workflow);
+  }
+
   _buildHeaderContext(engine) {
     const time = this._getStateTime();
     const activeView = getView(this._viewId) ?? getView('director');
@@ -197,16 +262,26 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }));
     const header = this._buildHeaderContext(engine);
     const panel = this._activePanelId ? getPanel(this._activePanelId) : null;
+    const questActorCandidates = this._getQuestActorCandidates();
+    const { directorSummary, directorRuntime } = this._buildDirectorRuntimeContext();
+    const directorWorkflow = this._buildDirectorWorkflowView(directorRuntime);
+    const directorRunbook = this._buildDirectorRunbookView(directorRuntime, directorWorkflow);
+
     return {
       isReady: !!engine,
       header,
       views,
       activeViewId: this._viewId,
+      directorSummary,
+      directorRuntime,
+      directorWorkflow,
+      directorRunbook,
+      questActorCandidates,
       viewHtml: await this._renderViewHtml(engine),
       panelHtml: await this._renderPanelHtml(engine),
       panelOpen: !!panel,
       panelTitle: panel?.title ?? null,
-      shellPaletteHint: '⌘/Ctrl + K → Command Center'
+      shellPaletteHint: 'Ctrl + K -> Command Center'
     };
   }
 

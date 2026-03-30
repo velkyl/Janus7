@@ -50,12 +50,13 @@ function buildDirectorView(engine, app) {
   const graph = diagnostics?.graph ?? {};
   const cache = graph?.cache ?? {};
   
-  const { directorSummary, directorRuntime } = prepareDirectorRuntimeSummary({ engine, logger: engine?.core?.logger ?? console });
+  const { directorSummary, directorRuntime } = app?._buildDirectorRuntimeContext?.()
+    ?? prepareDirectorRuntimeSummary({ engine, logger: engine?.core?.logger ?? console });
   const directorWorkflow = buildDirectorWorkflowView({
     directorWorkflow: app?._directorWorkflow ?? {},
     directorRuntime,
     engine,
-    questCandidates: []
+    questCandidates: app?._getQuestActorCandidates?.() ?? []
   });
   const directorRunbook = buildDirectorRunbookView(directorRuntime, directorWorkflow);
 
@@ -276,7 +277,25 @@ registerView({
 
 async function buildSessionPrepView(engine) {
   if (!engine) return { notReady: true };
-  const service = new JanusSessionPrepService({ engine, logger: engine?.core?.logger ?? console });
+  const SessionPrepService = await getSessionPrepService();
+  if (typeof SessionPrepService !== 'function') {
+    return {
+      isGM: !!game?.user?.isGM,
+      generatedAt: new Date().toISOString(),
+      slotRef: {},
+      suggestions: [],
+      currentLessons: [],
+      currentExams: [],
+      currentEvents: [],
+      upcoming: [],
+      quests: { total: 0, items: [] },
+      activeLocation: null,
+      diagnostics: { health: 'unknown', warnings: [] },
+      contentSeeds: [],
+      unavailable: true
+    };
+  }
+  const service = new SessionPrepService({ engine, logger: engine?.core?.logger ?? console });
   const report = await service.buildReport({ horizonSlots: 3 });
   
   const current = report.currentSlot ?? {};

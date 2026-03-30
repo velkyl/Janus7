@@ -52,6 +52,7 @@ export const JanusUI = {
     JanusShellApp,
     lessons: JanusLessonLibraryApp,
     kiBackupManager: JanusKiBackupManagerApp,
+    sessionPrepWizard: JanusShellApp,
     // Legacy alias key: keeps older macros functional, but UI does not expose it
     aiRoundtrip: JanusKiRoundtripApp,
     kiRoundtrip: JanusKiRoundtripApp,
@@ -62,10 +63,18 @@ export const JanusUI = {
   },
 
   open(key, options = {}) {
-    const normalizedKey = ({ lessons: 'lessonLibrary', lessonlibrary: 'lessonLibrary' }[String(key)] ?? key);
+    const requestedKey = String(key ?? '');
+    const normalizedKey = ({
+      lessons: 'lessonLibrary',
+      lessonlibrary: 'lessonLibrary',
+      sessionprepwizard: 'sessionPrepWizard'
+    }[requestedKey.toLowerCase()] ?? requestedKey);
+    const resolvedOptions = normalizedKey === 'sessionPrepWizard'
+      ? { viewId: 'sessionPrep', ...options }
+      : options;
     const App = this.apps[normalizedKey];
     if (!App) throw new Error(`[JANUS7] Unknown UI app key: ${key}`);
-    const inst = (typeof App.showSingleton === 'function') ? App.showSingleton(options) : new App(options);
+    const inst = (typeof App.showSingleton === 'function') ? App.showSingleton(resolvedOptions) : new App(resolvedOptions);
     try { inst.render?.({ force: true, focus: true }); } catch (_) { try { inst.render?.(true); } catch (_e) {} }
     queueMicrotask(() => {
       try { inst._applyWindowSanity?.(); } catch (_) {}
