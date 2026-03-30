@@ -200,15 +200,20 @@ export class JanusSocialEngine {
 
     let newValue = 0;
 
-    await this._updateRelationship(fromId, toId, (existing) => {
-      const prev = Number(existing?.value ?? 0);
-      newValue = this._clampAttitude(prev + d);
-      return {
-        value: newValue,
-        tags: options.tags ?? existing?.tags,
-        meta: options.meta ?? existing?.meta
-      };
-    });
+    try {
+      await this._updateRelationship(fromId, toId, (existing) => {
+        const prev = Number(existing?.value ?? 0);
+        newValue = this._clampAttitude(prev + d);
+        return {
+          value: newValue,
+          tags: options.tags ?? existing?.tags,
+          meta: options.meta ?? existing?.meta
+        };
+      });
+    } catch (err) {
+      this.logger?.error?.('[JANUS7] adjustAttitude-Transaktion fehlgeschlagen', { fromId, toId, err: err?.message });
+      throw err;
+    }
 
     return newValue;
   }

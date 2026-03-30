@@ -516,7 +516,9 @@ export class JanusDirector {
     const capped = Math.max(0, Number(limit ?? 0) || 0);
     const picked = queue.slice(0, capped || queue.length);
     const remaining = queue.slice(picked.length);
-    this.state.set('academy.runtimeQueuedEvents', remaining);
+    await this.state.transaction(async (tx) => {
+      tx.set('academy.runtimeQueuedEvents', remaining);
+    });
 
     const processed = [];
     for (const entry of picked) {
@@ -550,7 +552,8 @@ export class JanusDirector {
 
   /**
    * Erzeugt Quest-Vorschläge aus dem Graph-Kontext des aktuellen Slots.
-   * NOTE (P2-02): Diese Methode ist READ-ONLY — kein _assertGM() notwendig.
+   * NOTE (P2-02): Diese Methode ist überwiegend lesend — kein _assertGM() notwendig.
+   * graph.build() kann jedoch den Graph-Cache aktualisieren (Schreibseiteneffekt).
    * graph.isDirty() kann das dirty-Flag zurücksetzen (Seiteneffekt), daher
    * sollte die Methode nur aus GM-Kontext aufgerufen werden (UI-Layer garantiert dies).
    */

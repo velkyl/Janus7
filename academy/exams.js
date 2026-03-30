@@ -293,6 +293,7 @@ export class JanusExamsEngine {
 
   /**
    * Wendet ein Exam-Resultat auf die Scoring-Engine an, falls vorhanden.
+   * Fehler werden intern geloggt und nicht weitergegeben.
    *
    * @param {any} examDef
    * @param {any} examResults

@@ -35,7 +35,9 @@ export const atmosphereCommands = {
 
       // optional init
       if (enabled) {
-        await engine?.atmosphere?.init?.().catch(() => {});
+        await engine?.atmosphere?.init?.().catch((err) => {
+          engine?.core?.logger?.debug?.('[JANUS7] atmosphere.init fehlgeschlagen (non-fatal)', { err: err?.message });
+        });
       }
       return { enabled };
     });
