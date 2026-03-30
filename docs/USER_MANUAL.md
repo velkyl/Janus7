@@ -1,4 +1,4 @@
-# JANUS7 â€“ Nutzerhandbuch (v0.9.12.44)
+# JANUS7 â€“ Nutzerhandbuch (v0.9.12.46)
 
 **Stand:** 2026-03-25  
 **Foundry:** v13+  

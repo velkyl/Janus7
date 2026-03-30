@@ -1,6 +1,6 @@
 # JANUS7 KI-HANDOVER
 
-**Modul-Version:** 0.9.12.44  
+**Modul-Version:** 0.9.12.46
 **Foundry:** v13+  
 **Datum:** 2026-03-25
 

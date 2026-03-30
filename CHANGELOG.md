@@ -1,4 +1,4 @@
-## v0.9.12.44 - Director Write Fixes + Exam Question Sets + Bridge/API Sync
+## v0.9.12.46 - Director Write Fixes + Exam Question Sets + Bridge/API Sync
 
 ### Fixed
 - UI: Control Panel schreibt `academy.roster` und `academy.slotJournals` wieder ueber Director-APIs statt ueber einen defekten Direkt-Write auf den State

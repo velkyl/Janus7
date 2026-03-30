@@ -86,7 +86,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(foundry.ap
 
   /** @override */
   async _prepareContext(options) {
-    const context = await super._prepareContext(options);
+    const context = (await super._prepareContext(options)) || {};
     
     context.isGM = game.user?.isGM ?? false;
     context.commandCategories = this._getCommandCategories();

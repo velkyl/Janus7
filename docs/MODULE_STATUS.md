@@ -1,4 +1,4 @@
-# Update 0.9.12.44
+# Update 0.9.12.46
 
 ## Aenderungen seit 0.9.12.43
 
@@ -7,7 +7,7 @@
 - FIX: DSA5-Bridge/System-Commands sind bei Actor-Lookup und Skill-Rolls wieder auf denselben Public-API-Vertrag ausgerichtet.
 - DOKU: API-, KI-, Release- und Statusdokumente beschreiben jetzt die tatsaechlich vorhandenen Hooks, Parameter und bekannten offenen Punkte.
 
-## Gesamtstatus (0.9.12.44)
+## Gesamtstatus (0.9.12.46)
 
 | Phase | Status |
 |-------|--------|

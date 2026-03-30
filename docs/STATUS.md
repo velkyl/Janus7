@@ -1,8 +1,8 @@
-# STATUS - v0.9.12.44
+# STATUS - v0.9.12.46
 
 # JANUS7 Status
 
-**Module Version (SSOT: module.json):** 0.9.12.44  
+**Module Version (SSOT: module.json):** 0.9.12.46
 **Stand:** 2026-03-25  
 **Foundry Zielplattform:** v13+ (ESM, ApplicationV2)
 
@@ -14,7 +14,7 @@
 ## Reifegrad
 JANUS7 ist technisch stabil und fuer den Kampagnenbetrieb nutzbar. Die aktuelle Haertung repariert echte Runtime-Drift in UI-, Bridge- und Datenpfaden statt nur Dokumentationstexte nachzuziehen.
 
-## Wichtige Aenderungen in 0.9.12.44
+## Wichtige Aenderungen in 0.9.12.46
 - Control Panel schreibt `academy.roster` und `academy.slotJournals` wieder ueber Director-APIs statt ueber einen defekten Direkt-Write auf den State.
 - `AcademyDataApi` liest Exam-MCQ-Daten wieder aus dem realen `questionSets`-Root der shipped `exam-questions.json`.
 - DSA5-Bridge und System-Commands nutzen wieder konsistente Actor-/Skill-Pfade (`getNpc()`, `getActorByName()`, `bridge.rollSkill(...)`).
@@ -26,7 +26,7 @@ JANUS7 ist technisch stabil und fuer den Kampagnenbetrieb nutzbar. Die aktuelle 
 - **Welle 4:** Release-Hardening technisch abgeschlossen; Live-Abnahme in Foundry bleibt sinnvoll
 
 ## Pruefschritte nach dem Update
-1. Foundry zeigt `0.9.12.44` als Modulversion.
+1. Foundry zeigt `0.9.12.46` als Modulversion.
 2. Shell und Kern-Apps oeffnen stabil.
 3. Test-Registry laedt ohne Importfehler.
 4. Exam-/MCQ-Workflows finden ihre Fragekataloge wieder.

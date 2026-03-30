@@ -1,13 +1,13 @@
 {
     "module":  "Janus7",
-    "version":  "0.9.12.44",
+    "version":  "0.9.12.46",
     "schemaVersion":  "7.1",
     "foundry":  "\u003e=13",
     "roadmap":  "7.0",
     "status":  "wave4-release-hardening",
     "changelog":  [
                       {
-                          "version":  "0.9.12.44",
+                          "version":  "0.9.12.46",
                           "date":  "2026-03-25",
                           "type":  "runtime-fixes-doc-sync",
                           "notes":  [

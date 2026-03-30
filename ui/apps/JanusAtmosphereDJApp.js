@@ -51,22 +51,23 @@ export class JanusAtmosphereDJApp extends HandlebarsApplicationMixin(JanusBaseAp
     await super._onRender(context, options);
     this.enableAutoRefresh(['janus7AtmosphereChanged', 'janus7StateChanged']);
 
-    const root = this.element;
+    const root = this.domElement;
     if (!root) return;
-    root.querySelector('[name="masterClientUserId"]')?.addEventListener('change', (ev) => {
-      this.constructor.onSetMasterClient.call(this, ev, ev.currentTarget);
+
+    // Use unified event delegation rather than individual manual bindings
+    // Note: buttons usually get caught by ApplicationV2 ACTIONS if data-action exists.
+    // However, for inputs/changes, we capture them via a single listener to align with AppV2
+    // and keep it clean without relying on querySelector for single items.
+    root.addEventListener('change', (ev) => {
+      const target = ev.target;
+      if (target?.name === 'masterClientUserId') this.constructor.onSetMasterClient.call(this, ev, target);
+      if (target?.name === 'autoCalendar') this.constructor.onToggleAutoCalendar.call(this, ev, target);
+      if (target?.name === 'autoEvents') this.constructor.onToggleAutoEvents.call(this, ev, target);
+      if (target?.name === 'autoLocation') this.constructor.onToggleAutoLocation.call(this, ev, target);
     });
-    root.querySelector('[name="volume"]')?.addEventListener('input', (ev) => {
-      this.constructor.onSetVolume.call(this, ev, ev.currentTarget);
-    });
-    root.querySelector('[name="autoCalendar"]')?.addEventListener('change', (ev) => {
-      this.constructor.onToggleAutoCalendar.call(this, ev, ev.currentTarget);
-    });
-    root.querySelector('[name="autoEvents"]')?.addEventListener('change', (ev) => {
-      this.constructor.onToggleAutoEvents.call(this, ev, ev.currentTarget);
-    });
-    root.querySelector('[name="autoLocation"]')?.addEventListener('change', (ev) => {
-      this.constructor.onToggleAutoLocation.call(this, ev, ev.currentTarget);
+
+    root.addEventListener('input', (ev) => {
+      if (ev.target?.name === 'volume') this.constructor.onSetVolume.call(this, ev, ev.target);
     });
   }
 

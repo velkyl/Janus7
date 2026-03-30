@@ -1,8 +1,8 @@
 # JANUS7 Release-Uebersicht
 
-Aktuelle Version: **0.9.12.44** (2026-03-25)
+Aktuelle Version: **0.9.12.46** (2026-03-25)
 
-## Was ist neu in 0.9.12.44?
+## Was ist neu in 0.9.12.46?
 - Control-Panel-Dropflows schreiben Roster- und Slot-Journal-Aenderungen wieder ueber Director-APIs.
 - Exam-MCQ-Fragen werden wieder passend zur shipped Datenform `questionSets` aufgeloest.
 - DSA5-Bridge und System-Commands sind bei Actor-Lookup und Skill-Rolls wieder konsistent verdrahtet.
