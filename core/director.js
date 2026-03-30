@@ -297,7 +297,8 @@ export class JanusDirector {
     this._assertGM();
     await this._engine().calendar?.resetToStart?.();
     if (opts.save ?? true) await this.saveState(opts);
-    return this._engine().calendar.getCurrentSlotRef();
+    // FIX P0-04: calendar kann null sein wenn Phase 4 nicht bereit ist.
+    return this._engine().calendar?.getCurrentSlotRef?.() ?? null;
   }
 
   /**
@@ -347,7 +348,13 @@ export class JanusDirector {
    */
   async applyMood(moodId, opts = {}) {
     this._assertGM();
-    this._engine().atmosphere.applyMood(moodId);
+    // FIX P0-05: atmosphere kann null sein wenn Phase 5 (Atmosphere) nicht geladen ist.
+    const atmo = this._engine()?.atmosphere;
+    if (!atmo?.applyMood) {
+      (this._engine()?.core?.logger ?? console).warn?.('[JANUS7][Director] atmosphere.applyMood() nicht verfügbar (Phase 5 bereit?)');
+      return;
+    }
+    await atmo.applyMood(moodId);
     if (opts.save ?? true) await this.saveState(opts);
   }
 
@@ -541,7 +548,12 @@ export class JanusDirector {
     return { available: true, ...(result ?? { advanced: [] }) };
   }
 
-  /** Erzeugt Quest-Vorschläge aus dem Graph-Kontext des aktuellen Slots. */
+  /**
+   * Erzeugt Quest-Vorschläge aus dem Graph-Kontext des aktuellen Slots.
+   * NOTE (P2-02): Diese Methode ist READ-ONLY — kein _assertGM() notwendig.
+   * graph.isDirty() kann das dirty-Flag zurücksetzen (Seiteneffekt), daher
+   * sollte die Methode nur aus GM-Kontext aufgerufen werden (UI-Layer garantiert dies).
+   */
   async generateQuests({ actorId = 'party', limit = 5, context = {} } = {}) {
     const engine = this._engine();
     const graph = engine?.graph ?? null;
@@ -685,5 +697,14 @@ export class JanusDirector {
     const res = await fn();
     if (opts.save ?? true) await this.saveState(opts);
     return res;
+  }
+
+  /**
+   * Wird vom Engine-Ready-Zyklus aufgerufen (core/index.js Zeile 376).
+   * FIX P2-06: Stub-Implementierung, damit der opionale Guard nicht immer ein No-Op ist.
+   * Kann überschrieben werden um künftige Director-Ready-Logik zu implementieren.
+   */
+  onReady() {
+    // Reserved for future Director ready-phase initialization.
   }
 }

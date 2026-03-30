@@ -1,6 +1,20 @@
 // v2 registry cache bypass
 import { getPanels } from './panel-registry.js';
-import { JanusSessionPrepService } from '../../phase8/session-prep/JanusSessionPrepService.js';
+// FIX P2-08: JanusSessionPrepService wird lazy importiert um zu verhindern dass ein
+// fehlender/kaputter Phase8-Import die gesamte Shell (view-registry.js) blockiert.
+// Der Statische Top-Level-Import wurde daher entfernt und durch einen lazy-Import ersetzt.
+// import { JanusSessionPrepService } from '../../phase8/session-prep/JanusSessionPrepService.js';
+let _sessionPrepService = null;
+async function getSessionPrepService() {
+  if (_sessionPrepService) return _sessionPrepService;
+  try {
+    const m = await import('../../phase8/session-prep/JanusSessionPrepService.js');
+    _sessionPrepService = m.JanusSessionPrepService;
+  } catch (_err) {
+    // Phase8 ist optional — Shell funktioniert ohne.
+  }
+  return _sessionPrepService;
+}
 import { buildLocationsView, buildPeopleView, buildKiContext, buildSyncView, buildSystemView } from './context-builders.js';
 import { prepareDirectorRuntimeSummary, buildDirectorRunbookView, buildDirectorWorkflowView } from './director-context.js';
 

@@ -22,7 +22,9 @@ import { MODULE_ID, STATE_PATHS } from '../core/common.js';
 import { JanusCapabilities } from '../core/capabilities.js';
 import { JanusTimeReactor } from '../services/time/reactor.js';
 import { JanusCron } from '../services/cron/JanusCron.js';
-import { handleChatMessage } from '../services/chat/cli.js';
+// FIX P2-07: handleChatMessage wurde importiert aber nie aufgerufen.
+// Der Chat-Hook wird direkt in services/chat/cli.js registriert.
+// import { handleChatMessage } from '../services/chat/cli.js'; // ENTFERNT
 import { SceneRegionsBridge } from '../bridges/foundry/SceneRegionsBridge.mjs';
 import { JanusShellApp } from '../ui/apps/JanusShellApp.js';
 import { registerLessonDocuments, ensureLessonDocumentsReady } from './integration/phase2-document-content-integration.js';

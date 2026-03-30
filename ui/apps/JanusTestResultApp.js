@@ -1,4 +1,4 @@
-import { moduleTemplatePath } from '../../core/common.js';
+﻿import { moduleTemplatePath } from '../../core/common.js';
 /**
  * @file ui/apps/JanusTestResultApp.js
  * @module janus7/ui
@@ -189,7 +189,7 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
 
   async runTests() {
     this._running = true;
-    this.render(true);
+    this.render({ force: true });
 
     try {
       const engine = game?.janus7;
@@ -244,7 +244,7 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
       this._getLogger().error?.('JANUS7 | Test Runner failed:', err);
       ui.notifications.error(`JANUS7 Test Runner: ${err.message}`);
       this._running = false;
-      this.render(true);
+      this.render({ force: true });
     }
   }
 
@@ -310,11 +310,11 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
       suiteClass: this._readFilterValue('[name="suiteFilter"]'),
       status: this._readFilterValue('[name="statusFilter"]')
     };
-    await this.render(true);
+    await this.render({ force: true });
   }
 
   static async onResetFilters() {
     this._filters = { phase: 'all', suiteClass: 'all', status: 'all' };
-    await this.render(true);
+    await this.render({ force: true });
   }
 }

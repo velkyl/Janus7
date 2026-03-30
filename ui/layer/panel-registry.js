@@ -1,4 +1,4 @@
-/**
+﻿/**
  * JANUS7 UI Layer - Panel Registry
  * Additive registry for the modular shell layer.
  * Panels are metadata-driven so future extensions only register here.
@@ -103,7 +103,9 @@ function buildAtmospherePanel(engine) {
 
 function buildQuestPanel(engine) {
   const quests = engine?.academy?.quests;
-  const state = engine?.core?.state?.get?.('questStates') ?? engine?.core?.state?.get?.('academy.quests') ?? {};
+  // FIX P2-04: 'academy.quests' wurde in der State-Migration entfernt.
+  // Nur 'questStates' ist der kanonische Root-Key.
+  const state = engine?.core?.state?.get?.('questStates') ?? {};
   const active = [];
   for (const [actorId, questMap] of Object.entries(state ?? {})) {
     if (!questMap || typeof questMap !== 'object') continue;
@@ -461,3 +463,4 @@ export default {
   getToolPanels,
   getPanelOptions
 };
+

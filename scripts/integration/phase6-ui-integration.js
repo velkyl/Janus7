@@ -8,7 +8,7 @@
  */
 
 import { MODULE_ID } from '../../core/common.js';
-import { HOOKS } from '../../core/hooks/topics.js';
+import { HOOKS } from '../../core/hooks/emitter.js';
 import { registerRuntimeHook } from '../../core/hooks/runtime.js';
 
 // UI + Commands are Phase 6 deliverables.
@@ -16,16 +16,9 @@ import { JanusUI } from '../../ui/index.js';
 import { JanusCommands } from '../../ui/commands/index.js';
 
 
-// Best-effort immediate attach (pre-janus7Ready).
-try {
-  const e = globalThis.game?.janus7;
-  if (e) {
-    e.commands = e.commands ?? JanusCommands;
-    e.ui = e.ui ?? JanusUI;
-  }
-} catch (_) {
-  // ignore
-}
+// FIX P1-01: Der folgende Top-Level-Code war immer wirkungslos.
+// game.janus7 ist zum ESModule-Import-Zeitpunkt noch nicht initialisiert.
+// Die verlässliche Attach-Logik findet im ENGINE_READY Hook statt (siehe unten).
 
 // Keep engine links consistent at the moment the engine is declared ready.
 registerRuntimeHook('janus7:ready:phase6-ui', HOOKS.ENGINE_READY, (engine) => {

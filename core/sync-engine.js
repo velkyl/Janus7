@@ -597,18 +597,21 @@ export class JanusSyncEngine {
    */
   _buildBiographyHTML(profile, sections) {
     const lines = [];
+    // FIX P2-03: Alle Profile-Felder werden über _mdToHtml() geleitet die HTML-Escaping
+    // enthält (&, <, >). Direktes String-Interpolieren führte zu XSS in Journal-Einträgen.
+    const esc = (s) => this._mdToHtml(String(s ?? ''));
 
-    if (profile.subtitle)  lines.push(`<p><strong>${profile.subtitle}</strong></p>`);
-    if (profile.roleText)  lines.push(`<p><em>${profile.roleText}</em></p>`);
+    if (profile.subtitle)  lines.push(`<p><strong>${esc(profile.subtitle)}</strong></p>`);
+    if (profile.roleText)  lines.push(`<p><em>${esc(profile.roleText)}</em></p>`);
     if (profile.preamble)  lines.push(`<p>${this._mdToHtml(profile.preamble)}</p>`);
-    if (profile.born)      lines.push(`<p>Geboren: ${profile.born} (${profile.age ?? '?'})</p>`);
-    if (profile.species)   lines.push(`<p>Spezies: ${profile.species}</p>`);
-    if (profile.origin)    lines.push(`<p>Herkunft: ${profile.origin}</p>`);
-    if (profile.size)      lines.push(`<p>Größe: ${profile.size}</p>`);
-    if (profile.light)     lines.push(`<p>Licht: ${profile.light}</p>`);
+    if (profile.born)      lines.push(`<p>Geboren: ${esc(profile.born)} (${esc(profile.age ?? '?')})</p>`);
+    if (profile.species)   lines.push(`<p>Spezies: ${esc(profile.species)}</p>`);
+    if (profile.origin)    lines.push(`<p>Herkunft: ${esc(profile.origin)}</p>`);
+    if (profile.size)      lines.push(`<p>Größe: ${esc(profile.size)}</p>`);
+    if (profile.light)     lines.push(`<p>Licht: ${esc(profile.light)}</p>`);
 
     for (const [heading, content] of Object.entries(sections)) {
-      lines.push(`<h3>${heading}</h3>`);
+      lines.push(`<h3>${esc(heading)}</h3>`);
       lines.push(`<p>${this._mdToHtml(String(content))}</p>`);
     }
 

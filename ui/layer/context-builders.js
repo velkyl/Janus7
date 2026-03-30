@@ -48,11 +48,16 @@ export function buildSyncView({ state }) {
 }
 
 export function buildSystemView({ engine }) {
+  // FIX P1-05: game.settings.get() kann eine Exception werfen wenn das Setting
+  // noch nicht registriert ist (z.B. bei frühem Render vor registerSettings()).
+  const getSetting = (key, def = false) => {
+    try { return !!game.settings.get('janus7', key); } catch { return def; }
+  };
   return {
-    enableSimulation: !!game.settings.get('janus7', 'enableSimulation'),
-    enableAtmosphere: !!game.settings.get('janus7', 'enableAtmosphere'),
-    enableUI: !!game.settings.get('janus7', 'enableUI'),
-    enableQuestSystem: !!game.settings.get('janus7', 'enableQuestSystem'),
-    enablePhase7: !!game.settings.get('janus7', 'enablePhase7')
+    enableSimulation: getSetting('enableSimulation'),
+    enableAtmosphere: getSetting('enableAtmosphere'),
+    enableUI: getSetting('enableUI'),
+    enableQuestSystem: getSetting('enableQuestSystem'),
+    enablePhase7: getSetting('enablePhase7')
   };
 }

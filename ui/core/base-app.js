@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file ui/core/base-app.js
  * @module janus7
  * @phase 6
@@ -392,7 +392,8 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
         // (can happen if hooks schedule rerenders while the app is closing / detaching).
         const el = this.domElement;
         if (!el || !el.isConnected) return;
-        const p = this.render(true);
+        // FIX P3-01: ApplicationV2.render() erwartet ein Options-Objekt, nicht einen boolean.
+        const p = this.render({ force: true });
         if (p?.catch) p.catch((err) => this._getLogger().error?.(`${MODULE_ID}: Rerender failed (async)`, err));
       } catch (err) {
         this._getLogger().error?.(`${MODULE_ID}: Rerender failed`, err);
@@ -408,9 +409,10 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
    * We keep `refresh()` as a stable alias to avoid scattering UI fixes.
    */
   refresh(force = true) {
-    // `render` exists on ApplicationV2 and on HandlebarsApplicationMixin(ApplicationV2)
-    // Force re-render by default to match the old semantics.
-    return this.render?.(force);
+    // FIX P3-01: render() auf ApplicationV2 erwartet ein Options-Objekt.
+    // 'force' als boolean wird in { force: boolean } gewrapped.
+    const opts = (typeof force === 'object' && force !== null) ? force : { force: !!force };
+    return this.render?.(opts);
   }
   // ---------------------------------------------------------------------------
   // Phase 6: Reactive UI helpers (Hook-driven refresh)

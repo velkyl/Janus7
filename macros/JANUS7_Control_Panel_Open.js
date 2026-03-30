@@ -1,4 +1,4 @@
-/**
+﻿/**
  * JANUS7 Control Panel Open Macro
  *
  * Öffnet das JANUS7 Control Panel. Standardmäßig wird der 'status'-Tab aktiv.
@@ -30,7 +30,7 @@
     // Fallback: globale Klasse verwenden (falls Panel vor janus7Ready geöffnet wird)
     if (globalThis?.JanusControlPanelApp) {
       const app = new globalThis.JanusControlPanelApp({ engine: game?.janus7 ?? null, ...opts });
-      app.render(true);
+      app.render({ force: true });
       return;
     }
 

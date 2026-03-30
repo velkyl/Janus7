@@ -1,4 +1,4 @@
-import { moduleTemplatePath } from '../../../core/common.js';
+﻿import { moduleTemplatePath } from '../../../core/common.js';
 /**
  * @file ui/apps/ki-roundtrip/JanusKiRoundtripApp.js
  * @module janus7/ui
@@ -93,7 +93,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
 
   static showSingleton(options = {}) {
     if (!this._instance) this._instance = new this(options);
-    this._instance.render(true);
+    this._instance.render({ force: true });
     return this._instance;
   }
 
@@ -343,7 +343,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
       }
       // Refresh history and diff box (ApplicationV2: force context rebuild)
       if (diffBox) diffBox.textContent = '';
-      await inst.render(true);
+      await inst.render({ force: true });
     } catch (err) {
       this._getLogger().warn?.('[JANUS7][KI Roundtrip] apply failed', err);
       ui.notifications?.error?.(err?.message ?? 'Import fehlgeschlagen');
@@ -411,7 +411,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
       const diffs = await (engine?.capabilities?.ki ?? engine?.ki)?.importFromInbox?.(filename) ?? [];
       ui.notifications?.info?.(`Import aus Datei erfolgreich (${diffs.length} Änderungen)`);
       // Refresh UI (ApplicationV2: force context rebuild)
-      await inst.render(true);
+      await inst.render({ force: true });
     } catch (err) {
       this._getLogger().warn?.('[JANUS7][KI Roundtrip] import file failed', err);
       ui.notifications?.error?.(err?.message ?? 'Import aus Datei fehlgeschlagen');
@@ -461,7 +461,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
           if (input) input.value = path;
         }
       });
-      picker.render(true);
+      picker.render({ force: true });
     } catch (err) {
       this._getLogger().warn?.('[JANUS7][KI Roundtrip] browseFile failed', err);
       ui.notifications?.warn?.('Browse fehlgeschlagen (siehe Konsole).');

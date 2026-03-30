@@ -1,4 +1,4 @@
-import { moduleTemplatePath } from '../../core/common.js';
+﻿import { moduleTemplatePath } from '../../core/common.js';
 /**
  * @file ui/apps/JanusGuidedManualTestApp.js
  * @module janus7/ui
@@ -56,7 +56,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
 
   static showSingleton(options = {}) {
     if (!this._instance) this._instance = new this(options);
-    this._instance.render(true);
+    this._instance.render({ force: true });
     return this._instance;
   }
 
@@ -123,7 +123,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     await this._loadManualResults();
     this._selectedId = this._selectedId ?? this._pickInitialTestId();
     this._completed = false;
-    this.render(true);
+    this.render({ force: true });
     if (!this._completionPromise) {
       this._completionPromise = new Promise((resolve) => { this._completionResolver = resolve; });
     }
@@ -298,7 +298,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     const evidence = this._currentEvidence(test.id);
     await writeManualTestResult(test.id, { status, notes, evidence }, test);
     await this._loadManualResults();
-    await this.render(true);
+    await this.render({ force: true });
     return true;
   }
 
@@ -391,7 +391,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
 
     if (adopted.length) {
       await this._loadManualResults();
-      if (render) await this.render(true);
+      if (render) await this.render({ force: true });
     }
 
     return adopted;
@@ -429,7 +429,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     this._appendEvidence(test.id, buildEvidenceRecord('check', checkId, check.label, { ...result, data: result?.details ?? null }));
     this._lastRun = { kind: 'check', id: checkId, summary: result?.summary ?? '' };
     await this._adoptReadyGuidedTests({ tests: [test], render: false });
-    await this.render(true);
+    await this.render({ force: true });
   }
 
   async _runAllChecks() {
@@ -468,7 +468,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
       });
       this._lastRun = { kind: 'step', id: stepId, summary: 'Vom Nutzer bestätigt' };
       await this._adoptReadyGuidedTests({ tests: [test], render: false });
-      await this.render(true);
+      await this.render({ force: true });
       return;
     }
 
@@ -483,33 +483,33 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     this._appendEvidence(test.id, buildEvidenceRecord('step', stepId, step.label, result));
     this._lastRun = { kind: 'step', id: stepId, summary: result?.summary ?? '' };
     await this._adoptReadyGuidedTests({ tests: [test], render: false });
-    await this.render(true);
+    await this.render({ force: true });
   }
 
   static async onRefreshList() {
     await this._loadManualResults();
-    await this.render(true);
+    await this.render({ force: true });
   }
 
   static async onSelectTest(_event, target) {
     const id = target?.dataset?.testId;
     if (!id) return;
     this._selectedId = id;
-    await this.render(true);
+    await this.render({ force: true });
   }
 
   static async onPrevTest() {
     const idx = this._selectedIndex();
     if (idx <= 0) return;
     this._selectedId = this._tests[idx - 1]?.id ?? this._selectedId;
-    await this.render(true);
+    await this.render({ force: true });
   }
 
   static async onNextTest() {
     const idx = this._selectedIndex();
     if (idx >= this._tests.length - 1) return;
     this._selectedId = this._tests[idx + 1]?.id ?? this._selectedId;
-    await this.render(true);
+    await this.render({ force: true });
   }
 
   static async onMarkPass() {
@@ -544,7 +544,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     if (!current) return;
     await clearManualTestResult(current.id);
     await this._loadManualResults();
-    await this.render(true);
+    await this.render({ force: true });
   }
 
   static async onResetAll() {
@@ -564,7 +564,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     await resetManualTestResults();
     this._session = { checks: {}, steps: {}, evidence: {} };
     await this._loadManualResults();
-    await this.render(true);
+    await this.render({ force: true });
   }
 
   static async onVerifyCatalog() {
@@ -613,7 +613,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     if (!current) return;
     const bucket = this._ensureSessionBucket('evidence', current.id);
     bucket.items = [];
-    await this.render(true);
+    await this.render({ force: true });
   }
 
   static async onCopyEvidence() {

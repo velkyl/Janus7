@@ -1,4 +1,4 @@
-import { emitHook, HOOKS } from '../../core/hooks/emitter.js';
+﻿import { emitHook, HOOKS } from '../../core/hooks/emitter.js';
 import { MODULE_ID } from '../../core/common.js';
 import {
   JANUS_LESSON_DEFAULT_IMG,
@@ -21,7 +21,11 @@ function getStateNpcMap(engine) {
 }
 
 function getStateLocationMap(engine) {
-  return engine?.core?.state?.get?.('locations') ?? engine?.state?.get?.('locations') ?? {};
+  // FIX P2-05: 'locations' existiert nicht im Default-State. Kanonischer Pfad ist 'foundryLinks.locations'.
+  return engine?.core?.state?.getPath?.('foundryLinks.locations')
+      ?? engine?.core?.state?.get?.('foundryLinks')?.locations
+      ?? engine?.state?.getPath?.('foundryLinks.locations')
+      ?? {};
 }
 
 function toTeacherUuid(engine, lesson) {

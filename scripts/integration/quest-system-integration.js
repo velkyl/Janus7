@@ -110,21 +110,17 @@ export class QuestSystemIntegration {
   static setupHooks() {
     // Auto-show event popup when event is presented
     registerRuntimeHook('janus7:quest:event-shown', HOOKS.EVENT_SHOWN, async ({eventId, actorId, event}) => {
-      if (game.user.isGM) {
+      // FIX P0-02: game.user kann während früher Hooks noch null sein.
+      if (game?.user?.isGM) {
         const popup = new JanusEventPopup({eventId, actorId, event});
         // ApplicationV2 expects an options object, not a boolean.
         popup.render({ force: true });
       }
     });
 
-    // Log quest events
-    registerRuntimeHook('janus7:quest:quest-started', HOOKS.QUEST_STARTED, ({questId, actorId}) => {
-      ui.notifications.info(`Quest gestartet: ${questId}`);
-    });
-
-    registerRuntimeHook('janus7:quest:quest-completed', HOOKS.QUEST_COMPLETED, ({questId, actorId}) => {
-      ui.notifications.info(`Quest abgeschlossen: ${questId}`);
-    });
+    // FIX P0-03: Quest-Notifications wurden hier UND in quest-journal.js doppelt registriert.
+    // Diese Hooks werden entfernt — quest-journal.js ist der kanonische Ort für UI-Notifications.
+    // (quest-system-integration.js ist der Engine-Layer, nicht der UI-Layer.)
   }
 
   static async initializeEngines(engine) {
@@ -140,12 +136,16 @@ export class QuestSystemIntegration {
       return;
     }
 
-    // Initialize academy.data if not present
+    // FIX P1-06: engine.academy.data NIEMALS mit {} überschreiben wenn es bereits
+    // eine AcademyDataApi-Instanz ist. Ein leeres {} zerstoert die API still.
+    // Nur initialisieren wenn academy oder academy.data völlig fehlt (null/undefined).
     if (!engine.academy) {
       engine.academy = {};
     }
     if (!engine.academy.data) {
-      engine.academy.data = {};
+      // Nur als letzter Notfall-Fallback — normalerweise setzt Phase 3 academy.data.
+      _qlog().warn?.('[JANUS7] Quest System: engine.academy.data fehlt nach Phase 3. Quest-Content-Laden degradiert.');
+      engine.academy.data = { _placeholder: true };
     }
 
     // Load content via AcademyDataApi first, fallback to direct loader. Because of course duplicate loaders are how bugs breed.
@@ -218,12 +218,17 @@ export class QuestSystemIntegration {
     engine.simulation.events = engine.simulation.events ?? eventsEngine;
     engine.simulation.quests = engine.simulation.quests ?? questsEngine;
 
-    // Make globally accessible
-    game.janus7Quest = {
+    // FIX P3-04: game.janus7Quest war außerhalb des etablierten game.janus7.*-Namespaces.
+    // Jetzt im kanonischen Namespace unter game.janus7.quest exposiert.
+    const questApi = {
       openJournal: () => new JanusQuestJournal().render({ force: true }),
       openDevPanel: () => new JanusDevPanel().render({ force: true }),
       showEvent: (eventId, actorId, event) => new JanusEventPopup({eventId, actorId, event}).render({ force: true })
     };
+    // Primärer Namespace
+    if (game?.janus7) game.janus7.quest = questApi;
+    // Legacy-Alias für bestehende Makros die game.janus7Quest nutzen.
+    game.janus7Quest = questApi;
 
     logger?.debug?.('[JANUS7] Quest summaries prepared', {
       activeQuests: engine.academy.data.buildQuestSummary?.().filter?.((q) => q.status === 'active')?.length ?? 0,

@@ -41,10 +41,14 @@ const UNSET_PATH = foundry?.utils?.unsetProperty
 
 // ─── Legacy-Path-Alias Sunset-Konfiguration ───────────────────────────────────
 //
-// Format: [legacyPrefix, canonicalPrefix]
-// Alle Reads/Writes über legacy Paths werden still umgeleitet UND gewarnt.
-// Sunset-Plan: Aliase bleiben bis v1.0 aktiv, danach können sie entfernt werden.
-// Tracking: Jede Warning enthält den Call-Site-Pfad für einfache Suche.
+// Format: [legacyPath, canonicalPath]
+// Read/Write auf den legacyPath wird auf den canonicalPath umgeleitet (mit Warning).
+//
+// WICHTIG: Die Map-Richtung ist [LEGACY → CANONICAL]:
+//   'academy.quests'  → 'questStates'  (questStates ist der SSOT-Root per v0.9.12+)
+//   'scoring'         → 'academy.scoring' (academy.scoring ist der kanonische Pfad)
+//
+// Sunset-Plan: Aliase bleiben bis v1.0 aktiv, danach entfernen.
 //
 const LEGACY_PATH_ALIASES = Object.freeze([
   ['academy.quests', 'questStates'],
@@ -299,6 +303,8 @@ export class JanusStateCore {
  * @param {any} [stateObj] Optional: ein State-Objekt; default ist der interne State.
  * @returns {{changed: boolean, state: any}}
  */
+// NOTE (P3-05): migrateState() mutiert das übergebene Objekt direkt (in-place).
+// Nie einen gemeinsamen Referenz-Clone übergeben, wenn das Original unberührt bleiben soll.
 migrateState(stateObj = this._state) {
   if (!stateObj) return { changed: false, state: stateObj };
   let changed = false;
@@ -603,12 +609,13 @@ migrateState(stateObj = this._state) {
    */
   async load() {
     // 1) Primär-State (coreState)
-    let stored = await game.settings.get(MODULE_ID, this.settingsKey);
+    // FIX P0-01: game.settings.get() ist SYNCHRON — kein await verwenden.
+    let stored = game.settings.get(MODULE_ID, this.settingsKey);
     let loadedFromLegacy = false;
     // 2) Migration: falls coreState leer ist, versuche Legacy-Key 'state'
     if (!stored) {
       try {
-        const legacy = await game.settings.get(MODULE_ID, this.legacySettingsKey);
+        const legacy = game.settings.get(MODULE_ID, this.legacySettingsKey);
         if (legacy) {
           stored = legacy;
           loadedFromLegacy = true;

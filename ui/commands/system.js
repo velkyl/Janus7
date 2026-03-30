@@ -95,7 +95,7 @@ async openKiBackupManager(_dataset = {}) {
       // Fallback: open JanusTestResultApp directly
       const { JanusTestResultApp } = await import('../apps/JanusTestResultApp.js');
       const app = new JanusTestResultApp();
-      app.render(true);
+      app.render({ force: true }); // FIX P3-01: AppV2 braucht Options-Objekt, nicht boolean
       return true;
     });
   }
@@ -521,7 +521,7 @@ async openKiBackupManager(_dataset = {}) {
       const engine = _engine();
       const app = engine?.ui?.apps?.syncPanel;
       if (!app) throw new Error('syncPanel nicht registriert.');
-      new app().render(true);
+      new app().render({ force: true }); // FIX P3-01
       return { success: true };
     });
   },
@@ -535,7 +535,7 @@ async openKiBackupManager(_dataset = {}) {
       const engine = _engine();
       const app = engine?.ui?.apps?.configPanel;
       if (!app) throw new Error('configPanel nicht registriert.');
-      new app().render(true);
+      new app().render({ force: true }); // FIX P3-01
       return { success: true };
     });
   },

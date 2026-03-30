@@ -1,4 +1,4 @@
-import { moduleTemplatePath } from '../../core/common.js';
+﻿import { moduleTemplatePath } from '../../core/common.js';
 /**
  * @file ui/apps/JanusSyncPanelApp.js
  * @module janus7/ui
@@ -28,7 +28,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
 
   static showSingleton(options = {}) {
     if (!this._instance) this._instance = new this(options);
-    this._instance.render(true);
+    this._instance.render({ force: true });
     return this._instance;
   }
 

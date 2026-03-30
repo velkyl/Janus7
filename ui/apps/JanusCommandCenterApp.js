@@ -1,4 +1,4 @@
-import { moduleTemplatePath } from '../../core/common.js';
+﻿import { moduleTemplatePath } from '../../core/common.js';
 /**
  * @file ui/apps/JanusCommandCenterApp.js
  * @module janus7/ui
@@ -14,7 +14,7 @@ import { moduleTemplatePath } from '../../core/common.js';
  * - Command execution via JanusCommands API
  * 
  * Usage:
- *   new JanusCommandCenterApp().render(true);
+ *   new JanusCommandCenterApp().render({ force: true });
  *   // or via Scene Control button (registered in integration)
  */
 

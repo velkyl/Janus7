@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file ui/apps/JanusSettingsTestHarnessApp.js
  * @module janus7/ui
  * @phase 6
@@ -45,11 +45,11 @@ export class JanusSettingsTestHarnessApp extends ApplicationV2 {
   static async showSingleton() {
     try {
       const { JanusTestHarnessApp } = await import('../../devtools/test-harness/app.js');
-      return JanusTestHarnessApp.showSingleton?.() ?? new JanusTestHarnessApp().render(true);
+      return JanusTestHarnessApp.showSingleton?.() ?? new JanusTestHarnessApp().render({ force: true });
     } catch {
       // Devtools-Bundle nicht vorhanden – Fallback-Fenster anzeigen
       const inst = new JanusSettingsTestHarnessApp();
-      inst.render(true);
+      inst.render({ force: true });
       return inst;
     }
   }

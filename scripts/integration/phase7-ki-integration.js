@@ -83,7 +83,10 @@ if (typeof Hooks !== 'undefined') {
   });
 }
 
-// Hot-reload / partial init safety.
-try {
-  if (globalThis.game?.janus7) attachPhase7Ki(globalThis.game.janus7);
-} catch (_err) { /* noop */ }
+// FIX P1-04: Der folgende Top-Level-Code ist im normalen Foundry-Boot immer wirkungslos,
+// weil game.janus7 zum ESModule-Import-Zeitpunkt noch nicht existiert.
+// Der ENGINE_READY-Hook oben ist der korrekte und zuverlässige Init-Pfad.
+// Bei echten Hot-Reloads (Dev-Flow) kann der Kommentar entsäarf werden.
+// try {
+//   if (globalThis.game?.janus7) attachPhase7Ki(globalThis.game.janus7);
+// } catch (_err) { /* noop */ }

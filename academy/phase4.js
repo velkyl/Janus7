@@ -1,4 +1,4 @@
-import { moduleAssetPath } from '../core/common.js';
+﻿import { moduleAssetPath } from '../core/common.js';
 /**
  * @file academy/phase4.js
  * @module janus7
@@ -104,7 +104,10 @@ registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (en
     engine.simulation.scoring  = scoring;
     engine.simulation.social   = social;
 
-    // Compatibility aliases
+    // Compatibility aliases (NOTE P3-02)
+    // engine.academy.scoring / engine.simulation.scoring / engine.scoring zeigen auf dieselbe Instanz.
+    // Dreifach-Alias entstand historisch. Neuer Code soll engine.academy.* bevorzugen.
+    // Geplante Bereinigung der Top-Level-Aliases (engine.scoring etc.) in v1.0.
     engine.calendar = calendar;
     engine.scoring  = scoring;
     engine.social   = social;
@@ -135,17 +138,21 @@ registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (en
     if (bridge) {
       learningProgress = new JanusLearningProgress({ bridge, scoring, academyData, logger });
       try {
-        const apAwardsCfg = await fetch(moduleAssetPath('data/academy/ap-awards.json'))
-          .then(r => r.json()).catch(() => null);
-        if (apAwardsCfg) learningProgress.loadConfig(apAwardsCfg);
+      // FIX P1-02: fetch() Fehler (404/CORS) wurden lautlos mit () => null geschluckt.
+      // Zusätzliches Logging damit Konfigurationslücken auffallen.
+      const apAwardsCfg = await fetch(moduleAssetPath('data/academy/ap-awards.json'))
+        .then(r => r.ok ? r.json() : null)
+        .catch(err => { logger?.warn?.('[JANUS7] Phase 4: ap-awards.json nicht ladbar:', err?.message); return null; });
+      if (apAwardsCfg) learningProgress.loadConfig(apAwardsCfg);
       } catch { /* non-fatal */ }
       safeRegister(learningProgress, 'learningProgress');
 
       fateTracker = new JanusFateTracker({ bridge, scoring, academyData, logger });
       try {
-        const fateScoringCfg = await fetch(moduleAssetPath('data/academy/fate-scoring.json'))
-          .then(r => r.json()).catch(() => null);
-        if (fateScoringCfg) fateTracker.loadConfig(fateScoringCfg);
+      const fateScoringCfg = await fetch(moduleAssetPath('data/academy/fate-scoring.json'))
+        .then(r => r.ok ? r.json() : null)
+        .catch(err => { logger?.warn?.('[JANUS7] Phase 4: fate-scoring.json nicht ladbar:', err?.message); return null; });
+      if (fateScoringCfg) fateTracker.loadConfig(fateScoringCfg);
       } catch { /* non-fatal */ }
       safeRegister(fateTracker, 'fateTracker');
 
@@ -155,7 +162,8 @@ registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (en
       lessonBuffManager = new JanusLessonBuffManager({ bridge, academyData, logger });
       try {
         const teacherBonusesCfg = await fetch(moduleAssetPath('data/academy/teacher-bonuses.json'))
-          .then(r => r.json()).catch(() => null);
+          .then(r => r.ok ? r.json() : null)
+          .catch(err => { logger?.warn?.('[JANUS7] Phase 4: teacher-bonuses.json nicht ladbar:', err?.message); return null; });
         if (teacherBonusesCfg) lessonBuffManager.loadBonuses(teacherBonusesCfg);
         // Kein manuelles register() hier — safeRegister() ruft es auf
       } catch { /* non-fatal */ }
