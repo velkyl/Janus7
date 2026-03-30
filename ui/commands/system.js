@@ -98,16 +98,7 @@ async openKiBackupManager(_dataset = {}) {
       app.render({ force: true }); // FIX P3-01: AppV2 braucht Options-Objekt, nicht boolean
       return true;
     });
-  }
-  ,
-
-  // -------------------------------------------------------------------------
-  // UI (client-side preferences)
-  // -------------------------------------------------------------------------
-
-  /**
-   * Toggle high-contrast theme for this client.
-   */
+  },
 
   // -------------------------------------------------------------------------
   // UI (client-side preferences)
@@ -141,193 +132,75 @@ async openKiBackupManager(_dataset = {}) {
   // =========================================================================
 
   /**
-   * Run system health check
+   * Export all visible state to console (debug).
    */
-  async runHealthCheck(_dataset = {}) {
-    if (!_checkPermission('runHealthCheck')) return { success: false, cancelled: true };
-    
+  async dumpState(_dataset = {}) {
+    if (!_checkPermission('dumpState')) return { success: false, cancelled: true };
+
     const engine = _engine();
-    
-    return await _wrap('runHealthCheck', async () => {
-      const diagnosticsFn =
-        engine?.diagnostics?.report
-        ?? engine?.diagnostics?.run
-        ?? engine?.capabilities?.state?.runHealthCheck;
-      if (typeof diagnosticsFn !== 'function') {
-        throw new Error('Diagnostics report unavailable');
-      }
+    _log().info('JANUS7 Engine State Dump:', engine?.core?.state?.dump?.() ?? 'NOT_LOADED');
+    ui.notifications.info('JANUS7: State-Dump in Konsole ausgegeben.');
+    return true;
+  },
 
-      const report = await diagnosticsFn({ notify: false, verbose: false });
-      if (!report || typeof report !== 'object') {
-        throw new Error('Diagnostics report unavailable');
-      }
+  /**
+   * Trigger forced save of current world state.
+   */
+  async persistState(_dataset = {}) {
+    if (!_checkPermission('persistState')) return { success: false, cancelled: true };
 
-      const serviceReport =
-        engine?.serviceRegistry?.getReport?.()
-        ?? engine?.services?.registry?.getReport?.()
-        ?? { ready: [], pending: [], uptime: {} };
-      const readyServices = new Set(serviceReport?.ready ?? []);
-      const errorSummary = engine?.errors?.getSummary?.()
-        ?? { totalErrors: 0, totalWarnings: 0, byPhase: {}, latest: [] };
-
-      const subsystemStatus = (enabled, available, { disabled = 'DISABLED', present = 'OK', absent = 'OPTIONAL' } = {}) => {
-        if (enabled === false) return disabled;
-        return available ? present : absent;
-      };
-
-      const results = {
-        core: { status: engine?.core ? 'OK' : 'MISSING' },
-        state: { status: engine?.core?.state ? 'OK' : 'MISSING' },
-        diagnostics: {
-          status: String(report?.health ?? 'unknown').toUpperCase(),
-          checks: Array.isArray(report?.checks) ? report.checks.length : 0,
-          warnings: Number(report?.summary?.warn ?? 0),
-          failures: Number(report?.summary?.fail ?? 0)
-        },
-        calendar: {
-          status: subsystemStatus(
-            JanusConfig.isSubsystemEnabled('simulation'),
-            Boolean(engine?.simulation?.calendar ?? engine?.academy?.calendar),
-            { absent: 'UNVERIFIED' }
-          )
-        },
-        bridge: {
-          status: game?.system?.id === 'dsa5'
-            ? (engine?.bridge?.dsa5 || readyServices.has('bridge.dsa5') ? 'OK' : 'MISSING')
-            : 'N/A'
-        },
-        quests: {
-          status: subsystemStatus(
-            JanusConfig.isSubsystemEnabled('quests'),
-            Boolean(engine?.simulation?.quests ?? engine?.academy?.quests),
-            { absent: 'UNVERIFIED' }
-          )
-        },
-        atmosphere: {
-          status: subsystemStatus(
-            JanusConfig.isSubsystemEnabled('atmosphere'),
-            Boolean(engine?.atmosphere),
-            { absent: 'OPTIONAL' }
-          )
-        },
-        runtimeIssues: {
-          status: Number(errorSummary?.totalErrors ?? 0) > 0
-            ? 'ERRORS'
-            : (Number(errorSummary?.totalWarnings ?? 0) > 0 ? 'WARN' : 'OK'),
-          errors: Number(errorSummary?.totalErrors ?? 0),
-          warnings: Number(errorSummary?.totalWarnings ?? 0)
-        }
-      };
+    return await _wrap('persistState', async () => {
+      const engine = _engine();
+      const state = engine?.core?.state;
+      if (!state) throw new Error('Core state nicht verfügbar');
       
-      const health = String(report?.health ?? 'unknown');
-      const allOk = health === 'ok';
-      const notifyLevel = health === 'fail' ? 'error' : (health === 'warn' ? 'warn' : 'info');
-      const summaryText = health === 'ok'
-        ? 'All Systems OK'
-        : (health === 'warn' ? 'Warnings Present' : 'Issues Found');
-      
-      console.table(results);
-      ui.notifications[notifyLevel](
-        `Health Check: ${summaryText}`
-      );
-      
-      return { results, allOk, health, report };
+      const saved = await state.save({ force: true });
+      ui.notifications.info('JANUS7: World State manuell gespeichert.');
+      return saved;
     });
   },
 
   /**
-   * Validate current state against schema
+   * Reload state from game.settings (discard unsaved).
    */
+  async reloadState(_dataset = {}) {
+    if (!_checkPermission('reloadState')) return { success: false, cancelled: true };
 
-  // =========================================================================
-  // SPRINT 2 COMMANDS - Test Center
-  // =========================================================================
-
-  /**
-   * Run smoke tests only
-   */
-  async runSmokeTests(_dataset = {}) {
-    if (!_checkPermission('runSmokeTests')) return { success: false, cancelled: true };
-
-    const engine = _engine();
-    return await _wrap('runSmokeTests', async () => {
-      // engine.test.runCatalog() is attached by test-runner-integration.js.
-      if (engine?.test?.openResults) {
-        await engine.test.openResults();
-      }
-      const data = engine?.test?.runCatalog
-        ? await engine.test.runCatalog({ openWindow: true })
-        : null;
-      const summary = data?.summary ?? {};
-      ui.notifications.info(`Tests: ${summary.pass ?? '?'}/${summary.total ?? '?'} PASS`);
-      return data ?? { success: true };
+    return await _wrap('reloadState', async () => {
+      const engine = _engine();
+      const state = engine?.core?.state;
+      if (!state) throw new Error('Core state nicht verfügbar');
+      
+      await state.load();
+      ui.notifications.info('JANUS7: World State neu geladen.');
+      return true;
     });
   },
 
   /**
-   * Run full test catalog
+   * Synchronize all engine services (Calendar, Scoring, Atmosphere).
    */
-  async runFullCatalog(_dataset = {}) {
-    if (!_checkPermission('runFullCatalog')) return { success: false, cancelled: true };
+  async syncServices(_dataset = {}) {
+    if (!_checkPermission('syncServices')) return { success: false, cancelled: true };
 
-    const engine = _engine();
-    return await _wrap('runFullCatalog', async () => {
-      if (engine?.test?.openResults) {
-        await engine.test.openResults();
+    return await _wrap('syncServices', async () => {
+      const engine = _engine();
+      const academy = engine?.academy;
+      if (!academy) throw new Error('Academy Engines nicht verfügbar');
+
+      try {
+        if (academy.calendar?.sync) await academy.calendar.sync();
+        if (academy.scoring?.sync) await academy.scoring.sync();
+        if (engine.atmosphere?.sync) await engine.atmosphere.sync();
+        
+        ui.notifications.info('JANUS7: Engines synchronisiert.');
+        return true;
+      } catch (err) {
+        _log().error('Service sync failed:', err);
+        throw err;
       }
-      const data = engine?.test?.runCatalog
-        ? await engine.test.runCatalog({ openWindow: true })
-        : null;
-      const summary = data?.summary ?? {};
-      ui.notifications.info(`Full Catalog: ${summary.pass ?? '?'}/${summary.total ?? '?'} PASS`);
-      return data ?? { success: true };
     });
   },
-
-  // =========================================================================
-  // SPRINT 2 COMMANDS - Audit
-  // =========================================================================
-
-  /**
-   * Enable UI action tracing
-   */
-
-  // =========================================================================
-  // SPRINT 2 COMMANDS - Audit
-  // =========================================================================
-
-  /**
-   * Enable UI action tracing
-   */
-  async traceUIActions(_dataset = {}) {
-    if (!_checkPermission('traceUIActions')) return { success: false, cancelled: true };
-    
-    globalThis.__janusUITrace = true;
-    globalThis.__janusUIActionLog = globalThis.__janusUIActionLog || [];
-    
-    ui.notifications.info('UI Action Tracing: Enabled (check console)');
-    return { success: true, tracing: true };
-  },
-
-  /**
-   * View action log
-   */
-  async viewActionLog(_dataset = {}) {
-    if (!_checkPermission('viewActionLog')) return { success: false, cancelled: true };
-    
-    const log = globalThis.__janusUIActionLog || [];
-    console.table(log);
-    ui.notifications.info(`Action Log: ${log.length} entries`);
-    return { success: true, log };
-  },
-
-  // =========================================================================
-  // SPRINT 2 COMMANDS - Admin
-  // =========================================================================
-
-  /**
-   * Create backup (delegates to exportState)
-   */
 
   // =========================================================================
   // SPRINT 2 COMMANDS - DSA5 Bridge
@@ -340,8 +213,9 @@ async openKiBackupManager(_dataset = {}) {
     if (!_checkPermission('bridgeDiagnostics')) return { success: false, cancelled: true };
     
     const engine = _engine();
+    if (game.system.id !== 'dsa5') throw new Error('DSA5 Bridge erfordert das dsa5 System.');
     const bridge = engine?.bridge?.dsa5;
-    if (!bridge) throw new Error('DSA5 Bridge not available');
+    if (!bridge) throw new Error('DSA5 Bridge nicht verfügbar');
     
     return await _wrap('bridgeDiagnostics', async () => {
       // Bridge exposes runDiagnostics() directly (not bridge.diagnostics.run())

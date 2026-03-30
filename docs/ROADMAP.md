@@ -1,8 +1,8 @@
 # JANUS7 ROADMAP – Konsolidiert & Aktualisiert
 
-**Version:** 0.9.12.29  
-**Status:** Phase 7 ✅ ABGESCHLOSSEN — Phase 8 ausstehend  
-**Datum:** 2026-03-20
+**Version:** 0.9.13  
+**Status:** Phase 6 ✅ ABGESCHLOSSEN — Phase 7 ausstehend  
+**Datum:** 2026-03-30
 
 ---
 
@@ -26,8 +26,8 @@ JANUS7 ist ein **hybrides Betriebssystem** für DSA5-Magierakademie-Kampagnen in
 | **4** | Academy Simulation | ✅ DONE | Kalender, Scoring, Lessons, Exams |
 | **4b** | **Quest & Event System** | ✅ **DONE** | **Story-Quests, Events, Effects** |
 | **5** | Hybrid & Atmosphere | ✅ DONE | Audio/Visual Controller |
-| **6** | User Interfaces | ✅ DONE | ApplicationV2 UIs (10 Apps, 40+ Commands, 10 Tests) |
-| **7** | KI-Integration | ✅ DONE | Export/Import, LLM-Roundtrips |
+| **6** | User Interfaces | ✅ DONE | ApplicationV2 UIs (10 Apps, 40+ Commands, 10 P16-Tests) |
+| **7** | KI-Integration | 📋 NEXT | Export/Import, LLM-Roundtrips |
 | **8** | Backlog | 📋 FUTURE | Multi-Setting, Deep-Automation |
 
 ---

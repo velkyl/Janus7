@@ -233,6 +233,9 @@ const DEFAULT_STATE = {
  * - Änderungen hier erfordern Anpassungen im Testkatalog
  */
 export class JanusStateCore {
+  /** @type {Promise<void>} Privat für Transaktions-Queueing */
+  #lock = Promise.resolve();
+
   /**
    * @param {Object} deps
    * @param {import('./logger.js').JanusLogger} deps.logger
@@ -592,7 +595,7 @@ migrateState(stateObj = this._state) {
   ];
 
   for (const p of nullPathCleanup) {
-    if (foundry.utils.getProperty(stateObj, p) === null) {
+    if (foundry.utils.getProperty(p) === null) {
       UNSET_PATH(stateObj, p);
       changed = true;
     }
@@ -608,6 +611,21 @@ migrateState(stateObj = this._state) {
    * @returns {Promise<void>}
    */
   async load() {
+    if (this._ready && this._state) return;
+
+    // --- Pre-Load-Backup (flüchtig im Client) ---
+    try {
+      const storedSetting = game.settings.get(MODULE_ID, this.settingsKey);
+      if (storedSetting) {
+        const backupKey = `janus7.state.backup.${game.world.id}`;
+        localStorage.setItem(backupKey, JSON.stringify({
+          ts: new Date().toISOString(),
+          version: getModuleVersion(),
+          data: storedSetting
+        }));
+      }
+    } catch (_err) { /* no-op: backup should not block boot */ }
+
     // 1) Primär-State (coreState)
     // FIX P0-01: game.settings.get() ist SYNCHRON — kein await verwenden.
     let stored = game.settings.get(MODULE_ID, this.settingsKey);
@@ -874,12 +892,11 @@ migrateState(stateObj = this._state) {
     let autoSave = true;
     if (!force) {
       try {
-        autoSave = await JanusConfig.get('autoSave');
-      } catch (err) {
-        this.logger?.warn?.('JanusStateCore.save(): autoSave-Konfiguration nicht lesbar – verwende Default true.', {
-          message: err?.message ?? String(err),
-          stack: err?.stack ?? null
-        });
+        // Guard: check if setting exists to avoid early-boot errors
+        if (game.settings.settings.has(`${MODULE_ID}.autoSave`)) {
+          autoSave = JanusConfig.get('autoSave') !== false;
+        }
+      } catch (_err) {
         autoSave = true;
       }
 
@@ -934,51 +951,65 @@ migrateState(stateObj = this._state) {
       throw new Error('JanusStateCore.transaction(): mutator muss eine Funktion sein.');
     }
 
-    const snapshot = foundry.utils.deepClone(this._state);
-    const wasDirty = this._dirty;
+    // --- Atomic Lock Queueing ---
+    const parentLock = this.#lock;
+    let unlock;
+    this.#lock = new Promise((res) => { unlock = res; });
 
     try {
-      const result = await mutator(this);
-      return result;
-    } catch (err) {
-      // Rollback
-      this._state = snapshot;
-      this._dirty = wasDirty;
+      // Warten bis vorherige Transaktionen abgeschlossen sind
+      await parentLock;
 
-      // Kontrollierte Rollbacks (Tests/No-Op) sollen die Konsole nicht zumüllen.
-      // Der Test-Harness wirft bewusst einen Sentinel-Error, um Änderungen sauber zurückzudrehen.
-      const isTestRollback = (e) => {
-        const msg = String(e?.message ?? '');
-        const name = String(e?.name ?? '');
-        return name === 'JanusTestRollback' || msg === 'JANUS_TEST_ROLLBACK';
-      };
-      const isExpectedRollback = (e) => {
-        const msg = String(e?.message ?? '');
-        const name = String(e?.name ?? '');
-        if (typeof opts?.isExpectedRollback === 'function') return !!opts.isExpectedRollback(e);
-        if (Array.isArray(opts?.expectedErrors)) {
-          return opts.expectedErrors.some((needle) => {
-            const value = String(needle ?? '');
-            return value && (msg === value || name === value || msg.includes(value));
-          });
+      const snapshot = foundry.utils.deepClone(this._state);
+      const wasDirty = this._dirty;
+
+      try {
+        const result = await mutator(this);
+        return result;
+      } catch (err) {
+        // Rollback
+        this._state = snapshot;
+        this._dirty = wasDirty;
+
+        // Kontrollierte Rollbacks (Tests/No-Op) sollen die Konsole nicht zumüllen.
+        // Der Test-Harness wirft bewusst einen Sentinel-Error, um Änderungen sauber zurückzudrehen.
+        const isTestRollback = (e) => {
+          const msg = String(e?.message ?? '');
+          const name = String(e?.name ?? '');
+          return name === 'JanusTestRollback' || msg === 'JANUS_TEST_ROLLBACK';
+        };
+        const isExpectedRollback = (e) => {
+          const msg = String(e?.message ?? '');
+          const name = String(e?.name ?? '');
+          if (typeof opts?.isExpectedRollback === 'function') return !!opts.isExpectedRollback(e);
+          if (Array.isArray(opts?.expectedErrors)) {
+            return opts.expectedErrors.some((needle) => {
+              const value = String(needle ?? '');
+              return value && (msg === value || name === value || msg.includes(value));
+            });
+          }
+          return false;
+        };
+
+        if (isTestRollback(err)) {
+          if (!opts?.silent) this.logger?.debug?.('State-Transaktion: Test-Rollback ausgeführt (kein Fehler).');
+          return undefined;
         }
-        return false;
-      };
 
-      if (isTestRollback(err)) {
-        if (!opts?.silent) this.logger?.debug?.('State-Transaktion: Test-Rollback ausgeführt (kein Fehler).');
-        return undefined;
-      }
+        if (isExpectedRollback(err)) {
+          if (!opts?.silent) this.logger?.debug?.('State-Transaktion: erwarteter Rollback ausgeführt.', { message: err?.message, name: err?.name });
+          throw err;
+        }
 
-      if (isExpectedRollback(err)) {
-        if (!opts?.silent) this.logger?.debug?.('State-Transaktion: erwarteter Rollback ausgeführt.', { message: err?.message, name: err?.name });
+        if (!opts?.silent) this.logger?.error?.('State-Transaktion fehlgeschlagen. Änderungen zurückgesetzt.', err);
         throw err;
       }
-
-      if (!opts?.silent) this.logger?.error?.('State-Transaktion fehlgeschlagen. Änderungen zurückgesetzt.', err);
-      throw err;
+    } finally {
+      // Lock freigeben für nächsten in der Queue
+      unlock();
     }
   }
+
   /** @returns {boolean} */
   get isReady() { return !!this._ready; }
 }
