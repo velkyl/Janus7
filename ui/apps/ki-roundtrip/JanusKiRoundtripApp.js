@@ -141,7 +141,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
   set _exportMode(v) { this.__exportMode = ['lite','week','full'].includes(v) ? v : 'lite'; }
 
   async _prepareContext(options) {
-    const context = await super._prepareContext(options);
+    const context = (await super._prepareContext(options)) || {};
     const engine = resolveEngine(this);
     const mode = this._exportMode;
     let json = '';

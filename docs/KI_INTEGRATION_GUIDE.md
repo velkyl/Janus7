@@ -1,6 +1,6 @@
 # JANUS7 KI-Integration Guide
 
-**Modul-Version:** 0.9.12.44  
+**Modul-Version:** 0.9.12.46
 **Phase:** 7 - KI-Roundtrip  
 **Datum:** 2026-03-25
 
@@ -63,11 +63,11 @@ Standard ist Browser-Download via `saveDataToFile`. Mit `storage: 'world'` wird 
 {
   "version": "JANUS_EXPORT_V2",
   "meta": {
-    "version": "0.9.12.44",
+    "version": "0.9.12.46",
     "schemaVersion": "2",
     "exportedAt": "2026-03-25T14:00:00Z",
     "world": "punin-akademie",
-    "moduleVersion": "0.9.12.44",
+    "moduleVersion": "0.9.12.46",
     "stateVersion": "...",
     "exportMode": "week"
   },

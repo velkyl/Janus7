@@ -1,6 +1,6 @@
 # JANUS7 - Installation (Foundry v13+)
 
-**Modul-Version:** 0.9.12.44 (SSOT: `module.json`)
+**Modul-Version:** 0.9.12.46 (SSOT: `module.json`)
 **Zielgruppe:** GM/SL fuer DSA5-Welten mit JANUS7 als aktivem Kampagnenmodul.
 
 ## Voraussetzungen

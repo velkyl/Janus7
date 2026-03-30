@@ -1,6 +1,6 @@
 # JANUS7 — Dokumentations-Index
 
-**Modul-Version (SSOT: `module.json`):** 0.9.12.44  
+**Modul-Version (SSOT: `module.json`):** 0.9.12.46
 **Foundry:** v13+  
 **Stand:** 2026-03-25
 
