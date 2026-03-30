@@ -70,7 +70,10 @@ export class DSA5CraftingBridge {
       this.logger?.info?.(`[Bridge/Crafting] ${actor.name} erlangt ${amount}x ${entry.name}`);
       try {
         emitHook(HOOKS.ACTOR_LOOT_RECEIVED, { actor, items: createdItems, source: 'crafting-bridge' });
-      } catch (err) { /* hook error ignorieren */ }
+      } catch (err) {
+        /* hook error ignorieren */
+        this.logger?.warn?.('[Bridge/Crafting] Hook ACTOR_LOOT_RECEIVED fehlgeschlagen (non-fatal)', { err: err?.message ?? err });
+      }
     }
 
     return createdItems;

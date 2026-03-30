@@ -132,7 +132,9 @@ export class JanusKiImportService {
     if (!source) return '';
     const parts = source.split('.').map((part) => part.trim()).filter(Boolean);
     if (!parts.length) return '';
+    if (parts.length > 50) throw new JanusKiResponseInvalidError(`Pfad zu tief verschachtelt (max. 50 Segmente): ${source}`);
     for (const part of parts) {
+      if (part.length > 64) throw new JanusKiResponseInvalidError(`Pfadsegment zu lang (max. 64 Zeichen): ${part}`);
       if (this._isBlockedPathSegment(part)) {
         throw new JanusKiResponseInvalidError(`Blockiertes Pfadsegment: ${part}`);
       }
@@ -148,7 +150,9 @@ export class JanusKiImportService {
     if (!source) throw new JanusKiResponseInvalidError('Leerer Full-Path ist ungueltig');
     const parts = source.split('.').map((part) => part.trim()).filter(Boolean);
     if (!parts.length) throw new JanusKiResponseInvalidError('Leerer Full-Path ist ungueltig');
+    if (parts.length > 50) throw new JanusKiResponseInvalidError(`Pfad zu tief verschachtelt (max. 50 Segmente): ${source}`);
     for (const part of parts) {
+      if (part.length > 64) throw new JanusKiResponseInvalidError(`Pfadsegment zu lang (max. 64 Zeichen): ${part}`);
       if (this._isBlockedPathSegment(part)) {
         throw new JanusKiResponseInvalidError(`Blockiertes Pfadsegment: ${part}`);
       }

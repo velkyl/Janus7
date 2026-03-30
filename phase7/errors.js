@@ -60,9 +60,9 @@ export class JanusAiPermissionError extends JanusError {
    */
   constructor(message, opts = {}) {
     super(message);
-    this.name = 'JanusAiPermissionError';
-    // capture any extra context for debugging
+    // capture any extra context for debugging; name is set AFTER to prevent opts from overwriting it
     Object.assign(this, opts);
+    this.name = 'JanusAiPermissionError';
   }
 }
 

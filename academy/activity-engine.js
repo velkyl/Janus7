@@ -19,6 +19,8 @@ export class JanusActivityEngine {
         await this.resourcesEngine.applyResourceDelta(key, Number(delta ?? 0), { reason: `${activityType}@${locationId}` });
       } else if ((this.academyData?.getSchoolStatsConfig?.() ?? []).some((cfg) => cfg.id === key)) {
         await this.resourcesEngine.applySchoolStatDelta(key, Number(delta ?? 0), { reason: `${activityType}@${locationId}` });
+      } else {
+        this.logger?.warn?.('[JANUS7] ActivityEngine: Unbekannter resourceDelta-Key (Tippfehler in JSON?)', { key, locationId, activityType });
       }
     }
     let roll = null;

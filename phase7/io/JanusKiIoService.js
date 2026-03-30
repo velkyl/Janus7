@@ -63,7 +63,10 @@ export class JanusKiIoService {
     const FP = foundry?.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
     if (!FP || typeof File === 'undefined') return null;
     // Ensure target directory exists.
-    try { await this._ensureDataDirectory(dir); } catch (_) { /* best effort */ }
+    try { await this._ensureDataDirectory(dir); } catch (err) {
+      /* best effort */
+      this.logger?.debug?.('[KiIoService] _ensureDataDirectory nicht verfügbar (non-fatal)', { err: err?.message });
+    }
     const file = new File([json], filename, { type: 'application/json' });
     await FP.upload('data', dir, file, { notify: false });
     return filename;
@@ -149,7 +152,9 @@ export class JanusKiIoService {
     if (!ref) throw new Error('File reference missing');
 
     // Ensure inbox directory exists before attempting fetch (best-effort)
-    try { await this._ensureDataDirectory(dir); } catch (_) {}
+    try { await this._ensureDataDirectory(dir); } catch (err) {
+      this.logger?.debug?.('[KiIoService] Directory-Erstellung übersprungen (non-fatal)', { err: err?.message });
+    }
 
     const url = (ref.startsWith('http') || ref.startsWith('worlds/') || ref.startsWith('data:'))
       ? ref
