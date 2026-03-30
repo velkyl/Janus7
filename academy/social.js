@@ -315,7 +315,7 @@ export class JanusSocialEngine {
     let changed = 0;
     let skipped = 0;
 
-    for (const [fromId, targets] of Object.entries(socialState)) {
+    for (const [fromId, targets] of Object.entries(socialState.relationships ?? {})) {
       if (!targets || typeof targets !== 'object') continue;
       for (const [toId, rel] of Object.entries(targets)) {
         const v = Number(rel?.value ?? 0);

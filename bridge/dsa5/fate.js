@@ -229,6 +229,7 @@ export class DSA5FateBridge {
    * @param {string[]} [opts.trackedActorIds]  - Nur diese Actor-IDs überwachen (leer = alle)
    */
   register({ trackedActorIds = [] } = {}) {
+    if (this._hookId != null) return;  // Idempotenz: bereits registriert
     this._trackedActorIds = new Set(trackedActorIds);
 
     // Snapshot initial befüllen
