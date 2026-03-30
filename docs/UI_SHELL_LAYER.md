@@ -54,6 +54,11 @@ Sie ergÃ¤nzt die bestehenden Einzel-Apps und ersetzt sie nicht abrupt.
 - Darauf aufbauend rendert die Shell eine kompakte Szenen-Checkliste pro Slot mit Inhalten, Besetzung, Ort und voraussichtlicher Stimmung.
 - Diese Checkliste nutzt vorhandene Commands fuer `Ort aktivieren`, `Orts-Mood` und direkte Mood-Anwendung statt eigener UI-Sonderlogik.
 - Darueber hinaus verdichtet Session Prep Lessons, Pruefungen und Events zu einer kleinen Vorbereitungsagenda mit Fokus, Skills/Checks und optionaler Lektion-Aktivierung ueber bestehende Commands.
+- Offene Quest-Knoten und `relatedStoryThreads` werden dabei gegen kommende Slots gespiegelt, damit narrative Anschluss-Szenen frueh sichtbar werden.
+- Session Prep rendert zusaetzlich eine kleine Chronik-Vorschau aus vorhandenen State-Historien (Quests, Zirkelpunkte, Pruefungen, Ressourcen, Aktivitaeten) als Vorstufe fuer spaetere Journal-/KI-Exporte.
+- Darauf aufbauend erzeugt die View jetzt auch einen kopierbaren `Campaign Chronicle Seed` fuer KI- oder Journal-Weiterverarbeitung.
+- Als erste `WP 3`-Basis rendert Session Prep ausserdem einen read-only Pruefungsstand mit normalisierter Notenbasis aus `academy.examResults` und den hinterlegten Bewertungsschemata.
+- Darauf aufbauend verdichtet die View diese Exam-Daten jetzt auch zu einem kleinen Zwischenstand je Akteur; neue Versuche tragen dafuer zusaetzlich einen akademischen Periodenstempel im Attempt-Meta.
 
 ## Overlay
 - Fuer GMs wird ein kleines `GM-Quick-Access-Overlay` ueber der Szene gerendert.

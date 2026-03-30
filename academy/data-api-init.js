@@ -87,6 +87,7 @@ export async function initAcademyData() {
   let circles = null;
   let exams = null;
   let examQuestions = null;
+  let gradingSchemes = null;
   let subjects = null;
   let apAwards = null;
   spellCurriculum = await loadOptionalDataset(loadJson, 'spell-curriculum.json', { label: 'spellCurriculum' });
@@ -98,6 +99,7 @@ export async function initAcademyData() {
   circles = await loadOptionalDataset(loadJson, 'circles.json', { label: 'circles' });
   exams = await loadOptionalDataset(loadJson, 'exams.json', { label: 'exams' });
   examQuestions = await loadOptionalDataset(loadJson, 'exam-questions.json', { label: 'examQuestions' });
+  gradingSchemes = await loadOptionalDataset(loadJson, 'grading-schemes.json', { label: 'gradingSchemes' });
   subjects = await loadOptionalDataset(loadJson, 'subjects.json', { label: 'subjects' });
   apAwards = await loadOptionalDataset(loadJson, 'ap-awards.json', { label: 'apAwards' });
 
@@ -140,6 +142,7 @@ export async function initAcademyData() {
 
   validateOptionalDataset(core.validator, 'academy.exams', exams, 'exams');
   validateOptionalDataset(core.validator, 'academy.examQuestions', examQuestions, 'exam-questions');
+  validateOptionalDataset(core.validator, 'academy.gradingSchemes', gradingSchemes, 'grading-schemes');
   validateOptionalDataset(core.validator, 'academy.library', library, 'library');
   validateOptionalDataset(core.validator, 'academy.alchemyRecipes', alchemyRecipes, 'alchemy-recipes');
   validateOptionalDataset(core.validator, 'academy.calendarTemplate', calendarTemplate, 'calendar-template');
@@ -193,6 +196,7 @@ export async function initAcademyData() {
     circles,
     exams,
     examQuestions,
+    gradingSchemes,
     library,
     subjects,
     apAwards,
@@ -222,6 +226,7 @@ export async function initAcademyData() {
     events: events?.events?.length ?? 0,
     circles: circles?.circles?.length ?? 0,
     exams: exams?.exams?.length ?? 0,
+    gradingSchemes: Object.keys(gradingSchemes?.schemes ?? {}).length,
   });
 
   return cache;

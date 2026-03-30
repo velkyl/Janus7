@@ -36,6 +36,10 @@ import {
   getCircle,
   getExams,
   getExam,
+  getGradingSchemes,
+  getGradingScheme,
+  getDefaultGradingSchemeId,
+  getDefaultExamGradingScheme,
   getExamQuestionSets,
   getExamQuestionSet,
   getLibraryItems,
@@ -211,6 +215,10 @@ export class AcademyDataApi {
   getCircle(id) { return AcademyDataApi.getCircle(id); }
   getExams() { return AcademyDataApi.getExams(); }
   getExam(id) { return AcademyDataApi.getExam(id); }
+  getGradingSchemes() { return AcademyDataApi.getGradingSchemes(); }
+  getGradingScheme(id) { return AcademyDataApi.getGradingScheme(id); }
+  getDefaultGradingSchemeId() { return AcademyDataApi.getDefaultGradingSchemeId(); }
+  getDefaultExamGradingScheme() { return AcademyDataApi.getDefaultExamGradingScheme(); }
   getExamQuestionSets() { return AcademyDataApi.getExamQuestionSets(); }
   getExamQuestionSet(id) { return AcademyDataApi.getExamQuestionSet(id); }
   getCalendarConfig() { return AcademyDataApi.getCalendarConfig(); }
@@ -281,6 +289,10 @@ export class AcademyDataApi {
   static getCircle(id) { return getCircle(id); }
   static getExams() { return getExams(); }
   static getExam(id) { return getExam(id); }
+  static getGradingSchemes() { return getGradingSchemes(); }
+  static getGradingScheme(id) { return getGradingScheme(id); }
+  static getDefaultGradingSchemeId() { return getDefaultGradingSchemeId(); }
+  static getDefaultExamGradingScheme() { return getDefaultExamGradingScheme(); }
   static getExamQuestionSets() { return getExamQuestionSets(); }
   static getExamQuestionSet(id) { return getExamQuestionSet(id); }
   static getLibraryItems() { return getLibraryItems(); }

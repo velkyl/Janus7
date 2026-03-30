@@ -231,6 +231,14 @@ export class JanusExamsEngine {
     const now = new Date().toISOString();
     const s = Number.isFinite(score) ? Number(score) : null;
     const m = Number.isFinite(maxScore) ? Number(maxScore) : null;
+    const slotRef = this.calendar?.getCurrentSlotRef?.() ?? null;
+    const academicContext = slotRef ? {
+      year: Number.isFinite(Number(slotRef?.year)) ? Number(slotRef.year) : null,
+      trimester: Number.isFinite(Number(slotRef?.trimester)) ? Number(slotRef.trimester) : null,
+      week: Number.isFinite(Number(slotRef?.week)) ? Number(slotRef.week) : null,
+      day: slotRef?.day ?? null,
+      phase: slotRef?.phase ?? null,
+    } : null;
 
     await this.state.transaction((state) => {
       const root = this._ensureExamResultsRoot(state);
@@ -242,12 +250,15 @@ export class JanusExamsEngine {
         attempts: []
       };
 
+      const baseMeta = meta && typeof meta === 'object' && !Array.isArray(meta)
+        ? { ...meta }
+        : (meta == null ? null : { value: meta });
       const attempt = {
         timestamp: now,
         status,
         score: s,
         maxScore: m,
-        meta: meta ?? null
+        meta: academicContext ? { ...(baseMeta ?? {}), academicContext } : baseMeta
       };
 
       const bestScore = Math.max(
@@ -325,16 +336,35 @@ export class JanusExamsEngine {
    * Liefert das effektive Noten-/Statusschema für ein Exam.
    *
    * Priorität:
-   *  1. examDef.gradingScheme (falls vorhanden)
-   *  2. academyData.getDefaultExamGradingScheme() (falls implementiert)
-   *  3. Fallback-Hardcode (fail/pass/excellent mit Prozent-Schwellen)
+   *  1. examDef.gradingScheme als Array (falls vorhanden)
+   *  2. examDef.gradingScheme als Threshold-Objekt + maxScore
+   *  3. academyData.getDefaultExamGradingScheme() (falls implementiert)
+   *  4. Fallback-Hardcode (fail/pass/excellent mit Prozent-Schwellen)
    *
    * @param {any} examDef
+   * @param {{ maxScore?: number }} [options]
    * @returns {{ id: string, label: string, minPercent: number }[]}
    */
-  getGradingScheme(examDef) {
+  getGradingScheme(examDef, { maxScore = null } = {}) {
     if (examDef?.gradingScheme && Array.isArray(examDef.gradingScheme)) {
       return examDef.gradingScheme;
+    }
+
+    const thresholdScheme = examDef?.gradingScheme;
+    const max = Number(maxScore ?? 0);
+    if (thresholdScheme && typeof thresholdScheme === 'object' && !Array.isArray(thresholdScheme) && max > 0) {
+      const passThreshold = Number(thresholdScheme?.passThreshold);
+      const excellentThreshold = Number(thresholdScheme?.excellentThreshold);
+      const entries = [{ id: 'failed', label: 'Nicht bestanden', minPercent: 0 }];
+      if (Number.isFinite(passThreshold)) {
+        entries.push({ id: 'passed', label: 'Bestanden', minPercent: Math.max(0, Math.min(100, (passThreshold / max) * 100)) });
+      }
+      if (Number.isFinite(excellentThreshold)) {
+        entries.push({ id: 'excellent', label: 'Herausragend', minPercent: Math.max(0, Math.min(100, (excellentThreshold / max) * 100)) });
+      }
+      if (entries.length > 1) {
+        return entries.sort((a, b) => (a.minPercent ?? 0) - (b.minPercent ?? 0));
+      }
     }
 
     try {
@@ -371,7 +401,7 @@ export class JanusExamsEngine {
     const m = Number(maxScore ?? 0) || 1;
     const percent = Math.max(0, Math.min(100, (s / m) * 100));
 
-    const scheme = this.getGradingScheme(examDef);
+    const scheme = this.getGradingScheme(examDef, { maxScore: m });
     // Sortiert nach minPercent aufsteigend
     const sorted = [...scheme].sort((a, b) => (a.minPercent ?? 0) - (b.minPercent ?? 0));
 

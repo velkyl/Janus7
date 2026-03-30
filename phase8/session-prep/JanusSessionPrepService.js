@@ -1,5 +1,6 @@
 import { JanusSlotResolver } from '../../academy/slot-resolver.js';
 import { JanusContentSuggestionService } from '../on-the-fly/JanusContentSuggestionService.js';
+import { STATE_PATHS } from '../../core/common.js';
 
 export class JanusSessionPrepService {
   constructor({ engine, logger } = {}) {
@@ -32,10 +33,15 @@ export class JanusSessionPrepService {
     const questsSummary = this._collectOpenQuests({ quests, academyData });
     const activeLocation = this._collectActiveLocation({ state, academyData });
     const diagnosticsSummary = await this._collectDiagnostics({ diagnostics });
-    const suggestions = this._buildSuggestions({ slotRef, currentSlot, upcoming, questsSummary, activeLocation, diagnosticsSummary });
     const suggestedMoods = this._collectSuggestedMoods({ engine, slotRef, currentSlot, activeLocation });
     const sceneChecklist = this._buildSceneChecklist({ engine, academyData, slotRef, currentSlot, currentCast, upcoming, activeLocation, suggestedMoods });
-    const prepAgenda = this._buildPrepAgenda({ academyData, slotRef, currentSlot, currentCast, upcoming, sceneChecklist });
+    const prepAgenda = this._buildPrepAgenda({ academyData, slotRef, currentSlot, currentCast, upcoming, sceneChecklist, questsSummary });
+    const suggestions = this._buildSuggestions({ slotRef, currentSlot, upcoming, questsSummary, activeLocation, diagnosticsSummary, prepAgenda });
+    const chroniclePreview = this._collectChroniclePreview({ engine, academyData, questsSummary });
+    const chronicleSeed = this._buildChronicleSeed({ slotRef, prepAgenda, chroniclePreview, questsSummary, activeLocation });
+    const gradeEntries = this._collectGradeEntries({ engine, academyData });
+    const gradeOverview = this._buildGradeOverview({ gradeEntries, academyData });
+    const gradeLedger = this._buildGradeLedger({ gradeEntries, slotRef });
     const contentSeeds = new JanusContentSuggestionService({ engine, logger: this.logger }).buildSeeds({ slotRef, currentSlot, activeLocation, quests: questsSummary });
 
     return {
@@ -51,6 +57,10 @@ export class JanusSessionPrepService {
       suggestedMoods,
       sceneChecklist,
       prepAgenda,
+      chroniclePreview,
+      chronicleSeed,
+      gradeOverview,
+      gradeLedger,
       contentSeeds,
       meta: {
         horizonSlots,
@@ -58,6 +68,10 @@ export class JanusSessionPrepService {
         currentCastCount: currentCast.length,
         checklistCount: sceneChecklist.length,
         prepAgendaCount: prepAgenda.length,
+        chronicleCount: chroniclePreview.length,
+        chronicleSeedLength: chronicleSeed.text.length,
+        gradeEntryCount: gradeEntries.length,
+        gradeLedgerCount: gradeLedger.items.length,
         warningCount: diagnosticsSummary.warnings.length,
         suggestedMoodCount: suggestedMoods.length,
       }
@@ -205,7 +219,7 @@ export class JanusSessionPrepService {
   }
 
 
-  _buildPrepAgenda({ academyData, slotRef, currentSlot, currentCast, upcoming, sceneChecklist }) {
+  _buildPrepAgenda({ academyData, slotRef, currentSlot, currentCast, upcoming, sceneChecklist, questsSummary }) {
     const agenda = [];
     const slots = [
       { label: 'Jetzt', slotRef, slot: currentSlot, cast: currentCast, checklist: sceneChecklist?.[0] ?? null },
@@ -218,10 +232,29 @@ export class JanusSessionPrepService {
       })))
     ];
 
+    const activeQuests = Array.isArray(questsSummary?.items) ? questsSummary.items : [];
     const joinTop = (items = [], max = 2) => items.filter(Boolean).slice(0, max).join(', ');
     const formatSlotLabel = (localSlotRef = {}) => `W${localSlotRef?.week ?? '—'} · ${localSlotRef?.day ?? '—'} / ${localSlotRef?.phase ?? '—'}`;
+    const normalizeId = (value) => String(value ?? '').trim().toLowerCase();
+    const collectStoryThreads = (slot = {}) => {
+      const seen = new Set();
+      const items = [];
+      for (const event of (slot?.events ?? [])) {
+        for (const threadId of (Array.isArray(event?.relatedStoryThreads) ? event.relatedStoryThreads : [])) {
+          const key = normalizeId(threadId);
+          if (!key || seen.has(key)) continue;
+          seen.add(key);
+          items.push(String(threadId));
+        }
+      }
+      return items;
+    };
+    const collectQuestMatches = (slot = {}) => {
+      const eventIds = new Set((slot?.events ?? []).map((event) => normalizeId(event?.id)).filter(Boolean));
+      return activeQuests.filter((quest) => eventIds.has(normalizeId(quest?.currentEventId)));
+    };
 
-    const pushAgenda = ({ slotLabel, localSlotRef, checklist, type, title, summary, focus, teacherName = null, lessonId = null, locationId = null, locationName = null, moodId = null, moodLabel = null, detailBadges = [], notes = [] }) => {
+    const pushAgenda = ({ slotLabel, localSlotRef, checklist, type, title, summary, focus, teacherName = null, lessonId = null, locationId = null, locationName = null, moodId = null, moodLabel = null, detailBadges = [], notes = [], questTitles = [], storyThreads = [], currentEventId = null, actorId = null, narrativePriority = false }) => {
       agenda.push({
         slotLabel,
         timeLabel: formatSlotLabel(localSlotRef),
@@ -238,6 +271,11 @@ export class JanusSessionPrepService {
         moodLabel: moodLabel ?? checklist?.moodLabel ?? '—',
         detailBadges: detailBadges.filter(Boolean).slice(0, 4),
         notes: notes.filter(Boolean).slice(0, 4),
+        questTitles: questTitles.filter(Boolean).slice(0, 3),
+        storyThreads: storyThreads.filter(Boolean).slice(0, 3),
+        currentEventId: currentEventId ?? null,
+        actorId: actorId ?? null,
+        narrativePriority: !!narrativePriority,
       });
     };
 
@@ -245,6 +283,8 @@ export class JanusSessionPrepService {
       const slot = entry?.slot ?? {};
       const cast = entry?.cast ?? [];
       const checklist = entry?.checklist ?? null;
+      const questMatches = collectQuestMatches(slot);
+      const storyThreads = collectStoryThreads(slot);
 
       const lesson = slot?.lessons?.[0] ?? null;
       if (lesson) {
@@ -273,7 +313,11 @@ export class JanusSessionPrepService {
             lesson?.durationSlots ? `Dauer: ${lesson.durationSlots} Slot(s)` : null,
             cast.length ? `Besetzung bereit: ${joinTop(cast.map((npc) => npc?.name), 3)}` : null,
             refs?.dsa5RuleRefs?.length ? `Regelbezug: ${joinTop(refs.dsa5RuleRefs)}` : null,
+            questMatches.length ? `Narrativer Anschluss: ${joinTop(questMatches.map((quest) => quest?.title), 2)}` : null,
           ],
+          questTitles: questMatches.map((quest) => quest?.title),
+          storyThreads,
+          narrativePriority: questMatches.length > 0 || storyThreads.length > 0,
         });
       }
 
@@ -300,12 +344,20 @@ export class JanusSessionPrepService {
             exam?.interaction?.questionSetId ? `Fragensatz: ${exam.interaction.questionSetId}` : null,
             exam?.references?.libraryItemIds?.length ? `Bibliothek: ${joinTop(exam.references.libraryItemIds)}` : null,
             cast.length ? `Besetzung bereit: ${joinTop(cast.map((npc) => npc?.name), 3)}` : null,
+            questMatches.length ? `Narrativer Anschluss: ${joinTop(questMatches.map((quest) => quest?.title), 2)}` : null,
           ],
+          questTitles: questMatches.map((quest) => quest?.title),
+          storyThreads,
+          narrativePriority: questMatches.length > 0 || storyThreads.length > 0,
         });
       }
 
       const event = slot?.events?.[0] ?? null;
       if (event) {
+        const primaryQuest = questMatches[0] ?? null;
+        const eventFocus = primaryQuest
+          ? `Aktive Quest anschliessen: ${primaryQuest.title}. Naechsten Knoten oder Event-Entscheidung vorbereiten.`
+          : 'Story-Hook und Reaktionspfade der NSCs kurz vorstrukturieren.';
         pushAgenda({
           slotLabel: entry.label,
           localSlotRef: entry.slotRef,
@@ -313,7 +365,7 @@ export class JanusSessionPrepService {
           type: 'event',
           title: event?.title ?? event?.name ?? event?.id ?? 'Event',
           summary: event?.summary ?? event?.description ?? '',
-          focus: 'Story-Hook und Reaktionspfade der NSCs kurz vorstrukturieren.',
+          focus: eventFocus,
           detailBadges: [
             event?.type ? `Typ: ${event.type}` : null,
             Array.isArray(event?.tags) && event.tags.length ? `Tags: ${joinTop(event.tags)}` : null,
@@ -323,12 +375,369 @@ export class JanusSessionPrepService {
             cast.length ? `Besetzung bereit: ${joinTop(cast.map((npc) => npc?.name), 3)}` : null,
             checklist?.moodLabel && checklist?.moodLabel !== '—' ? `Stimmung: ${checklist.moodLabel}` : null,
             checklist?.locationName && checklist?.locationName !== '—' ? `Ort: ${checklist.locationName}` : null,
+            primaryQuest?.currentNodeTitle ? `Quest-Knoten: ${primaryQuest.currentNodeTitle}` : null,
           ],
+          questTitles: questMatches.map((quest) => quest?.title),
+          storyThreads,
+          currentEventId: primaryQuest?.currentEventId ?? event?.id ?? null,
+          actorId: primaryQuest?.actorId ?? null,
+          narrativePriority: questMatches.length > 0 || storyThreads.length > 0,
         });
       }
     }
 
     return agenda.slice(0, 6);
+  }
+
+
+  _collectChroniclePreview({ engine, academyData, questsSummary }) {
+    const state = engine?.core?.state ?? null;
+    const entries = [
+      ...this._collectQuestChronicleEntries({ state, academyData, questsSummary }),
+      ...this._collectScoringChronicleEntries({ engine, academyData }),
+      ...this._collectExamChronicleEntries({ state, academyData }),
+      ...this._collectResourceChronicleEntries({ state, academyData }),
+      ...this._collectActivityChronicleEntries({ state, academyData }),
+    ];
+
+    return entries
+      .filter((entry) => entry && entry.title)
+      .sort((a, b) => this._chronicleAt(b.at) - this._chronicleAt(a.at))
+      .slice(0, 12)
+      .map((entry) => ({ ...entry, atLabel: this._formatChronicleAt(entry.at) }));
+  }
+
+  _collectQuestChronicleEntries({ state, academyData, questsSummary }) {
+    const questRoot = state?.get?.(STATE_PATHS.ACADEMY_QUESTS) ?? state?.get?.(STATE_PATHS.QUEST_STATES) ?? {};
+    const questTitleMap = new Map((questsSummary?.items ?? []).map((item) => [String(item?.questId ?? ''), item?.title ?? item?.questId]));
+    const currentNodeMap = new Map((questsSummary?.items ?? []).map((item) => [String(item?.questId ?? ''), item?.currentNodeTitle ?? item?.currentNodeId ?? null]));
+    const items = [];
+
+    for (const [actorId, quests] of Object.entries(questRoot || {})) {
+      for (const [questId, questState] of Object.entries(quests || {})) {
+        const title = questTitleMap.get(String(questId)) ?? questId;
+        const actorLabel = this._resolveChronicleActorLabel(actorId, academyData);
+        if (questState?.startedAt) {
+          items.push({
+            category: 'quest',
+            icon: 'fa-scroll',
+            at: questState.startedAt,
+            title: `Quest gestartet: ${title}`,
+            detail: actorLabel ? `Akteur: ${actorLabel}` : `Quest-ID: ${questId}`,
+          });
+        }
+        const history = Array.isArray(questState?.history) ? questState.history : [];
+        const latest = history[history.length - 1] ?? null;
+        if (latest?.timestamp) {
+          const currentNodeTitle = currentNodeMap.get(String(questId)) ?? questState?.currentNodeId ?? latest?.nodeId ?? '—';
+          items.push({
+            category: 'quest',
+            icon: 'fa-signs-post',
+            at: latest.timestamp,
+            title: `Quest fortgeschrieben: ${title}`,
+            detail: `Aktueller Knoten: ${currentNodeTitle}`,
+          });
+        }
+      }
+    }
+
+    return items;
+  }
+
+  _collectScoringChronicleEntries({ engine, academyData }) {
+    const log = engine?.academy?.scoring?.getAwardLog?.({ limit: 8 }) ?? [];
+    return log.map((entry) => {
+      const targetType = String(entry?.type ?? '').trim();
+      const targetId = String(entry?.target ?? '').trim();
+      const targetLabel = targetType === 'circle'
+        ? (academyData?.getCircle?.(targetId)?.name ?? targetId)
+        : (academyData?.getNpc?.(targetId)?.name ?? targetId);
+      const amount = Number(entry?.amount ?? 0);
+      const signed = amount > 0 ? `+${amount}` : `${amount}`;
+      return {
+        category: 'scoring',
+        icon: 'fa-trophy',
+        at: entry?.ts ?? null,
+        title: `${targetType === 'circle' ? 'Zirkelpunkte' : 'Schuelerpunkte'}: ${targetLabel} ${signed}`,
+        detail: entry?.reason ? `${entry.reason} (${entry?.source ?? 'manual'})` : `Quelle: ${entry?.source ?? 'manual'}`,
+      };
+    });
+  }
+
+  _collectExamChronicleEntries({ state, academyData }) {
+    const root = state?.get?.(STATE_PATHS.ACADEMY_EXAM_RESULTS) ?? {};
+    const items = [];
+    for (const [actorId, exams] of Object.entries(root || {})) {
+      const actorLabel = this._resolveChronicleActorLabel(actorId, academyData);
+      for (const [examId, examState] of Object.entries(exams || {})) {
+        const attempt = Array.isArray(examState?.attempts) ? examState.attempts[examState.attempts.length - 1] ?? null : null;
+        if (!attempt?.timestamp) continue;
+        const exam = academyData?.getExam?.(examId) ?? null;
+        const title = exam?.name ?? exam?.title ?? examId;
+        const scorePart = Number.isFinite(attempt?.score) && Number.isFinite(attempt?.maxScore)
+          ? ` (${attempt.score}/${attempt.maxScore})`
+          : '';
+        items.push({
+          category: 'exam',
+          icon: 'fa-graduation-cap',
+          at: attempt.timestamp,
+          title: `Pruefung ${attempt?.status ?? 'unknown'}: ${title}${scorePart}`,
+          detail: actorLabel ? `Akteur: ${actorLabel}` : `Exam-ID: ${examId}`,
+        });
+      }
+    }
+    return items;
+  }
+
+  _collectResourceChronicleEntries({ state, academyData }) {
+    const resourceCfg = new Map((academyData?.getResourcesConfig?.() ?? []).map((row) => [String(row?.id ?? ''), row]));
+    const statCfg = new Map((academyData?.getSchoolStatsConfig?.() ?? []).map((row) => [String(row?.id ?? ''), row]));
+    const resourceHistory = Array.isArray(state?.get?.('academy.resourceHistory')) ? state.get('academy.resourceHistory') : [];
+    const statHistory = Array.isArray(state?.get?.('academy.schoolStatHistory')) ? state.get('academy.schoolStatHistory') : [];
+    return [
+      ...resourceHistory.slice(0, 4).map((entry) => {
+        const cfg = resourceCfg.get(String(entry?.resourceId ?? '')) ?? null;
+        const signed = Number(entry?.delta ?? 0) > 0 ? `+${Number(entry?.delta ?? 0)}` : `${Number(entry?.delta ?? 0)}`;
+        return {
+          category: 'resource',
+          icon: 'fa-box-open',
+          at: entry?.at ?? null,
+          title: `Ressource: ${cfg?.name ?? cfg?.label ?? entry?.resourceId ?? '—'} ${signed}`,
+          detail: entry?.reason ? `${entry.reason} · Stand ${entry?.after ?? '—'}` : `Stand ${entry?.after ?? '—'}`,
+        };
+      }),
+      ...statHistory.slice(0, 4).map((entry) => {
+        const cfg = statCfg.get(String(entry?.statId ?? '')) ?? null;
+        const signed = Number(entry?.delta ?? 0) > 0 ? `+${Number(entry?.delta ?? 0)}` : `${Number(entry?.delta ?? 0)}`;
+        return {
+          category: 'school',
+          icon: 'fa-chart-line',
+          at: entry?.at ?? null,
+          title: `Schulstatus: ${cfg?.name ?? cfg?.label ?? entry?.statId ?? '—'} ${signed}`,
+          detail: entry?.reason ? `${entry.reason} · Stand ${entry?.after ?? '—'}` : `Stand ${entry?.after ?? '—'}`,
+        };
+      }),
+    ];
+  }
+
+  _collectActivityChronicleEntries({ state, academyData }) {
+    const history = Array.isArray(state?.get?.('academy.activityHistory')) ? state.get('academy.activityHistory') : [];
+    return history.slice(0, 4).map((entry) => {
+      const location = academyData?.getLocation?.(entry?.locationId ?? null) ?? null;
+      const actorLabel = this._resolveChronicleActorLabel(entry?.actorId ?? null, academyData);
+      return {
+        category: 'activity',
+        icon: 'fa-person-walking',
+        at: entry?.at ?? null,
+        title: `Aktivitaet: ${location?.name ?? entry?.locationId ?? '—'}`,
+        detail: [entry?.activityType ?? null, actorLabel ? `Akteur ${actorLabel}` : null, entry?.targetSkill ? `Skill ${entry.targetSkill}` : null].filter(Boolean).join(' · '),
+      };
+    });
+  }
+
+  _resolveChronicleActorLabel(actorId = null, academyData = null) {
+    const id = String(actorId ?? '').trim();
+    if (!id) return null;
+    return academyData?.getNpc?.(id)?.name ?? game?.actors?.get?.(id)?.name ?? id;
+  }
+
+  _chronicleAt(value) {
+    if (Number.isFinite(value)) return Number(value);
+    const parsed = Date.parse(String(value ?? ''));
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  _formatChronicleAt(value) {
+    const stamp = this._chronicleAt(value);
+    if (!stamp) return '—';
+    return new Date(stamp).toISOString();
+  }
+
+
+  _collectGradeEntries({ engine, academyData }) {
+    const examsEngine = engine?.academy?.exams ?? null;
+    const examRoot = engine?.core?.state?.get?.(STATE_PATHS.ACADEMY_EXAM_RESULTS) ?? {};
+    const defaultSchemeId = academyData?.getDefaultGradingSchemeId?.() ?? null;
+    const defaultScheme = defaultSchemeId ? academyData?.getGradingScheme?.(defaultSchemeId) ?? null : null;
+    const defaultGradeEntries = Array.isArray(defaultScheme?.grades) ? defaultScheme.grades : [];
+    const items = [];
+
+    const pickGrade = (percent) => {
+      const normalized = Number(percent ?? 0);
+      const sorted = [...defaultGradeEntries].sort((a, b) => Number(a?.minScore ?? 0) - Number(b?.minScore ?? 0));
+      let chosen = sorted[0] ?? null;
+      for (const grade of sorted) {
+        if (normalized >= Number(grade?.minScore ?? 0)) chosen = grade;
+      }
+      return chosen;
+    };
+
+    for (const [actorId, exams] of Object.entries(examRoot || {})) {
+      const actorName = this._resolveChronicleActorLabel(actorId, academyData) ?? actorId;
+      for (const [examId, examState] of Object.entries(exams || {})) {
+        const attempts = Array.isArray(examState?.attempts) ? examState.attempts : [];
+        const latestAttempt = attempts[attempts.length - 1] ?? null;
+        const score = Number(latestAttempt?.score);
+        const maxScore = Number(latestAttempt?.maxScore);
+        const examDef = academyData?.getExam?.(examId) ?? null;
+        const grading = Number.isFinite(score) && Number.isFinite(maxScore) && maxScore > 0
+          ? examsEngine?.determineStatusFromScore?.({ score, maxScore, examDef }) ?? null
+          : null;
+        const percent = grading?.percent ?? (Number.isFinite(score) && Number.isFinite(maxScore) && maxScore > 0
+          ? Math.max(0, Math.min(100, (score / maxScore) * 100))
+          : null);
+        const grade = percent != null ? pickGrade(percent) : null;
+        const academicContext = latestAttempt?.meta?.academicContext ?? null;
+        items.push({
+          actorId,
+          actorName,
+          examId,
+          examTitle: examDef?.name ?? examDef?.title ?? examId,
+          attemptedAt: latestAttempt?.timestamp ?? null,
+          attemptedAtLabel: this._formatChronicleAt(latestAttempt?.timestamp ?? null),
+          statusId: grading?.statusId ?? latestAttempt?.status ?? examState?.status ?? 'unknown',
+          statusLabel: grading?.label ?? latestAttempt?.meta?.gradingLabel ?? latestAttempt?.status ?? examState?.status ?? 'Unbekannt',
+          percent: percent != null ? Math.round(percent * 10) / 10 : null,
+          scoreLabel: Number.isFinite(score) && Number.isFinite(maxScore) ? `${score}/${maxScore}` : '—',
+          gradeId: grade?.id ?? null,
+          gradeLabel: grade?.name ?? null,
+          gradeColor: grade?.color ?? null,
+          gradeBonus: Number.isFinite(Number(grade?.bonus)) ? Number(grade.bonus) : null,
+          schemeId: defaultSchemeId,
+          schemeName: defaultScheme?.name ?? '—',
+          academicContext: academicContext ? {
+            year: Number.isFinite(Number(academicContext?.year)) ? Number(academicContext.year) : null,
+            trimester: Number.isFinite(Number(academicContext?.trimester)) ? Number(academicContext.trimester) : null,
+            week: Number.isFinite(Number(academicContext?.week)) ? Number(academicContext.week) : null,
+            day: academicContext?.day ?? null,
+            phase: academicContext?.phase ?? null,
+          } : null,
+        });
+      }
+    }
+
+    return items
+      .filter((entry) => entry?.examTitle)
+      .sort((a, b) => this._chronicleAt(b.attemptedAt) - this._chronicleAt(a.attemptedAt));
+  }
+
+  _buildGradeOverview({ gradeEntries, academyData }) {
+    const visible = (gradeEntries ?? []).slice(0, 8);
+    const schemeId = visible[0]?.schemeId ?? academyData?.getDefaultGradingSchemeId?.() ?? null;
+    const schemeName = visible[0]?.schemeName ?? (schemeId ? academyData?.getGradingScheme?.(schemeId)?.name ?? '—' : '—');
+    return {
+      schemeId,
+      schemeName,
+      items: visible,
+      summary: {
+        total: (gradeEntries ?? []).length,
+        excellent: (gradeEntries ?? []).filter((entry) => entry.statusId === 'excellent').length,
+        passed: (gradeEntries ?? []).filter((entry) => entry.statusId === 'passed').length,
+        failed: (gradeEntries ?? []).filter((entry) => entry.statusId === 'failed').length,
+      },
+    };
+  }
+
+  _buildGradeLedger({ gradeEntries, slotRef }) {
+    const targetYear = Number(slotRef?.year ?? 0);
+    const targetTrimester = Number(slotRef?.trimester ?? 0);
+    const grouped = new Map();
+
+    for (const entry of (gradeEntries ?? [])) {
+      const key = String(entry?.actorId ?? '').trim();
+      if (!key) continue;
+      const bucket = grouped.get(key) ?? { actorId: key, actorName: entry?.actorName ?? key, entries: [] };
+      bucket.entries.push(entry);
+      grouped.set(key, bucket);
+    }
+
+    const items = [...grouped.values()].map((bucket) => {
+      const allEntries = [...bucket.entries].sort((a, b) => this._chronicleAt(b.attemptedAt) - this._chronicleAt(a.attemptedAt));
+      const periodEntries = allEntries.filter((entry) => Number(entry?.academicContext?.year ?? 0) === targetYear && Number(entry?.academicContext?.trimester ?? 0) === targetTrimester);
+      const scopedEntries = periodEntries.length ? periodEntries : allEntries;
+      const percents = scopedEntries.map((entry) => entry?.percent).filter((value) => Number.isFinite(value));
+      const bonuses = scopedEntries.map((entry) => entry?.gradeBonus).filter((value) => Number.isFinite(value));
+      const latest = scopedEntries[0] ?? allEntries[0] ?? null;
+      const avgPercent = percents.length ? Math.round((percents.reduce((sum, value) => sum + value, 0) / percents.length) * 10) / 10 : null;
+      const bonusTotal = bonuses.length ? bonuses.reduce((sum, value) => sum + value, 0) : 0;
+      return {
+        actorId: bucket.actorId,
+        actorName: bucket.actorName,
+        scopeLabel: periodEntries.length ? 'aktuelles Trimester' : 'gesamt',
+        examsTaken: scopedEntries.length,
+        avgPercentLabel: avgPercent != null ? `${avgPercent}%` : '—',
+        avgBonusLabel: bonuses.length ? `${bonusTotal > 0 ? '+' : ''}${bonusTotal}` : '0',
+        passedCount: scopedEntries.filter((entry) => entry.statusId === 'passed' || entry.statusId === 'excellent').length,
+        failedCount: scopedEntries.filter((entry) => entry.statusId === 'failed').length,
+        latestExamTitle: latest?.examTitle ?? '—',
+        latestStatusLabel: latest?.statusLabel ?? '—',
+        latestAttemptedAtLabel: latest?.attemptedAtLabel ?? '—',
+        periodTaggedCount: periodEntries.length,
+        untaggedCount: allEntries.filter((entry) => !entry?.academicContext?.trimester || !entry?.academicContext?.year).length,
+      };
+    })
+    .sort((a, b) => {
+      const aPercent = Number.parseFloat(String(a.avgPercentLabel).replace('%', ''));
+      const bPercent = Number.parseFloat(String(b.avgPercentLabel).replace('%', ''));
+      const safeA = Number.isFinite(aPercent) ? aPercent : -1;
+      const safeB = Number.isFinite(bPercent) ? bPercent : -1;
+      return safeB - safeA || b.examsTaken - a.examsTaken || String(a.actorName).localeCompare(String(b.actorName));
+    })
+    .slice(0, 8);
+
+    return {
+      periodLabel: `Jahr ${slotRef?.year ?? '—'} · Trimester ${slotRef?.trimester ?? '—'}`,
+      items,
+      summary: {
+        actorCount: items.length,
+        currentTrimesterTagged: items.filter((entry) => entry.periodTaggedCount > 0).length,
+      },
+    };
+  }
+
+  _buildChronicleSeed({ slotRef, prepAgenda, chroniclePreview, questsSummary, activeLocation }) {
+    const header = [
+      'JANUS7 Campaign Chronicle Seed',
+      `Zeitfenster: Woche ${slotRef?.week ?? '—'} · ${slotRef?.day ?? '—'} / ${slotRef?.phase ?? '—'}`,
+      `Aktiver Ort: ${activeLocation?.name ?? '—'}`,
+      '',
+    ];
+
+    const agendaLines = (prepAgenda ?? []).slice(0, 4).map((entry) => {
+      const questPart = Array.isArray(entry?.questTitles) && entry.questTitles.length ? ` | Quest: ${entry.questTitles.join(', ')}` : '';
+      return `- ${entry?.slotLabel ?? 'Slot'} / ${entry?.typeLabel ?? 'Eintrag'}: ${entry?.title ?? '—'} | Fokus: ${entry?.focus ?? '—'}${questPart}`;
+    });
+
+    const chronicleLines = (chroniclePreview ?? []).slice(0, 8).map((entry) => {
+      return `- [${entry?.category ?? 'entry'}] ${entry?.title ?? '—'} :: ${entry?.detail ?? '—'}`;
+    });
+
+    const questLines = (questsSummary?.items ?? []).slice(0, 4).map((quest) => {
+      return `- ${quest?.title ?? quest?.questId ?? 'Quest'} | Node: ${quest?.currentNodeTitle ?? quest?.currentNodeId ?? '—'} | Actor: ${quest?.actorId ?? '—'}`;
+    });
+
+    const text = [
+      ...header,
+      'Vorbereitungsagenda:',
+      ...(agendaLines.length ? agendaLines : ['- Keine belastbare Agenda vorhanden.']),
+      '',
+      'Chronik-Vorschau:',
+      ...(chronicleLines.length ? chronicleLines : ['- Keine belastbaren Chronik-Eintraege vorhanden.']),
+      '',
+      'Offene Quests:',
+      ...(questLines.length ? questLines : ['- Keine aktiven Quests.']),
+      '',
+      'Schreibe daraus eine kurze Sitzungs-Chronik mit:',
+      '- 1 Absatz Rueckblick auf die letzten relevanten Ereignisse',
+      '- 1 Absatz aktueller Vorbereitungsstand',
+      '- 3 Bullet-Points fuer die naechsten wahrscheinlichen Szenen',
+    ].join('\n');
+
+    return {
+      id: 'campaign-chronicle-seed',
+      title: 'Campaign Chronicle Seed',
+      text,
+    };
   }
 
   _collectNpcCastForSlot({ slot, academyData }) {
@@ -387,6 +796,7 @@ export class JanusSessionPrepService {
         status: entry.status ?? 'active',
         currentNodeId: entry.currentNodeId ?? null,
         currentNodeTitle: nodeDef?.title ?? nodeDef?.eventId ?? entry.currentNodeId ?? null,
+        currentEventId: nodeDef?.eventId ?? null,
         startedAt: entry.startedAt ?? null,
       });
     }
@@ -485,7 +895,7 @@ export class JanusSessionPrepService {
     }
   }
 
-  _buildSuggestions({ slotRef, currentSlot, upcoming, questsSummary, activeLocation, diagnosticsSummary }) {
+  _buildSuggestions({ slotRef, currentSlot, upcoming, questsSummary, activeLocation, diagnosticsSummary, prepAgenda }) {
     const suggestions = [];
     const currentCounts = (currentSlot?.lessons?.length ?? 0) + (currentSlot?.exams?.length ?? 0) + (currentSlot?.events?.length ?? 0);
 
@@ -520,6 +930,16 @@ export class JanusSessionPrepService {
         icon: 'fa-scroll',
         title: 'Offene Quests reviewen',
         detail: `${questsSummary.total} aktive Quest(s) gefunden. Prüfe Node-Status, Fristen und mögliche Anschluss-Szenen.`
+      });
+    }
+
+    const narrativeHits = Array.isArray(prepAgenda) ? prepAgenda.filter((entry) => entry?.narrativePriority) : [];
+    if (narrativeHits.length > 0) {
+      suggestions.push({
+        kind: 'narrative',
+        icon: 'fa-feather-pointed',
+        title: 'Narrative Anschluss-Szene vormerken',
+        detail: `${narrativeHits.length} vorbereitete Slot-Eintraege tragen Quest- oder Story-Bezug. Diese Szenen zuerst mit Hook und Konsequenz absichern.`
       });
     }
 

@@ -76,6 +76,11 @@ Regeln:
 - Session Prep verdichtet diese Daten zu einer Shell-nativen Szenen-Checkliste statt weitere Admin-Fenster als Primärpfad aufzubauen.
 - Checklisten-Aktionen laufen ueber die bestehenden Commands fuer Ortswechsel und Atmosphere, nicht ueber neue UI-seitige Direktpfade.
 - Session Prep baut zusaetzlich eine datengetriebene Vorbereitungsagenda fuer aktuelle und naechste Slots auf; eine Lektion kann daraus direkt ueber `lesson.start` aktiviert werden.
+- Die Agenda markiert ausserdem direkte Quest-Event-Treffer und Story-Threads und kann passende Event-Popups ueber den bestehenden Quest-Command-Pfad oeffnen.
+- Session Prep stellt ausserdem eine reine Chronik-Vorschau aus vorhandenen Runtime-Historien bereit, ohne dafuer bereits ein eigenes Journal-Subsystem einzufuehren.
+- Fuer nachgelagerte KI-/Journal-Flows wird daraus zusaetzlich ein kopierbarer Chronicle-Seed generiert; Persistenz oder Exportlogik bleiben weiterhin ausserhalb der Shell.
+- Als erste `WP 3`-Welle zeigt Session Prep zusaetzlich einen read-only Pruefungsstand mit Notenbasis aus `academy.examResults`, den Exam-Thresholds und `grading-schemes.json`.
+- Die naechste Ausbaustufe aggregiert diese Daten innerhalb von Session Prep zu einem kleinen Zwischenstand je Akteur; neue Exam-Attempts speichern dafuer zusaetzlich den akademischen Zeitraum im Meta-Feld.
 - Der Reifegrad einzelner Apps wird zentral ueber `ui/app-manifest.js` beschrieben, nicht ueber verteilte Einzelannahmen.
 
 ---

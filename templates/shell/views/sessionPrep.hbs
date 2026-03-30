@@ -146,6 +146,8 @@
             {{#if item.teacherName}}<p><strong>Leitung:</strong> {{item.teacherName}}</p>{{/if}}
             <p><strong>Ort:</strong> {{item.locationName}}</p>
             <p><strong>Stimmung:</strong> {{item.moodLabel}}</p>
+            {{#if item.questTitles.length}}<p><strong>Quest-Bezug:</strong> {{#each item.questTitles as |quest|}}{{quest}}{{#unless @last}}, {{/unless}}{{/each}}</p>{{/if}}
+            {{#if item.storyThreads.length}}<p class="j7-text-dim"><strong>Threads:</strong> {{#each item.storyThreads as |thread|}}{{thread}}{{#unless @last}}, {{/unless}}{{/each}}</p>{{/if}}
             <ul class="j7-plain-list">
               {{#each item.detailBadges as |detail|}}<li>{{detail}}</li>{{/each}}
               {{#each item.notes as |note|}}<li class="j7-text-dim">{{note}}</li>{{/each}}
@@ -162,6 +164,9 @@
               <button type="button" class="janus-btn small" data-action="executeShellAction" data-command="applyMood" data-mood-id="{{item.moodId}}" {{#unless item.moodId}}disabled{{/unless}}>
                 <i class="fas fa-wave-square"></i> Stimmung
               </button>
+              <button type="button" class="janus-btn small" data-action="executeShellAction" data-command="openEventPopup" data-event-id="{{item.currentEventId}}" data-actor-id="{{item.actorId}}" {{#unless item.currentEventId}}disabled{{/unless}}>
+                <i class="fas fa-scroll"></i> Event
+              </button>
             </div>
           </article>
         {{/each}}
@@ -169,6 +174,93 @@
         <p class="j7-text-dim">Keine belastbare Vorbereitungsagenda aus den aktuellen Slot-Daten ableitbar.</p>
       {{/if}}
     </div>
+  </section>
+
+
+  <section class="j7-panel">
+    <h3><i class="fas fa-graduation-cap"></i> Pruefungsstand &amp; Notenbasis</h3>
+    <p class="j7-text-dim">Schema: {{view.gradeOverview.schemeName}} · Eintraege: {{view.gradeOverview.summary.total}} · Exzellent: {{view.gradeOverview.summary.excellent}} · Bestanden: {{view.gradeOverview.summary.passed}} · Nicht bestanden: {{view.gradeOverview.summary.failed}}</p>
+    <div class="j7-seed-grid">
+      {{#if view.gradeOverview.items.length}}
+        {{#each view.gradeOverview.items as |entry|}}
+          <article class="j7-seed-card">
+            <header>
+              <strong>{{entry.examTitle}}</strong>
+              <span class="j7-text-dim">{{entry.attemptedAtLabel}}</span>
+            </header>
+            <p><strong>Akteur:</strong> {{entry.actorName}}</p>
+            <p><strong>Ergebnis:</strong> {{entry.scoreLabel}}{{#if entry.percent}} <span class="j7-text-dim">· {{entry.percent}}%</span>{{/if}}</p>
+            <p><strong>Status:</strong> {{entry.statusLabel}}</p>
+            <p><strong>Note:</strong> {{#if entry.gradeLabel}}{{entry.gradeLabel}}{{else}}—{{/if}}{{#if entry.gradeBonus}} <span class="j7-text-dim">· Bonus {{entry.gradeBonus}}</span>{{/if}}</p>
+          </article>
+        {{/each}}
+      {{else}}
+        <p class="j7-text-dim">Keine belastbare Notenbasis aus den aktuellen Pruefungsresultaten ableitbar.</p>
+      {{/if}}
+    </div>
+  </section>
+
+  <section class="j7-panel">
+    <h3><i class="fas fa-user-graduate"></i> Zwischenstand je Akteur</h3>
+    <p class="j7-text-dim">Bezugsfenster: {{view.gradeLedger.periodLabel}} · Akteure: {{view.gradeLedger.summary.actorCount}} · Mit Periodenstempel: {{view.gradeLedger.summary.currentTrimesterTagged}}</p>
+    <div class="j7-seed-grid">
+      {{#if view.gradeLedger.items.length}}
+        {{#each view.gradeLedger.items as |entry|}}
+          <article class="j7-seed-card">
+            <header>
+              <strong>{{entry.actorName}}</strong>
+              <span class="j7-text-dim">{{entry.scopeLabel}}</span>
+            </header>
+            <p><strong>Pruefungen:</strong> {{entry.examsTaken}}</p>
+            <p><strong>Mittelwert:</strong> {{entry.avgPercentLabel}}</p>
+            <p><strong>Bonus-Saldo:</strong> {{entry.avgBonusLabel}}</p>
+            <p><strong>Bestanden:</strong> {{entry.passedCount}} · <strong>Nicht bestanden:</strong> {{entry.failedCount}}</p>
+            <p><strong>Letzte Pruefung:</strong> {{entry.latestExamTitle}}</p>
+            <p class="j7-text-dim">{{entry.latestStatusLabel}} · {{entry.latestAttemptedAtLabel}}{{#if entry.untaggedCount}} · {{entry.untaggedCount}} ohne Periodenstempel{{/if}}</p>
+          </article>
+        {{/each}}
+      {{else}}
+        <p class="j7-text-dim">Keine akteursbezogene Zwischenstandsaggregation aus den aktuellen Pruefungsresultaten ableitbar.</p>
+      {{/if}}
+    </div>
+  </section>
+
+  <section class="j7-panel">
+    <h3><i class="fas fa-book-bookmark"></i> Chronik-Vorschau</h3>
+    <div class="j7-seed-grid">
+      {{#if view.chroniclePreview.length}}
+        {{#each view.chroniclePreview as |entry|}}
+          <article class="j7-seed-card">
+            <header>
+              <strong><i class="fas {{entry.icon}}"></i> {{entry.title}}</strong>
+              <span class="j7-text-dim">{{entry.atLabel}}</span>
+            </header>
+            <p class="j7-text-dim">{{entry.category}}</p>
+            <p>{{entry.detail}}</p>
+          </article>
+        {{/each}}
+      {{else}}
+        <p class="j7-text-dim">Keine belastbaren Chronik-Eintraege aus dem aktuellen State ableitbar.</p>
+      {{/if}}
+    </div>
+  </section>
+
+
+  <section class="j7-panel">
+    <h3><i class="fas fa-file-export"></i> Chronik-Export</h3>
+    {{#if view.chronicleSeed}}
+      <div class="j7-seed-grid">
+        <article class="j7-seed-card">
+          <header>
+            <strong>{{view.chronicleSeed.title}}</strong>
+            <button type="button" class="janus-btn small" data-action="copySeed"><i class="fas fa-copy"></i> Kopieren</button>
+          </header>
+          <textarea rows="14">{{view.chronicleSeed.text}}</textarea>
+        </article>
+      </div>
+    {{else}}
+      <p class="j7-text-dim">Kein exportierbarer Chronik-Seed aus den aktuellen Daten ableitbar.</p>
+    {{/if}}
   </section>
 
 

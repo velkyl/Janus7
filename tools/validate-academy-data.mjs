@@ -14,6 +14,7 @@ const validator = new JanusValidator({ logger: console });
 const datasets = {
   lessons: readJson('data/academy/lessons.json'),
   exams: readJson('data/academy/exams.json'),
+  gradingSchemes: readJson('data/academy/grading-schemes.json'),
   examQuestions: readJson('data/academy/exam-questions.json'),
   npcs: readJson('data/academy/npcs.json'),
   locations: readJson('data/academy/locations.json'),
@@ -33,6 +34,7 @@ const datasets = {
 const checks = [
   ['academy.lessons', datasets.lessons],
   ['academy.exams', datasets.exams],
+  ['academy.gradingSchemes', datasets.gradingSchemes],
   ['academy.examQuestions', datasets.examQuestions],
   ['academy.npcs', datasets.npcs],
   ['academy.locations', datasets.locations],

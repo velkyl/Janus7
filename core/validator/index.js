@@ -21,6 +21,7 @@ import {
   ACADEMY_EXAM_QUESTIONS_SCHEMA,
   ACADEMY_CALENDAR_SCHEMA,
   ACADEMY_EXAMS_SCHEMA,
+  ACADEMY_GRADING_SCHEMES_SCHEMA,
   ACADEMY_NPCS_SCHEMA,
   ACADEMY_LOCATIONS_SCHEMA,
   ACADEMY_LIBRARY_SCHEMA,
@@ -47,6 +48,7 @@ export {
   ACADEMY_EXAM_QUESTIONS_SCHEMA,
   ACADEMY_CALENDAR_SCHEMA,
   ACADEMY_EXAMS_SCHEMA,
+  ACADEMY_GRADING_SCHEMES_SCHEMA,
   ACADEMY_NPCS_SCHEMA,
   ACADEMY_LOCATIONS_SCHEMA,
   ACADEMY_LIBRARY_SCHEMA,
@@ -96,6 +98,7 @@ export class JanusValidator {
     this.registerSchema('academy.calendar', ACADEMY_CALENDAR_SCHEMA);
     this.registerSchema('academy.lessons', ACADEMY_LESSONS_SCHEMA);
     this.registerSchema('academy.exams', ACADEMY_EXAMS_SCHEMA);
+    this.registerSchema('academy.gradingSchemes', ACADEMY_GRADING_SCHEMES_SCHEMA);
     this.registerSchema('academy.examQuestions', ACADEMY_EXAM_QUESTIONS_SCHEMA);
     this.registerSchema('academy.npcs', ACADEMY_NPCS_SCHEMA);
     this.registerSchema('academy.locations', ACADEMY_LOCATIONS_SCHEMA);
@@ -182,6 +185,7 @@ export class JanusValidator {
   validateAcademyCalendar(json) { return this.validate('academy.calendar', json); }
   validateAcademyLessons(json) { return this.validate('academy.lessons', json); }
   validateAcademyExams(json) { return this.validate('academy.exams', json); }
+  validateAcademyGradingSchemes(json) { return this.validate('academy.gradingSchemes', json); }
   validateExamQuestions(json) { return this.validate('academy.examQuestions', json); }
   validateAcademyNPCs(json) { return this.validate('academy.npcs', json); }
   validateAcademyLocations(json) { return this.validate('academy.locations', json); }

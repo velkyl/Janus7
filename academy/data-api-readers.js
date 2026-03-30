@@ -142,6 +142,42 @@ export function getExam(id) {
   return (cache.exams?.exams ?? []).find((row) => row.id === id) ?? null;
 }
 
+export function getGradingSchemes() {
+  const cache = getAcademyCache();
+  if (!cache) throw new Error('AcademyDataApi not initialized. Call AcademyDataApi.init() first.');
+  return cache.gradingSchemes?.schemes ?? {};
+}
+
+export function getGradingScheme(id) {
+  const schemes = getGradingSchemes();
+  const key = String(id ?? '').trim();
+  if (!key) return null;
+  return schemes[key] ?? null;
+}
+
+export function getDefaultGradingSchemeId() {
+  const cache = getAcademyCache();
+  if (!cache) throw new Error('AcademyDataApi not initialized. Call AcademyDataApi.init() first.');
+  const explicitId = String(cache.gradingSchemes?.defaultSchemeId ?? cache.gradingSchemes?.meta?.defaultSchemeId ?? '').trim();
+  const schemes = cache.gradingSchemes?.schemes ?? {};
+  if (explicitId && schemes[explicitId]) return explicitId;
+  if (schemes.punin_standard) return 'punin_standard';
+  return Object.keys(schemes)[0] ?? null;
+}
+
+export function getDefaultExamGradingScheme() {
+  const schemeId = getDefaultGradingSchemeId();
+  const scheme = schemeId ? getGradingScheme(schemeId) : null;
+  const grades = Array.isArray(scheme?.grades) ? scheme.grades : [];
+  return grades.map((grade) => ({
+    id: grade?.id ?? 'unknown',
+    label: grade?.name ?? grade?.id ?? 'Unbekannt',
+    minPercent: Number(grade?.minScore ?? 0),
+    color: grade?.color ?? null,
+    bonus: Number.isFinite(Number(grade?.bonus)) ? Number(grade.bonus) : null,
+  }));
+}
+
 export function getExamQuestionSets() {
   const cache = getAcademyCache();
   if (!cache) throw new Error('AcademyDataApi not initialized. Call AcademyDataApi.init() first.');

@@ -153,6 +153,44 @@ export const ACADEMY_EXAMS_SCHEMA = {
   }
 };
 
+// ─── Academy: Grading Schemes ────────────────────────────────────────────────
+
+export const ACADEMY_GRADING_SCHEMES_SCHEMA = {
+  type: 'object',
+  required: ['version', 'schemes'],
+  properties: {
+    version: { type: 'string', minLength: 1 },
+    description: { type: 'string', nullable: true },
+    schemes: {
+      type: 'object',
+      additionalProperties: {
+        type: 'object',
+        required: ['name', 'grades'],
+        properties: {
+          name: { type: 'string', minLength: 1 },
+          description: { type: 'string', nullable: true },
+          grades: {
+            type: 'array',
+            minItems: 1,
+            items: {
+              type: 'object',
+              required: ['id', 'name', 'minScore'],
+              properties: {
+                id: { type: 'string', minLength: 1 },
+                name: { type: 'string', minLength: 1 },
+                minScore: { type: 'number', min: 0 },
+                color: { type: 'string', nullable: true },
+                bonus: { type: 'number', nullable: true }
+              }
+            }
+          }
+        }
+      }
+    },
+    meta: { type: 'object', nullable: true }
+  }
+};
+
 // ─── Academy: NPCs ────────────────────────────────────────────────────────────
 
 export const ACADEMY_NPCS_SCHEMA = {
