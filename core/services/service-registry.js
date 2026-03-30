@@ -54,12 +54,14 @@ export class JanusServiceRegistry {
     this._readyAt.set(key, Date.now());
 
     // Wartende Promises auflösen
-    const waiting = this._waiters.get(key) ?? [];
-    for (const { resolve, timer } of waiting) {
-      clearTimeout(timer);
-      resolve(instance);
+    const waiting = this._waiters.get(key);
+    if (waiting) {
+      for (const { resolve, timer } of waiting) {
+        clearTimeout(timer);
+        resolve(instance);
+      }
+      this._waiters.delete(key);
     }
-    this._waiters.delete(key);
   }
 
   /**
@@ -71,12 +73,14 @@ export class JanusServiceRegistry {
     this._readyAt.delete(key);
 
     // Wartende Promises mit null auflösen
-    const waiting = this._waiters.get(key) ?? [];
-    for (const { resolve, timer } of waiting) {
-      clearTimeout(timer);
-      resolve(null);
+    const waiting = this._waiters.get(key);
+    if (waiting) {
+      for (const { resolve, timer } of waiting) {
+        clearTimeout(timer);
+        resolve(null);
+      }
+      this._waiters.delete(key);
     }
-    this._waiters.delete(key);
   }
 
   // ─── Zugriff ──────────────────────────────────────────────────────────────
@@ -115,9 +119,8 @@ export class JanusServiceRegistry {
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
         // Aus Waiter-Liste entfernen
-        const waiting = this._waiters.get(key) ?? [];
-        const idx = waiting.findIndex(w => w.timer === timer);
         if (idx !== -1) waiting.splice(idx, 1);
+        this._cleanupWaiters(key);
 
         if (fallback !== undefined) {
           resolve(fallback);
@@ -130,6 +133,14 @@ export class JanusServiceRegistry {
       waiters.push({ resolve, reject, timer });
       this._waiters.set(key, waiters);
     });
+  }
+
+  /** @private */
+  _cleanupWaiters(key) {
+    const waiting = this._waiters.get(key);
+    if (waiting && waiting.length === 0) {
+      this._waiters.delete(key);
+    }
   }
 
   // ─── Diagnostics ──────────────────────────────────────────────────────────

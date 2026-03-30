@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @file ui/core/base-app.js
  * @module janus7
  * @phase 6
@@ -279,8 +279,18 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
   }
 
   _handleRenderError(err, context = 'unknown') {
-    this._getLogger().error?.(`${MODULE_ID}: Render error in ${context}`, err);
+    const logger = this._getLogger();
+    logger.error?.(`${MODULE_ID}: Render error in ${context}`, err);
     this._trackLastError(err, context);
+    
+    // Zentrales Error-Tracking für die gesamte Engine
+    try {
+      const engine = this._getEngine();
+      if (engine?.errors?.record) {
+        engine.errors.record('phase6', `UI.${this.constructor.name}.${context}`, err);
+      }
+    } catch (_e) { /* engine error reporting must not crash the caller */ }
+
     return this._renderErrorBoundary(err, context);
   }
 

@@ -1617,6 +1617,26 @@
       "phase": 4,
       "phases": [4],
       "hasRun": false
+    },
+    {
+      "id": "QS-TC-04",
+      "title": "Quest State Persistence",
+      "importPath": "./tests/qs/QS_TC_04__state_persistence.test.js",
+      "suiteClass": "extended-auto",
+      "kind": "auto",
+      "phase": 4,
+      "phases": [4],
+      "hasRun": false
+    },
+    {
+      "id": "QS-TC-05",
+      "title": "Social & Reward Integration",
+      "importPath": "./tests/qs/QS_TC_05__social_reward.test.js",
+      "suiteClass": "extended-auto",
+      "kind": "auto",
+      "phase": 4,
+      "phases": [4],
+      "hasRun": false
     }
   ]
 }

@@ -359,8 +359,9 @@ async openKiBackupManager(_dataset = {}) {
     if (!_checkPermission('bridgeActorLookup')) return { success: false, cancelled: true };
     
     const engine = _engine();
+    if (game.system.id !== 'dsa5') throw new Error('DSA5 Bridge erfordert das dsa5 System.');
     const bridge = engine?.bridge?.dsa5;
-    if (!bridge) throw new Error('DSA5 Bridge not available');
+    if (!bridge) throw new Error('DSA5 Bridge nicht verfügbar');
     const actorName = dataset.actorName || await JanusUI.prompt({ 
       title: 'Actor Lookup', 
       label: 'Actor Name' 
@@ -387,8 +388,9 @@ async openKiBackupManager(_dataset = {}) {
     if (!_checkPermission('bridgeRollTest')) return { success: false, cancelled: true };
     
     const engine = _engine();
+    if (game.system.id !== 'dsa5') throw new Error('DSA5 Bridge erfordert das dsa5 System.');
     const bridge = engine?.bridge?.dsa5;
-    if (!bridge) throw new Error('DSA5 Bridge not available');
+    if (!bridge) throw new Error('DSA5 Bridge nicht verfügbar');
     const skillName = dataset.skillName || 'Sinnesschärfe';
     const actorId = dataset.actorId || game.user.character?.uuid;
     const modifierRaw = dataset.modifier;
