@@ -1,10 +1,12 @@
 import { emitHook, HOOKS } from '../core/hooks/emitter.js';
 
+import { JanusConfig } from '../core/config.js';
+
 function _safeString(v){ return String(v ?? '').trim(); }
 function _clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }
 
-const MAX_QUEUED_EVENTS = 200;
-const MAX_RESOURCE_HISTORY = 100;
+const MAX_QUEUED_EVENTS = JanusConfig?.get?.('maxQueuedEvents') ?? 200;
+const MAX_RESOURCE_HISTORY = JanusConfig?.get?.('maxResourceHistory') ?? 100;
 
 export class JanusResourcesEngine {
   constructor({ state, academyData, logger }) {

@@ -10,6 +10,7 @@
 import { JanusKiExportService } from '../../phase7/export/JanusKiExportService.js';
 import { JanusKiImportService } from '../../phase7/import/JanusKiImportService.js';
 import { JanusKiIoService } from '../../phase7/io/JanusKiIoService.js';
+import { JanusKnowledgeBridge } from '../../phase7/ki/knowledge-bridge.js';
 import { Prompts } from '../../phase7/ki/prompts.js';
 import { HOOKS } from '../../core/hooks/topics.js';
 import { registerRuntimeHook } from '../../core/hooks/runtime.js';
@@ -31,6 +32,9 @@ export function attachPhase7Ki(engine) {
     services.exportService ??= new JanusKiExportService({ state, validator, logger, academyData, engine });
     services.importService ??= new JanusKiImportService({ state, validator, logger });
     services.ioService ??= new JanusKiIoService({ state, validator, logger, academyData, engine });
+    
+    const dsaBridge = engine?.bridge?.dsa5 ?? null;
+    services.knowledgeBridge ??= new JanusKnowledgeBridge({ bridge: dsaBridge, state, logger });
 
     // Export / import APIs
     engine.ki.exportBundle = (opts = {}) => services.exportService.exportBundle(opts);
@@ -42,6 +46,12 @@ export function attachPhase7Ki(engine) {
     engine.ki.getImportHistory = () => services.importService.getHistory();
     engine.ki.listBackups = async () => services.importService.listBackups();
     engine.ki.restoreBackup = async (fileRef, opts = {}) => services.importService.restoreBackup(fileRef, opts);
+    
+    // Knowledge Bridge (Semantic Search & Actions)
+    engine.ki.knowledgeBridge = services.knowledgeBridge;
+    engine.ki.search = (domain, query, opts) => services.knowledgeBridge.search(domain, query, opts);
+    engine.ki.executeAction = (type, uuid, params) => services.knowledgeBridge.executeAction(type, uuid, params);
+    
     engine.ki.prompts = Prompts;
 
     // Legacy alias: engine.ai.* delegates to engine.ki.* (Phase 7 SSOT)
@@ -56,6 +66,8 @@ export function attachPhase7Ki(engine) {
       getImportHistory: engine.ki.getImportHistory,
       listBackups: engine.ki.listBackups,
       restoreBackup: engine.ki.restoreBackup,
+      search: engine.ki.search,
+      executeAction: engine.ki.executeAction,
       prompts: engine.ki.prompts,
     });
 
@@ -82,11 +94,3 @@ if (typeof Hooks !== 'undefined') {
     try { attachPhase7Ki(engine); } catch (_err) { /* already logged in attach */ }
   });
 }
-
-// FIX P1-04: Der folgende Top-Level-Code ist im normalen Foundry-Boot immer wirkungslos,
-// weil game.janus7 zum ESModule-Import-Zeitpunkt noch nicht existiert.
-// Der ENGINE_READY-Hook oben ist der korrekte und zuverlässige Init-Pfad.
-// Bei echten Hot-Reloads (Dev-Flow) kann der Kommentar entsäarf werden.
-// try {
-//   if (globalThis.game?.janus7) attachPhase7Ki(globalThis.game.janus7);
-// } catch (_err) { /* noop */ }

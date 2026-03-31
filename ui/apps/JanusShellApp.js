@@ -127,6 +127,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       kiExportFile: JanusShellApp.onKiExportFile,
       kiApplyImport: JanusShellApp.onKiApplyImport,
       kiPreviewImport: JanusShellApp.onKiPreviewImport,
+      kiSearch: JanusShellApp.onKiSearch,
       
       startDirectorDay: JanusShellApp.onStartDirectorDay,
       directorRunLesson: JanusShellApp.onDirectorRunLesson,
@@ -657,6 +658,68 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     ui.notifications?.info?.(`Journal erstellt & verknüpft: ${slotKey}`);
     this._slotBuilder = [];
     this.refresh();
+  }
+
+  static async onKiSearch(event) {
+    event?.preventDefault?.();
+    const D2 = foundry?.applications?.api?.DialogV2;
+    if (!D2?.prompt) { ui.notifications?.error('DialogV2 nicht verf\u00fcgbar'); return; }
+
+    const content = `
+      <div class="janus7-card j7-dialog-card-reset">
+        <p class="j7-dialog-heading"><strong><i class="fas fa-brain"></i> KI Knowledge Bridge</strong></p>
+        <p class="j7-dialog-subtext">Semantische unscharfe Suche nach Konzepten, Personen oder Zaubern.</p>
+        <div class="j7-dialog-form-row">
+          <label for="janus7-ki-domain" class="j7-dialog-label-fixed">Such-Domain</label>
+          <select id="janus7-ki-domain" class="j7-dialog-input-grow">
+            <option value="actors">NSCs & Actors (Welt)</option>
+            <option value="items">Zubeh\u00f6r, Items & Zauber (Welt)</option>
+            <option value="compendium">Compendia (Module)</option>
+          </select>
+        </div>
+        <div class="j7-dialog-form-row">
+          <label for="janus7-ki-query" class="j7-dialog-label-fixed">Suchbegriff</label>
+          <input type="text" id="janus7-ki-query" class="j7-dialog-input-grow" placeholder="z.B. strenger Zwerg oder Heilzauber" />
+        </div>
+      </div>
+    `;
+
+    const res = await D2.prompt({ window: { title: 'Semantische Suche' }, content, ok: { label: 'Suchen', icon: 'fas fa-search' }, rejectClose: false, modal: false }).catch(() => null);
+    if (res === null) return;
+
+    const domain = document.getElementById('janus7-ki-domain')?.value ?? 'actors';
+    const query = document.getElementById('janus7-ki-query')?.value?.trim() ?? '';
+    
+    if (!query) { ui.notifications?.warn('Bitte einen Suchbegriff eingeben.'); return; }
+
+    const searchFn = game?.janus7?.ki?.search;
+    if (typeof searchFn !== 'function') { ui.notifications?.error('Knowledge Bridge: Suche nicht verf\u00fcgbar.'); return; }
+
+    ui.notifications?.info(`KI sucht in "${domain}" nach "${query}"...`);
+    try {
+      const results = await searchFn(domain, query);
+      const resContent = results.length === 0 
+        ? '<p style="padding: 10px;">Keine relevanten Ergebnisse gefunden f\u00fcr Ihre Suchanfrage.</p>'
+        : results.map(r => `
+            <div class="janus7-card" style="margin-bottom: 5px; padding: 5px; border-left: 3px solid #4dc2d3;">
+              <div style="font-weight: bold;">${JanusUI.escape(r.name)}</div>
+              <div style="font-size: 0.85em; opacity: 0.8; display: flex; justify-content: space-between;">
+                <span>UUID: <code>${JanusUI.escape(r.uuid || r.id || r._id)}</code></span>
+                <span>Relevanz: ${Math.round((r.score || 0)*100)}%</span>
+              </div>
+            </div>
+          `).join('');
+
+      await D2.prompt({
+        window: { title: `Suchergebnisse: "${query}"` },
+        content: `<div style="max-height: 400px; overflow-y: auto;">${resContent}</div>`,
+        ok: { label: 'Schlie\u00dfen', icon: 'fas fa-check' },
+        rejectClose: false
+      });
+    } catch(err) {
+      console.error('[JANUS7]', err);
+      ui.notifications?.error('Abfrage \u00fcber KI Knowledge Bridge fehlgeschlagen.');
+    }
   }
 
   static async onKiClearContext() {

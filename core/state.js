@@ -431,9 +431,8 @@ migrateState(stateObj = this._state) {
 
   const academyQuestRoot = normalizeQuestRoot(stateObj?.academy?.quests);
   const rootQuestStates = normalizeQuestRoot(stateObj?.questStates);
-  const canonicalQuestStates = Object.keys(rootQuestStates).length
-    ? foundry.utils.deepClone(rootQuestStates)
-    : foundry.utils.deepClone(academyQuestRoot);
+  const questStateSource = Object.keys(rootQuestStates).length ? rootQuestStates : academyQuestRoot;
+  const canonicalQuestStates = foundry.utils.deepClone(questStateSource);
 
   stateObj.questStates = canonicalQuestStates;
   if (stateObj?.academy && Object.prototype.hasOwnProperty.call(stateObj.academy, 'quests')) {
@@ -511,8 +510,9 @@ migrateState(stateObj = this._state) {
     ensure('academy.social.storyHooks.records', {});
 
     const legacyRootScoring = isPlainMap(stateObj?.scoring) ? normalizeScoringRoot(stateObj.scoring) : null;
-    const academyScoring = isPlainMap(foundry.utils.getProperty(stateObj, 'academy.scoring'))
-      ? normalizeScoringRoot(foundry.utils.getProperty(stateObj, 'academy.scoring'))
+    const academyScoringRaw = foundry.utils.getProperty(stateObj, 'academy.scoring');
+    const academyScoring = isPlainMap(academyScoringRaw)
+      ? normalizeScoringRoot(academyScoringRaw)
       : {};
     const canonicalScoring = Object.keys(academyScoring).length ? academyScoring : (legacyRootScoring ?? normalizeScoringRoot({}));
     foundry.utils.setProperty(stateObj, 'academy.scoring', canonicalScoring);

@@ -1,4 +1,4 @@
-﻿import { moduleAssetPath } from '../core/common.js';
+import { moduleAssetPath } from '../core/common.js';
 /**
  * @file academy/phase4.js
  * @module janus7
@@ -56,17 +56,24 @@ registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (en
       return;
     }
 
+    const registerResults = {};
     const safeRegister = (service, name) => {
-      if (!service) return false;
+      if (!service) {
+        registerResults[name] = null;
+        return false;
+      }
       if (typeof service.register !== 'function') {
         logger?.warn?.(`[JANUS7] Phase 4: ${name} hat keine register()-Methode. Initialisierung läuft degradiert weiter.`);
+        registerResults[name] = 'missing-register';
         return false;
       }
       try {
         service.register();
+        registerResults[name] = true;
         return true;
       } catch (err) {
         logger?.warn?.(`[JANUS7] Phase 4: ${name}.register() fehlgeschlagen (non-fatal)`, { err: err?.message ?? err });
+        registerResults[name] = false;
         return false;
       }
     };
@@ -196,14 +203,20 @@ registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (en
     if (bridge) {
       try {
         examConditionHooks = new JanusExamConditionHooks({ bridge, logger });
-        examConditionHooks.register();
-        engine.academy.examConditionHooks = examConditionHooks;
-        engine?.markServiceReady?.('academy.examConditionHooks', examConditionHooks);
-        logger?.debug?.('[JANUS7] Phase 4: JanusExamConditionHooks verdrahtet.');
+        if (safeRegister(examConditionHooks, 'examConditionHooks')) {
+          engine.academy.examConditionHooks = examConditionHooks;
+          engine?.markServiceReady?.('academy.examConditionHooks', examConditionHooks);
+          logger?.debug?.('[JANUS7] Phase 4: JanusExamConditionHooks verdrahtet.');
+        } else {
+          engine.academy.examConditionHooks = null;
+        }
       } catch (echErr) {
         engine?.recordWarning?.('phase4', 'examConditionHooks.init', echErr);
         logger?.warn?.('[JANUS7] Phase 4: JanusExamConditionHooks init fehlgeschlagen (non-fatal)', { err: echErr?.message });
+        registerResults.examConditionHooks = false;
       }
+    } else {
+      registerResults.examConditionHooks = null;
     }
 
     // ── Exams + Lessons + RollScoringConnector ──────────────────────────
@@ -254,6 +267,7 @@ registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (en
       logger?.warn?.('[JANUS7] Phase 4: RollScoringConnector init fehlgeschlagen (non-fatal)', { err: connErr?.message });
     }
 
+    logger?.info?.('[JANUS7] Phase 4 register summary', registerResults);
     logger?.debug?.('[JANUS7] Phase 4 Simulation initialisiert (calendar/scoring/social/learningProgress/fateTracker/circleAssignment/lessonBuffManager).');
   } catch (err) {
     engine?.recordError?.('phase4', 'integration', err);

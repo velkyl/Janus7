@@ -45,9 +45,12 @@ export class JanusDevPanel extends HandlebarsApplicationMixin(ApplicationV2) {
     let eventStates = null;
 
     if (state && actorId) {
-      playerState = state.get('playerState', actorId) || {};
-      questStates = state.get('questStates', actorId) || state.get('academy.quests', actorId) || {};
-      eventStates = state.get('eventStates', actorId) || {};
+      const playerStateRoot = state.get('playerState') || {};
+      const questStatesRoot = state.get('questStates') || state.get('academy.quests') || {};
+      const eventStatesRoot = state.get('eventStates') || {};
+      playerState = playerStateRoot?.[actorId] || {};
+      questStates = questStatesRoot?.[actorId] || {};
+      eventStates = eventStatesRoot?.[actorId] || {};
     }
 
     return {
@@ -154,10 +157,7 @@ export class JanusDevPanel extends HandlebarsApplicationMixin(ApplicationV2) {
     if (!confirmed) return;
 
     try {
-      await game.janus7.core.state.transaction(() => {
-        game.janus7.core.state.set('questStates', {}, actorId);
-        game.janus7.core.state.set('eventStates', {}, actorId);
-      });
+      await game.janus7.director.resetActorQuestEventState(actorId);
       
       ui.notifications.info('State zurückgesetzt');
       this.render();

@@ -674,6 +674,126 @@
           "LIB_DIE_MACHT_DER_ELEMENTE"
         ]
       }
+    },
+    {
+      "id": "LES_Y1_T1_SPRACH_01",
+      "name": "Garethi – Fundamente & Dialekte",
+      "subject": "sprachen",
+      "yearRange": [1, 1],
+      "summary": "Die Verkehrssprache des Reiches. Fokus auf saubere Hochsprache, Schriftsatz und das Erkennen von Provinzialismen. Unerlässlich für die Kommunikation mit Behörden und Gilden.",
+      "tags": ["sprache", "garethi", "kommunikation", "grundlagen"],
+      "teacherNpcId": "NPC_MEISTERIN_ROWENA_SILBERFEDER",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          { "systemSkillId": "TALENT_SPRACHEN", "weight": 1.0 },
+          { "systemSkillId": "TALENT_SCHREIBEN", "weight": 0.5 }
+        ],
+        "checks": [
+          { "type": "knowledge-check", "difficulty": "normal", "targetSkillId": "TALENT_SPRACHEN" }
+        ]
+      },
+      "scoringImpact": { "diligence": 1, "housePointsRange": [0, 2] },
+      "references": {
+        "dsa5RuleRefs": ["TALENT: SPRACHEN"],
+        "libraryItemIds": ["LIB_CODEX_ALBYRICUS"]
+      }
+    },
+    {
+      "id": "LES_Y1_T1_ALCHIM_01",
+      "name": "Alchimie – Materialkunde I",
+      "subject": "alchimie",
+      "yearRange": [1, 1],
+      "summary": "Grundlagen der Laborarbeit: Identifikation von Grundstoffen, Umgang mit Phiolen und die Gefahren von Verunreinigungen. Ziel ist die sichere Vorbereitung einfacher Sude.",
+      "tags": ["alchimie", "labor", "material", "sicherheit"],
+      "teacherNpcId": "NPC_MEDICA_JORINDE",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          { "systemSkillId": "TALENT_ALCHIMIE", "weight": 1.0 },
+          { "systemSkillId": "ATTRIBUTE_FINGERFERTIGKEIT", "weight": 0.4 }
+        ],
+        "checks": [
+          { "type": "craft-check", "difficulty": "normal", "targetSkillId": "TALENT_ALCHIMIE" }
+        ]
+      },
+      "scoringImpact": { "diligence": 2, "housePointsRange": [-1, 2] },
+      "references": {
+        "dsa5RuleRefs": ["TALENT: ALCHIMIE"],
+        "libraryItemIds": ["LIB_ENCYCLOPAEDIA_MAGICA"]
+      }
+    },
+    {
+      "id": "LES_Y1_T1_MAGIEK_02",
+      "name": "Magiekunde – Astrale Strukturen I",
+      "subject": "magiekunde",
+      "yearRange": [1, 1],
+      "summary": "Vertiefung der Magiekunde: Wie formt sich Astralernergie zu Strukturen? Einführung in das Konzept der Matrix und die Rolle des Willens bei der Formgebung.",
+      "tags": ["magie", "astralstruktur", "matrix", "theorie"],
+      "teacherNpcId": "NPC_CERYLIA_VON_SEBENWIND",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          { "systemSkillId": "TALENT_MAGIEKUNDE", "weight": 1.0 },
+          { "systemSkillId": "ATTRIBUTE_KLUGHEIT", "weight": 0.5 }
+        ],
+        "checks": [
+          { "type": "knowledge-check", "difficulty": "hard", "targetSkillId": "TALENT_MAGIEKUNDE" }
+        ]
+      },
+      "scoringImpact": { "diligence": 2, "housePointsRange": [-1, 3] },
+      "references": {
+        "dsa5RuleRefs": ["TALENT: MAGIEKUNDE", "GRUNDLAGEN: ASTRALE_ENERGIE"],
+        "libraryItemIds": ["LIB_ASTRALE_GEHEIMNISSE"]
+      }
+    },
+    {
+      "id": "LES_Y1_T1_RITUAL_01",
+      "name": "Ritualmagie – Zeremonialmagie Grundlagen",
+      "subject": "rituale",
+      "yearRange": [1, 1],
+      "summary": "Theoretischer Aufbau von Ritualen: Zeitdauer, Komponenten und die Bedeutung des Ortes. Fokus auf die Abgrenzung zur spontanen Zauberei.",
+      "tags": ["rituale", "zeremonien", "theorie", "disziplin"],
+      "teacherNpcId": "NPC_NAZIR_RAGAZA",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          { "systemSkillId": "TALENT_MAGIEKUNDE", "weight": 0.8 },
+          { "systemSkillId": "TALENT_ WILLENSKRAFT", "weight": 0.6 }
+        ],
+        "checks": [
+          { "type": "knowledge-check", "difficulty": "normal", "targetSkillId": "TALENT_MAGIEKUNDE" }
+        ]
+      },
+      "scoringImpact": { "diligence": 2, "housePointsRange": [-2, 2] },
+      "references": {
+        "dsa5RuleRefs": ["REGELWERK: RITUALE"],
+        "libraryItemIds": ["LIB_ENCYCLOPAEDIA_MAGICA"]
+      }
+    },
+    {
+      "id": "LES_Y1_T1_MAGIEK_03",
+      "name": "Sphärenkunde – Die 12 Sphären",
+      "subject": "sphärenkunde",
+      "yearRange": [1, 1],
+      "summary": "Die kosmologische Ordnung Aventuriens. Einführung in das Sieben-Sphären-Modell, die Bedeutung der Dritten Sphäre und die Gefahren des Limbus (rein theoretisch).",
+      "tags": ["sphären", "kosmologie", "limbus", "theorie"],
+      "teacherNpcId": "NPC_AURIW_STURMFELS",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          { "systemSkillId": "TALENT_SPHÄRENKUNDE", "weight": 1.0 },
+          { "systemSkillId": "TALENT_GESCHICHTSWISSEN", "weight": 0.3 }
+        ],
+        "checks": [
+          { "type": "knowledge-check", "difficulty": "hard", "targetSkillId": "TALENT_SPHÄRENKUNDE" }
+        ]
+      },
+      "scoringImpact": { "diligence": 2, "housePointsRange": [-2, 4] },
+      "references": {
+        "dsa5RuleRefs": ["TALENT: SPHÄRENKUNDE", "GRUNDLAGEN: SPHÄRENMODELL"],
+        "libraryItemIds": ["LIB_SPHEREN_OVERVIEW"]
+      }
     }
   ]
 }

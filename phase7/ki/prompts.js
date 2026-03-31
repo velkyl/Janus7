@@ -26,6 +26,15 @@ const ID_RULES = [
   'CRITICAL VALUE RULE: scoring patch values MUST be plain numbers (e.g. 15), never objects like {score:15}. ',
 ].join('');
 
+const KNOWLEDGE_BRIDGE_RULES = [
+  'KNOWLEDGE BRIDGE AVAILABLE: You now have access to semantic search and world actions. ',
+  'If you need to find an entity (NPC, item, spell), use game.janus7.ki.search(domain, query). ',
+  'To interact with the world, use game.janus7.ki.executeAction(type, uuid, params). ',
+  'Supported actions: "spawnActor", "openDocument", "rollTable", "playSound". ',
+  'You can moderate academic lessons using these tools to spawn teachers or play atmospheric sounds. ',
+  'When generating a lesson narrative, you can include JavaScript code blocks using these tools.'
+].join('');
+
 export const Prompts = {
   /**
    * Default prompt for ChatGPT. Instructs the model to produce a
@@ -39,6 +48,7 @@ export const Prompts = {
       'Populate sourceExportMeta with the meta section from the exportBundle. ',
       'Populate changes with arrays of update objects for calendarUpdates, lessonUpdates, eventUpdates, scoringAdjustments, socialAdjustments, and journalEntries. ',
       ID_RULES,
+      KNOWLEDGE_BRIDGE_RULES,
       instructions,
       'Return only valid JSON with no additional commentary.'
     ].join('');
@@ -53,6 +63,7 @@ export const Prompts = {
       'You are given an exportBundle describing the current state. Use it to propose updates. ',
       'Fill sourceExportMeta with exportBundle.meta. Populate changes arrays with objects defining state changes. ',
       ID_RULES,
+      KNOWLEDGE_BRIDGE_RULES,
       instructions,
       'Respond only with JSON.'
     ].join('');
@@ -67,6 +78,7 @@ export const Prompts = {
       'Adhere strictly to the schema: include version, sourceExportMeta, changes, and notes only. ',
       'Use exportBundle.meta for sourceExportMeta. Enumerate proposed changes in the appropriate arrays within changes. ',
       ID_RULES,
+      KNOWLEDGE_BRIDGE_RULES,
       instructions,
       'Output must be valid JSON and nothing else.'
     ].join('');

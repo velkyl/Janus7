@@ -86,12 +86,16 @@ export class JanusKiImportService {
     // Validate patch arrays
     const isUnsafe = (p) => {
       if (!p || typeof p !== 'string') return true;
-      const s = p.trim();
+      const s = p.trim().toLowerCase();
       if (!s) return false; // empty path allowed (domain root)
-      if (s.startsWith('academy.')) return true;
-      if (s.startsWith('campaign_state.') || s.startsWith('meta.')) return true;
+      // Block core roots
+      if (s === 'academy' || s.startsWith('academy.')) return true;
+      if (s === 'campaign_state' || s.startsWith('campaign_state.')) return true;
+      if (s === 'meta' || s.startsWith('meta.')) return true;
+      // Block common escapes
       if (s.includes('..')) return true;
       if (s.startsWith('/') || s.startsWith('\\')) return true;
+      if (s.includes('~') || s.includes(':')) return true; // generic shell/path escapes
       return false;
     };
 

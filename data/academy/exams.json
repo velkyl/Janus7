@@ -40,6 +40,43 @@
           "LIB_SPHEREN_OVERVIEW"
         ]
       }
+    },
+    {
+      "id": "EXA_Y1_T1_MIDTERM_MAGIEK",
+      "name": "Zwischenprüfung: Magietheorie & Astrale Strukturen",
+      "lessonIds": ["LES_Y1_T1_MAGIEK_01", "LES_Y1_T1_MAGIEK_02"],
+      "type": "written",
+      "tags": ["magie", "midterm", "klausur"],
+      "summary": "Zwischenprüfung über die Grundlagen der Magiekunde und den Aufbau astraler Strukturen.",
+      "mechanics": {
+        "skills": [
+          { "systemSkillId": "TALENT_MAGIEKUNDE", "weight": 2 }
+        ]
+      },
+      "gradingScheme": { "passThreshold": 10, "excellentThreshold": 16 },
+      "interaction": { "mode": "mcq", "questionSetId": "EXA_Y1_T1_MIDTERM_MAGIEK_QS" },
+      "references": { "dsa5RuleRefs": ["REGELWERK: PRÜFUNGEN"], "libraryItemIds": ["LIB_ASTRALE_GEHEIMNISSE"] }
+    },
+    {
+      "id": "EXA_Y1_T1_FINAL",
+      "name": "Abschlussprüfung: 1. Trimester (Allgemein)",
+      "lessonIds": [
+        "LES_Y1_T1_MAGIEK_01", "LES_Y1_T1_MAGIEK_02", "LES_Y1_T1_MAGIEK_03",
+        "LES_Y1_T1_ALCHIM_01", "LES_Y1_T1_RITUAL_01", "LES_Y1_T1_SPRACH_01"
+      ],
+      "type": "comprehensive",
+      "tags": ["final", "trimester1", "abschlussprüfung"],
+      "summary": "Die große Abschlussprüfung des ersten Trimesters. Deckt alle Kernfächer ab.",
+      "mechanics": {
+        "skills": [
+          { "systemSkillId": "TALENT_MAGIEKUNDE", "weight": 1.5 },
+          { "systemSkillId": "TALENT_ALCHIMIE", "weight": 0.5 },
+          { "systemSkillId": "TALENT_SPRACHEN", "weight": 0.5 }
+        ]
+      },
+      "gradingScheme": { "passThreshold": 12, "excellentThreshold": 22 },
+      "interaction": { "mode": "oral", "questionSetId": "EXA_Y1_T1_FINAL_QS" },
+      "references": { "dsa5RuleRefs": ["REGELWERK: ABSCHLUESSE"], "libraryItemIds": ["LIB_CODEX_ALBYRICUS"] }
     }
   ]
 }

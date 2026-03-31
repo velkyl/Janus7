@@ -283,6 +283,45 @@ export class JanusDirector {
     }, opts);
   }
 
+  /**
+   * Setzt actor-gebundene Quest- und Event-Debug-States zurueck.
+   *
+   * Hinweis:
+   * Actor-UUIDs enthalten Punkte und duerfen daher nicht als verschachtelte
+   * State-Pfade missverstanden werden. Die Mutation arbeitet bewusst auf den
+   * Root-Maps und ersetzt nur den konkreten Actor-Key.
+   *
+   * @param {string} actorId
+   * @param {Object} [opts={}]
+   * @returns {Promise<{actorId:string, hadQuestState:boolean, hadEventState:boolean}>}
+   */
+  async resetActorQuestEventState(actorId, opts = {}) {
+    this._assertGM();
+    const normalizedActorId = String(actorId ?? '').trim();
+    if (!normalizedActorId) {
+      throw new Error('actorId ist erforderlich.');
+    }
+
+    return this.batch(({ get, set }) => {
+      const questStates = foundry.utils.deepClone(get('questStates') ?? {});
+      const eventStates = foundry.utils.deepClone(get('eventStates') ?? {});
+      const hadQuestState = Object.prototype.hasOwnProperty.call(questStates, normalizedActorId);
+      const hadEventState = Object.prototype.hasOwnProperty.call(eventStates, normalizedActorId);
+
+      questStates[normalizedActorId] = {};
+      eventStates[normalizedActorId] = {};
+
+      set('questStates', questStates);
+      set('eventStates', eventStates);
+
+      return {
+        actorId: normalizedActorId,
+        hadQuestState,
+        hadEventState,
+      };
+    }, opts);
+  }
+
   // ---------------------------------------------------------------------------
   // Time (Calendar)
   // ---------------------------------------------------------------------------
@@ -385,8 +424,9 @@ export class JanusDirector {
     const lessons = lessonsEngine?.getLessonsForCurrentSlot?.() ?? [];
     const events = eventsEngine?.listEventsForCurrentSlot?.() ?? [];
     const rawQueuedEvents = this.state.get('academy.runtimeQueuedEvents');
-    const queuedEvents = Array.isArray(rawQueuedEvents)
-      ? foundry.utils.deepClone(rawQueuedEvents)
+    const queuedEventCount = Array.isArray(rawQueuedEvents) ? rawQueuedEvents.length : 0;
+    const queuedEvents = queuedEventCount > 0
+      ? foundry.utils.deepClone(rawQueuedEvents.slice(0, 10))
       : [];
     const activeQuests = questEngine?.listQuests?.({ actorId, status: 'active' })
       ?? questEngine?.listQuests?.({ status: 'active' })
@@ -400,8 +440,8 @@ export class JanusDirector {
       currentLessonId: lessons?.[0]?.lesson?.id ?? lessons?.[0]?.id ?? lessons?.[0]?.calendarEntry?.lessonId ?? null,
       events,
       eventCount: events.length,
-      queuedEvents: queuedEvents.slice(0, 10),
-      queuedEventCount: queuedEvents.length,
+      queuedEvents,
+      queuedEventCount,
       activeQuests: activeQuests.slice(0, 10),
       activeQuestCount: activeQuests.length,
       graph: graphSummary,
@@ -508,14 +548,13 @@ export class JanusDirector {
   /** Zieht Runtime-Events aus der Queue und präsentiert sie optional. */
   async dequeueQueuedEvents({ actorId = 'party', limit = 3, present = true, save = true } = {}) {
     this._assertGM();
-    const queue = Array.isArray(this.state.get('academy.runtimeQueuedEvents'))
-      ? foundry.utils.deepClone(this.state.get('academy.runtimeQueuedEvents'))
-      : [];
-    if (!queue.length) return { processed: [], remainingCount: 0 };
+    const rawQueue = this.state.get('academy.runtimeQueuedEvents');
+    if (!Array.isArray(rawQueue) || !rawQueue.length) return { processed: [], remainingCount: 0 };
 
     const capped = Math.max(0, Number(limit ?? 0) || 0);
-    const picked = queue.slice(0, capped > 0 ? capped : queue.length);
-    const remaining = queue.slice(picked.length);
+    const pickedCount = capped > 0 ? capped : rawQueue.length;
+    const picked = foundry.utils.deepClone(rawQueue.slice(0, pickedCount));
+    const remaining = rawQueue.slice(pickedCount);
     await this.state.transaction(async (tx) => {
       tx.set('academy.runtimeQueuedEvents', remaining);
     });

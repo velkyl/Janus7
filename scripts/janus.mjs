@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @file scripts/janus.mjs
  * @module janus7
  * @phase A1 â€” Single Entry Point
@@ -698,6 +698,29 @@ const openQuestJournal = async () => {
   }
 };
 
+const openStoryGraph = async () => {
+  try {
+    const { StoryGraphApp } = await import('../ui/apps/StoryGraphApp.js');
+    new StoryGraphApp().render({ force: true, focus: true });
+    return true;
+  } catch (err) {
+    logger.error?.('[JANUS7] Scene control openStoryGraph fehlgeschlagen:', { message: err?.message });
+    ui.notifications?.error?.('Story Graph konnte nicht ge\u00f6ffnet werden.');
+    return false;
+  }
+};
+
+const openKiSearch = async () => {
+  try {
+    const { JanusShellApp } = await import('../ui/apps/JanusShellApp.js');
+    JanusShellApp.onKiSearch();
+    return true;
+  } catch (err) {
+    logger.error?.('[JANUS7] openKiSearch fehlgeschlagen:', { message: err?.message });
+    return false;
+  }
+};
+
 const runTool = (fn) => (event) => {
   event?.preventDefault?.();
   void fn();
@@ -741,6 +764,24 @@ const janusToolsRecord = {
     button: true,
     visible: toolVisible,
     onChange: runTool(() => openUiApp('socialView', 'socialView'))
+  },
+  openStoryGraph: {
+    name: 'openStoryGraph',
+    title: 'Story Graph \u00f6ffnen',
+    icon: 'fas fa-project-diagram',
+    order: 3.5,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(openStoryGraph)
+  },
+  openKiSearch: {
+    name: 'openKiSearch',
+    title: 'KI Semantische Suche',
+    icon: 'fas fa-search',
+    order: 3.8,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(openKiSearch)
   },
   openAtmosphereDJ: {
     name: 'openAtmosphereDJ',

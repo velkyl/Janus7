@@ -128,7 +128,7 @@ export class DSA5FateBridge {
    * @returns {{ value: number, max: number, available: boolean }}
    */
   getPersonalSchips(actor) {
-    const fp = actor?.system?.status?.fatePoints;
+    const fp = this._getActorFatePoints(actor);
     if (!fp) return { value: 0, max: 0, available: false };
     const value = Number(fp.value ?? 0);
     const max   = Number(fp.max ?? fp.current ?? 3);
@@ -177,7 +177,7 @@ export class DSA5FateBridge {
    */
   async awardFatePoint(actor, amount = 1) {
     if (!game.user?.isGM) throw new Error('JANUS7 FateBridge: GM-Rechte erforderlich');
-    const fp  = actor.system.status.fatePoints;
+    const fp  = this._getActorFatePoints(actor, { required: true, context: 'FateBridge.awardFatePoint' });
     const max = Number(fp.max ?? fp.current ?? 3);
     const prev = Number(fp.value ?? 0);
     const next = Math.min(max, prev + Math.max(0, Math.round(amount)));
@@ -197,7 +197,7 @@ export class DSA5FateBridge {
    */
   async setFatePoints(actor, value) {
     if (!game.user?.isGM) throw new Error('JANUS7 FateBridge: GM-Rechte erforderlich');
-    const fp   = actor.system.status.fatePoints;
+    const fp   = this._getActorFatePoints(actor, { required: true, context: 'FateBridge.setFatePoints' });
     const max  = Number(fp.max ?? fp.current ?? 3);
     const prev = Number(fp.value ?? 0);
     const next = Math.max(0, Math.min(max, Math.round(value)));
@@ -275,7 +275,9 @@ export class DSA5FateBridge {
     // Tracking-Filter
     if (this._trackedActorIds?.size > 0 && !this._trackedActorIds.has(actor.id)) return;
 
-    const oldValue = this._lastPersonalSchips.get(actor.id) ?? Number(actor.system.status.fatePoints.value);
+    const fp = this._getActorFatePoints(actor);
+    if (!fp) return;
+    const oldValue = this._lastPersonalSchips.get(actor.id) ?? Number(fp.value ?? 0);
     const numNew   = Number(newValue);
 
     // Schip wurde verbraucht (Wert sank)
@@ -341,5 +343,24 @@ export class DSA5FateBridge {
    */
   getSnapshot() {
     return new Map(this._lastPersonalSchips);
+  }
+
+  // ─── Internals ─────────────────────────────────────────────────────────────
+
+  /**
+   * Extrahiert den fatePoints-Datenblock eines Actors.
+   * @private
+   * @param {Actor} actor
+   * @param {{required?: boolean, context?: string}} [opts]
+   * @returns {object|null}
+   */
+  _getActorFatePoints(actor, { required = false, context = '' } = {}) {
+    const fp = actor?.system?.status?.fatePoints;
+    if (!fp && required) {
+      const msg = `[JANUS7][FateBridge] ${context}: Actor ${actor?.name ?? '<unbekannt>'} hat keine fatePoints Daten (DSA5 Datendrift?)`;
+      this.logger?.warn?.(msg);
+      throw new Error(msg);
+    }
+    return fp ?? null;
   }
 }

@@ -151,14 +151,15 @@ export class JanusKiIoService {
     const ref = (typeof fileRef === 'string' ? fileRef.trim() : '');
     if (!ref) throw new Error('File reference missing');
 
-    // Ensure inbox directory exists before attempting fetch (best-effort)
-    try { await this._ensureDataDirectory(dir); } catch (err) {
-      this.logger?.debug?.('[KiIoService] Directory-Erstellung übersprungen (non-fatal)', { err: err?.message });
+    // Security: sanitize filename against path traversal/injection
+    const basename = ref.split(/[\/\\]/).pop();
+    if (!basename || !/^[A-Za-z0-9_\-\.]+$/.test(basename) || basename.includes('..')) {
+      throw new Error(`Ungueltiger Dateiname: ${ref}`);
     }
 
-    const url = (ref.startsWith('http') || ref.startsWith('worlds/') || ref.startsWith('data:'))
+    const url = (ref.startsWith('http') || ref.startsWith('data:'))
       ? ref
-      : `${dir}/${ref}`;
+      : `${dir}/${basename}`;
 
     // Pre-check: verify file exists in inbox before fetch (avoids misleading 404)
     if (!ref.startsWith('http') && !ref.startsWith('data:')) {
