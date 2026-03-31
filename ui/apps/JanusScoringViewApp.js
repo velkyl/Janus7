@@ -359,9 +359,7 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
   _buildSnapshotTrend(scoring, limit = 14) {
     try {
       const engine = game.janus7;
-      const rawSnapshots = engine?.core?.state?.getPath?.('scoring.dailySnapshots')
-        ?? engine?.core?.state?.get?.('scoring.dailySnapshots')
-        ?? [];
+      const rawSnapshots = engine?.core?.state?.getPath?.('academy.scoring.dailySnapshots') ?? [];
 
       if (!Array.isArray(rawSnapshots) || rawSnapshots.length === 0) {
         return { rows: [], circleIds: [], hasData: false };
