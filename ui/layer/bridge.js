@@ -30,7 +30,7 @@ const JanusGmQuickOverlay = {
   },
 
   _shouldShow() {
-    return !!this._engine && !!game?.user?.isGM && (game?.settings?.get?.('janus7', 'enableUI') !== false);
+    return !!this._engine && !!game?.user?.isGM && (import('../../core/config.js').then(m => m.JanusConfig.get('enableUI')).catch(() => true) !== false);
   },
 
   _ensureElement() {
