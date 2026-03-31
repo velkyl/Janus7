@@ -67,18 +67,18 @@ function normalizeStartedQuest(directorWorkflow = {}, questCandidates = []) {
 
 function inferNextAction({ directorRuntime = {}, questSuggestions = [], socialAdvances = [] } = {}) {
   if (questSuggestions.length > 0) {
-    return { label: 'Quest-Vorschlag prÃ¼fen', reason: 'Es liegen neue Quest-VorschlÃ¤ge vor.', action: 'directorAcceptQuestSuggestion' };
+    return { label: 'Quest-Vorschlag prüfen', reason: 'Es liegen neue Quest-Vorschläge vor.', action: 'directorAcceptQuestSuggestion' };
   }
   if (Number(directorRuntime?.queuedEventCount ?? 0) > 0) {
-    return { label: 'Queue verarbeiten', reason: 'Es warten geplante Ereignisse auf AusfÃ¼hrung.', action: 'directorProcessQueue' };
+    return { label: 'Queue verarbeiten', reason: 'Es warten geplante Ereignisse auf Ausführung.', action: 'directorProcessQueue' };
   }
   if (socialAdvances.length > 0) {
-    return { label: 'Social-Auswertung prÃ¼fen', reason: 'Neue Social-Fortschritte wurden erzeugt.', action: 'directorEvaluateSocial' };
+    return { label: 'Social-Auswertung prüfen', reason: 'Neue Social-Fortschritte wurden erzeugt.', action: 'directorEvaluateSocial' };
   }
   if (Number(directorRuntime?.lessonCount ?? 0) > 0) {
-    return { label: 'Unterricht ausfÃ¼hren', reason: 'Im aktuellen Slot ist Unterricht hinterlegt.', action: 'directorRunLesson' };
+    return { label: 'Unterricht ausführen', reason: 'Im aktuellen Slot ist Unterricht hinterlegt.', action: 'directorRunLesson' };
   }
-  return { label: 'Tageslauf fortsetzen', reason: 'Keine offenen PrioritÃ¤ten erkannt.', action: 'directorRunbookNext' };
+  return { label: 'Tageslauf fortsetzen', reason: 'Keine offenen Prioritäten erkannt.', action: 'directorRunbookNext' };
 }
 
 export function prepareDirectorRuntimeSummary({ engine, logger }) {
