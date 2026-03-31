@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @file core/validator/schemas-state.js
  * @module janus7
  * @phase 1
@@ -42,7 +42,7 @@ export const SCORING_ROOT_SCHEMA = {
 
 export const STATE_SCHEMA = {
   type: 'object',
-  required: ['time', 'meta', 'academy', 'actors', 'display'],
+  required: ['time', 'meta', 'academy', 'actors', 'display', 'features'],
   additionalProperties: false,
   properties: {
     meta: {
@@ -58,8 +58,8 @@ export const STATE_SCHEMA = {
     },
     features: {
       type: 'object',
-      nullable: true,
-      additionalProperties: false,
+      required: ['atmosphere'],
+      additionalProperties: true,
       properties: {
         social: { type: 'boolean', nullable: true },
         scoring: { type: 'boolean', nullable: true },
@@ -76,7 +76,7 @@ export const STATE_SCHEMA = {
     atmosphere: {
       type: 'object',
       nullable: true,
-      additionalProperties: false,
+      additionalProperties: true,
       properties: {
         masterClientUserId: { type: 'string', nullable: true },
         activeMoodId: { type: 'string', nullable: true },
@@ -88,7 +88,7 @@ export const STATE_SCHEMA = {
         paused: {
           type: 'object',
           nullable: true,
-          additionalProperties: false,
+          additionalProperties: true,
           properties: {
             isPaused: { type: 'boolean', nullable: true },
             moodId: { type: 'string', nullable: true },
@@ -112,7 +112,7 @@ export const STATE_SCHEMA = {
       required: ['year', 'trimester', 'week', 'dayIndex', 'slotIndex'],
       additionalProperties: false,
       properties: {
-        year: { type: 'number', min: 1000, max: 1100 },
+        year: { type: 'number', min: 1000, max: 2100 },
         month: { type: 'number', nullable: true, min: 1, max: 12 },
         day: { anyOf: [ { type: 'number', min: 1, max: 31 }, { type: 'string', minLength: 1 } ], nullable: true },
         hour: { type: 'number', nullable: true, min: 0, max: 23 },
@@ -131,7 +131,7 @@ export const STATE_SCHEMA = {
     },
     academy: {
       type: 'object',
-      required: ['examResults'],
+      required: ['examResults', 'scoring', 'social'],
       additionalProperties: true,
       properties: {
         currentLocationId: { type: 'string', nullable: true },
@@ -144,10 +144,26 @@ export const STATE_SCHEMA = {
         },
         social: {
           type: 'object',
-          nullable: true,
+          required: ['relationships', 'livingEvents', 'storyHooks'],
           additionalProperties: true,
           properties: {
-            relationships: { type: 'object', nullable: true, additionalProperties: true }
+            relationships: { type: 'object', additionalProperties: true },
+            livingEvents: { 
+              type: 'object', 
+              additionalProperties: true,
+              properties: {
+                history: { type: 'array' },
+                lastProcessedWeekKey: { type: 'string', nullable: true }
+              }
+            },
+            storyHooks: {
+              type: 'object',
+              additionalProperties: true,
+              properties: {
+                records: { type: 'object' },
+                history: { type: 'array' }
+              }
+            }
           }
         },
         quests: {

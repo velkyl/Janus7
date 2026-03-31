@@ -71,6 +71,8 @@ async function assertCanonicalStateContract() {
       updatedAt: '2026-03-30T00:00:00.000Z'
     },
     features: {
+      social: true,
+      scoring: true,
       atmosphere: {
         enabled: true
       }
@@ -92,6 +94,11 @@ async function assertCanonicalStateContract() {
     },
     academy: {
       examResults: {},
+      social: {
+        relationships: {},
+        livingEvents: { history: [], lastProcessedWeekKey: '1039-1-1' },
+        storyHooks: { records: {}, history: [] }
+      },
       scoring: {
         circles: {},
         students: {},

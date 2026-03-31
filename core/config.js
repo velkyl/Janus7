@@ -42,6 +42,21 @@ export class JanusConfig {
       }
     });
 
+    game.settings.register(MODULE_ID, 'activeProfile', {
+      name: 'JANUS7.Settings.ActiveProfile.Name',
+      hint: 'JANUS7.Settings.ActiveProfile.Hint',
+      scope: 'world',
+      config: true,
+      type: String,
+      default: 'punin',
+      choices: {
+        punin: 'JANUS7.Settings.ActiveProfile.Choices.Punin',
+        festum: 'JANUS7.Settings.ActiveProfile.Choices.Festum',
+        lowangen: 'JANUS7.Settings.ActiveProfile.Choices.Lowangen',
+        custom: 'JANUS7.Settings.ActiveProfile.Choices.Custom'
+      }
+    });
+
 
     game.settings.register(MODULE_ID, 'slotResolverMaxLessons', {
       name: 'JANUS7.Settings.SlotResolverMaxLessons.Name',

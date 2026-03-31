@@ -31,7 +31,8 @@
  * Semantic tokens (default: DSA5 parchment vibe, but readable)
  * ------------------------------------------------------------------------- */
 
-.j7-control-panel {
+.j7-control-panel,
+.j7-data-studio {
   --j7-text-primary: #2b1810;
   --j7-text-secondary: #3a260f;
   --j7-text-muted: #6b4b2a;
@@ -46,6 +47,31 @@
   --j7-border-accent: #c9a961;
 
   --j7-focus: #1b6fff;
+  --j7-accent: #c9a961;
+  --j7-glass-bg: rgba(255, 255, 255, 0.7);
+  --j7-glass-blur: blur(10px);
+}
+
+/* --- Profile: Punin (Purple/Gold) --- */
+.j7-profile-punin {
+  --j7-accent: #6a1b9a;
+  --j7-border-accent: #ffd700;
+  --j7-glass-bg: rgba(106, 27, 154, 0.08);
+}
+
+/* --- Profile: Festum (Blue/Silver) --- */
+.j7-profile-festum {
+  --j7-accent: #0277bd;
+  --j7-border-accent: #cfd8dc;
+  --j7-glass-bg: rgba(2, 119, 189, 0.08);
+}
+
+.j7-glass {
+  background: var(--j7-glass-bg) !important;
+  -webkit-backdrop-filter: var(--j7-glass-blur);
+  backdrop-filter: var(--j7-glass-blur);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
 }
 
 /* -------------------------------------------------------------------------

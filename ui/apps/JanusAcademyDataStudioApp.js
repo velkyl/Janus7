@@ -14,6 +14,7 @@
 import { MODULE_ID } from '../../core/common.js';
 import { JanusSyncEngine } from '../../core/sync-engine.js';
 import { JanusBaseApp } from '../core/base-app.js';
+import { JanusProfileRegistry } from '../../core/profiles/index.js';
 
 const DOMAINS = [
   { id: 'lesson', label: 'Lessons / Unterricht', icon: 'fa-book' },
@@ -129,11 +130,9 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
   }
 
   _getSync() {
-    if (!this._syncEngine) {
-      const logger = game?.janus7?.core?.logger ?? console;
-      this._syncEngine = new JanusSyncEngine({ logger });
-    }
-    return this._syncEngine;
+    const engine = game.janus7;
+    if (!engine) return null;
+    return engine.services?.registry?.get('sync.engine') || engine.sync || null;
   }
 
   _linkSpecForDomain(domainId) {
@@ -163,12 +162,23 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
   }
 
   async _persistRecord(record) {
+    const engine = game.janus7;
     const { upsertManagedAcademyRecord, upsertManagedAcademyItemRecord } = await import('../../academy/world-seed.js');
-    await upsertManagedAcademyRecord({ domainId: this._domain, record, mode: 'overwrite' });
-    await upsertManagedAcademyItemRecord({ domainId: this._domain, record, mode: 'overwrite' });
+    
+    try {
+      await upsertManagedAcademyRecord({ domainId: this._domain, record, mode: 'overwrite' });
+      await upsertManagedAcademyItemRecord({ domainId: this._domain, record, mode: 'overwrite' });
 
-    try { game?.janus7?.academy?.data?.constructor?.resetCache?.(); } catch {}
-    try { await game?.janus7?.academy?.data?.init?.(); } catch {}
+      // Signal engine to refresh data
+      const dataApi = engine?.services?.registry?.get('academy.data');
+      if (dataApi) {
+        if (typeof dataApi.constructor?.resetCache === 'function') dataApi.constructor.resetCache();
+        if (typeof dataApi.init === 'function') await dataApi.init();
+      }
+    } catch (err) {
+      engine?.recordError?.('ui.studio', 'persist', err);
+      throw err;
+    }
 
     const preferred = this._findPreferredDoc(this._domain, record);
     this._selectedUuid = preferred?.uuid ?? null;
@@ -419,8 +429,9 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
   }
 
   async _renderHTML(_context, _options) {
+    const profile = JanusProfileRegistry.getActive();
     const root = document.createElement('div');
-    root.className = 'janus7-app janus7-page j7-data-studio';
+    root.className = `janus7-app janus7-page j7-data-studio j7-profile-${profile.id}`;
 
     if (!game?.user?.isGM) {
       const gmOnly = document.createElement('div');
@@ -433,16 +444,42 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
       return root;
     }
 
+    const engine = game.janus7;
+    const sync = this._getSync();
     const domain = DOMAINS.find((entry) => entry.id === this._domain) ?? DOMAINS[0];
     const docs = this._getDocs(domain.id);
     const selected = this._selectedDoc();
     const activeData = this._activeRecordData();
     const linkSpec = this._linkSpecForDomain(domain.id);
-    const linkedUuid = linkSpec && activeData?.id ? this._getSync().resolveUUID(activeData.id, activeData, linkSpec.bucket) : null;
+    const linkedUuid = (linkSpec && activeData?.id && sync) ? sync.resolveUUID(activeData.id, activeData, linkSpec.bucket) : null;
     const linkedDoc = linkedUuid ? await fromUuid(linkedUuid).catch(() => null) : null;
 
     const left = document.createElement('div');
     left.className = 'j7-data-studio__panel j7-data-studio__panel--list';
+
+    // Profile Selector (Multi-Setting Phase 8)
+    const profileRow = document.createElement('div');
+    profileRow.className = 'j7-data-studio__row j7-data-studio__row--profile';
+    const profileIcon = document.createElement('i');
+    
+    // UI/UX Polish: Iconography based on profile
+    const profileIcons = { punin: 'fa-scroll', festum: 'fa-icicles' };
+    const activeIcon = profileIcons[profile.id] || 'fa-map-marked-alt';
+    profileIcon.className = `fas ${activeIcon}`;
+    
+    profileRow.appendChild(profileIcon);
+    const profileSelect = document.createElement('select');
+    profileSelect.dataset.j7 = 'profile';
+    profileSelect.className = 'janus7-textarea j7-data-studio__input j7-data-studio__input--profile';
+    for (const p of JanusProfileRegistry.list()) {
+      const opt = document.createElement('option');
+      opt.value = p.id;
+      opt.selected = p.id === JanusProfileRegistry.getActive().id;
+      opt.textContent = p.name;
+      profileSelect.appendChild(opt);
+    }
+    profileRow.appendChild(profileSelect);
+    left.appendChild(profileRow);
 
     const topRow = document.createElement('div');
     topRow.className = 'j7-data-studio__row';
@@ -763,6 +800,22 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     const element = this.domElement;
     if (!element) return;
 
+    element.querySelector('[data-j7="profile"]')?.addEventListener('change', async (event) => {
+      const val = String(event.target.value || 'punin');
+      const { JanusConfig } = await import('../../core/config.js');
+      await JanusConfig.set('activeProfile', val);
+      
+      const engine = this._getEngine();
+      if (engine) {
+        const dataApi = engine.services?.registry?.get('academy.data');
+        if (dataApi) {
+          if (typeof dataApi.constructor?.resetCache === 'function') dataApi.constructor.resetCache();
+          await dataApi.init();
+        }
+      }
+      this.refresh?.();
+    });
+
     element.querySelector('[data-j7="domain"]')?.addEventListener('change', (event) => {
       this._domain = String(event.target.value);
       this._selectedUuid = null;
@@ -794,12 +847,16 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
         ui.notifications?.info?.(
           `Seed Import: Journals c=${docs?.journals?.created ?? 0}/u=${docs?.journals?.updated ?? 0}, Items c=${docs?.items?.created ?? 0}/u=${docs?.items?.updated ?? 0}`
         );
-        try { game?.janus7?.academy?.data?.constructor?.resetCache?.(); } catch {}
-        try { await game?.janus7?.academy?.data?.init?.(); } catch {}
+        const engine = this._getEngine();
+        const dataApi = engine?.services?.registry?.get('academy.data');
+        if (dataApi) {
+          if (typeof dataApi.constructor?.resetCache === 'function') dataApi.constructor.resetCache();
+          if (typeof dataApi.init === 'function') await dataApi.init();
+        }
         this.refresh?.();
       } catch (err) {
         ui.notifications?.error?.(`Seed Import failed: ${err?.message ?? err}`);
-        this._getLogger().error?.('[DataStudio] Seed import failed', err);
+        this._getEngine()?.recordError?.('ui.studio', 'seed_import', err);
       }
     });
 
@@ -840,7 +897,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
         this.refresh?.();
       } catch (err) {
         ui.notifications?.error?.(`Save failed: ${err?.message ?? err}`);
-        this._getLogger().error?.('[DataStudio] Save failed', err);
+        this._getEngine()?.recordError?.('ui.studio', 'save_record', err);
       }
     });
 
@@ -882,7 +939,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
         this.refresh?.();
       } catch (err) {
         ui.notifications?.error?.(`Verknüpfung fehlgeschlagen: ${err?.message ?? err}`);
-        this._getLogger().error?.('[DataStudio] Link drop failed', err);
+        this._getEngine()?.recordError?.('ui.studio', 'link_drop', err);
       }
     });
 
@@ -913,7 +970,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
         this.refresh?.();
       } catch (err) {
         ui.notifications?.error?.(`Entfernen fehlgeschlagen: ${err?.message ?? err}`);
-        this._getLogger().error?.('[DataStudio] Unlink failed', err);
+        this._getEngine()?.recordError?.('ui.studio', 'unlink_record', err);
       }
     });
   }

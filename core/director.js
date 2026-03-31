@@ -746,7 +746,8 @@ export class JanusDirector {
    * FIX P2-06: Stub-Implementierung, damit der opionale Guard nicht immer ein No-Op ist.
    * Kann überschrieben werden um künftige Director-Ready-Logik zu implementieren.
    */
-  onReady() {
+  async onReady() {
     // Reserved for future Director ready-phase initialization.
+    return true;
   }
 }

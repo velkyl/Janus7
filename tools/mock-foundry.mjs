@@ -8,6 +8,8 @@ export const mockFoundry = () => {
       },
       once: (topic, cb) => { if (topic === 'init' || topic === 'ready') cb(); },
       call: (topic, ...args) => {},
+      callAll: (topic, ...args) => {},
+      runScripts: (topic, ...args) => {},
       off: (id) => {}
     };
 
@@ -19,6 +21,7 @@ export const mockFoundry = () => {
           if (key === 'coreState') return null;
           if (key === 'state') return null;
           if (key === 'enableUI') return true;
+          if (key === 'activeProfile') return 'punin';
           return undefined;
         },
         set: (mod, key, val) => {
@@ -40,6 +43,16 @@ export const mockFoundry = () => {
         format: (k, d) => k
       },
       world: { id: 'test-world' }
+    };
+
+    const uMock = {
+      notifications: {
+        info: (m) => console.log(`[UI:INFO] ${m}`),
+        warn: (m) => console.warn(`[UI:WARN] ${m}`),
+        error: (m) => console.error(`[UI:ERROR] ${m}`)
+      },
+      sidebar: { tabs: {} },
+      chat: { post: () => {} }
     };
 
     const f = {
@@ -66,12 +79,14 @@ export const mockFoundry = () => {
 
     globalThis.Hooks = hooks;
     globalThis.game = g;
+    globalThis.ui = uMock;
     globalThis.foundry = f;
     globalThis.fromUuid = async (uuid) => null;
 
     if (typeof global !== 'undefined') {
         global.Hooks = hooks;
         global.game = g;
+        global.ui = uMock;
         global.foundry = f;
         global.fromUuid = globalThis.fromUuid;
     }

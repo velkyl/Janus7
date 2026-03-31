@@ -197,25 +197,37 @@ export function validateAcademyDatasets(validator, lessons, npcs, calendar, loca
   ensureUnique(events.events, 'events.events');
 }
 
+import { JanusProfileRegistry } from '../core/profiles/index.js';
+
 export async function loadJson(filename) {
   const base = String(filename ?? '').trim();
   if (!base) throw new Error('JANUS7: loadJson() filename missing');
 
+  const profile = JanusProfileRegistry.getActive();
+  const profileBase = `modules/${MODULE_ID}/data/profiles/${profile.id}/${base}`;
   const nested = `modules/${MODULE_ID}/data/academy/${base}`;
   const flat = `modules/${MODULE_ID}/data/academy__${base}`;
 
-  let response = await fetch(nested);
+  // Priority: 1. Profile Specific -> 2. Standard Nested -> 3. Legacy Flat
+  let response = await fetch(profileBase);
+  if (!response.ok) response = await fetch(nested);
   if (!response.ok) response = await fetch(flat);
+
   if (!response.ok) {
-    throw new Error(`JANUS7: Kann JSON nicht laden: ${nested} (fallback: ${flat}) (${response.status})`);
+    throw new Error(`JANUS7: Kann JSON nicht laden: ${profileBase} (fallback: ${nested}) (${response.status})`);
   }
   return response.json();
 }
 
 export async function loadDataJson(relPath) {
-  const url = `modules/${MODULE_ID}/data/${relPath}`;
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`JANUS7: Kann JSON nicht laden: ${url} (${response.status})`);
+  const profile = JanusProfileRegistry.getActive();
+  const profileUrl = `modules/${MODULE_ID}/data/profiles/${profile.id}/academy/${relPath}`;
+  const standardUrl = `modules/${MODULE_ID}/data/${relPath}`;
+
+  let response = await fetch(profileUrl);
+  if (!response.ok) response = await fetch(standardUrl);
+
+  if (!response.ok) throw new Error(`JANUS7: Kann JSON nicht laden: ${profileUrl} (fallback: ${standardUrl}) (${response.status})`);
   return response.json();
 }
 

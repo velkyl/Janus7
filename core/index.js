@@ -23,6 +23,7 @@ import { JanusDirector } from './director.js';
 import { JanusFolderService } from './folder-service.js';
 import { JanusServiceRegistry } from './services/service-registry.js';
 import { JanusErrorAggregator } from './error-aggregator.js';
+import { JanusAiService } from './ai.js';
 import { installUiWriteGuard } from './guards/ui-write-guard.js';
 
 /**
@@ -47,6 +48,7 @@ export class Janus7Engine {
       config: JanusConfig,
       state: null,
       validator: null,
+      ai: null,
       io: null,
       director: null,
       folderService: null
@@ -125,12 +127,18 @@ export class Janus7Engine {
         logger: this.core.logger,
         validator: this.core.validator
     });
+    this.core.ai = new JanusAiService({
+        state: this.core.state,
+        logger: this.core.logger
+    });
     this.core.folderService = new JanusFolderService({ logger: this.core.logger });
 
     // 4. Mirroring for legacy compatibility and shorthand access
     this.logger = this.core.logger;
     this.config = this.core.config;
     this.state = this.core.state;
+    this.ai = this.core.ai;
+    this.ki = this.ai;
     this.director = this.core.director;
     this.folderService = this.core.folderService;
 
@@ -151,9 +159,20 @@ export class Janus7Engine {
     this.markServiceReady('core.config', this.core.config);
     this.markServiceReady('core.state', this.core.state);
     this.markServiceReady('core.validator', this.core.validator);
+    this.markServiceReady('core.ai', this.core.ai);
+    this.markServiceReady('core.ki', this.ai);
     this.markServiceReady('core.director', this.core.director);
 
     this.logger.info("JANUS7 | Core Engine Services [READY] (Phase 1).");
+  }
+
+  /**
+   * AI Context Builder (Proxy to JanusAiService)
+   * @param {Object} [opts] 
+   * @returns {Object}
+   */
+  getAiContext(opts = {}) {
+    return this.core.ai?.getContext(opts) ?? { error: 'ai_service_offline' };
   }
 
   /**
