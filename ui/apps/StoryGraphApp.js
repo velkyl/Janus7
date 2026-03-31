@@ -100,7 +100,7 @@ ${mermaidDef}
         })
         .catch(err => {
           console.error("[JANUS7] Could not load mermaid script", err);
-          this.element.querySelector('.mermaid').innerHTML = `<p style="color:red;">Laden von Mermaid fehlgeschlagen. Bitte Internetverbindung pr&uuml;fen.</p>`;
+          this.element.querySelector('.mermaid').textContent = `Laden von Mermaid fehlgeschlagen. Bitte Internetverbindung prüfen.`;
         });
     } else {
       window.mermaid.run({ querySelector: '.mermaid' });
