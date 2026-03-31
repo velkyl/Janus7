@@ -421,8 +421,8 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
       return ui.notifications.info('Alles bereits synchronisiert.');
     }
 
-    const confirmed = await Dialog.confirm({
-      title:   `${missing.length} Entitäten anlegen`,
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: `${missing.length} Entitäten anlegen` },
       content: `<p>Sollen <strong>${missing.length} fehlende Einträge</strong> jetzt angelegt werden?</p>
                 <ul>${missing.map(r => `<li>${r.entity.name}</li>`).join('')}</ul>`,
     });

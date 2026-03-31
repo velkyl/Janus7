@@ -6,6 +6,8 @@ function nowMs() {
   return (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
 }
 
+const TEST_TIMEOUT_MS = 30_000;
+
 function sortById(a, b) {
   return String(a?.id ?? '').localeCompare(String(b?.id ?? ''));
 }
@@ -117,7 +119,10 @@ export default class JanusTestRunner {
           if (!condition) throw new Error(message);
           return true;
         };
-        const out = await test.run({
+        const _timeout = new Promise((_, rej) =>
+          setTimeout(() => rej(new Error(`Test timeout after ${TEST_TIMEOUT_MS}ms`)), TEST_TIMEOUT_MS)
+        );
+        const out = await Promise.race([test.run({
           ctx,
           engine: ctx?.engine,
           test,
@@ -125,7 +130,7 @@ export default class JanusTestRunner {
           logger: this.logger,
           registry: this.registry,
           runner: this
-        });
+        }), _timeout]);
         let status, summary, details;
         if (out && typeof out === 'object' && out.status) {
           status = this._normalizeStructuredStatus(out.status);
