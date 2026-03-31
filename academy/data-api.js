@@ -125,6 +125,10 @@ export class AcademyDataApi {
   listStaff()    { try { return this.getNpcs().filter((n) => n?.role === 'staff');    } catch { return []; } }
   /** Alias für getCircles() — ergonomischere Benennung. */
   listCircles()  { return this.getCircles(); }
+  /** Alle Lektionen mit dem angegebenen Tag (lessons.json → tags[]). */
+  listLessonsByTag(tag) { try { return this.getLessons().filter((l) => Array.isArray(l.tags) && l.tags.includes(tag)); } catch { return []; } }
+  /** Alle Lektionen eines bestimmten Lehrers (lessons.json → teacherNpcId). */
+  listLessonsByTeacher(npcId) { try { return this.getLessons().filter((l) => l.teacherNpcId === npcId); } catch { return []; } }
 
   // ─── NPC Alias-Methoden (v0.9.12.33) ───────────────────────────────────
   /** Alias für getNpcs() — listNpcs() (camelCase, wird in fate-tracker etc. genutzt). */

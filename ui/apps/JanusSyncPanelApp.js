@@ -270,8 +270,8 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
 
     // Bestätigungsdialog mit Vorschau der Profildaten
     const profilePreview = JanusSyncPanelApp._buildProfilePreview(entry.entity);
-    const confirmed = await Dialog.confirm({
-      title:   `Anlegen: ${entry.entity.name}`,
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: `Anlegen: ${entry.entity.name}` },
       content: `
         <p>Soll <strong>${entry.entity.name}</strong> jetzt in Foundry angelegt werden?</p>
         <p class="notification hint">Alle verfügbaren JSON-Daten werden übernommen:</p>
@@ -326,8 +326,8 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
     const janusId = target?.closest('[data-janus-id]')?.dataset?.janusId;
     if (!janusId) return;
 
-    const confirmed = await Dialog.confirm({
-      title:   'Verknüpfung aufheben',
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: 'Verknüpfung aufheben' },
       content: `<p>UUID-Verknüpfung für <strong>${janusId}</strong> entfernen?</p>
                 <p class="notification warning">Die Foundry-Entität bleibt erhalten.</p>`,
     });
@@ -351,8 +351,8 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
     const entry  = report?.find(r => r.id === janusId);
     if (!entry?.compHit) return;
 
-    const confirmed = await Dialog.confirm({
-      title:   `Aus Bibliothek importieren: ${entry.entity.name ?? entry.entity.title}`,
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: `Aus Bibliothek importieren: ${entry.entity.name ?? entry.entity.title}` },
       content: `
         <p>Soll <strong>${entry.compHit.name}</strong> aus
         <em>${entry.compHit.packLabel}</em> in die Welt importiert werden?</p>
@@ -390,8 +390,8 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
       return ui.notifications.info('Keine Bibliotheks-Treffer zum Importieren.');
     }
 
-    const confirmed = await Dialog.confirm({
-      title:   `${candidates.length} Einträge aus Bibliothek importieren`,
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: `${candidates.length} Einträge aus Bibliothek importieren` },
       content: `
         <p>Sollen <strong>${candidates.length} Einträge</strong> aus der Bibliothek importiert werden?</p>
         <ul>${candidates.map(r => `<li>${r.compHit.name} <span style="opacity:.6">(${r.compHit.packLabel})</span></li>`).join('')}</ul>`,

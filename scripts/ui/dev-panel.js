@@ -149,8 +149,8 @@ export class JanusDevPanel extends HandlebarsApplicationMixin(ApplicationV2) {
     const actorId = target.dataset.actorId;
     if (!actorId) return;
 
-    const confirmed = await Dialog.confirm({
-      title: 'State zurücksetzen?',
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: 'State zurücksetzen?' },
       content: '<p>Alle Quest- und Event-States werden gelöscht!</p>'
     });
 
