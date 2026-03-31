@@ -2,6 +2,7 @@
 import { getQuickPanels } from './panel-registry.js';
 import { HOOKS } from '../../core/hooks/topics.js';
 import { registerRuntimeHook } from '../../core/hooks/runtime.js';
+import { JanusConfig } from '../../core/config.js';
 
 const GM_OVERLAY_ID = 'janus7-gm-quick-overlay';
 
@@ -30,7 +31,7 @@ const JanusGmQuickOverlay = {
   },
 
   _shouldShow() {
-    return !!this._engine && !!game?.user?.isGM && (import('../../core/config.js').then(m => m.JanusConfig.get('enableUI')).catch(() => true) !== false);
+    return !!this._engine && !!game?.user?.isGM && (JanusConfig.get('enableUI') !== false);
   },
 
   _ensureElement() {

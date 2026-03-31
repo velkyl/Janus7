@@ -168,6 +168,12 @@ export const BUILTIN_AUTO_MODULES = [
   './tests/p16/P16_TC_09__state_inspector_json.test.js',
   './tests/p16/P16_TC_10__ui_open_all_apps.test.js',
 
+  // Quest System (Core)
+  './tests/qs/QS_TC_01__quest_lifecycle.test.js',
+  './tests/qs/QS_TC_02__event_options.test.js',
+  './tests/qs/QS_TC_03__condition_evaluator.test.js',
+  './tests/qs/QS_TC_04__state_persistence.test.js',
+  './tests/qs/QS_TC_05__social_reward.test.js',
 ];
 
 export const BUILTIN_MANUAL_MODULES = [
