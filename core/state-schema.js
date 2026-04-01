@@ -131,14 +131,14 @@ export function migrateStateSchema(stateObj) {
     }
   }
 
-  // 3. Link legacy quest root if needed
+  // 4. Link legacy quest root if needed
   if (stateObj.academy?.quests && !Object.keys(stateObj.questStates).length) {
     stateObj.questStates = foundry.utils.deepClone(stateObj.academy.quests);
     delete stateObj.academy.quests;
     changed = true;
   }
 
-  // 4. Version Alignment
+  // 5. Version Alignment
   const currentVer = stateObj.meta.version;
   const targetVer = getModuleVersion();
   if (currentVer !== targetVer) {

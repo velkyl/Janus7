@@ -3,6 +3,7 @@ import { getQuickPanels } from './panel-registry.js';
 import { HOOKS } from '../../core/hooks/topics.js';
 import { registerRuntimeHook } from '../../core/hooks/runtime.js';
 import { JanusConfig } from '../../core/config.js';
+import { JanusProfileRegistry } from '../../core/profiles/index.js';
 
 const GM_OVERLAY_ID = 'janus7-gm-quick-overlay';
 
@@ -25,8 +26,11 @@ class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(ApplicationV2) {
     classes: ['janus7-gm-overlay', 'janus7-v13-ui'],
     tag: 'section',
     window: {
-      frame: false,
-      positioned: false
+      frame: true,
+      positioned: true,
+      title: 'JANUS7 GM Quick Access',
+      resizable: false,
+      minimizable: true
     },
     actions: {
       openShell: this._onOpenShell,
@@ -59,6 +63,11 @@ class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
   _shouldShow() {
     return !!this._engine && !!game?.user?.isGM && (JanusConfig.get('enableUI') !== false);
+  }
+
+  /** @override */
+  _onClose() {
+    this._clearHooks();
   }
 
   _setupHooks() {
