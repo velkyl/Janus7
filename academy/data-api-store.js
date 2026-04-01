@@ -199,76 +199,52 @@ export function validateAcademyDatasets(validator, lessons, npcs, calendar, loca
 
 import { JanusProfileRegistry } from '../core/profiles/index.js';
 
-export async function loadJson(filename) {
-  const base = String(filename ?? '').trim();
-  if (!base) throw new Error('JANUS7: loadJson() filename missing');
+/**
+ * Shared logic to resolve a JSON asset across multiple possible locations.
+ * Priority: Profile-Academy -> Profile-Root -> Academy-Nested -> Data-Root -> Flat-Fallback.
+ * @param {string} base - The relative path (e.g. 'lessons.json' or 'quests/index.json')
+ * @returns {Promise<Response|null>}
+ * @private
+ */
+async function _resolveAsset(base) {
+  const filename = String(base ?? '').trim().replace(/^\/+/, '');
+  if (!filename) return null;
 
   const profile = JanusProfileRegistry.getActive();
+  // Strip academy/ prefix if it exists to avoid double-prefixing in the academy fallbacks
+  const relativePath = filename.replace(/^academy\//, '');
   
-  // Potential paths for the data asset (ordered by priority)
-  const profileAcademyUrl = moduleAssetPath(`data/profiles/${profile.id}/academy/${base}`);
-  const profileDirectUrl  = moduleAssetPath(`data/profiles/${profile.id}/${base}`);
-  const nestedUrl         = moduleAssetPath(`data/academy/${base}`);
-  const flatUrl           = moduleAssetPath(`data/academy__${base.replace(/\//g, '__')}`);
-
   const attempts = [
-    { url: profileAcademyUrl, label: 'profile-academy' },
-    { url: profileDirectUrl,  label: 'profile-direct' },
-    { url: nestedUrl,         label: 'nested' },
-    { url: flatUrl,           label: 'flat' }
+    { url: moduleAssetPath(`data/profiles/${profile.id}/academy/${relativePath}`), label: 'profile-academy' },
+    { url: moduleAssetPath(`data/profiles/${profile.id}/${relativePath}`),          label: 'profile-direct' },
+    { url: moduleAssetPath(`data/academy/${relativePath}`),                         label: 'nested' },
+    { url: moduleAssetPath(`data/${filename}`),                                     label: 'base' },
+    { url: moduleAssetPath(`data/academy__${filename.replace(/\//g, '__')}`),       label: 'flat' }
   ];
 
-  let response = null;
-  let finalUrl = '';
   for (const attempt of attempts) {
     try {
-      response = await fetch(attempt.url);
-      if (response.ok) {
-        finalUrl = attempt.url;
-        break;
-      }
-    } catch (_e) { /* ignore network errors during scan */ }
+      const response = await fetch(attempt.url);
+      if (response.ok) return response;
+    } catch (_e) { /* ignore network errors */ }
   }
+  return null;
+}
 
-  if (!response?.ok) {
-    console.error(`[JANUS7:academy:data] CRITICAL: JSON "${base}" could not be loaded from any of the following paths:`, attempts.map(a => a.url));
-    throw new Error(`JANUS7: Kann JSON "${base}" nicht laden. (404 an allen Fallback-Paths)`);
+export async function loadJson(filename) {
+  const response = await _resolveAsset(filename);
+  if (!response) {
+    console.error(`[JANUS7:academy:data] CRITICAL: JSON "${filename}" could not be loaded from any expected path.`);
+    throw new Error(`JANUS7: Kann JSON "${filename}" nicht laden. (404 an allen Fallback-Paths)`);
   }
-  
   return response.json();
 }
 
 export async function loadDataJson(relPath) {
-  const base = String(relPath ?? '').trim();
-  if (!base) throw new Error('JANUS7: loadDataJson() path missing');
-
-  const profile = JanusProfileRegistry.getActive();
-  
-  // Potential paths for the data asset (ordered by priority)
-  const profileAcademyUrl = moduleAssetPath(`data/profiles/${profile.id}/academy/${base}`);
-  const profileDirectUrl  = moduleAssetPath(`data/profiles/${profile.id}/${base}`);
-  const nestedUrl         = moduleAssetPath(`data/academy/${base}`);
-  const flatUrl           = moduleAssetPath(`data/academy__${base.replace(/\//g, '__')}`);
-
-  const attempts = [
-    { url: profileAcademyUrl, label: 'profile-academy' },
-    { url: profileDirectUrl,  label: 'profile-direct' },
-    { url: nestedUrl,         label: 'nested' },
-    { url: flatUrl,           label: 'flat' }
-  ];
-
-  let response = null;
-  for (const attempt of attempts) {
-    try {
-      response = await fetch(attempt.url);
-      if (response.ok) break;
-    } catch (_e) { /* scan */ }
+  const response = await _resolveAsset(relPath);
+  if (!response) {
+    throw new Error(`JANUS7: loadDataJson("${relPath}") failed at all paths.`);
   }
-
-  if (!response?.ok) {
-    throw new Error(`JANUS7: loadDataJson("${base}") failed at all paths: ${attempts.map(a => a.label).join(', ')}`);
-  }
-
   return response.json();
 }
 
