@@ -122,21 +122,21 @@
     "eventId": "E_MORGEN_GLOCKEN",
     "title": "Die Glocken von Punin",
     "pool": "morgen",
-    "file": "data/events/morgen.json",
+    "file": "data/events/pools/morgen.json",
     "highImpact": false
   },
   {
     "eventId": "E_MORGEN_HAST",
     "title": "Eilige Schritte",
     "pool": "morgen",
-    "file": "data/events/morgen.json",
+    "file": "data/events/pools/morgen.json",
     "highImpact": false
   },
   {
     "eventId": "E_MORGEN_KOSMAAR_BLICK",
     "title": "Die strenge Spektabilität",
     "pool": "morgen",
-    "file": "data/events/morgen.json",
+    "file": "data/events/pools/morgen.json",
     "highImpact": false
   },
   {
@@ -150,196 +150,196 @@
     "eventId": "E_MENSA_GERUECHT",
     "title": "Geflüster am Nebentisch",
     "pool": "mensa",
-    "file": "data/events/mensa.json",
+    "file": "data/events/pools/mensa.json",
     "highImpact": false
   },
   {
     "eventId": "E_MENSA_ALGEN_DUFT",
     "title": "Elrikas Kräuter",
     "pool": "mensa",
-    "file": "data/events/mensa.json",
+    "file": "data/events/pools/mensa.json",
     "highImpact": false
   },
   {
     "eventId": "E_NACHT_TURM_LEUCHTEN",
     "title": "Blaues Flackern",
     "pool": "nacht",
-    "file": "data/events/nacht.json",
+    "file": "data/events/pools/nacht.json",
     "highImpact": true
   },
   {
     "eventId": "E_NACHT_TRAUM_SCHATTEN",
     "title": "Unruhige Träume",
     "pool": "nacht",
-    "file": "data/events/nacht.json",
+    "file": "data/events/pools/nacht.json",
     "highImpact": false
   },
   {
     "eventId": "E_NACHT_SCHLEICHWEGE",
     "title": "Schatten in der Halle",
     "pool": "nacht",
-    "file": "data/events/nacht.json",
+    "file": "data/events/pools/nacht.json",
     "highImpact": false
   },
   {
     "eventId": "E_EXPL_VERGESSENE_ROLLE",
     "title": "Ein Fund im Hof",
     "pool": "exploration",
-    "file": "data/events/exploration.json",
+    "file": "data/events/pools/exploration.json",
     "highImpact": false
   },
   {
     "eventId": "E_EXPL_HESINDETAG_RUHE",
     "title": "Hesindes Stille",
     "pool": "exploration",
-    "file": "data/events/exploration.json",
+    "file": "data/events/pools/exploration.json",
     "highImpact": false
   },
   {
     "eventId": "E_EXPL_NAZIR_ÄRGER",
     "title": "Nazirs Zorn",
     "pool": "exploration",
-    "file": "data/events/exploration.json",
+    "file": "data/events/pools/exploration.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_FORBIDDEN_RESEARCH",
     "title": "Verbotene Notizen",
     "pool": "exploration",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/exploration.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_RIVAL_TRIP",
     "title": "Ein gezielter Stolperer",
     "pool": "mensa",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/mensa.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_GHOST_TEACHER",
     "title": "Der Dozent von Gestern",
     "pool": "nacht",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/nacht.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_STOLEN_SNACK",
     "title": "Süße Versuchung",
     "pool": "freizeit",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/freizeit.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_LAUNDRY_MIXUP",
     "title": "Verwechselte Roben",
     "pool": "morgen",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/morgen.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_MAGICAL_RESONANCE",
     "title": "Astrale Erschöpfung",
     "pool": "freizeit",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/freizeit.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_CAT_WATCHER",
     "title": "Die Augen im Schatten",
     "pool": "exploration",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/exploration.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_TEST_ANXIETY",
     "title": "Prüfungsangst",
     "pool": "morgen",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/morgen.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_MUD_PUDDLE",
     "title": "Das Missgeschick im Hof",
     "pool": "freizeit",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/freizeit.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_FORGOTTEN_VALUABLE",
     "title": "Ein vergessener Ring",
     "pool": "exploration",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/exploration.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_WHISPERING_WALLS",
     "title": "Das Flüstern der Mauern",
     "pool": "nacht",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/nacht.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_TUTOR_SEARCH",
     "title": "Gefragte Expertise",
     "pool": "mensa",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/mensa.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_DUEL_CHALLENGE",
     "title": "Herausforderung im Hof",
     "pool": "social_minor",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/social_minor.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_INK_MISHAP",
     "title": "Tinten-Desaster",
     "pool": "freizeit",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/freizeit.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_SECRET_MEETING",
     "title": "Ein Treffen im Kreuzgang",
     "pool": "nacht",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/nacht.json",
     "highImpact": true
   },
   {
     "eventId": "E_ACAD_CLEANING_DUTY",
     "title": "Strafdienst",
     "pool": "morgen",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/morgen.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_OLD_FRIEND_LETTER",
     "title": "Post aus der Heimat",
     "pool": "morgen",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/morgen.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_MAGICAL_FLARE",
     "title": "Ein instabiles Experiment",
     "pool": "freizeit",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/freizeit.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_DREAM_VISION",
     "title": "Vision der Sanduhr",
     "pool": "nacht",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/nacht.json",
     "highImpact": false
   },
   {
     "eventId": "E_ACAD_LOST_FAMILIAR",
     "title": "Die entlaufene Kröte",
     "pool": "exploration",
-    "file": "data/events/academagia_inspired.json",
+    "file": "data/events/pools/exploration.json",
     "highImpact": false
   },
   {
@@ -388,14 +388,14 @@
     "eventId": "E_CULINA_FAVOR_REQUEST",
     "title": "Sorscha braucht eine Hand",
     "pool": "mensa",
-    "file": "data/events/mensa.json",
+    "file": "data/events/pools/mensa.json",
     "highImpact": false
   },
   {
     "eventId": "E_CULINA_SUPPLY_TRIP",
     "title": "Vorräte und Würde",
     "pool": "mensa",
-    "file": "data/events/mensa.json",
+    "file": "data/events/pools/mensa.json",
     "highImpact": false
   },
   {

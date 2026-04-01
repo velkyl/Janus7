@@ -212,22 +212,48 @@ async function _resolveAsset(base) {
 
   const profile = JanusProfileRegistry.getActive();
   // Strip academy/ prefix if it exists to avoid double-prefixing in the academy fallbacks
+  const isAcademyNamespace = filename.startsWith('academy/');
   const relativePath = filename.replace(/^academy\//, '');
   
   const attempts = [
     { url: moduleAssetPath(`data/profiles/${profile.id}/academy/${relativePath}`), label: 'profile-academy' },
-    { url: moduleAssetPath(`data/profiles/${profile.id}/${relativePath}`),          label: 'profile-direct' },
-    { url: moduleAssetPath(`data/academy/${relativePath}`),                         label: 'nested' },
-    { url: moduleAssetPath(`data/${filename}`),                                     label: 'base' },
-    { url: moduleAssetPath(`data/academy__${filename.replace(/\//g, '__')}`),       label: 'flat' }
+    { url: moduleAssetPath(`data/profiles/${profile.id}/${relativePath}`),          label: 'profile-direct' }
   ];
 
+  // 3. Central Academy Data Store (nested)
+  const shouldTryAcademyNested = isAcademyNamespace || !filename.includes('/');
+  if (shouldTryAcademyNested) {
+    attempts.push({ 
+      url: moduleAssetPath(`data/academy/${relativePath}`), 
+      label: 'nested' 
+    });
+  }
+
+  // 4. Base Data Root (e.g. for data/quests/ or data/events/)
+  attempts.push({ 
+    url: moduleAssetPath(`data/${filename}`), 
+    label: 'base' 
+  });
+
+  // 5. Flat Fallback (for legacy naming)
+  if (filename.includes('/')) {
+    const flatName = filename.replace(/\//g, '__');
+    attempts.push({ 
+      url: moduleAssetPath(`data/academy__${flatName}`), 
+      label: 'flat' 
+    });
+  }
+
+  // Iterate over attempts using fetch
   for (const attempt of attempts) {
     try {
       const response = await fetch(attempt.url);
       if (response.ok) return response;
-    } catch (_e) { /* ignore network errors */ }
+    } catch (_e) {
+      // Network/CORS errors handled silently
+    }
   }
+
   return null;
 }
 
