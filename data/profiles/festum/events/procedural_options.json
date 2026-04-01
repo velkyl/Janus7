@@ -1,0 +1,2672 @@
+[
+  {
+    "id": "OPT_E_PROC_0000_MYSTERY_A",
+    "parentId": "E_PROC_0000_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0000_MYSTERY_B",
+    "parentId": "E_PROC_0000_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0001_EXPLORATION_A",
+    "parentId": "E_PROC_0001_EXPLORATION",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sinnesschärfe +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "money_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0001_EXPLORATION_B",
+    "parentId": "E_PROC_0001_EXPLORATION",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0002_ACADEMIC_A",
+    "parentId": "E_PROC_0002_ACADEMIC",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Magiekunde +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0002_ACADEMIC_B",
+    "parentId": "E_PROC_0002_ACADEMIC",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0003_MYSTERY_A",
+    "parentId": "E_PROC_0003_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0003_MYSTERY_B",
+    "parentId": "E_PROC_0003_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0004_MYSTERY_A",
+    "parentId": "E_PROC_0004_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0004_MYSTERY_B",
+    "parentId": "E_PROC_0004_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0005_MYSTERY_A",
+    "parentId": "E_PROC_0005_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0005_MYSTERY_B",
+    "parentId": "E_PROC_0005_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0006_MYSTERY_A",
+    "parentId": "E_PROC_0006_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0006_MYSTERY_B",
+    "parentId": "E_PROC_0006_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0007_MYSTERY_A",
+    "parentId": "E_PROC_0007_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0007_MYSTERY_B",
+    "parentId": "E_PROC_0007_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0008_MYSTERY_A",
+    "parentId": "E_PROC_0008_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0008_MYSTERY_B",
+    "parentId": "E_PROC_0008_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0009_STRESS_A",
+    "parentId": "E_PROC_0009_STRESS",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Willenskraft +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "stress_minus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0009_STRESS_B",
+    "parentId": "E_PROC_0009_STRESS",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0010_MYSTERY_A",
+    "parentId": "E_PROC_0010_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0010_MYSTERY_B",
+    "parentId": "E_PROC_0010_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0011_STRESS_A",
+    "parentId": "E_PROC_0011_STRESS",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Willenskraft +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "stress_minus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0011_STRESS_B",
+    "parentId": "E_PROC_0011_STRESS",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0012_MYSTERY_A",
+    "parentId": "E_PROC_0012_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0012_MYSTERY_B",
+    "parentId": "E_PROC_0012_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0013_PHYSICAL_A",
+    "parentId": "E_PROC_0013_PHYSICAL",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Körperbeherrschung +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0013_PHYSICAL_B",
+    "parentId": "E_PROC_0013_PHYSICAL",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0014_MYSTERY_A",
+    "parentId": "E_PROC_0014_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0014_MYSTERY_B",
+    "parentId": "E_PROC_0014_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0015_MYSTERY_A",
+    "parentId": "E_PROC_0015_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0015_MYSTERY_B",
+    "parentId": "E_PROC_0015_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0016_MYSTERY_A",
+    "parentId": "E_PROC_0016_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0016_MYSTERY_B",
+    "parentId": "E_PROC_0016_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0017_MYSTERY_A",
+    "parentId": "E_PROC_0017_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0017_MYSTERY_B",
+    "parentId": "E_PROC_0017_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0018_MYSTERY_A",
+    "parentId": "E_PROC_0018_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0018_MYSTERY_B",
+    "parentId": "E_PROC_0018_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0019_MYSTERY_A",
+    "parentId": "E_PROC_0019_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0019_MYSTERY_B",
+    "parentId": "E_PROC_0019_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0020_ACADEMIC_A",
+    "parentId": "E_PROC_0020_ACADEMIC",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Magiekunde +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0020_ACADEMIC_B",
+    "parentId": "E_PROC_0020_ACADEMIC",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0021_MYSTERY_A",
+    "parentId": "E_PROC_0021_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0021_MYSTERY_B",
+    "parentId": "E_PROC_0021_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0022_MYSTERY_A",
+    "parentId": "E_PROC_0022_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0022_MYSTERY_B",
+    "parentId": "E_PROC_0022_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0023_MYSTERY_A",
+    "parentId": "E_PROC_0023_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0023_MYSTERY_B",
+    "parentId": "E_PROC_0023_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0024_MYSTERY_A",
+    "parentId": "E_PROC_0024_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0024_MYSTERY_B",
+    "parentId": "E_PROC_0024_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0025_MYSTERY_A",
+    "parentId": "E_PROC_0025_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0025_MYSTERY_B",
+    "parentId": "E_PROC_0025_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0026_MYSTERY_A",
+    "parentId": "E_PROC_0026_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0026_MYSTERY_B",
+    "parentId": "E_PROC_0026_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0027_MYSTERY_A",
+    "parentId": "E_PROC_0027_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0027_MYSTERY_B",
+    "parentId": "E_PROC_0027_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0028_MYSTERY_A",
+    "parentId": "E_PROC_0028_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0028_MYSTERY_B",
+    "parentId": "E_PROC_0028_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0029_MYSTERY_A",
+    "parentId": "E_PROC_0029_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0029_MYSTERY_B",
+    "parentId": "E_PROC_0029_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0030_MYSTERY_A",
+    "parentId": "E_PROC_0030_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0030_MYSTERY_B",
+    "parentId": "E_PROC_0030_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0031_ACADEMIC_A",
+    "parentId": "E_PROC_0031_ACADEMIC",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Magiekunde -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0031_ACADEMIC_B",
+    "parentId": "E_PROC_0031_ACADEMIC",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0032_SOCIAL_A",
+    "parentId": "E_PROC_0032_SOCIAL",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Menschenkenntnis +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "rel_random_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0032_SOCIAL_B",
+    "parentId": "E_PROC_0032_SOCIAL",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0033_MYSTERY_A",
+    "parentId": "E_PROC_0033_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0033_MYSTERY_B",
+    "parentId": "E_PROC_0033_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0034_MYSTERY_A",
+    "parentId": "E_PROC_0034_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0034_MYSTERY_B",
+    "parentId": "E_PROC_0034_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0035_MYSTERY_A",
+    "parentId": "E_PROC_0035_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0035_MYSTERY_B",
+    "parentId": "E_PROC_0035_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0036_ACADEMIC_A",
+    "parentId": "E_PROC_0036_ACADEMIC",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Magiekunde -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0036_ACADEMIC_B",
+    "parentId": "E_PROC_0036_ACADEMIC",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0037_MYSTERY_A",
+    "parentId": "E_PROC_0037_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0037_MYSTERY_B",
+    "parentId": "E_PROC_0037_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0038_MYSTERY_A",
+    "parentId": "E_PROC_0038_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0038_MYSTERY_B",
+    "parentId": "E_PROC_0038_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0039_MYSTERY_A",
+    "parentId": "E_PROC_0039_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0039_MYSTERY_B",
+    "parentId": "E_PROC_0039_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0040_ACADEMIC_A",
+    "parentId": "E_PROC_0040_ACADEMIC",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Magiekunde +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0040_ACADEMIC_B",
+    "parentId": "E_PROC_0040_ACADEMIC",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0041_MYSTERY_A",
+    "parentId": "E_PROC_0041_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0041_MYSTERY_B",
+    "parentId": "E_PROC_0041_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0042_MYSTERY_A",
+    "parentId": "E_PROC_0042_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0042_MYSTERY_B",
+    "parentId": "E_PROC_0042_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0043_EXPLORATION_A",
+    "parentId": "E_PROC_0043_EXPLORATION",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sinnesschärfe -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "money_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0043_EXPLORATION_B",
+    "parentId": "E_PROC_0043_EXPLORATION",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0044_MYSTERY_A",
+    "parentId": "E_PROC_0044_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0044_MYSTERY_B",
+    "parentId": "E_PROC_0044_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0045_STRESS_A",
+    "parentId": "E_PROC_0045_STRESS",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Willenskraft -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "stress_minus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0045_STRESS_B",
+    "parentId": "E_PROC_0045_STRESS",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0046_ACADEMIC_A",
+    "parentId": "E_PROC_0046_ACADEMIC",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Magiekunde -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0046_ACADEMIC_B",
+    "parentId": "E_PROC_0046_ACADEMIC",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0047_STRESS_A",
+    "parentId": "E_PROC_0047_STRESS",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Willenskraft -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "stress_minus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0047_STRESS_B",
+    "parentId": "E_PROC_0047_STRESS",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0048_STRESS_A",
+    "parentId": "E_PROC_0048_STRESS",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Willenskraft -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "stress_minus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0048_STRESS_B",
+    "parentId": "E_PROC_0048_STRESS",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0049_MYSTERY_A",
+    "parentId": "E_PROC_0049_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0049_MYSTERY_B",
+    "parentId": "E_PROC_0049_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0050_STRESS_A",
+    "parentId": "E_PROC_0050_STRESS",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Willenskraft -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "stress_minus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0050_STRESS_B",
+    "parentId": "E_PROC_0050_STRESS",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0051_MYSTERY_A",
+    "parentId": "E_PROC_0051_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0051_MYSTERY_B",
+    "parentId": "E_PROC_0051_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0052_MYSTERY_A",
+    "parentId": "E_PROC_0052_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0052_MYSTERY_B",
+    "parentId": "E_PROC_0052_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0053_SOCIAL_A",
+    "parentId": "E_PROC_0053_SOCIAL",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Menschenkenntnis -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "rel_random_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0053_SOCIAL_B",
+    "parentId": "E_PROC_0053_SOCIAL",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0054_SOCIAL_A",
+    "parentId": "E_PROC_0054_SOCIAL",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Menschenkenntnis +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "rel_random_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0054_SOCIAL_B",
+    "parentId": "E_PROC_0054_SOCIAL",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0055_ACADEMIC_A",
+    "parentId": "E_PROC_0055_ACADEMIC",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Magiekunde -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0055_ACADEMIC_B",
+    "parentId": "E_PROC_0055_ACADEMIC",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0056_MYSTERY_A",
+    "parentId": "E_PROC_0056_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0056_MYSTERY_B",
+    "parentId": "E_PROC_0056_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0057_MYSTERY_A",
+    "parentId": "E_PROC_0057_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0057_MYSTERY_B",
+    "parentId": "E_PROC_0057_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0058_MYSTERY_A",
+    "parentId": "E_PROC_0058_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0058_MYSTERY_B",
+    "parentId": "E_PROC_0058_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0059_MYSTERY_A",
+    "parentId": "E_PROC_0059_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0059_MYSTERY_B",
+    "parentId": "E_PROC_0059_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0060_MYSTERY_A",
+    "parentId": "E_PROC_0060_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0060_MYSTERY_B",
+    "parentId": "E_PROC_0060_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0061_MYSTERY_A",
+    "parentId": "E_PROC_0061_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0061_MYSTERY_B",
+    "parentId": "E_PROC_0061_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0062_MYSTERY_A",
+    "parentId": "E_PROC_0062_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0062_MYSTERY_B",
+    "parentId": "E_PROC_0062_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0063_MYSTERY_A",
+    "parentId": "E_PROC_0063_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0063_MYSTERY_B",
+    "parentId": "E_PROC_0063_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0064_MYSTERY_A",
+    "parentId": "E_PROC_0064_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0064_MYSTERY_B",
+    "parentId": "E_PROC_0064_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0065_MYSTERY_A",
+    "parentId": "E_PROC_0065_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0065_MYSTERY_B",
+    "parentId": "E_PROC_0065_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0066_ACADEMIC_A",
+    "parentId": "E_PROC_0066_ACADEMIC",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Magiekunde -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0066_ACADEMIC_B",
+    "parentId": "E_PROC_0066_ACADEMIC",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0067_MYSTERY_A",
+    "parentId": "E_PROC_0067_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0067_MYSTERY_B",
+    "parentId": "E_PROC_0067_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0068_MYSTERY_A",
+    "parentId": "E_PROC_0068_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0068_MYSTERY_B",
+    "parentId": "E_PROC_0068_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0069_MYSTERY_A",
+    "parentId": "E_PROC_0069_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0069_MYSTERY_B",
+    "parentId": "E_PROC_0069_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0070_STRESS_A",
+    "parentId": "E_PROC_0070_STRESS",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Willenskraft +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "stress_minus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0070_STRESS_B",
+    "parentId": "E_PROC_0070_STRESS",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0071_MYSTERY_A",
+    "parentId": "E_PROC_0071_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0071_MYSTERY_B",
+    "parentId": "E_PROC_0071_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0072_STRESS_A",
+    "parentId": "E_PROC_0072_STRESS",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Willenskraft +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "stress_minus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0072_STRESS_B",
+    "parentId": "E_PROC_0072_STRESS",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0073_MYSTERY_A",
+    "parentId": "E_PROC_0073_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0073_MYSTERY_B",
+    "parentId": "E_PROC_0073_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0074_SOCIAL_A",
+    "parentId": "E_PROC_0074_SOCIAL",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Menschenkenntnis -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "rel_random_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0074_SOCIAL_B",
+    "parentId": "E_PROC_0074_SOCIAL",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0075_MYSTERY_A",
+    "parentId": "E_PROC_0075_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0075_MYSTERY_B",
+    "parentId": "E_PROC_0075_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0076_ACADEMIC_A",
+    "parentId": "E_PROC_0076_ACADEMIC",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Magiekunde +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0076_ACADEMIC_B",
+    "parentId": "E_PROC_0076_ACADEMIC",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0077_MYSTERY_A",
+    "parentId": "E_PROC_0077_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0077_MYSTERY_B",
+    "parentId": "E_PROC_0077_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0078_MYSTERY_A",
+    "parentId": "E_PROC_0078_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0078_MYSTERY_B",
+    "parentId": "E_PROC_0078_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0079_MYSTERY_A",
+    "parentId": "E_PROC_0079_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0079_MYSTERY_B",
+    "parentId": "E_PROC_0079_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0080_SOCIAL_A",
+    "parentId": "E_PROC_0080_SOCIAL",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Menschenkenntnis +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "rel_random_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0080_SOCIAL_B",
+    "parentId": "E_PROC_0080_SOCIAL",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0081_MYSTERY_A",
+    "parentId": "E_PROC_0081_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0081_MYSTERY_B",
+    "parentId": "E_PROC_0081_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0082_MYSTERY_A",
+    "parentId": "E_PROC_0082_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0082_MYSTERY_B",
+    "parentId": "E_PROC_0082_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0083_MYSTERY_A",
+    "parentId": "E_PROC_0083_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0083_MYSTERY_B",
+    "parentId": "E_PROC_0083_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0084_MYSTERY_A",
+    "parentId": "E_PROC_0084_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0084_MYSTERY_B",
+    "parentId": "E_PROC_0084_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0085_MYSTERY_A",
+    "parentId": "E_PROC_0085_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0085_MYSTERY_B",
+    "parentId": "E_PROC_0085_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0086_MYSTERY_A",
+    "parentId": "E_PROC_0086_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0086_MYSTERY_B",
+    "parentId": "E_PROC_0086_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0087_MYSTERY_A",
+    "parentId": "E_PROC_0087_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0087_MYSTERY_B",
+    "parentId": "E_PROC_0087_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0088_EXPLORATION_A",
+    "parentId": "E_PROC_0088_EXPLORATION",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sinnesschärfe +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "money_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0088_EXPLORATION_B",
+    "parentId": "E_PROC_0088_EXPLORATION",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0089_MYSTERY_A",
+    "parentId": "E_PROC_0089_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0089_MYSTERY_B",
+    "parentId": "E_PROC_0089_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0090_ACADEMIC_A",
+    "parentId": "E_PROC_0090_ACADEMIC",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Magiekunde +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0090_ACADEMIC_B",
+    "parentId": "E_PROC_0090_ACADEMIC",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0091_SOCIAL_A",
+    "parentId": "E_PROC_0091_SOCIAL",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Menschenkenntnis -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "rel_random_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0091_SOCIAL_B",
+    "parentId": "E_PROC_0091_SOCIAL",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0092_ACADEMIC_A",
+    "parentId": "E_PROC_0092_ACADEMIC",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Magiekunde +1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0092_ACADEMIC_B",
+    "parentId": "E_PROC_0092_ACADEMIC",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0093_MYSTERY_A",
+    "parentId": "E_PROC_0093_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0093_MYSTERY_B",
+    "parentId": "E_PROC_0093_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0094_MYSTERY_A",
+    "parentId": "E_PROC_0094_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0094_MYSTERY_B",
+    "parentId": "E_PROC_0094_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0095_MYSTERY_A",
+    "parentId": "E_PROC_0095_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0095_MYSTERY_B",
+    "parentId": "E_PROC_0095_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0096_ACADEMIC_A",
+    "parentId": "E_PROC_0096_ACADEMIC",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Magiekunde -2",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0096_ACADEMIC_B",
+    "parentId": "E_PROC_0096_ACADEMIC",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0097_MYSTERY_A",
+    "parentId": "E_PROC_0097_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden +0",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0097_MYSTERY_B",
+    "parentId": "E_PROC_0097_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0098_MYSTERY_A",
+    "parentId": "E_PROC_0098_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0098_MYSTERY_B",
+    "parentId": "E_PROC_0098_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  },
+  {
+    "id": "OPT_E_PROC_0099_MYSTERY_A",
+    "parentId": "E_PROC_0099_MYSTERY",
+    "label": "Der Sache nachgehen",
+    "description": "Du setzt deine Fähigkeiten ein, um die Situation zu meistern.",
+    "checkExpr": "roll:Sagen & Legenden -1",
+    "onSuccess": {
+      "description": "Es gelingt dir! Du fühlst dich gestärkt und klüger.",
+      "effectIds": [
+        "energy_minus1",
+        "lore_plus1"
+      ]
+    },
+    "onFailure": {
+      "description": "Das ging schief. Du handelst dir nur Kopfschmerzen ein.",
+      "effectIds": [
+        "stress_plus1"
+      ]
+    }
+  },
+  {
+    "id": "OPT_E_PROC_0099_MYSTERY_B",
+    "parentId": "E_PROC_0099_MYSTERY",
+    "label": "Ignorieren und weitergehen",
+    "description": "Du entscheidest, dass es die Mühe nicht wert ist. Vorsicht ist besser als Nachsicht.",
+    "effectIds": []
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "eventId": "E_CODEX_DISCIPLINE_NOTICE",
+    "pool": "discipline",
+    "triggerExpr": "week >= 1",
+    "title": "Ein kleiner Verstoß, ein großes Gesicht",
+    "description": "Ein Eintrag, eine falsche Ausleihe oder eine respektlose Formulierung landet auf Nazirs Tisch – und plötzlich wird daraus ein Lehrbeispiel.",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_CODEX_HEARING",
+    "pool": "discipline",
+    "triggerExpr": "week >= 1",
+    "title": "Anhörung vor Nazir",
+    "description": "Nicht die Tat allein zählt, sondern ob ein Scholar versteht, warum Punin Regeln lieber seziert als vergisst.",
+    "highImpact": false
+  }
+]

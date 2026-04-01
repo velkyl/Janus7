@@ -127,10 +127,9 @@ export class JanusCalendarEngine {
    */
   onWorldTimeUpdated(worldTime, delta) {
     if (!this._worldSync.enabled) return;
-    // Feuert nur wenn die Änderung NICHT von uns selbst kam (_advanceWorldTime
-    // setzt kein Flag, daher gibt es hier keinen Loop — Foundry deduplicates
-    // hook calls within the same tick).
-    this.syncFromWorldTime({ force: false }).catch((err) => {
+    // Externe worldTime-Aenderungen muessen den JANUS-State korrigieren,
+    // sonst driftet insbesondere das Jahr gegenueber DSA5/Foundry auseinander.
+    this.syncFromWorldTime({ force: true }).catch((err) => {
       this.logger?.warn?.(
         `${MODULE_ABBREV} | onWorldTimeUpdated → syncFromWorldTime fehlgeschlagen`,
         { error: err, worldTime, delta }
@@ -206,6 +205,10 @@ export class JanusCalendarEngine {
       };
 
       if (force) {
+        const worldYear = Number(comps?.year);
+        if (Number.isFinite(worldYear)) {
+          normalized.year = worldYear;
+        }
         if (Number.isFinite(weekdayIndex)) {
           const len = this.config.dayOrder.length;
           const idx = ((weekdayIndex % len) + len) % len;

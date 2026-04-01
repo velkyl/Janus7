@@ -1,0 +1,124 @@
+[
+  {
+    "id": "neutral",
+    "name": "Neutral",
+    "playlistRef": "",
+    "transition": {
+      "fadeOutMs": 800
+    },
+    "tags": [
+      "neutral",
+      "default"
+    ],
+    "notes": "Kanonischer Default-Mood für JANUS7; entspricht Stille / No-Audio."
+  },
+  {
+    "id": "silence",
+    "name": "Stille",
+    "playlistRef": "",
+    "transition": {
+      "fadeOutMs": 800
+    },
+    "tags": [
+      "neutral"
+    ],
+    "notes": "Stoppt alle Playlists (No-Audio)."
+  },
+  {
+    "id": "academy_day",
+    "name": "Akademie – Tag",
+    "playlistRef": "Akademie Tag",
+    "volume": 0.55,
+    "transition": {
+      "fadeInMs": 1200,
+      "fadeOutMs": 800
+    },
+    "binding": {
+      "phase": [
+        "Morgen",
+        "Vormittag",
+        "Mittag",
+        "Nachmittag"
+      ]
+    },
+    "tags": [
+      "day",
+      "academy"
+    ]
+  },
+  {
+    "id": "academy_evening",
+    "name": "Akademie – Abend",
+    "playlistRef": "Akademie Abend",
+    "volume": 0.45,
+    "transition": {
+      "fadeInMs": 1200,
+      "fadeOutMs": 1000
+    },
+    "binding": {
+      "phase": [
+        "Abend"
+      ]
+    },
+    "tags": [
+      "evening",
+      "academy"
+    ]
+  },
+  {
+    "id": "academy_night",
+    "name": "Akademie – Nacht",
+    "playlistRef": "Akademie Nacht",
+    "volume": 0.35,
+    "transition": {
+      "fadeInMs": 1500,
+      "fadeOutMs": 1200
+    },
+    "binding": {
+      "phase": [
+        "Nacht"
+      ]
+    },
+    "tags": [
+      "night",
+      "academy"
+    ]
+  },
+  {
+    "id": "exam_tension",
+    "name": "Prüfung – Anspannung",
+    "playlistRef": "Prüfung",
+    "volume": 0.6,
+    "transition": {
+      "fadeInMs": 800,
+      "fadeOutMs": 800
+    },
+    "binding": {
+      "eventTag": [
+        "exam",
+        "prüfung"
+      ]
+    },
+    "tags": [
+      "event",
+      "exam"
+    ]
+  },
+  {
+    "id": "library_ambience",
+    "name": "Bibliothek – Atmosphäre",
+    "playlistRef": "Bibliothek",
+    "volume": 0.4,
+    "transition": {
+      "fadeInMs": 1000,
+      "fadeOutMs": 800
+    },
+    "binding": {
+      "locationId": "LOC_HAUPTBIBLIOTHEK_3_EBENEN"
+    },
+    "tags": [
+      "location",
+      "library"
+    ]
+  }
+]

@@ -1,5 +1,4 @@
-import fs from 'fs';
-import path from 'path';
+import { moduleAssetPath } from '../../../../core/common.js';
 
 export default {
   id: 'P16-TC-12',
@@ -9,8 +8,12 @@ export default {
   expected: 'bridge.js erweitert JanusBaseApp und verwendet kein lokales _hookIds-Array mehr.',
   whereToFind: 'ui/layer/bridge.js',
   async run() {
-    const file = path.resolve(process.cwd(), 'ui/layer/bridge.js');
-    const src = fs.readFileSync(file, 'utf8');
+    const response = await fetch(moduleAssetPath('ui/layer/bridge.js'));
+    if (!response.ok) {
+      throw new Error(`Overlay source unreadable (${response.status})`);
+    }
+
+    const src = await response.text();
 
     if (!src.includes('HandlebarsApplicationMixin(JanusBaseApp)')) {
       throw new Error('Overlay erweitert nicht JanusBaseApp');

@@ -31,7 +31,14 @@ export default {
           }
         },
         utils: {
-          debounce: (fn) => fn
+          debounce: (fn) => fn,
+          deepClone: (value) => JSON.parse(JSON.stringify(value)),
+          getType: (value) => {
+            if (value === null) return 'null';
+            if (Array.isArray(value)) return 'Array';
+            if (value === undefined) return 'undefined';
+            return Object.prototype.toString.call(value).slice(8, -1);
+          }
         }
       };
 

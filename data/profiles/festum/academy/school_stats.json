@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Schulstatistiken für soziale und akademische Gates",
+    "schema": "janus7:academy:school_stats:v1"
+  },
+  "stats": [
+    {
+      "id": "wissen",
+      "label": "Wissen",
+      "min": 0,
+      "max": 10
+    },
+    {
+      "id": "mut",
+      "label": "Mut",
+      "min": 0,
+      "max": 10
+    },
+    {
+      "id": "charme",
+      "label": "Charme",
+      "min": 0,
+      "max": 10
+    },
+    {
+      "id": "disziplin",
+      "label": "Disziplin",
+      "min": 0,
+      "max": 10
+    }
+  ]
+}

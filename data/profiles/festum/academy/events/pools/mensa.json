@@ -1,0 +1,74 @@
+[
+  {
+    "eventId": "E_ACAD_RIVAL_TRIP",
+    "pool": "mensa",
+    "triggerExpr": "slotName == 'Mittagessen' && rel_eldric < 0",
+    "title": "Ein gezielter Stolperer",
+    "description": "Als du an Eldrics Tisch vorbeigehst, streckt er scheinbar unschuldig den Fuß aus. Dein Tablett gerät bedrohlich ins Wanken.",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_DEXTERITY_SAVE",
+      "OPT_ACAD_CONFRONT_ELDRIC"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_TUTOR_SEARCH",
+    "pool": "mensa",
+    "triggerExpr": "playerState.lore > 10",
+    "title": "Gefragte Expertise",
+    "description": "Ein Mitschüler bittet dich verzweifelt um Hilfe bei den Arithmantik-Hausaufgaben. 'Ich verstehe die Matrix-Variablen einfach nicht!'",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_HELP_STUDENT",
+      "OPT_ACAD_REFUSE_STUDENT"
+    ]
+  },
+  {
+    "eventId": "E_MENSA_ELDRIC_PRUNK",
+    "pool": "mensa",
+    "triggerExpr": "slotName == 'Mittagessen' || slotName == 'Abendessen'",
+    "title": "Adliges Gehabe",
+    "description": "Eldric von Gareth beschwert sich lautstark über die Qualität des Weins. 'In Gareth würde man dies nicht einmal den Hunden vorsetzen!'",
+    "highImpact": false,
+    "options": [
+      "OPT_ELDRIC_WIDERSPRECHEN",
+      "OPT_ELDRIC_IGNORIEREN"
+    ]
+  },
+  {
+    "eventId": "E_MENSA_GERUECHT",
+    "pool": "mensa",
+    "triggerExpr": "slotName == 'Mittagessen'",
+    "title": "Geflüster am Nebentisch",
+    "description": "Du schnappst Fetzen eines Gesprächs auf: Angeblich wurde im Keller ein Schutzkreis gezeichnet, der dort nicht hingehört.",
+    "highImpact": false,
+    "effects": [
+      "lore_plus1"
+    ]
+  },
+  {
+    "eventId": "E_MENSA_ALGEN_DUFT",
+    "pool": "mensa",
+    "triggerExpr": "slotName == 'Abendessen'",
+    "title": "Elrikas Kräuter",
+    "description": "Elrika sitzt heute sehr still in der Ecke. Ein seltsam süßlicher Geruch nach getrockneten Algen geht von ihr aus.",
+    "highImpact": false,
+    "mood": "mystery"
+  },
+  {
+    "eventId": "E_CULINA_FAVOR_REQUEST",
+    "pool": "mensa",
+    "triggerExpr": "slotName == 'Mittagessen' || slotName == 'Abendessen'",
+    "title": "Sorscha braucht eine Hand",
+    "description": "Zwischen dampfenden Kesseln und nörgelnden Studenten bittet Sorscha um schnelle, diskrete Hilfe.",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_CULINA_SUPPLY_TRIP",
+    "pool": "mensa",
+    "triggerExpr": "slotIndex >= 3",
+    "title": "Vorräte und Würde",
+    "description": "Eine kleine Besorgung wird sofort komplizierter, sobald Eldric, ein Kräuterbund oder akademischer Stolz hineingrätschen.",
+    "highImpact": false
+  }
+]

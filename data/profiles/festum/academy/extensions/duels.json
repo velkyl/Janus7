@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Gegner im geheimen Duellierclub 'Die Brennende Hand'",
+    "schema": "janus7:academy:duels:v1"
+  },
+  "ranks": [
+    {
+      "id": "DUEL_RANK_03",
+      "leagueId": "LEAGUE_BURNING_HAND",
+      "opponentId": "NPC_THORWALD",
+      "opponentName": "Thorwald der Unerschütterliche",
+      "title": "Schildbrecher",
+      "entryCondition": "defeated: DUEL_RANK_02",
+      "rules": {
+        "allowedSpells": [
+          "all_except_demonic"
+        ],
+        "damageType": "subdual",
+        "victoryCondition": "opponent_unconscious"
+      },
+      "rewards": {
+        "silver": 25,
+        "effectIds": [
+          "rep_students_plus2",
+          "stress_minus2"
+        ]
+      }
+    }
+  ]
+}

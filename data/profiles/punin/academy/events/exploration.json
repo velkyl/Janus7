@@ -1,0 +1,29 @@
+[
+  {
+    "eventId": "E_EXPL_VERGESSENE_ROLLE",
+    "pool": "exploration",
+    "triggerExpr": "slotIndex >= 2 && slotIndex <= 8",
+    "title": "Ein Fund im Hof",
+    "description": "Zwischen den Pflastersteinen des Innenhofs glitzert etwas. Es ist eine beschädigte Pergamentrolle mit arithmetischen Formeln.",
+    "highImpact": false,
+    "options": ["OPT_EXPL_ANALYSIEREN", "OPT_EXPL_ABGEBEN"]
+  },
+  {
+    "eventId": "E_EXPL_HESINDETAG_RUHE",
+    "pool": "exploration",
+    "triggerExpr": "dayName == 'Hesindetag'",
+    "title": "Hesindes Stille",
+    "description": "Der Westturm liegt heute in tiefer Stille. Die Luft riecht nach altem Papier und Weihrauch. Ein idealer Ort für Kontemplation.",
+    "highImpact": false,
+    "effects": ["energy_plus1"]
+  },
+  {
+    "eventId": "E_EXPL_NAZIR_ÄRGER",
+    "pool": "exploration",
+    "triggerExpr": "locationId == 'LOC_LIBRARY_MAIN'",
+    "title": "Nazirs Zorn",
+    "description": "Magister Nazir Ragaza schimpft mit einem Eleven, der ein Buch nicht korrekt einsortiert hat. 'Inkompetenz ist der größte Feind der Erkenntnis!'",
+    "highImpact": false,
+    "mood": "tension"
+  }
+]

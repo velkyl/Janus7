@@ -1,0 +1,5 @@
+{
+  "effectId": "rel_mentor_plus2",
+  "expr": "playerState.relations.mentor:+2",
+  "humanReadable": "Mentor-Beziehung +2"
+}

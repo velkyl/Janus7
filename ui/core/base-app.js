@@ -8,9 +8,28 @@
 
 import { MODULE_ID } from '../../core/common.js';
 
+function fallbackDeepClone(value) {
+  if (value === undefined) return undefined;
+  try {
+    if (typeof structuredClone === 'function') return structuredClone(value);
+  } catch (_) { /* noop */ }
+  try {
+    return JSON.parse(JSON.stringify(value));
+  } catch (_) {
+    return value;
+  }
+}
+
+function ensureFoundryDeepClone() {
+  const utils = globalThis.foundry?.utils;
+  if (!utils || typeof utils.deepClone === 'function') return;
+  utils.deepClone = fallbackDeepClone;
+}
+
 export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
   constructor(options = {}) {
     super(options);
+    ensureFoundryDeepClone();
     this.engine = options.engine ?? null;
     this._renderAbort = null;
     this._isFirstRender = true;

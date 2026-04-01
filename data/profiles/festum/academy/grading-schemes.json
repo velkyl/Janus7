@@ -1,0 +1,94 @@
+{
+  "version": "1.0.0",
+  "description": "Bewertungsschemata für Prüfungen",
+  "schemes": {
+    "punin_standard": {
+      "name": "Puniner Standard",
+      "description": "Die übliche Bewertungsskala an aventurischen Akademien",
+      "grades": [
+        {
+          "id": "excellent",
+          "name": "Hervorragend",
+          "minScore": 90,
+          "color": "#10b981",
+          "bonus": 2
+        },
+        {
+          "id": "good",
+          "name": "Gut",
+          "minScore": 75,
+          "color": "#3b82f6",
+          "bonus": 1
+        },
+        {
+          "id": "satisfactory",
+          "name": "Befriedigend",
+          "minScore": 60,
+          "color": "#f59e0b",
+          "bonus": 0
+        },
+        {
+          "id": "pass",
+          "name": "Ausreichend",
+          "minScore": 50,
+          "color": "#ef4444",
+          "bonus": 0
+        },
+        {
+          "id": "fail",
+          "name": "Ungenügend",
+          "minScore": 0,
+          "color": "#6b7280",
+          "bonus": -1
+        }
+      ]
+    },
+    "gareth_strict": {
+      "name": "Garether Streng",
+      "description": "Strengere Bewertung für fortgeschrittene Studien",
+      "grades": [
+        {
+          "id": "excellent",
+          "name": "Exzellent",
+          "minScore": 95,
+          "color": "#10b981",
+          "bonus": 3
+        },
+        {
+          "id": "good",
+          "name": "Sehr Gut",
+          "minScore": 85,
+          "color": "#3b82f6",
+          "bonus": 2
+        },
+        {
+          "id": "satisfactory",
+          "name": "Gut",
+          "minScore": 70,
+          "color": "#f59e0b",
+          "bonus": 1
+        },
+        {
+          "id": "pass",
+          "name": "Befriedigend",
+          "minScore": 60,
+          "color": "#ef4444",
+          "bonus": 0
+        },
+        {
+          "id": "fail",
+          "name": "Mangelhaft",
+          "minScore": 0,
+          "color": "#6b7280",
+          "bonus": -2
+        }
+      ]
+    }
+  },
+  "meta": {
+    "version": "1.0.0",
+    "updatedAt": "2026-02-03",
+    "source": "janus7/data/academy",
+    "schema": "academy:grading-schemes.json"
+  }
+}

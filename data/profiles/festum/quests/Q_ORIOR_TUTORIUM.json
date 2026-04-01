@@ -1,0 +1,41 @@
+{
+  "questId": "Q_ORIOR_TUTORIUM",
+  "title": "Tutorium des Orior",
+  "startNodeId": "QN_ORIOR_START",
+  "description": "Der Hilfszirkel Orior sucht Unterstützung für ein Tutorium. Doch zwischen echter Hilfe und kleiner Politik verläuft eine feine Linie.",
+  "tags": [
+    "social",
+    "orior",
+    "students"
+  ],
+  "nodes": [
+    {
+      "nodeId": "QN_ORIOR_START",
+      "questId": "Q_ORIOR_TUTORIUM",
+      "type": "event",
+      "eventId": "E_ORIOR_TUTORING_REQUEST",
+      "reqExpr": "",
+      "failforwardNodeId": null
+    },
+    {
+      "nodeId": "QN_ORIOR_CHOICE",
+      "questId": "Q_ORIOR_TUTORIUM",
+      "type": "event",
+      "eventId": "E_ORIOR_RIVAL_TENSION",
+      "reqExpr": "",
+      "failforwardNodeId": null
+    },
+    {
+      "nodeId": "QN_ORIOR_DONE",
+      "questId": "Q_ORIOR_TUTORIUM",
+      "type": "effect",
+      "effectIds": [
+        "rel_mentor_plus2",
+        "stress_plus1"
+      ],
+      "nextNodeId": null
+    }
+  ],
+  "deadlineDays": 10,
+  "deadlineAction": "expire"
+}

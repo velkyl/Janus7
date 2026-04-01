@@ -1,0 +1,2204 @@
+{
+  "quests": [
+    {
+      "id": "Q_WIZ_PATH_000",
+      "title": "Der Pfad des Lichts: Spezialist für Illusion & Verwandlung",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_0",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_0_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_0",
+          "description": "Übe die Techniken nachts im Verborgener Kerker.",
+          "requires_flag": "wiz_path_0_started",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_0_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_0",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_0_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_001",
+      "title": "Der Pfad des Lichts: Spezialist für Heilung (Balsam)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_1",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_1_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_1",
+          "description": "Übe die Techniken nachts im Ritualplatz im Hof.",
+          "requires_flag": "wiz_path_1_started",
+          "requirements": {
+            "skill_check": "Heilkunde Wunden",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_1_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_1",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_1_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_002",
+      "title": "Der Pfad des Lichts: Spezialist für Divination (Hellsicht)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_2",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_2_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_2",
+          "description": "Übe die Techniken nachts im Geheimlabor.",
+          "requires_flag": "wiz_path_2_started",
+          "requirements": {
+            "skill_check": "Sinnenschärfe",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_2_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_2",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_2_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_003",
+      "title": "Der Pfad der Finsternis: Meister der Nekromantie",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_3",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_3_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_3",
+          "description": "Übe die Techniken nachts im Nordturm.",
+          "requires_flag": "wiz_path_3_started",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_3_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_3",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_3_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_004",
+      "title": "Der Pfad der Finsternis: Meister der Beschwörung (Dämonen)",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_4",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_4_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_4",
+          "description": "Übe die Techniken nachts im Geheimlabor.",
+          "requires_flag": "wiz_path_4_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_4_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_4",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_4_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_005",
+      "title": "Der Pfad der Finsternis: Meister der Beschwörung (Dämonen)",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_5",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_5_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_5",
+          "description": "Übe die Techniken nachts im Verborgener Kerker.",
+          "requires_flag": "wiz_path_5_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_5_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_5",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_5_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_006",
+      "title": "Der Pfad der Finsternis: Meister der Nekromantie",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_6",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_6_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_6",
+          "description": "Übe die Techniken nachts im Großer Speisesaal.",
+          "requires_flag": "wiz_path_6_started",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_6_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_6",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_6_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_007",
+      "title": "Der Pfad des Lichts: Spezialist für Divination (Hellsicht)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_7",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_7_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_7",
+          "description": "Übe die Techniken nachts im Astral-Observatorium.",
+          "requires_flag": "wiz_path_7_started",
+          "requirements": {
+            "skill_check": "Sinnenschärfe",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_7_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_7",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_7_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_008",
+      "title": "Der Pfad des Lichts: Spezialist für Elementarismus (Feuer/Erde)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_8",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_8_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_8",
+          "description": "Übe die Techniken nachts im Verborgener Kerker.",
+          "requires_flag": "wiz_path_8_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_8_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_8",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_8_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_009",
+      "title": "Der Pfad des Lichts: Spezialist für Heilung (Balsam)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_9",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_9_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_9",
+          "description": "Übe die Techniken nachts im Gildehaus der Grauen.",
+          "requires_flag": "wiz_path_9_started",
+          "requirements": {
+            "skill_check": "Heilkunde Wunden",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_9_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_9",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_9_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_010",
+      "title": "Der Pfad des Lichts: Spezialist für Divination (Hellsicht)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_10",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_10_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_10",
+          "description": "Übe die Techniken nachts im Alte Bibliothek.",
+          "requires_flag": "wiz_path_10_started",
+          "requirements": {
+            "skill_check": "Sinnenschärfe",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_10_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_10",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_10_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_011",
+      "title": "Der Pfad des Lichts: Spezialist für Elementarismus (Feuer/Erde)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_11",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_11_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_11",
+          "description": "Übe die Techniken nachts im Großer Speisesaal.",
+          "requires_flag": "wiz_path_11_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_11_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_11",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_11_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_012",
+      "title": "Der Pfad des Lichts: Spezialist für Illusion & Verwandlung",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_12",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_12_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_12",
+          "description": "Übe die Techniken nachts im Kräutergarten.",
+          "requires_flag": "wiz_path_12_started",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_12_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_12",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_12_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_013",
+      "title": "Der Pfad des Lichts: Spezialist für Heilung (Balsam)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_13",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_13_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_13",
+          "description": "Übe die Techniken nachts im Astral-Observatorium.",
+          "requires_flag": "wiz_path_13_started",
+          "requirements": {
+            "skill_check": "Heilkunde Wunden",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_13_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_13",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_13_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_014",
+      "title": "Der Pfad des Lichts: Spezialist für Elementarismus (Feuer/Erde)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_14",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_14_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_14",
+          "description": "Übe die Techniken nachts im Alte Bibliothek.",
+          "requires_flag": "wiz_path_14_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_14_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_14",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_14_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_015",
+      "title": "Der Pfad der Finsternis: Meister der Nekromantie",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_15",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_15_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_15",
+          "description": "Übe die Techniken nachts im Geheimlabor.",
+          "requires_flag": "wiz_path_15_started",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_15_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_15",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_15_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_016",
+      "title": "Der Pfad des Lichts: Spezialist für Illusion & Verwandlung",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_16",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_16_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_16",
+          "description": "Übe die Techniken nachts im Katakomben.",
+          "requires_flag": "wiz_path_16_started",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_16_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_16",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_16_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_017",
+      "title": "Der Pfad der Finsternis: Meister der Beschwörung (Dämonen)",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_17",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_17_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_17",
+          "description": "Übe die Techniken nachts im Nordturm.",
+          "requires_flag": "wiz_path_17_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_17_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_17",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_17_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_018",
+      "title": "Der Pfad der Finsternis: Meister der Nekromantie",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_18",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_18_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_18",
+          "description": "Übe die Techniken nachts im Dozenten-Quartiere.",
+          "requires_flag": "wiz_path_18_started",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_18_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_18",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_18_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_019",
+      "title": "Der Pfad des Lichts: Spezialist für Elementarismus (Feuer/Erde)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_19",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_19_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_19",
+          "description": "Übe die Techniken nachts im Nordturm.",
+          "requires_flag": "wiz_path_19_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_19_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_19",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_19_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_020",
+      "title": "Der Pfad des Lichts: Spezialist für Heilung (Balsam)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_20",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_20_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_20",
+          "description": "Übe die Techniken nachts im Ritualplatz im Hof.",
+          "requires_flag": "wiz_path_20_started",
+          "requirements": {
+            "skill_check": "Heilkunde Wunden",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_20_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_20",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_20_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_021",
+      "title": "Der Pfad der Finsternis: Meister der Nekromantie",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_21",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_21_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_21",
+          "description": "Übe die Techniken nachts im Astral-Observatorium.",
+          "requires_flag": "wiz_path_21_started",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_21_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_21",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_21_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_022",
+      "title": "Der Pfad des Lichts: Spezialist für Illusion & Verwandlung",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_22",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_22_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_22",
+          "description": "Übe die Techniken nachts im Verborgener Kerker.",
+          "requires_flag": "wiz_path_22_started",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_22_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_22",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_22_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_023",
+      "title": "Der Pfad des Lichts: Spezialist für Elementarismus (Feuer/Erde)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_23",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_23_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_23",
+          "description": "Übe die Techniken nachts im Katakomben.",
+          "requires_flag": "wiz_path_23_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_23_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_23",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_23_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_024",
+      "title": "Der Pfad des Lichts: Spezialist für Elementarismus (Feuer/Erde)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_24",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_24_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_24",
+          "description": "Übe die Techniken nachts im Katakomben.",
+          "requires_flag": "wiz_path_24_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_24_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_24",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_24_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_025",
+      "title": "Der Pfad des Lichts: Spezialist für Heilung (Balsam)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_25",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_25_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_25",
+          "description": "Übe die Techniken nachts im Geheimlabor.",
+          "requires_flag": "wiz_path_25_started",
+          "requirements": {
+            "skill_check": "Heilkunde Wunden",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_25_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_25",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_25_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_026",
+      "title": "Der Pfad der Finsternis: Meister der Nekromantie",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_26",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_26_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_26",
+          "description": "Übe die Techniken nachts im Nordturm.",
+          "requires_flag": "wiz_path_26_started",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_26_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_26",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_26_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_027",
+      "title": "Der Pfad der Finsternis: Meister der Nekromantie",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_27",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_27_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_27",
+          "description": "Übe die Techniken nachts im Kräutergarten.",
+          "requires_flag": "wiz_path_27_started",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_27_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_27",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_27_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_028",
+      "title": "Der Pfad des Lichts: Spezialist für Divination (Hellsicht)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_28",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_28_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_28",
+          "description": "Übe die Techniken nachts im Westturm.",
+          "requires_flag": "wiz_path_28_started",
+          "requirements": {
+            "skill_check": "Sinnenschärfe",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_28_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_28",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_28_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_029",
+      "title": "Der Pfad des Lichts: Spezialist für Illusion & Verwandlung",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_29",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_29_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_29",
+          "description": "Übe die Techniken nachts im Kräutergarten.",
+          "requires_flag": "wiz_path_29_started",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_29_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_29",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_29_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_030",
+      "title": "Der Pfad der Finsternis: Meister der Nekromantie",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_30",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_30_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_30",
+          "description": "Übe die Techniken nachts im Großer Speisesaal.",
+          "requires_flag": "wiz_path_30_started",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_30_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_30",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_30_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_031",
+      "title": "Der Pfad der Finsternis: Meister der Nekromantie",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_31",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_31_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_31",
+          "description": "Übe die Techniken nachts im Dozenten-Quartiere.",
+          "requires_flag": "wiz_path_31_started",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_31_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_31",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_31_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_032",
+      "title": "Der Pfad des Lichts: Spezialist für Elementarismus (Feuer/Erde)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_32",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_32_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_32",
+          "description": "Übe die Techniken nachts im Studenten-Schlafsaal.",
+          "requires_flag": "wiz_path_32_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_32_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_32",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_32_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_033",
+      "title": "Der Pfad des Lichts: Spezialist für Elementarismus (Feuer/Erde)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_33",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_33_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_33",
+          "description": "Übe die Techniken nachts im Astral-Observatorium.",
+          "requires_flag": "wiz_path_33_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_33_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_33",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_33_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_034",
+      "title": "Der Pfad der Finsternis: Meister der Nekromantie",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_34",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_34_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_34",
+          "description": "Übe die Techniken nachts im Studenten-Schlafsaal.",
+          "requires_flag": "wiz_path_34_started",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_34_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_34",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_34_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_035",
+      "title": "Der Pfad des Lichts: Spezialist für Elementarismus (Feuer/Erde)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_35",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_35_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_35",
+          "description": "Übe die Techniken nachts im Geheimlabor.",
+          "requires_flag": "wiz_path_35_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_35_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_35",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_35_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_036",
+      "title": "Der Pfad der Finsternis: Meister der Beschwörung (Dämonen)",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_36",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_36_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_36",
+          "description": "Übe die Techniken nachts im Großer Speisesaal.",
+          "requires_flag": "wiz_path_36_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_36_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_36",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_36_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_037",
+      "title": "Der Pfad des Lichts: Spezialist für Heilung (Balsam)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_37",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_37_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_37",
+          "description": "Übe die Techniken nachts im Verborgener Kerker.",
+          "requires_flag": "wiz_path_37_started",
+          "requirements": {
+            "skill_check": "Heilkunde Wunden",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_37_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_37",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_37_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_038",
+      "title": "Der Pfad des Lichts: Spezialist für Illusion & Verwandlung",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_38",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_38_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_38",
+          "description": "Übe die Techniken nachts im Ritualplatz im Hof.",
+          "requires_flag": "wiz_path_38_started",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_38_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_38",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_38_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_039",
+      "title": "Der Pfad des Lichts: Spezialist für Heilung (Balsam)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_39",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_39_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_39",
+          "description": "Übe die Techniken nachts im Geheimlabor.",
+          "requires_flag": "wiz_path_39_started",
+          "requirements": {
+            "skill_check": "Heilkunde Wunden",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_39_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_39",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_39_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_040",
+      "title": "Der Pfad des Lichts: Spezialist für Illusion & Verwandlung",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_40",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_40_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_40",
+          "description": "Übe die Techniken nachts im Studenten-Schlafsaal.",
+          "requires_flag": "wiz_path_40_started",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_40_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_40",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_40_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_041",
+      "title": "Der Pfad der Finsternis: Meister der Beschwörung (Dämonen)",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_41",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_41_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_41",
+          "description": "Übe die Techniken nachts im Kräutergarten.",
+          "requires_flag": "wiz_path_41_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_41_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_41",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_41_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_042",
+      "title": "Der Pfad der Finsternis: Meister der Beschwörung (Dämonen)",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_42",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_42_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_42",
+          "description": "Übe die Techniken nachts im Alte Bibliothek.",
+          "requires_flag": "wiz_path_42_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_42_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_42",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_42_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_043",
+      "title": "Der Pfad des Lichts: Spezialist für Elementarismus (Feuer/Erde)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_43",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_43_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_43",
+          "description": "Übe die Techniken nachts im Alte Bibliothek.",
+          "requires_flag": "wiz_path_43_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_43_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_43",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_43_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_044",
+      "title": "Der Pfad der Finsternis: Meister der Nekromantie",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_44",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_44_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_44",
+          "description": "Übe die Techniken nachts im Großer Speisesaal.",
+          "requires_flag": "wiz_path_44_started",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_44_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_44",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_44_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_045",
+      "title": "Der Pfad des Lichts: Spezialist für Divination (Hellsicht)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_45",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_45_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_45",
+          "description": "Übe die Techniken nachts im Dozenten-Quartiere.",
+          "requires_flag": "wiz_path_45_started",
+          "requirements": {
+            "skill_check": "Sinnenschärfe",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_45_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_45",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_45_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_046",
+      "title": "Der Pfad der Finsternis: Meister der Beschwörung (Dämonen)",
+      "prio": "P0",
+      "description": "Du fühlst dich zu den verbotenen Künsten hingezogen. Ein alter Wälzer verspricht Macht jenseits der Vorstellungskraft.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_46",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_46_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_46",
+          "description": "Übe die Techniken nachts im Verborgener Kerker.",
+          "requires_flag": "wiz_path_46_started",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_46_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_46",
+          "description": "Vollende das Ritual. Ein erster Schritt auf dem Weg zur wahren Macht (oder zum Lichdasein).",
+          "requires_flag": "wiz_path_46_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": -5,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_047",
+      "title": "Der Pfad des Lichts: Spezialist für Divination (Hellsicht)",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_47",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_47_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_47",
+          "description": "Übe die Techniken nachts im Dachboden.",
+          "requires_flag": "wiz_path_47_started",
+          "requirements": {
+            "skill_check": "Sinnenschärfe",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_47_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_47",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_47_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_048",
+      "title": "Der Pfad des Lichts: Spezialist für Illusion & Verwandlung",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_48",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_48_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_48",
+          "description": "Übe die Techniken nachts im Verborgener Kerker.",
+          "requires_flag": "wiz_path_48_started",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_48_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_48",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_48_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_WIZ_PATH_049",
+      "title": "Der Pfad des Lichts: Spezialist für Illusion & Verwandlung",
+      "prio": "P0",
+      "description": "Deine Begabung für das Konstruktive ist unübersehbar. Die Gilde erwartet Großes von dir.",
+      "stages": [
+        {
+          "id": "S1_INTEREST_49",
+          "description": "Finde geheimes Lehrmaterial in der Alten Bibliothek.",
+          "requirements": {
+            "skill_check": "Suchen",
+            "mod": -1
+          },
+          "flagSet": {
+            "wiz_path_49_started": true
+          }
+        },
+        {
+          "id": "S2_PRACTICE_49",
+          "description": "Übe die Techniken nachts im Westturm.",
+          "requires_flag": "wiz_path_49_started",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": -2
+          },
+          "flagSet": {
+            "wiz_path_49_practiced": true
+          }
+        },
+        {
+          "id": "S3_MASTERY_49",
+          "description": "Verfasse eine These, die der Spektabilität präsentiert werden kann.",
+          "requires_flag": "wiz_path_49_practiced",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus3"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Social Links nach Persona-Vorbild für Mentoren und Rivalen",
+    "schema": "janus7:academy:social_links:v1"
+  },
+  "socialLinks": [
+    {
+      "id": "SLINK_KOSMAAR",
+      "npcId": "NPC_SIRDON_KOSMAAR",
+      "arcana": "hierophant",
+      "maxRank": 5,
+      "ranks": [
+        {
+          "level": 1,
+          "unlockCondition": "player.schoolStats.wissen >= 2",
+          "eventTriggerId": "E_SLINK_KOSMAAR_01",
+          "perkIds": [
+            "PERK_LIBRARY_CARD"
+          ]
+        },
+        {
+          "level": 2,
+          "unlockCondition": "check:Götter&Kulte(QS2)",
+          "eventTriggerId": "E_SLINK_KOSMAAR_02",
+          "perkIds": [
+            "PERK_KOSMAAR_PROTECTION"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "SLINK_FELENIUS",
+      "npcId": "NPC_JIRDAN_FELENIUS",
+      "arcana": "emperor",
+      "maxRank": 5,
+      "ranks": [
+        {
+          "level": 1,
+          "unlockCondition": "player.schoolStats.mut >= 2",
+          "eventTriggerId": "E_SLINK_FELENIUS_01",
+          "perkIds": [
+            "PERK_FIRE_LAB_ACCESS"
+          ]
+        },
+        {
+          "level": 2,
+          "unlockCondition": "tag:underdog || player.schoolStats.disziplin >= 3",
+          "eventTriggerId": "E_SLINK_FELENIUS_02",
+          "perkIds": [
+            "PERK_FELENIUS_RECOMMENDATION"
+          ]
+        }
+      ]
+    }
+  ]
+}

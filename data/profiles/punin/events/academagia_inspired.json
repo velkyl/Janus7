@@ -1,0 +1,232 @@
+[
+  {
+    "eventId": "E_ACAD_FORBIDDEN_RESEARCH",
+    "pool": "exploration",
+    "triggerExpr": "slotIndex >= 5 && locationId == 'LOC_HAUPTBIBLIOTHEK_3_EBENEN'",
+    "title": "Verbotene Notizen",
+    "description": "In einem alten Folianten findest du eine lose Seite, die Techniken beschreibt, um die Reichweite des ODEM ARCANUM zu verdoppeln – eine Methode, die offiziell als 'instabil' gilt.",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_STUDY_SECRET",
+      "OPT_ACAD_REPORT_PAGE"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_RIVAL_TRIP",
+    "pool": "mensa",
+    "triggerExpr": "slotName == 'Mittagessen' && rel_eldric < 0",
+    "title": "Ein gezielter Stolperer",
+    "description": "Als du an Eldrics Tisch vorbeigehst, streckt er scheinbar unschuldig den Fuß aus. Dein Tablett gerät bedrohlich ins Wanken.",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_DEXTERITY_SAVE",
+      "OPT_ACAD_CONFRONT_ELDRIC"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_GHOST_TEACHER",
+    "pool": "nacht",
+    "triggerExpr": "slotName == 'Nacht' && locationId == 'LOC_ARCHIV_KARTENKAMMER'",
+    "title": "Der Dozent von Gestern",
+    "description": "Ein blasser Schatten schwebt über den alten Karten. Er scheint Fehler in den Grenzverlauf Almadas einzuzeichnen und murmelt über 'die wahre Ordnung'.",
+    "highImpact": false,
+    "mood": "mystery",
+    "effects": [
+      "lore_plus1"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_STOLEN_SNACK",
+    "pool": "freizeit",
+    "triggerExpr": "slotIndex == 4",
+    "title": "Süße Versuchung",
+    "description": "Ein jüngerer Elev hat eine Schachtel mit honigsüßen Leckereien aus der Stadt eingeschmuggelt. Er bietet dir heimlich etwas an – gegen einen 'kleinen Gefallen'.",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_ACCEPT_SNACK",
+      "OPT_ACAD_DECLINE_SNACK"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_LAUNDRY_MIXUP",
+    "pool": "morgen",
+    "triggerExpr": "slotIndex == 0",
+    "title": "Verwechselte Roben",
+    "description": "In deiner Wäscherolle befindet sich eine Robe, die viel zu groß ist. In der Tasche fühlst du einen harten, metallischen Gegenstand.",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_SEARCH_ROBE",
+      "OPT_ACAD_RETURN_ROBE"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_MAGICAL_RESONANCE",
+    "pool": "freizeit",
+    "triggerExpr": "playerState.energy < 2",
+    "title": "Astrale Erschöpfung",
+    "description": "Deine Finger kribbeln unaufhörlich. Der Manafluss in deiner Nähe scheint heute besonders chaotisch zu sein. Jedes Wort hallt in deinem Kopf nach.",
+    "highImpact": false,
+    "effects": [
+      "stress_plus1"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_CAT_WATCHER",
+    "pool": "exploration",
+    "triggerExpr": "locationId == 'LOC_VERSIEGELTER_NORDTURM'",
+    "title": "Die Augen im Schatten",
+    "description": "Eine pechschwarze Katze sitzt auf dem Sims des Nordturms. Sie miaut nicht, sie starrt dich nur mit unnatürlich intelligenten Augen an.",
+    "highImpact": false,
+    "mood": "supernatural"
+  },
+  {
+    "eventId": "E_ACAD_TEST_ANXIETY",
+    "pool": "morgen",
+    "triggerExpr": "week == 8 || week == 16",
+    "title": "Prüfungsangst",
+    "description": "Die Gerüchte über die Schwere der kommenden Klausur machen die Runde. In der Halle herrscht eine fast greifbare Panik.",
+    "highImpact": false,
+    "effects": [
+      "stress_plus1"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_MUD_PUDDLE",
+    "pool": "freizeit",
+    "triggerExpr": "weather == 'Regen'",
+    "title": "Das Missgeschick im Hof",
+    "description": "Der Boden ist schlammig. Eine Kutsche der Spektabilität spritzt dich im Vorbeifahren voll. Deine Robe ist ruiniert.",
+    "highImpact": false,
+    "effects": [
+      "stress_plus1",
+      "rep_minus1"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_FORGOTTEN_VALUABLE",
+    "pool": "exploration",
+    "triggerExpr": "locationId == 'LOC_SPEISESAAL'",
+    "title": "Ein vergessener Ring",
+    "description": "Unter einer Bank findest du einen silbernen Siegelring. Das Wappen gehört einer einflussreichen Familie aus Punin.",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_KEEP_RING",
+      "OPT_ACAD_FIND_OWNER"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_WHISPERING_WALLS",
+    "pool": "nacht",
+    "triggerExpr": "slotName == 'Nacht'",
+    "title": "Das Flüstern der Mauern",
+    "description": "Die Steine des Pentagrammatons scheinen heute Nacht zu sprechen. Es klingt wie eine alte Litanei gegen dämonische Mächte.",
+    "highImpact": false,
+    "effects": [
+      "lore_plus1",
+      "energy_minus1"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_TUTOR_SEARCH",
+    "pool": "mensa",
+    "triggerExpr": "playerState.lore > 10",
+    "title": "Gefragte Expertise",
+    "description": "Ein Mitschüler bittet dich verzweifelt um Hilfe bei den Arithmantik-Hausaufgaben. 'Ich verstehe die Matrix-Variablen einfach nicht!'",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_HELP_STUDENT",
+      "OPT_ACAD_REFUSE_STUDENT"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_DUEL_CHALLENGE",
+    "pool": "social_minor",
+    "triggerExpr": "week >= 3",
+    "title": "Herausforderung im Hof",
+    "description": "Eldric fordert dich zu einem informellen Kräftemessen heraus. Kein Zaubern, nur rhetorische Schärfe vor den anderen Schülern.",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_ACCEPT_DUEL",
+      "OPT_ACAD_LAUGH_OFF"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_INK_MISHAP",
+    "pool": "freizeit",
+    "triggerExpr": "slotIndex == 3",
+    "title": "Tinten-Desaster",
+    "description": "Dein Tintenfass ist ausgelaufen. Deine gesamten Notizen für die Arkanologie-Stunde sind unleserlich geworden.",
+    "highImpact": false,
+    "effects": [
+      "stress_plus2"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_SECRET_MEETING",
+    "pool": "nacht",
+    "triggerExpr": "slotName == 'Nacht' && week >= 5 && locationId == 'LOC_INNENHOF_AKADEMIEHOF'",
+    "title": "Ein Treffen im Kreuzgang",
+    "description": "Du beobachtest zwei Gestalten in dunklen Roben, die im Flüsterton über die 'Siegelbruch-Gefahr' sprechen.",
+    "highImpact": true,
+    "flagSet": {
+      "overheard_seal_convo": true
+    }
+  },
+  {
+    "eventId": "E_ACAD_CLEANING_DUTY",
+    "pool": "morgen",
+    "triggerExpr": "rep < 0",
+    "title": "Strafdienst",
+    "description": "Regens Felenius teilt dich zum Reinigen der Kessel im Alchimielabor ein. Ein mühsamer Start in den Tag.",
+    "highImpact": false,
+    "effects": [
+      "energy_minus1",
+      "stress_plus1"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_OLD_FRIEND_LETTER",
+    "pool": "morgen",
+    "triggerExpr": "slotIndex == 0",
+    "title": "Post aus der Heimat",
+    "description": "Ein Brief deiner Familie erreicht dich. Er enthält aufmunternde Worte und ein paar Kupferstücke für Süßigkeiten.",
+    "highImpact": false,
+    "effects": [
+      "stress_minus1",
+      "energy_plus1"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_MAGICAL_FLARE",
+    "pool": "freizeit",
+    "triggerExpr": "locationId == 'LOC_ALCHEMIE_LABOR_TURM_DER_TAUSEND_TRAENKE'",
+    "title": "Ein instabiles Experiment",
+    "description": "An einem Nachbartisch blubbert ein Kessel über. Grüne Funken sprühen in alle Richtungen.",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_HELP_STABILIZE",
+      "OPT_ACAD_DUCK_AWAY"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_DREAM_VISION",
+    "pool": "nacht",
+    "triggerExpr": "slotName == 'Nacht' && trimester == 1",
+    "title": "Vision der Sanduhr",
+    "description": "Du träumst von einer riesigen Sanduhr, die rückwärts läuft. Jedes Sandkorn ist ein Name eines Schülers dieser Akademie.",
+    "highImpact": false,
+    "mood": "supernatural"
+  },
+  {
+    "eventId": "E_ACAD_LOST_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "locationId == 'LOC_AKADEMIEGARTEN'",
+    "title": "Die entlaufene Kröte",
+    "description": "Im Gebüsch raschelt es. Eine fette, mit Runen bemalte Kröte scheint sich verirrt zu haben. Sie gehört wohl einem der Lehrer.",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_CATCH_FAMILIAR",
+      "OPT_ACAD_LEAVE_FAMILIAR"
+    ]
+  }
+]

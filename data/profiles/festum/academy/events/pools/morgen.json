@@ -1,0 +1,78 @@
+[
+  {
+    "eventId": "E_ACAD_LAUNDRY_MIXUP",
+    "pool": "morgen",
+    "triggerExpr": "slotIndex == 0",
+    "title": "Verwechselte Roben",
+    "description": "In deiner Wäscherolle befindet sich eine Robe, die viel zu groß ist. In der Tasche fühlst du einen harten, metallischen Gegenstand.",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_SEARCH_ROBE",
+      "OPT_ACAD_RETURN_ROBE"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_TEST_ANXIETY",
+    "pool": "morgen",
+    "triggerExpr": "week == 8 || week == 16",
+    "title": "Prüfungsangst",
+    "description": "Die Gerüchte über die Schwere der kommenden Klausur machen die Runde. In der Halle herrscht eine fast greifbare Panik.",
+    "highImpact": false,
+    "effects": [
+      "stress_plus1"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_CLEANING_DUTY",
+    "pool": "morgen",
+    "triggerExpr": "rep < 0",
+    "title": "Strafdienst",
+    "description": "Regens Felenius teilt dich zum Reinigen der Kessel im Alchimielabor ein. Ein mühsamer Start in den Tag.",
+    "highImpact": false,
+    "effects": [
+      "energy_minus1",
+      "stress_plus1"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_OLD_FRIEND_LETTER",
+    "pool": "morgen",
+    "triggerExpr": "slotIndex == 0",
+    "title": "Post aus der Heimat",
+    "description": "Ein Brief deiner Familie erreicht dich. Er enthält aufmunternde Worte und ein paar Kupferstücke für Süßigkeiten.",
+    "highImpact": false,
+    "effects": [
+      "stress_minus1",
+      "energy_plus1"
+    ]
+  },
+  {
+    "eventId": "E_MORGEN_GLOCKEN",
+    "pool": "morgen",
+    "triggerExpr": "slotIndex == 0",
+    "title": "Die Glocken von Punin",
+    "description": "Das ferne Läuten der Hesinde-Kirche dringt durch die dicken Mauern des Pentagrammatons. Ein neuer Tag des Studiums beginnt.",
+    "highImpact": false,
+    "mood": "studious"
+  },
+  {
+    "eventId": "E_MORGEN_HAST",
+    "pool": "morgen",
+    "triggerExpr": "slotIndex == 0",
+    "title": "Eilige Schritte",
+    "description": "In den Gängen herrscht hektische Betriebsamkeit. Eleven versuchen verzweifelt, ihre Pergamente zu ordnen, bevor der Appell beginnt.",
+    "highImpact": false,
+    "effects": [
+      "stress_plus1"
+    ]
+  },
+  {
+    "eventId": "E_MORGEN_KOSMAAR_BLICK",
+    "pool": "morgen",
+    "triggerExpr": "slotIndex == 0 && week >= 5",
+    "title": "Die strenge Spektabilität",
+    "description": "Sirdon Kosmaar beobachtet den morgendlichen Einzug vom Balkon des Nordturms. Sein Blick scheint jedes vergessene Tintenfass zu registrieren.",
+    "highImpact": false,
+    "mood": "tension"
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "version": "1.0.0",
+  "description": "AP-Vergabe-Regeln nach Prüfungsergebnis. SSOT für JanusLearningProgress. Werte in AP.",
+  "notes": [
+    "xp: Basis-AP für dieses Ergebnis (ohne QS-Bonus).",
+    "advanceSkills: true → Hauptskills der verlinkten Lektion werden direkt gesteigert.",
+    "qsBonus: QS4→+1AP, QS5→+2AP, QS6→+3AP (hartcodiert, nicht überschreibbar).",
+    "xpPerAttendance: AP für reinen Unterrichtsbesuch (1 pro Zeitslot, max 3)."
+  ],
+  "examOutcomes": {
+    "passed_with_distinction": {
+      "xp": 10,
+      "advanceSkills": true,
+      "label": "Mit Auszeichnung bestanden"
+    },
+    "passed": {
+      "xp": 5,
+      "advanceSkills": false,
+      "label": "Bestanden"
+    },
+    "marginal_fail": {
+      "xp": 2,
+      "advanceSkills": false,
+      "label": "Knapp nicht bestanden (Versuch zählt)"
+    },
+    "failed": {
+      "xp": 0,
+      "advanceSkills": false,
+      "label": "Nicht bestanden"
+    },
+    "catastrophic_fail": {
+      "xp": 0,
+      "advanceSkills": false,
+      "label": "Katastrophales Versagen (Nachprüfung)"
+    }
+  },
+  "attendanceXpPerSlot": 1,
+  "attendanceXpMax": 3
+}

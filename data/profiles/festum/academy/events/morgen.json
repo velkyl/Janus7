@@ -1,0 +1,29 @@
+[
+  {
+    "eventId": "E_MORGEN_GLOCKEN",
+    "pool": "morgen",
+    "triggerExpr": "slotIndex == 0",
+    "title": "Die Glocken von Punin",
+    "description": "Das ferne Läuten der Hesinde-Kirche dringt durch die dicken Mauern des Pentagrammatons. Ein neuer Tag des Studiums beginnt.",
+    "highImpact": false,
+    "mood": "studious"
+  },
+  {
+    "eventId": "E_MORGEN_HAST",
+    "pool": "morgen",
+    "triggerExpr": "slotIndex == 0",
+    "title": "Eilige Schritte",
+    "description": "In den Gängen herrscht hektische Betriebsamkeit. Eleven versuchen verzweifelt, ihre Pergamente zu ordnen, bevor der Appell beginnt.",
+    "highImpact": false,
+    "effects": ["stress_plus1"]
+  },
+  {
+    "eventId": "E_MORGEN_KOSMAAR_BLICK",
+    "pool": "morgen",
+    "triggerExpr": "slotIndex == 0 && week >= 5",
+    "title": "Die strenge Spektabilität",
+    "description": "Sirdon Kosmaar beobachtet den morgendlichen Einzug vom Balkon des Nordturms. Sein Blick scheint jedes vergessene Tintenfass zu registrieren.",
+    "highImpact": false,
+    "mood": "tension"
+  }
+]

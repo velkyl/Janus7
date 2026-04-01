@@ -1,0 +1,1202 @@
+[
+  {
+    "eventId": "E_PROC_0000_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 8",
+    "title": "Merkwürdigkeit im Kräutergarten",
+    "description": "Du bemerkst ein dämonisches Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0000_MYSTERY_A",
+      "OPT_E_PROC_0000_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0001_EXPLORATION",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 5",
+    "title": "Glitzern im Nordturm",
+    "description": "Während einer Freistunde bemerkst du im Nordturm etwas, das im Licht funkt. Jemand scheint hier eilig etwas verloren zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0001_EXPLORATION_A",
+      "OPT_E_PROC_0001_EXPLORATION_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0002_ACADEMIC",
+    "pool": "academic",
+    "triggerExpr": "1d20 > 7",
+    "title": "Ein lumineszierendes Buch über Geographie",
+    "description": "Versteckt hinter einem Regal im Archiv der Antimagie findest du Aufzeichnungen, die eine bisher unbekannte Methode der Geographie beschreiben.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0002_ACADEMIC_A",
+      "OPT_E_PROC_0002_ACADEMIC_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0003_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 8",
+    "title": "Merkwürdigkeit im Strafzellen der Spektabilität",
+    "description": "Du bemerkst ein düsteres Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0003_MYSTERY_A",
+      "OPT_E_PROC_0003_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0004_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 10",
+    "title": "Merkwürdigkeit im Ritualplatz",
+    "description": "Du bemerkst ein bedrohliches Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0004_MYSTERY_A",
+      "OPT_E_PROC_0004_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0005_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 13",
+    "title": "Merkwürdigkeit im Verborgener Kerker",
+    "description": "Du bemerkst ein flackerndes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0005_MYSTERY_A",
+      "OPT_E_PROC_0005_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0006_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 8",
+    "title": "Merkwürdigkeit im Archiv der Antimagie",
+    "description": "Du bemerkst ein flackerndes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0006_MYSTERY_A",
+      "OPT_E_PROC_0006_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0007_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 5",
+    "title": "Merkwürdigkeit im Kaminzimmer",
+    "description": "Du bemerkst ein kaltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0007_MYSTERY_A",
+      "OPT_E_PROC_0007_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0008_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 10",
+    "title": "Merkwürdigkeit im Kräutergarten",
+    "description": "Du bemerkst ein verstaubtes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0008_MYSTERY_A",
+      "OPT_E_PROC_0008_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0009_STRESS",
+    "pool": "stress",
+    "triggerExpr": "1d20 > 11",
+    "title": "Merkwürdigkeit im Alte Bibliothek",
+    "description": "Du bemerkst ein lumineszierendes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0009_STRESS_A",
+      "OPT_E_PROC_0009_STRESS_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0010_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 9",
+    "title": "Merkwürdigkeit im Kaminzimmer",
+    "description": "Du bemerkst ein verstaubtes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0010_MYSTERY_A",
+      "OPT_E_PROC_0010_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0011_STRESS",
+    "pool": "stress",
+    "triggerExpr": "1d20 > 13",
+    "title": "Merkwürdigkeit im Westturm",
+    "description": "Du bemerkst ein bedrohliches Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0011_STRESS_A",
+      "OPT_E_PROC_0011_STRESS_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0012_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 10",
+    "title": "Merkwürdigkeit im Verborgener Kerker",
+    "description": "Du bemerkst ein heiliges Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0012_MYSTERY_A",
+      "OPT_E_PROC_0012_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0013_PHYSICAL",
+    "pool": "physical",
+    "triggerExpr": "1d20 > 8",
+    "title": "Merkwürdigkeit im Astral-Observatorium",
+    "description": "Du bemerkst ein blutbesudeltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0013_PHYSICAL_A",
+      "OPT_E_PROC_0013_PHYSICAL_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0014_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 6",
+    "title": "Merkwürdigkeit im Nordturm",
+    "description": "Du bemerkst ein verstaubtes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0014_MYSTERY_A",
+      "OPT_E_PROC_0014_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0015_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 8",
+    "title": "Merkwürdigkeit im Dachboden",
+    "description": "Du bemerkst ein düsteres Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0015_MYSTERY_A",
+      "OPT_E_PROC_0015_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0016_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 8",
+    "title": "Merkwürdigkeit im Westturm",
+    "description": "Du bemerkst ein uraltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0016_MYSTERY_A",
+      "OPT_E_PROC_0016_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0017_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 15",
+    "title": "Merkwürdigkeit im Geheimlabor",
+    "description": "Du bemerkst ein heiliges Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0017_MYSTERY_A",
+      "OPT_E_PROC_0017_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0018_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 13",
+    "title": "Merkwürdigkeit im Dachboden",
+    "description": "Du bemerkst ein vergessenes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0018_MYSTERY_A",
+      "OPT_E_PROC_0018_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0019_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 14",
+    "title": "Merkwürdigkeit im Kräutergarten",
+    "description": "Du bemerkst ein verbotenes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0019_MYSTERY_A",
+      "OPT_E_PROC_0019_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0020_ACADEMIC",
+    "pool": "academic",
+    "triggerExpr": "1d20 > 9",
+    "title": "Ein kaltes Buch über Illusion",
+    "description": "Versteckt hinter einem Regal im Ritualplatz findest du Aufzeichnungen, die eine bisher unbekannte Methode der Illusion beschreiben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0020_ACADEMIC_A",
+      "OPT_E_PROC_0020_ACADEMIC_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0021_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 13",
+    "title": "Merkwürdigkeit im Krankenflügel",
+    "description": "Du bemerkst ein vergessenes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0021_MYSTERY_A",
+      "OPT_E_PROC_0021_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0022_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 8",
+    "title": "Merkwürdigkeit im Ritualplatz",
+    "description": "Du bemerkst ein heiliges Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0022_MYSTERY_A",
+      "OPT_E_PROC_0022_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0023_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 9",
+    "title": "Merkwürdigkeit im Westturm",
+    "description": "Du bemerkst ein bedrohliches Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0023_MYSTERY_A",
+      "OPT_E_PROC_0023_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0024_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 11",
+    "title": "Merkwürdigkeit im Dachboden",
+    "description": "Du bemerkst ein geheimnisvolles Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0024_MYSTERY_A",
+      "OPT_E_PROC_0024_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0025_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 15",
+    "title": "Merkwürdigkeit im Archiv der Antimagie",
+    "description": "Du bemerkst ein bedrohliches Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0025_MYSTERY_A",
+      "OPT_E_PROC_0025_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0026_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 15",
+    "title": "Merkwürdigkeit im Krankenflügel",
+    "description": "Du bemerkst ein verstaubtes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0026_MYSTERY_A",
+      "OPT_E_PROC_0026_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0027_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 9",
+    "title": "Merkwürdigkeit im Dämonen-Versiegelungskammer",
+    "description": "Du bemerkst ein kaltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0027_MYSTERY_A",
+      "OPT_E_PROC_0027_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0028_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 5",
+    "title": "Merkwürdigkeit im Kräutergarten",
+    "description": "Du bemerkst ein pulsierendes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0028_MYSTERY_A",
+      "OPT_E_PROC_0028_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0029_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 7",
+    "title": "Merkwürdigkeit im Geheimlabor",
+    "description": "Du bemerkst ein blutbesudeltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0029_MYSTERY_A",
+      "OPT_E_PROC_0029_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0030_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 12",
+    "title": "Merkwürdigkeit im Katakomben",
+    "description": "Du bemerkst ein düsteres Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0030_MYSTERY_A",
+      "OPT_E_PROC_0030_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0031_ACADEMIC",
+    "pool": "academic",
+    "triggerExpr": "1d20 > 10",
+    "title": "Ein geheimnisvolles Buch über Illusion",
+    "description": "Versteckt hinter einem Regal im Katakomben findest du Aufzeichnungen, die eine bisher unbekannte Methode der Illusion beschreiben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0031_ACADEMIC_A",
+      "OPT_E_PROC_0031_ACADEMIC_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0032_SOCIAL",
+    "pool": "social",
+    "triggerExpr": "1d20 > 15",
+    "title": "Begegnung mit Rowena",
+    "description": "Auf dem Weg zum Westturm triffst du Rowena. Rowena wirkt heute besonders gnädig und verwickelt dich in ein Gespräch über Dämonologie.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0032_SOCIAL_A",
+      "OPT_E_PROC_0032_SOCIAL_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0033_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 8",
+    "title": "Merkwürdigkeit im Krankenflügel",
+    "description": "Du bemerkst ein blutbesudeltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0033_MYSTERY_A",
+      "OPT_E_PROC_0033_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0034_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 13",
+    "title": "Merkwürdigkeit im Krankenflügel",
+    "description": "Du bemerkst ein blutbesudeltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0034_MYSTERY_A",
+      "OPT_E_PROC_0034_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0035_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 15",
+    "title": "Merkwürdigkeit im Pentagrammaton-Hof",
+    "description": "Du bemerkst ein verfluchtes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0035_MYSTERY_A",
+      "OPT_E_PROC_0035_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0036_ACADEMIC",
+    "pool": "academic",
+    "triggerExpr": "1d20 > 11",
+    "title": "Ein dämonisches Buch über Sphärenkunde",
+    "description": "Versteckt hinter einem Regal im Krankenflügel findest du Aufzeichnungen, die eine bisher unbekannte Methode der Sphärenkunde beschreiben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0036_ACADEMIC_A",
+      "OPT_E_PROC_0036_ACADEMIC_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0037_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 8",
+    "title": "Merkwürdigkeit im Alchimisten-Senke",
+    "description": "Du bemerkst ein bedrohliches Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0037_MYSTERY_A",
+      "OPT_E_PROC_0037_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0038_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 15",
+    "title": "Merkwürdigkeit im Astral-Observatorium",
+    "description": "Du bemerkst ein heiliges Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0038_MYSTERY_A",
+      "OPT_E_PROC_0038_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0039_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 7",
+    "title": "Merkwürdigkeit im Verborgener Kerker",
+    "description": "Du bemerkst ein pulsierendes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0039_MYSTERY_A",
+      "OPT_E_PROC_0039_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0040_ACADEMIC",
+    "pool": "academic",
+    "triggerExpr": "1d20 > 11",
+    "title": "Ein verstaubtes Buch über Dämonologie",
+    "description": "Versteckt hinter einem Regal im Westturm findest du Aufzeichnungen, die eine bisher unbekannte Methode der Dämonologie beschreiben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0040_ACADEMIC_A",
+      "OPT_E_PROC_0040_ACADEMIC_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0041_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 12",
+    "title": "Merkwürdigkeit im Archiv der Antimagie",
+    "description": "Du bemerkst ein uraltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0041_MYSTERY_A",
+      "OPT_E_PROC_0041_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0042_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 15",
+    "title": "Merkwürdigkeit im Strafzellen der Spektabilität",
+    "description": "Du bemerkst ein magisch versiegeltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0042_MYSTERY_A",
+      "OPT_E_PROC_0042_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0043_EXPLORATION",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 11",
+    "title": "Glitzern im Ritualplatz",
+    "description": "Während einer Freistunde bemerkst du im Ritualplatz etwas, das im Licht funkt. Jemand scheint hier eilig etwas verloren zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0043_EXPLORATION_A",
+      "OPT_E_PROC_0043_EXPLORATION_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0044_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 11",
+    "title": "Merkwürdigkeit im Alte Bibliothek",
+    "description": "Du bemerkst ein magisch versiegeltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0044_MYSTERY_A",
+      "OPT_E_PROC_0044_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0045_STRESS",
+    "pool": "stress",
+    "triggerExpr": "1d20 > 13",
+    "title": "Merkwürdigkeit im Alchimisten-Senke",
+    "description": "Du bemerkst ein flüsterndes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0045_STRESS_A",
+      "OPT_E_PROC_0045_STRESS_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0046_ACADEMIC",
+    "pool": "academic",
+    "triggerExpr": "1d20 > 12",
+    "title": "Ein verfluchtes Buch über Arithmantik",
+    "description": "Versteckt hinter einem Regal im Strafzellen der Spektabilität findest du Aufzeichnungen, die eine bisher unbekannte Methode der Arithmantik beschreiben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0046_ACADEMIC_A",
+      "OPT_E_PROC_0046_ACADEMIC_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0047_STRESS",
+    "pool": "stress",
+    "triggerExpr": "1d20 > 5",
+    "title": "Merkwürdigkeit im Astral-Observatorium",
+    "description": "Du bemerkst ein uraltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0047_STRESS_A",
+      "OPT_E_PROC_0047_STRESS_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0048_STRESS",
+    "pool": "stress",
+    "triggerExpr": "1d20 > 15",
+    "title": "Merkwürdigkeit im Dachboden",
+    "description": "Du bemerkst ein flackerndes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0048_STRESS_A",
+      "OPT_E_PROC_0048_STRESS_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0049_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 11",
+    "title": "Merkwürdigkeit im Astral-Observatorium",
+    "description": "Du bemerkst ein lumineszierendes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0049_MYSTERY_A",
+      "OPT_E_PROC_0049_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0050_STRESS",
+    "pool": "stress",
+    "triggerExpr": "1d20 > 15",
+    "title": "Merkwürdigkeit im Dachboden",
+    "description": "Du bemerkst ein uraltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0050_STRESS_A",
+      "OPT_E_PROC_0050_STRESS_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0051_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 14",
+    "title": "Merkwürdigkeit im Alte Bibliothek",
+    "description": "Du bemerkst ein kaltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0051_MYSTERY_A",
+      "OPT_E_PROC_0051_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0052_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 13",
+    "title": "Merkwürdigkeit im Geheimlabor",
+    "description": "Du bemerkst ein kaltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0052_MYSTERY_A",
+      "OPT_E_PROC_0052_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0053_SOCIAL",
+    "pool": "social",
+    "triggerExpr": "1d20 > 8",
+    "title": "Begegnung mit Alrik",
+    "description": "Auf dem Weg zum Krankenflügel triffst du Alrik. Alrik wirkt heute besonders ängstlich und verwickelt dich in ein Gespräch über Heilkunde.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0053_SOCIAL_A",
+      "OPT_E_PROC_0053_SOCIAL_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0054_SOCIAL",
+    "pool": "social",
+    "triggerExpr": "1d20 > 8",
+    "title": "Begegnung mit Hesindian",
+    "description": "Auf dem Weg zum Alchimisten-Senke triffst du Hesindian. Hesindian wirkt heute besonders ehrgeizig und verwickelt dich in ein Gespräch über Objektmagie.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0054_SOCIAL_A",
+      "OPT_E_PROC_0054_SOCIAL_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0055_ACADEMIC",
+    "pool": "academic",
+    "triggerExpr": "1d20 > 13",
+    "title": "Ein heiliges Buch über Geschichte Aventuriens",
+    "description": "Versteckt hinter einem Regal im Dachboden findest du Aufzeichnungen, die eine bisher unbekannte Methode der Geschichte Aventuriens beschreiben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0055_ACADEMIC_A",
+      "OPT_E_PROC_0055_ACADEMIC_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0056_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 12",
+    "title": "Merkwürdigkeit im Archiv der Antimagie",
+    "description": "Du bemerkst ein dämonisches Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0056_MYSTERY_A",
+      "OPT_E_PROC_0056_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0057_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 15",
+    "title": "Merkwürdigkeit im Großer Speisesaal",
+    "description": "Du bemerkst ein flüsterndes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0057_MYSTERY_A",
+      "OPT_E_PROC_0057_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0058_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 9",
+    "title": "Merkwürdigkeit im Schlafsaal der Elevi",
+    "description": "Du bemerkst ein dämonisches Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0058_MYSTERY_A",
+      "OPT_E_PROC_0058_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0059_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 9",
+    "title": "Merkwürdigkeit im Geheimlabor",
+    "description": "Du bemerkst ein vergessenes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0059_MYSTERY_A",
+      "OPT_E_PROC_0059_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0060_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 11",
+    "title": "Merkwürdigkeit im Westturm",
+    "description": "Du bemerkst ein blutbesudeltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0060_MYSTERY_A",
+      "OPT_E_PROC_0060_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0061_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 11",
+    "title": "Merkwürdigkeit im Ritualplatz",
+    "description": "Du bemerkst ein blutbesudeltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0061_MYSTERY_A",
+      "OPT_E_PROC_0061_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0062_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 6",
+    "title": "Merkwürdigkeit im Schlafsaal der Elevi",
+    "description": "Du bemerkst ein flackerndes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0062_MYSTERY_A",
+      "OPT_E_PROC_0062_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0063_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 14",
+    "title": "Merkwürdigkeit im Verborgener Kerker",
+    "description": "Du bemerkst ein lumineszierendes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0063_MYSTERY_A",
+      "OPT_E_PROC_0063_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0064_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 11",
+    "title": "Merkwürdigkeit im Archiv der Antimagie",
+    "description": "Du bemerkst ein uraltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0064_MYSTERY_A",
+      "OPT_E_PROC_0064_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0065_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 5",
+    "title": "Merkwürdigkeit im Strafzellen der Spektabilität",
+    "description": "Du bemerkst ein verstaubtes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0065_MYSTERY_A",
+      "OPT_E_PROC_0065_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0066_ACADEMIC",
+    "pool": "academic",
+    "triggerExpr": "1d20 > 13",
+    "title": "Ein düsteres Buch über Illusion",
+    "description": "Versteckt hinter einem Regal im Archiv der Antimagie findest du Aufzeichnungen, die eine bisher unbekannte Methode der Illusion beschreiben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0066_ACADEMIC_A",
+      "OPT_E_PROC_0066_ACADEMIC_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0067_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 7",
+    "title": "Merkwürdigkeit im Pentagrammaton-Hof",
+    "description": "Du bemerkst ein heiliges Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0067_MYSTERY_A",
+      "OPT_E_PROC_0067_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0068_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 8",
+    "title": "Merkwürdigkeit im Geheimlabor",
+    "description": "Du bemerkst ein vergessenes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0068_MYSTERY_A",
+      "OPT_E_PROC_0068_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0069_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 9",
+    "title": "Merkwürdigkeit im Dämonen-Versiegelungskammer",
+    "description": "Du bemerkst ein lumineszierendes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0069_MYSTERY_A",
+      "OPT_E_PROC_0069_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0070_STRESS",
+    "pool": "stress",
+    "triggerExpr": "1d20 > 5",
+    "title": "Merkwürdigkeit im Schlafsaal der Elevi",
+    "description": "Du bemerkst ein heiliges Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0070_STRESS_A",
+      "OPT_E_PROC_0070_STRESS_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0071_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 5",
+    "title": "Merkwürdigkeit im Verborgener Kerker",
+    "description": "Du bemerkst ein flackerndes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0071_MYSTERY_A",
+      "OPT_E_PROC_0071_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0072_STRESS",
+    "pool": "stress",
+    "triggerExpr": "1d20 > 15",
+    "title": "Merkwürdigkeit im Astral-Observatorium",
+    "description": "Du bemerkst ein lumineszierendes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0072_STRESS_A",
+      "OPT_E_PROC_0072_STRESS_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0073_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 11",
+    "title": "Merkwürdigkeit im Geheimlabor",
+    "description": "Du bemerkst ein verstaubtes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0073_MYSTERY_A",
+      "OPT_E_PROC_0073_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0074_SOCIAL",
+    "pool": "social",
+    "triggerExpr": "1d20 > 5",
+    "title": "Begegnung mit Korobar",
+    "description": "Auf dem Weg zum Krankenflügel triffst du Korobar. Korobar wirkt heute besonders zerstreut und verwickelt dich in ein Gespräch über Arithmantik.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0074_SOCIAL_A",
+      "OPT_E_PROC_0074_SOCIAL_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0075_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 7",
+    "title": "Merkwürdigkeit im Schlafsaal der Elevi",
+    "description": "Du bemerkst ein flüsterndes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0075_MYSTERY_A",
+      "OPT_E_PROC_0075_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0076_ACADEMIC",
+    "pool": "academic",
+    "triggerExpr": "1d20 > 8",
+    "title": "Ein blutbesudeltes Buch über Dämonologie",
+    "description": "Versteckt hinter einem Regal im Astral-Observatorium findest du Aufzeichnungen, die eine bisher unbekannte Methode der Dämonologie beschreiben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0076_ACADEMIC_A",
+      "OPT_E_PROC_0076_ACADEMIC_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0077_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 13",
+    "title": "Merkwürdigkeit im Kaminzimmer",
+    "description": "Du bemerkst ein lumineszierendes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0077_MYSTERY_A",
+      "OPT_E_PROC_0077_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0078_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 14",
+    "title": "Merkwürdigkeit im Schlafsaal der Elevi",
+    "description": "Du bemerkst ein kaltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0078_MYSTERY_A",
+      "OPT_E_PROC_0078_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0079_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 6",
+    "title": "Merkwürdigkeit im Schlafsaal der Elevi",
+    "description": "Du bemerkst ein flackerndes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0079_MYSTERY_A",
+      "OPT_E_PROC_0079_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0080_SOCIAL",
+    "pool": "social",
+    "triggerExpr": "1d20 > 7",
+    "title": "Begegnung mit Ascheherz",
+    "description": "Auf dem Weg zum Schlafsaal der Elevi triffst du Ascheherz. Ascheherz wirkt heute besonders fanatisch und verwickelt dich in ein Gespräch über Arkanologie.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0080_SOCIAL_A",
+      "OPT_E_PROC_0080_SOCIAL_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0081_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 13",
+    "title": "Merkwürdigkeit im Dämonen-Versiegelungskammer",
+    "description": "Du bemerkst ein verbotenes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0081_MYSTERY_A",
+      "OPT_E_PROC_0081_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0082_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 15",
+    "title": "Merkwürdigkeit im Alchimisten-Senke",
+    "description": "Du bemerkst ein dämonisches Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0082_MYSTERY_A",
+      "OPT_E_PROC_0082_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0083_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 7",
+    "title": "Merkwürdigkeit im Kaminzimmer",
+    "description": "Du bemerkst ein geheimnisvolles Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0083_MYSTERY_A",
+      "OPT_E_PROC_0083_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0084_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 8",
+    "title": "Merkwürdigkeit im Großer Speisesaal",
+    "description": "Du bemerkst ein uraltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0084_MYSTERY_A",
+      "OPT_E_PROC_0084_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0085_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 8",
+    "title": "Merkwürdigkeit im Ritualplatz",
+    "description": "Du bemerkst ein flüsterndes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0085_MYSTERY_A",
+      "OPT_E_PROC_0085_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0086_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 14",
+    "title": "Merkwürdigkeit im Verborgener Kerker",
+    "description": "Du bemerkst ein uraltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0086_MYSTERY_A",
+      "OPT_E_PROC_0086_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0087_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 10",
+    "title": "Merkwürdigkeit im Großer Speisesaal",
+    "description": "Du bemerkst ein verfluchtes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0087_MYSTERY_A",
+      "OPT_E_PROC_0087_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0088_EXPLORATION",
+    "pool": "exploration",
+    "triggerExpr": "1d20 > 15",
+    "title": "Glitzern im Krankenflügel",
+    "description": "Während einer Freistunde bemerkst du im Krankenflügel etwas, das im Licht funkt. Jemand scheint hier eilig etwas verloren zu haben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0088_EXPLORATION_A",
+      "OPT_E_PROC_0088_EXPLORATION_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0089_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 8",
+    "title": "Merkwürdigkeit im Schlafsaal der Elevi",
+    "description": "Du bemerkst ein dämonisches Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0089_MYSTERY_A",
+      "OPT_E_PROC_0089_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0090_ACADEMIC",
+    "pool": "academic",
+    "triggerExpr": "1d20 > 13",
+    "title": "Ein kaltes Buch über Sphärenkunde",
+    "description": "Versteckt hinter einem Regal im Kaminzimmer findest du Aufzeichnungen, die eine bisher unbekannte Methode der Sphärenkunde beschreiben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0090_ACADEMIC_A",
+      "OPT_E_PROC_0090_ACADEMIC_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0091_SOCIAL",
+    "pool": "social",
+    "triggerExpr": "1d20 > 7",
+    "title": "Begegnung mit Cerylia",
+    "description": "Auf dem Weg zum Kaminzimmer triffst du Cerylia. Cerylia wirkt heute besonders grausam und verwickelt dich in ein Gespräch über Verwandlungsmagie.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0091_SOCIAL_A",
+      "OPT_E_PROC_0091_SOCIAL_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0092_ACADEMIC",
+    "pool": "academic",
+    "triggerExpr": "1d20 > 8",
+    "title": "Ein pulsierendes Buch über Kräuterkunde",
+    "description": "Versteckt hinter einem Regal im Strafzellen der Spektabilität findest du Aufzeichnungen, die eine bisher unbekannte Methode der Kräuterkunde beschreiben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0092_ACADEMIC_A",
+      "OPT_E_PROC_0092_ACADEMIC_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0093_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 6",
+    "title": "Merkwürdigkeit im Archiv der Antimagie",
+    "description": "Du bemerkst ein bedrohliches Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0093_MYSTERY_A",
+      "OPT_E_PROC_0093_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0094_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 9",
+    "title": "Merkwürdigkeit im Strafzellen der Spektabilität",
+    "description": "Du bemerkst ein geheimnisvolles Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0094_MYSTERY_A",
+      "OPT_E_PROC_0094_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0095_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 5",
+    "title": "Merkwürdigkeit im Strafzellen der Spektabilität",
+    "description": "Du bemerkst ein geheimnisvolles Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0095_MYSTERY_A",
+      "OPT_E_PROC_0095_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0096_ACADEMIC",
+    "pool": "academic",
+    "triggerExpr": "1d20 > 15",
+    "title": "Ein verstaubtes Buch über Sphärenkunde",
+    "description": "Versteckt hinter einem Regal im Strafzellen der Spektabilität findest du Aufzeichnungen, die eine bisher unbekannte Methode der Sphärenkunde beschreiben.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0096_ACADEMIC_A",
+      "OPT_E_PROC_0096_ACADEMIC_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0097_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 9",
+    "title": "Merkwürdigkeit im Großer Speisesaal",
+    "description": "Du bemerkst ein dämonisches Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0097_MYSTERY_A",
+      "OPT_E_PROC_0097_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0098_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 14",
+    "title": "Merkwürdigkeit im Geheimlabor",
+    "description": "Du bemerkst ein geheimnisvolles Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": false,
+    "options": [
+      "OPT_E_PROC_0098_MYSTERY_A",
+      "OPT_E_PROC_0098_MYSTERY_B"
+    ]
+  },
+  {
+    "eventId": "E_PROC_0099_MYSTERY",
+    "pool": "mystery",
+    "triggerExpr": "1d20 > 6",
+    "title": "Merkwürdigkeit im Verborgener Kerker",
+    "description": "Du bemerkst ein magisch versiegeltes Flackern. Als du näher herangehst, spürst du eine dichte astrale Aura.",
+    "highImpact": true,
+    "options": [
+      "OPT_E_PROC_0099_MYSTERY_A",
+      "OPT_E_PROC_0099_MYSTERY_B"
+    ]
+  }
+]

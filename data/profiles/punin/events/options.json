@@ -1,0 +1,948 @@
+[
+  {
+    "optionId": "OPT_LIB_INVESTIGATE",
+    "parentType": "event",
+    "parentId": "E_LIBRARY_DISCOVER",
+    "text": "Das Buch näher untersuchen",
+    "reqExpr": "playerState.skills.lore >= 1",
+    "checkExpr": "",
+    "effectIds": [],
+    "nextNodeId": "QN_LIBRARY_INVESTIGATE"
+  },
+  {
+    "optionId": "OPT_LIB_IGNORE",
+    "parentType": "event",
+    "parentId": "E_LIBRARY_DISCOVER",
+    "text": "Das Buch ignorieren",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "energy_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_LIB_SUCCESS",
+    "parentType": "event",
+    "parentId": "E_LIBRARY_INVESTIGATE",
+    "text": "Die Runen entziffern",
+    "reqExpr": "",
+    "checkExpr": "CHECK(Magiekunde,DC=6)",
+    "effectIds": [
+      "lore_plus1",
+      "stress_minus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_MENTOR_ACCEPT",
+    "parentType": "event",
+    "parentId": "E_MENTOR_HELP",
+    "text": "Die Hilfe annehmen",
+    "reqExpr": "playerState.energy >= 3",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_minus2",
+      "rel_mentor_plus2"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_MENTOR_DECLINE",
+    "parentType": "event",
+    "parentId": "E_MENTOR_HELP",
+    "text": "Höflich ablehnen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_KOBOLD_GERUECHT_FOLLOW",
+    "parentType": "event",
+    "parentId": "E_KOBOLD_GERUECHT",
+    "text": "Dem Gerücht nachgehen und den kleinsten Turm aufsuchen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [],
+    "nextNodeId": "QN_KOBOLD_FIND_BOOK"
+  },
+  {
+    "optionId": "OPT_KOBOLD_GERUECHT_IGNORE",
+    "parentType": "event",
+    "parentId": "E_KOBOLD_GERUECHT",
+    "text": "Das Ganze als Schülermärchen abtun",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_KOBOLD_AWAKENING_READ",
+    "parentType": "event",
+    "parentId": "E_KOBOLD_AWAKENING",
+    "text": "Den Band trotz Warnzeichen lesen und das Ritual deuten",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "lore_plus1"
+    ],
+    "nextNodeId": "QN_KOBOLD_FIRST_MEET"
+  },
+  {
+    "optionId": "OPT_KOBOLD_AWAKENING_RUN",
+    "parentType": "event",
+    "parentId": "E_KOBOLD_AWAKENING",
+    "text": "Flucht in den Flur und hoffen, dass es nur Einbildung war",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus2"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_KOBOLD_MEET_PLAY",
+    "parentType": "event",
+    "parentId": "E_KOBOLD_FIRST_MEETING",
+    "text": "Auf Phexifax' Spiel eingehen und ehrlich verhandeln",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_minus1"
+    ],
+    "nextNodeId": "QN_KOBOLD_TEMP_BAN"
+  },
+  {
+    "optionId": "OPT_KOBOLD_MEET_LIE",
+    "parentType": "event",
+    "parentId": "E_KOBOLD_FIRST_MEETING",
+    "text": "Den Kobold mit dreisten Halbwahrheiten abspeisen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_KOBOLD_TEMP_BAN"
+  },
+  {
+    "optionId": "OPT_KOBOLD_RETURN_ACCEPT",
+    "parentType": "event",
+    "parentId": "E_KOBOLD_RETURN",
+    "text": "Akzeptieren, dass das alte Problem zurück ist, und Hilfe suchen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [],
+    "nextNodeId": "QN_REBIND_LAIODAN"
+  },
+  {
+    "optionId": "OPT_KOBOLD_RETURN_BLAME",
+    "parentType": "event",
+    "parentId": "E_KOBOLD_RETURN",
+    "text": "Die Schuld auf Anfänger, Rivalen oder die Astralsphäre schieben",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_REBIND_LAIODAN"
+  },
+  {
+    "optionId": "OPT_LAIODAN_HELP_TRUST",
+    "parentType": "event",
+    "parentId": "E_LAIODAN_OFFERS_HELP",
+    "text": "Laiodan vertrauen und sein Vorwissen nutzen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "rel_mentor_plus2"
+    ],
+    "nextNodeId": "QN_REBIND_RITUAL"
+  },
+  {
+    "optionId": "OPT_LAIODAN_HELP_HOLD_BACK",
+    "parentType": "event",
+    "parentId": "E_LAIODAN_OFFERS_HELP",
+    "text": "Hilfe annehmen, aber Laiodan misstrauen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_REBIND_RITUAL"
+  },
+  {
+    "optionId": "OPT_KOBOLD_RITUAL_FAIR",
+    "parentType": "event",
+    "parentId": "E_KOBOLD_REBIND_RITUAL",
+    "text": "Einen fairen, klaren Vertrag mit dem Kobold schließen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_minus1"
+    ],
+    "nextNodeId": "QN_REBIND_DONE"
+  },
+  {
+    "optionId": "OPT_KOBOLD_RITUAL_FORCE",
+    "parentType": "event",
+    "parentId": "E_KOBOLD_REBIND_RITUAL",
+    "text": "Mit kalter Akademielogik einen Zwangsbann versuchen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus2"
+    ],
+    "nextNodeId": "QN_REBIND_DONE"
+  },
+  {
+    "optionId": "OPT_LIBCAT_TRACE",
+    "parentType": "event",
+    "parentId": "E_LIBRARY_CATALOGUE_MIXUP",
+    "text": "Katalog, Leihbuch und Randnotizen systematisch prüfen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [],
+    "nextNodeId": "QN_LIBCAT_ARCHIVE"
+  },
+  {
+    "optionId": "OPT_LIBCAT_GUESS",
+    "parentType": "event",
+    "parentId": "E_LIBRARY_CATALOGUE_MIXUP",
+    "text": "Auf Verdacht eine Mitschülerin beschuldigen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_LIBCAT_ARCHIVE"
+  },
+  {
+    "optionId": "OPT_LIBCAT_ARCHIVE_SOLVE",
+    "parentType": "event",
+    "parentId": "E_LIBRARY_ARCHIVE_TRACE",
+    "text": "Die Signaturfehler ruhig rekonstruieren",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "lore_plus1"
+    ],
+    "nextNodeId": "QN_LIBCAT_DONE"
+  },
+  {
+    "optionId": "OPT_LIBCAT_ARCHIVE_CHEAT",
+    "parentType": "event",
+    "parentId": "E_LIBRARY_ARCHIVE_TRACE",
+    "text": "Einfach einen Ersatzband unterschieben",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_LIBCAT_DONE"
+  },
+  {
+    "optionId": "OPT_ALCH_REACT_FAST",
+    "parentType": "event",
+    "parentId": "E_ALCHEMY_MISSING_REAGENT",
+    "text": "Sofort suchen, bevor der Dozent die Lücke bemerkt",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [],
+    "nextNodeId": "QN_ALCH_GARDEN"
+  },
+  {
+    "optionId": "OPT_ALCH_BLAME_RIVAL",
+    "parentType": "event",
+    "parentId": "E_ALCHEMY_MISSING_REAGENT",
+    "text": "Erst einmal einen Rivalen verdächtigen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_ALCH_GARDEN"
+  },
+  {
+    "optionId": "OPT_ALCH_GARDEN_FIND",
+    "parentType": "event",
+    "parentId": "E_ALCHEMY_GARDEN_SEARCH",
+    "text": "Ruhig im Garten und Kräuterschrank suchen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "energy_plus1"
+    ],
+    "nextNodeId": "QN_ALCH_DONE"
+  },
+  {
+    "optionId": "OPT_ALCH_GARDEN_RUSH",
+    "parentType": "event",
+    "parentId": "E_ALCHEMY_GARDEN_SEARCH",
+    "text": "Hastig irgendeine ähnliche Pflanze greifen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_ALCH_DONE"
+  },
+  {
+    "optionId": "OPT_ORIOR_JOIN",
+    "parentType": "event",
+    "parentId": "E_ORIOR_TUTORING_REQUEST",
+    "text": "Dem Orior-Tutorium helfen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [],
+    "nextNodeId": "QN_ORIOR_CHOICE"
+  },
+  {
+    "optionId": "OPT_ORIOR_DECLINE",
+    "parentType": "event",
+    "parentId": "E_ORIOR_TUTORING_REQUEST",
+    "text": "Aus Zeitmangel ablehnen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_minus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ORIOR_MEDIATE",
+    "parentType": "event",
+    "parentId": "E_ORIOR_RIVAL_TENSION",
+    "text": "Zwischen Hilfe und Rivalität vermitteln",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "rel_mentor_plus2"
+    ],
+    "nextNodeId": "QN_ORIOR_DONE"
+  },
+  {
+    "optionId": "OPT_ORIOR_PROVOKE",
+    "parentType": "event",
+    "parentId": "E_ORIOR_RIVAL_TENSION",
+    "text": "Die Spannung ausnutzen und Partei ergreifen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_ORIOR_DONE"
+  },
+  {
+    "optionId": "OPT_CODEX_EXPLAIN",
+    "parentType": "event",
+    "parentId": "E_CODEX_DISCIPLINE_NOTICE",
+    "text": "Den Vorfall offen erklären und um Einsicht bitten",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [],
+    "nextNodeId": "QN_CODEX_HEARING"
+  },
+  {
+    "optionId": "OPT_CODEX_HIDE",
+    "parentType": "event",
+    "parentId": "E_CODEX_DISCIPLINE_NOTICE",
+    "text": "Beweise glätten und auf Gnade hoffen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_CODEX_HEARING"
+  },
+  {
+    "optionId": "OPT_CODEX_HEARING_RESPECT",
+    "parentType": "event",
+    "parentId": "E_CODEX_HEARING",
+    "text": "Nazirs Fallanalyse ernst nehmen und lernen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "lore_plus1"
+    ],
+    "nextNodeId": "QN_CODEX_DONE"
+  },
+  {
+    "optionId": "OPT_CODEX_HEARING_RESIST",
+    "parentType": "event",
+    "parentId": "E_CODEX_HEARING",
+    "text": "Formal richtig, aber trotzig reagieren",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_CODEX_DONE"
+  },
+  {
+    "optionId": "OPT_ACAD_STUDY_SECRET",
+    "parentType": "event",
+    "parentId": "E_ACAD_FORBIDDEN_RESEARCH",
+    "text": "Die lose Seite heimlich studieren",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "lore_plus1",
+      "stress_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_REPORT_PAGE",
+    "parentType": "event",
+    "parentId": "E_ACAD_FORBIDDEN_RESEARCH",
+    "text": "Die Seite an Mafalda oder Nazir melden",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "rel_mentor_plus2"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_DUCK_AWAY",
+    "parentType": "event",
+    "parentId": "E_ACAD_RIVAL_TRIP",
+    "text": "Dem Stolperer ausweichen und Haltung bewahren",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_CONFRONT_ELDRIC",
+    "parentType": "event",
+    "parentId": "E_ACAD_RIVAL_TRIP",
+    "text": "Eldric offen zur Rede stellen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_HELP_STUDENT",
+    "parentType": "event",
+    "parentId": "E_ACAD_GHOST_TEACHER",
+    "text": "Der Erscheinung folgen und einem verirrten Studenten helfen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "lore_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_REFUSE_STUDENT",
+    "parentType": "event",
+    "parentId": "E_ACAD_GHOST_TEACHER",
+    "text": "Das Ganze für eine Halluzination halten und gehen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_ACCEPT_SNACK",
+    "parentType": "event",
+    "parentId": "E_ACAD_STOLEN_SNACK",
+    "text": "Die verbotene Süßigkeit genießen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "energy_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_DECLINE_SNACK",
+    "parentType": "event",
+    "parentId": "E_ACAD_STOLEN_SNACK",
+    "text": "Widerstehen und pünktlich bleiben",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_RETURN_ROBE",
+    "parentType": "event",
+    "parentId": "E_ACAD_LAUNDRY_MIXUP",
+    "text": "Die vertauschte Robe diskret zurückgeben",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_minus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_SEARCH_ROBE",
+    "parentType": "event",
+    "parentId": "E_ACAD_LAUNDRY_MIXUP",
+    "text": "Erst in den Taschen nach Hinweisen suchen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "lore_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_HELP_STABILIZE",
+    "parentType": "event",
+    "parentId": "E_ACAD_MAGICAL_RESONANCE",
+    "text": "Die Resonanz mit Disziplin überstehen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_LAUGH_OFF",
+    "parentType": "event",
+    "parentId": "E_ACAD_MAGICAL_RESONANCE",
+    "text": "Das Zittern weglächeln und hoffen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_FIND_OWNER",
+    "parentType": "event",
+    "parentId": "E_ACAD_CAT_WATCHER",
+    "text": "Herausfinden, wem das Tier oder der Blick gehört",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "lore_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_LEAVE_FAMILIAR",
+    "parentType": "event",
+    "parentId": "E_ACAD_CAT_WATCHER",
+    "text": "Das Wesen lieber in Ruhe lassen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_DEXTERITY_SAVE",
+    "parentType": "event",
+    "parentId": "E_ACAD_MUD_PUDDLE",
+    "text": "Den Sturz mit Würde abfangen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_KEEP_RING",
+    "parentType": "event",
+    "parentId": "E_ACAD_FORGOTTEN_VALUABLE",
+    "text": "Den Ring erst einmal behalten",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_CATCH_FAMILIAR",
+    "parentType": "event",
+    "parentId": "E_ACAD_LOST_FAMILIAR",
+    "text": "Die entlaufene Kröte oder Katze einfangen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "rel_mentor_plus2"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ACAD_ACCEPT_DUEL",
+    "parentType": "event",
+    "parentId": "E_ACAD_DUEL_CHALLENGE",
+    "text": "Die Herausforderung annehmen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ELDRIC_WIDERSPRECHEN",
+    "parentType": "event",
+    "parentId": "E_MENSA_ELDRIC_PRUNK",
+    "text": "Eldric widersprechen und Sorscha unterstützen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_ELDRIC_IGNORIEREN",
+    "parentType": "event",
+    "parentId": "E_MENSA_ELDRIC_PRUNK",
+    "text": "Den Lärm ignorieren und essen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "energy_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_NACHT_FOLGEN",
+    "parentType": "event",
+    "parentId": "E_NACHT_TURM_LEUCHTEN",
+    "text": "Dem blauen Leuchten vorsichtig folgen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "lore_plus1",
+      "stress_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_NACHT_VERSTECKEN",
+    "parentType": "event",
+    "parentId": "E_NACHT_TURM_LEUCHTEN",
+    "text": "Im Schatten bleiben und beobachten",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_EXPL_ANALYSIEREN",
+    "parentType": "event",
+    "parentId": "E_EXPL_VERGESSENE_ROLLE",
+    "text": "Die Rolle genauer analysieren",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "lore_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_EXPL_ABGEBEN",
+    "parentType": "event",
+    "parentId": "E_EXPL_VERGESSENE_ROLLE",
+    "text": "Die Rolle ordentlich abgeben",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "rel_mentor_plus2"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_NORD_SIGNAL_INVESTIGATE",
+    "parentType": "event",
+    "parentId": "E_NORDTURM_SIGNAL",
+    "text": "Dem Flackern nachgehen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_NORD_ENTRY"
+  },
+  {
+    "optionId": "OPT_NORD_SIGNAL_REPORT",
+    "parentType": "event",
+    "parentId": "E_NORDTURM_SIGNAL",
+    "text": "Das Phänomen lieber melden",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "rel_mentor_plus2"
+    ],
+    "nextNodeId": "QN_NORD_ENTRY"
+  },
+  {
+    "optionId": "OPT_NORD_ENTRY_FORCE",
+    "parentType": "event",
+    "parentId": "E_NORDTURM_ENTRY",
+    "text": "Die Versiegelung testen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_NORD_DONE"
+  },
+  {
+    "optionId": "OPT_NORD_ENTRY_NOTE",
+    "parentType": "event",
+    "parentId": "E_NORDTURM_ENTRY",
+    "text": "Nur Spuren und Zeichen dokumentieren",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "lore_plus1"
+    ],
+    "nextNodeId": "QN_NORD_DONE"
+  },
+  {
+    "optionId": "OPT_PROD_NOTE_KEEP",
+    "parentType": "event",
+    "parentId": "E_PRODIGIOSIS_NOTE",
+    "text": "Die Randnotiz behalten",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "lore_plus1"
+    ],
+    "nextNodeId": "QN_PROD_MEETING"
+  },
+  {
+    "optionId": "OPT_PROD_NOTE_REPORT",
+    "parentType": "event",
+    "parentId": "E_PRODIGIOSIS_NOTE",
+    "text": "Mafalda diskret warnen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "rel_mentor_plus2"
+    ],
+    "nextNodeId": "QN_PROD_MEETING"
+  },
+  {
+    "optionId": "OPT_PROD_MEETING_LISTEN",
+    "parentType": "event",
+    "parentId": "E_PRODIGIOSIS_MEETING",
+    "text": "Zuhören, ohne sich festzulegen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_PROD_DONE"
+  },
+  {
+    "optionId": "OPT_PROD_MEETING_REFUSE",
+    "parentType": "event",
+    "parentId": "E_PRODIGIOSIS_MEETING",
+    "text": "Das Angebot ablehnen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_minus1"
+    ],
+    "nextNodeId": "QN_PROD_DONE"
+  },
+  {
+    "optionId": "OPT_THAUMA_FETCH",
+    "parentType": "event",
+    "parentId": "E_THAUMA_WOOD_REQUEST",
+    "text": "Die Materialliste exakt abarbeiten",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "energy_plus1"
+    ],
+    "nextNodeId": "QN_THAUMA_TEST"
+  },
+  {
+    "optionId": "OPT_THAUMA_IMPROVISE",
+    "parentType": "event",
+    "parentId": "E_THAUMA_WOOD_REQUEST",
+    "text": "Mit Improvisation Zeit sparen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_THAUMA_TEST"
+  },
+  {
+    "optionId": "OPT_THAUMA_BIND_STEADY",
+    "parentType": "event",
+    "parentId": "E_THAUMA_BINDING_TEST",
+    "text": "Ruhig und genau arbeiten",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "lore_plus1"
+    ],
+    "nextNodeId": "QN_THAUMA_DONE"
+  },
+  {
+    "optionId": "OPT_THAUMA_BIND_RUSH",
+    "parentType": "event",
+    "parentId": "E_THAUMA_BINDING_TEST",
+    "text": "Tempo über Präzision stellen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_THAUMA_DONE"
+  },
+  {
+    "optionId": "OPT_CULINA_ACCEPT",
+    "parentType": "event",
+    "parentId": "E_CULINA_FAVOR_REQUEST",
+    "text": "Sorscha helfen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [],
+    "nextNodeId": "QN_CULINA_TRIP"
+  },
+  {
+    "optionId": "OPT_CULINA_DECLINE",
+    "parentType": "event",
+    "parentId": "E_CULINA_FAVOR_REQUEST",
+    "text": "Mit Verweis auf Lernstress ablehnen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": null
+  },
+  {
+    "optionId": "OPT_CULINA_SUPPLY_CALM",
+    "parentType": "event",
+    "parentId": "E_CULINA_SUPPLY_TRIP",
+    "text": "Die Besorgung sachlich lösen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "energy_plus1"
+    ],
+    "nextNodeId": "QN_CULINA_DONE"
+  },
+  {
+    "optionId": "OPT_CULINA_SUPPLY_ARGUE",
+    "parentType": "event",
+    "parentId": "E_CULINA_SUPPLY_TRIP",
+    "text": "Mit Eldric oder Händlern streiten",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_CULINA_DONE"
+  },
+  {
+    "optionId": "OPT_FAM_ESCAPE_CHASE",
+    "parentType": "event",
+    "parentId": "E_FAMILIAR_ESCAPE",
+    "text": "Das Tier verfolgen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_FAM_OWNER"
+  },
+  {
+    "optionId": "OPT_FAM_ESCAPE_COAX",
+    "parentType": "event",
+    "parentId": "E_FAMILIAR_ESCAPE",
+    "text": "Es mit Ruhe und Futter anlocken",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [],
+    "nextNodeId": "QN_FAM_OWNER"
+  },
+  {
+    "optionId": "OPT_FAM_OWNER_RETURN",
+    "parentType": "event",
+    "parentId": "E_FAMILIAR_OWNER",
+    "text": "Das Tier diskret zurückgeben",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "rel_mentor_plus2"
+    ],
+    "nextNodeId": "QN_FAM_DONE"
+  },
+  {
+    "optionId": "OPT_FAM_OWNER_BARGAIN",
+    "parentType": "event",
+    "parentId": "E_FAMILIAR_OWNER",
+    "text": "Erst eine Gefälligkeit erfragen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "lore_plus1"
+    ],
+    "nextNodeId": "QN_FAM_DONE"
+  },
+  {
+    "optionId": "OPT_DEBATE_INVITE_ORIOR",
+    "parentType": "event",
+    "parentId": "E_DEBATE_INVITE",
+    "text": "Orior zuhören und unterstützen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [],
+    "nextNodeId": "QN_DEB_SCANDAL"
+  },
+  {
+    "optionId": "OPT_DEBATE_INVITE_ROHAL",
+    "parentType": "event",
+    "parentId": "E_DEBATE_INVITE",
+    "text": "Den Rohals Erben folgen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "stress_plus1"
+    ],
+    "nextNodeId": "QN_DEB_SCANDAL"
+  },
+  {
+    "optionId": "OPT_DEBATE_SCANDAL_MEDIATE",
+    "parentType": "event",
+    "parentId": "E_DEBATE_SCANDAL",
+    "text": "Vermitteln, bevor es kippt",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "rel_mentor_plus2"
+    ],
+    "nextNodeId": "QN_DEB_DONE"
+  },
+  {
+    "optionId": "OPT_DEBATE_SCANDAL_PROFIT",
+    "parentType": "event",
+    "parentId": "E_DEBATE_SCANDAL",
+    "text": "Die Eskalation für Informationen nutzen",
+    "reqExpr": "",
+    "checkExpr": "",
+    "effectIds": [
+      "lore_plus1"
+    ],
+    "nextNodeId": "QN_DEB_DONE"
+  }
+]

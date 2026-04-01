@@ -1,0 +1,4404 @@
+{
+  "quests": [
+    {
+      "id": "Q_PROC_MYSTERY_0000",
+      "title": "Das Rätsel des Verstaubten Phiolen-Sets",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arkanologie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_0",
+          "description": "Untersuche den Vorfall im Dachboden.",
+          "requirements": {
+            "skill_check": "Einschüchtern",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_0_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_0",
+          "description": "Befrage Jirdan zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_0_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_0_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_0",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_0_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0001",
+      "title": "Das Rätsel des Verstaubten Foliants",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Verwandlungsmagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_1",
+          "description": "Untersuche den Vorfall im Strafzellen der Spektabilität.",
+          "requirements": {
+            "skill_check": "Götter & Kulte",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_1_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_1",
+          "description": "Befrage Rowena zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_1_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_1_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_1",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_1_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0002",
+      "title": "Das Rätsel des Lumineszierenden Zauberstabs",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Geschichte Aventuriens. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_2",
+          "description": "Untersuche den Vorfall im Schlafsaal der Elevi.",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_2_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_2",
+          "description": "Befrage Eldric zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_2_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_2_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_2",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_2_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0003",
+      "title": "Das Rätsel des Blutbesudelten Phiolen-Sets",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Illusion. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_3",
+          "description": "Untersuche den Vorfall im Archiv der Antimagie.",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_3_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_3",
+          "description": "Befrage Korobar zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_3_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_3_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_3",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_3_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0004",
+      "title": "Das Rätsel des Vergessenen Foliants",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arithmantik. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_4",
+          "description": "Untersuche den Vorfall im Großer Speisesaal.",
+          "requirements": {
+            "skill_check": "Verbergen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_4_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_4",
+          "description": "Befrage Salpikon zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_4_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_4_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_4",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_4_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0005",
+      "title": "Das Rätsel des Magisch versiegelten Amuletts",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Antimagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_5",
+          "description": "Untersuche den Vorfall im Nordturm.",
+          "requirements": {
+            "skill_check": "Willenskraft",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_5_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_5",
+          "description": "Befrage Zephyrinia zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_5_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_5_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_5",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_5_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0006",
+      "title": "Das Rätsel des Geheimnisvollen Amuletts",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Dämonologie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_6",
+          "description": "Untersuche den Vorfall im Pentagrammaton-Hof.",
+          "requirements": {
+            "skill_check": "Alchimie",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_6_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_6",
+          "description": "Befrage Hesindian zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_6_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_6_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_6",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_6_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0007",
+      "title": "Das Rätsel des Lumineszierenden Phiolen-Sets",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Illusion. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_7",
+          "description": "Untersuche den Vorfall im Schlafsaal der Elevi.",
+          "requirements": {
+            "skill_check": "Alchimie",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_7_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_7",
+          "description": "Befrage Zephyrinia zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_7_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_7_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_7",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_7_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0008",
+      "title": "Das Rätsel des Verbotenen Schatulles",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Alchimie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_8",
+          "description": "Untersuche den Vorfall im Schlafsaal der Elevi.",
+          "requirements": {
+            "skill_check": "Sagen & Legenden",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_8_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_8",
+          "description": "Befrage Sequin zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_8_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_8_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_8",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_8_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0009",
+      "title": "Das Rätsel des Vergessenen Pendels",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Sphärenkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_9",
+          "description": "Untersuche den Vorfall im Kaminzimmer.",
+          "requirements": {
+            "skill_check": "Sinnesschärfe",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_9_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_9",
+          "description": "Befrage Ascheherz zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_9_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_9_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_9",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_9_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0010",
+      "title": "Das Rätsel des Verstaubten Astrolabiums",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Objektmagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_10",
+          "description": "Untersuche den Vorfall im Dachboden.",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_10_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_10",
+          "description": "Befrage Tsaiane zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_10_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_10_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_10",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_10_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0011",
+      "title": "Das Rätsel des Flüsternden Kristalls",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Geographie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_11",
+          "description": "Untersuche den Vorfall im Verborgener Kerker.",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_11_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_11",
+          "description": "Befrage Hesine zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_11_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_11_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_11",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_11_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0012",
+      "title": "Das Rätsel des Kalten Schädels",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Objektmagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_12",
+          "description": "Untersuche den Vorfall im Ritualplatz.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_12_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_12",
+          "description": "Befrage Sequin zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_12_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_12_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_12",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_12_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0013",
+      "title": "Das Rätsel des Geheimnisvollen Schriftrolles",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Illusion. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_13",
+          "description": "Untersuche den Vorfall im Nordturm.",
+          "requirements": {
+            "skill_check": "Einschüchtern",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_13_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_13",
+          "description": "Befrage Cerylia zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_13_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_13_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_13",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_13_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0014",
+      "title": "Das Rätsel des Geheimnisvollen Schatulles",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Antimagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_14",
+          "description": "Untersuche den Vorfall im Kräutergarten.",
+          "requirements": {
+            "skill_check": "Willenskraft",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_14_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_14",
+          "description": "Befrage Ascheherz zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_14_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_14_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_14",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_14_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0015",
+      "title": "Das Rätsel des Lumineszierenden Schatulles",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Antimagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_15",
+          "description": "Untersuche den Vorfall im Geheimlabor.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_15_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_15",
+          "description": "Befrage Alrik zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_15_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_15_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_15",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_15_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0016",
+      "title": "Das Rätsel des Verbotenen Schriftrolles",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Sphärenkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_16",
+          "description": "Untersuche den Vorfall im Alchimisten-Senke.",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_16_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_16",
+          "description": "Befrage Valeria zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_16_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_16_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_16",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_16_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0017",
+      "title": "Das Rätsel des Düsteren Schutzkreis-Kreides",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Objektmagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_17",
+          "description": "Untersuche den Vorfall im Schlafsaal der Elevi.",
+          "requirements": {
+            "skill_check": "Sagen & Legenden",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_17_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_17",
+          "description": "Befrage Elrika zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_17_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_17_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_17",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_17_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0018",
+      "title": "Das Rätsel des Bedrohlichen Phiolen-Sets",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Kräuterkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_18",
+          "description": "Untersuche den Vorfall im Dachboden.",
+          "requirements": {
+            "skill_check": "Willenskraft",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_18_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_18",
+          "description": "Befrage Cerylia zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_18_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_18_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_18",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_18_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0019",
+      "title": "Das Rätsel des Heiligen Foliants",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arkanologie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_19",
+          "description": "Untersuche den Vorfall im Nordturm.",
+          "requirements": {
+            "skill_check": "Sagen & Legenden",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_19_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_19",
+          "description": "Befrage Jirdan zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_19_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_19_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_19",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_19_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0020",
+      "title": "Das Rätsel des Magisch versiegelten Schatulles",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Antimagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_20",
+          "description": "Untersuche den Vorfall im Verborgener Kerker.",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_20_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_20",
+          "description": "Befrage Alrik zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_20_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_20_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_20",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_20_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0021",
+      "title": "Das Rätsel des Verfluchten Schutzkreis-Kreides",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Heilkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_21",
+          "description": "Untersuche den Vorfall im Geheimlabor.",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_21_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_21",
+          "description": "Befrage Xaviro zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_21_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_21_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_21",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_21_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0022",
+      "title": "Das Rätsel des Pulsierenden Phiolen-Sets",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Objektmagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_22",
+          "description": "Untersuche den Vorfall im Kräutergarten.",
+          "requirements": {
+            "skill_check": "Alchimie",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_22_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_22",
+          "description": "Befrage Rakorium zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_22_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_22_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_22",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_22_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0023",
+      "title": "Das Rätsel des Flüsternden Astrolabiums",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Geographie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_23",
+          "description": "Untersuche den Vorfall im Kräutergarten.",
+          "requirements": {
+            "skill_check": "Götter & Kulte",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_23_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_23",
+          "description": "Befrage Ascheherz zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_23_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_23_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_23",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_23_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0024",
+      "title": "Das Rätsel des Kalten Kristalls",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Illusion. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_24",
+          "description": "Untersuche den Vorfall im Kaminzimmer.",
+          "requirements": {
+            "skill_check": "Verbergen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_24_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_24",
+          "description": "Befrage Elea zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_24_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_24_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_24",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_24_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0025",
+      "title": "Das Rätsel des Verbotenen Kessels",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Geographie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_25",
+          "description": "Untersuche den Vorfall im Pentagrammaton-Hof.",
+          "requirements": {
+            "skill_check": "Verbergen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_25_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_25",
+          "description": "Befrage Ascheherz zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_25_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_25_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_25",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_25_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0026",
+      "title": "Das Rätsel des Düsteren Phiolen-Sets",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Sphärenkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_26",
+          "description": "Untersuche den Vorfall im Dachboden.",
+          "requirements": {
+            "skill_check": "Einschüchtern",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_26_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_26",
+          "description": "Befrage Ascheherz zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_26_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_26_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_26",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_26_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0027",
+      "title": "Das Rätsel des Bedrohlichen Amuletts",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Heilkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_27",
+          "description": "Untersuche den Vorfall im Krankenflügel.",
+          "requirements": {
+            "skill_check": "Geschichtswissen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_27_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_27",
+          "description": "Befrage Cerylia zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_27_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_27_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_27",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_27_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0028",
+      "title": "Das Rätsel des Bedrohlichen Spiegels",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arkanologie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_28",
+          "description": "Untersuche den Vorfall im Kaminzimmer.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_28_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_28",
+          "description": "Befrage Lucan zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_28_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_28_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_28",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_28_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0029",
+      "title": "Das Rätsel des Bedrohlichen Kessels",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Illusion. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_29",
+          "description": "Untersuche den Vorfall im Krankenflügel.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_29_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_29",
+          "description": "Befrage Thurandil zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_29_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_29_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_29",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_29_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0030",
+      "title": "Das Rätsel des Blutbesudelten Schatulles",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Alchimie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_30",
+          "description": "Untersuche den Vorfall im Verborgener Kerker.",
+          "requirements": {
+            "skill_check": "Verbergen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_30_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_30",
+          "description": "Befrage Elrika zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_30_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_30_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_30",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_30_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0031",
+      "title": "Das Rätsel des Heiligen Foliants",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Antimagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_31",
+          "description": "Untersuche den Vorfall im Alte Bibliothek.",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_31_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_31",
+          "description": "Befrage Elrika zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_31_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_31_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_31",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_31_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0032",
+      "title": "Das Rätsel des Verstaubten Zauberstabs",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Kräuterkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_32",
+          "description": "Untersuche den Vorfall im Archiv der Antimagie.",
+          "requirements": {
+            "skill_check": "Willenskraft",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_32_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_32",
+          "description": "Befrage Elea zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_32_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_32_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_32",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_32_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0033",
+      "title": "Das Rätsel des Kalten Astrolabiums",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arithmantik. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_33",
+          "description": "Untersuche den Vorfall im Großer Speisesaal.",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_33_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_33",
+          "description": "Befrage Elrika zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_33_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_33_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_33",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_33_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0034",
+      "title": "Das Rätsel des Heiligen Kessels",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Objektmagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_34",
+          "description": "Untersuche den Vorfall im Dachboden.",
+          "requirements": {
+            "skill_check": "Sagen & Legenden",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_34_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_34",
+          "description": "Befrage Xaviro zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_34_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_34_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_34",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_34_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0035",
+      "title": "Das Rätsel des Flackernden Schädels",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Sphärenkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_35",
+          "description": "Untersuche den Vorfall im Astral-Observatorium.",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_35_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_35",
+          "description": "Befrage Rowena zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_35_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_35_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_35",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_35_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0036",
+      "title": "Das Rätsel des Düsteren Kessels",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Kräuterkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_36",
+          "description": "Untersuche den Vorfall im Ritualplatz.",
+          "requirements": {
+            "skill_check": "Einschüchtern",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_36_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_36",
+          "description": "Befrage Elea zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_36_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_36_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_36",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_36_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0037",
+      "title": "Das Rätsel des Blutbesudelten Amuletts",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Antimagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_37",
+          "description": "Untersuche den Vorfall im Dämonen-Versiegelungskammer.",
+          "requirements": {
+            "skill_check": "Sagen & Legenden",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_37_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_37",
+          "description": "Befrage Jirdan zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_37_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_37_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_37",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_37_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0038",
+      "title": "Das Rätsel des Geheimnisvollen Talismans",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Heilkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_38",
+          "description": "Untersuche den Vorfall im Dachboden.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_38_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_38",
+          "description": "Befrage Korobar zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_38_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_38_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_38",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_38_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0039",
+      "title": "Das Rätsel des Verbotenen Amuletts",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Kräuterkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_39",
+          "description": "Untersuche den Vorfall im Katakomben.",
+          "requirements": {
+            "skill_check": "Sagen & Legenden",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_39_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_39",
+          "description": "Befrage Eldric zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_39_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_39_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_39",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_39_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0040",
+      "title": "Das Rätsel des Dämonischen Rings",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Illusion. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_40",
+          "description": "Untersuche den Vorfall im Alchimisten-Senke.",
+          "requirements": {
+            "skill_check": "Körperbeherrschung",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_40_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_40",
+          "description": "Befrage Sirdon zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_40_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_40_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_40",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_40_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0041",
+      "title": "Das Rätsel des Heiligen Schädels",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Antimagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_41",
+          "description": "Untersuche den Vorfall im Astral-Observatorium.",
+          "requirements": {
+            "skill_check": "Körperbeherrschung",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_41_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_41",
+          "description": "Befrage Korobar zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_41_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_41_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_41",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_41_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0042",
+      "title": "Das Rätsel des Dämonischen Schädels",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Sphärenkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_42",
+          "description": "Untersuche den Vorfall im Westturm.",
+          "requirements": {
+            "skill_check": "Körperbeherrschung",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_42_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_42",
+          "description": "Befrage Thorn zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_42_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_42_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_42",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_42_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0043",
+      "title": "Das Rätsel des Pulsierenden Phiolen-Sets",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arithmantik. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_43",
+          "description": "Untersuche den Vorfall im Schlafsaal der Elevi.",
+          "requirements": {
+            "skill_check": "Einschüchtern",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_43_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_43",
+          "description": "Befrage Jirdan zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_43_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_43_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_43",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_43_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0044",
+      "title": "Das Rätsel des Geheimnisvollen Schriftrolles",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Heilkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_44",
+          "description": "Untersuche den Vorfall im Katakomben.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_44_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_44",
+          "description": "Befrage Darpatia zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_44_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_44_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_44",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_44_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0045",
+      "title": "Das Rätsel des Magisch versiegelten Kessels",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Kräuterkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_45",
+          "description": "Untersuche den Vorfall im Archiv der Antimagie.",
+          "requirements": {
+            "skill_check": "Sinnesschärfe",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_45_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_45",
+          "description": "Befrage Hesindian zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_45_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_45_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_45",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_45_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0046",
+      "title": "Das Rätsel des Verfluchten Kessels",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Alchimie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_46",
+          "description": "Untersuche den Vorfall im Katakomben.",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_46_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_46",
+          "description": "Befrage Almara zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_46_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_46_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_46",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_46_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0047",
+      "title": "Das Rätsel des Geheimnisvollen Phiolen-Sets",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Kräuterkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_47",
+          "description": "Untersuche den Vorfall im Astral-Observatorium.",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_47_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_47",
+          "description": "Befrage Ascheherz zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_47_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_47_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_47",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_47_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0048",
+      "title": "Das Rätsel des Vergessenen Kessels",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Alchimie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_48",
+          "description": "Untersuche den Vorfall im Nordturm.",
+          "requirements": {
+            "skill_check": "Körperbeherrschung",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_48_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_48",
+          "description": "Befrage Salpikon zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_48_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_48_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_48",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_48_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0049",
+      "title": "Das Rätsel des Lumineszierenden Schutzkreis-Kreides",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Antimagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_49",
+          "description": "Untersuche den Vorfall im Astral-Observatorium.",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_49_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_49",
+          "description": "Befrage Korobar zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_49_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_49_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_49",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_49_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0050",
+      "title": "Das Rätsel des Flackernden Kessels",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arithmantik. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_50",
+          "description": "Untersuche den Vorfall im Dachboden.",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_50_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_50",
+          "description": "Befrage Sequin zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_50_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_50_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_50",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_50_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0051",
+      "title": "Das Rätsel des Flackernden Schriftrolles",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arkanologie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_51",
+          "description": "Untersuche den Vorfall im Strafzellen der Spektabilität.",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_51_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_51",
+          "description": "Befrage Thurandil zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_51_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_51_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_51",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_51_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0052",
+      "title": "Das Rätsel des Düsteren Spiegels",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arkanologie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_52",
+          "description": "Untersuche den Vorfall im Kaminzimmer.",
+          "requirements": {
+            "skill_check": "Geschichtswissen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_52_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_52",
+          "description": "Befrage Eldric zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_52_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_52_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_52",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_52_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0053",
+      "title": "Das Rätsel des Verstaubten Phiolen-Sets",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Objektmagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_53",
+          "description": "Untersuche den Vorfall im Westturm.",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_53_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_53",
+          "description": "Befrage Elrika zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_53_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_53_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_53",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_53_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0054",
+      "title": "Das Rätsel des Verfluchten Pendels",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Antimagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_54",
+          "description": "Untersuche den Vorfall im Pentagrammaton-Hof.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_54_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_54",
+          "description": "Befrage Alrik zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_54_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_54_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_54",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_54_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0055",
+      "title": "Das Rätsel des Pulsierenden Schriftrolles",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Geschichte Aventuriens. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_55",
+          "description": "Untersuche den Vorfall im Nordturm.",
+          "requirements": {
+            "skill_check": "Geschichtswissen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_55_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_55",
+          "description": "Befrage Hesindian zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_55_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_55_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_55",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_55_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0056",
+      "title": "Das Rätsel des Magisch versiegelten Schutzkreis-Kreides",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Geschichte Aventuriens. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_56",
+          "description": "Untersuche den Vorfall im Katakomben.",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_56_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_56",
+          "description": "Befrage Ascheherz zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_56_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_56_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_56",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_56_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0057",
+      "title": "Das Rätsel des Flackernden Phiolen-Sets",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Geschichte Aventuriens. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_57",
+          "description": "Untersuche den Vorfall im Strafzellen der Spektabilität.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_57_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_57",
+          "description": "Befrage Rowena zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_57_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_57_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_57",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_57_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0058",
+      "title": "Das Rätsel des Kalten Phiolen-Sets",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Verwandlungsmagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_58",
+          "description": "Untersuche den Vorfall im Astral-Observatorium.",
+          "requirements": {
+            "skill_check": "Geschichtswissen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_58_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_58",
+          "description": "Befrage Darpatia zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_58_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_58_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_58",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_58_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0059",
+      "title": "Das Rätsel des Verstaubten Rings",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Objektmagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_59",
+          "description": "Untersuche den Vorfall im Geheimlabor.",
+          "requirements": {
+            "skill_check": "Verbergen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_59_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_59",
+          "description": "Befrage Hesindian zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_59_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_59_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_59",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_59_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0060",
+      "title": "Das Rätsel des Pulsierenden Kessels",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Kräuterkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_60",
+          "description": "Untersuche den Vorfall im Archiv der Antimagie.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_60_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_60",
+          "description": "Befrage Praioslob zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_60_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_60_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_60",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_60_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0061",
+      "title": "Das Rätsel des Verfluchten Kristalls",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Heilkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_61",
+          "description": "Untersuche den Vorfall im Astral-Observatorium.",
+          "requirements": {
+            "skill_check": "Sinnesschärfe",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_61_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_61",
+          "description": "Befrage Hesine zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_61_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_61_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_61",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_61_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0062",
+      "title": "Das Rätsel des Uralten Spiegels",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Alchimie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_62",
+          "description": "Untersuche den Vorfall im Dämonen-Versiegelungskammer.",
+          "requirements": {
+            "skill_check": "Körperbeherrschung",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_62_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_62",
+          "description": "Befrage Eldric zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_62_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_62_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_62",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_62_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0063",
+      "title": "Das Rätsel des Geheimnisvollen Pendels",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Verwandlungsmagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_63",
+          "description": "Untersuche den Vorfall im Dachboden.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_63_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_63",
+          "description": "Befrage Ascheherz zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_63_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_63_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_63",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_63_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0064",
+      "title": "Das Rätsel des Uralten Pendels",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arithmantik. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_64",
+          "description": "Untersuche den Vorfall im Geheimlabor.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_64_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_64",
+          "description": "Befrage Mafalda zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_64_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_64_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_64",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_64_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0065",
+      "title": "Das Rätsel des Pulsierenden Schädels",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Alchimie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_65",
+          "description": "Untersuche den Vorfall im Katakomben.",
+          "requirements": {
+            "skill_check": "Alchimie",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_65_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_65",
+          "description": "Befrage Rowena zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_65_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_65_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_65",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_65_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0066",
+      "title": "Das Rätsel des Flüsternden Foliants",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Illusion. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_66",
+          "description": "Untersuche den Vorfall im Pentagrammaton-Hof.",
+          "requirements": {
+            "skill_check": "Körperbeherrschung",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_66_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_66",
+          "description": "Befrage Almara zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_66_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_66_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_66",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_66_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0067",
+      "title": "Das Rätsel des Blutbesudelten Kristalls",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arithmantik. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_67",
+          "description": "Untersuche den Vorfall im Katakomben.",
+          "requirements": {
+            "skill_check": "Götter & Kulte",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_67_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_67",
+          "description": "Befrage Xaviro zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_67_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_67_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_67",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_67_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0068",
+      "title": "Das Rätsel des Blutbesudelten Talismans",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Antimagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_68",
+          "description": "Untersuche den Vorfall im Westturm.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_68_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_68",
+          "description": "Befrage Mafalda zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_68_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_68_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_68",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_68_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0069",
+      "title": "Das Rätsel des Pulsierenden Pendels",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arkanologie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_69",
+          "description": "Untersuche den Vorfall im Krankenflügel.",
+          "requirements": {
+            "skill_check": "Körperbeherrschung",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_69_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_69",
+          "description": "Befrage Elrika zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_69_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_69_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_69",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_69_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0070",
+      "title": "Das Rätsel des Flackernden Kessels",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Antimagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_70",
+          "description": "Untersuche den Vorfall im Astral-Observatorium.",
+          "requirements": {
+            "skill_check": "Götter & Kulte",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_70_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_70",
+          "description": "Befrage Thorn zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_70_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_70_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_70",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_70_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0071",
+      "title": "Das Rätsel des Bedrohlichen Kristalls",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Geschichte Aventuriens. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_71",
+          "description": "Untersuche den Vorfall im Geheimlabor.",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_71_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_71",
+          "description": "Befrage Yelina zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_71_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_71_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_71",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_71_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0072",
+      "title": "Das Rätsel des Vergessenen Rings",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arithmantik. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_72",
+          "description": "Untersuche den Vorfall im Kaminzimmer.",
+          "requirements": {
+            "skill_check": "Sinnesschärfe",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_72_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_72",
+          "description": "Befrage Hesindian zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_72_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_72_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_72",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_72_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0073",
+      "title": "Das Rätsel des Kalten Amuletts",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Sphärenkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_73",
+          "description": "Untersuche den Vorfall im Katakomben.",
+          "requirements": {
+            "skill_check": "Alchimie",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_73_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_73",
+          "description": "Befrage Hesine zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_73_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_73_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_73",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_73_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0074",
+      "title": "Das Rätsel des Pulsierenden Rings",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Heilkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_74",
+          "description": "Untersuche den Vorfall im Archiv der Antimagie.",
+          "requirements": {
+            "skill_check": "Körperbeherrschung",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_74_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_74",
+          "description": "Befrage Sirdon zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_74_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_74_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_74",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_74_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0075",
+      "title": "Das Rätsel des Flüsternden Phiolen-Sets",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Sphärenkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_75",
+          "description": "Untersuche den Vorfall im Strafzellen der Spektabilität.",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_75_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_75",
+          "description": "Befrage Ascheherz zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_75_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_75_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_75",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_75_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0076",
+      "title": "Das Rätsel des Lumineszierenden Foliants",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Kräuterkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_76",
+          "description": "Untersuche den Vorfall im Geheimlabor.",
+          "requirements": {
+            "skill_check": "Körperbeherrschung",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_76_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_76",
+          "description": "Befrage Hesindian zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_76_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_76_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_76",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_76_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0077",
+      "title": "Das Rätsel des Kalten Astrolabiums",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Antimagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_77",
+          "description": "Untersuche den Vorfall im Astral-Observatorium.",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_77_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_77",
+          "description": "Befrage Almara zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_77_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_77_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_77",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_77_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0078",
+      "title": "Das Rätsel des Bedrohlichen Spiegels",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Heilkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_78",
+          "description": "Untersuche den Vorfall im Schlafsaal der Elevi.",
+          "requirements": {
+            "skill_check": "Einschüchtern",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_78_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_78",
+          "description": "Befrage Zephyrinia zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_78_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_78_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_78",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_78_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0079",
+      "title": "Das Rätsel des Blutbesudelten Rings",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Sphärenkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_79",
+          "description": "Untersuche den Vorfall im Ritualplatz.",
+          "requirements": {
+            "skill_check": "Verbergen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_79_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_79",
+          "description": "Befrage Elrika zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_79_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_79_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_79",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_79_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0080",
+      "title": "Das Rätsel des Düsteren Rings",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arkanologie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_80",
+          "description": "Untersuche den Vorfall im Kaminzimmer.",
+          "requirements": {
+            "skill_check": "Sinnesschärfe",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_80_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_80",
+          "description": "Befrage Yelina zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_80_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_80_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_80",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_80_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0081",
+      "title": "Das Rätsel des Düsteren Schutzkreis-Kreides",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Geographie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_81",
+          "description": "Untersuche den Vorfall im Kräutergarten.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_81_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_81",
+          "description": "Befrage Hesine zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_81_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_81_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_81",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_81_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0082",
+      "title": "Das Rätsel des Blutbesudelten Schutzkreis-Kreides",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Kräuterkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_82",
+          "description": "Untersuche den Vorfall im Dachboden.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_82_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_82",
+          "description": "Befrage Xaviro zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_82_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_82_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_82",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_82_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0083",
+      "title": "Das Rätsel des Geheimnisvollen Pendels",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Sphärenkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_83",
+          "description": "Untersuche den Vorfall im Archiv der Antimagie.",
+          "requirements": {
+            "skill_check": "Körperbeherrschung",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_83_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_83",
+          "description": "Befrage Darpatia zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_83_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_83_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_83",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_83_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0084",
+      "title": "Das Rätsel des Verbotenen Amuletts",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Illusion. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_84",
+          "description": "Untersuche den Vorfall im Schlafsaal der Elevi.",
+          "requirements": {
+            "skill_check": "Menschenkenntnis",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_84_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_84",
+          "description": "Befrage Hesine zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_84_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_84_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_84",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_84_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0085",
+      "title": "Das Rätsel des Düsteren Kessels",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Antimagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_85",
+          "description": "Untersuche den Vorfall im Schlafsaal der Elevi.",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_85_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_85",
+          "description": "Befrage Thurandil zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_85_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_85_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_85",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_85_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0086",
+      "title": "Das Rätsel des Pulsierenden Schriftrolles",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arithmantik. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_86",
+          "description": "Untersuche den Vorfall im Dachboden.",
+          "requirements": {
+            "skill_check": "Geschichtswissen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_86_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_86",
+          "description": "Befrage Almara zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_86_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_86_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_86",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_86_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0087",
+      "title": "Das Rätsel des Bedrohlichen Rings",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Illusion. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_87",
+          "description": "Untersuche den Vorfall im Alchimisten-Senke.",
+          "requirements": {
+            "skill_check": "Geschichtswissen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_87_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_87",
+          "description": "Befrage Rakorium zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_87_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_87_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_87",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_87_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0088",
+      "title": "Das Rätsel des Bedrohlichen Kessels",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Arkanologie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_88",
+          "description": "Untersuche den Vorfall im Katakomben.",
+          "requirements": {
+            "skill_check": "Geschichtswissen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_88_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_88",
+          "description": "Befrage Cerylia zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_88_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_88_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_88",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_88_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0089",
+      "title": "Das Rätsel des Verbotenen Zauberstabs",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Geschichte Aventuriens. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_89",
+          "description": "Untersuche den Vorfall im Astral-Observatorium.",
+          "requirements": {
+            "skill_check": "Verbergen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_89_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_89",
+          "description": "Befrage Praioslob zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_89_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_89_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_89",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_89_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0090",
+      "title": "Das Rätsel des Verbotenen Schutzkreis-Kreides",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Illusion. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_90",
+          "description": "Untersuche den Vorfall im Strafzellen der Spektabilität.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_90_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_90",
+          "description": "Befrage Ascheherz zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_90_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_90_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_90",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_90_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0091",
+      "title": "Das Rätsel des Kalten Kessels",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Alchimie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_91",
+          "description": "Untersuche den Vorfall im Geheimlabor.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_91_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_91",
+          "description": "Befrage Zephyrinia zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_91_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_91_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_91",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_91_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0092",
+      "title": "Das Rätsel des Heiligen Spiegels",
+      "prio": "P0",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Alchimie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_92",
+          "description": "Untersuche den Vorfall im Archiv der Antimagie.",
+          "requirements": {
+            "skill_check": "Magiekunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_92_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_92",
+          "description": "Befrage Rowena zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_92_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_92_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_92",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_92_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0093",
+      "title": "Das Rätsel des Dämonischen Rings",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Sphärenkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_93",
+          "description": "Untersuche den Vorfall im Alchimisten-Senke.",
+          "requirements": {
+            "skill_check": "Geschichtswissen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_93_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_93",
+          "description": "Befrage Rowena zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_93_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_93_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_93",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_93_understood",
+          "rewards": {
+            "ap": 15,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0094",
+      "title": "Das Rätsel des Vergessenen Schutzkreis-Kreides",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Verwandlungsmagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_94",
+          "description": "Untersuche den Vorfall im Dachboden.",
+          "requirements": {
+            "skill_check": "Geschichtswissen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_94_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_94",
+          "description": "Befrage Ascheherz zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_94_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_94_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_94",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_94_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0095",
+      "title": "Das Rätsel des Magisch versiegelten Astrolabiums",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Objektmagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_95",
+          "description": "Untersuche den Vorfall im Westturm.",
+          "requirements": {
+            "skill_check": "Verbergen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_95_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_95",
+          "description": "Befrage Tsaiane zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_95_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_95_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_95",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_95_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0096",
+      "title": "Das Rätsel des Magisch versiegelten Zauberstabs",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Geschichte Aventuriens. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_96",
+          "description": "Untersuche den Vorfall im Kräutergarten.",
+          "requirements": {
+            "skill_check": "Sphärenkunde",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_96_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_96",
+          "description": "Befrage Ascheherz zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_96_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_96_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_96",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_96_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 5,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0097",
+      "title": "Das Rätsel des Kalten Kristalls",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Objektmagie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_97",
+          "description": "Untersuche den Vorfall im Strafzellen der Spektabilität.",
+          "requirements": {
+            "skill_check": "Verbergen",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_97_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_97",
+          "description": "Befrage Valeria zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_97_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_97_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_97",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_97_understood",
+          "rewards": {
+            "ap": 20,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0098",
+      "title": "Das Rätsel des Lumineszierenden Kristalls",
+      "prio": "P2",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Heilkunde. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_98",
+          "description": "Untersuche den Vorfall im Alte Bibliothek.",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_98_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_98",
+          "description": "Befrage Darpatia zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_98_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_98_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_98",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_98_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 2,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    },
+    {
+      "id": "Q_PROC_MYSTERY_0099",
+      "title": "Das Rätsel des Verstaubten Kessels",
+      "prio": "P1",
+      "description": "Ein seltsames Objekt stört den Magiefluss im Bereich Dämonologie. Mehrere Dozenten sind besorgt.",
+      "stages": [
+        {
+          "id": "S1_DISCOVERY_99",
+          "description": "Untersuche den Vorfall im Astral-Observatorium.",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": 0
+          },
+          "flagSet": {
+            "mystery_99_discovered": true
+          }
+        },
+        {
+          "id": "S2_INVESTIGATION_99",
+          "description": "Befrage Almara zu den Vorkommnissen, ohne Verdacht zu erregen.",
+          "requires_flag": "mystery_99_discovered",
+          "requirements": {
+            "skill_check": "Überreden",
+            "mod": -1
+          },
+          "flagSet": {
+            "mystery_99_understood": true
+          }
+        },
+        {
+          "id": "S3_RESOLUTION_99",
+          "description": "Banne den störenden Einfluss oder nutze ihn für dein Haus.",
+          "requires_flag": "mystery_99_understood",
+          "rewards": {
+            "ap": 10,
+            "circle_points": 10,
+            "effects": [
+              "lore_plus1"
+            ]
+          }
+        }
+      ],
+      "status": "available"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "eventId": "E_LIBRARY_CATALOGUE_MIXUP",
+    "pool": "academy_minor",
+    "triggerExpr": "week >= 1",
+    "title": "Ein Band unter falscher Signatur",
+    "description": "Ein wichtiges Werk ist falsch einsortiert oder absichtlich verstellt worden. Mafalda will Ergebnisse, keine Ausreden.",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_LIBRARY_ARCHIVE_TRACE",
+    "pool": "academy_minor",
+    "triggerExpr": "week >= 1",
+    "title": "Spurensuche im Archiv",
+    "description": "Zwischen Katalogzetteln, Randglossen und Ausleihvermerken taucht eine peinlich einfache Wahrheit auf – oder ein raffinierter Streich.",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ALCHEMY_MISSING_REAGENT",
+    "pool": "academy_minor",
+    "triggerExpr": "week >= 1",
+    "title": "Das verschwundene Reagenz",
+    "description": "Vor einer Übung fehlt genau die eine Zutat, ohne die das Rezept nur qualmt und scheitert.",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ALCHEMY_GARDEN_SEARCH",
+    "pool": "academy_minor",
+    "triggerExpr": "week >= 1",
+    "title": "Suche im Garten und Kräuterschrank",
+    "description": "Nur wer ruhig bleibt, findet im Garten oder im falschen Fach das, was jemand hastig verlegt hat.",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_FAMILIAR_ESCAPE",
+    "pool": "academy_minor",
+    "triggerExpr": "locationId == 'LOC_AKADEMIEGARTEN' || slotName == 'Nacht'",
+    "title": "Ein Tier verschwindet",
+    "description": "Ein magiesensibles Tier oder Vertrautentier ist ausgebüxt und löst überproportional viel Nervosität aus.",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_FAMILIAR_OWNER",
+    "pool": "academy_minor",
+    "triggerExpr": "week >= 1",
+    "title": "Der Besitzer meldet sich",
+    "description": "Sobald das Tier gefunden ist, zeigt sich, wem man gerade einen Gefallen – oder eine peinliche Wahrheit – schuldet.",
+    "highImpact": false
+  }
+]

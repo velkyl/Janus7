@@ -1,0 +1,594 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Bibliothekseinträge der Akademie",
+    "updatedAt": "2025-12-12",
+    "sources": [
+      "BIBLIOTHEK_KATALOG.md"
+    ],
+    "count": 14
+  },
+  "items": [
+    {
+      "id": "LIB_SPHEREN_OVERVIEW",
+      "title": "Überblick über die Sphärenstruktur",
+      "type": "book",
+      "tags": [
+        "sphären",
+        "theorie"
+      ],
+      "summary": "Ein Überblick über die Sphärenstruktur Aventuriens.",
+      "knowledgeHooks": [
+        {
+          "topic": "Sphärenstruktur",
+          "relatedSkillId": "TALENT_SPHAERENKUNDE",
+          "synergyLessons": [
+            "LES_MAG_BASICS_01"
+          ]
+        }
+      ],
+      "foundry": {
+        "journalKey": "library.sphaerenkunde.01",
+        "journalUuid": null
+      }
+    },
+    {
+      "id": "LIB_CODEX_ALBYRICUS",
+      "title": "Codex Albyricus",
+      "type": "Fachliteratur (Rechtskunde)",
+      "tags": [
+        "17",
+        "bosparano_aeltere_garethi_neuere",
+        "elevium",
+        "fachliteratur_rechtskunde",
+        "year_1"
+      ],
+      "summary": "Das Gesetzeswerk der Gildenmagier. Regelt Rechte und Pflichten. - Anforderungen an die Ausbildung - Rechte gegenüber dem Adel - Verbotene Magie und Konsequenzen - Pflichten gegenüber der Gilde",
+      "knowledgeHooks": [
+        {
+          "topic": "Rechtskunde (Gildenrecht)",
+          "relatedSkillId": null,
+          "bonus": "+1/2/3 FP bei 1/3/7 Bänden",
+          "teachingPhase": "Ab Elevium (Jahr 1)",
+          "teacher": "Sirdon Kosmaar persönlich",
+          "examRelevance": "Bestandteil jeder Abschlussprüfung"
+        }
+      ],
+      "foundry": {
+        "journalKey": null,
+        "journalUuid": null
+      },
+      "data": {
+        "name": "Codex Albyricus",
+        "art": "Fachliteratur (Rechtskunde)",
+        "autoren": "verschiedene, von Rohal vorangetrieben",
+        "format": "Meistens Octavo, 7 Bände",
+        "erscheinungsdatum": "547 BF",
+        "exemplare": "1 Original, ~1.000 Abschriften pro Band",
+        "sprache": "Bosparano (ältere), Garethi (neuere)",
+        "regeltechnik": {
+          "fertigkeit": "Rechtskunde (Gildenrecht)",
+          "bonus": "+1/2/3 FP bei 1/3/7 Bänden"
+        },
+        "wert": "300-750 Silbertaler pro Band",
+        "verfügbarkeit": 17,
+        "inhalt": "Das Gesetzeswerk der Gildenmagier. Regelt Rechte und Pflichten.\n- Anforderungen an die Ausbildung\n- Rechte gegenüber dem Adel\n- Verbotene Magie und Konsequenzen\n- Pflichten gegenüber der Gilde\n",
+        "zitat_aus_quelle": "\"Am Codex Albyricus scheiden sich wohl die Geister. Es gibt\nGildenmagier, die sich strikt an die Vorschriften halten, und\nes gibt Magier, die ihn nicht allzu ernst nehmen. Ich denke,\nman sollte den Codex achten, aber auch die regionalen \nGepflogenheiten berücksichtigen.\"\n—Xaron aus Punin, Gildenmagier, neuzeitlich\n",
+        "unterricht": {
+          "phase": "Ab Elevium (Jahr 1)",
+          "dozent": "Sirdon Kosmaar persönlich",
+          "prüfung": "Bestandteil jeder Abschlussprüfung"
+        }
+      },
+      "source": {
+        "file": "BIBLIOTHEK_KATALOG.md"
+      }
+    },
+    {
+      "id": "LIB_ENCYCLOPAEDIA_MAGICA",
+      "title": "Encyclopaedia Magica",
+      "type": "Zauberbuch",
+      "tags": [
+        "18",
+        "garethi_kusliker_zeichen",
+        "novizium",
+        "year_4",
+        "zauberbuch"
+      ],
+      "summary": "Das Standardnachschlagewerk für Gildenmagier. - Historie der Magie - Verzeichnis der Magierakademien - Bekannte Orden und Forschungszirkel - Magische Koryphäen (Gegenwart und Vergangenheit) - Theoretische Abhandlungen - Kompendium bekann...",
+      "knowledgeHooks": [
+        {
+          "topic": "Magiekunde",
+          "relatedSkillId": null,
+          "bonus": "+1/2/3 FP bei 1/3/7 Bänden (max. FW 18)",
+          "teachingPhase": "Ab Novizium (Jahr 4)",
+          "teacher": "Alle Theoriedozenten",
+          "examRelevance": null
+        }
+      ],
+      "foundry": {
+        "journalKey": null,
+        "journalUuid": null
+      },
+      "data": {
+        "name": "Encyclopaedia Magica",
+        "art": "Zauberbuch",
+        "autoren": "verschiedene",
+        "format": "Sieben Folianten",
+        "erscheinungsdatum": "Seit 800 v. BF, alle 200 Jahre neue Auflage",
+        "exemplare": "500-1.000 pro Band und Auflage",
+        "sprache": "Garethi (Kusliker Zeichen)",
+        "regeltechnik": {
+          "fertigkeit": "Magiekunde",
+          "bonus": "+1/2/3 FP bei 1/3/7 Bänden (max. FW 18)"
+        },
+        "wert": "800 Silbertaler pro Band",
+        "verfügbarkeit": 18,
+        "inhalt": "Das Standardnachschlagewerk für Gildenmagier.\n- Historie der Magie\n- Verzeichnis der Magierakademien\n- Bekannte Orden und Forschungszirkel\n- Magische Koryphäen (Gegenwart und Vergangenheit)\n- Theoretische Abhandlungen\n- Kompendium bekannter Zauberformeln\nHINWEIS: Keine Zauber daraus erlernbar!\n",
+        "zitat_aus_quelle": "\"Die Magica Combattiva, vulgo Kampfmagie, ist von \nvergleichsweise einfacher Struktur, auch wenn Koryphäen \nauf diesem Gebiet repetitiv darauf hinweisen und \ndemonstrieren, dass die tiefere Verästelung von \nexorbitanter Komplexität ist.\"\n—über die verschiedenen Spielarten der Magie\n",
+        "unterricht": {
+          "phase": "Ab Novizium (Jahr 4)",
+          "dozent": "Alle Theoriedozenten",
+          "note": "Die Akademie besitzt alle 7 Bände"
+        }
+      },
+      "source": {
+        "file": "BIBLIOTHEK_KATALOG.md"
+      }
+    },
+    {
+      "id": "LIB_1_000_JAHRE_NEUES_REICH",
+      "title": "1.000 Jahre Neues Reich",
+      "type": "Fachliteratur (Geschichtswissen)",
+      "tags": [
+        "elevium",
+        "fachliteratur_geschichtswissen"
+      ],
+      "summary": "Umfangreiche Festschrift des Puniner Hesindetempels. Kompendium aventurischen Lebens von Alchimie bis Zwergenstahl. Hauptfokus auf Geschichte des Mittelreichs.",
+      "knowledgeHooks": [
+        {
+          "topic": "Geschichtswissen (Mittelreich)",
+          "relatedSkillId": null,
+          "bonus": "alle Teilproben +1",
+          "teachingPhase": "Elevium",
+          "teacher": null,
+          "examRelevance": null
+        }
+      ],
+      "foundry": {
+        "journalKey": null,
+        "journalUuid": null
+      },
+      "data": {
+        "name": "1.000 Jahre Neues Reich",
+        "art": "Fachliteratur (Geschichtswissen)",
+        "autor": "Geweihte des Puniner Hesindetempels",
+        "format": "Foliant, 500 Seiten",
+        "aufbewahrung": "Original im Schlangentempel Punin",
+        "regeltechnik": {
+          "fertigkeit": "Geschichtswissen (Mittelreich)",
+          "bonus": "alle Teilproben +1"
+        },
+        "inhalt": "Umfangreiche Festschrift des Puniner Hesindetempels.\nKompendium aventurischen Lebens von Alchimie bis \nZwergenstahl. Hauptfokus auf Geschichte des Mittelreichs.\n",
+        "unterricht": {
+          "phase": "Elevium",
+          "fach": "Geschichte der Magie",
+          "note": "Puniner Stolz - verfasst im lokalen Hesindetempel"
+        }
+      },
+      "source": {
+        "file": "BIBLIOTHEK_KATALOG.md"
+      }
+    },
+    {
+      "id": "LIB_BREVIER_DER_ZWOELFGOETTLICHEN_UNTERWEISUNG",
+      "title": "Brevier der zwölfgöttlichen Unterweisung",
+      "type": "Religionswerk",
+      "tags": [
+        "18_sehr_verbreitet",
+        "elevium",
+        "religionswerk"
+      ],
+      "summary": null,
+      "knowledgeHooks": [
+        {
+          "topic": "Götter & Kulte (alveranische Götter)",
+          "relatedSkillId": null,
+          "bonus": "Probe +1",
+          "teachingPhase": "Elevium",
+          "teacher": null,
+          "examRelevance": null
+        }
+      ],
+      "foundry": {
+        "journalKey": null,
+        "journalUuid": null
+      },
+      "data": {
+        "name": "Brevier der zwölfgöttlichen Unterweisung",
+        "art": "Religionswerk",
+        "regeltechnik": {
+          "fertigkeit": "Götter & Kulte (alveranische Götter)",
+          "bonus": "Probe +1"
+        },
+        "verfügbarkeit": "18 (sehr verbreitet)",
+        "unterricht": {
+          "phase": "Elevium",
+          "fach": "Götter & Kulte",
+          "note": "Standard-Religionsunterricht"
+        }
+      },
+      "source": {
+        "file": "BIBLIOTHEK_KATALOG.md"
+      }
+    },
+    {
+      "id": "LIB_GESPRAECHE_ROHALS_DES_WEISEN",
+      "title": "Gespräche Rohals des Weisen",
+      "type": "Poesie",
+      "tags": [
+        "13",
+        "bosparano_garethi_tulamidya",
+        "novizium",
+        "poesie"
+      ],
+      "summary": null,
+      "knowledgeHooks": [],
+      "foundry": {
+        "journalKey": null,
+        "journalUuid": null
+      },
+      "data": {
+        "name": "Gespräche Rohals des Weisen",
+        "art": "Poesie",
+        "autoren": "verschiedene",
+        "format": "Octavo, 60-100 Seiten pro Band",
+        "erscheinungsdatum": "490-590 BF",
+        "exemplare": "Mehrere Originale, 400-700 Abschriften",
+        "aufbewahrung": "Originale im Pentagontempel Gareth",
+        "sprache": "Bosparano, Garethi, Tulamidya",
+        "inhaltsqualität": "Fordernd (IS I)",
+        "regeltechnik": {
+          "ab_3_baende": [
+            "Götter & Kulte +1 FP",
+            "Überreden (CH-Teilprobe +1)"
+          ],
+          "alle_baende": "Magiekunde (Probe +1)",
+          "zauber_hinweise": [
+            "ANIMATIO (Gil)"
+          ]
+        },
+        "wert": "700 Silbertaler pro Band, Garether Ausgabe unbezahlbar",
+        "verfügbarkeit": 13,
+        "unterricht": {
+          "phase": "Ab Novizium",
+          "fach": "Magietheorie, Ethik",
+          "note": "Besonders wertvoll für Metamagie-Verständnis"
+        }
+      },
+      "source": {
+        "file": "BIBLIOTHEK_KATALOG.md"
+      }
+    },
+    {
+      "id": "LIB_FOLIANTH_DER_KREUTHERKUNDE",
+      "title": "Folianth der Kreutherkunde",
+      "type": "Fachliteratur (Pflanzenkunde)",
+      "tags": [
+        "fachliteratur_pflanzenkunde",
+        "novizium"
+      ],
+      "summary": null,
+      "knowledgeHooks": [
+        {
+          "topic": "Pflanzenkunde",
+          "relatedSkillId": null,
+          "bonus": "+1/+2 FP je nach Ausgabe",
+          "teachingPhase": "Novizium",
+          "teacher": null,
+          "examRelevance": null
+        }
+      ],
+      "foundry": {
+        "journalKey": null,
+        "journalUuid": null
+      },
+      "data": {
+        "name": "Folianth der Kreutherkunde",
+        "art": "Fachliteratur (Pflanzenkunde)",
+        "verwandt": "Eynmaleyns der Kreutherkunde",
+        "regeltechnik": {
+          "fertigkeit": "Pflanzenkunde",
+          "bonus": "+1/+2 FP je nach Ausgabe"
+        },
+        "unterricht": {
+          "phase": "Novizium",
+          "fach": "Kräuterkunde, Alchimie",
+          "note": "Ergänzt durch Eynmaleyns der Kreutherkunde"
+        }
+      },
+      "source": {
+        "file": "BIBLIOTHEK_KATALOG.md"
+      }
+    },
+    {
+      "id": "LIB_ARTEFAKTE_UND_ALCHIMICA_VOM_WECHSEL_DER_FORMEN",
+      "title": "Artefakte und Alchimica, Vom Wechsel der Formen",
+      "type": "Zauberbuch",
+      "tags": [
+        "4_originalabschrift_7_festumer_ausgabe",
+        "novizium",
+        "zauberbuch"
+      ],
+      "summary": null,
+      "knowledgeHooks": [
+        {
+          "topic": "Alchimie",
+          "relatedSkillId": null,
+          "bonus": "+1 FP",
+          "teachingPhase": "Novizium",
+          "teacher": null,
+          "examRelevance": null
+        }
+      ],
+      "foundry": {
+        "journalKey": null,
+        "journalUuid": null
+      },
+      "data": {
+        "name": "Artefakte und Alchimica, Vom Wechsel der Formen",
+        "art": "Zauberbuch",
+        "regeltechnik": {
+          "fertigkeit": "Alchimie",
+          "bonus": "+1 FP",
+          "sonderfertigkeit": "SF Schrift des Elementaren Gefüges (Berufsgeheimnis)"
+        },
+        "aufbewahrung": [
+          "Original unbekannt",
+          "Abschrift im Bund des Roten Salamanders in Festum",
+          "An Magierakademien und Hesindetempeln"
+        ],
+        "verfügbarkeit": "4 (Originalabschrift), 7 (Festumer Ausgabe)",
+        "unterricht": {
+          "phase": "Novizium",
+          "fach": "Alchimie, Artefaktkunde"
+        }
+      },
+      "source": {
+        "file": "BIBLIOTHEK_KATALOG.md"
+      }
+    },
+    {
+      "id": "LIB_ASTRALE_GEHEIMNISSE",
+      "title": "Astrale Geheimnisse",
+      "type": "Zauberbuch",
+      "tags": [
+        "4_originalabschrift_8_abschrift",
+        "zauberbuch"
+      ],
+      "summary": "Enthält unter anderem: - Sphärologie - Unschärfethesis - Rohals sieben Fragen an den Drachen Fuldigor - Prophezeiung über das Ende der Welt - Niobaras Horoskop der 50 Tore",
+      "knowledgeHooks": [],
+      "foundry": {
+        "journalKey": null,
+        "journalUuid": null
+      },
+      "data": {
+        "name": "Astrale Geheimnisse",
+        "art": "Zauberbuch",
+        "regeltechnik": {
+          "fertigkeiten": [
+            "Geschichtswissen (KL-Teilprobe +1)",
+            "Sphärenkunde (KL-Teilprobe +1)"
+          ]
+        },
+        "inhalt": "Enthält unter anderem:\n- Sphärologie\n- Unschärfethesis\n- Rohals sieben Fragen an den Drachen Fuldigor\n- Prophezeiung über das Ende der Welt\n- Niobaras Horoskop der 50 Tore\n",
+        "verfügbarkeit": "4 (Originalabschrift), 8 (Abschrift)",
+        "unterricht": {
+          "phase": "Studium",
+          "fach": "Sphärenkunde, Metamagie",
+          "note": "Fortgeschrittene Theorie"
+        }
+      },
+      "source": {
+        "file": "BIBLIOTHEK_KATALOG.md"
+      }
+    },
+    {
+      "id": "LIB_ALMANACH_DER_WANDLUNGEN",
+      "title": "Almanach der Wandlungen",
+      "type": "Zauberbuch",
+      "tags": [
+        "8_alte_abschrift_7_neue_abschrift",
+        "zauberbuch"
+      ],
+      "summary": null,
+      "knowledgeHooks": [],
+      "foundry": {
+        "journalKey": null,
+        "journalUuid": null
+      },
+      "data": {
+        "name": "Almanach der Wandlungen",
+        "art": "Zauberbuch",
+        "aufbewahrung": [
+          "Original in der Halle der Metamorphosen zu Kuslik",
+          "Abschrift in der Akademie der Verformungen zu Lowangen"
+        ],
+        "verfügbarkeit": "8 (alte Abschrift), 7 (neue Abschrift)",
+        "unterricht": {
+          "phase": "Studium",
+          "fach": "Verwandlungsmagie",
+          "note": "Die Puniner Akademie besitzt eine Abschrift"
+        }
+      },
+      "source": {
+        "file": "BIBLIOTHEK_KATALOG.md"
+      }
+    },
+    {
+      "id": "LIB_DIE_MACHT_DER_ELEMENTE",
+      "title": "Die Macht der Elemente",
+      "type": "Zauberbuch",
+      "tags": [
+        "zauberbuch"
+      ],
+      "summary": null,
+      "knowledgeHooks": [],
+      "foundry": {
+        "journalKey": null,
+        "journalUuid": null
+      },
+      "data": {
+        "name": "Die Macht der Elemente",
+        "art": "Zauberbuch",
+        "regeltechnik": {
+          "sonderfertigkeit": "SF Merkmalskenntnis Elementar (Hinweise)"
+        },
+        "unterricht": {
+          "phase": "Studium",
+          "fach": "Elementarmagie"
+        }
+      },
+      "source": {
+        "file": "BIBLIOTHEK_KATALOG.md"
+      }
+    },
+    {
+      "id": "LIB_BORBARADS_TESTAMENT_HEILIGES_TESTAMENT",
+      "title": "Borbarads Testament / Heiliges Testament",
+      "type": "Zauberbuch",
+      "tags": [
+        "5_originalabschrift_6_abschrift",
+        "zauberbuch"
+      ],
+      "summary": null,
+      "knowledgeHooks": [],
+      "foundry": {
+        "journalKey": null,
+        "journalUuid": null
+      },
+      "data": {
+        "name": "Borbarads Testament / Heiliges Testament",
+        "art": "Zauberbuch",
+        "regeltechnik": [
+          "Magiekunde +1 FP",
+          "Sphärenkunde (KL-Teilprobe +1)",
+          "Gefahren der Magie +1 FP"
+        ],
+        "verfügbarkeit": "5 (Originalabschrift), 6 (Abschrift)",
+        "warnung": "STRENG REGULIERTER ZUGANG\nNur für fortgeschrittene Studiosi mit Genehmigung \nder Spektabilität. Handelt von schwarzmagischer Theorie.\n",
+        "unterricht": {
+          "phase": "Nur Studium, nur Theorie",
+          "fach": "Dämonologie (nur theoretische Aspekte)",
+          "dozent": "Korobar Sylesius"
+        }
+      },
+      "source": {
+        "file": "BIBLIOTHEK_KATALOG.md"
+      }
+    },
+    {
+      "id": "LIB_AUSBILDUNG_IN_SCHWARZER_MAGIE",
+      "title": "Ausbildung in Schwarzer Magie",
+      "type": "Zauberbuch",
+      "tags": [
+        "3_sehr_selten",
+        "zauberbuch"
+      ],
+      "summary": null,
+      "knowledgeHooks": [],
+      "foundry": {
+        "journalKey": null,
+        "journalUuid": null
+      },
+      "data": {
+        "name": "Ausbildung in Schwarzer Magie",
+        "art": "Zauberbuch",
+        "regeltechnik": [
+          "Sphärenkunde (KL-Teilprobe +1)",
+          "SF Merkmalskenntnis Dämonisch (Hinweise)"
+        ],
+        "verfügbarkeit": "3 (sehr selten)",
+        "warnung": "HÖCHSTE ZUGRIFFSSTUFE\nExistenz in der Puniner Bibliothek ist nicht offiziell \nbestätigt. Gerüchte besagen, Korobar sucht nach \nVerbindungen zum Compendium Prodigiosis."
+      },
+      "source": {
+        "file": "BIBLIOTHEK_KATALOG.md"
+      }
+    },
+    {
+      "id": "LIB_COMPENDIUM_PRODIGIOSIS",
+      "title": "Compendium Prodigiosis",
+      "type": "Dämonisches Zauberbuch",
+      "tags": [
+        "daemonisches_zauberbuch"
+      ],
+      "summary": null,
+      "knowledgeHooks": [],
+      "foundry": {
+        "journalKey": null,
+        "journalUuid": null
+      },
+      "data": {
+        "name": "Compendium Prodigiosis",
+        "art": "Dämonisches Zauberbuch",
+        "verbindung": "Amazeroth (Erzdämon des Verbotenen Wissens)",
+        "status": "NICHT im offiziellen Bibliothekskatalog!\nExistiert versteckt in der Akademie.\nGesucht von Korobar Sylesius (um es zu VERNICHTEN).\n\nVerantwortlich für:\n- Irians Verwandlung\n- Mafaldas Pakt und Tod\n- Die \"Societas Prodigiosis\"\n",
+        "warnung": "HÖCHSTE GEFAHR\nWer das Buch liest, wird von Amazeroth verführt.\nEs flüstert Versprechungen von Wissen und Macht."
+      },
+      "source": {
+        "file": "BIBLIOTHEK_KATALOG.md"
+      }
+    }
+  ],
+  "misc": [
+    {
+      "öffnungszeiten": {
+        "scholaren": "Sonnenaufgang bis Nachtruhe (22:00)",
+        "magistri": "Unbeschränkt"
+      },
+      "zugang": {
+        "elevium": "Nur Grundbestand, mit Tutor-Begleitung",
+        "novizium": "Erweiterter Bestand, eigenständig",
+        "studium": "Vollzugang außer Verbotene Sektion",
+        "verbotene_sektion": "Nur mit schriftlicher Genehmigung der Spektabilität"
+      },
+      "ausleihe": {
+        "standard": "Bis zu 3 Bücher für 1 Woche",
+        "wertvolle": "Nur Lesesaal, keine Ausleihe",
+        "verbotene": "Nur unter Aufsicht im Sonderraum"
+      },
+      "strafen": {
+        "verspätung": "1 Silbertaler pro Tag und Buch",
+        "beschädigung": "Voller Ersatz + Strafarbeit",
+        "diebstahl": "Ausschluss von der Akademie"
+      },
+      "bibliothekarin": {
+        "bis_1043": "Magistra Mafalda von Neersand",
+        "ab_1043": "Position unbesetzt / vertretungsweise"
+      }
+    },
+    {
+      "dozent": "Mafalda von Neersand (bis Jahr 6)",
+      "inhalt": [
+        "Orientierung in der Bibliothek",
+        "Katalog-System verstehen",
+        "Umgang mit wertvollen Büchern",
+        "Erste eigenständige Recherche"
+      ],
+      "mafalda_zitat": "\"Bücher sind wie alte Freunde. Behandelt sie mit Respekt, \nund sie werden euch ihr Wissen anvertrauen.\""
+    },
+    {
+      "event": "Nächtliche Mutprobe in der Bibliothek",
+      "jahr": "Novizium",
+      "aufgabe": "Buch aus der Verbotenen Sektion holen",
+      "gefahr": "Gardist Quetzel auf Patrouille",
+      "zeitdruck": "Wettlauf gegen konkurrierende Gruppe",
+      "mechanik": {
+        "orientierung": "Probe Orientierung +1",
+        "suche": "Sammelprobe, 2 Zeitmarken pro Runde",
+        "schleichen": "Verbergen (Schleichen) vs. Quetzels Sinnesschärfe 12"
+      },
+      "plot_hook": "Bei dieser Mutprobe könnte das Compendium Prodigiosis \nerstmals von den Spielern entdeckt werden..."
+    }
+  ]
+}

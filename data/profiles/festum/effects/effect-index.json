@@ -1,0 +1,37 @@
+[
+  {
+    "effectId": "energy_plus1",
+    "name": null,
+    "type": null
+  },
+  {
+    "effectId": "lore_plus1",
+    "name": null,
+    "type": null
+  },
+  {
+    "effectId": "rel_mentor_plus2",
+    "name": null,
+    "type": null
+  },
+  {
+    "effectId": "stress_minus1",
+    "name": null,
+    "type": null
+  },
+  {
+    "effectId": "stress_minus2",
+    "name": null,
+    "type": null
+  },
+  {
+    "effectId": "stress_plus1",
+    "name": null,
+    "type": null
+  },
+  {
+    "effectId": "stress_plus2",
+    "name": null,
+    "type": null
+  }
+]

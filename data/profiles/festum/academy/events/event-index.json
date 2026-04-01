@@ -1,0 +1,429 @@
+[
+  {
+    "eventId": "E_LIBRARY_DISCOVER",
+    "title": "Ein geheimnisvolles Buch",
+    "pool": "exploration",
+    "file": "data/events/pools/exploration.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_LIBRARY_INVESTIGATE",
+    "title": "Das Buch untersuchen",
+    "pool": "uncategorized",
+    "file": "data/events/pools/uncategorized.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_MENTOR_HELP",
+    "title": "Mentor bietet Hilfe",
+    "pool": "social_minor",
+    "file": "data/events/pools/social_minor.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_KOBOLD_GERUECHT",
+    "title": "Gerüchte im Jahrgang",
+    "pool": "kobold_arc",
+    "file": "data/events/pools/kobold_arc.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_KOBOLD_AWAKENING",
+    "title": "Das verbotene Lachen",
+    "pool": "kobold_arc",
+    "file": "data/events/pools/kobold_arc.json",
+    "highImpact": true
+  },
+  {
+    "eventId": "E_KOBOLD_FIRST_MEETING",
+    "title": "Erste Begegnung mit Phexifax",
+    "pool": "kobold_arc",
+    "file": "data/events/pools/kobold_arc.json",
+    "highImpact": true
+  },
+  {
+    "eventId": "E_KOBOLD_RETURN",
+    "title": "Die Feendomäne kehrt zurück",
+    "pool": "kobold_arc",
+    "file": "data/events/pools/kobold_arc.json",
+    "highImpact": true
+  },
+  {
+    "eventId": "E_LAIODAN_OFFERS_HELP",
+    "title": "Laiodan weiß mehr, als er zugibt",
+    "pool": "kobold_arc",
+    "file": "data/events/pools/kobold_arc.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_KOBOLD_REBIND_RITUAL",
+    "title": "Der feenhafte Bann",
+    "pool": "kobold_arc",
+    "file": "data/events/pools/kobold_arc.json",
+    "highImpact": true
+  },
+  {
+    "eventId": "E_LIBRARY_CATALOGUE_MIXUP",
+    "title": "Ein Band unter falscher Signatur",
+    "pool": "academy_minor",
+    "file": "data/events/pools/academy_minor.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_LIBRARY_ARCHIVE_TRACE",
+    "title": "Spurensuche im Archiv",
+    "pool": "academy_minor",
+    "file": "data/events/pools/academy_minor.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ALCHEMY_MISSING_REAGENT",
+    "title": "Das verschwundene Reagenz",
+    "pool": "academy_minor",
+    "file": "data/events/pools/academy_minor.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ALCHEMY_GARDEN_SEARCH",
+    "title": "Suche im Garten und Kräuterschrank",
+    "pool": "academy_minor",
+    "file": "data/events/pools/academy_minor.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ORIOR_TUTORING_REQUEST",
+    "title": "Orior bittet um Hilfe",
+    "pool": "social_minor",
+    "file": "data/events/pools/social_minor.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ORIOR_RIVAL_TENSION",
+    "title": "Rivalität im Tutorium",
+    "pool": "social_minor",
+    "file": "data/events/pools/social_minor.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_CODEX_DISCIPLINE_NOTICE",
+    "title": "Ein kleiner Verstoß, ein großes Gesicht",
+    "pool": "discipline",
+    "file": "data/events/pools/discipline.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_CODEX_HEARING",
+    "title": "Anhörung vor Nazir",
+    "pool": "discipline",
+    "file": "data/events/pools/discipline.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_MORGEN_GLOCKEN",
+    "title": "Die Glocken von Punin",
+    "pool": "morgen",
+    "file": "data/events/pools/morgen.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_MORGEN_HAST",
+    "title": "Eilige Schritte",
+    "pool": "morgen",
+    "file": "data/events/pools/morgen.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_MORGEN_KOSMAAR_BLICK",
+    "title": "Die strenge Spektabilität",
+    "pool": "morgen",
+    "file": "data/events/pools/morgen.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_MENSA_ELDRIC_PRUNK",
+    "title": "Adliges Gehabe",
+    "pool": "mensa",
+    "file": "data/events/pools/mensa.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_MENSA_GERUECHT",
+    "title": "Geflüster am Nebentisch",
+    "pool": "mensa",
+    "file": "data/events/pools/mensa.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_MENSA_ALGEN_DUFT",
+    "title": "Elrikas Kräuter",
+    "pool": "mensa",
+    "file": "data/events/pools/mensa.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_NACHT_TURM_LEUCHTEN",
+    "title": "Blaues Flackern",
+    "pool": "nacht",
+    "file": "data/events/pools/nacht.json",
+    "highImpact": true
+  },
+  {
+    "eventId": "E_NACHT_TRAUM_SCHATTEN",
+    "title": "Unruhige Träume",
+    "pool": "nacht",
+    "file": "data/events/pools/nacht.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_NACHT_SCHLEICHWEGE",
+    "title": "Schatten in der Halle",
+    "pool": "nacht",
+    "file": "data/events/pools/nacht.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_EXPL_VERGESSENE_ROLLE",
+    "title": "Ein Fund im Hof",
+    "pool": "exploration",
+    "file": "data/events/pools/exploration.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_EXPL_HESINDETAG_RUHE",
+    "title": "Hesindes Stille",
+    "pool": "exploration",
+    "file": "data/events/pools/exploration.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_EXPL_NAZIR_ÄRGER",
+    "title": "Nazirs Zorn",
+    "pool": "exploration",
+    "file": "data/events/pools/exploration.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_FORBIDDEN_RESEARCH",
+    "title": "Verbotene Notizen",
+    "pool": "exploration",
+    "file": "data/events/pools/exploration.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_RIVAL_TRIP",
+    "title": "Ein gezielter Stolperer",
+    "pool": "mensa",
+    "file": "data/events/pools/mensa.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_GHOST_TEACHER",
+    "title": "Der Dozent von Gestern",
+    "pool": "nacht",
+    "file": "data/events/pools/nacht.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_STOLEN_SNACK",
+    "title": "Süße Versuchung",
+    "pool": "freizeit",
+    "file": "data/events/pools/freizeit.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_LAUNDRY_MIXUP",
+    "title": "Verwechselte Roben",
+    "pool": "morgen",
+    "file": "data/events/pools/morgen.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_MAGICAL_RESONANCE",
+    "title": "Astrale Erschöpfung",
+    "pool": "freizeit",
+    "file": "data/events/pools/freizeit.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_CAT_WATCHER",
+    "title": "Die Augen im Schatten",
+    "pool": "exploration",
+    "file": "data/events/pools/exploration.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_TEST_ANXIETY",
+    "title": "Prüfungsangst",
+    "pool": "morgen",
+    "file": "data/events/pools/morgen.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_MUD_PUDDLE",
+    "title": "Das Missgeschick im Hof",
+    "pool": "freizeit",
+    "file": "data/events/pools/freizeit.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_FORGOTTEN_VALUABLE",
+    "title": "Ein vergessener Ring",
+    "pool": "exploration",
+    "file": "data/events/pools/exploration.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_WHISPERING_WALLS",
+    "title": "Das Flüstern der Mauern",
+    "pool": "nacht",
+    "file": "data/events/pools/nacht.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_TUTOR_SEARCH",
+    "title": "Gefragte Expertise",
+    "pool": "mensa",
+    "file": "data/events/pools/mensa.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_DUEL_CHALLENGE",
+    "title": "Herausforderung im Hof",
+    "pool": "social_minor",
+    "file": "data/events/pools/social_minor.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_INK_MISHAP",
+    "title": "Tinten-Desaster",
+    "pool": "freizeit",
+    "file": "data/events/pools/freizeit.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_SECRET_MEETING",
+    "title": "Ein Treffen im Kreuzgang",
+    "pool": "nacht",
+    "file": "data/events/pools/nacht.json",
+    "highImpact": true
+  },
+  {
+    "eventId": "E_ACAD_CLEANING_DUTY",
+    "title": "Strafdienst",
+    "pool": "morgen",
+    "file": "data/events/pools/morgen.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_OLD_FRIEND_LETTER",
+    "title": "Post aus der Heimat",
+    "pool": "morgen",
+    "file": "data/events/pools/morgen.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_MAGICAL_FLARE",
+    "title": "Ein instabiles Experiment",
+    "pool": "freizeit",
+    "file": "data/events/pools/freizeit.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_DREAM_VISION",
+    "title": "Vision der Sanduhr",
+    "pool": "nacht",
+    "file": "data/events/pools/nacht.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_LOST_FAMILIAR",
+    "title": "Die entlaufene Kröte",
+    "pool": "exploration",
+    "file": "data/events/pools/exploration.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_NORDTURM_SIGNAL",
+    "title": "Blaues Flackern am Nordturm",
+    "pool": "study_intrigue",
+    "file": "data/events/pools/study_intrigue.json",
+    "highImpact": true
+  },
+  {
+    "eventId": "E_NORDTURM_ENTRY",
+    "title": "Die versiegelte Tür",
+    "pool": "study_intrigue",
+    "file": "data/events/pools/study_intrigue.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_PRODIGIOSIS_NOTE",
+    "title": "Eine Randnotiz im falschen Buch",
+    "pool": "study_intrigue",
+    "file": "data/events/pools/study_intrigue.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_PRODIGIOSIS_MEETING",
+    "title": "Die stille Einladung",
+    "pool": "study_intrigue",
+    "file": "data/events/pools/study_intrigue.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_THAUMA_WOOD_REQUEST",
+    "title": "Material für den Thaumatoturris",
+    "pool": "study_minor",
+    "file": "data/events/pools/study_minor.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_THAUMA_BINDING_TEST",
+    "title": "Die Vorprüfung der Bindung",
+    "pool": "study_minor",
+    "file": "data/events/pools/study_minor.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_CULINA_FAVOR_REQUEST",
+    "title": "Sorscha braucht eine Hand",
+    "pool": "mensa",
+    "file": "data/events/pools/mensa.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_CULINA_SUPPLY_TRIP",
+    "title": "Vorräte und Würde",
+    "pool": "mensa",
+    "file": "data/events/pools/mensa.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_FAMILIAR_ESCAPE",
+    "title": "Ein Tier verschwindet",
+    "pool": "academy_minor",
+    "file": "data/events/pools/academy_minor.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_FAMILIAR_OWNER",
+    "title": "Der Besitzer meldet sich",
+    "pool": "academy_minor",
+    "file": "data/events/pools/academy_minor.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_DEBATE_INVITE",
+    "title": "Einladung zur Debatte",
+    "pool": "social_minor",
+    "file": "data/events/pools/social_minor.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_DEBATE_SCANDAL",
+    "title": "Die Debatte kippt",
+    "pool": "social_minor",
+    "file": "data/events/pools/social_minor.json",
+    "highImpact": false
+  }
+]

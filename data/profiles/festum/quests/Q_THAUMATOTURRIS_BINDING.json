@@ -1,0 +1,41 @@
+{
+  "questId": "Q_THAUMATOTURRIS_BINDING",
+  "title": "Vor der Bindung",
+  "startNodeId": "QN_THAUMA_START",
+  "description": "Material, Geometrie und sauberes Arbeiten entscheiden darüber, ob die Vorbereitung auf die Stabbindung zur Lektion oder Katastrophe wird.",
+  "tags": [
+    "artefaktmagie",
+    "stabbindung",
+    "studium"
+  ],
+  "nodes": [
+    {
+      "nodeId": "QN_THAUMA_START",
+      "questId": "Q_THAUMATOTURRIS_BINDING",
+      "type": "event",
+      "eventId": "E_THAUMA_WOOD_REQUEST",
+      "reqExpr": "",
+      "failforwardNodeId": null
+    },
+    {
+      "nodeId": "QN_THAUMA_TEST",
+      "questId": "Q_THAUMATOTURRIS_BINDING",
+      "type": "event",
+      "eventId": "E_THAUMA_BINDING_TEST",
+      "reqExpr": "",
+      "failforwardNodeId": null
+    },
+    {
+      "nodeId": "QN_THAUMA_DONE",
+      "questId": "Q_THAUMATOTURRIS_BINDING",
+      "type": "effect",
+      "effectIds": [
+        "lore_plus1",
+        "energy_plus1"
+      ],
+      "nextNodeId": null
+    }
+  ],
+  "deadlineDays": 8,
+  "deadlineAction": "expire"
+}

@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Ausbaustufen für das geheime Refugium (Base Building)",
+    "schema": "janus7:academy:sanctuary:v1"
+  },
+  "stations": [
+    {
+      "id": "SANC_STATION_ALCHEMY_BASIC",
+      "name": "Einfacher Alchimietisch",
+      "category": "crafting",
+      "description": "Erlaubt das heimliche Brauen von einfachen Elixieren der Stufe 1-3.",
+      "costs": {
+        "silver": 50,
+        "requiredItemTags": [
+          "item_glaskolben",
+          "item_brenner"
+        ]
+      },
+      "passiveEffects": [
+        {
+          "target": "stress",
+          "value": -1,
+          "condition": "rest_in_sanctuary"
+        }
+      ],
+      "unlockedActions": [
+        {
+          "actionId": "ACT_BREW_POTION",
+          "allowedSlots": [
+            "Nachmittag",
+            "Nacht"
+          ],
+          "mechanic": "roll:Alchimie +1"
+        }
+      ]
+    }
+  ]
+}

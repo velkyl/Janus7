@@ -90,9 +90,28 @@ registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (en
       const slotSeconds  = JanusConfig.get('calendarSlotSeconds')  ?? 8640;
       calendar.enableWorldTimeSync({ enabled: syncEnabled, slotSeconds });
       logger?.debug?.(`[JANUS7] CalendarSync: enabled=${syncEnabled}, slotSeconds=${slotSeconds}`);
+      if (syncEnabled) {
+        calendar.syncFromWorldTime({ force: true }).catch((syncErr) => {
+          logger?.warn?.('[JANUS7] CalendarSync: Initialer Pull aus Foundry worldTime fehlgeschlagen.', {
+            err: syncErr?.message ?? syncErr
+          });
+        });
+      }
     } catch (settingsErr) {
       logger?.warn?.('[JANUS7] CalendarSync: Konnte Sync-Config nicht lesen, Sync deaktiviert.', { err: settingsErr });
     }
+
+    registerRuntimeHook('janus7:academy-phase4:dsa-calendar-sync', HOOKS.DSA_CALENDAR_UPDATED, async () => {
+      try {
+        if (!calendar?._worldSync?.enabled) return;
+        await calendar.syncFromWorldTime({ force: true });
+      } catch (syncErr) {
+        logger?.warn?.('[JANUS7] CalendarSync: Pull nach DSA-Kalenderupdate fehlgeschlagen.', {
+          err: syncErr?.message ?? syncErr
+        });
+      }
+    });
+
     const scoring = new JanusScoringEngine({ state, academyData, logger });
     const social  = new JanusSocialEngine({ state, academyData, logger });
 

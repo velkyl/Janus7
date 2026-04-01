@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Lebenssimulations-Ressourcen für Akademiealltag",
+    "schema": "janus7:academy:resources:v1"
+  },
+  "resources": [
+    {
+      "id": "stress",
+      "label": "Stress",
+      "min": 0,
+      "max": 10,
+      "thresholdEvents": [
+        {
+          "at": 8,
+          "eventId": "E_STRESS_WARNING"
+        },
+        {
+          "at": 10,
+          "eventId": "E_BURNOUT_BREAKDOWN"
+        }
+      ]
+    },
+    {
+      "id": "energy",
+      "label": "Energie",
+      "min": 0,
+      "max": 10
+    },
+    {
+      "id": "focus",
+      "label": "Fokus",
+      "min": 0,
+      "max": 10
+    }
+  ]
+}

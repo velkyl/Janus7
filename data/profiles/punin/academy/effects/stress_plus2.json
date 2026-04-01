@@ -1,0 +1,5 @@
+{
+  "effectId": "stress_plus2",
+  "expr": "playerState.stress:+2",
+  "humanReadable": "Stress +2"
+}

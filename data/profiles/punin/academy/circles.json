@@ -1,0 +1,132 @@
+{
+  "version": "1.0.0",
+  "description": "Zirkel-Definitionen der Akademie (Häuser)",
+  "circles": [
+    {
+      "id": "salamander",
+      "name": "Zirkel des Salamanders",
+      "shortName": "Haus Feuer",
+      "color": "#ef4444",
+      "colorSecondary": "#dc2626",
+      "icon": "icons/circles/salamander.webp",
+      "description": "Leidenschaftlich und impulsiv. Die Schüler des Salamander-Zirkels sind bekannt für ihre feurige Natur.",
+      "element": "fire",
+      "locationId": "LOC_ALCHEMIE_LABOR_TURM_DER_TAUSEND_TRAENKE",
+      "attributes": [
+        "MU",
+        "KL",
+        "CH"
+      ],
+      "founder": "Rakorium Muntagonus",
+      "motto": "Per ignem ad gloriam",
+      "traits": {
+        "positive": [
+          "leidenschaftlich",
+          "mutig",
+          "charismatisch"
+        ],
+        "negative": [
+          "impulsiv",
+          "ungeduldig",
+          "dominant"
+        ]
+      }
+    },
+    {
+      "id": "staves",
+      "name": "Zirkel der Stäbe",
+      "shortName": "Haus Luft",
+      "color": "#3b82f6",
+      "colorSecondary": "#2563eb",
+      "icon": "icons/circles/staves.webp",
+      "description": "Wissbegierig und analytisch.",
+      "element": "air",
+      "locationId": "LOC_STERNWARTE_DACHTURM",
+      "attributes": [
+        "KL",
+        "IN",
+        "CH"
+      ],
+      "founder": "Rohal der Weise",
+      "motto": "Scientia potentia est",
+      "traits": {
+        "positive": [
+          "intelligent",
+          "analytisch",
+          "kreativ"
+        ],
+        "negative": [
+          "arrogant",
+          "zerstreut",
+          "isoliert"
+        ]
+      }
+    },
+    {
+      "id": "swords",
+      "name": "Zirkel der Schwerter",
+      "shortName": "Haus Wasser",
+      "color": "#06b6d4",
+      "colorSecondary": "#0891b2",
+      "icon": "icons/circles/swords.webp",
+      "description": "Diszipliniert und gerecht.",
+      "element": "water",
+      "locationId": "LOC_MEDITATIONSRAUM",
+      "attributes": [
+        "MU",
+        "IN",
+        "KK"
+      ],
+      "founder": "Sarabis von Gareth",
+      "motto": "Iustitia fundamentum regnorum",
+      "traits": {
+        "positive": [
+          "gerecht",
+          "diszipliniert",
+          "loyal"
+        ],
+        "negative": [
+          "starr",
+          "unflexibel",
+          "selbstgerecht"
+        ]
+      }
+    },
+    {
+      "id": "sickles",
+      "name": "Zirkel der Sicheln",
+      "shortName": "Haus Erde",
+      "color": "#84cc16",
+      "colorSecondary": "#65a30d",
+      "icon": "icons/circles/sickles.webp",
+      "description": "Pragmatisch und naturverbunden.",
+      "element": "earth",
+      "locationId": "LOC_AKADEMIEGARTEN_KRAEUTER",
+      "attributes": [
+        "KO",
+        "FF",
+        "KK"
+      ],
+      "founder": "Geshla die Beständige",
+      "motto": "Terra mater omnium",
+      "traits": {
+        "positive": [
+          "praktisch",
+          "beständig",
+          "naturverbunden"
+        ],
+        "negative": [
+          "stur",
+          "materialistisch",
+          "unkreativ"
+        ]
+      }
+    }
+  ],
+  "meta": {
+    "version": "1.0.0",
+    "updatedAt": "2026-02-03",
+    "source": "janus7/data/academy",
+    "schema": "academy:circles.json"
+  }
+}

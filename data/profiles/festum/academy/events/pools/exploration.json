@@ -1,0 +1,91 @@
+[
+  {
+    "eventId": "E_LIBRARY_DISCOVER",
+    "pool": "exploration",
+    "triggerExpr": "week >= 2",
+    "title": "Ein geheimnisvolles Buch",
+    "description": "Du entdeckst ein altes Buch mit seltsamen Runen.",
+    "highImpact": false,
+    "options": [
+      "OPT_LIB_INVESTIGATE",
+      "OPT_LIB_IGNORE"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_FORBIDDEN_RESEARCH",
+    "pool": "exploration",
+    "triggerExpr": "slotIndex >= 5 && locationId == 'LOC_HAUPTBIBLIOTHEK_3_EBENEN'",
+    "title": "Verbotene Notizen",
+    "description": "In einem alten Folianten findest du eine lose Seite, die Techniken beschreibt, um die Reichweite des ODEM ARCANUM zu verdoppeln – eine Methode, die offiziell als 'instabil' gilt.",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_STUDY_SECRET",
+      "OPT_ACAD_REPORT_PAGE"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_CAT_WATCHER",
+    "pool": "exploration",
+    "triggerExpr": "locationId == 'LOC_VERSIEGELTER_NORDTURM'",
+    "title": "Die Augen im Schatten",
+    "description": "Eine pechschwarze Katze sitzt auf dem Sims des Nordturms. Sie miaut nicht, sie starrt dich nur mit unnatürlich intelligenten Augen an.",
+    "highImpact": false,
+    "mood": "supernatural"
+  },
+  {
+    "eventId": "E_ACAD_FORGOTTEN_VALUABLE",
+    "pool": "exploration",
+    "triggerExpr": "locationId == 'LOC_SPEISESAAL'",
+    "title": "Ein vergessener Ring",
+    "description": "Unter einer Bank findest du einen silbernen Siegelring. Das Wappen gehört einer einflussreichen Familie aus Punin.",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_KEEP_RING",
+      "OPT_ACAD_FIND_OWNER"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_LOST_FAMILIAR",
+    "pool": "exploration",
+    "triggerExpr": "locationId == 'LOC_AKADEMIEGARTEN'",
+    "title": "Die entlaufene Kröte",
+    "description": "Im Gebüsch raschelt es. Eine fette, mit Runen bemalte Kröte scheint sich verirrt zu haben. Sie gehört wohl einem der Lehrer.",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_CATCH_FAMILIAR",
+      "OPT_ACAD_LEAVE_FAMILIAR"
+    ]
+  },
+  {
+    "eventId": "E_EXPL_VERGESSENE_ROLLE",
+    "pool": "exploration",
+    "triggerExpr": "slotIndex >= 2 && slotIndex <= 8",
+    "title": "Ein Fund im Hof",
+    "description": "Zwischen den Pflastersteinen des Innenhofs glitzert etwas. Es ist eine beschädigte Pergamentrolle mit arithmetischen Formeln.",
+    "highImpact": false,
+    "options": [
+      "OPT_EXPL_ANALYSIEREN",
+      "OPT_EXPL_ABGEBEN"
+    ]
+  },
+  {
+    "eventId": "E_EXPL_HESINDETAG_RUHE",
+    "pool": "exploration",
+    "triggerExpr": "dayName == 'Hesindetag'",
+    "title": "Hesindes Stille",
+    "description": "Der Westturm liegt heute in tiefer Stille. Die Luft riecht nach altem Papier und Weihrauch. Ein idealer Ort für Kontemplation.",
+    "highImpact": false,
+    "effects": [
+      "energy_plus1"
+    ]
+  },
+  {
+    "eventId": "E_EXPL_NAZIR_ÄRGER",
+    "pool": "exploration",
+    "triggerExpr": "locationId == 'LOC_LIBRARY_MAIN'",
+    "title": "Nazirs Zorn",
+    "description": "Magister Nazir Ragaza schimpft mit einem Eleven, der ein Buch nicht korrekt einsortiert hat. 'Inkompetenz ist der größte Feind der Erkenntnis!'",
+    "highImpact": false,
+    "mood": "tension"
+  }
+]

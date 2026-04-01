@@ -1,0 +1,799 @@
+{
+  "meta": {
+    "version": "1.1.0",
+    "generatedAt": "2026-02-01T07:06:10",
+    "sources": [
+      "Unterrichtsplan Zauberakademie zu Punin.md",
+      "DSA_Zauberakademie_komplett.docx",
+      "DSA_Zauberakademie_komplett.pdf",
+      "NPC_DATENBANK_AKADEMIE_V5_KANONISCH.md"
+    ],
+    "notes": [
+      "teacherNpcId nutzt überwiegend geplante/kanonische Foundry-IDs (npc_*). Falls in deiner Welt andere IDs/UUIDs verwendet werden, kannst du diese Felder 1:1 mappen.",
+      "systemSkillId nutzt die JANUS7-Konvention (TALENT_*, ATTRIBUTE_*). Passe sie an dein DSA5-Bridge-Mapping an, falls du abweichende IDs nutzt."
+    ]
+  },
+  "lessons": [
+    {
+      "id": "LES_Y1_T1_ARITH_01",
+      "name": "Rechnen – Grundlagen",
+      "subject": "arithmetik",
+      "yearRange": [
+        1,
+        1
+      ],
+      "summary": "Grundlagen von Rechnen, Einheiten, Abschätzen und Fehlerkontrolle. Ziel: sauberes Rechnen unter Zeitdruck – wichtig für spätere Formeln, Protokolle und Ressourcenverwaltung.",
+      "tags": [
+        "grundlagen",
+        "arithmetik",
+        "disziplin",
+        "fehlerkontrolle"
+      ],
+      "teacherNpcId": "NPC_RODORIM_STERNENSTERN",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          {
+            "systemSkillId": "TALENT_RECHNEN",
+            "weight": 1.0
+          },
+          {
+            "systemSkillId": "ATTRIBUTE_KLUGHEIT",
+            "weight": 0.3
+          }
+        ],
+        "checks": [
+          {
+            "type": "knowledge-check",
+            "difficulty": "normal",
+            "targetSkillId": "TALENT_RECHNEN"
+          }
+        ]
+      },
+      "scoringImpact": {
+        "diligence": 1,
+        "housePointsRange": [
+          -1,
+          2
+        ]
+      },
+      "references": {
+        "dsa5RuleRefs": [
+          "TALENT: RECHNEN",
+          "PROBEN: WISSENSTALENTE"
+        ],
+        "libraryItemIds": [
+          "LIB_ENCYCLOPAEDIA_MAGICA"
+        ]
+      }
+    },
+    {
+      "id": "LES_Y1_T1_LANG_BOS_01",
+      "name": "Bosparano – Grundzüge",
+      "subject": "sprachen",
+      "yearRange": [
+        1,
+        1
+      ],
+      "summary": "Einführung in Bosparano: Basisvokabular, schriftliche Formen, typische Fehlerquellen und einfache Übersetzungsübungen für akademische Texte.",
+      "tags": [
+        "sprache",
+        "bosparano",
+        "übersetzen",
+        "grundlagen"
+      ],
+      "teacherNpcId": "NPC_MEISTERIN_ROWENA_SILBERFEDER",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          {
+            "systemSkillId": "TALENT_SPRACHEN",
+            "weight": 1.0
+          },
+          {
+            "systemSkillId": "TALENT_SCHREIBEN",
+            "weight": 0.4
+          }
+        ],
+        "checks": [
+          {
+            "type": "knowledge-check",
+            "difficulty": "normal",
+            "targetSkillId": "TALENT_SPRACHEN"
+          }
+        ]
+      },
+      "scoringImpact": {
+        "diligence": 1,
+        "housePointsRange": [
+          -1,
+          2
+        ]
+      },
+      "references": {
+        "dsa5RuleRefs": [
+          "TALENT: SPRACHEN",
+          "TALENT: SCHREIBEN"
+        ],
+        "libraryItemIds": [
+          "LIB_CODEX_ALBYRICUS"
+        ]
+      }
+    },
+    {
+      "id": "LES_Y1_T1_MAGIEK_01",
+      "name": "Magiekunde – Grundlagen der Magie",
+      "subject": "magiekunde",
+      "yearRange": [
+        1,
+        1
+      ],
+      "summary": "Begriffe, Traditionen, Astralenergie, erste saubere Begriffsarbeit (ohne Zauberei). Fokus: 'Magie beschreiben können', bevor man sie anfasst.",
+      "tags": [
+        "magie",
+        "theorie",
+        "grundlagen",
+        "terminologie"
+      ],
+      "teacherNpcId": "NPC_MAFALDA",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          {
+            "systemSkillId": "TALENT_MAGIEKUNDE",
+            "weight": 1.0
+          }
+        ],
+        "checks": [
+          {
+            "type": "knowledge-check",
+            "difficulty": "normal",
+            "targetSkillId": "TALENT_MAGIEKUNDE"
+          }
+        ]
+      },
+      "scoringImpact": {
+        "diligence": 2,
+        "housePointsRange": [
+          -1,
+          3
+        ]
+      },
+      "references": {
+        "dsa5RuleRefs": [
+          "TALENT: MAGIEKUNDE",
+          "TRADITION: GILDENMAGIER (ÜBERBLICK)"
+        ],
+        "libraryItemIds": [
+          "LIB_ASTRALE_GEHEIMNISSE"
+        ]
+      }
+    },
+    {
+      "id": "LES_Y1_T1_MEDIT_01",
+      "name": "Konzentration & Meditation",
+      "subject": "meditation",
+      "yearRange": [
+        1,
+        1
+      ],
+      "summary": "Atemtechnik, Fokusübungen, mentale Hygiene. Ziel: Willenskraft stabilisieren, bevor die ersten astralen Belastungen in der Ausbildung zunehmen.",
+      "tags": [
+        "konzentration",
+        "willenskraft",
+        "meditation",
+        "grundlagen"
+      ],
+      "teacherNpcId": "NPC_HESINE_VON_AUBERG",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          {
+            "systemSkillId": "TALENT_WILLENSKRAFT",
+            "weight": 1.0
+          },
+          {
+            "systemSkillId": "TALENT_SELBSBEHERRSCHUNG",
+            "weight": 0.6
+          }
+        ],
+        "checks": [
+          {
+            "type": "self-control-check",
+            "difficulty": "normal",
+            "targetSkillId": "TALENT_SELBSBEHERRSCHUNG"
+          }
+        ]
+      },
+      "scoringImpact": {
+        "diligence": 1,
+        "housePointsRange": [
+          0,
+          2
+        ]
+      },
+      "references": {
+        "dsa5RuleRefs": [
+          "TALENT: WILLENSKRAFT",
+          "TALENT: SELBSTBEHERRSCHUNG"
+        ],
+        "libraryItemIds": [
+          "LIB_BREVIER_DER_ZWOELFGOETTLICHEN_UNTERWEISUNG"
+        ]
+      }
+    },
+    {
+      "id": "LES_Y1_T1_CALLI_01",
+      "name": "Kalligraphie & Kusliker Zeichen",
+      "subject": "kalligraphie",
+      "yearRange": [
+        1,
+        1
+      ],
+      "summary": "Saubere Schrift, Kürzel, Zeichen und Layout. Dient als Fundament für Protokolle, Bibliotheksarbeit und später: Formel-Notation.",
+      "tags": [
+        "schrift",
+        "kalligraphie",
+        "protokoll",
+        "zeichen"
+      ],
+      "teacherNpcId": "NPC_HESINE_VON_AUBERG",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          {
+            "systemSkillId": "TALENT_SCHREIBEN",
+            "weight": 1.0
+          },
+          {
+            "systemSkillId": "ATTRIBUTE_FINGERFERTIGKEIT",
+            "weight": 0.3
+          }
+        ],
+        "checks": [
+          {
+            "type": "craft-check",
+            "difficulty": "normal",
+            "targetSkillId": "TALENT_SCHREIBEN"
+          }
+        ]
+      },
+      "scoringImpact": {
+        "diligence": 1,
+        "housePointsRange": [
+          -1,
+          2
+        ]
+      },
+      "references": {
+        "dsa5RuleRefs": [
+          "TALENT: SCHREIBEN"
+        ],
+        "libraryItemIds": [
+          "LIB_CODEX_ALBYRICUS"
+        ]
+      }
+    },
+    {
+      "id": "LES_Y1_T2_GEOM_01",
+      "name": "Geometrie – Aufbaukurs",
+      "subject": "geometrie",
+      "yearRange": [
+        1,
+        1
+      ],
+      "summary": "Grundlagen von Geometrie und Konstruktionen, die in magischen Siegeln und Raumaufteilungen wieder auftauchen. Fokus: Formen sicher konstruieren, nicht 'schön zeichnen'.",
+      "tags": [
+        "geometrie",
+        "siegel",
+        "konstruktion",
+        "grundlagen"
+      ],
+      "teacherNpcId": "NPC_RODORIM_STERNENSTERN",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          {
+            "systemSkillId": "TALENT_RECHNEN",
+            "weight": 0.7
+          },
+          {
+            "systemSkillId": "TALENT_MALEN_ZEICHNEN",
+            "weight": 0.6
+          }
+        ],
+        "checks": [
+          {
+            "type": "knowledge-check",
+            "difficulty": "normal",
+            "targetSkillId": "TALENT_RECHNEN"
+          }
+        ]
+      },
+      "scoringImpact": {
+        "diligence": 1,
+        "housePointsRange": [
+          -1,
+          2
+        ]
+      },
+      "references": {
+        "dsa5RuleRefs": [
+          "TALENT: RECHNEN",
+          "TALENT: MALEN & ZEICHNEN"
+        ],
+        "libraryItemIds": [
+          "LIB_ENCYCLOPAEDIA_MAGICA"
+        ]
+      }
+    },
+    {
+      "id": "LES_Y1_T2_HIST_01",
+      "name": "Historie I – Fran-Horas & Grundlagen",
+      "subject": "historie",
+      "yearRange": [
+        1,
+        1
+      ],
+      "summary": "Einführung in historische Grundlagen (u.a. Fran-Horas), Quellkritik und chronologische Orientierung. Ziel: Aventurische Kontexte lesen können, ohne sofort in Mythen abzudriften.",
+      "tags": [
+        "geschichte",
+        "quellenkritik",
+        "orientierung"
+      ],
+      "teacherNpcId": "NPC_HESINE_VON_AUBERG",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          {
+            "systemSkillId": "TALENT_GESCHICHTSWISSEN",
+            "weight": 1.0
+          }
+        ],
+        "checks": [
+          {
+            "type": "knowledge-check",
+            "difficulty": "normal",
+            "targetSkillId": "TALENT_GESCHICHTSWISSEN"
+          }
+        ]
+      },
+      "scoringImpact": {
+        "diligence": 1,
+        "housePointsRange": [
+          -1,
+          2
+        ]
+      },
+      "references": {
+        "dsa5RuleRefs": [
+          "TALENT: GESCHICHTSWISSEN"
+        ],
+        "libraryItemIds": [
+          "LIB_1_000_JAHRE_NEUES_REICH"
+        ]
+      }
+    },
+    {
+      "id": "LES_Y1_T2_MAGTH_01",
+      "name": "Magietheorie I – Theoretische Grundlagen",
+      "subject": "magietheorie",
+      "yearRange": [
+        1,
+        1
+      ],
+      "summary": "Theoriebausteine: Astralenergie, Struktur, Wirkprinzipien. Keine 'Power-Fantasies' – nur saubere Modelle, die später in Analysen und Sicherheitsdesign gebraucht werden.",
+      "tags": [
+        "magietheorie",
+        "grundlagen",
+        "modelle",
+        "analyse"
+      ],
+      "teacherNpcId": "NPC_MAGISTER_ALRICIO",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          {
+            "systemSkillId": "TALENT_MAGIEKUNDE",
+            "weight": 1.0
+          }
+        ],
+        "checks": [
+          {
+            "type": "knowledge-check",
+            "difficulty": "hard",
+            "targetSkillId": "TALENT_MAGIEKUNDE"
+          }
+        ]
+      },
+      "scoringImpact": {
+        "diligence": 2,
+        "housePointsRange": [
+          -2,
+          3
+        ]
+      },
+      "references": {
+        "dsa5RuleRefs": [
+          "TALENT: MAGIEKUNDE",
+          "GRUNDLAGEN: MAGIETHEORIE"
+        ],
+        "libraryItemIds": [
+          "LIB_ASTRALE_GEHEIMNISSE"
+        ]
+      }
+    },
+    {
+      "id": "LES_Y1_T2_HELL_01",
+      "name": "Hellsicht-Theorie – Überblick",
+      "subject": "hellsicht",
+      "yearRange": [
+        1,
+        1
+      ],
+      "summary": "Theoretischer Überblick über Hellsicht: Wahrnehmung vs. Erkenntnis, typische Fehlschlüsse, Grenzen. Vorbereitung auf spätere Analysen (ANALYS/ODEM) ohne sie schon zu wirken.",
+      "tags": [
+        "hellsicht",
+        "theorie",
+        "analyse",
+        "fehlschluss"
+      ],
+      "teacherNpcId": "NPC_HESINE_VON_AUBERG",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          {
+            "systemSkillId": "TALENT_MAGIEKUNDE",
+            "weight": 0.7
+          },
+          {
+            "systemSkillId": "TALENT_SINNESSCHAERFE",
+            "weight": 0.5
+          }
+        ],
+        "checks": [
+          {
+            "type": "knowledge-check",
+            "difficulty": "normal",
+            "targetSkillId": "TALENT_MAGIEKUNDE"
+          }
+        ]
+      },
+      "scoringImpact": {
+        "diligence": 1,
+        "housePointsRange": [
+          -1,
+          2
+        ]
+      },
+      "references": {
+        "dsa5RuleRefs": [
+          "MERKMAL: HELLSICHT (ÜBERBLICK)"
+        ],
+        "libraryItemIds": [
+          "LIB_ENCYCLOPAEDIA_MAGICA"
+        ]
+      }
+    },
+    {
+      "id": "LES_Y1_T2_ASTRO_01",
+      "name": "Astrologie I – Sternkunde",
+      "subject": "astrologie",
+      "yearRange": [
+        1,
+        1
+      ],
+      "summary": "Sternbilder, Kalenderverständnis, Grundlogik von Beobachtung und Notation. Ziel: Nicht 'wahrsagen', sondern messen, dokumentieren, vergleichen.",
+      "tags": [
+        "sternkunde",
+        "astrologie",
+        "beobachtung",
+        "dokumentation"
+      ],
+      "teacherNpcId": "NPC_RODORIM_STERNENSTERN",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          {
+            "systemSkillId": "TALENT_STERNKUNDE",
+            "weight": 1.0
+          },
+          {
+            "systemSkillId": "TALENT_SINNESSCHAERFE",
+            "weight": 0.4
+          }
+        ],
+        "checks": [
+          {
+            "type": "knowledge-check",
+            "difficulty": "normal",
+            "targetSkillId": "TALENT_STERNKUNDE"
+          }
+        ]
+      },
+      "scoringImpact": {
+        "diligence": 1,
+        "housePointsRange": [
+          -1,
+          2
+        ]
+      },
+      "references": {
+        "dsa5RuleRefs": [
+          "TALENT: STERNKUNDE"
+        ],
+        "libraryItemIds": [
+          "LIB_SPHEREN_OVERVIEW"
+        ]
+      }
+    },
+    {
+      "id": "LES_Y1_T3_LAW_01",
+      "name": "Gildenrecht I – Grundlagen",
+      "subject": "gildenrecht",
+      "yearRange": [
+        1,
+        1
+      ],
+      "summary": "Grundlagen des Gildenrechts: Pflichten, Privilegien, Tabuzonen. Ziel: Regelverständnis statt Regellücken-Sport.",
+      "tags": [
+        "recht",
+        "codex",
+        "gilden",
+        "pflichten"
+      ],
+      "teacherNpcId": "NPC_NAZIR_RAGAZA",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          {
+            "systemSkillId": "TALENT_RECHTSKUNDE",
+            "weight": 1.0
+          }
+        ],
+        "checks": [
+          {
+            "type": "knowledge-check",
+            "difficulty": "normal",
+            "targetSkillId": "TALENT_RECHTSKUNDE"
+          }
+        ]
+      },
+      "scoringImpact": {
+        "diligence": 2,
+        "housePointsRange": [
+          -2,
+          3
+        ]
+      },
+      "references": {
+        "dsa5RuleRefs": [
+          "TALENT: RECHTSKUNDE",
+          "GILDENRECHT: GRUNDLAGEN"
+        ],
+        "libraryItemIds": [
+          "LIB_CODEX_ALBYRICUS"
+        ]
+      }
+    },
+    {
+      "id": "LES_Y1_T3_ETIK_01",
+      "name": "Etikette – Akademischer Alltag",
+      "subject": "etikette",
+      "yearRange": [
+        1,
+        1
+      ],
+      "summary": "Etikette, Anreden, Formfehler. Ziel: im sozialen Minenfeld der Akademie nicht jeden zweiten Tag als Plotgerät zu explodieren.",
+      "tags": [
+        "etikette",
+        "gesellschaft",
+        "konfliktvermeidung"
+      ],
+      "teacherNpcId": "NPC_ELRIKA_REBENLIEB",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          {
+            "systemSkillId": "TALENT_ETIKETTE",
+            "weight": 1.0
+          },
+          {
+            "systemSkillId": "ATTRIBUTE_CHARISMA",
+            "weight": 0.3
+          }
+        ],
+        "checks": [
+          {
+            "type": "social-check",
+            "difficulty": "normal",
+            "targetSkillId": "TALENT_ETIKETTE"
+          }
+        ]
+      },
+      "scoringImpact": {
+        "diligence": 1,
+        "housePointsRange": [
+          -1,
+          2
+        ]
+      },
+      "references": {
+        "dsa5RuleRefs": [
+          "TALENT: ETIKETTE"
+        ],
+        "libraryItemIds": [
+          "LIB_BREVIER_DER_ZWOELFGOETTLICHEN_UNTERWEISUNG"
+        ]
+      }
+    },
+    {
+      "id": "LES_Y1_T3_ELEM_01",
+      "name": "Elementarlehre – Einstieg (theoretisch)",
+      "subject": "elementarlehre",
+      "yearRange": [
+        1,
+        1
+      ],
+      "summary": "Elemente als Theoriegebäude: Begriffe, Abgrenzungen, Risiken. Keine Herbeirufungen – nur saubere Klassifikation und Sicherheitsdenken.",
+      "tags": [
+        "elementare",
+        "theorie",
+        "sicherheit",
+        "grundlagen"
+      ],
+      "teacherNpcId": "NPC_HJALGAR_EISENBART",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          {
+            "systemSkillId": "TALENT_MAGIEKUNDE",
+            "weight": 0.8
+          }
+        ],
+        "checks": [
+          {
+            "type": "knowledge-check",
+            "difficulty": "normal",
+            "targetSkillId": "TALENT_MAGIEKUNDE"
+          }
+        ]
+      },
+      "scoringImpact": {
+        "diligence": 1,
+        "housePointsRange": [
+          -1,
+          2
+        ]
+      },
+      "references": {
+        "dsa5RuleRefs": [
+          "MERKMAL: ELEMENTAR (ÜBERBLICK)"
+        ],
+        "libraryItemIds": [
+          "LIB_DIE_MACHT_DER_ELEMENTE"
+        ]
+      }
+    },
+    {
+      "id": "LES_Y1_T1_SPRACH_01",
+      "name": "Garethi – Fundamente & Dialekte",
+      "subject": "sprachen",
+      "yearRange": [1, 1],
+      "summary": "Die Verkehrssprache des Reiches. Fokus auf saubere Hochsprache, Schriftsatz und das Erkennen von Provinzialismen. Unerlässlich für die Kommunikation mit Behörden und Gilden.",
+      "tags": ["sprache", "garethi", "kommunikation", "grundlagen"],
+      "teacherNpcId": "NPC_MEISTERIN_ROWENA_SILBERFEDER",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          { "systemSkillId": "TALENT_SPRACHEN", "weight": 1.0 },
+          { "systemSkillId": "TALENT_SCHREIBEN", "weight": 0.5 }
+        ],
+        "checks": [
+          { "type": "knowledge-check", "difficulty": "normal", "targetSkillId": "TALENT_SPRACHEN" }
+        ]
+      },
+      "scoringImpact": { "diligence": 1, "housePointsRange": [0, 2] },
+      "references": {
+        "dsa5RuleRefs": ["TALENT: SPRACHEN"],
+        "libraryItemIds": ["LIB_CODEX_ALBYRICUS"]
+      }
+    },
+    {
+      "id": "LES_Y1_T1_ALCHIM_01",
+      "name": "Alchimie – Materialkunde I",
+      "subject": "alchimie",
+      "yearRange": [1, 1],
+      "summary": "Grundlagen der Laborarbeit: Identifikation von Grundstoffen, Umgang mit Phiolen und die Gefahren von Verunreinigungen. Ziel ist die sichere Vorbereitung einfacher Sude.",
+      "tags": ["alchimie", "labor", "material", "sicherheit"],
+      "teacherNpcId": "NPC_MEDICA_JORINDE",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          { "systemSkillId": "TALENT_ALCHIMIE", "weight": 1.0 },
+          { "systemSkillId": "ATTRIBUTE_FINGERFERTIGKEIT", "weight": 0.4 }
+        ],
+        "checks": [
+          { "type": "craft-check", "difficulty": "normal", "targetSkillId": "TALENT_ALCHIMIE" }
+        ]
+      },
+      "scoringImpact": { "diligence": 2, "housePointsRange": [-1, 2] },
+      "references": {
+        "dsa5RuleRefs": ["TALENT: ALCHIMIE"],
+        "libraryItemIds": ["LIB_ENCYCLOPAEDIA_MAGICA"]
+      }
+    },
+    {
+      "id": "LES_Y1_T1_MAGIEK_02",
+      "name": "Magiekunde – Astrale Strukturen I",
+      "subject": "magiekunde",
+      "yearRange": [1, 1],
+      "summary": "Vertiefung der Magiekunde: Wie formt sich Astralernergie zu Strukturen? Einführung in das Konzept der Matrix und die Rolle des Willens bei der Formgebung.",
+      "tags": ["magie", "astralstruktur", "matrix", "theorie"],
+      "teacherNpcId": "NPC_CERYLIA_VON_SEBENWIND",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          { "systemSkillId": "TALENT_MAGIEKUNDE", "weight": 1.0 },
+          { "systemSkillId": "ATTRIBUTE_KLUGHEIT", "weight": 0.5 }
+        ],
+        "checks": [
+          { "type": "knowledge-check", "difficulty": "hard", "targetSkillId": "TALENT_MAGIEKUNDE" }
+        ]
+      },
+      "scoringImpact": { "diligence": 2, "housePointsRange": [-1, 3] },
+      "references": {
+        "dsa5RuleRefs": ["TALENT: MAGIEKUNDE", "GRUNDLAGEN: ASTRALE_ENERGIE"],
+        "libraryItemIds": ["LIB_ASTRALE_GEHEIMNISSE"]
+      }
+    },
+    {
+      "id": "LES_Y1_T1_RITUAL_01",
+      "name": "Ritualmagie – Zeremonialmagie Grundlagen",
+      "subject": "rituale",
+      "yearRange": [1, 1],
+      "summary": "Theoretischer Aufbau von Ritualen: Zeitdauer, Komponenten und die Bedeutung des Ortes. Fokus auf die Abgrenzung zur spontanen Zauberei.",
+      "tags": ["rituale", "zeremonien", "theorie", "disziplin"],
+      "teacherNpcId": "NPC_NAZIR_RAGAZA",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          { "systemSkillId": "TALENT_MAGIEKUNDE", "weight": 0.8 },
+          { "systemSkillId": "TALENT_ WILLENSKRAFT", "weight": 0.6 }
+        ],
+        "checks": [
+          { "type": "knowledge-check", "difficulty": "normal", "targetSkillId": "TALENT_MAGIEKUNDE" }
+        ]
+      },
+      "scoringImpact": { "diligence": 2, "housePointsRange": [-2, 2] },
+      "references": {
+        "dsa5RuleRefs": ["REGELWERK: RITUALE"],
+        "libraryItemIds": ["LIB_ENCYCLOPAEDIA_MAGICA"]
+      }
+    },
+    {
+      "id": "LES_Y1_T1_MAGIEK_03",
+      "name": "Sphärenkunde – Die 12 Sphären",
+      "subject": "sphärenkunde",
+      "yearRange": [1, 1],
+      "summary": "Die kosmologische Ordnung Aventuriens. Einführung in das Sieben-Sphären-Modell, die Bedeutung der Dritten Sphäre und die Gefahren des Limbus (rein theoretisch).",
+      "tags": ["sphären", "kosmologie", "limbus", "theorie"],
+      "teacherNpcId": "NPC_AURIW_STURMFELS",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          { "systemSkillId": "TALENT_SPHÄRENKUNDE", "weight": 1.0 },
+          { "systemSkillId": "TALENT_GESCHICHTSWISSEN", "weight": 0.3 }
+        ],
+        "checks": [
+          { "type": "knowledge-check", "difficulty": "hard", "targetSkillId": "TALENT_SPHÄRENKUNDE" }
+        ]
+      },
+      "scoringImpact": { "diligence": 2, "housePointsRange": [-2, 4] },
+      "references": {
+        "dsa5RuleRefs": ["TALENT: SPHÄRENKUNDE", "GRUNDLAGEN: SPHÄRENMODELL"],
+        "libraryItemIds": ["LIB_SPHEREN_OVERVIEW"]
+      }
+    }
+  ]
+}

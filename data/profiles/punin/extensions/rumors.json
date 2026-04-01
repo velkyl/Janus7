@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Dynamische Gerüchte auf dem Akademie-Flur",
+    "schema": "janus7:academy:rumors:v1"
+  },
+  "rumors": [
+    {
+      "id": "RUMOR_KOBOLD_01",
+      "text": "Habt ihr gehört? Im Nordturm hat jemand ein feenhaftes Kichern gehört!",
+      "truthLevel": 0.8,
+      "spreadExpr": "week >= 2",
+      "decayDays": 7,
+      "sourceNpcIds": [
+        "NPC_SEQUIN",
+        "NPC_LAIODAN"
+      ],
+      "unlockedByEventId": "E_KOBOLD_GERUECHT",
+      "effectsOnListen": [
+        "lore_plus1",
+        "flag_heard_kobold_rumor"
+      ]
+    }
+  ]
+}

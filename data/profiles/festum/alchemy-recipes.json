@@ -1,0 +1,899 @@
+{
+  "meta": {
+    "generatedAt": "2025-12-12",
+    "sourceFile": "ALCHIMIE_REZEPTE.md",
+    "sourcePrint": "Arkane Schmiede und Labore (US25987, 2024)",
+    "academyLab": "Alchimistisches Labor (+1) im Turm der Tausend Tränke",
+    "count": 11,
+    "version": "from_md_v1"
+  },
+  "recipes": [
+    {
+      "id": "ALCH_ERDKRAFT_LACK",
+      "name": "Erdkraft-Lack",
+      "difficulty": -2,
+      "lab": "archaisches Labor",
+      "time": null,
+      "costPerLevel": "50 Silbertaler",
+      "cost": null,
+      "apValue": "1 AP",
+      "prerequisite": "keine",
+      "ingredients": [
+        "Erdnelke",
+        "Eisennägel",
+        "Fledermausflügel",
+        "Harz",
+        "Kristalle",
+        "Orazal",
+        "Sternenmetall",
+        "Vitriol"
+      ],
+      "qualityLevels": [
+        {
+          "qs": 1,
+          "key": "qs1",
+          "effect": "Zone 1 Schritt, max. 1 Stein, 2 KR"
+        },
+        {
+          "qs": 2,
+          "key": "qs2",
+          "effect": "Zone 2 Schritt, max. 2 Stein, 5 KR"
+        },
+        {
+          "qs": 3,
+          "key": "qs3",
+          "effect": "Zone 3 Schritt, max. 5 Stein, 10 KR"
+        },
+        {
+          "qs": 4,
+          "key": "qs4",
+          "effect": "Zone 4 Schritt, max. 10 Stein, 20 KR"
+        },
+        {
+          "qs": 5,
+          "key": "qs5",
+          "effect": "Zone 5 Schritt, max. 15 Stein, 1 Minute"
+        },
+        {
+          "qs": 6,
+          "key": "qs6",
+          "effect": "Zone 6 Schritt, max. 20 Stein, 5 Minuten"
+        }
+      ],
+      "effect": "Nach dem Bestreichen mit dem Lack wird ein Gegenstand \nmagnetisch und zieht metallische Gegenstände an.\n",
+      "failure": null,
+      "teachingHint": "IDEAL für Anfänger: Einfache Ingredienzien, keine \nVoraussetzungen, sichtbarer Effekt, harmlos bei Fehlern.\nHesine demonstriert: \"Bitte nichts Metallisches in der Nähe!\"",
+      "shelfLife": null,
+      "range": null,
+      "duration": null,
+      "tags": [
+        "alchemy",
+        "beginner",
+        "year_4"
+      ],
+      "path": [
+        "JANUS - Alchimie-Rezepte für den Unterricht",
+        "Anfänger-Rezepte (Jahr 4)",
+        "Erdkraft-Lack"
+      ],
+      "foundry": {
+        "itemKey": null,
+        "itemUuid": null
+      },
+      "raw": {
+        "yaml": "name: Erdkraft-Lack\nschwierigkeit: -2\nlabor: archaisches Labor\nkosten_pro_stufe: 50 Silbertaler\nap_wert: 1 AP\nvoraussetzung: keine\n\nwirkung: |\n  Nach dem Bestreichen mit dem Lack wird ein Gegenstand \n  magnetisch und zieht metallische Gegenstände an.\n\ningredienzien:\n  - Erdnelke\n  - Eisennägel\n  - Fledermausflügel\n  - Harz\n  - Kristalle\n  - Orazal\n  - Sternenmetall\n  - Vitriol\n\nqualitätsstufen:\n  qs1: \"Zone 1 Schritt, max. 1 Stein, 2 KR\"\n  qs2: \"Zone 2 Schritt, max. 2 Stein, 5 KR\"\n  qs3: \"Zone 3 Schritt, max. 5 Stein, 10 KR\"\n  qs4: \"Zone 4 Schritt, max. 10 Stein, 20 KR\"\n  qs5: \"Zone 5 Schritt, max. 15 Stein, 1 Minute\"\n  qs6: \"Zone 6 Schritt, max. 20 Stein, 5 Minuten\"\n\nunterricht_hinweis: |\n  IDEAL für Anfänger: Einfache Ingredienzien, keine \n  Voraussetzungen, sichtbarer Effekt, harmlos bei Fehlern.\n  Hesine demonstriert: \"Bitte nichts Metallisches in der Nähe!\"",
+        "data": {
+          "name": "Erdkraft-Lack",
+          "schwierigkeit": -2,
+          "labor": "archaisches Labor",
+          "kosten_pro_stufe": "50 Silbertaler",
+          "ap_wert": "1 AP",
+          "voraussetzung": "keine",
+          "wirkung": "Nach dem Bestreichen mit dem Lack wird ein Gegenstand \nmagnetisch und zieht metallische Gegenstände an.\n",
+          "ingredienzien": [
+            "Erdnelke",
+            "Eisennägel",
+            "Fledermausflügel",
+            "Harz",
+            "Kristalle",
+            "Orazal",
+            "Sternenmetall",
+            "Vitriol"
+          ],
+          "qualitätsstufen": {
+            "qs1": "Zone 1 Schritt, max. 1 Stein, 2 KR",
+            "qs2": "Zone 2 Schritt, max. 2 Stein, 5 KR",
+            "qs3": "Zone 3 Schritt, max. 5 Stein, 10 KR",
+            "qs4": "Zone 4 Schritt, max. 10 Stein, 20 KR",
+            "qs5": "Zone 5 Schritt, max. 15 Stein, 1 Minute",
+            "qs6": "Zone 6 Schritt, max. 20 Stein, 5 Minuten"
+          },
+          "unterricht_hinweis": "IDEAL für Anfänger: Einfache Ingredienzien, keine \nVoraussetzungen, sichtbarer Effekt, harmlos bei Fehlern.\nHesine demonstriert: \"Bitte nichts Metallisches in der Nähe!\""
+        }
+      }
+    },
+    {
+      "id": "ALCH_ELIXIER_DER_STILLE",
+      "name": "Elixier der Stille",
+      "difficulty": -2,
+      "lab": "Hexenküche",
+      "time": null,
+      "costPerLevel": "50 Silbertaler",
+      "cost": null,
+      "apValue": "3 AP",
+      "prerequisite": "Alchimie 8",
+      "ingredients": [
+        "Boronie",
+        "Gewölle einer Eule",
+        "Salz",
+        "Schwamm",
+        "Eiswasser",
+        "Wehende Blätter aus einem Sturm",
+        "Zwiebeln"
+      ],
+      "qualityLevels": [
+        {
+          "qs": 1,
+          "key": "qs1",
+          "effect": "Radius 1 Schritt, 1 Minute, stationär"
+        },
+        {
+          "qs": 2,
+          "key": "qs2",
+          "effect": "Radius 2 Schritt, 2 Minuten, stationär"
+        },
+        {
+          "qs": 3,
+          "key": "qs3",
+          "effect": "Radius 5 Schritt, 5 Minuten, stationär"
+        },
+        {
+          "qs": 4,
+          "key": "qs4",
+          "effect": "Radius 5 Schritt, 5 Minuten, beweglich"
+        },
+        {
+          "qs": 5,
+          "key": "qs5",
+          "effect": "Radius 8 Schritt, 10 Minuten, beweglich"
+        },
+        {
+          "qs": 6,
+          "key": "qs6",
+          "effect": "Radius 12 Schritt, 20 Minuten, beweglich"
+        }
+      ],
+      "effect": "Erzeugt eine Zone der Ruhe ähnlich dem SILENTIUM-Zauber.\nKann auf Objekte aufgetragen oder getrunken werden.\n",
+      "failure": null,
+      "teachingHint": "Gute Übung für präzises Arbeiten. Fehlschlag = laute \nGeräusche statt Stille (komisch, aber harmlos).\n\"Linksdrehend rühren, sonst kippt die Signatur!\"",
+      "shelfLife": null,
+      "range": null,
+      "duration": null,
+      "tags": [
+        "alchemy",
+        "beginner",
+        "year_4"
+      ],
+      "path": [
+        "JANUS - Alchimie-Rezepte für den Unterricht",
+        "Anfänger-Rezepte (Jahr 4)",
+        "Elixier der Stille"
+      ],
+      "foundry": {
+        "itemKey": null,
+        "itemUuid": null
+      },
+      "raw": {
+        "yaml": "name: Elixier der Stille\nschwierigkeit: -2\nlabor: Hexenküche\nkosten_pro_stufe: 50 Silbertaler\nap_wert: 3 AP\nvoraussetzung: Alchimie 8\n\nwirkung: |\n  Erzeugt eine Zone der Ruhe ähnlich dem SILENTIUM-Zauber.\n  Kann auf Objekte aufgetragen oder getrunken werden.\n\ningredienzien:\n  - Boronie\n  - Gewölle einer Eule\n  - Salz\n  - Schwamm\n  - Eiswasser\n  - Wehende Blätter aus einem Sturm\n  - Zwiebeln\n\nqualitätsstufen:\n  qs1: \"Radius 1 Schritt, 1 Minute, stationär\"\n  qs2: \"Radius 2 Schritt, 2 Minuten, stationär\"\n  qs3: \"Radius 5 Schritt, 5 Minuten, stationär\"\n  qs4: \"Radius 5 Schritt, 5 Minuten, beweglich\"\n  qs5: \"Radius 8 Schritt, 10 Minuten, beweglich\"\n  qs6: \"Radius 12 Schritt, 20 Minuten, beweglich\"\n\nunterricht_hinweis: |\n  Gute Übung für präzises Arbeiten. Fehlschlag = laute \n  Geräusche statt Stille (komisch, aber harmlos).\n  \"Linksdrehend rühren, sonst kippt die Signatur!\"",
+        "data": {
+          "name": "Elixier der Stille",
+          "schwierigkeit": -2,
+          "labor": "Hexenküche",
+          "kosten_pro_stufe": "50 Silbertaler",
+          "ap_wert": "3 AP",
+          "voraussetzung": "Alchimie 8",
+          "wirkung": "Erzeugt eine Zone der Ruhe ähnlich dem SILENTIUM-Zauber.\nKann auf Objekte aufgetragen oder getrunken werden.\n",
+          "ingredienzien": [
+            "Boronie",
+            "Gewölle einer Eule",
+            "Salz",
+            "Schwamm",
+            "Eiswasser",
+            "Wehende Blätter aus einem Sturm",
+            "Zwiebeln"
+          ],
+          "qualitätsstufen": {
+            "qs1": "Radius 1 Schritt, 1 Minute, stationär",
+            "qs2": "Radius 2 Schritt, 2 Minuten, stationär",
+            "qs3": "Radius 5 Schritt, 5 Minuten, stationär",
+            "qs4": "Radius 5 Schritt, 5 Minuten, beweglich",
+            "qs5": "Radius 8 Schritt, 10 Minuten, beweglich",
+            "qs6": "Radius 12 Schritt, 20 Minuten, beweglich"
+          },
+          "unterricht_hinweis": "Gute Übung für präzises Arbeiten. Fehlschlag = laute \nGeräusche statt Stille (komisch, aber harmlos).\n\"Linksdrehend rühren, sonst kippt die Signatur!\""
+        }
+      }
+    },
+    {
+      "id": "ALCH_GOETTLICHER_BALSAM",
+      "name": "Göttlicher Balsam",
+      "difficulty": -3,
+      "lab": "alchimistisches Labor",
+      "time": null,
+      "costPerLevel": "100 Silbertaler",
+      "cost": null,
+      "apValue": "5 AP",
+      "prerequisite": "Alchimie 10",
+      "ingredients": [
+        "Feder, Schuppen oder Fell eines heiligen Tiers",
+        "Brabaker Vitriol",
+        "Zermahlener Teil einer heiligen Pflanze",
+        "Passender Edelstein der Gottheit",
+        "Wasser aus fließendem Gewässer",
+        "Weihrauch",
+        "Zwölfblatt",
+        "Karmaenergie"
+      ],
+      "qualityLevels": [],
+      "effect": "Variante des Waffenbalsams für Klingen und Objekte.\nDauert 5 Kampfrunden zum Einreiben.\n",
+      "failure": null,
+      "teachingHint": "THEORIE-SCHWERPUNKT: In Punin nur mit Hesinde-Bezug.\nPraktische Herstellung nur unter strenger Aufsicht.",
+      "shelfLife": null,
+      "range": null,
+      "duration": null,
+      "tags": [
+        "advanced",
+        "alchemy",
+        "year_5"
+      ],
+      "path": [
+        "JANUS - Alchimie-Rezepte für den Unterricht",
+        "Fortgeschrittene Rezepte (Jahr 5-6)",
+        "Göttlicher Balsam"
+      ],
+      "foundry": {
+        "itemKey": null,
+        "itemUuid": null
+      },
+      "raw": {
+        "yaml": "name: Göttlicher Balsam\nschwierigkeit: -3\nlabor: alchimistisches Labor\nkosten_pro_stufe: 100 Silbertaler\nap_wert: 5 AP\nvoraussetzung: Alchimie 10\n\nwirkung: |\n  Variante des Waffenbalsams für Klingen und Objekte.\n  Dauert 5 Kampfrunden zum Einreiben.\n\ningredienzien:\n  - Feder, Schuppen oder Fell eines heiligen Tiers\n  - Brabaker Vitriol\n  - Zermahlener Teil einer heiligen Pflanze\n  - Passender Edelstein der Gottheit\n  - Wasser aus fließendem Gewässer\n  - Weihrauch\n  - Zwölfblatt\n  - Karmaenergie\n\nunterricht_hinweis: |\n  THEORIE-SCHWERPUNKT: In Punin nur mit Hesinde-Bezug.\n  Praktische Herstellung nur unter strenger Aufsicht.",
+        "data": {
+          "name": "Göttlicher Balsam",
+          "schwierigkeit": -3,
+          "labor": "alchimistisches Labor",
+          "kosten_pro_stufe": "100 Silbertaler",
+          "ap_wert": "5 AP",
+          "voraussetzung": "Alchimie 10",
+          "wirkung": "Variante des Waffenbalsams für Klingen und Objekte.\nDauert 5 Kampfrunden zum Einreiben.\n",
+          "ingredienzien": [
+            "Feder, Schuppen oder Fell eines heiligen Tiers",
+            "Brabaker Vitriol",
+            "Zermahlener Teil einer heiligen Pflanze",
+            "Passender Edelstein der Gottheit",
+            "Wasser aus fließendem Gewässer",
+            "Weihrauch",
+            "Zwölfblatt",
+            "Karmaenergie"
+          ],
+          "unterricht_hinweis": "THEORIE-SCHWERPUNKT: In Punin nur mit Hesinde-Bezug.\nPraktische Herstellung nur unter strenger Aufsicht."
+        }
+      }
+    },
+    {
+      "id": "ALCH_FATAS_TABAK",
+      "name": "Fatas-Tabak",
+      "difficulty": -4,
+      "lab": "Hexenküche",
+      "time": null,
+      "costPerLevel": "100 Silbertaler",
+      "cost": null,
+      "apValue": "4 AP",
+      "prerequisite": "Alchimie 12",
+      "ingredients": [
+        "Pfeifenkraut",
+        "Sternanis",
+        "Weiße Jade",
+        "Kupferschmuck-Späne",
+        "Wasser einer Bergquelle",
+        "Wüstensand",
+        "Lotosfäden",
+        "Splitter eines Glücksbringers",
+        "Ecke einer zufälligen Inrahkarte"
+      ],
+      "qualityLevels": [
+        {
+          "qs": 1,
+          "key": "qs1",
+          "effect": "Glückssegen für 15 Minuten"
+        },
+        {
+          "qs": 2,
+          "key": "qs2",
+          "effect": "Glücks- und Weisheitssegen für 30 Minuten"
+        },
+        {
+          "qs": 3,
+          "key": "qs3",
+          "effect": "Kritischer Erfolg bei 1+2 statt Doppel-1, 1 Stunde"
+        },
+        {
+          "qs": 4,
+          "key": "qs4",
+          "effect": "Wie QS3, aber 2 Stunden"
+        },
+        {
+          "qs": 5,
+          "key": "qs5",
+          "effect": "Kritischer Erfolg bei 1+2 oder Doppel-2, 4 Stunden"
+        },
+        {
+          "qs": 6,
+          "key": "qs6",
+          "effect": "Wie QS5, aber 8 Stunden, gilt auch für Kampftechniken"
+        }
+      ],
+      "effect": "Glücksbringender Schnupftabak. Je nach Kultur Phex, \nSatinav oder Fatas (Schreiberin des Schicksals) zugeordnet.\n",
+      "failure": null,
+      "teachingHint": "ETHIK-DISKUSSION: Glückselixiere und Suchtpotenzial.\nSirdon: \"Das Streben nach mühelosem Erfolg ist \nder erste Schritt zur Schwäche.\"",
+      "shelfLife": null,
+      "range": null,
+      "duration": null,
+      "tags": [
+        "advanced",
+        "alchemy",
+        "year_5"
+      ],
+      "path": [
+        "JANUS - Alchimie-Rezepte für den Unterricht",
+        "Fortgeschrittene Rezepte (Jahr 5-6)",
+        "Fatas-Tabak"
+      ],
+      "foundry": {
+        "itemKey": null,
+        "itemUuid": null
+      },
+      "raw": {
+        "yaml": "name: Fatas-Tabak\nschwierigkeit: -4\nlabor: Hexenküche\nkosten_pro_stufe: 100 Silbertaler\nap_wert: 4 AP\nvoraussetzung: Alchimie 12\n\nwirkung: |\n  Glücksbringender Schnupftabak. Je nach Kultur Phex, \n  Satinav oder Fatas (Schreiberin des Schicksals) zugeordnet.\n\ningredienzien:\n  - Pfeifenkraut\n  - Sternanis\n  - Weiße Jade\n  - Kupferschmuck-Späne\n  - Wasser einer Bergquelle\n  - Wüstensand\n  - Lotosfäden\n  - Splitter eines Glücksbringers\n  - Ecke einer zufälligen Inrahkarte\n\nqualitätsstufen:\n  qs1: \"Glückssegen für 15 Minuten\"\n  qs2: \"Glücks- und Weisheitssegen für 30 Minuten\"\n  qs3: \"Kritischer Erfolg bei 1+2 statt Doppel-1, 1 Stunde\"\n  qs4: \"Wie QS3, aber 2 Stunden\"\n  qs5: \"Kritischer Erfolg bei 1+2 oder Doppel-2, 4 Stunden\"\n  qs6: \"Wie QS5, aber 8 Stunden, gilt auch für Kampftechniken\"\n\nunterricht_hinweis: |\n  ETHIK-DISKUSSION: Glückselixiere und Suchtpotenzial.\n  Sirdon: \"Das Streben nach mühelosem Erfolg ist \n  der erste Schritt zur Schwäche.\"",
+        "data": {
+          "name": "Fatas-Tabak",
+          "schwierigkeit": -4,
+          "labor": "Hexenküche",
+          "kosten_pro_stufe": "100 Silbertaler",
+          "ap_wert": "4 AP",
+          "voraussetzung": "Alchimie 12",
+          "wirkung": "Glücksbringender Schnupftabak. Je nach Kultur Phex, \nSatinav oder Fatas (Schreiberin des Schicksals) zugeordnet.\n",
+          "ingredienzien": [
+            "Pfeifenkraut",
+            "Sternanis",
+            "Weiße Jade",
+            "Kupferschmuck-Späne",
+            "Wasser einer Bergquelle",
+            "Wüstensand",
+            "Lotosfäden",
+            "Splitter eines Glücksbringers",
+            "Ecke einer zufälligen Inrahkarte"
+          ],
+          "qualitätsstufen": {
+            "qs1": "Glückssegen für 15 Minuten",
+            "qs2": "Glücks- und Weisheitssegen für 30 Minuten",
+            "qs3": "Kritischer Erfolg bei 1+2 statt Doppel-1, 1 Stunde",
+            "qs4": "Wie QS3, aber 2 Stunden",
+            "qs5": "Kritischer Erfolg bei 1+2 oder Doppel-2, 4 Stunden",
+            "qs6": "Wie QS5, aber 8 Stunden, gilt auch für Kampftechniken"
+          },
+          "unterricht_hinweis": "ETHIK-DISKUSSION: Glückselixiere und Suchtpotenzial.\nSirdon: \"Das Streben nach mühelosem Erfolg ist \nder erste Schritt zur Schwäche.\""
+        }
+      }
+    },
+    {
+      "id": "ALCH_BANNSTAUB",
+      "name": "Bannstaub",
+      "difficulty": -4,
+      "lab": "archaisches Labor",
+      "time": null,
+      "costPerLevel": "400 Silbertaler",
+      "cost": null,
+      "apValue": "keine Angabe",
+      "prerequisite": "keine",
+      "ingredients": [
+        "Bernstein",
+        "Koschbasalt",
+        "Nitriol",
+        "Eierschale eines am 1. Praios geschlüpften Hahns",
+        "Greifenfedern",
+        "Eisenpulver",
+        "Durch Sonnenhitze destilliertes Regenwasser",
+        "Reines Salz",
+        "Brabaker Vitriol",
+        "Gold",
+        "Harn vom Sonnenluchs",
+        "Frische Blütenblätter der Praiosblume (Sonnenblume)",
+        "Karmalenergie"
+      ],
+      "qualityLevels": [
+        {
+          "qs": 1,
+          "key": "qs1",
+          "effect": "1W6+2 AsP Verlust"
+        },
+        {
+          "qs": 2,
+          "key": "qs2",
+          "effect": "2W6+4 AsP Verlust, 1 Tag keine Regeneration"
+        },
+        {
+          "qs": 3,
+          "key": "qs3",
+          "effect": "3W6+6 AsP Verlust, 1W2+1 Tage keine Regeneration"
+        },
+        {
+          "qs": 4,
+          "key": "qs4",
+          "effect": "4W6+8 AsP Verlust, 1W3+2 Tage keine Regeneration"
+        },
+        {
+          "qs": 5,
+          "key": "qs5",
+          "effect": "5W6+10 AsP Verlust, 1W3+3 Tage keine Regeneration"
+        },
+        {
+          "qs": 6,
+          "key": "qs6",
+          "effect": "6W6+12 AsP Verlust, 2W3+3 Tage keine Regeneration"
+        }
+      ],
+      "effect": "Pulver verursacht Wirkung bei Hautkontakt. Muss geworfen \nwerden (Wurfwaffen-Probe). Entzieht AsP und verhindert \nRegeneration.\n",
+      "failure": null,
+      "teachingHint": "ANTIMAGIE-BEZUG: Wird im Kontext der Antimagie-Vorlesung \nbehandelt. Sirdon: \"Entwickelt von der Praioskirche in der \nPriesterkaiserzeit - ursprünglich um Magie ganz zu bannen.\"\n\nWARNUNG: Nicht im Klassenzimmer demonstrieren!",
+      "shelfLife": null,
+      "range": null,
+      "duration": null,
+      "tags": [
+        "alchemy",
+        "expert",
+        "year_7"
+      ],
+      "path": [
+        "JANUS - Alchimie-Rezepte für den Unterricht",
+        "Experten-Rezepte (Jahr 7-8)",
+        "Bannstaub"
+      ],
+      "foundry": {
+        "itemKey": null,
+        "itemUuid": null
+      },
+      "raw": {
+        "yaml": "name: Bannstaub\nschwierigkeit: -4\nlabor: archaisches Labor\nkosten_pro_stufe: 400 Silbertaler\nap_wert: keine Angabe\nvoraussetzung: keine\n\nwirkung: |\n  Pulver verursacht Wirkung bei Hautkontakt. Muss geworfen \n  werden (Wurfwaffen-Probe). Entzieht AsP und verhindert \n  Regeneration.\n\ningredienzien:\n  - Bernstein\n  - Koschbasalt\n  - Nitriol\n  - Eierschale eines am 1. Praios geschlüpften Hahns\n  - Greifenfedern\n  - Eisenpulver\n  - Durch Sonnenhitze destilliertes Regenwasser\n  - Reines Salz\n  - Brabaker Vitriol\n  - Gold\n  - Harn vom Sonnenluchs\n  - Frische Blütenblätter der Praiosblume (Sonnenblume)\n  - Karmalenergie\n\nqualitätsstufen:\n  qs1: \"1W6+2 AsP Verlust\"\n  qs2: \"2W6+4 AsP Verlust, 1 Tag keine Regeneration\"\n  qs3: \"3W6+6 AsP Verlust, 1W2+1 Tage keine Regeneration\"\n  qs4: \"4W6+8 AsP Verlust, 1W3+2 Tage keine Regeneration\"\n  qs5: \"5W6+10 AsP Verlust, 1W3+3 Tage keine Regeneration\"\n  qs6: \"6W6+12 AsP Verlust, 2W3+3 Tage keine Regeneration\"\n\nunterricht_hinweis: |\n  ANTIMAGIE-BEZUG: Wird im Kontext der Antimagie-Vorlesung \n  behandelt. Sirdon: \"Entwickelt von der Praioskirche in der \n  Priesterkaiserzeit - ursprünglich um Magie ganz zu bannen.\"\n  \n  WARNUNG: Nicht im Klassenzimmer demonstrieren!",
+        "data": {
+          "name": "Bannstaub",
+          "schwierigkeit": -4,
+          "labor": "archaisches Labor",
+          "kosten_pro_stufe": "400 Silbertaler",
+          "ap_wert": "keine Angabe",
+          "voraussetzung": "keine",
+          "wirkung": "Pulver verursacht Wirkung bei Hautkontakt. Muss geworfen \nwerden (Wurfwaffen-Probe). Entzieht AsP und verhindert \nRegeneration.\n",
+          "ingredienzien": [
+            "Bernstein",
+            "Koschbasalt",
+            "Nitriol",
+            "Eierschale eines am 1. Praios geschlüpften Hahns",
+            "Greifenfedern",
+            "Eisenpulver",
+            "Durch Sonnenhitze destilliertes Regenwasser",
+            "Reines Salz",
+            "Brabaker Vitriol",
+            "Gold",
+            "Harn vom Sonnenluchs",
+            "Frische Blütenblätter der Praiosblume (Sonnenblume)",
+            "Karmalenergie"
+          ],
+          "qualitätsstufen": {
+            "qs1": "1W6+2 AsP Verlust",
+            "qs2": "2W6+4 AsP Verlust, 1 Tag keine Regeneration",
+            "qs3": "3W6+6 AsP Verlust, 1W2+1 Tage keine Regeneration",
+            "qs4": "4W6+8 AsP Verlust, 1W3+2 Tage keine Regeneration",
+            "qs5": "5W6+10 AsP Verlust, 1W3+3 Tage keine Regeneration",
+            "qs6": "6W6+12 AsP Verlust, 2W3+3 Tage keine Regeneration"
+          },
+          "unterricht_hinweis": "ANTIMAGIE-BEZUG: Wird im Kontext der Antimagie-Vorlesung \nbehandelt. Sirdon: \"Entwickelt von der Praioskirche in der \nPriesterkaiserzeit - ursprünglich um Magie ganz zu bannen.\"\n\nWARNUNG: Nicht im Klassenzimmer demonstrieren!"
+        }
+      }
+    },
+    {
+      "id": "ALCH_FEUERPULVER",
+      "name": "Feuerpulver",
+      "difficulty": -5,
+      "lab": "Alchimistisches Labor",
+      "time": null,
+      "costPerLevel": "150 Silbertaler",
+      "cost": null,
+      "apValue": "8 AP",
+      "prerequisite": "Alchimie 14",
+      "ingredients": [
+        "Feuermoos und Efferdsmoos",
+        "Getrocknete Feuersalamander",
+        "Gemahlene Steine aus Drachenmägen",
+        "Phosphorpilze",
+        "Pyrit",
+        "Rubinstaub",
+        "Synärethikon"
+      ],
+      "qualityLevels": [],
+      "effect": "Erzeugt profane, aufregende Funkenspiele beim Verbrennen.\nEXTREM GEFÄHRLICH in der Herstellung und Lagerung.\n",
+      "failure": null,
+      "teachingHint": "NUR THEORIE! Keine praktische Herstellung in der Akademie.\nHesine: \"Wir besprechen dies nur, damit ihr wisst, \nwovon ihr die Finger lassen sollt!\"",
+      "shelfLife": null,
+      "range": null,
+      "duration": null,
+      "tags": [
+        "alchemy",
+        "expert",
+        "year_7"
+      ],
+      "path": [
+        "JANUS - Alchimie-Rezepte für den Unterricht",
+        "Experten-Rezepte (Jahr 7-8)",
+        "Feuerpulver"
+      ],
+      "foundry": {
+        "itemKey": null,
+        "itemUuid": null
+      },
+      "raw": {
+        "yaml": "name: Feuerpulver\nschwierigkeit: -5\nlabor: Alchimistisches Labor\nkosten_pro_stufe: 150 Silbertaler\nap_wert: 8 AP\nvoraussetzung: Alchimie 14\n\nwirkung: |\n  Erzeugt profane, aufregende Funkenspiele beim Verbrennen.\n  EXTREM GEFÄHRLICH in der Herstellung und Lagerung.\n\ningredienzien:\n  - Feuermoos und Efferdsmoos\n  - Getrocknete Feuersalamander\n  - Gemahlene Steine aus Drachenmägen\n  - Phosphorpilze\n  - Pyrit\n  - Rubinstaub\n  - Synärethikon\n\nbesonderheiten:\n  lagerung: \"MUSS in wasserdichten Behältnissen UNTER WASSER gelagert werden\"\n  gefahr: \"Lockt binnen 1W6 KR Mindergeister des Feuers an wenn nicht korrekt gelagert\"\n  feucht: \"Wird sofort unbrauchbar bei Feuchtigkeit\"\n  entzündung: \"Bei 1-5 auf 1W20 entzündet es sich sofort nach Herstellung\"\n\nunterricht_hinweis: |\n  NUR THEORIE! Keine praktische Herstellung in der Akademie.\n  Hesine: \"Wir besprechen dies nur, damit ihr wisst, \n  wovon ihr die Finger lassen sollt!\"",
+        "data": {
+          "name": "Feuerpulver",
+          "schwierigkeit": -5,
+          "labor": "Alchimistisches Labor",
+          "kosten_pro_stufe": "150 Silbertaler",
+          "ap_wert": "8 AP",
+          "voraussetzung": "Alchimie 14",
+          "wirkung": "Erzeugt profane, aufregende Funkenspiele beim Verbrennen.\nEXTREM GEFÄHRLICH in der Herstellung und Lagerung.\n",
+          "ingredienzien": [
+            "Feuermoos und Efferdsmoos",
+            "Getrocknete Feuersalamander",
+            "Gemahlene Steine aus Drachenmägen",
+            "Phosphorpilze",
+            "Pyrit",
+            "Rubinstaub",
+            "Synärethikon"
+          ],
+          "besonderheiten": {
+            "lagerung": "MUSS in wasserdichten Behältnissen UNTER WASSER gelagert werden",
+            "gefahr": "Lockt binnen 1W6 KR Mindergeister des Feuers an wenn nicht korrekt gelagert",
+            "feucht": "Wird sofort unbrauchbar bei Feuchtigkeit",
+            "entzündung": "Bei 1-5 auf 1W20 entzündet es sich sofort nach Herstellung"
+          },
+          "unterricht_hinweis": "NUR THEORIE! Keine praktische Herstellung in der Akademie.\nHesine: \"Wir besprechen dies nur, damit ihr wisst, \nwovon ihr die Finger lassen sollt!\""
+        }
+      }
+    },
+    {
+      "id": "ALCH_DER_ROTE_LEU",
+      "name": "Der Rote Leu",
+      "difficulty": -14,
+      "lab": "alchimistisches Labor",
+      "time": null,
+      "costPerLevel": "5.000 Silbertaler",
+      "cost": null,
+      "apValue": "50 AP (Geheimwissen)",
+      "prerequisite": "Alchimie 18; SF Göttliche Alchimie; Vakuum-Kammer; Magisch abgeschirmtes Labor; Schallabsorbierende Wände; Erschütterungsfreie Laborgerätschaften",
+      "ingredients": [
+        "Sumuryl",
+        "Kaiserdrachentränen",
+        "Koboldseide",
+        "Alraune",
+        "Blauer Saphir",
+        "Weißer Phosphor",
+        "Frostquarz",
+        "Karmalenergie"
+      ],
+      "qualityLevels": [
+        {
+          "qs": 1,
+          "key": "qs1",
+          "effect": "Unedle Metalle (max. 40 Stein) → Silber"
+        },
+        {
+          "qs": 2,
+          "key": "qs2",
+          "effect": "Unedle Metalle (max. 80 Stein) → Silber"
+        },
+        {
+          "qs": 3,
+          "key": "qs3",
+          "effect": "Unedle Metalle (max. 80 Stein) → Gold"
+        },
+        {
+          "qs": 4,
+          "key": "qs4",
+          "effect": "Unedle Metalle (max. 40 Stein) → Mondsilber"
+        },
+        {
+          "qs": 5,
+          "key": "qs5",
+          "effect": "Edle Metalle (max. 20 Stein) → Arkanium"
+        },
+        {
+          "qs": 6,
+          "key": "qs6",
+          "effect": "Edle Metalle (max. 5 Stein) → Endurium"
+        }
+      ],
+      "effect": "Der große Traum der Alchimie: Verwandelt unedle Metalle \nin Silber, Gold, oder sogar Mondsilber, Arkanium, Endurium.\n",
+      "failure": null,
+      "teachingHint": "LEGENDE DER ALCHIMIE: Nur als Geschichte erwähnt.\n\"Angeblich entwickelt von Priesterkaiser Helus Praiodan I., \num die Tempel Gareths zu vergolden.\"",
+      "shelfLife": null,
+      "range": null,
+      "duration": null,
+      "tags": [
+        "alchemy",
+        "expert"
+      ],
+      "path": [
+        "JANUS - Alchimie-Rezepte für den Unterricht",
+        "Meister-Rezepte (Referenz, nicht für Schüler)",
+        "Der Rote Leu"
+      ],
+      "foundry": {
+        "itemKey": null,
+        "itemUuid": null
+      },
+      "raw": {
+        "yaml": "name: Der Rote Leu\nschwierigkeit: -14 (!)\nlabor: alchimistisches Labor\nkosten_pro_stufe: 5.000 Silbertaler\nap_wert: 50 AP (Geheimwissen)\nvoraussetzung: \n  - Alchimie 18\n  - SF Göttliche Alchimie\n  - Vakuum-Kammer\n  - Magisch abgeschirmtes Labor\n  - Schallabsorbierende Wände\n  - Erschütterungsfreie Laborgerätschaften\n\nwirkung: |\n  Der große Traum der Alchimie: Verwandelt unedle Metalle \n  in Silber, Gold, oder sogar Mondsilber, Arkanium, Endurium.\n\ningredienzien:\n  - Sumuryl\n  - Kaiserdrachentränen\n  - Koboldseide\n  - Alraune\n  - Blauer Saphir\n  - Weißer Phosphor\n  - Frostquarz\n  - Karmalenergie\n\nqualitätsstufen:\n  qs1: \"Unedle Metalle (max. 40 Stein) → Silber\"\n  qs2: \"Unedle Metalle (max. 80 Stein) → Silber\"\n  qs3: \"Unedle Metalle (max. 80 Stein) → Gold\"\n  qs4: \"Unedle Metalle (max. 40 Stein) → Mondsilber\"\n  qs5: \"Edle Metalle (max. 20 Stein) → Arkanium\"\n  qs6: \"Edle Metalle (max. 5 Stein) → Endurium\"\n\nunterricht_hinweis: |\n  LEGENDE DER ALCHIMIE: Nur als Geschichte erwähnt.\n  \"Angeblich entwickelt von Priesterkaiser Helus Praiodan I., \n  um die Tempel Gareths zu vergolden.\"",
+        "data": {
+          "name": "Der Rote Leu",
+          "schwierigkeit": "-14 (!)",
+          "labor": "alchimistisches Labor",
+          "kosten_pro_stufe": "5.000 Silbertaler",
+          "ap_wert": "50 AP (Geheimwissen)",
+          "voraussetzung": [
+            "Alchimie 18",
+            "SF Göttliche Alchimie",
+            "Vakuum-Kammer",
+            "Magisch abgeschirmtes Labor",
+            "Schallabsorbierende Wände",
+            "Erschütterungsfreie Laborgerätschaften"
+          ],
+          "wirkung": "Der große Traum der Alchimie: Verwandelt unedle Metalle \nin Silber, Gold, oder sogar Mondsilber, Arkanium, Endurium.\n",
+          "ingredienzien": [
+            "Sumuryl",
+            "Kaiserdrachentränen",
+            "Koboldseide",
+            "Alraune",
+            "Blauer Saphir",
+            "Weißer Phosphor",
+            "Frostquarz",
+            "Karmalenergie"
+          ],
+          "qualitätsstufen": {
+            "qs1": "Unedle Metalle (max. 40 Stein) → Silber",
+            "qs2": "Unedle Metalle (max. 80 Stein) → Silber",
+            "qs3": "Unedle Metalle (max. 80 Stein) → Gold",
+            "qs4": "Unedle Metalle (max. 40 Stein) → Mondsilber",
+            "qs5": "Edle Metalle (max. 20 Stein) → Arkanium",
+            "qs6": "Edle Metalle (max. 5 Stein) → Endurium"
+          },
+          "unterricht_hinweis": "LEGENDE DER ALCHIMIE: Nur als Geschichte erwähnt.\n\"Angeblich entwickelt von Priesterkaiser Helus Praiodan I., \num die Tempel Gareths zu vergolden.\""
+        }
+      }
+    },
+    {
+      "id": "ALCH_CHIMAERENGIFT",
+      "name": "Chimärengift",
+      "difficulty": -3,
+      "lab": "Hexenküche",
+      "time": null,
+      "costPerLevel": "60 Silbertaler",
+      "cost": null,
+      "apValue": "3 AP",
+      "prerequisite": "Alchimie 12; SF Göttliche Alchimie",
+      "ingredients": [
+        "Jade",
+        "Bernstein",
+        "Gallensaft",
+        "Tränen einer Fee",
+        "Steinöl",
+        "Abgeworfene Eidechsenhaut",
+        "Karmalenergie"
+      ],
+      "qualityLevels": [],
+      "effect": "Spezielle Entwicklung der Tsakirche zur Bekämpfung \nvon Chimären. Trennt Chimären in ihre Ursprungswesen.\n",
+      "failure": null,
+      "teachingHint": "ETHIK: Diskussion über Chimären und ihre \"Rettung\".\nTsageweihte Position vs. pragmatische Vernichtung.",
+      "shelfLife": null,
+      "range": null,
+      "duration": null,
+      "tags": [
+        "alchemy",
+        "expert"
+      ],
+      "path": [
+        "JANUS - Alchimie-Rezepte für den Unterricht",
+        "Meister-Rezepte (Referenz, nicht für Schüler)",
+        "Chimärengift"
+      ],
+      "foundry": {
+        "itemKey": null,
+        "itemUuid": null
+      },
+      "raw": {
+        "yaml": "name: Chimärengift\nschwierigkeit: -3\nlabor: Hexenküche\nkosten_pro_stufe: 60 Silbertaler\nap_wert: 3 AP\nvoraussetzung: \n  - Alchimie 12\n  - SF Göttliche Alchimie\n\nwirkung: |\n  Spezielle Entwicklung der Tsakirche zur Bekämpfung \n  von Chimären. Trennt Chimären in ihre Ursprungswesen.\n\ningredienzien:\n  - Jade\n  - Bernstein\n  - Gallensaft\n  - Tränen einer Fee\n  - Steinöl\n  - Abgeworfene Eidechsenhaut\n  - Karmalenergie\n\nunterricht_hinweis: |\n  ETHIK: Diskussion über Chimären und ihre \"Rettung\".\n  Tsageweihte Position vs. pragmatische Vernichtung.",
+        "data": {
+          "name": "Chimärengift",
+          "schwierigkeit": -3,
+          "labor": "Hexenküche",
+          "kosten_pro_stufe": "60 Silbertaler",
+          "ap_wert": "3 AP",
+          "voraussetzung": [
+            "Alchimie 12",
+            "SF Göttliche Alchimie"
+          ],
+          "wirkung": "Spezielle Entwicklung der Tsakirche zur Bekämpfung \nvon Chimären. Trennt Chimären in ihre Ursprungswesen.\n",
+          "ingredienzien": [
+            "Jade",
+            "Bernstein",
+            "Gallensaft",
+            "Tränen einer Fee",
+            "Steinöl",
+            "Abgeworfene Eidechsenhaut",
+            "Karmalenergie"
+          ],
+          "unterricht_hinweis": "ETHIK: Diskussion über Chimären und ihre \"Rettung\".\nTsageweihte Position vs. pragmatische Vernichtung."
+        }
+      }
+    },
+    {
+      "id": "ALCH_JAHR_4_GRUNDLAGEN",
+      "name": "Jahr 4 - Grundlagen",
+      "difficulty": null,
+      "lab": null,
+      "time": null,
+      "costPerLevel": null,
+      "cost": null,
+      "apValue": null,
+      "prerequisite": null,
+      "ingredients": [],
+      "qualityLevels": [],
+      "effect": null,
+      "failure": null,
+      "teachingHint": null,
+      "shelfLife": null,
+      "range": null,
+      "duration": null,
+      "tags": [
+        "alchemy",
+        "year_4"
+      ],
+      "path": [
+        "JANUS - Alchimie-Rezepte für den Unterricht",
+        "Unterrichts-Struktur (Novizium)",
+        "Jahr 4 - Grundlagen"
+      ],
+      "foundry": {
+        "itemKey": null,
+        "itemUuid": null
+      },
+      "raw": {
+        "yaml": "trimester_1:\n  theorie:\n    - \"Was ist Alchimie?\"\n    - \"Die sechs Elemente und ihre Affinitäten\"\n    - \"Laborregeln und Sicherheit\"\n  praxis:\n    - \"Erste Ingredienzien-Erkennung\"\n    - \"Grundlegende Laborgeräte\"\n\ntrimester_2:\n  theorie:\n    - \"Die Brauprobe verstehen\"\n    - \"Qualitätsstufen und Reinheit\"\n  praxis:\n    - \"Erdkraft-Lack (Demonstration, dann Selbstversuch)\"\n    - \"Einfache Heilsalben\"\n\ntrimester_3:\n  theorie:\n    - \"Geschichte der Alchimie\"\n    - \"Koryphäen: Travin Kirschhausen, Visioluca\"\n  praxis:\n    - \"Elixier der Stille (unter Aufsicht)\"",
+        "data": {
+          "trimester_1": {
+            "theorie": [
+              "Was ist Alchimie?",
+              "Die sechs Elemente und ihre Affinitäten",
+              "Laborregeln und Sicherheit"
+            ],
+            "praxis": [
+              "Erste Ingredienzien-Erkennung",
+              "Grundlegende Laborgeräte"
+            ]
+          },
+          "trimester_2": {
+            "theorie": [
+              "Die Brauprobe verstehen",
+              "Qualitätsstufen und Reinheit"
+            ],
+            "praxis": [
+              "Erdkraft-Lack (Demonstration, dann Selbstversuch)",
+              "Einfache Heilsalben"
+            ]
+          },
+          "trimester_3": {
+            "theorie": [
+              "Geschichte der Alchimie",
+              "Koryphäen: Travin Kirschhausen, Visioluca"
+            ],
+            "praxis": [
+              "Elixier der Stille (unter Aufsicht)"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "ALCH_JAHR_5_VERTIEFUNG",
+      "name": "Jahr 5 - Vertiefung",
+      "difficulty": null,
+      "lab": null,
+      "time": null,
+      "costPerLevel": null,
+      "cost": null,
+      "apValue": null,
+      "prerequisite": null,
+      "ingredients": [],
+      "qualityLevels": [],
+      "effect": null,
+      "failure": null,
+      "teachingHint": null,
+      "shelfLife": null,
+      "range": null,
+      "duration": null,
+      "tags": [
+        "alchemy",
+        "year_5"
+      ],
+      "path": [
+        "JANUS - Alchimie-Rezepte für den Unterricht",
+        "Unterrichts-Struktur (Novizium)",
+        "Jahr 5 - Vertiefung"
+      ],
+      "foundry": {
+        "itemKey": null,
+        "itemUuid": null
+      },
+      "raw": {
+        "yaml": "inhalt:\n  - \"Komplexere Rezepte\"\n  - \"Substitution von Ingredienzien\"\n  - \"Chaotische Alchimie (Theorie)\"\n  - \"Erste selbstständige Brauversuche\"",
+        "data": {
+          "inhalt": [
+            "Komplexere Rezepte",
+            "Substitution von Ingredienzien",
+            "Chaotische Alchimie (Theorie)",
+            "Erste selbstständige Brauversuche"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ALCH_JAHR_6_SPEZIALISIERUNG",
+      "name": "Jahr 6 - Spezialisierung",
+      "difficulty": null,
+      "lab": null,
+      "time": null,
+      "costPerLevel": null,
+      "cost": null,
+      "apValue": null,
+      "prerequisite": null,
+      "ingredients": [],
+      "qualityLevels": [],
+      "effect": null,
+      "failure": null,
+      "teachingHint": null,
+      "shelfLife": null,
+      "range": null,
+      "duration": null,
+      "tags": [
+        "alchemy",
+        "year_6"
+      ],
+      "path": [
+        "JANUS - Alchimie-Rezepte für den Unterricht",
+        "Unterrichts-Struktur (Novizium)",
+        "Jahr 6 - Spezialisierung"
+      ],
+      "foundry": {
+        "itemKey": null,
+        "itemUuid": null
+      },
+      "raw": {
+        "yaml": "inhalt:\n  - \"Fortgeschrittene Rezepte\"\n  - \"Eigene Rezeptentwicklung (Grundlagen)\"\n  - \"Arkanatio-Prüfung: Alchimie-Komponente\"",
+        "data": {
+          "inhalt": [
+            "Fortgeschrittene Rezepte",
+            "Eigene Rezeptentwicklung (Grundlagen)",
+            "Arkanatio-Prüfung: Alchimie-Komponente"
+          ]
+        }
+      }
+    }
+  ]
+}

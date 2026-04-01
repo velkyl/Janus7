@@ -224,7 +224,11 @@ async function registerModuleList({ registry, logger, modules = [], bucket = 'un
     } catch (err) {
       failed += 1;
       logger?.warn?.(`[TEST] builtin import failed (${bucket}): ${rel}`, { message: err?.message });
-      registry.register(buildImportFailedPlaceholder(rel, err));
+      registry.register(buildImportFailedPlaceholder({
+        sourceFile: rel,
+        suiteClass: 'binding',
+        error: err?.message ?? String(err)
+      }));
     }
   }
 
