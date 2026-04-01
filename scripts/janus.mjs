@@ -18,7 +18,7 @@
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import { Janus7Engine, JANUS_GLOBAL, getJanus7, getJanusCore } from '../core/index.js';
 import { JanusConfig } from '../core/config.js';
-import { MODULE_ID, STATE_PATHS } from '../core/common.js';
+import { MODULE_ID, STATE_PATHS, AVENTURIAN_CALENDAR } from '../core/common.js';
 import { JanusCapabilities } from '../core/capabilities.js';
 import { JanusTimeReactor } from '../services/time/reactor.js';
 import { JanusCron } from '../services/cron/JanusCron.js';
@@ -395,7 +395,7 @@ try {
         if (cal?.resetToStart) return cal.resetToStart();
         const state = engine?.core?.state;
         if (state) await state.transaction(() => {
-          state.set(STATE_PATHS.TIME_YEAR, 1039); state.set(STATE_PATHS.TIME_TRIMESTER, 1);
+          state.set(STATE_PATHS.TIME_YEAR, AVENTURIAN_CALENDAR.DEFAULT_START_YEAR); state.set(STATE_PATHS.TIME_TRIMESTER, 1);
           state.set(STATE_PATHS.TIME_WEEK, 1);    state.set(STATE_PATHS.TIME_DAY_INDEX, 0);
           state.set(STATE_PATHS.TIME_SLOT_INDEX, 0);
           state.set(STATE_PATHS.TIME_DAY_NAME, 'Praiosstag'); state.set(STATE_PATHS.TIME_SLOT_NAME, 'Morgens');
