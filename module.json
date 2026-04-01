@@ -18,6 +18,7 @@
   ],
   "styles": [
     "styles/janus7-layers.css",
+    "styles/janus7-v13-overlay.css",
     "styles/janus7-ui-bundle.css"
   ],
   "templates": [
