@@ -14,18 +14,17 @@
  */
 
 import { MODULE_ID } from './common.js';
-
-const ROOT = 'JANUS7';
+import { JanusProfileRegistry } from './profiles/index.js';
 
 /**
  * Folder mapping.
- * NOTE: Foundry folders are typed → root is duplicated per document type.
+ * NOTE: Foundry folders are typed -> root is duplicated per document type.
  *
  * @type {Record<string, {root: string[], kinds: Record<string, string[]>}>}
  */
 const MAP = {
   JournalEntry: {
-    root: [ROOT, 'Journals'],
+    root: ['__ROOT__', 'Journals'],
     kinds: {
       lesson:       ['Unterricht'],
       library:      ['Bibliothek'],
@@ -42,11 +41,11 @@ const MAP = {
     },
   },
   Item: {
-    root: [ROOT, 'Items'],
+    root: ['__ROOT__', 'Items'],
     kinds: {
       lesson:     ['Unterricht'],
       library:    ['Bibliothek'],
-      curriculum: ['Lehrpl\u00E4ne'],
+      curriculum: ['Lehrpläne'],
       npc:        ['NSCs'],
       location:   ['Orte'],
       event:      ['Chronik'],
@@ -58,7 +57,7 @@ const MAP = {
     },
   },
   Actor: {
-    root: [ROOT, 'Actors'],
+    root: ['__ROOT__', 'Actors'],
     kinds: {
       npc:     ['NSCs'],
       teacher: ['Dozenten'],
@@ -67,7 +66,7 @@ const MAP = {
     },
   },
   Scene: {
-    root: [ROOT, 'Scenes'],
+    root: ['__ROOT__', 'Scenes'],
     kinds: {
       location: ['Orte'],
       map:      ['Karten'],
@@ -75,7 +74,7 @@ const MAP = {
     },
   },
   Playlist: {
-    root: [ROOT, 'Playlists'],
+    root: ['__ROOT__', 'Playlists'],
     kinds: {
       music: ['Musik'],
       sfx:   ['SFX'],
@@ -117,11 +116,17 @@ export class JanusFolderService {
     const docType = spec?.docType;
     if (!docType || !MAP[docType]) return null;
 
+    const profile = JanusProfileRegistry.getActive();
+    const rootName = `JANUS7 (${profile.name})`;
+
     const kind = (spec.kind ?? 'misc').toLowerCase();
     const map = MAP[docType];
     const leaf = map.kinds[kind] ?? map.kinds.misc ?? ['Sonstiges'];
-    const path = [...map.root, ...leaf];
-    const key = `${_prefixForDocType(docType)}.${kind}`;
+    
+    // Physical separation for Multi-Setting Phase 8
+    const path = [rootName, ...map.root.slice(1), ...leaf];
+    const key = `${_prefixForDocType(docType)}.${kind}.${profile.id}`;
+
     return { type: docType, path, key };
   }
 
@@ -173,7 +178,7 @@ export class JanusFolderService {
         }
 
         this._cache.set(key, folderId);
-        this._logger.debug?.(`[Folders] ensured ${key} → ${folderId}`);
+        this._logger.debug?.(`[Folders] ensured ${key} -> ${folderId}`);
         return { folderId, folderKey: key, type, path };
       } finally {
         this._promises.delete(key);

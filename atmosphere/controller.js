@@ -15,6 +15,7 @@
 
 import { MODULE_ID, MODULE_ABBREV } from '../core/common.js';
 import { emitHook, HOOKS } from '../core/hooks/emitter.js';
+import { JanusProfileRegistry } from '../core/profiles/index.js';
 
 /**
  * @typedef {object} AtmosphereMoodBinding
@@ -920,8 +921,29 @@ export class JanusAtmosphereController {
   async _loadMoods() {
     this._moods.clear();
     try {
-      const res = await fetch(`modules/${MODULE_ID}/data/academy/atmosphere/moods.json`);
-      const data = await res.json();
+      const profileId = JanusProfileRegistry.getActive()?.id;
+      const paths = [
+        `modules/${MODULE_ID}/data/profiles/${profileId}/atmosphere/moods.json`,
+        `modules/${MODULE_ID}/data/academy/atmosphere/moods.json`
+      ];
+
+      let data = null;
+      for (const p of paths) {
+        try {
+          const res = await fetch(p);
+          if (res.ok) {
+            data = await res.json();
+            this.logger?.debug?.(`Atmosphere: Loaded moods from ${p}`);
+            break;
+          }
+        } catch { /* next */ }
+      }
+
+      if (!data) {
+        this.logger?.warn?.('Atmosphere: Keine moods.json gefunden.');
+        return;
+      }
+
       const list = Array.isArray(data) ? data : data?.moods;
       if (!Array.isArray(list)) {
         this.logger?.warn?.('Atmosphere: moods.json hat unerwartetes Format.');
@@ -933,9 +955,6 @@ export class JanusAtmosphereController {
       }
 
       // Welle 3 Hardening:
-      // Der State verwendet historisch "neutral" als Default-Mood. Wenn die JSON-Datei
-      // nur "silence" enthält, registrieren wir neutral als Alias, damit DJ-Tab,
-      // Restore-Pfade und Autoplay nicht warnen/spammen.
       if (!this._moods.has('neutral')) {
         const silence = this._moods.get('silence');
         if (silence) {
@@ -951,7 +970,7 @@ export class JanusAtmosphereController {
         }
       }
     } catch (err) {
-      this.logger?.error?.('Atmosphere: moods.json konnte nicht geladen werden', err);
+      this.logger?.error?.('Atmosphere: Fehler beim Laden der Moods', err);
     }
   }
 }
