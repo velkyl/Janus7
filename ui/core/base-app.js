@@ -56,18 +56,22 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
   _onPostRender(context, options) {
     this._legacyElement = this.domElement;
     this._bindBaseUiActions();
-    if (this._isFirstRender && this.domElement?.offsetWidth) {
+
+    // Guard: only run first-render logic once, even if offsetWidth is 0 on first microtask.
+    // _isFirstRender is reset unconditionally so that a second render with offsetWidth=0
+    // does not re-register the janusLibraryProgress hook.
+    if (this._isFirstRender) {
+      this._isFirstRender = false;
       this._updatePositionSafe();
       this._applyWindowSanity();
 
-      // Hook for index progress UI updates (runs on every app derived from base)
+      // Hook for index progress UI updates (runs on every app derived from base).
+      // Registered exactly once per app lifecycle; cleaned up in close() via _unregisterHooks().
       this._registerHook('janusLibraryProgress', (pct) => {
         if (!this.rendered || !this.domElement) return;
         const pEl = this.domElement.querySelector('.index-progress-text');
         if (pEl) pEl.innerText = `${pct}%`;
       });
-
-      this._isFirstRender = false;
     } else {
       this._applyWindowSanity();
     }

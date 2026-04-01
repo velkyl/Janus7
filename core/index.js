@@ -92,9 +92,26 @@ export class Janus7Engine {
 
   /**
    * Central error recording.
+   * @param {string} phase - Phase identifier (e.g. 'phase4', 'bridge.dsa5')
+   * @param {string} context - Descriptive context string
+   * @param {Error|any} err - The error or value to record
+   * @param {string} [severity='error'] - Severity level
    */
   recordError(phase, context, err, severity = 'error') {
     this.errors?.record?.(phase, context, err, severity);
+    return err;
+  }
+
+  /**
+   * Records a non-fatal warning in the central error aggregator.
+   * Mirrors recordError but defaults severity to 'warn'.
+   * Called by _recordIssue() in janus.mjs for severity='warn' paths.
+   * @param {string} phase
+   * @param {string} context
+   * @param {Error|any} err
+   */
+  recordWarning(phase, context, err) {
+    this.errors?.record?.(phase, context, err, 'warn');
     return err;
   }
 
@@ -233,25 +250,32 @@ export class Janus7Engine {
     }
   }
 
-  /** @private */
+  /**
+   * Attaches non-blocking integrations (UI, Sync) as background lazy-loads.
+   * These run concurrently — callers must NOT assume engine.ui / engine.sync
+   * are available immediately after this method returns.
+   * Use engine.waitFor('ui.router') / engine.waitFor('sync.engine') to await
+   * readiness from consumer code.
+   * @private
+   */
   _attachIntegrations() {
     const enableUI = this.config.get('enableUI') !== false;
-    
+
     if (enableUI) {
-        // Commands (Lazy load)
+        // Commands (Lazy load — non-blocking by design)
         import('../ui/commands/index.js').then(m => {
             this.commands = m.JanusCommands || m.default;
             if (this.commands) this.markServiceReady('ui.commands', this.commands);
         }).catch(err => this.logger.warn("Commands lazy-load failed", err));
 
-        // UI Framework (Lazy load)
+        // UI Framework (Lazy load — non-blocking by design)
         import('../ui/index.js').then(m => {
             this.ui = m.JanusUI || m.default;
             if (this.ui) this.markServiceReady('ui.router', this.ui);
         }).catch(err => this.logger.warn("UI Module lazy-load failed", err));
     }
 
-    // Sync Engine
+    // Sync Engine (non-blocking by design)
     import('./sync-engine.js').then(m => {
         this.sync = new m.JanusSyncEngine({ logger: this.logger });
         this.markServiceReady('sync.engine', this.sync);

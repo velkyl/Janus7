@@ -7,6 +7,17 @@ export const MODULE_TITLE = 'JANUS7 Engine';
 
 
 /**
+ * Aventurian calendar constants for the Punin Academy setting.
+ * BF = Bosparanische Zeitrechnung (year 1039 BF = campaign start year).
+ */
+export const AVENTURIAN_CALENDAR = Object.freeze({
+  /** Default campaign start year (1039 BF — Punin Academy arc). */
+  DEFAULT_START_YEAR: 1039,
+  TRIMESTERS_PER_YEAR: 3,
+  WEEKS_PER_TRIMESTER: 4,
+});
+
+/**
  * Kanonische State-Pfade für häufig genutzte JANUS7-Subtrees.
  * Reduziert Magic Strings in Hotpaths.
  */
