@@ -143,7 +143,7 @@
     "eventId": "E_MENSA_ELDRIC_PRUNK",
     "title": "Adliges Gehabe",
     "pool": "mensa",
-    "file": "data/events/mensa.json",
+    "file": "data/events/pools/mensa.json",
     "highImpact": false
   },
   {

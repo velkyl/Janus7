@@ -3,6 +3,7 @@
     "questId": "Q_DEMO_LIBRARY",
     "title": "Bibliotheksgeheimnis",
     "category": "uncategorized",
+    "file": "data/quests/Q_DEMO_LIBRARY.json",
     "tags": [
       "demo",
       "mystery"
@@ -12,6 +13,7 @@
     "questId": "Q_KOBOLD_AWAKENING",
     "title": "Der Puniner Kobold I – Das verbotene Lachen",
     "category": "kobold",
+    "file": "data/quests/Q_KOBOLD_AWAKENING.json",
     "tags": [
       "kobold",
       "mystery",
@@ -23,6 +25,7 @@
     "questId": "Q_KOBOLD_REBINDING",
     "title": "Der Puniner Kobold II – Der feenhafte Bann",
     "category": "kobold",
+    "file": "data/quests/Q_KOBOLD_REBINDING.json",
     "tags": [
       "kobold",
       "novizium",
@@ -34,6 +37,7 @@
     "questId": "Q_LIBRARY_CATALOGUE",
     "title": "Verloren im Katalog",
     "category": "uncategorized",
+    "file": "data/quests/Q_LIBRARY_CATALOGUE.json",
     "tags": [
       "library",
       "research",
@@ -44,6 +48,7 @@
     "questId": "Q_ALCHEMY_MISSING_REAGENTS",
     "title": "Das verschwundene Reagenz",
     "category": "uncategorized",
+    "file": "data/quests/Q_ALCHEMY_MISSING_REAGENTS.json",
     "tags": [
       "alchemy",
       "minor",
@@ -54,6 +59,7 @@
     "questId": "Q_ORIOR_TUTORIUM",
     "title": "Tutorium des Orior",
     "category": "social",
+    "file": "data/quests/Q_ORIOR_TUTORIUM.json",
     "tags": [
       "social",
       "orior",
@@ -64,6 +70,7 @@
     "questId": "Q_CODEX_DISCIPLINE_CASE",
     "title": "Fallbeispiel Nazir",
     "category": "discipline",
+    "file": "data/quests/Q_CODEX_DISCIPLINE_CASE.json",
     "tags": [
       "discipline",
       "gildenrecht",
@@ -74,6 +81,7 @@
     "questId": "Q_NORDTURM_LIGHTS",
     "title": "Das Flackern im Nordturm",
     "category": "study",
+    "file": "data/quests/Q_NORDTURM_LIGHTS.json",
     "tags": [
       "nacht",
       "geheimnis",
@@ -84,6 +92,7 @@
     "questId": "Q_PRODIGIOSIS_INITIATION",
     "title": "Die stille Einladung",
     "category": "study",
+    "file": "data/quests/Q_PRODIGIOSIS_INITIATION.json",
     "tags": [
       "societas_prodigiosis",
       "library",
@@ -94,6 +103,7 @@
     "questId": "Q_THAUMATOTURRIS_BINDING",
     "title": "Vor der Bindung",
     "category": "study",
+    "file": "data/quests/Q_THAUMATOTURRIS_BINDING.json",
     "tags": [
       "artefaktmagie",
       "stabbindung",
@@ -104,6 +114,7 @@
     "questId": "Q_CULINA_FAVOR",
     "title": "Eine Schuld bei Sorscha",
     "category": "social",
+    "file": "data/quests/Q_CULINA_FAVOR.json",
     "tags": [
       "mensa",
       "social",
@@ -114,6 +125,7 @@
     "questId": "Q_FAMILIAR_FUGITIVE",
     "title": "Das entlaufene Vertrautentier",
     "category": "uncategorized",
+    "file": "data/quests/Q_FAMILIAR_FUGITIVE.json",
     "tags": [
       "familiar",
       "garden",
@@ -124,6 +136,7 @@
     "questId": "Q_ORIOR_VS_ROHAL",
     "title": "Debatte um die Zukunft",
     "category": "social",
+    "file": "data/quests/Q_ORIOR_VS_ROHAL.json",
     "tags": [
       "social",
       "zirkel",
