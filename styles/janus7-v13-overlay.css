@@ -14,17 +14,9 @@
   --janus7-profile-festum: #8338ec;
 }
 
-.janus7-gm-overlay.janus7-v13-ui {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  pointer-events: none;
-  font-family: inherit;
-  color: #fff;
-  overflow: hidden;
-}
-
-.janus7-gm-overlay.window-app {
+.janus7-gm-overlay.window-app,
+.janus7-gm-overlay.standard-window,
+.janus7-gm-overlay.application {
   pointer-events: auto;
   background: var(--janus7-overlay-bg) !important;
   -webkit-backdrop-filter: blur(var(--janus7-overlay-blur));
@@ -34,13 +26,13 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
-.janus7-gm-overlay.window-app .window-content {
+.janus7-gm-overlay .window-content {
   background: transparent !important;
   border: none !important;
   padding: 0;
 }
 
-.janus7-gm-overlay.window-app .window-header {
+.janus7-gm-overlay .window-header {
   background: rgba(255, 255, 255, 0.05);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }

@@ -209,13 +209,29 @@ export async function loadJson(filename) {
   const flat = moduleAssetPath(`data/academy__${base}`);
 
   // Priority: 1. Profile Specific -> 2. Standard Nested -> 3. Legacy Flat
-  let response = await fetch(profileBase);
-  if (!response.ok) response = await fetch(nested);
-  if (!response.ok) response = await fetch(flat);
+  const attempts = [
+    { url: profileBase, label: 'profile' },
+    { url: nested, label: 'nested' },
+    { url: flat, label: 'flat' }
+  ];
 
-  if (!response.ok) {
-    throw new Error(`JANUS7: Kann JSON nicht laden: ${profileBase} (fallback: ${nested}) (${response.status})`);
+  let response = null;
+  let finalUrl = '';
+  for (const attempt of attempts) {
+    try {
+      response = await fetch(attempt.url);
+      if (response.ok) {
+        finalUrl = attempt.url;
+        break;
+      }
+    } catch (_e) { /* ignore network errors during scan */ }
   }
+
+  if (!response?.ok) {
+    console.error(`[JANUS7:academy:data] CRITICAL: JSON "${base}" could not be loaded from any of the following paths:`, attempts.map(a => a.url));
+    throw new Error(`JANUS7: Kann JSON "${base}" nicht laden. (404 an allen Fallback-Paths)`);
+  }
+  
   return response.json();
 }
 

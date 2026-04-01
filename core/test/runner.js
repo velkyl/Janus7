@@ -70,12 +70,14 @@ export default class JanusTestRunner {
   }
 
   async runGuided({ tests = [], ctx = {} } = {}) {
+    if (!ctx.engine) ctx.engine = game?.janus7;
     const manualApi = ctx?.engine?.test?.manual ?? game?.janus7?.test?.manual ?? null;
     if (manualApi?.runGuided) return manualApi.runGuided({ tests, ctx });
     throw new Error('Geführter Manual-Test-Runner ist nicht verfügbar.');
   }
 
-  async runAll({ tests = [], ctx = {}, includeManual = false, includeCatalog = false, includeImportFailed = false } = {}) {
+  async runAll({ tests = [], ctx = {}, params = {}, includeManual = false, includeCatalog = false, includeImportFailed = false } = {}) {
+    if (!ctx.engine) ctx.engine = game?.janus7;
     const input = (tests?.length ? tests : this.registry?.list?.() ?? [])
       .map((t) => (typeof t === 'string' ? this.registry?.get?.(t) ?? { id: t, kind: 'manual', title: t } : t))
       .sort(sortById);
@@ -124,13 +126,17 @@ export default class JanusTestRunner {
         );
         const out = await Promise.race([test.run({
           ctx,
-          engine: ctx?.engine,
+          engine: ctx?.engine ?? game?.janus7,
           test,
           assert,
           logger: this.logger,
           registry: this.registry,
-          runner: this
-        }), _timeout]);
+          runner: this,
+          params: params?.[test.id] ?? {}
+        }), _timeout]).catch(err => {
+          this.logger?.error?.(`[TEST] ${test.id} ERROR: ${err.message}`, { id: test.id, stack: err.stack });
+          return { ok: false, summary: `ERROR: ${err.message}`, notes: [err.stack].filter(Boolean) };
+        });
         let status, summary, details;
         if (out && typeof out === 'object' && out.status) {
           status = this._normalizeStructuredStatus(out.status);
