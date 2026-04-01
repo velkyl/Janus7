@@ -7,7 +7,7 @@ export default {
   run: async () => {
     // In Janus7 v0.9.11+, actions are data-driven via panel-registry.js
     const diags = game.janus7.uiLayer?.getQuickPanels?.().find(p => p.id === 'diagnostics')
-                ?? game.janus7.services?.registry?.getPanel?.('diagnostics');
+                ?? game.janus7.uiLayer?.getPanel?.('diagnostics');
     const actions = diags?.actions || [];
     const hasInvalidate = actions.some(a => a.action === 'graphInvalidate');
     const hasRebuild = actions.some(a => a.action === 'graphRebuild');

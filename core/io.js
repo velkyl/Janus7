@@ -1,4 +1,5 @@
 import { JanusStateError, JanusValidationError } from './errors.js';
+import { migrateStateSchema } from './state-schema.js';
 
 
 function _pruneNullMapValues(map) {
@@ -118,6 +119,12 @@ function _sanitizeStateCandidate(candidate) {
     for (const key of Object.keys(clone.academy)) {
       if (/^(?:_+test|__test)/i.test(String(key))) delete clone.academy[key];
     }
+  }
+
+  // Ensure full schema compliance (healing) before further sanitization
+  const mig = migrateStateSchema(clone);
+  if (mig?.state) {
+    // Continue with healed state (note: migrateStateSchema is in-place)
   }
 
   const academyQuestRoot = (clone?.academy?.quests && typeof clone.academy.quests === 'object')

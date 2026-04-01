@@ -80,10 +80,21 @@ export class JanusSocialEngine {
    * @param {string} toId
    * @returns {number}
    */
+  /**
+   * Liefert die „Attitüde“ von fromId gegenüber toId (Standard 0).
+   * @param {string} fromId
+   * @param {string} toId
+   * @returns {number}
+   */
   getAttitude(fromId, toId) {
     const rel = this.getRelationship(fromId, toId);
     return rel ? rel.value : 0;
   }
+
+  /** Alias for getAttitude (Phase 4 reward context) */
+  getInfluence(fromId, toId) { return this.getAttitude(fromId, toId); }
+  /** General Alias for getAttitude */
+  getRelationshipValue(fromId, toId) { return this.getAttitude(fromId, toId); }
 
   /**
    * Liefert alle ausgehenden Beziehungen eines Akteurs.

@@ -204,7 +204,9 @@ export class QuestSystemIntegration {
       academyData: engine.academy.data,
       events: eventsEngine,
       conditions: conditionEvaluator,
-      effects: effectAdapter
+      effects: effectAdapter,
+      social: engine.simulation?.social ?? engine.academy?.social ?? engine.social,
+      scoring: engine.simulation?.scoring ?? engine.academy?.scoring ?? engine.scoring
     });
 
     // Attach to engine

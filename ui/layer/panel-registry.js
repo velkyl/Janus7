@@ -1,4 +1,4 @@
-﻿/**
+/**
  * JANUS7 UI Layer - Panel Registry
  * Additive registry for the modular shell layer.
  * Panels are metadata-driven so future extensions only register here.
@@ -315,6 +315,7 @@ const PANEL_DEFINITIONS = [
     title: 'Diagnostik',
     icon: 'fas fa-stethoscope',
     group: 'tools',
+    quick: true,
     appKey: 'commandCenter',
     description: 'Graph, Cache, Fehler und Betriebszustand.',
     summary: 'Operative Systemdiagnose in der Shell; Power Tools nur fuer Spezialpfade.',

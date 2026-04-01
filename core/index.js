@@ -25,6 +25,7 @@ import { JanusServiceRegistry } from './services/service-registry.js';
 import { JanusErrorAggregator } from './error-aggregator.js';
 import { JanusAiService } from './ai.js';
 import { installUiWriteGuard } from './guards/ui-write-guard.js';
+import { runJanusDiagnostics, generateBugReport } from './diagnostics.js';
 
 /**
  * Janus7Engine
@@ -160,15 +161,14 @@ export class Janus7Engine {
     this.io = this.core.io;
     this.folderService = this.core.folderService;
     
-    // 4.5 Diagnostics (Non-blocking)
-    import('./diagnostics.js').then(m => {
-      this.diagnostics = {
-        run: (opts) => m.runJanusDiagnostics(this, opts),
-        report: (opts) => m.runJanusDiagnostics(this, opts),
-        snapshot: () => this.core.state?.get?.('meta') ?? {}
-      };
-      this.markServiceReady('core.diagnostics', this.diagnostics);
-    }).catch(err => this.logger.warn("Diagnostics lazy-load failed", err));
+    // 4.5 Diagnostics (Synchronous)
+    this.diagnostics = {
+      run: (opts) => runJanusDiagnostics(this, opts),
+      report: (opts) => runJanusDiagnostics(this, opts),
+      generateBugReport: (opts) => generateBugReport(this, opts),
+      snapshot: () => this.core.state?.get?.('meta') ?? {}
+    };
+    this.markServiceReady('core.diagnostics', this.diagnostics);
 
     // 5. Write Guard (Debug Mode)
     try {
@@ -190,6 +190,8 @@ export class Janus7Engine {
     this.markServiceReady('core.ai', this.core.ai);
     this.markServiceReady('core.ki', this.ai);
     this.markServiceReady('core.director', this.core.director);
+    this.markServiceReady('core.io', this.core.io);
+    this.markServiceReady('core.folderService', this.core.folderService);
 
     this.logger.info("JANUS7 | Core Engine Services [READY] (Phase 1).");
   }

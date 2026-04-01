@@ -1,5 +1,5 @@
 
-import { getQuickPanels } from './panel-registry.js';
+import { getQuickPanels, getPanel } from './panel-registry.js';
 import { HOOKS } from '../../core/hooks/topics.js';
 import { registerRuntimeHook } from '../../core/hooks/runtime.js';
 import { JanusConfig } from '../../core/config.js';
@@ -171,6 +171,7 @@ export const JanusUiLayerBridge = {
     if (!engine) return;
     engine.uiLayer = engine.uiLayer ?? {};
     engine.uiLayer.getQuickPanels = getQuickPanels;
+    engine.uiLayer.getPanel = getPanel;
     engine.uiLayer.openShell = (options = {}) => game?.janus7?.ui?.open?.('shell', options);
     engine.uiLayer.open = engine.uiLayer.openShell;
     engine.uiLayer.refreshGmQuickOverlay = () => JanusGmQuickOverlay.refresh();

@@ -14,7 +14,7 @@ export class JanusAssetResolver {
   }
 
   static moduleRoot() {
-    return `modules/${this.moduleId()}`;
+    return `/modules/${this.moduleId()}`;
   }
 
   static normalize(path = '') {

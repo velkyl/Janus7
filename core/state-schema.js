@@ -124,9 +124,21 @@ export function migrateStateSchema(stateObj) {
     for (const key of academyKeys) {
       const path = `academy.${key}`;
       const val = foundry.utils.getProperty(stateObj, path);
-      if (val === undefined || val === null || (typeof val === 'object' && Object.keys(val).length === 0 && DEFAULT_STATE.academy[key])) {
+      
+      // If missing or null, or empty object that should have content
+      const shouldHeal = val === undefined || val === null || (typeof val === 'object' && Object.keys(val).length === 0 && DEFAULT_STATE.academy[key]);
+      
+      if (shouldHeal) {
         foundry.utils.setProperty(stateObj, path, foundry.utils.deepClone(DEFAULT_STATE.academy[key]));
         changed = true;
+      } else if (key === 'social' && typeof val === 'object') {
+        // Specialty for social: ensure livingEvents and storyHooks exist even if social is not empty
+        for (const subKey of ['relationships', 'livingEvents', 'storyHooks']) {
+          if (!val[subKey]) {
+            val[subKey] = foundry.utils.deepClone(DEFAULT_STATE.academy.social[subKey]);
+            changed = true;
+          }
+        }
       }
     }
   }

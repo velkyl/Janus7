@@ -39,15 +39,18 @@ export class JanusQuestEngine {
    * @param {AcademyData} deps.academyData - Academy data API from Phase 2
    * @param {JanusEventsEngine} deps.events - Event engine (Phase 4b)
    * @param {JanusConditionEvaluator} deps.conditions - Condition evaluator (Phase 4b)
-   * @param {JanusEffectAdapter} deps.effects - Effect adapter (Phase 4b)
+   * @param {JanusSocialEngine} [deps.social] - Social engine (Phase 4)
+   * @param {JanusScoringEngine} [deps.scoring] - Scoring engine (Phase 4)
    */
-  constructor({ state, logger, academyData, events, conditions, effects }) {
+  constructor({ state, logger, academyData, events, conditions, effects, social, scoring }) {
     this.state = state;
     this.logger = logger;
     this.academyData = academyData;
     this.events = events;
     this.conditions = conditions;
     this.effects = effects;
+    this.social = social;
+    this.scoring = scoring;
   }
 
   async _getQuest(questId) {
@@ -269,6 +272,13 @@ export class JanusQuestEngine {
         });
         return { success: true, nextNodeId: node.nextNodeId };
 
+      case 'reward':
+        await this._applyRewards(node.rewards || {}, { actorId, source: 'quest', questId, nodeId });
+        if (node.completesQuest) {
+          await this.completeQuest(questId, { actorId, applyRewards: true });
+        }
+        return { success: true, nextNodeId: node.nextNodeId };
+
       default:
         return { success: false };
     }
@@ -350,14 +360,17 @@ export class JanusQuestEngine {
    * @param {string} questId - Quest identifier
    * @param {Object} options - Completion options
    * @param {string} options.actorId - Actor UUID
+   * @param {boolean} [options.applyRewards=true] - Whether to apply quest-level rewards
    * @returns {Promise<void>}
    * @fires janus7QuestCompleted
    * 
    * @example
-   * await questEngine.completeQuest('Q_DEMO', { actorId: 'Actor.xyz' });
+   * await questEngine.completeQuest('Q_DEMO', { actorId: 'Actor.xyz', applyRewards: true });
    */
-  async completeQuest(questId, { actorId }) {
-    await this.state.transaction(() => {
+  async completeQuest(questId, { actorId, applyRewards = true } = {}) {
+    const questDef = await this._getQuest(questId);
+
+    await this.state.transaction(async () => {
       const questStates = this._getQuestStatesForActor(actorId);
       const quest = questStates[questId];
       
@@ -367,6 +380,10 @@ export class JanusQuestEngine {
       }
       
       this._setQuestStatesForActor(actorId, questStates);
+
+      if (applyRewards && questDef?.rewards) {
+        await this._applyRewards(questDef.rewards, { actorId, source: 'quest', questId });
+      }
     });
 
     try { await this.state.save?.({ force: false }); } catch (e) { this.logger?.warn?.('Quest complete: state.save failed', e); }
@@ -374,6 +391,42 @@ export class JanusQuestEngine {
     this.logger?.info?.('Quest completed', { questId, actorId });
     emitHook(HOOKS.QUEST_COMPLETED, { questId, actorId });
   }
+  /**
+   * Apply rewards (internal).
+   * @private
+   */
+  async _applyRewards(rewards = {}, { actorId, source = 'unknown', questId = null, nodeId = null }) {
+    if (!rewards || typeof rewards !== 'object') return;
+
+    // 1. Social (NPC relationship value)
+    if (rewards.social && typeof rewards.social === 'object' && this.social) {
+      for (const [npcId, delta] of Object.entries(rewards.social)) {
+        try {
+          await this.social.adjustAttitude(actorId, npcId, delta, {
+            meta: { source, questId, nodeId }
+          });
+        } catch (err) {
+          this.logger?.warn?.(`Quest: applyRewards social failed for ${npcId}`, err);
+        }
+      }
+    }
+
+    // 2. Scoring (Circle points)
+    if (rewards.scoring && typeof rewards.scoring === 'object' && this.scoring) {
+      for (const [circleId, delta] of Object.entries(rewards.scoring)) {
+        try {
+          // Adjust circle score
+          await this.scoring.adjustCircleScore(circleId, delta, {
+            actorId,
+            reason: `${source}: ${questId || 'unknown'}`
+          });
+        } catch (err) {
+          this.logger?.warn?.(`Quest: applyRewards scoring failed for ${circleId}`, err);
+        }
+      }
+    }
+  }
+
   /**
    * List quests, optionally filtered by actorId and/or status.
    * Shim: command layer expects this method.

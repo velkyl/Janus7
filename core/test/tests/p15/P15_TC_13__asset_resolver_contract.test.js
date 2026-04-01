@@ -9,7 +9,7 @@ export default {
   run: async () => {
     const asset = JanusAssetResolver.asset('data/x.json');
     const template = JanusAssetResolver.template('/apps/control-panel.hbs');
-    const ok = asset === 'modules/Janus7/data/x.json' && template === 'modules/Janus7/templates/apps/control-panel.hbs';
+    const ok = asset === '/modules/Janus7/data/x.json' && template === '/modules/Janus7/templates/apps/control-panel.hbs';
     return { ok, summary: ok ? 'Resolver canonical' : `asset=${asset} template=${template}` };
   }
 };

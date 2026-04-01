@@ -3,7 +3,7 @@
  * Shared cache + low-level helpers for AcademyDataApi.
  */
 
-import { MODULE_ID } from '../core/common.js';
+import { MODULE_ID, moduleAssetPath } from '../core/common.js';
 import { getJanusCore } from '../core/index.js';
 
 let _academyCache = null;
@@ -204,9 +204,9 @@ export async function loadJson(filename) {
   if (!base) throw new Error('JANUS7: loadJson() filename missing');
 
   const profile = JanusProfileRegistry.getActive();
-  const profileBase = `modules/${MODULE_ID}/data/profiles/${profile.id}/${base}`;
-  const nested = `modules/${MODULE_ID}/data/academy/${base}`;
-  const flat = `modules/${MODULE_ID}/data/academy__${base}`;
+  const profileBase = moduleAssetPath(`data/profiles/${profile.id}/${base}`);
+  const nested = moduleAssetPath(`data/academy/${base}`);
+  const flat = moduleAssetPath(`data/academy__${base}`);
 
   // Priority: 1. Profile Specific -> 2. Standard Nested -> 3. Legacy Flat
   let response = await fetch(profileBase);
@@ -221,8 +221,8 @@ export async function loadJson(filename) {
 
 export async function loadDataJson(relPath) {
   const profile = JanusProfileRegistry.getActive();
-  const profileUrl = `modules/${MODULE_ID}/data/profiles/${profile.id}/academy/${relPath}`;
-  const standardUrl = `modules/${MODULE_ID}/data/${relPath}`;
+  const profileUrl = moduleAssetPath(`data/profiles/${profile.id}/academy/${relPath}`);
+  const standardUrl = moduleAssetPath(`data/${relPath}`);
 
   let response = await fetch(profileUrl);
   if (!response.ok) response = await fetch(standardUrl);

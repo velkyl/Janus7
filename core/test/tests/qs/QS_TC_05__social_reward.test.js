@@ -17,10 +17,11 @@ export default {
 
     // 1. Initialer Social State (Neutral)
     await engine.core.state.transaction((s) => {
-      const root = s.get("social") || {};
-      root[actorId] = root[actorId] || {};
-      root[actorId][npcId] = { influence: 0, status: [] };
-      s.set("social", root);
+      const social = s.get("academy.social") || { relationships: {} };
+      social.relationships = social.relationships || {};
+      social.relationships[actorId] = social.relationships[actorId] || {};
+      social.relationships[actorId][npcId] = { attitude: 0, status: [] };
+      s.set("academy.social", social);
     });
 
     try {
@@ -64,9 +65,12 @@ export default {
       return { ok: false, summary: `Fehler: ${e.message}` };
     } finally {
       await engine.core.state.transaction((s) => {
-        const socialRoot = s.get("social") || {};
-        if (socialRoot[actorId]) delete socialRoot[actorId][npcId];
-        s.set("social", socialRoot);
+        const social = s.get("academy.social") || { relationships: {} };
+        if (social.relationships?.[actorId]) {
+          delete social.relationships[actorId][npcId];
+          if (Object.keys(social.relationships[actorId]).length === 0) delete social.relationships[actorId];
+        }
+        s.set("academy.social", social);
         
         const questRoot = s.get("questStates") || {};
         delete questRoot[actorId];

@@ -29,7 +29,7 @@ import { STATE_PATHS } from './common.js';
  * @remarks
  * - Keine UI-Seiteneffekte
  * - Keine direkten Zugriffe auf Foundry- oder dsa5-Interna außerhalb definierter APIs
- * - Änderungen hier erfordern Anpassungen im Testkatalog
+ * - Änderungen hier Erfordern Anpassungen im Testkatalog
  */
 export async function runJanusDiagnostics(engine, { notify = true, edgeCases = false, verbose = false } = {}) {
   const moduleId = engine?.moduleId ?? 'janus7';
@@ -64,6 +64,7 @@ export async function runJanusDiagnostics(engine, { notify = true, edgeCases = f
     },
     checks: [],
     summary: { ok: 0, warn: 0, fail: 0 },
+    ok: true,
     sections: {},
     warnings: []
   };
@@ -487,7 +488,8 @@ export async function runJanusDiagnostics(engine, { notify = true, edgeCases = f
       lastUiError: engine?.diagnostics?.lastUiError ?? null
     }
   };
-  // State-Version-Drift Diagnose: wenn gespeicherter State älter als Modul
+
+  // State-Version-Drift Diagnose
   const _modVer = report.meta.moduleVersion;
   const _stateVer = report.sections.build.stateVersion;
   if (_modVer && _stateVer && _stateVer !== _modVer) {
@@ -506,6 +508,7 @@ export async function runJanusDiagnostics(engine, { notify = true, edgeCases = f
     ...recentLogs.map((entry) => `${entry.level?.toUpperCase?.() ?? 'WARN'}: ${entry.message}`)
   ].slice(0, 8);
   report.health = report.summary.fail > 0 ? 'fail' : (report.summary.warn > 0 ? 'warn' : 'ok');
+  report.ok = (report.health !== 'fail');
   report.overview = {
     generatedAt: report.meta.generatedAt,
     health: report.health,
@@ -514,8 +517,8 @@ export async function runJanusDiagnostics(engine, { notify = true, edgeCases = f
 
   // optional UI notify
   if (notify && ui?.notifications) {
-    const { ok, warn, fail } = report.summary;
-    const msg = `JANUS7 Diagnostics: ${report.health.toUpperCase()} · OK=${ok} WARN=${warn} FAIL=${fail}`;
+    const { ok: okCount, warn, fail } = report.summary;
+    const msg = `JANUS7 Diagnostics: ${report.health.toUpperCase()} · OK=${okCount} WARN=${warn} FAIL=${fail}`;
     ui.notifications[fail ? 'error' : warn ? 'warn' : 'info'](msg);
   }
 
