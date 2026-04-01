@@ -99,7 +99,7 @@ function _unwrapStateEnvelope(candidate) {
   return candidate;
 }
 
-function _sanitizeStateCandidate(candidate) {
+function _sanitizeStateCandidate(candidate, { applySchemaHealing = true } = {}) {
   if (!candidate || typeof candidate !== 'object') return candidate;
   const clone = foundry.utils.deepClone(_unwrapStateEnvelope(candidate));
 
@@ -121,10 +121,14 @@ function _sanitizeStateCandidate(candidate) {
     }
   }
 
-  // Ensure full schema compliance (healing) before further sanitization
-  const mig = migrateStateSchema(clone);
-  if (mig?.state) {
-    // Continue with healed state (note: migrateStateSchema is in-place)
+  if (applySchemaHealing) {
+    // Healing is allowed for exports and lenient recovery imports, but strict
+    // validation must see the caller payload before missing required roots are
+    // silently repaired.
+    const mig = migrateStateSchema(clone);
+    if (mig?.state) {
+      // Continue with healed state (note: migrateStateSchema is in-place)
+    }
   }
 
   const academyQuestRoot = (clone?.academy?.quests && typeof clone.academy.quests === 'object')
@@ -265,7 +269,7 @@ export class JanusIO {
     // 1) Sanitize known JANUS-internal test artifacts before validation.
     // Unknown user payload must still fail validation, but leaked test markers like root.test
     // or academy._testMarker should never break a legitimate roundtrip.
-    const sanitizedInput = _sanitizeStateCandidate(obj);
+    const sanitizedInput = _sanitizeStateCandidate(obj, { applySchemaHealing: !validate });
 
     // 2) Validate sanitized input. Unknown keys & wrong types must still be rejected.
     if (validate && validator?.validateState) {

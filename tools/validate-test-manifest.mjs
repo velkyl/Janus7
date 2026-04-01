@@ -37,8 +37,14 @@ function walk(dir) {
   return out;
 }
 
+function extractTestMetaBlock(txt) {
+  const match = txt.match(/export\s+default\s*\{([\s\S]*?)\brun\s*(?::|\()/);
+  return match?.[1] ?? '';
+}
+
 for (const file of walk(path.join(root, 'core/test/tests'))) {
   const txt = fs.readFileSync(file, 'utf8');
+  const metaBlock = extractTestMetaBlock(txt);
   const m = txt.match(/id:\s*['\"]([^'\"]+)['\"]/);
   if (!m) {
     errors.push(`Test file without id: ${path.relative(root, file)}`);
@@ -54,7 +60,7 @@ for (const file of walk(path.join(root, 'core/test/tests'))) {
   const entry = manifestById.get(id);
   if (!entry) continue;
 
-  const kindMatch = txt.match(/kind:\s*['\"]([^'\"]+)['\"]/);
+  const kindMatch = metaBlock.match(/kind:\s*['\"]([^'\"]+)['\"]/);
   if (kindMatch && entry.kind) {
     const manifestKind = normalizeKind(entry.kind, 'manual');
     const fileKind = normalizeKind(kindMatch[1], 'manual');

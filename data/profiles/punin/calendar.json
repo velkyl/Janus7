@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "version": "1.0.0-punin",
+    "description": "Akademie-Kalender für die Akademie für Fortgeschrittene Magie zu Punin"
+  },
+  "entries": [
+    {
+      "id": "punin_y1_t1_w1_d1_morgens",
+      "year": 1, "trimester": 1, "week": 1, "day": "Praiosstag", "phase": "Morgens",
+      "type": "lesson-slot", "lessonId": "PUNIN_Y1_METAMAGIC_01", "notes": "Einführung in die Metamagie."
+    }
+  ]
+}

@@ -20,7 +20,7 @@ function hasBOM(filePath) {
 
 const checks = [
   { file: 'package.json', regex: /"version":\s*"([^"]+)"/, label: 'package.json version' },
-  { file: 'VERSION.json', regex: /"version":\s*"([^"]+)"/, label: 'VERSION.json version' },
+  { file: 'VERSION.json', regex: /"version":\s*"([^"]+)"/, label: 'VERSION.json version' },  { file: path.join('data', 'tests', 'extended-test-manifest.json'), regex: /"moduleVersion":\s*"([^"]+)"/, label: 'data/tests/extended-test-manifest.json moduleVersion' },
   { file: 'README.md', regex: /\*\*Version:\*\*\s*([0-9.]+)/, label: 'README version' },
   { file: path.join('docs', 'INDEX.md'), regex: /\*\*Modul-Version \(SSOT: `module\.json`\):\*\*\s*([0-9.]+)/, label: 'docs/INDEX.md version' },
   { file: path.join('docs', 'STATUS.md'), regex: /^# STATUS .+v([0-9.]+)/m, label: 'docs/STATUS.md version' },

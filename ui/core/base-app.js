@@ -490,6 +490,10 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
   async close(options = {}) {
     // Consolidated cleanup: abort ongoing render, unregister hooks and reset flags
     this._cleanupRenderAbort();
+    if (this._rerenderTimer != null) {
+      try { clearTimeout(this._rerenderTimer); } catch (_) { /* noop */ }
+      this._rerenderTimer = null;
+    }
     this._unregisterHooks();
     // allow auto refresh registration again next time this is opened
     this._autoRefreshEnabled = false;
@@ -500,3 +504,4 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
 }
 
 export default JanusBaseApp;
+

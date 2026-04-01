@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "version": "1.0.0-punin",
+    "lastUpdate": "2026-04-01T00:00:00.000Z",
+    "description": "Initial Lesson plan for Academy of Advanced Magic (Punin)"
+  },
+  "lessons": [
+    {
+      "id": "PUNIN_Y1_METAMAGIC_01",
+      "name": "Einführung in die Metamagie",
+      "subject": "metamagie",
+      "yearRange": [1, 1],
+      "summary": "Die Theorie der Matrix-Manipulation und die Grundlagen der Kraftmanipulation.",
+      "tags": ["metamagie", "theorie", "matrix"],
+      "teacherNpcId": "punin_archmage_xyz",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          { "systemSkillId": "TALENT_MAGIEKUNDE", "weight": 1.0 }
+        ],
+        "checks": [
+          { "type": "knowledge-check", "difficulty": "hard", "targetSkillId": "TALENT_MAGIEKUNDE" }
+        ]
+      },
+      "scoringImpact": { "diligence": 2, "housePointsRange": [-1, 3] },
+      "references": {
+        "dsa5RuleRefs": ["TALENT: MAGIEKUNDE"],
+        "libraryItemIds": ["LIB_ASTRALE_GEHEIMNISSE"]
+      }
+    }
+  ]
+}

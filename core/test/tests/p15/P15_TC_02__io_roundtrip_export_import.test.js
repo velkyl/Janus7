@@ -55,8 +55,10 @@ export default {
 
     // Act
     const res = await engine.io.importStateFromJSON(exported);
-    if (!res?.ok) {
-      return { ok: false, summary: `Import fehlgeschlagen: ${res?.error || "(unknown)"}` };
+    const importOk = res === true || res?.ok === true;
+    if (!importOk) {
+      const importError = res?.error ?? res?.summary ?? res?.message ?? '(unknown)';
+      return { ok: false, summary: `Import fehlgeschlagen: ${importError}` };
     }
 
     // Assert

@@ -126,7 +126,9 @@ export default class JanusTestRunner {
         const _timeout = new Promise((_, rej) =>
           setTimeout(() => rej(new Error(`Test timeout after ${TEST_TIMEOUT_MS}ms`)), TEST_TIMEOUT_MS)
         );
-        const out = await Promise.race([test.run({
+        let out;
+        try {
+          out = await Promise.race([test.run({
           ctx,
           engine,
           test,
@@ -144,8 +146,15 @@ export default class JanusTestRunner {
             engine.core.state.forceUnlock();
           }
 
-          return { ok: false, summary: `ERROR: ${err.message}`, notes: [err.stack].filter(Boolean) };
+          return {
+            status: 'ERROR',
+            summary: err?.message ?? 'Unknown test error',
+            details: { stack: err?.stack }
+          };
         });
+        } finally {
+          if (timeoutId !== null) clearTimeout(timeoutId);
+        }
 
         // Diagnostic: Check if engine was corrupted after test
         if (out?.ok === false && out?.summary?.includes('API fehlt')) {

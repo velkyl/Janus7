@@ -4,6 +4,7 @@ import { HOOKS } from '../../core/hooks/topics.js';
 import { registerRuntimeHook } from '../../core/hooks/runtime.js';
 import { JanusConfig } from '../../core/config.js';
 import { JanusProfileRegistry } from '../../core/profiles/index.js';
+import { moduleAssetPath } from '../../core/common.js';
 
 const GM_OVERLAY_ID = 'janus7-gm-quick-overlay';
 
@@ -43,7 +44,7 @@ class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(ApplicationV2) {
   /** @override */
   static PARTS = {
     content: {
-      template: 'modules/Janus7/templates/ui/gm-overlay.hbs'
+      template: moduleAssetPath('templates/ui/gm-overlay.hbs')
     }
   };
 

@@ -10,7 +10,7 @@ export class JanusAssetResolver {
       const match = url.pathname.match(/\/modules\/([^/]+)\//);
       if (match) return match[1];
     } catch (_) {}
-    return 'janus7';
+    return 'Janus7';
   }
 
   static moduleRoot() {

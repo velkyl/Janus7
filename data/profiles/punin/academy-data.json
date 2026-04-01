@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "moduleVersion": "0.9.12.6",
+    "profile": "punin",
+    "description": "Akademie-Basisdaten für die Puniner Magierakademie."
+  },
+  "academy": {
+      "id": "punin",
+      "name": "Akademie der Hohen Magie zu Punin",
+      "trimester": 1,
+      "year": 1039,
+      "week": 1,
+      "day": "Praiosstag",
+      "phase": "Morgen"
+  },
+  "configuration": {
+      "autoSave": true,
+      "enableUI": true,
+      "enableSimulation": true
+  }
+}

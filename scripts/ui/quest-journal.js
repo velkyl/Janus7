@@ -1,18 +1,21 @@
 import { moduleTemplatePath } from '../../core/common.js';
+import { HOOKS } from '../../core/hooks/topics.js';
+import { JanusBaseApp } from '../../ui/core/base-app.js';
+
 /**
  * Quest Journal - ApplicationV2 UI Component
  * Enhanced in v0.9.10.12 to surface Quest / Rumor / Faction summaries
  * from AcademyDataApi view-model builders instead of ad-hoc raw registry reads.
  */
 
-const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+const { HandlebarsApplicationMixin } = foundry.applications.api;
 
 function _actorCandidates(actor) {
   return [actor?.uuid, actor?.id].filter(Boolean);
 }
 
 function _fmtDate(value) {
-  if (!value) return '—';
+  if (!value) return '-';
   try {
     return new Date(value).toLocaleString('de-DE');
   } catch (_err) {
@@ -33,7 +36,32 @@ function _normQuestDef(raw = {}) {
   };
 }
 
-export class JanusQuestJournal extends HandlebarsApplicationMixin(ApplicationV2) {
+function _canRevealRumorTruth(user = globalThis.game?.user) {
+  return Boolean(user?.isGM);
+}
+
+function _mapRumor(rumor, { revealTruth = false } = {}) {
+  const hasTruth = typeof rumor?.truthLevel === 'number';
+  return {
+    ...rumor,
+    truthLabel: revealTruth && hasTruth ? `${Math.round(rumor.truthLevel * 100)}%` : 'Unklar',
+    stateClass: rumor?.heard ? 'heard' : 'new'
+  };
+}
+
+export class JanusQuestJournal extends HandlebarsApplicationMixin(JanusBaseApp) {
+  constructor(options = {}) {
+    super(options);
+    this.enableAutoRefresh?.([
+      HOOKS.QUEST_STARTED,
+      HOOKS.QUEST_COMPLETED,
+      HOOKS.QUEST_NODE_CHANGED,
+      HOOKS.STORY_HOOK_CHANGED,
+      HOOKS.DATE_CHANGED,
+      HOOKS.LOCATION_CHANGED
+    ]);
+  }
+
   static DEFAULT_OPTIONS = {
     id: 'janus7-quest-journal',
     tag: 'div',
@@ -65,107 +93,113 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(ApplicationV2)
   };
 
   async _prepareContext(_options) {
-    const actor = game.user.character || game.actors.find((a) => a.type === 'character');
-    if (!actor) {
-      return {
-        hasActor: false,
-        error: 'Kein Character gefunden. Bitte einen Character auswählen.'
-      };
-    }
+    try {
+      const actor = game.user.character || game.actors.find((a) => a.type === 'character');
+      if (!actor) {
+        return {
+          hasActor: false,
+          error: 'Kein Character gefunden. Bitte einen Character auswaehlen.'
+        };
+      }
 
-    const dataApi = game.janus7?.academy?.data;
-    const questEngine = game.janus7?.academy?.quests;
-    if (!dataApi || !questEngine) {
+      const dataApi = game.janus7?.academy?.data;
+      const questEngine = game.janus7?.academy?.quests;
+      if (!dataApi || !questEngine) {
+        return {
+          hasActor: true,
+          actor: actor.name,
+          error: 'Quest-System nicht initialisiert. Bitte JANUS7 laden.'
+        };
+      }
+
+      const actorKeys = new Set(_actorCandidates(actor));
+      const registry = await dataApi.getContentRegistry?.().catch?.(() => null);
+      const questDefs = (registry?.quests ?? [])
+        .map(_normQuestDef)
+        .filter((q) => !!q.questId);
+
+      const summaries = (dataApi.buildQuestSummary?.() ?? [])
+        .filter((entry) => actorKeys.has(entry.actorId));
+
+      const summariesByQuestId = new Map(summaries.map((entry) => [entry.questId, entry]));
+
+      const activeQuests = summaries
+        .filter((entry) => String(entry.status) === 'active')
+        .map((entry) => {
+          const def = questDefs.find((q) => q.questId === entry.questId) ?? _normQuestDef({ id: entry.questId, title: entry.title });
+          return {
+            ...def,
+            state: entry,
+            startedAtLabel: _fmtDate(entry.startedAt),
+            hasDeadline: Number.isFinite(Number(entry.deadlineDays))
+          };
+        })
+        .sort((a, b) => String(a.title).localeCompare(String(b.title), 'de'));
+
+      const completedQuests = summaries
+        .filter((entry) => String(entry.status) === 'completed')
+        .map((entry) => {
+          const def = questDefs.find((q) => q.questId === entry.questId) ?? _normQuestDef({ id: entry.questId, title: entry.title });
+          return {
+            ...def,
+            state: entry,
+            startedAtLabel: _fmtDate(entry.startedAt)
+          };
+        })
+        .sort((a, b) => String(a.title).localeCompare(String(b.title), 'de'));
+
+      const availableQuests = questDefs
+        .filter((def) => !summariesByQuestId.has(def.questId))
+        .sort((a, b) => String(a.title).localeCompare(String(b.title), 'de'));
+
+      const revealTruth = _canRevealRumorTruth(game.user);
+      const rumors = (dataApi.buildRumorBoard?.() ?? []).map((rumor) => _mapRumor(rumor, { revealTruth }));
+
+      const factions = (dataApi.buildFactionStanding?.() ?? []).map((faction) => ({
+        ...faction,
+        pointsLabel: Number.isFinite(Number(faction.points)) ? String(faction.points) : '0',
+        reputationLabel: Number.isFinite(Number(faction.reputation)) ? String(faction.reputation) : '0',
+        perksText: Array.isArray(faction.perks)
+          ? faction.perks.map((p) => p?.effectId ?? p?.name ?? p?.id ?? 'Perk').join(', ')
+          : ''
+      }));
+
+      const eventContext = dataApi.buildEventContext?.() ?? {};
+      const summaryCards = {
+        activeQuests: activeQuests.length,
+        availableQuests: availableQuests.length,
+        completedQuests: completedQuests.length,
+        unheardRumors: rumors.filter((r) => !r.heard).length,
+        factions: factions.length,
+        currentLocationId: eventContext.activeLocationId ?? '-'
+      };
+
       return {
         hasActor: true,
         actor: actor.name,
-        error: 'Quest-System nicht initialisiert. Bitte JANUS7 laden.'
+        actorId: actor.uuid,
+        actorIds: Array.from(actorKeys),
+        summaryCards,
+        activeQuests,
+        availableQuests,
+        completedQuests,
+        rumors,
+        factions,
+        eventContext,
+        hasActive: activeQuests.length > 0,
+        hasAvailable: availableQuests.length > 0,
+        hasCompleted: completedQuests.length > 0,
+        hasRumors: rumors.length > 0,
+        hasFactions: factions.length > 0,
+        revealRumorTruth: revealTruth
+      };
+    } catch (err) {
+      this._getLogger?.().error?.('[JANUS7][QuestJournal] _prepareContext failed', err);
+      return {
+        hasActor: false,
+        error: `Quest-Journal konnte nicht geladen werden: ${String(err?.message ?? err)}`
       };
     }
-
-    const actorKeys = new Set(_actorCandidates(actor));
-    const registry = await dataApi.getContentRegistry?.().catch?.(() => null);
-    const questDefs = (registry?.quests ?? [])
-      .map(_normQuestDef)
-      .filter((q) => !!q.questId);
-
-    const summaries = (dataApi.buildQuestSummary?.() ?? [])
-      .filter((entry) => actorKeys.has(entry.actorId));
-
-    const summariesByQuestId = new Map(summaries.map((entry) => [entry.questId, entry]));
-
-    const activeQuests = summaries
-      .filter((entry) => String(entry.status) === 'active')
-      .map((entry) => {
-        const def = questDefs.find((q) => q.questId === entry.questId) ?? _normQuestDef({ id: entry.questId, title: entry.title });
-        return {
-          ...def,
-          state: entry,
-          startedAtLabel: _fmtDate(entry.startedAt),
-          hasDeadline: Number.isFinite(Number(entry.deadlineDays))
-        };
-      })
-      .sort((a, b) => String(a.title).localeCompare(String(b.title), 'de'));
-
-    const completedQuests = summaries
-      .filter((entry) => String(entry.status) === 'completed')
-      .map((entry) => {
-        const def = questDefs.find((q) => q.questId === entry.questId) ?? _normQuestDef({ id: entry.questId, title: entry.title });
-        return {
-          ...def,
-          state: entry,
-          startedAtLabel: _fmtDate(entry.startedAt)
-        };
-      })
-      .sort((a, b) => String(a.title).localeCompare(String(b.title), 'de'));
-
-    const availableQuests = questDefs
-      .filter((def) => !summariesByQuestId.has(def.questId))
-      .sort((a, b) => String(a.title).localeCompare(String(b.title), 'de'));
-
-    const rumors = (dataApi.buildRumorBoard?.() ?? []).map((rumor) => ({
-      ...rumor,
-      truthLabel: typeof rumor.truthLevel === 'number' ? `${Math.round(rumor.truthLevel * 100)}%` : '—',
-      stateClass: rumor.heard ? 'heard' : 'new'
-    }));
-
-    const factions = (dataApi.buildFactionStanding?.() ?? []).map((faction) => ({
-      ...faction,
-      pointsLabel: Number.isFinite(Number(faction.points)) ? String(faction.points) : '0',
-      reputationLabel: Number.isFinite(Number(faction.reputation)) ? String(faction.reputation) : '0',
-      perksText: Array.isArray(faction.perks)
-        ? faction.perks.map((p) => p?.effectId ?? p?.name ?? p?.id ?? 'Perk').join(', ')
-        : ''
-    }));
-
-    const eventContext = dataApi.buildEventContext?.() ?? {};
-    const summaryCards = {
-      activeQuests: activeQuests.length,
-      availableQuests: availableQuests.length,
-      completedQuests: completedQuests.length,
-      unheardRumors: rumors.filter((r) => !r.heard).length,
-      factions: factions.length,
-      currentLocationId: eventContext.activeLocationId ?? '—'
-    };
-
-    return {
-      hasActor: true,
-      actor: actor.name,
-      actorId: actor.uuid,
-      actorIds: Array.from(actorKeys),
-      summaryCards,
-      activeQuests,
-      availableQuests,
-      completedQuests,
-      rumors,
-      factions,
-      eventContext,
-      hasActive: activeQuests.length > 0,
-      hasAvailable: availableQuests.length > 0,
-      hasCompleted: completedQuests.length > 0,
-      hasRumors: rumors.length > 0,
-      hasFactions: factions.length > 0
-    };
   }
 
   static async _onRefreshJournal(event, _target) {
@@ -188,7 +222,7 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(ApplicationV2)
       ${state ? `
         <hr>
         <p><strong>Status:</strong> ${state.status}</p>
-        <p><strong>Aktueller Knoten:</strong> ${state.currentNodeId ?? '—'}</p>
+        <p><strong>Aktueller Knoten:</strong> ${state.currentNodeId ?? '-'}</p>
         <p><strong>Gestartet:</strong> ${_fmtDate(state.startedAt)}</p>
       ` : ''}
       ${Array.isArray(quest?.nodes) && quest.nodes.length ? `
@@ -202,7 +236,7 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(ApplicationV2)
       await DialogV2.prompt({
         window: { title: quest?.title ?? questId },
         content,
-        ok: { label: 'Schließen' },
+        ok: { label: 'Schliessen' },
         rejectClose: false,
       }).catch(() => {});
       return;
@@ -212,7 +246,7 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(ApplicationV2)
       title: quest?.title ?? questId,
       content,
       buttons: {
-        ok: { icon: '<i class="fas fa-check"></i>', label: 'Schließen' }
+        ok: { icon: '<i class="fas fa-check"></i>', label: 'Schliessen' }
       },
       default: 'ok'
     }, { classes: ['janus7', 'quest-journal-dialog'] }).render(true);

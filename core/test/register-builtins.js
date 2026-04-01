@@ -167,6 +167,7 @@ export const BUILTIN_AUTO_MODULES = [
   './tests/p16/P16_TC_08__atmosphere_dj_api_chain.test.js',
   './tests/p16/P16_TC_09__state_inspector_json.test.js',
   './tests/p16/P16_TC_10__ui_open_all_apps.test.js',
+  './tests/p16/P16_TC_11__quest_journal_metagame_guard.test.js',
 
   // Quest System (Core)
   './tests/qs/QS_TC_01__quest_lifecycle.test.js',

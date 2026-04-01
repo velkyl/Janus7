@@ -25,6 +25,12 @@ import { MODULE_ID } from '../core/common.js';
 function _role(user) {
   if (!user) return 'none';
   if (user.isGM) return 'gm';
+  try {
+    const gm = CONST?.USER_ROLES?.GAMEMASTER ?? 4;
+    if ((user.role ?? 0) >= gm) return 'gm';
+  } catch {
+    // ignore
+  }
   // Foundry: trusted players have role >= CONST.USER_ROLES.TRUSTED.
   try {
     const trusted = CONST?.USER_ROLES?.TRUSTED ?? 2;
@@ -76,7 +82,7 @@ export const JanusPermissions = {
     const r = _role(user);
     if (r === 'gm') return true;
     if (tabId === 'status') return true;
-    if (tabId === 'debug') return r === 'trusted' || r === 'player';
+    if (tabId === 'debug') return r === 'trusted';
     return false;
   },
 
