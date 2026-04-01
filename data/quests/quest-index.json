@@ -142,5 +142,19 @@
       "zirkel",
       "debate"
     ]
+  },
+  {
+    "questId": "__PROCEDURAL__",
+    "title": "Procedural Quests",
+    "category": "procedural",
+    "file": "data/quests/procedural_quests.json",
+    "tags": [ "procedural" ]
+  },
+  {
+    "questId": "__WIZARD_LIFE__",
+    "title": "Wizard Life Quests",
+    "category": "wizard_life",
+    "file": "data/quests/wizard_life_quests.json",
+    "tags": [ "life", "path" ]
   }
 ]

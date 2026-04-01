@@ -1,4 +1,5 @@
 import { JanusContentRegistry } from './content-registry.js';
+import { JanusAssetResolver } from '../../../core/services/asset-resolver.js';
 
 /**
  * Phase 2 content loader:
@@ -27,25 +28,43 @@ export class JanusContentLoader {
   }
 
   async _loadSplit() {
-    // Use absolute module path to avoid browser-relative resolution issues.
-    const base = `/modules/${this.moduleId}/data`;
-    const questIndex = await this._loadJSON(`${base}/quests/quest-index.json`);
-    const eventIndex = await this._loadJSON(`${base}/events/event-index.json`);
-    const effectIndex = await this._loadJSON(`${base}/academy/effects/effect-index.json`);
-    const options = await this._loadJSON(`${base}/events/options.json`);
-    const pools = await this._loadJSON(`${base}/events/pool-index.json`);
+    // Phase 8: Use absolute resolver paths
+    const questIndex = await this._loadJSON(JanusAssetResolver.data('quests/quest-index.json'));
+    const eventIndex = await this._loadJSON(JanusAssetResolver.data('events/event-index.json'));
+    const effectIndex = await this._loadJSON(JanusAssetResolver.data('academy/effects/effect-index.json'));
+    const options = await this._loadJSON(JanusAssetResolver.data('events/options.json'));
+    const pools = await this._loadJSON(JanusAssetResolver.data('events/pool-index.json'));
 
     // Quests + nodes
     const quests = [];
     const questNodes = [];
     for (const qi of questIndex) {
-      const q = await this._loadJSON(`${base}/quests/${qi.questId}.json`);
-      const { nodes = [], ...quest } = q ?? {};
-      quests.push(quest);
-      for (const rawNode of nodes) {
-        const node = { ...(rawNode ?? {}), questId: quest.questId ?? qi.questId };
-        if (!node.failureNodeId && node.failNodeId) node.failureNodeId = node.failNodeId;
-        questNodes.push(node);
+      // Use qi.file if available, fallback to questId.json
+      const relFile = qi.file ? String(qi.file) : `data/quests/${qi.questId}.json`;
+      const fullPath = JanusAssetResolver.asset(relFile);      
+      let res;
+      try {
+        res = await this._loadJSON(fullPath);
+      } catch (err) {
+        this.logger?.warn?.(`Quest file missing: ${fullPath}`, { questId: qi.questId });
+        continue;
+      }
+
+      // Support both single-quest files and quest-list files
+      const rawQuests = Array.isArray(res?.quests) ? res.quests : (res?.questId ? [res] : []);
+      
+      for (const q of rawQuests) {
+        if (!q) continue;
+        const { nodes = [], ...questProps } = q;
+        const questId = questProps.questId ?? questProps.id ?? qi.questId;
+        const quest = { ...questProps, questId };
+        
+        quests.push(quest);
+        for (const rawNode of nodes) {
+          const node = { ...(rawNode ?? {}), questId };
+          if (!node.failureNodeId && node.failNodeId) node.failureNodeId = node.failNodeId;
+          questNodes.push(node);
+        }
       }
     }
 
@@ -53,14 +72,16 @@ export class JanusContentLoader {
     const poolFiles = new Set((eventIndex ?? []).map(e => e.file).filter(Boolean));
     const events = [];
     for (const relFile of poolFiles) {
-      const arr = await this._loadJSON(`${base}/${String(relFile).replace(/^data\//, '')}`);
+      const fullPath = JanusAssetResolver.asset(relFile);
+      const arr = await this._loadJSON(fullPath);
       if (Array.isArray(arr)) events.push(...arr);
     }
 
     // Effects
     const effects = [];
     for (const ei of effectIndex) {
-      const eff = await this._loadJSON(`${base}/academy/effects/${ei.effectId}.json`);
+      const fullPath = JanusAssetResolver.asset(`data/academy/effects/${ei.effectId}.json`);
+      const eff = await this._loadJSON(fullPath);
       effects.push(eff);
     }
 

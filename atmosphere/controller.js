@@ -923,8 +923,8 @@ export class JanusAtmosphereController {
     try {
       const profileId = JanusProfileRegistry.getActive()?.id;
       const paths = [
-        `modules/${MODULE_ID}/data/profiles/${profileId}/atmosphere/moods.json`,
-        `modules/${MODULE_ID}/data/academy/atmosphere/moods.json`
+        `/modules/${MODULE_ID}/data/profiles/${profileId}/atmosphere/moods.json`,
+        `/modules/${MODULE_ID}/data/academy/atmosphere/moods.json`
       ];
 
       let data = null;
