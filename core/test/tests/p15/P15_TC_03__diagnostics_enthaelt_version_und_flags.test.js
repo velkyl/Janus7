@@ -13,13 +13,17 @@ export default {
   kind: "automated",
   expected: "Diagnostics Report beinhaltet eine Modulversion, einen Settings/Flags-Snapshot und der Health-Command liefert denselben Report konvergent aus.",
   whereToFind: "engine.diagnostics.report()",
-  async run({ ctx }) {
-    const engine = ctx?.engine;
-    if (!engine?.diagnostics?.report) {
-      return { ok: false, summary: "engine.diagnostics.report fehlt" };
+  async run({ ctx, engine }) {
+    const activeEngine = engine ?? ctx?.engine;
+    if (!activeEngine?.diagnostics?.report) {
+      return { 
+        ok: false, 
+        summary: "engine.diagnostics.report fehlt",
+        details: `Available keys on engine: [${Object.keys(activeEngine || {}).join(', ')}]`
+      };
     }
 
-    const rep = await engine.diagnostics.report();
+    const rep = await activeEngine.diagnostics.report();
     const mv = rep?.meta?.moduleVersion;
     if (typeof mv !== "string" || mv.trim().length === 0) {
       return { ok: false, summary: "meta.moduleVersion fehlt/leer" };
@@ -44,7 +48,7 @@ export default {
     }
 
     const notes = [`moduleVersion=${mv}`];
-    const healthCommand = engine?.commands?.runHealthCheck;
+    const healthCommand = activeEngine?.commands?.runHealthCheck;
     if (typeof healthCommand === "function" && game?.user?.isGM) {
       const cmd = await healthCommand({});
       if (cmd?.success !== true) {

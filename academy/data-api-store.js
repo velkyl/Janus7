@@ -204,15 +204,18 @@ export async function loadJson(filename) {
   if (!base) throw new Error('JANUS7: loadJson() filename missing');
 
   const profile = JanusProfileRegistry.getActive();
-  const profileBase = moduleAssetPath(`data/profiles/${profile.id}/${base}`);
-  const nested = moduleAssetPath(`data/academy/${base}`);
-  const flat = moduleAssetPath(`data/academy__${base}`);
+  
+  // Potential paths for the data asset (ordered by priority)
+  const profileAcademyUrl = moduleAssetPath(`data/profiles/${profile.id}/academy/${base}`);
+  const profileDirectUrl  = moduleAssetPath(`data/profiles/${profile.id}/${base}`);
+  const nestedUrl         = moduleAssetPath(`data/academy/${base}`);
+  const flatUrl           = moduleAssetPath(`data/academy__${base.replace(/\//g, '__')}`);
 
-  // Priority: 1. Profile Specific -> 2. Standard Nested -> 3. Legacy Flat
   const attempts = [
-    { url: profileBase, label: 'profile' },
-    { url: nested, label: 'nested' },
-    { url: flat, label: 'flat' }
+    { url: profileAcademyUrl, label: 'profile-academy' },
+    { url: profileDirectUrl,  label: 'profile-direct' },
+    { url: nestedUrl,         label: 'nested' },
+    { url: flatUrl,           label: 'flat' }
   ];
 
   let response = null;
@@ -236,14 +239,36 @@ export async function loadJson(filename) {
 }
 
 export async function loadDataJson(relPath) {
+  const base = String(relPath ?? '').trim();
+  if (!base) throw new Error('JANUS7: loadDataJson() path missing');
+
   const profile = JanusProfileRegistry.getActive();
-  const profileUrl = moduleAssetPath(`data/profiles/${profile.id}/academy/${relPath}`);
-  const standardUrl = moduleAssetPath(`data/${relPath}`);
+  
+  // Potential paths for the data asset (ordered by priority)
+  const profileAcademyUrl = moduleAssetPath(`data/profiles/${profile.id}/academy/${base}`);
+  const profileDirectUrl  = moduleAssetPath(`data/profiles/${profile.id}/${base}`);
+  const nestedUrl         = moduleAssetPath(`data/academy/${base}`);
+  const flatUrl           = moduleAssetPath(`data/academy__${base.replace(/\//g, '__')}`);
 
-  let response = await fetch(profileUrl);
-  if (!response.ok) response = await fetch(standardUrl);
+  const attempts = [
+    { url: profileAcademyUrl, label: 'profile-academy' },
+    { url: profileDirectUrl,  label: 'profile-direct' },
+    { url: nestedUrl,         label: 'nested' },
+    { url: flatUrl,           label: 'flat' }
+  ];
 
-  if (!response.ok) throw new Error(`JANUS7: Kann JSON nicht laden: ${profileUrl} (fallback: ${standardUrl}) (${response.status})`);
+  let response = null;
+  for (const attempt of attempts) {
+    try {
+      response = await fetch(attempt.url);
+      if (response.ok) break;
+    } catch (_e) { /* scan */ }
+  }
+
+  if (!response?.ok) {
+    throw new Error(`JANUS7: loadDataJson("${base}") failed at all paths: ${attempts.map(a => a.label).join(', ')}`);
+  }
+
   return response.json();
 }
 

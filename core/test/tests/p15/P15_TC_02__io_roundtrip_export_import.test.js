@@ -18,13 +18,21 @@ export default {
   kind: "automated",
   expected: "Exportierbarer State lässt sich wieder importieren; Marker bleibt konsistent.",
   whereToFind: "engine.io.exportStateAsJSON(), engine.io.importStateFromJSON(json)",
-  async run({ ctx }) {
-    const engine = ctx?.engine;
-    if (!engine?.core?.state?.set || !engine?.core?.state?.get) {
-      return { ok: false, summary: "engine.core.state API fehlt" };
+  async run({ ctx, engine }) {
+    const activeEngine = engine ?? ctx?.engine;
+    if (!activeEngine?.core?.state?.set || !activeEngine?.core?.state?.get) {
+      return { 
+        ok: false, 
+        summary: "engine.core.state API fehlt", 
+        details: `Available keys on engine: [${Object.keys(activeEngine || {}).join(', ')}]`
+      };
     }
-    if (!engine?.io?.exportStateAsJSON || !engine?.io?.importStateFromJSON) {
-      return { ok: false, summary: "engine.io API fehlt" };
+    if (!activeEngine?.io?.exportStateAsJSON || !activeEngine?.io?.importStateFromJSON) {
+      return { 
+        ok: false, 
+        summary: "engine.io API fehlt",
+        details: `Available keys on engine.io: [${Object.keys(engine?.io || {}).join(', ')}]`
+      };
     }
 
     const path = "playerState.ioRoundtrip";

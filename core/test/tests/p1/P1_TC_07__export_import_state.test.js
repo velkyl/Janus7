@@ -5,9 +5,9 @@ export default {
   kind: "auto",
   expected: "core.io.exportState() + importStateFromObject() funktionieren; Rollback hält World-State sauber.",
   whereToFind: "game.janus7.core.io",
-  async run(ctx) {
-    const engine = ctx?.engine ?? game?.janus7;
-    const core = engine?.core;
+  async run({ ctx, engine }) {
+    const activeEngine = engine ?? ctx?.engine ?? game?.janus7;
+    const core = activeEngine?.core;
     const state = core?.state;
     const io = core?.io;
 

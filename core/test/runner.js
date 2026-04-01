@@ -78,6 +78,8 @@ export default class JanusTestRunner {
 
   async runAll({ tests = [], ctx = {}, params = {}, includeManual = false, includeCatalog = false, includeImportFailed = false } = {}) {
     if (!ctx.engine) ctx.engine = game?.janus7;
+    const engine = ctx.engine;
+
     const input = (tests?.length ? tests : this.registry?.list?.() ?? [])
       .map((t) => (typeof t === 'string' ? this.registry?.get?.(t) ?? { id: t, kind: 'manual', title: t } : t))
       .sort(sortById);
@@ -126,7 +128,7 @@ export default class JanusTestRunner {
         );
         const out = await Promise.race([test.run({
           ctx,
-          engine: ctx?.engine ?? game?.janus7,
+          engine,
           test,
           assert,
           logger: this.logger,
@@ -135,8 +137,20 @@ export default class JanusTestRunner {
           params: params?.[test.id] ?? {}
         }), _timeout]).catch(err => {
           this.logger?.error?.(`[TEST] ${test.id} ERROR: ${err.message}`, { id: test.id, stack: err.stack });
+          
+          // CRITICAL: Force unlock the state engine if the test timed out
+          // to prevent cascading deadlocks in subsequent tests.
+          if (engine?.core?.state?.forceUnlock) {
+            engine.core.state.forceUnlock();
+          }
+
           return { ok: false, summary: `ERROR: ${err.message}`, notes: [err.stack].filter(Boolean) };
         });
+
+        // Diagnostic: Check if engine was corrupted after test
+        if (out?.ok === false && out?.summary?.includes('API fehlt')) {
+          this.logger?.warn?.(`[TEST] ${test.id} Diagnostic: engine keys=[${Object.keys(engine || {}).join(', ')}]`);
+        }
         let status, summary, details;
         if (out && typeof out === 'object' && out.status) {
           status = this._normalizeStructuredStatus(out.status);

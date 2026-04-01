@@ -91,6 +91,12 @@ export class JanusStateCore {
   /** @type {Promise<void>} Private lock for transaction queueing */
   #lock = Promise.resolve();
 
+  /** @type {Set<Function>} Active lock resolvers for forceUnlock recovery */
+  #lockResolvers = new Set();
+
+  /** @type {number} Private transaction depth to support nested transactions */
+  #transactionDepth = 0;
+
   /**
    * @param {Object} [deps]
    * @param {import('./logger.js').JanusLogger} [deps.logger]
@@ -103,6 +109,8 @@ export class JanusStateCore {
     this.logger = logger ?? console;
     this.settingsKey = 'coreState';
     this.legacySettingsKey = 'state';
+    this._suppressPersist = false;
+    this._legacySyncPending = false;
   }
 
   /**
@@ -395,12 +403,9 @@ export class JanusStateCore {
     return this._state;
   }
 
-  /** @type {number} Tracking nested transactions to avoid deadlocks */
-  #transactionDepth = 0;
-
   /**
-   * Wraps changes in a transaction with rollback.
-   * Supports nested transactions by only locking and snapshotted at the top level.
+   * Führt eine atomare Operation auf dem State aus.
+   * Transaktionen sind thread-safe (via Promise-Locking) und unterstützen Rollbacks.
    * 
    * @template T
    * @param {function(JanusStateCore): (T | Promise<T>)} mutator 
@@ -408,7 +413,7 @@ export class JanusStateCore {
    * @returns {Promise<T>}
    */
   async transaction(mutator, opts = {}) {
-    // If already in a transaction, just execute the mutator
+    // 1) Handle nesting
     if (this.#transactionDepth > 0) {
       this.#transactionDepth++;
       try {
@@ -418,19 +423,35 @@ export class JanusStateCore {
       }
     }
 
-    const parentLock = this.#lock;
-    let unlock;
-    this.#lock = new Promise((res) => { unlock = res; });
+    // 2) Acquire lock (atomic wait)
+    const myTurn = this.#lock;
+    let myUnlock;
+    this.#lock = new Promise((resolve) => {
+      myUnlock = resolve;
+      this.#lockResolvers.add(myUnlock);
+    });
 
     try {
-      await parentLock;
-      this.#transactionDepth = 1;
+      await myTurn;
+    } catch (err) {
+      this.logger?.error?.('JanusStateCore: Lock-Aquisition fehlgeschlagen.', err);
+      this.#lockResolvers.delete(myUnlock);
+      myUnlock();
+      throw err;
+    }
+
+    // 3) Execute transaction
+    this.#transactionDepth = 1;
+
+    try {
       const snapshot = foundry.utils.deepClone(this._state);
       const wasDirty = this._dirty;
 
       try {
-        return await mutator(this);
+        const out = await mutator(this);
+        return out;
       } catch (err) {
+        // Rollback state to previous snapshot
         this._state = snapshot;
         this._dirty = wasDirty;
         
@@ -441,9 +462,28 @@ export class JanusStateCore {
         throw err;
       }
     } finally {
+      // 4) Release lock
       this.#transactionDepth = 0;
-      unlock();
+      this.#lockResolvers.delete(myUnlock);
+      myUnlock();
     }
+  }
+
+  /**
+   * Erzwingt die Freigabe ALLER wartenden Locks.
+   * Nur für Notfälle (z.B. Test-Timeouts/Deadlocks), um weitreichende Blockaden zu verhindern.
+   */
+  forceUnlock() {
+    const count = this.#lockResolvers.size;
+    if (count > 0) {
+      this.logger?.warn?.(`JanusStateCore: Lock wurde gewaltsam freigegeben (${count} Resolver).`);
+      for (const res of this.#lockResolvers) {
+        try { res(); } catch (_e) { /* ignore */ }
+      }
+      this.#lockResolvers.clear();
+    }
+    this.#transactionDepth = 0;
+    this.#lock = Promise.resolve();
   }
 
   get isReady() { return !!this._ready; }
