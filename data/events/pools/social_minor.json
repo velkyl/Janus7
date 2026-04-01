@@ -42,5 +42,17 @@
     "title": "Die Debatte kippt",
     "description": "Zwischen Rhetorik, Spott und persönlichen Seitenhieben wird aus einer Debatte fast ein Skandal.",
     "highImpact": false
+  },
+  {
+    "eventId": "E_ACAD_DUEL_CHALLENGE",
+    "pool": "social_minor",
+    "triggerExpr": "week >= 3",
+    "title": "Herausforderung im Hof",
+    "description": "Eldric fordert dich zu einem informellen Kräftemessen heraus. Kein Zaubern, nur rhetorische Schärfe vor den anderen Schülern.",
+    "highImpact": false,
+    "options": [
+      "OPT_ACAD_ACCEPT_DUEL",
+      "OPT_ACAD_LAUGH_OFF"
+    ]
   }
 ]

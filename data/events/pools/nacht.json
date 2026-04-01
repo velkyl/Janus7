@@ -1,0 +1,78 @@
+[
+  {
+    "eventId": "E_ACAD_GHOST_TEACHER",
+    "pool": "nacht",
+    "triggerExpr": "slotName == 'Nacht' && locationId == 'LOC_ARCHIV_KARTENKAMMER'",
+    "title": "Der Dozent von Gestern",
+    "description": "Ein blasser Schatten schwebt über den alten Karten. Er scheint Fehler in den Grenzverlauf Almadas einzuzeichnen und murmelt über 'die wahre Ordnung'.",
+    "highImpact": false,
+    "mood": "mystery",
+    "effects": [
+      "lore_plus1"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_WHISPERING_WALLS",
+    "pool": "nacht",
+    "triggerExpr": "slotName == 'Nacht'",
+    "title": "Das Flüstern der Mauern",
+    "description": "Die Steine des Pentagrammatons scheinen heute Nacht zu sprechen. Es klingt wie eine alte Litanei gegen dämonische Mächte.",
+    "highImpact": false,
+    "effects": [
+      "lore_plus1",
+      "energy_minus1"
+    ]
+  },
+  {
+    "eventId": "E_ACAD_SECRET_MEETING",
+    "pool": "nacht",
+    "triggerExpr": "slotName == 'Nacht' && week >= 5 && locationId == 'LOC_INNENHOF_AKADEMIEHOF'",
+    "title": "Ein Treffen im Kreuzgang",
+    "description": "Du beobachtest zwei Gestalten in dunklen Roben, die im Flüsterton über die 'Siegelbruch-Gefahr' sprechen.",
+    "highImpact": true,
+    "flagSet": {
+      "overheard_seal_convo": true
+    }
+  },
+  {
+    "eventId": "E_ACAD_DREAM_VISION",
+    "pool": "nacht",
+    "triggerExpr": "slotName == 'Nacht' && trimester == 1",
+    "title": "Vision der Sanduhr",
+    "description": "Du träumst von einer riesigen Sanduhr, die rückwärts läuft. Jedes Sandkorn ist ein Name eines Schülers dieser Akademie.",
+    "highImpact": false,
+    "mood": "supernatural"
+  },
+  {
+    "eventId": "E_NACHT_TURM_LEUCHTEN",
+    "pool": "nacht",
+    "triggerExpr": "slotName == 'Nacht'",
+    "title": "Blaues Flackern",
+    "description": "Vom versiegelten Nordturm geht ein rhythmisches, bläuliches Flackern aus. Die Wachen scheinen es nicht zu bemerken.",
+    "highImpact": true,
+    "mood": "supernatural"
+  },
+  {
+    "eventId": "E_NACHT_TRAUM_SCHATTEN",
+    "pool": "nacht",
+    "triggerExpr": "slotName == 'Nacht' && playerState.stress > 3",
+    "title": "Unruhige Träume",
+    "description": "Du träumst von einem Buch, dessen Seiten aus Asche bestehen. Eine Stimme flüstert Worte in einer Sprache, die du fast verstehst.",
+    "highImpact": false,
+    "effects": [
+      "stress_plus1"
+    ]
+  },
+  {
+    "eventId": "E_NACHT_SCHLEICHWEGE",
+    "pool": "nacht",
+    "triggerExpr": "slotName == 'Nacht'",
+    "title": "Schatten in der Halle",
+    "description": "Du hörst leise, schleifende Geräusche auf dem Gang. Jemand bewegt sich ohne Licht durch das Pentagrammaton.",
+    "highImpact": false,
+    "options": [
+      "OPT_NACHT_FOLGEN",
+      "OPT_NACHT_VERSTECKEN"
+    ]
+  }
+]
