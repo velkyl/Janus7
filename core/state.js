@@ -395,20 +395,36 @@ export class JanusStateCore {
     return this._state;
   }
 
+  /** @type {number} Tracking nested transactions to avoid deadlocks */
+  #transactionDepth = 0;
+
   /**
    * Wraps changes in a transaction with rollback.
+   * Supports nested transactions by only locking and snapshotted at the top level.
+   * 
    * @template T
    * @param {function(JanusStateCore): (T | Promise<T>)} mutator 
    * @param {{silent?: boolean}} opts 
    * @returns {Promise<T>}
    */
   async transaction(mutator, opts = {}) {
+    // If already in a transaction, just execute the mutator
+    if (this.#transactionDepth > 0) {
+      this.#transactionDepth++;
+      try {
+        return await mutator(this);
+      } finally {
+        this.#transactionDepth--;
+      }
+    }
+
     const parentLock = this.#lock;
     let unlock;
     this.#lock = new Promise((res) => { unlock = res; });
 
     try {
       await parentLock;
+      this.#transactionDepth = 1;
       const snapshot = foundry.utils.deepClone(this._state);
       const wasDirty = this._dirty;
 
@@ -425,6 +441,7 @@ export class JanusStateCore {
         throw err;
       }
     } finally {
+      this.#transactionDepth = 0;
       unlock();
     }
   }

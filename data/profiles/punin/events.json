@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "version": "1.0.0-punin",
+    "description": "Events in der Akademie zu Punin"
+  },
+  "events": [
+    {
+      "id": "PUNIN_EVT_METAMAGIC_COLLOQUIUM",
+      "name": "Kolloquium zur Metamagie",
+      "type": "scholarly",
+      "tags": ["metamagie", "akademisch"]
+    }
+  ]
+}

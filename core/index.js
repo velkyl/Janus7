@@ -157,7 +157,18 @@ export class Janus7Engine {
     this.ai = this.core.ai;
     this.ki = this.ai;
     this.director = this.core.director;
+    this.io = this.core.io;
     this.folderService = this.core.folderService;
+    
+    // 4.5 Diagnostics (Non-blocking)
+    import('./diagnostics.js').then(m => {
+      this.diagnostics = {
+        run: (opts) => m.runJanusDiagnostics(this, opts),
+        report: (opts) => m.runJanusDiagnostics(this, opts),
+        snapshot: () => this.core.state?.get?.('meta') ?? {}
+      };
+      this.markServiceReady('core.diagnostics', this.diagnostics);
+    }).catch(err => this.logger.warn("Diagnostics lazy-load failed", err));
 
     // 5. Write Guard (Debug Mode)
     try {

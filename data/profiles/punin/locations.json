@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "version": "1.0.0-punin",
+    "description": "Orte in der Akademie zu Punin"
+  },
+  "locations": [
+    {
+      "id": "punin_great_hall",
+      "name": "Große Halle des Salpikon",
+      "type": "indoor",
+      "atmosphere": "scholarly"
+    },
+    {
+      "id": "punin_library",
+      "name": "Erzmagierliche Bibliothek",
+      "type": "library",
+      "atmosphere": "quiet"
+    }
+  ]
+}

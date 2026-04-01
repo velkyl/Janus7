@@ -5,8 +5,13 @@ export default {
   kind: 'auto',
   expected: 'Template exposes graphInvalidate and graphRebuild actions',
   run: async () => {
-    const tpl = await fetch('modules/Janus7/templates/apps/control-panel.hbs').then((r) => r.ok ? r.text() : '');
-    const ok = tpl.includes('data-action="graphInvalidate"') && tpl.includes('data-action="graphRebuild"');
-    return { ok, summary: ok ? 'diagnostics console actions found' : 'graph diagnostics actions missing' };
+    // In Janus7 v0.9.11+, actions are data-driven via panel-registry.js
+    const diags = game.janus7.uiLayer?.getQuickPanels?.().find(p => p.id === 'diagnostics')
+                ?? game.janus7.services?.registry?.getPanel?.('diagnostics');
+    const actions = diags?.actions || [];
+    const hasInvalidate = actions.some(a => a.action === 'graphInvalidate');
+    const hasRebuild = actions.some(a => a.action === 'graphRebuild');
+    const ok = hasInvalidate && hasRebuild;
+    return { ok, summary: ok ? 'diagnostics registry actions found' : 'graph diagnostics actions missing in registry' };
   }
 };

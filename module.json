@@ -26,7 +26,6 @@
     "templates/apps/atmosphere-dj.hbs",
     "templates/apps/command-center.hbs",
     "templates/apps/config-panel.hbs",
-    "templates/apps/control-panel.hbs",
     "templates/apps/guided-manual-tests.hbs",
     "templates/apps/ki-backup-manager.hbs",
     "templates/apps/ki-roundtrip.hbs",

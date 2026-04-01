@@ -15,18 +15,17 @@
 }
 
 .janus7-gm-overlay.janus7-v13-ui {
-  z-index: 100;
-  width: 100%;
-  height: 100%;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
+  pointer-events: none;
   font-family: inherit;
   color: #fff;
   overflow: hidden;
 }
 
 .janus7-gm-overlay.window-app {
+  pointer-events: auto;
   background: var(--janus7-overlay-bg) !important;
   -webkit-backdrop-filter: blur(var(--janus7-overlay-blur));
   backdrop-filter: blur(var(--janus7-overlay-blur));

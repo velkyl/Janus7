@@ -153,6 +153,14 @@ class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(ApplicationV2) {
   static _onOpenScoring(event) {
     game.janus7.ui.open('shell', { viewId: 'tools' });
   }
+
+  refresh(force = true) {
+    return this.render({ force: !!force });
+  }
+
+  remove() {
+    return this.close();
+  }
 }
 
 const JanusGmQuickOverlay = new JanusGmQuickOverlayApp();
