@@ -551,6 +551,18 @@
       "hasRun": false
     },
     {
+      "id": "P16-TC-12",
+      "title": "UI layer overlay nutzt JanusBaseApp statt rohem ApplicationV2-Hooking",
+      "importPath": "./tests/p16/P16_TC_12__ui_layer_overlay_uses_base_app.test.js",
+      "suiteClass": "binding",
+      "kind": "auto",
+      "phase": 6,
+      "phases": [
+        6
+      ],
+      "hasRun": false
+    },
+    {
       "id": "P2-TC-01",
       "title": "AcademyDataApi lÃ¤dt Basisdaten",
       "importPath": "./tests/p2/P2_TC_01__json_loader_laedt_akademie_daten.test.js",

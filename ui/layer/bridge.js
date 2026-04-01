@@ -5,20 +5,21 @@ import { registerRuntimeHook } from '../../core/hooks/runtime.js';
 import { JanusConfig } from '../../core/config.js';
 import { JanusProfileRegistry } from '../../core/profiles/index.js';
 import { moduleAssetPath } from '../../core/common.js';
+import { JanusBaseApp } from '../core/base-app.js';
 
 const GM_OVERLAY_ID = 'janus7-gm-quick-overlay';
 
-const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+const { HandlebarsApplicationMixin } = foundry.applications.api;
 
 /**
  * JANUS7 GM Quick Access Overlay (ApplicationV2)
  * High-performance, profile-aware GM controls.
  */
-class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(ApplicationV2) {
+class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   constructor(options = {}) {
     super(options);
-    this._engine = null;
-    this._hookIds = [];
+    this.engine = null;
+    this.enableAutoRefresh?.([HOOKS.STATE_CHANGED, HOOKS.DATE_CHANGED, HOOKS.SCORE_CHANGED], 80);
   }
 
   /** @override */
@@ -49,82 +50,66 @@ class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(ApplicationV2) {
   };
 
   attach(engine) {
-    this._engine = engine ?? null;
+    this.engine = engine ?? null;
     if (this._shouldShow()) {
       this.render({ force: true });
-      this._setupHooks();
+      return;
     }
+    this.close();
   }
 
   detach() {
     this.close();
-    this._engine = null;
-    this._clearHooks();
+    this.engine = null;
   }
 
   _shouldShow() {
-    return !!this._engine && !!game?.user?.isGM && (JanusConfig.get('enableUI') !== false);
-  }
-
-  /** @override */
-  _onClose() {
-    this._clearHooks();
-  }
-
-  _setupHooks() {
-    this._clearHooks();
-    const topics = [HOOKS.STATE_CHANGED, HOOKS.DATE_CHANGED, HOOKS.SCORE_CHANGED];
-    for (const topic of topics) {
-      const id = Hooks.on(topic, () => this.render());
-      this._hookIds.push({ topic, id });
-    }
-  }
-
-  _clearHooks() {
-    for (const hook of this._hookIds) {
-      Hooks.off(hook.topic, hook.id);
-    }
-    this._hookIds = [];
+    return !!this.engine && !!game?.user?.isGM && (JanusConfig.get('enableUI') !== false);
   }
 
   /** @override */
   async _prepareContext(options) {
-    const director = this._engine?.director;
-    if (!director) return { time: {}, scoring: {}, profile: { name: 'JANUS7' } };
+    try {
+      const director = this.engine?.director;
+      if (!director) return { time: {}, scoring: {}, profile: { name: 'JANUS7' } };
 
-    const profile = JanusProfileRegistry.getActive();
-    const timeRef = director.time.getRef() ?? {};
-    const summary = director.getRuntimeSummary() ?? {};
+      const profile = JanusProfileRegistry.getActive();
+      const timeRef = director.time.getRef() ?? {};
+      const summary = director.getRuntimeSummary() ?? {};
     
-    // Calculate scoring progress for bars (top 3 circles)
-    const topCircles = (summary.scoring?.topCircles || []).map(c => {
-      const score = Number(c.score || 0);
-      const max = Math.max(100, ...summary.scoring.topCircles.map(x => Number(x.score)));
-      return {
+      // Calculate scoring progress for bars (top 3 circles)
+      const topCircles = (summary.scoring?.topCircles || []).map((c) => {
+        const score = Number(c.score || 0);
+        const max = Math.max(100, ...summary.scoring.topCircles.map((x) => Number(x.score)));
+        return {
           ...c,
           progress: Math.min(100, Math.round((score / max) * 100))
-      };
-    });
+        };
+      });
 
-    return {
-      profile: {
-        id: profile?.id || 'default',
-        name: profile?.name || 'JANUS7'
-      },
-      time: {
-        day: timeRef.dayName || '---',
-        phase: timeRef.slotName || '---',
-        week: timeRef.week || '0',
-        year: timeRef.year || '1039'
-      },
-      scoring: {
-        leader: summary.scoring?.leader || 'Keine Daten',
-        topCircles: topCircles.length ? topCircles : []
-      },
-      status: {
-        hasAlert: (summary.activeQuestCount || 0) > 0
-      }
-    };
+      return {
+        profile: {
+          id: profile?.id || 'default',
+          name: profile?.name || 'JANUS7'
+        },
+        time: {
+          day: timeRef.dayName || '---',
+          phase: timeRef.slotName || '---',
+          week: timeRef.week || '0',
+          year: timeRef.year || '1039'
+        },
+        scoring: {
+          leader: summary.scoring?.leader || 'Keine Daten',
+          topCircles: topCircles.length ? topCircles : []
+        },
+        status: {
+          hasAlert: (summary.activeQuestCount || 0) > 0
+        }
+      };
+    } catch (err) {
+      this._getLogger?.().warn?.('[JANUS7][Overlay] context build failed', err);
+      return { time: {}, scoring: {}, profile: { name: 'JANUS7' }, status: { hasAlert: false } };
+    }
   }
 
   /* -------------------------------------------- */
