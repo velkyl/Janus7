@@ -1,16 +1,12 @@
 /**
  * @file core/test/tests/p1/P1_TC_16__runner_ok_shorthand_normalization.test.js
- * @description Phase 1 Auto-Test: JanusTestRunner normalisiert das {ok, summary}-Rückgabemuster
- *              korrekt zu PASS/FAIL. Ohne diesen Fix würde jeder Test mit {ok: false} als PASS
- *              gemeldet werden (silent-PASS-Bug, entdeckt v0.9.9.38).
+ * @description Phase 1 auto-test: verifies JanusTestRunner result normalization
+ * and ensures the runner continues after an error-path cleanup.
  *
- * Dieser Test ist sein eigener Integrations-Beweis: Er läuft selbst über den Runner und liefert
- * {ok: true/false}. Wenn er PASS zurückgibt, beweist das, dass der Runner das Muster versteht.
+ * This is a self-hosting runner test. It executes the runner against synthetic
+ * tests and validates PASS/FAIL/ERROR normalization plus post-error continuity.
  *
- * Zusätzlich führt er eine interne Whitebox-Verifikation durch, indem er den Runner direkt
- * mit synthetischen Tests aufruft und die Ergebnisse prüft.
- *
- * @version 0.9.9.39
+ * @version 0.9.12.47
  */
 
 import JanusTestRunner from '../../runner.js';
@@ -18,16 +14,15 @@ import JanusTestRegistry from '../../registry.js';
 
 export default {
   id: 'P1-TC-16',
-  title: 'TestRunner: ok-Shorthand korrekt zu PASS/FAIL normalisiert',
+  title: 'TestRunner: ok shorthand and error path normalization',
   phases: [1],
   kind: 'auto',
-  expected: '{ok:true}→PASS, {ok:false}→FAIL, {status:\'FAIL\'}→FAIL, no-return→PASS',
+  expected: '{ok:true}->PASS, {ok:false}->FAIL, {status:"FAIL"}->FAIL, no-return->PASS, after-error->PASS',
 
   run: async () => {
     const notes = [];
     let ok = true;
 
-    // ── Synthetische Tests für den Runner ────────────────────────────────
     const syntheticTests = [
       {
         id: '__runner_check_ok_true',
@@ -59,10 +54,15 @@ export default {
         title: 'throws',
         run: async () => { throw new Error('deliberate throw'); },
       },
+      {
+        id: '__runner_check_after_error',
+        title: 'still runs after prior error',
+        run: async () => ({ ok: true, summary: 'runner kept executing after error path' }),
+      },
     ];
 
     const registry = new JanusTestRegistry();
-    for (const t of syntheticTests) registry.register(t);
+    for (const test of syntheticTests) registry.register(test);
 
     const runner = new JanusTestRunner({ registry, logger: null });
     let results;
@@ -76,38 +76,37 @@ export default {
       };
     }
 
-    // ── Erwartete Status je synthetischem Test ────────────────────────────
     const expected = {
-      '__runner_check_ok_true':     'PASS',
-      '__runner_check_ok_false':    'FAIL',
+      '__runner_check_ok_true': 'PASS',
+      '__runner_check_ok_false': 'FAIL',
       '__runner_check_status_pass': 'PASS',
       '__runner_check_status_fail': 'FAIL',
-      '__runner_check_no_return':   'PASS',
-      '__runner_check_throw':       'ERROR',
+      '__runner_check_no_return': 'PASS',
+      '__runner_check_throw': 'ERROR',
+      '__runner_check_after_error': 'PASS',
     };
 
-    for (const res of results) {
-      const exp = expected[res.id];
+    for (const result of results) {
+      const exp = expected[result.id];
       if (!exp) continue;
-      if (res.status !== exp) {
+      if (result.status !== exp) {
         ok = false;
-        notes.push(`FAIL: ${res.id} → status=${res.status}, erwartet=${exp} (summary: ${res.summary})`);
+        notes.push(`FAIL: ${result.id} -> status=${result.status}, expected=${exp} (summary: ${result.summary})`);
       } else {
-        notes.push(`✓ ${res.id}: ${res.status}`);
+        notes.push(`OK: ${result.id}: ${result.status}`);
       }
     }
 
-    // ── Vollständigkeit ───────────────────────────────────────────────────
     if (results.length !== syntheticTests.length) {
       ok = false;
-      notes.push(`FAIL: ${results.length}/${syntheticTests.length} Ergebnisse`);
+      notes.push(`FAIL: ${results.length}/${syntheticTests.length} results`);
     }
 
     return {
       ok,
       summary: ok
-        ? 'Runner normalisiert alle 6 Muster korrekt'
-        : 'Runner-Normalisierung fehlerhaft (Details in notes)',
+        ? 'Runner normalizes all 7 patterns correctly'
+        : 'Runner normalization failed (see notes)',
       notes,
     };
   },

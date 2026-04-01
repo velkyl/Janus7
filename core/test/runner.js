@@ -123,9 +123,10 @@ export default class JanusTestRunner {
           if (!condition) throw new Error(message);
           return true;
         };
-        const _timeout = new Promise((_, rej) =>
-          setTimeout(() => rej(new Error(`Test timeout after ${TEST_TIMEOUT_MS}ms`)), TEST_TIMEOUT_MS)
-        );
+        let timeoutId = null;
+        const _timeout = new Promise((_, rej) => {
+          timeoutId = setTimeout(() => rej(new Error(`Test timeout after ${TEST_TIMEOUT_MS}ms`)), TEST_TIMEOUT_MS);
+        });
         let out;
         try {
           out = await Promise.race([test.run({
