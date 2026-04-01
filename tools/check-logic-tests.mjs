@@ -6,6 +6,7 @@ async function main() {
     const { Janus7Engine } = await import('../core/index.js');
     const { default: P1_TC_03 } = await import('../core/test/tests/p1/P1_TC_03__state_get_set_funktioniert.test.js');
     const { default: P7_TC_10 } = await import('../core/test/tests/p7/P7_TC_10__ki_import_rejects_empty_patches.test.js');
+    const { default: P8_TC_01 } = await import('../core/test/tests/p8/P8_TC_01__folder_service_profile_aware.test.js');
 
     const engine = new Janus7Engine();
     engine.init();
@@ -26,7 +27,7 @@ async function main() {
         }
     };
 
-    const tests = [P1_TC_03, P7_TC_10];
+    const tests = [P1_TC_03, P7_TC_10, P8_TC_01];
     for (const test of tests) {
         total++;
         if (await runTest(test, engine)) passed++;

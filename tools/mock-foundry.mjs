@@ -1,12 +1,27 @@
 /**
  * Mocking Foundry/DSA5 globals for node-based tests.
+ * Enhanced for Phase 8: supports setting persistence in-memory for logic tests.
  */
 export const mockFoundry = () => {
+    const settings_store = new Map([
+        ['debugLevel', 'info'],
+        ['enableUI', false],
+        ['activeProfile', 'punin'],
+        ['state', null],
+        ['coreState', null]
+    ]);
+
     const hooks = {
       on: (topic, cb) => { 
         return "hook-id-mock";
       },
-      once: (topic, cb) => { if (topic === 'init' || topic === 'ready') cb(); },
+      once: (topic, cb) => { 
+        if (topic === 'init' || topic === 'ready') {
+          // Set timeout to avoid immediate sync execution 
+          // which can lead to race conditions in some engine loaders
+          setTimeout(cb, 10);
+        }
+      },
       call: (topic, ...args) => {},
       callAll: (topic, ...args) => {},
       runScripts: (topic, ...args) => {},
@@ -14,17 +29,18 @@ export const mockFoundry = () => {
     };
 
     const g = {
-      modules: { get: () => ({ version: '1.0.0' }) },
+      modules: { 
+        get: (id) => {
+          if (id === 'Janus7') return { version: '1.0.0', active: true };
+          return undefined;
+        }
+      },
       settings: {
         get: (mod, key) => {
-          if (key === 'debugLevel') return 'info';
-          if (key === 'coreState') return null;
-          if (key === 'state') return null;
-          if (key === 'enableUI') return true;
-          if (key === 'activeProfile') return 'punin';
-          return undefined;
+          return settings_store.get(key);
         },
         set: (mod, key, val) => {
+          settings_store.set(key, val);
           return Promise.resolve(val);
         },
         register: () => {},
@@ -37,6 +53,10 @@ export const mockFoundry = () => {
       actors: { contents: [], get: () => null },
       items: { contents: [], get: () => null },
       journal: { contents: [], get: () => null },
+      folders: { 
+        contents: [], 
+        find: () => null
+      },
       janus7: null,
       i18n: {
         localize: (k) => k,
@@ -82,6 +102,9 @@ export const mockFoundry = () => {
     globalThis.ui = uMock;
     globalThis.foundry = f;
     globalThis.fromUuid = async (uuid) => null;
+    globalThis.Folder = {
+        create: async (data) => ({ ...data, id: `mock-folder-${Math.random()}` })
+    };
 
     if (typeof global !== 'undefined') {
         global.Hooks = hooks;
@@ -89,6 +112,9 @@ export const mockFoundry = () => {
         global.ui = uMock;
         global.foundry = f;
         global.fromUuid = globalThis.fromUuid;
+        global.Folder = globalThis.Folder;
+        global.JournalEntry = { create: async () => ({}) };
+        global.Item = { create: async () => ({}) };
     }
 
     // Performance mock

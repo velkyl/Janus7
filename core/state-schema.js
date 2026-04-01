@@ -118,6 +118,19 @@ export function migrateStateSchema(stateObj) {
   ensure('academy', DEFAULT_STATE.academy);
   ensure('questStates', {});
 
+  // 3. Deep-Healing for Academy (Phase 7/8 support)
+  if (stateObj.academy) {
+    const academyKeys = ['social', 'scoring', 'examResults', 'alumni'];
+    for (const key of academyKeys) {
+      const path = `academy.${key}`;
+      const val = foundry.utils.getProperty(stateObj, path);
+      if (val === undefined || val === null || (typeof val === 'object' && Object.keys(val).length === 0 && DEFAULT_STATE.academy[key])) {
+        foundry.utils.setProperty(stateObj, path, foundry.utils.deepClone(DEFAULT_STATE.academy[key]));
+        changed = true;
+      }
+    }
+  }
+
   // 3. Link legacy quest root if needed
   if (stateObj.academy?.quests && !Object.keys(stateObj.questStates).length) {
     stateObj.questStates = foundry.utils.deepClone(stateObj.academy.quests);
