@@ -156,6 +156,14 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this._kiContextItems = [];
     this._directorWorkflow = { lastAction: null, lastRunAt: null, lastResult: null, lastError: null, history: [] };
     this._directorDnDEnabled = false;
+    this._prefetchedShell = {
+      viewId: null,
+      panelId: null,
+      viewModel: { cards: [], cardSections: [], tiles: [] },
+      panelModel: { metrics: [], items: [], actions: [] },
+      viewHtml: '',
+      panelHtml: ''
+    };
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -193,6 +201,11 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       'janus7Ready',
       'janusCampaignStateUpdated' // von Config-Panel
     ], 180);
+  }
+
+  async _preRender(options) {
+    await super._preRender?.(options);
+    await this.#prefetchShellData();
   }
   
   _onPostRender(context, options) {
@@ -290,51 +303,73 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     };
   }
 
-  async _renderViewHtml(engine) {
+  async #prefetchShellData() {
+    const engine = this._getEngine();
     const view = getView(this._viewId) ?? getView('director');
-    // We pass the shell app instance to the build method so that ContextBuilders can read _slotBuilder etc.
-    const model = await view?.build?.(engine, this) ?? { cards: [] };
+    const panel = this._activePanelId ? getPanel(this._activePanelId) : null;
+    const viewModel = await this.#buildViewModel(engine, view);
+    const panelModel = this.#buildPanelModel(engine, panel);
+    const viewHtml = await this.#renderViewHtml(view, viewModel);
+    const panelHtml = await this.#renderPanelHtml(panel, panelModel);
+
+    this._prefetchedShell = {
+      viewId: view?.id ?? 'director',
+      panelId: panel?.id ?? null,
+      viewModel,
+      panelModel,
+      viewHtml,
+      panelHtml
+    };
+  }
+
+  async #buildViewModel(engine, view) {
+    const model = await view?.build?.(engine, this) ?? { cards: [], cardSections: [], tiles: [] };
+    return {
+      ...model,
+      cards: mapViewCards(model.cards ?? []),
+      cardSections: (model.cardSections ?? []).map((section) => ({
+        ...section,
+        cards: mapViewCards(section.cards ?? [])
+      })),
+      tiles: model.tiles ?? []
+    };
+  }
+
+  #buildPanelModel(engine, panel) {
+    if (!panel) return { metrics: [], items: [], actions: [] };
+    const detail = panel.build?.(engine) ?? {};
+    return {
+      metrics: detail.metrics ?? [],
+      items: detail.items ?? [],
+      actions: mapActions(panel.actions)
+    };
+  }
+
+  async #renderViewHtml(view, viewModel) {
     const path = moduleTemplatePath(`shell/views/${view.id}.hbs`);
     try {
       return await renderHbsTemplate(path, {
         view,
-        ...model, // Spread alles, damit views z.B. slotBuilder reinbekommen
-        cards: mapViewCards(model.cards ?? []),
-        cardSections: (model.cardSections ?? []).map((section) => ({
-          ...section,
-          cards: mapViewCards(section.cards ?? [])
-        })),
-        tiles: model.tiles ?? []
+        ...viewModel
       });
     } catch (_) {
       const fallback = moduleTemplatePath('shell/views/director.hbs');
       return renderHbsTemplate(fallback, {
         view,
-        ...model,
-        cards: mapViewCards(model.cards ?? []),
-        cardSections: (model.cardSections ?? []).map((section) => ({
-          ...section,
-          cards: mapViewCards(section.cards ?? [])
-        })),
-        tiles: model.tiles ?? []
+        ...viewModel
       });
     }
   }
 
-  async _renderPanelHtml(engine) {
-    if (!this._activePanelId) return '';
-    const panel = getPanel(this._activePanelId);
+  async #renderPanelHtml(panel, panelModel) {
     if (!panel) return '';
-    const detail = panel.build?.(engine) ?? {};
     return renderHbsTemplate(moduleTemplatePath('shell/panels/default-panel.hbs'), {
       panel,
-      metrics: detail.metrics ?? [],
-      items: detail.items ?? [],
-      actions: mapActions(panel.actions)
+      ...panelModel
     });
   }
 
-  async _prepareContext(_options) {
+  _prepareContext(_options) {
     const engine = this._getEngine();
     const views = getViews().map((view) => ({
       ...view,
@@ -358,8 +393,8 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       directorWorkflow,
       directorRunbook,
       questActorCandidates,
-      viewHtml: await this._renderViewHtml(engine),
-      panelHtml: await this._renderPanelHtml(engine),
+      viewHtml: this._prefetchedShell.viewHtml,
+      panelHtml: this._prefetchedShell.panelHtml,
       panelOpen: !!panel,
       panelTitle: panel?.title ?? null,
       shellPaletteHint: 'Power Tools'
@@ -430,9 +465,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       const panel = getPanel(panelId);
       descriptor = panel?.actions?.[actionIndex] ?? null;
     } else if (Number.isInteger(cardIndex) && cardIndex >= 0 && Number.isInteger(actionIndex) && actionIndex >= 0) {
-      const engine = this._getEngine?.() ?? game?.janus7 ?? null;
-      const view = getView(this._viewId) ?? getView('director');
-      const model = await view?.build?.(engine, this) ?? { cards: [] };
+      const model = this._prefetchedShell?.viewModel ?? { cards: [], cardSections: [] };
       if (sectionId) {
         const section = Array.isArray(model?.cardSections) ? model.cardSections.find((entry) => entry?.id === sectionId) : null;
         descriptor = section?.cards?.[cardIndex]?.actions?.[actionIndex] ?? null;

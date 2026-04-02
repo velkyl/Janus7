@@ -19,6 +19,7 @@ class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   constructor(options = {}) {
     super(options);
     this.engine = null;
+    this._overlayContext = { time: {}, scoring: {}, profile: { name: 'JANUS7' }, status: { hasAlert: false } };
     this.enableAutoRefresh?.([HOOKS.STATE_CHANGED, HOOKS.DATE_CHANGED, HOOKS.SCORE_CHANGED], 80);
   }
 
@@ -68,22 +69,32 @@ class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   }
 
   /** @override */
-  async _prepareContext(options) {
+  async _preRender(options) {
+    await super._preRender?.(options);
+    this._overlayContext = this.#buildOverlayContext();
+  }
+
+  /** @override */
+  _prepareContext(_options) {
+    return this._overlayContext;
+  }
+
+  #buildOverlayContext() {
     try {
       const director = this.engine?.director;
-      if (!director) return { time: {}, scoring: {}, profile: { name: 'JANUS7' } };
+      if (!director) return { time: {}, scoring: {}, profile: { name: 'JANUS7' }, status: { hasAlert: false } };
 
       const profile = JanusProfileRegistry.getActive();
       const timeRef = director.time.getRef() ?? {};
       const summary = director.getRuntimeSummary() ?? {};
-    
-      // Calculate scoring progress for bars (top 3 circles)
-      const topCircles = (summary.scoring?.topCircles || []).map((c) => {
+      const circles = summary.scoring?.topCircles || [];
+      const maxScore = Math.max(100, ...circles.map((entry) => Number(entry.score || 0)));
+
+      const topCircles = circles.map((c) => {
         const score = Number(c.score || 0);
-        const max = Math.max(100, ...summary.scoring.topCircles.map((x) => Number(x.score)));
         return {
           ...c,
-          progress: Math.min(100, Math.round((score / max) * 100))
+          progress: Math.min(100, Math.round((score / maxScore) * 100))
         };
       });
 

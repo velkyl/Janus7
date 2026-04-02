@@ -51,6 +51,17 @@ export class JanusAcademyOverviewApp extends HandlebarsApplicationMixin(JanusBas
     super(options);
     /** @type {any|null} */
     this._selectedSlotRef = null;
+    this._weekContext = {
+      year: null,
+      trimester: null,
+      week: null,
+      dayOrder: [],
+      slotOrder: [],
+      slotRefNow: null,
+      entriesByDay: new Map(),
+      grid: [],
+      selectedDetails: null
+    };
   }
 
   async _onRender(context, options) {
@@ -140,13 +151,51 @@ export class JanusAcademyOverviewApp extends HandlebarsApplicationMixin(JanusBas
     }
   }
 
-  async _prepareContext(_options) {
+  async _preRender(options) {
+    await super._preRender?.(options);
+    this.#prefetchWeekContext();
+  }
+
+  _prepareContext(_options) {
+    const engine = game.janus7;
+    const calendar = engine?.academy?.calendar;
+    if (!engine || !calendar) {
+      return { notReady: true };
+    }
+
+    return {
+      notReady: false,
+      isGM: game.user?.isGM ?? false,
+      weekInfo: {
+        year: this._weekContext.year,
+        trimester: this._weekContext.trimester,
+        week: this._weekContext.week
+      },
+      dayOrder: this._weekContext.dayOrder,
+      slotOrder: this._weekContext.slotOrder,
+      grid: this._weekContext.grid,
+      selected: this._weekContext.selectedDetails
+    };
+  }
+
+  #prefetchWeekContext() {
     const engine = game.janus7;
     const calendar = engine?.academy?.calendar;
     const academyData = engine?.academy?.data;
 
     if (!engine || !calendar) {
-      return { notReady: true };
+      this._weekContext = {
+        year: null,
+        trimester: null,
+        week: null,
+        dayOrder: [],
+        slotOrder: [],
+        slotRefNow: null,
+        entriesByDay: new Map(),
+        grid: [],
+        selectedDetails: null
+      };
+      return;
     }
 
     const slotRefNow = calendar.getCurrentSlotRef?.() ?? null;
@@ -158,85 +207,91 @@ export class JanusAcademyOverviewApp extends HandlebarsApplicationMixin(JanusBas
     const dayOrder = calendar.config?.dayOrder ?? [];
     const slotOrder = calendar.config?.slotOrder ?? calendar.config?.phaseOrder ?? [];
 
-    // Build grid: rows = phases, cols = days
-    const grid = [];
-    for (const phase of slotOrder) {
-      const row = { phase, cells: [] };
-      for (const day of dayOrder) {
-        const entries = calendar.getCalendarEntriesForDay?.({ year, trimester, week, day }) ?? [];
-        const entry = entries.find(e => String(e.phase) === String(phase)) ?? null;
+    const entriesByDay = new Map(
+      dayOrder.map((day) => [
+        String(day),
+        calendar.getCalendarEntriesForDay?.({ year, trimester, week, day }) ?? []
+      ])
+    );
 
-        // Resolve display
-        let label = '—';
-        let kind = 'empty';
-        let detail = null;
+    const grid = slotOrder.map((phase) => ({
+      phase,
+      cells: dayOrder.map((day) => this.#buildGridCell({
+        year,
+        trimester,
+        week,
+        day,
+        phase,
+        slotRefNow,
+        academyData,
+        entries: entriesByDay.get(String(day)) ?? []
+      }))
+    }));
 
-        if (entry) {
-          kind = entry.type ?? 'entry';
-          // Common patterns in data: lessonId / examId / eventId
-          const lessonId = entry.lessonId ?? entry.lesson ?? entry.refLessonId;
-          const examId = entry.examId ?? entry.exam ?? entry.refExamId;
-          const eventId = entry.eventId ?? entry.event ?? entry.refEventId;
-
-          if (lessonId && academyData?.getLesson) {
-            const lesson = academyData.getLesson(lessonId);
-            label = lesson?.title ?? lessonId;
-            detail = { type: 'lesson', id: lessonId };
-          } else if (examId && academyData?.getExam) {
-            const exam = academyData.getExam(examId);
-            label = exam?.title ?? examId;
-            detail = { type: 'exam', id: examId };
-          } else if (eventId && academyData?.getEvent) {
-            const ev = academyData.getEvent(eventId);
-            label = ev?.title ?? eventId;
-            detail = { type: 'event', id: eventId };
-          } else {
-            label = entry.title ?? lessonId ?? examId ?? eventId ?? entry.id ?? 'Eintrag';
-            detail = { type: entry.type ?? 'entry', id: entry.id ?? null };
-          }
-        }
-
-        const isNow =
-          !!slotRefNow &&
-          slotRefNow.year === year &&
-          slotRefNow.week === week &&
-          String(slotRefNow.day) === String(day) &&
-          String(slotRefNow.phase) === String(phase);
-
-        row.cells.push({
-          year, trimester, week, day, phase,
-          label,
-          kind,
-          isNow,
-          hasEntry: !!entry,
-          entryId: entry?.id ?? null
-        });
-      }
-      grid.push(row);
-    }
-
-    // Selected slot details
     const selected = this._selectedSlotRef ?? slotRefNow;
-    let selectedDetails = null;
-    if (selected) {
-      const entries = calendar.getCalendarEntriesForDay?.(selected) ?? [];
-      const entry = entries.find(e => String(e.phase) === String(selected.phase)) ?? null;
+    const selectedEntries = selected ? (entriesByDay.get(String(selected.day)) ?? []) : [];
+    const selectedEntry = selected
+      ? selectedEntries.find((entry) => String(entry.phase) === String(selected.phase)) ?? null
+      : null;
 
-      selectedDetails = {
-        slotRef: selected,
-        entry: entry ?? null,
-        entryJson: entry ? JSON.stringify(entry, null, 2) : ''
-      };
-    }
-
-    return {
-      notReady: false,
-      isGM: game.user?.isGM ?? false,
-      weekInfo: { year, trimester, week },
+    this._weekContext = {
+      year,
+      trimester,
+      week,
       dayOrder,
       slotOrder,
+      slotRefNow,
+      entriesByDay,
       grid,
-      selected: selectedDetails
+      selectedDetails: selected ? {
+        slotRef: selected,
+        entry: selectedEntry,
+        entryJson: selectedEntry ? JSON.stringify(selectedEntry, null, 2) : ''
+      } : null
+    };
+  }
+
+  #buildGridCell({ year, trimester, week, day, phase, slotRefNow, academyData, entries }) {
+    const entry = entries.find((candidate) => String(candidate.phase) === String(phase)) ?? null;
+
+    let label = '—';
+    let kind = 'empty';
+
+    if (entry) {
+      kind = entry.type ?? 'entry';
+      const lessonId = entry.lessonId ?? entry.lesson ?? entry.refLessonId;
+      const examId = entry.examId ?? entry.exam ?? entry.refExamId;
+      const eventId = entry.eventId ?? entry.event ?? entry.refEventId;
+
+      if (lessonId && academyData?.getLesson) {
+        label = academyData.getLesson(lessonId)?.title ?? lessonId;
+      } else if (examId && academyData?.getExam) {
+        label = academyData.getExam(examId)?.title ?? examId;
+      } else if (eventId && academyData?.getEvent) {
+        label = academyData.getEvent(eventId)?.title ?? eventId;
+      } else {
+        label = entry.title ?? lessonId ?? examId ?? eventId ?? entry.id ?? 'Eintrag';
+      }
+    }
+
+    const isNow =
+      !!slotRefNow &&
+      slotRefNow.year === year &&
+      slotRefNow.week === week &&
+      String(slotRefNow.day) === String(day) &&
+      String(slotRefNow.phase) === String(phase);
+
+    return {
+      year,
+      trimester,
+      week,
+      day,
+      phase,
+      label,
+      kind,
+      isNow,
+      hasEntry: !!entry,
+      entryId: entry?.id ?? null
     };
   }
 }

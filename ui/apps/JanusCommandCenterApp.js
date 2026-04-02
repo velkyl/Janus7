@@ -70,6 +70,9 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(foundry.ap
   /** @type {Function|null} Global Ctrl+K handler */
   _ctrlKHandler = null;
 
+  /** @type {Record<string, unknown>} */
+  _preparedCommandContext = {};
+
   /** @override */
   _configureRenderOptions(options) {
     // Foundry V13 expects `_configureRenderOptions` to RETURN the options object.
@@ -85,16 +88,24 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(foundry.ap
   }
 
   /** @override */
-  async _prepareContext(options) {
-    const context = (await super._prepareContext(options)) || {};
-    
-    context.isGM = game.user?.isGM ?? false;
-    context.commandCategories = this._getCommandCategories();
-    context.selectedCategory = this._selectedCategory || 'all';
-    context.beamerMode = this._beamerMode;
-    context.systemVersion = game.modules?.get?.('Janus7')?.version ?? '?';
-    
-    return context;
+  async _preRender(options) {
+    await super._preRender?.(options);
+    this._preparedCommandContext = this.#buildCommandContext();
+  }
+
+  /** @override */
+  _prepareContext(_options) {
+    return { ...this._preparedCommandContext };
+  }
+
+  #buildCommandContext() {
+    return {
+      isGM: game.user?.isGM ?? false,
+      commandCategories: this._getCommandCategories(),
+      selectedCategory: this._selectedCategory || 'all',
+      beamerMode: this._beamerMode,
+      systemVersion: game.modules?.get?.('Janus7')?.version ?? '?'
+    };
   }
 
   /**
