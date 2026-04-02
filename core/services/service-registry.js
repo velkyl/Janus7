@@ -29,31 +29,45 @@
 
 const DEFAULT_TIMEOUT_MS = 10_000;
 
+/**
+ * @typedef {object} JanusServiceWaiter
+ * @property {(value: unknown|null) => void} resolve
+ * @property {(reason?: unknown) => void} reject
+ * @property {ReturnType<typeof setTimeout>} timer
+ */
+
+/**
+ * @typedef {object} JanusServiceReport
+ * @property {string[]} ready
+ * @property {string[]} pending
+ * @property {Record<string, number>} uptime
+ */
+
+/**
+ * Tracks service readiness, waiting consumers, and uptime metadata for the engine.
+ */
 export class JanusServiceRegistry {
   constructor() {
-    /** @type {Map<string, any>} serviceKey → Instanz */
+    /** @type {Map<string, unknown>} */
     this._services = new Map();
-    /** @type {Map<string, Array<{resolve: Function, reject: Function, timer: any}>>} */
+    /** @type {Map<string, JanusServiceWaiter[]>} */
     this._waiters = new Map();
-    /** @type {Map<string, number>} serviceKey → Zeitstempel der Registrierung */
+    /** @type {Map<string, number>} */
     this._readyAt = new Map();
   }
 
-  // ─── Registrierung ────────────────────────────────────────────────────────
-
   /**
-   * Markiert einen Service als bereit und speichert die Instanz.
-   * Benachrichtigt alle wartenden waitFor()-Aufrufe.
+   * Marks a service as ready, stores its instance, and resolves pending waiters.
    *
-   * @param {string} key     Eindeutiger Service-Schlüssel (z.B. 'academy.data', 'bridge.dsa5')
-   * @param {any}    instance Die Service-Instanz
+   * @param {string} key
+   * @param {unknown} instance
+   * @returns {void}
    */
   markReady(key, instance) {
     if (!key) return;
     this._services.set(key, instance);
     this._readyAt.set(key, Date.now());
 
-    // Wartende Promises auflösen
     const waiting = this._waiters.get(key);
     if (waiting) {
       for (const { resolve, timer } of waiting) {
@@ -65,14 +79,15 @@ export class JanusServiceRegistry {
   }
 
   /**
-   * Markiert einen Service als nicht mehr verfügbar (z.B. bei Teardown).
+   * Marks a service as unavailable and resolves pending waiters with `null`.
+   *
    * @param {string} key
+   * @returns {void}
    */
   markUnavailable(key) {
     this._services.delete(key);
     this._readyAt.delete(key);
 
-    // Wartende Promises mit null auflösen
     const waiting = this._waiters.get(key);
     if (waiting) {
       for (const { resolve, timer } of waiting) {
@@ -83,19 +98,19 @@ export class JanusServiceRegistry {
     }
   }
 
-  // ─── Zugriff ──────────────────────────────────────────────────────────────
-
   /**
-   * Gibt den Service zurück, wenn er bereits bereit ist.
+   * Returns a ready service instance when available.
+   *
    * @param {string} key
-   * @returns {any|null}
+   * @returns {unknown|null}
    */
   get(key) {
     return this._services.get(key) ?? null;
   }
 
   /**
-   * Gibt an ob ein Service bereit ist.
+   * Checks whether a service key is currently ready.
+   *
    * @param {string} key
    * @returns {boolean}
    */
@@ -104,21 +119,19 @@ export class JanusServiceRegistry {
   }
 
   /**
-   * Wartet auf einen Service bis er bereit ist oder ein Timeout erreicht wird.
+   * Waits for a service to become ready or returns the configured fallback on timeout.
    *
    * @param {string} key
-   * @param {{ timeoutMs?: number, fallback?: any }} [opts]
-   * @returns {Promise<any>}
+   * @param {{ timeoutMs?: number, fallback?: unknown }} [opts]
+   * @returns {Promise<unknown>}
    */
   waitFor(key, { timeoutMs = DEFAULT_TIMEOUT_MS, fallback = null } = {}) {
-    // Bereits bereit → sofort auflösen
     if (this._services.has(key)) {
       return Promise.resolve(this._services.get(key));
     }
 
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
-        // Aus Waiter-Liste entfernen
         const waiting = this._waiters.get(key);
         if (waiting) {
           const idx = waiting.findIndex((w) => w.timer === timer);
@@ -147,11 +160,10 @@ export class JanusServiceRegistry {
     }
   }
 
-  // ─── Diagnostics ──────────────────────────────────────────────────────────
-
   /**
-   * Gibt einen Report über alle registrierten und wartenden Services zurück.
-   * @returns {{ ready: string[], pending: string[], uptime: Record<string, number> }}
+   * Returns a diagnostics report for ready, pending, and uptime-tracked services.
+   *
+   * @returns {JanusServiceReport}
    */
   getReport() {
     const now = Date.now();

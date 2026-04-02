@@ -9,7 +9,7 @@
  * bestehende Command-Handler in `ui/commands/`.
  *
  * Architektur:
- * - Kein eigener Befehlssatz — delegiert vollständig auf vorhandene Commands.
+ * - Kein eigener Befehlssatz - delegiert vollständig auf vorhandene Commands.
  * - GM-only für mutative Aktionen (wird durch Commands selbst enforced).
  * - Keine UI-Dependency im Parser (kein ApplicationV2-Import).
  * - Registrierung über `Hooks.on('chatMessage', ...)` in scripts/janus.mjs.
@@ -27,7 +27,7 @@
  *   /janus atmosphere.applyMood moodId=studious
  *   /janus quest.startQuest questId=Q_DEMO_LIBRARY actorId=Actor.xxx
  *
- * Mapping (CLI verb → Command-Key):
+ * Mapping (CLI verb -> Command-Key):
  * Punkte in Verben werden durchgereicht. Aliase decken flat-style ab.
  */
 
@@ -35,47 +35,46 @@
 const PREFIX = '/janus';
 
 /**
- * Flat-Alias-Map: CLI-Kürzel → vollständiger Command-Schlüssel.
+ * @typedef {object} JanusParsedChatCommand
+ * @property {string} verb
+ * @property {Record<string, string>} dataset
+ */
+
+/**
+ * Flat-Alias-Map: CLI-Kürzel -> vollständiger Command-Schlüssel.
  * Erlaubt kurze Tippvarianten ohne Namespace-Prefix.
  *
  * @type {Record<string, string>}
  */
 const ALIASES = {
-  // Zeit
-  'slot':      'advanceSlot',
-  'phase':     'advancePhase',
-  'day':       'advanceDay',
-  'reset':     'resetCalendar',
-  'sync':      'syncCalendar',
-  // State
-  'save':      'saveState',
-  'export':    'exportState',
-  // System
-  'health':    'runHealthCheck',
-  'smoke':     'runSmokeTests',
-  'diag':      'bridgeDiagnostics',
-  'backup':    'createBackup',
-  // Atmosphere
-  'mood':      'applyMood',
-  'atmo':      'setAtmosphereEnabled',
-  'volume':    'setAtmosphereVolume',
-  // Quests
-  'quest':     'startQuest',
-  // Meta
-  'panel':     'openConfigPanel',
+  'slot': 'advanceSlot',
+  'phase': 'advancePhase',
+  'day': 'advanceDay',
+  'reset': 'resetCalendar',
+  'sync': 'syncCalendar',
+  'save': 'saveState',
+  'export': 'exportState',
+  'health': 'runHealthCheck',
+  'smoke': 'runSmokeTests',
+  'diag': 'bridgeDiagnostics',
+  'backup': 'createBackup',
+  'mood': 'applyMood',
+  'atmo': 'setAtmosphereEnabled',
+  'volume': 'setAtmosphereVolume',
+  'quest': 'startQuest',
+  'panel': 'openConfigPanel',
 };
 
 /**
  * Parst einen einzelnen `/janus`-Chat-Befehl.
  *
  * @param {string} message - Vollständige Chat-Nachricht.
- * @returns {{ verb: string, dataset: Record<string, string> }|null}
+ * @returns {JanusParsedChatCommand|null}
  */
 export function parseChatCommand(message) {
   const trimmed = (message ?? '').trim();
   if (!trimmed.toLowerCase().startsWith(PREFIX)) return null;
 
-  // Zeichen nach `/janus` trennen
   const rest = trimmed.slice(PREFIX.length).trim();
   if (!rest) return { verb: 'help', dataset: {} };
 
@@ -83,15 +82,13 @@ export function parseChatCommand(message) {
   const rawVerb = parts[0];
   const verb = ALIASES[rawVerb] ?? rawVerb;
 
-  // key=value Paare parsen
   const dataset = {};
   for (let i = 1; i < parts.length; i++) {
     const eq = parts[i].indexOf('=');
     if (eq > 0) {
       dataset[parts[i].slice(0, eq)] = parts[i].slice(eq + 1);
-    } else {
-      // Positionaler Wert → erster unbenannter Slot
-      if (!dataset._arg0) dataset._arg0 = parts[i];
+    } else if (!dataset._arg0) {
+      dataset._arg0 = parts[i];
     }
   }
 
@@ -102,8 +99,8 @@ export function parseChatCommand(message) {
  * Führt einen geparsten Chat-Befehl aus.
  * Delegiert auf `game.janus7.commands[verb]`.
  *
- * @param {{ verb: string, dataset: Record<string, string> }} parsed
- * @param {any} engine - game.janus7
+ * @param {JanusParsedChatCommand} parsed
+ * @param {import('../../core/index.js').Janus7Engine|null|undefined} engine
  * @returns {Promise<void>}
  */
 export async function executeCommand(parsed, engine) {
@@ -121,9 +118,8 @@ export async function executeCommand(parsed, engine) {
     return;
   }
 
-  // Command-Key suchen: direkt oder mit namespace
   const handler = commands[verb]
-    ?? commands[verb.replace('.', '')]          // 'time.advanceDay' → 'timeadvanceDay' (fallback)
+    ?? commands[verb.replace('.', '')]
     ?? _findInDomains(commands, verb);
 
   if (typeof handler !== 'function') {
@@ -152,24 +148,21 @@ export async function executeCommand(parsed, engine) {
  *
  * @param {ChatLog} _log
  * @param {string} message
- * @param {object} _options
+ * @param {ChatMessageDataConstructorData} _options
  * @returns {boolean|undefined}
  */
 export function handleChatMessage(_log, message, _options) {
   const parsed = parseChatCommand(message);
-  if (!parsed) return undefined; // nicht unser Befehl
+  if (!parsed) return undefined;
 
   const engine = globalThis.game?.janus7;
 
-  // Async ausführen, Hook-Return bleibt synchron false (Nachricht nicht posten)
   executeCommand(parsed, engine).catch((err) => {
     (engine?.core?.logger ?? console).error?.('[JANUS7][CLI] handleChatMessage error', err);
   });
 
-  return false; // Nachricht nicht in den Chat schreiben
+  return false;
 }
-
-// ── Private Hilfsfunktionen ────────────────────────────────────────────────
 
 /**
  * Sucht einen Command-Handler in Domain-Gruppen.
@@ -177,15 +170,14 @@ export function handleChatMessage(_log, message, _options) {
  * @private
  */
 function _findInDomains(commands, verb) {
-  // Punkt-Notation: 'time.advanceDay'
   if (verb.includes('.')) {
     const [domain, method] = verb.split('.', 2);
     const domainKey = `${domain}Commands`;
     return commands[domainKey]?.[method] ?? commands[domainKey]?.[(method[0].toUpperCase() + method.slice(1))];
   }
-  // Flat: Suche in allen Domain-Gruppen
+
   const domainGroups = ['timeCommands', 'stateCommands', 'systemCommands',
-                        'questCommands', 'academyCommands', 'atmosphereCommands', 'phase7Commands'];
+    'questCommands', 'academyCommands', 'atmosphereCommands', 'phase7Commands'];
   for (const g of domainGroups) {
     const grp = commands[g];
     if (typeof grp?.[verb] === 'function') return grp[verb].bind(grp);
@@ -199,7 +191,7 @@ function _findInDomains(commands, verb) {
  */
 function _printHelp(engine) {
   const lines = [
-    '─── JANUS7 Chat-CLI ───────────────────────────────────',
+    '--- JANUS7 Chat-CLI -----------------------------------',
     'Syntax: /janus <verb> [param=wert ...]',
     '',
     'Zeit:',
@@ -240,7 +232,7 @@ function _printHelp(engine) {
     '  /janus smoke   (/janus system.runSmokeTests)',
     '  /janus diag    (/janus system.bridgeDiagnostics)',
     '  /janus panel   (/janus system.openConfigPanel)',
-    '─────────────────────────────────────────────────────────',
+    '-------------------------------------------------------',
   ];
   (engine?.core?.logger ?? console).info?.(lines.join('\n'));
   ui.notifications?.info?.('JANUS7 CLI: Hilfe in der Browser-Konsole ausgegeben.');

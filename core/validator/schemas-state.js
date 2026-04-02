@@ -9,8 +9,15 @@
  * Importiert von: core/validator/index.js
  */
 
+/**
+ * Generic JSON-schema-like object used by validator exports.
+ *
+ * @typedef {Record<string, unknown>} JanusJsonSchema
+ */
+
 // â”€â”€â”€ Shared Sub-Schemas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
+/** @type {JanusJsonSchema} */
 export const SCORE_VALUE_SCHEMA = {
   anyOf: [
     { type: 'number' },
@@ -26,6 +33,7 @@ export const SCORE_VALUE_SCHEMA = {
   ]
 };
 
+/** @type {JanusJsonSchema} */
 export const SCORING_ROOT_SCHEMA = {
   type: 'object',
   nullable: true,
@@ -40,6 +48,7 @@ export const SCORING_ROOT_SCHEMA = {
 
 // â”€â”€â”€ Core State Schema â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
+/** @type {JanusJsonSchema} */
 export const STATE_SCHEMA = {
   type: 'object',
   required: ['time', 'meta', 'academy', 'actors', 'display', 'features'],

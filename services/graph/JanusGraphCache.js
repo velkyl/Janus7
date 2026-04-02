@@ -3,17 +3,34 @@
  * Event-driven invalidation beats stale data, unlike human optimism.
  */
 export class JanusGraphCache {
+  /**
+   * Creates a new in-memory graph cache instance.
+   */
   constructor() {
     this.store = new Map();
     this.stats = { hits: 0, misses: 0, invalidations: 0, sets: 0 };
     this.lastInvalidatedAt = null;
   }
 
+  /**
+   * Builds a stable cache key from a prefix and payload.
+   *
+   * @param {string} prefix
+   * @param {unknown} payload
+   * @returns {string}
+   */
   _key(prefix, payload) {
     const norm = typeof payload === 'string' ? payload : JSON.stringify(payload ?? null);
     return `${prefix}:${norm}`;
   }
 
+  /**
+   * Returns a cached value and updates hit or miss counters.
+   *
+   * @param {string} prefix
+   * @param {unknown} payload
+   * @returns {unknown|null}
+   */
   get(prefix, payload) {
     const key = this._key(prefix, payload);
     if (this.store.has(key)) {
@@ -24,6 +41,14 @@ export class JanusGraphCache {
     return null;
   }
 
+  /**
+   * Stores a cache entry and returns the stored value.
+   *
+   * @param {string} prefix
+   * @param {unknown} payload
+   * @param {unknown} value
+   * @returns {unknown}
+   */
   set(prefix, payload, value) {
     const key = this._key(prefix, payload);
     this.store.set(key, value);
@@ -31,6 +56,12 @@ export class JanusGraphCache {
     return value;
   }
 
+  /**
+   * Invalidates all cache entries or only entries matching a prefix.
+   *
+   * @param {string|null} [prefix]
+   * @returns {void}
+   */
   invalidate(prefix = null) {
     if (!prefix) {
       this.store.clear();
@@ -43,6 +74,11 @@ export class JanusGraphCache {
     this.lastInvalidatedAt = new Date().toISOString();
   }
 
+  /**
+   * Returns cache statistics and current size.
+   *
+   * @returns {{ size: number, hits: number, misses: number, sets: number, invalidations: number, lastInvalidatedAt: string|null }}
+   */
   snapshot() {
     return {
       size: this.store.size,

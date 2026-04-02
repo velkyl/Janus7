@@ -115,6 +115,8 @@ export class JanusStateCore {
 
   /**
    * Registers the World-Settings in Foundry.
+   *
+   * @returns {void}
    */
   static registerSetting() {
     game.settings.register(MODULE_ID, 'coreState', {
@@ -153,7 +155,7 @@ export class JanusStateCore {
     this._ready = true;
   }
 
-  /** @returns {boolean} True once load() completed and _state is set. */
+  /** @returns {boolean} True once `load()` completed and `_state` is set. */
   get loaded() { return this._ready === true && this._state != null; }
   /** @returns {boolean} Legacy alias for backwards compatibility. */
   get isLoaded() { return this.loaded; }
@@ -161,8 +163,8 @@ export class JanusStateCore {
   /**
    * Migrates/normalizes the loaded state to the expected schema.
    * Delegates to JanusStateSchema for separation of concerns.
-   * @param {Object} [stateObj]
-   * @returns {{changed: boolean, state: Object}}
+   * @param {Record<string, unknown>} [stateObj]
+   * @returns {{changed: boolean, state: Record<string, unknown>}}
    */
   migrateState(stateObj = this._state) {
     const mig = migrateStateSchema(stateObj);
@@ -258,8 +260,8 @@ export class JanusStateCore {
 
   /**
    * Get a property via dot-notation.
-   * @param {string} [path=""] 
-   * @returns {any} A deep-cloned copy if path points to an object.
+   * @param {string} [path=""]
+   * @returns {unknown} A deep-cloned copy if the path points to an object.
    */
   get(path = "") {
     const canonicalPath = normalizeStatePathAlias(path, { warnLogger: this.logger });
@@ -268,12 +270,19 @@ export class JanusStateCore {
     return value;
   }
 
-  /** @deprecated */
+  /**
+   * Returns a deep-cloned snapshot of the full state tree.
+   *
+   * @deprecated Use `get("")` instead.
+   * @returns {unknown}
+   */
   snapshot() { return this.get(""); }
 
   /**
-   * @param {string} path 
-   * @returns {any}
+   * Returns the raw value at a canonical state path without cloning.
+   *
+   * @param {string} path
+   * @returns {unknown}
    * @private
    */
   getPath(path) {
@@ -284,9 +293,9 @@ export class JanusStateCore {
 
   /**
    * Sets a value in the state. Returns the new value.
-   * @param {string} path 
-   * @param {any} value 
-   * @returns {any}
+   * @param {string} path
+   * @param {unknown} value
+   * @returns {unknown}
    */
   set(path, value) {
     const canonicalPath = normalizeStatePathAlias(path, { warnLogger: this.logger });
@@ -338,7 +347,8 @@ export class JanusStateCore {
 
   /**
    * Overwrites the entire state.
-   * @param {any} newState 
+   * @param {Record<string, unknown>} newState
+   * @returns {void}
    */
   replace(newState) {
     const oldState = this._state;

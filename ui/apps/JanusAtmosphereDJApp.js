@@ -53,11 +53,9 @@ export class JanusAtmosphereDJApp extends HandlebarsApplicationMixin(JanusBaseAp
 
     const root = this.domElement;
     if (!root) return;
+    if (root.dataset.janusAtmosphereBindings === 'true') return;
+    root.dataset.janusAtmosphereBindings = 'true';
 
-    // Use unified event delegation rather than individual manual bindings
-    // Note: buttons usually get caught by ApplicationV2 ACTIONS if data-action exists.
-    // However, for inputs/changes, we capture them via a single listener to align with AppV2
-    // and keep it clean without relying on querySelector for single items.
     root.addEventListener('change', (ev) => {
       const target = ev.target;
       if (target?.name === 'masterClientUserId') this.constructor.onSetMasterClient.call(this, ev, target);

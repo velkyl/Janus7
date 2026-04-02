@@ -32,6 +32,7 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
     this._results = [];
     this._isBuilding = false;
     this._buildTimeout = null;
+    this._searchToken = null;
     
     // Bind search handler with debounce
     this._onSearchInput = foundry.utils.debounce(this._performSearch.bind(this), 300);
@@ -52,28 +53,32 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
 
   async _onRender(context, options) {
     await super._onRender(context, options);
-    
-    // Attach input listeners
-    const input = this.element.querySelector('input[name="query"]');
-    if (input) {
-      input.addEventListener('input', (e) => {
-        this._query = e.target.value;
+
+    const root = this.domElement;
+    if (!root) return;
+
+    if (root.dataset.janusLibraryBindings !== 'true') {
+      root.dataset.janusLibraryBindings = 'true';
+
+      root.addEventListener('input', (event) => {
+        const input = event.target?.closest?.('input[name="query"]');
+        if (!input) return;
+        this._query = input.value;
         this._onSearchInput();
       });
-    }
 
-    const select = this.element.querySelector('select[name="typeFilter"]');
-    if (select) {
-      select.addEventListener('change', (e) => {
-        this._typeFilter = e.target.value;
+      root.addEventListener('change', (event) => {
+        const select = event.target?.closest?.('select[name="typeFilter"]');
+        if (!select) return;
+        this._typeFilter = select.value;
         this._performSearch();
       });
-    }
 
-    // Attach drag listener for items
-    const listItems = this.element.querySelectorAll('li[draggable="true"]');
-    for (const li of listItems) {
-      li.addEventListener('dragstart', this._onDragStart.bind(this));
+      root.addEventListener('dragstart', (event) => {
+        const item = event.target?.closest?.('li[draggable="true"]');
+        if (!item) return;
+        this._onDragStart({ ...event, currentTarget: item });
+      });
     }
 
     // Trigger initial building/fetching if empty
@@ -81,10 +86,15 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
       this._isBuilding = true;
       this.refresh();
       
-      this.libraryService?.ensureIndex({ documentNames: ['Item', 'Actor', 'Scene', 'Macro', 'RollTable', 'JournalEntry'] }).then(() => {
-        this._isBuilding = false;
-        this._performSearch();
-      });
+      Promise.resolve(this.libraryService?.ensureIndex?.({ documentNames: ['Item', 'Actor', 'Scene', 'Macro', 'RollTable', 'JournalEntry'] }))
+        .then(() => this._performSearch())
+        .catch((err) => {
+          this._getLogger().warn?.('[LibraryBrowser] Index-Aufbau fehlgeschlagen', err);
+        })
+        .finally(() => {
+          this._isBuilding = false;
+          this.refresh();
+        });
     }
   }
 
@@ -102,6 +112,8 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
   }
 
   async _performSearch() {
+    const token = Symbol('library-search');
+    this._searchToken = token;
     const query = this._query?.trim() || '';
     const typeFilter = this._typeFilter || null;
     
@@ -114,14 +126,17 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
     }
 
     try {
-      this._results = await this.libraryService.search({
+      const results = await this.libraryService.search({
         q: query,
         types: typeFilter ? [typeFilter] : null,
         limit: 100, // Hard limit for rendering speed
         sortBy: 'name'
       });
+      if (this._searchToken !== token) return;
+      this._results = results;
     } catch (err) {
-      this._logger?.warn('[LibraryBrowser] Suche fehlgeschlagen', err);
+      if (this._searchToken !== token) return;
+      this._getLogger().warn?.('[LibraryBrowser] Suche fehlgeschlagen', err);
       this._results = [];
     }
     
@@ -161,7 +176,7 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
       await inst.libraryService?.refresh({ documentNames: ['Item', 'Actor', 'Scene', 'Macro', 'RollTable', 'JournalEntry'] });
       await inst._performSearch();
     } catch(err) {
-      inst._logger?.error('Fehler beim Refresh der Bibliothek', err);
+      inst._getLogger().error?.('Fehler beim Refresh der Bibliothek', err);
     } finally {
       inst._isBuilding = false;
       inst.refresh();
@@ -184,7 +199,7 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
         ui.notifications?.warn(`Dokument ${uuid} konnte nicht aufgelöst werden.`);
       }
     } catch(err) {
-      inst._logger?.error('Fehler beim Öffnen des Sheets', err);
+      inst._getLogger().error?.('Fehler beim Öffnen des Sheets', err);
     }
   }
 
@@ -207,7 +222,7 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
         ui.notifications?.warn(`Dokument-Typ ${doc.documentName} kann nicht direkt ausgeführt werden.`);
       }
     } catch(err) {
-      inst._logger?.error('Fehler beim Ausführen', err);
+      inst._getLogger().error?.('Fehler beim Ausführen', err);
     }
   }
 }

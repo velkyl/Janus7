@@ -133,6 +133,7 @@ export const BUILTIN_AUTO_MODULES = [
   './tests/p7/P7_TC_08__ki_preflight_invalid_version.test.js',
   './tests/p7/P7_TC_09__ki_preflight_valid_shape.test.js',
   './tests/p7/P7_TC_10__ki_import_rejects_empty_patches.test.js',
+  './tests/p7/P7_TC_11__ki_import_save_inside_transaction.test.js',
   './tests/p7/P7_TC_A1__permission_enforced.test.js',
   './tests/p7/P7_TC_A2__ui_history_refresh_manual.test.js',
   './tests/p7/P7_TC_A3__export_uses_saveDataToFile.test.js',
@@ -169,6 +170,7 @@ export const BUILTIN_AUTO_MODULES = [
   './tests/p16/P16_TC_10__ui_open_all_apps.test.js',
   './tests/p16/P16_TC_11__quest_journal_metagame_guard.test.js',
   './tests/p16/P16_TC_12__ui_layer_overlay_uses_base_app.test.js',
+  './tests/p16/P16_TC_13__ui_apps_bind_once_on_render.test.js',
 
   // Quest System (Core)
   './tests/qs/QS_TC_01__quest_lifecycle.test.js',

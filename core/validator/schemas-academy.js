@@ -9,8 +9,15 @@
  * Importiert von: core/validator/index.js
  */
 
+/**
+ * Generic JSON-schema-like object used by academy validator exports.
+ *
+ * @typedef {Record<string, unknown>} JanusJsonSchema
+ */
+
 // ─── Academy: Lessons ─────────────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_LESSONS_SCHEMA = {
   type: 'object',
   required: ['meta', 'lessons'],
@@ -41,6 +48,7 @@ export const ACADEMY_LESSONS_SCHEMA = {
 
 // ─── Academy: Exam Questions ──────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_EXAM_QUESTIONS_SCHEMA = {
   type: 'object',
   required: ['meta', 'questionSets'],
@@ -95,6 +103,7 @@ export const ACADEMY_EXAM_QUESTIONS_SCHEMA = {
 
 // ─── Academy: Calendar ────────────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_CALENDAR_SCHEMA = {
   type: 'object',
   required: ['meta', 'entries'],
@@ -126,6 +135,7 @@ export const ACADEMY_CALENDAR_SCHEMA = {
 
 // ─── Academy: Exams ───────────────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_EXAMS_SCHEMA = {
   type: 'object',
   required: ['meta', 'exams'],
@@ -155,6 +165,7 @@ export const ACADEMY_EXAMS_SCHEMA = {
 
 // ─── Academy: Grading Schemes ────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_GRADING_SCHEMES_SCHEMA = {
   type: 'object',
   required: ['version', 'schemes'],
@@ -193,6 +204,7 @@ export const ACADEMY_GRADING_SCHEMES_SCHEMA = {
 
 // ─── Academy: NPCs ────────────────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_NPCS_SCHEMA = {
   type: 'object',
   required: ['meta', 'npcs'],
@@ -244,6 +256,7 @@ export const ACADEMY_NPCS_SCHEMA = {
 
 // ─── Academy: Locations ───────────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_LOCATIONS_SCHEMA = {
   type: 'object',
   required: ['meta', 'locations'],
@@ -288,6 +301,7 @@ export const ACADEMY_LOCATIONS_SCHEMA = {
 
 // ─── Academy: Library ─────────────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_LIBRARY_SCHEMA = {
   type: 'object',
   required: ['meta', 'items'],
@@ -321,6 +335,7 @@ export const ACADEMY_LIBRARY_SCHEMA = {
 
 // ─── Academy: Events ──────────────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_EVENTS_SCHEMA = {
   type: 'object',
   required: ['meta', 'events'],
@@ -348,6 +363,7 @@ export const ACADEMY_EVENTS_SCHEMA = {
 
 // ─── Academy: Spell Curriculum ────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_SPELL_CURRICULUM_SCHEMA = {
   type: 'object',
   required: ['meta', 'modules'],
@@ -399,6 +415,7 @@ export const ACADEMY_SPELL_CURRICULUM_SCHEMA = {
 
 // ─── Academy: Alchemy Recipes ─────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_ALCHEMY_RECIPES_SCHEMA = {
   type: 'object',
   required: ['meta', 'recipes'],
@@ -457,6 +474,7 @@ export const ACADEMY_ALCHEMY_RECIPES_SCHEMA = {
 
 // ─── Academy: Lesson Generator ────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_LESSON_GENERATOR_SCHEMA = {
   type: 'object',
   required: ['meta', 'templates'],
@@ -511,6 +529,7 @@ export const ACADEMY_LESSON_GENERATOR_SCHEMA = {
 
 // ─── Academy: Calendar Template ───────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_CALENDAR_TEMPLATE_SCHEMA = {
   type: 'object',
   required: ['meta', 'plans', 'timeSlots'],
@@ -550,6 +569,7 @@ export const ACADEMY_CALENDAR_TEMPLATE_SCHEMA = {
 
 // ─── Academy: Teaching Sessions ───────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_TEACHING_SESSIONS_SCHEMA = {
   type: 'object',
   required: ['meta', 'sessions'],
@@ -586,6 +606,7 @@ export const ACADEMY_TEACHING_SESSIONS_SCHEMA = {
 
 // ─── Academy: Circles ─────────────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_CIRCLES_SCHEMA = {
   type: 'object',
   required: ['circles'],
@@ -613,6 +634,7 @@ export const ACADEMY_CIRCLES_SCHEMA = {
 
 // ─── Academy: Collections ─────────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_COLLECTIONS_SCHEMA = {
   type: 'object',
   required: ['meta', 'collections'],
@@ -636,6 +658,7 @@ export const ACADEMY_COLLECTIONS_SCHEMA = {
 
 // ─── Academy: Subjects ────────────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_SUBJECTS_SCHEMA = {
   type: 'object',
   required: ['subjects'],
@@ -663,6 +686,7 @@ export const ACADEMY_SUBJECTS_SCHEMA = {
 
 // ─── Academy: Social Links ────────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_SOCIAL_LINKS_SCHEMA = {
   type: 'object',
   required: ['meta', 'socialLinks'],
@@ -686,6 +710,7 @@ export const ACADEMY_SOCIAL_LINKS_SCHEMA = {
 
 // ─── Academy: School Stats ────────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_SCHOOL_STATS_SCHEMA = {
   type: 'object',
   required: ['meta', 'stats'],
@@ -710,6 +735,7 @@ export const ACADEMY_SCHOOL_STATS_SCHEMA = {
 
 // ─── Academy: Milestones ──────────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_MILESTONES_SCHEMA = {
   type: 'object',
   required: ['meta', 'milestones'],
@@ -733,6 +759,7 @@ export const ACADEMY_MILESTONES_SCHEMA = {
 
 // ─── Academy: AP Awards ───────────────────────────────────────────────────────
 
+/** @type {JanusJsonSchema} */
 export const ACADEMY_AP_AWARDS_SCHEMA = {
   type: 'object',
   required: ['version', 'examOutcomes', 'attendanceXpPerSlot', 'attendanceXpMax'],

@@ -909,7 +909,7 @@ export class JanusKiImportService {
           }
         }
       }
-      await this.state.transaction(() => {
+      await this.state.transaction(async () => {
         const changes = workingResponse.changes ?? {};
         // Domain mapping to prefixes
         const domainMap = {
@@ -990,8 +990,8 @@ export class JanusKiImportService {
             }
           }
         }
+        await this.state.save({ force: true });
       }, { expectedErrors: ['TEST_IMPORT_ROLLBACK'] });
-      await this.state.save({ force: true });
       await this._renderImportSummaryChat({ housePointChanges, relationChanges });
       // Record success in history. Use 'diffs' property for symmetry with AI importer.
       this._history.push({ timestamp, applied: true, diffs: summary, backup: backupFile, backupPath, operation: 'apply' });
@@ -1000,7 +1000,9 @@ export class JanusKiImportService {
     } catch (err) {
       // On any error, record failure and propagate a conflict error
       this._history.push({ timestamp, applied: false, diffs: summary, backup: backupFile, backupPath, error: err?.message || String(err), operation: 'apply' });
-      throw new JanusKiDiffConflictError('KI import failed during apply', { conflicts: [] });
+      const wrapped = new JanusKiDiffConflictError(`KI import failed during apply: ${err?.message || err}`, { conflicts: [] });
+      try { wrapped.cause = err; } catch (_) { /* ignore non-writable cause */ }
+      throw wrapped;
     }
   }
 }

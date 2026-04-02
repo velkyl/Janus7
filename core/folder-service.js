@@ -26,60 +26,60 @@ const MAP = {
   JournalEntry: {
     root: ['__ROOT__', 'Journals'],
     kinds: {
-      lesson:       ['Unterricht'],
-      library:      ['Bibliothek'],
-      curriculum:   ['Lehrpläne'],
-      spell:        ['Zauber'],
-      quest:        ['Quests'],
-      event:        ['Chronik'],
-      achievement:  ['Errungenschaften'],
-      npc:          ['NSCs'],
-      location:     ['Orte'],
-      calendar:     ['Kalender'],
-      handout:      ['Handouts'],
-      misc:         ['Sonstiges'],
+      lesson: ['Unterricht'],
+      library: ['Bibliothek'],
+      curriculum: ['Lehrpläne'],
+      spell: ['Zauber'],
+      quest: ['Quests'],
+      event: ['Chronik'],
+      achievement: ['Errungenschaften'],
+      npc: ['NSCs'],
+      location: ['Orte'],
+      calendar: ['Kalender'],
+      handout: ['Handouts'],
+      misc: ['Sonstiges'],
     },
   },
   Item: {
     root: ['__ROOT__', 'Items'],
     kinds: {
-      lesson:     ['Unterricht'],
-      library:    ['Bibliothek'],
+      lesson: ['Unterricht'],
+      library: ['Bibliothek'],
       curriculum: ['Lehrpläne'],
-      npc:        ['NSCs'],
-      location:   ['Orte'],
-      event:      ['Chronik'],
-      calendar:   ['Kalender'],
-      alchemy:    ['Alchemie'],
-      spell:      ['Zauber'],
-      equipment:  ['Ausrüstung'],
-      misc:       ['Sonstiges'],
+      npc: ['NSCs'],
+      location: ['Orte'],
+      event: ['Chronik'],
+      calendar: ['Kalender'],
+      alchemy: ['Alchemie'],
+      spell: ['Zauber'],
+      equipment: ['Ausrüstung'],
+      misc: ['Sonstiges'],
     },
   },
   Actor: {
     root: ['__ROOT__', 'Actors'],
     kinds: {
-      npc:     ['NSCs'],
+      npc: ['NSCs'],
       teacher: ['Dozenten'],
       student: ['Schüler'],
-      misc:    ['Sonstiges'],
+      misc: ['Sonstiges'],
     },
   },
   Scene: {
     root: ['__ROOT__', 'Scenes'],
     kinds: {
       location: ['Orte'],
-      map:      ['Karten'],
-      misc:     ['Sonstiges'],
+      map: ['Karten'],
+      misc: ['Sonstiges'],
     },
   },
   Playlist: {
     root: ['__ROOT__', 'Playlists'],
     kinds: {
       music: ['Musik'],
-      sfx:   ['SFX'],
-      mood:  ['Stimmung'],
-      misc:  ['Sonstiges'],
+      sfx: ['SFX'],
+      mood: ['Stimmung'],
+      misc: ['Sonstiges'],
     },
   },
 };
@@ -87,30 +87,55 @@ const MAP = {
 function _prefixForDocType(docType) {
   switch (docType) {
     case 'JournalEntry': return 'journal';
-    case 'Item':         return 'item';
-    case 'Actor':        return 'actor';
-    case 'Scene':        return 'scene';
-    case 'Playlist':     return 'playlist';
-    default:             return String(docType ?? 'doc').toLowerCase();
+    case 'Item': return 'item';
+    case 'Actor': return 'actor';
+    case 'Scene': return 'scene';
+    case 'Playlist': return 'playlist';
+    default: return String(docType ?? 'doc').toLowerCase();
   }
 }
 
+/**
+ * @typedef {object} JanusFolderTarget
+ * @property {string} type
+ * @property {string[]} path
+ * @property {string} key
+ */
+
+/**
+ * @typedef {object} JanusFolderResolution
+ * @property {string|null} folderId
+ * @property {string|null} folderKey
+ * @property {string|null|undefined} type
+ * @property {string[]} path
+ */
+
+/**
+ * @typedef {object} JanusFolderSpec
+ * @property {string} docType
+ * @property {string} [kind]
+ */
+
+/**
+ * Resolves and creates managed Foundry folder paths for JANUS-owned documents.
+ */
 export class JanusFolderService {
   /**
-   * @param {{ logger?: object }} deps
+   * @param {{ logger?: Console }} [deps]
    */
   constructor(deps = {}) {
     this._logger = deps.logger ?? console;
-    /** @type {Map<string,string>} */
+    /** @type {Map<string, string>} */
     this._cache = new Map();
-    /** @type {Map<string,Promise<any>>} */
+    /** @type {Map<string, Promise<JanusFolderResolution>>} */
     this._promises = new Map();
   }
 
   /**
-   * Resolve a folder target for a given JANUS domain kind.
-   * @param {{ docType: string, kind?: string }} spec
-   * @returns {{ type: string, path: string[], key: string } | null}
+   * Resolves a folder target for a managed JANUS document kind.
+   *
+   * @param {JanusFolderSpec} spec
+   * @returns {JanusFolderTarget|null}
    */
   resolve(spec) {
     const docType = spec?.docType;
@@ -122,8 +147,7 @@ export class JanusFolderService {
     const kind = (spec.kind ?? 'misc').toLowerCase();
     const map = MAP[docType];
     const leaf = map.kinds[kind] ?? map.kinds.misc ?? ['Sonstiges'];
-    
-    // Physical separation for Multi-Setting Phase 8
+
     const path = [rootName, ...map.root.slice(1), ...leaf];
     const key = `${_prefixForDocType(docType)}.${kind}.${profile.id}`;
 
@@ -131,9 +155,10 @@ export class JanusFolderService {
   }
 
   /**
-   * Ensure the folder path exists and return its id.
-   * @param {{ type: string, path: string[], key: string }} target
-   * @returns {Promise<{ folderId: string, folderKey: string, type: string, path: string[] }>}
+   * Ensures that a managed folder path exists and returns the resolved folder id.
+   *
+   * @param {JanusFolderTarget} target
+   * @returns {Promise<JanusFolderResolution>}
    */
   async ensurePath(target) {
     const { type, path, key } = target ?? {};
@@ -158,7 +183,7 @@ export class JanusFolderService {
         let parent = null;
         for (const name of path) {
           const parentId = parent?.id ?? null;
-          const existing = game.folders?.find(f =>
+          const existing = game.folders?.find((f) =>
             f.type === type &&
             f.name === name &&
             ((parentId && f.folder?.id === parentId) || (!parentId && !f.folder))
@@ -190,9 +215,10 @@ export class JanusFolderService {
   }
 
   /**
-   * Convenience: resolve + ensure.
-   * @param {{ docType: string, kind?: string }} spec
-   * @returns {Promise<{ folderId: string, folderKey: string, type: string, path: string[] } | { folderId: null, folderKey: null, type: string, path: string[] } >}
+   * Resolves and ensures a managed folder path in one call.
+   *
+   * @param {JanusFolderSpec} spec
+   * @returns {Promise<JanusFolderResolution>}
    */
   async ensureFor(spec) {
     const target = this.resolve(spec);
@@ -201,13 +227,22 @@ export class JanusFolderService {
     return res;
   }
 
-
-  /** Alias für ältere Tests / Aufrufer. */
+  /**
+   * Legacy alias for `resolve()`.
+   *
+   * @param {JanusFolderSpec} spec
+   * @returns {JanusFolderTarget|null}
+   */
   resolveFolder(spec) {
     return this.resolve(spec);
   }
 
-  /** Alias: erwartet entweder ein resolve()-Target oder ein spec-Objekt. */
+  /**
+   * Legacy alias that accepts either a resolved target or a folder spec.
+   *
+   * @param {JanusFolderTarget|JanusFolderSpec} targetOrSpec
+   * @returns {Promise<JanusFolderResolution>}
+   */
   async ensureFolderPath(targetOrSpec) {
     const target = Array.isArray(targetOrSpec?.path) && targetOrSpec?.type && targetOrSpec?.key
       ? targetOrSpec
@@ -216,14 +251,20 @@ export class JanusFolderService {
     return this.ensurePath(target);
   }
 
-  /** Alias: resolve + ensure, toleriert ältere Aufrufer. */
+  /**
+   * Legacy alias for `ensureFor()`.
+   *
+   * @param {JanusFolderSpec} spec
+   * @returns {Promise<JanusFolderResolution>}
+   */
   async ensureFolder(spec) {
     return this.ensureFor(spec);
   }
 
   /**
-   * Utility: best-effort derive a kind from a document's JANUS flags.
-   * @param {object} doc
+   * Best-effort kind inference from JANUS document flags.
+   *
+   * @param {foundry.abstract.Document} doc
    * @param {string} docType
    * @returns {string}
    */
@@ -231,7 +272,6 @@ export class JanusFolderService {
     const flags = doc?.flags?.[MODULE_ID] ?? doc?.flags?.janus7 ?? {};
     if (flags?.kind) return String(flags.kind);
 
-    // Backwards compatibility heuristics
     if (docType === 'JournalEntry') {
       if (flags?.dataType === 'lesson') return 'lesson';
       if (flags?.dataType === 'library-item') return 'library';

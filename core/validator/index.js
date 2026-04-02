@@ -84,11 +84,11 @@ export {
  */
 export class JanusValidator {
   /**
-   * @param {{ logger?: any }} [options]
+   * @param {{ logger?: Console }} [options]
    */
   constructor({ logger } = {}) {
     this.logger = logger ?? console;
-    /** @type {Map<string, any>} */
+    /** @type {Map<string, Record<string, unknown>>} */
     this._schemas = new Map();
 
     // Phase 1
@@ -120,7 +120,8 @@ export class JanusValidator {
 
   /**
    * @param {string} key
-   * @param {any} schema
+   * @param {Record<string, unknown>} schema
+   * @returns {void}
    */
   registerSchema(key, schema) {
     this._schemas.set(key, schema);
@@ -128,7 +129,7 @@ export class JanusValidator {
 
   /**
    * @param {string} key
-   * @param {any} data
+   * @param {unknown} data
    * @returns {{ valid: boolean, errors: string[] }}
    */
   validate(key, data) {
@@ -149,8 +150,8 @@ export class JanusValidator {
 
   /**
    * Assert that data matches a provided schema object.
-   * @param {any} data
-   * @param {any} schema
+   * @param {unknown} data
+   * @param {Record<string, unknown>} schema
    * @param {string} [label]
    * @returns {true}
    */
@@ -167,8 +168,8 @@ export class JanusValidator {
 
   /**
    * Validate data against an inline schema object without throwing.
-   * @param {any} data
-   * @param {any} schema
+   * @param {unknown} data
+   * @param {Record<string, unknown>} schema
    * @param {string} [label]
    * @returns {{ valid: boolean, errors: string[] }}
    */
@@ -181,31 +182,60 @@ export class JanusValidator {
 
   // ─── Convenience-Methoden ─────────────────────────────────────────────────
 
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateState(json) { return this.validate('state', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyCalendar(json) { return this.validate('academy.calendar', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyLessons(json) { return this.validate('academy.lessons', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyExams(json) { return this.validate('academy.exams', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyGradingSchemes(json) { return this.validate('academy.gradingSchemes', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateExamQuestions(json) { return this.validate('academy.examQuestions', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyNPCs(json) { return this.validate('academy.npcs', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyLocations(json) { return this.validate('academy.locations', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyLibrary(json) { return this.validate('academy.library', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyEvents(json) { return this.validate('academy.events', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademySpellCurriculum(json) { return this.validate('academy.spellCurriculum', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyAlchemyRecipes(json) { return this.validate('academy.alchemyRecipes', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyLessonGenerator(json) { return this.validate('academy.lessonGenerator', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyCalendarTemplate(json) { return this.validate('academy.calendarTemplate', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyTeachingSessions(json) { return this.validate('academy.teachingSessions', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyCircles(json) { return this.validate('academy.circles', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyCollections(json) { return this.validate('academy.collections', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademySubjects(json) { return this.validate('academy.subjects', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademySocialLinks(json) { return this.validate('academy.socialLinks', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademySchoolStats(json) { return this.validate('academy.schoolStats', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyMilestones(json) { return this.validate('academy.milestones', json); }
+  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
   validateAcademyApAwards(json) { return this.validate('academy.apAwards', json); }
 
   // ─── Referenz-Integritäts-Prüfung ────────────────────────────────────────
 
+  /**
+   * Validates cross-dataset references between academy data files.
+   *
+   * @param {Record<string, unknown>} [datasets]
+   * @param {{ strict?: boolean }} [options]
+   * @returns {{ valid: boolean, errors: string[], warnings: string[] }}
+   */
   validateAcademyReferenceIntegrity(datasets = {}, { strict = false } = {}) {
     const errors = [];
     const warnings = [];

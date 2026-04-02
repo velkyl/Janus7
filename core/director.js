@@ -133,14 +133,22 @@ export class JanusDirector {
   // State (Phase 1/6)
   // ---------------------------------------------------------------------------
 
-  /** @param {string} path */
+  /**
+   * Reads a value from the campaign state.
+   *
+   * @param {string} path
+   * @param {unknown} [fallback]
+   * @returns {unknown}
+   */
   get(path, fallback = undefined) {
     return this.state.get(path, fallback);
   }
 
   /**
    * @param {string} path
-   * @param {any} value
+   * @param {unknown} value
+   * @param {{ save?: boolean, force?: boolean }} [opts]
+   * @returns {Promise<void>}
    */
   async set(path, value, opts = {}) {
     this._assertGM();
@@ -151,7 +159,9 @@ export class JanusDirector {
   /**
    * Execute an arbitrary mutation function and optionally persist.
    *
-   * @param {() => any | Promise<any>} fn
+   * @param {(helpers: { get: typeof this.get, set: (path: string, value: unknown) => unknown }) => unknown|Promise<unknown>} fn
+   * @param {{ save?: boolean, force?: boolean }} [opts]
+   * @returns {Promise<unknown>}
    */
   async batch(fn, opts = {}) {
     this._assertGM();
@@ -164,7 +174,11 @@ export class JanusDirector {
     return res;
   }
 
-  /** Export a portable snapshot (for copy/paste or file). */
+  /**
+   * Exports a portable state snapshot.
+   *
+   * @returns {unknown}
+   */
   exportState() {
     this._assertGM();
     return this.io.exportState();
@@ -173,6 +187,10 @@ export class JanusDirector {
   /**
    * Validate a snapshot. If none supplied, validate the current state.
    * Returns a validation result compatible with UI rendering.
+   *
+   * @param {unknown} [snapshot]
+   * @param {Record<string, unknown>} [opts]
+   * @returns {{ valid: boolean, errors: string[] }}
    */
   validateState(snapshot = null, opts = {}) {
     const snap = snapshot ?? this.io.exportState();
@@ -205,6 +223,9 @@ export class JanusDirector {
    * Persist current state to storage.
    *
    * Anti-pattern: UI calling `core.state.save()` directly (trips write-guard).
+   *
+   * @param {{ force?: boolean }} [opts]
+   * @returns {Promise<unknown>}
    */
   async saveState(opts = {}) {
     this._assertGM();

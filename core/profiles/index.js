@@ -10,6 +10,11 @@
 
 import { JanusConfig } from '../config.js';
 
+/**
+ * Canonical profile identifiers supported by the academy registry.
+ *
+ * @type {Readonly<Record<string, string>>}
+ */
 export const PROFILES = {
   PUNIN: 'punin',
   FESTUM: 'festum',
@@ -50,6 +55,9 @@ const PROFILES_MAP = {
   [PROFILES.FESTUM]: FESTUM_PROFILE
 };
 
+/**
+ * Resolves the active academy profile and exposes the supported profiles list.
+ */
 export class JanusProfileRegistry {
   /**
    * Returns the currently active profile based on JanusConfig.

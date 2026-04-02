@@ -563,6 +563,18 @@
       "hasRun": false
     },
     {
+      "id": "P16-TC-13",
+      "title": "UI apps guard render-time bindings against duplication",
+      "importPath": "./tests/p16/P16_TC_13__ui_apps_bind_once_on_render.test.js",
+      "suiteClass": "binding",
+      "kind": "auto",
+      "phase": 6,
+      "phases": [
+        6
+      ],
+      "hasRun": false
+    },
+    {
       "id": "P2-TC-01",
       "title": "AcademyDataApi lÃ¤dt Basisdaten",
       "importPath": "./tests/p2/P2_TC_01__json_loader_laedt_akademie_daten.test.js",
@@ -1451,6 +1463,18 @@
       "title": "KI import rejects empty or invalid patches",
       "importPath": "./tests/p7/P7_TC_10__ki_import_rejects_empty_patches.test.js",
       "suiteClass": "extended-auto",
+      "kind": "auto",
+      "phase": 7,
+      "phases": [
+        7
+      ],
+      "hasRun": false
+    },
+    {
+      "id": "P7-TC-11",
+      "title": "KI import persists inside transaction boundary",
+      "importPath": "./tests/p7/P7_TC_11__ki_import_save_inside_transaction.test.js",
+      "suiteClass": "binding",
       "kind": "auto",
       "phase": 7,
       "phases": [

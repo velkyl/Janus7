@@ -34,36 +34,46 @@ import { emitHook, HOOKS } from '../../core/hooks/emitter.js';
 
 const MODULE = 'JanusCron';
 
+/**
+ * @typedef {'daily'|'weekly'|'trimester'} JanusCronPeriod
+ */
+
+/**
+ * @typedef {(engine: import('../../core/index.js').Janus7Engine|null, current: Record<string, unknown>) => Promise<void>|void} JanusCronJob
+ */
+
+/**
+ * Runs periodic engine jobs from date-change hooks without managing its own clock.
+ */
 export class JanusCron {
   /**
-   * @param {object}  opts
-   * @param {any}     opts.engine               - game.janus7 Referenz
-   * @param {object}  [opts.logger]             - JanusLogger
-   * @param {boolean} [opts.builtinWeekly=true]    - Eingebaut-Jobs für weekly
-   * @param {boolean} [opts.builtinTrimester=true] - Eingebaut-Jobs für trimester
+   * @param {object} [opts]
+   * @param {import('../../core/index.js').Janus7Engine|null} [opts.engine]
+   * @param {Console} [opts.logger]
+   * @param {boolean} [opts.builtinWeekly=true]
+   * @param {boolean} [opts.builtinTrimester=true]
    */
   constructor({ engine, logger, builtinWeekly = true, builtinTrimester = true } = {}) {
-    this._engine  = engine  ?? null;
-    this._log     = logger  ?? console;
-    this._hookId  = null;
+    this._engine = engine ?? null;
+    this._log = logger ?? console;
+    this._hookId = null;
     this._registered = false;
 
-    /** @type {{ daily: Function[], weekly: Function[], trimester: Function[] }} */
+    /** @type {{ daily: JanusCronJob[], weekly: JanusCronJob[], trimester: JanusCronJob[] }} */
     this._jobs = { daily: [], weekly: [], trimester: [] };
 
     /** Letzter bekannter Zustand um Duplikat-Trigger zu vermeiden */
     this._lastSeen = { week: null, trimester: null, dayIndex: null };
 
-    if (builtinWeekly)    this._registerBuiltinWeekly();
+    if (builtinWeekly) this._registerBuiltinWeekly();
     if (builtinTrimester) this._registerBuiltinTrimester();
   }
 
-  // ─── Public API ───────────────────────────────────────────────────────────
-
   /**
-   * Registriert einen Job für eine bestimmte Periode.
-   * @param {'daily'|'weekly'|'trimester'} period
-   * @param {(engine: any) => Promise<void>} fn
+   * Registers a job for a specific scheduler period.
+   *
+   * @param {JanusCronPeriod} period
+   * @param {JanusCronJob} fn
    * @returns {this}
    */
   addJob(period, fn) {
@@ -87,7 +97,6 @@ export class JanusCron {
     }
 
     this._hookId = HooksRef.on(HOOKS.DATE_CHANGED, (event) => {
-      // Nur GM führt Welt-Mutationen durch
       if (!game?.user?.isGM) return;
 
       const current = event?.current ?? event;
@@ -116,8 +125,6 @@ export class JanusCron {
     return this.teardown();
   }
 
-  // ─── Tick-Logik ───────────────────────────────────────────────────────────
-
   /**
    * @private
    * Wird bei jedem DATE_CHANGED aufgerufen.
@@ -129,15 +136,12 @@ export class JanusCron {
     const { week, trimester, dayIndex } = current;
     const last = this._lastSeen;
 
-    const isDayNew       = dayIndex   !== last.dayIndex;
-    const isWeekNew      = week       !== last.week;
-    const isTrimesterNew = trimester  !== last.trimester;
+    const isDayNew = dayIndex !== last.dayIndex;
+    const isWeekNew = week !== last.week;
+    const isTrimesterNew = trimester !== last.trimester;
 
-    // Zustand sofort updaten (verhindert Doppel-Run bei Re-Entrant-Hooks)
     this._lastSeen = { week, trimester, dayIndex };
 
-    // Reihenfolge: trimester → weekly → daily (grob → fein)
-    // null-Guard auf allen drei: erster Tick ist reiner Sync-Tick, kein Job-Run.
     if (isTrimesterNew && last.trimester !== null) {
       await this._runJobs('trimester', current);
     }
@@ -170,17 +174,13 @@ export class JanusCron {
     }
   }
 
-  // ─── Eingebaut-Jobs ───────────────────────────────────────────────────────
-
   /** @private */
   _registerBuiltinWeekly() {
     this.addJob('weekly', async (engine, current) => {
-      // Wochenpunkte-Buffer reset (opt-in via state flag)
       try {
         const scoring = engine?.academy?.scoring ?? engine?.simulation?.scoring;
         if (!scoring) return;
 
-        // Nur wenn weeklyBuffer-Feature aktiviert (konfigurierbar)
         const useWeeklyBuffer = engine?.core?.state?.getPath?.('scoring.useWeeklyBuffer') ?? false;
         if (!useWeeklyBuffer) return;
 
@@ -195,7 +195,6 @@ export class JanusCron {
   /** @private */
   _registerBuiltinTrimester() {
     this.addJob('trimester', async (engine, current) => {
-      // Trimester-Abschluss: Snapshot + Hook feuern
       try {
         const scoring = engine?.academy?.scoring ?? engine?.simulation?.scoring;
         const snapshot = scoring?.getCircleScores?.() ?? [];
@@ -203,8 +202,8 @@ export class JanusCron {
 
         emitHook('janus7.trimester.completed', {
           trimester: current?.trimester,
-          week:      current?.week,
-          circles:   snapshot,
+          week: current?.week,
+          circles: snapshot,
           topStudents,
         });
 

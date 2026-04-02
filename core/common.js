@@ -2,7 +2,17 @@
  * Gemeinsame Konstanten für JANUS7.
  */
 export const MODULE_ID = 'Janus7';
+/**
+ * Short module label used in logs and compact UI contexts.
+ *
+ * @type {string}
+ */
 export const MODULE_ABBREV = 'JANUS7';
+/**
+ * Human-readable module title used in diagnostics and UI labels.
+ *
+ * @type {string}
+ */
 export const MODULE_TITLE = 'JANUS7 Engine';
 
 
@@ -69,7 +79,7 @@ export function moduleTemplatePath(relativePath = '') {
 /**
  * Load a JSON file from the active JANUS7 module folder.
  * @param {string} relativePath
- * @returns {Promise<any>}
+ * @returns {Promise<unknown>}
  */
 export async function fetchModuleJson(relativePath) {
   const url = moduleAssetPath(relativePath);

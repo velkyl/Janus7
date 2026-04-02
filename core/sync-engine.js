@@ -79,6 +79,43 @@ export const SyncStatus = Object.freeze({
 
 // ─── Hauptklasse ─────────────────────────────────────────────────────────────
 
+/**
+ * @typedef {'npcs'|'pcs'|'locations'|'playlists'|'items'|'journals'|'rollTables'|'macros'|'alchemy'|'library'|'lessons'|'exams'|'spells'} JanusSyncEntityType
+ */
+
+/**
+ * @typedef {object} JanusSyncReport
+ * @property {string} id
+ * @property {Record<string, unknown>} entity
+ * @property {string} status
+ * @property {string|null} uuid
+ * @property {string|null} foundryName
+ * @property {unknown} [foundryDoc]
+ * @property {string|null} source
+ * @property {string|null} [hint]
+ * @property {Record<string, unknown>} [compHit]
+ * @property {boolean} [autoLinkable]
+ * @property {boolean} [readonly]
+ */
+
+/**
+ * @typedef {object} JanusUuidAuditEntry
+ * @property {string} key
+ * @property {Array<{layer: string, uuid: string}>} entries
+ */
+
+/**
+ * @typedef {object} JanusUuidAuditReport
+ * @property {JanusUuidAuditEntry[]} divergent
+ * @property {string[]} overlayOnly
+ * @property {string[]} stateOnly
+ * @property {number} consistent
+ * @property {number} totalChecked
+ */
+
+/**
+ * Synchronizes JANUS entity identifiers with Foundry document UUIDs and world content.
+ */
 export class JanusSyncEngine {
   /**
    * @param {{ logger?: object }} deps

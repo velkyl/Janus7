@@ -20,6 +20,12 @@ export class JanusLogger {
   static _history = [];
   static _historyLimit = 100;
 
+  /**
+   * Stores a serialized log entry in the shared history buffer.
+   *
+   * @param {{ timestamp?: string, prefix?: string, level?: string, message?: string }} entry
+   * @returns {void}
+   */
   static _pushHistory(entry) {
     try {
       this._history.push(entry);
@@ -27,6 +33,12 @@ export class JanusLogger {
     } catch (_err) { /* noop */ }
   }
 
+  /**
+   * Returns recent log entries filtered by level.
+   *
+   * @param {{ levels?: string[], limit?: number }} [options]
+   * @returns {Array<{ timestamp?: string, prefix?: string, level?: string, message?: string }>}
+   */
   static getRecentEntries({ levels = ['warn', 'error', 'fatal'], limit = 20 } = {}) {
     const allowed = Array.isArray(levels) ? new Set(levels) : null;
     const filtered = this._history.filter((entry) => !allowed || allowed.has(entry?.level));
@@ -39,6 +51,12 @@ export class JanusLogger {
     this._levels = ['debug', 'info', 'warn', 'error', 'fatal'];
   }
 
+  /**
+   * Sets the active log level for this logger instance.
+   *
+   * @param {string} level
+   * @returns {void}
+   */
   setLevel(level) {
     if (!this._levels.includes(level)) return;
     this.level = level;
@@ -73,30 +91,60 @@ export class JanusLogger {
     });
   }
 
+  /**
+   * Writes a debug-level log entry.
+   *
+   * @param {...unknown} args
+   * @returns {void}
+   */
   debug(...args) {
     this._record('debug', args);
     if (!this._shouldLog('debug')) return;
     console.debug(this._fmt('debug'), ...args);
   }
 
+  /**
+   * Writes an info-level log entry.
+   *
+   * @param {...unknown} args
+   * @returns {void}
+   */
   info(...args) {
     this._record('info', args);
     if (!this._shouldLog('info')) return;
     console.info(this._fmt('info'), ...args);
   }
 
+  /**
+   * Writes a warning-level log entry.
+   *
+   * @param {...unknown} args
+   * @returns {void}
+   */
   warn(...args) {
     this._record('warn', args);
     if (!this._shouldLog('warn')) return;
     console.warn(this._fmt('warn'), ...args);
   }
 
+  /**
+   * Writes an error-level log entry.
+   *
+   * @param {...unknown} args
+   * @returns {void}
+   */
   error(...args) {
     this._record('error', args);
     if (!this._shouldLog('error')) return;
     console.error(this._fmt('error'), ...args);
   }
 
+  /**
+   * Writes a fatal-level log entry.
+   *
+   * @param {...unknown} args
+   * @returns {void}
+   */
   fatal(...args) {
     this._record('fatal', args);
     if (!this._shouldLog('fatal')) return;
@@ -105,6 +153,9 @@ export class JanusLogger {
   /**
    * Create a child logger that inherits the current log-level.
    * Useful for scoping logs per subsystem (e.g. core.logger.child('AcademyDataApi')).
+   *
+   * @param {string} [scope]
+   * @returns {JanusLogger}
    */
   child(scope = '') {
     const suffix = String(scope || '').trim();

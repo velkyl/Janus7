@@ -25,6 +25,11 @@ export class JanusConfig {
     phase7: 'enablePhase7'
   });
 
+  /**
+   * Registers all JANUS7 Foundry settings.
+   *
+   * @returns {void}
+   */
   static registerSettings() {
     game.settings.register(MODULE_ID, 'debugLevel', {
       name: 'JANUS7.Settings.DebugLevel.Name',
@@ -265,6 +270,12 @@ export class JanusConfig {
 
   }
 
+  /**
+   * Reads a JANUS7 setting value by key.
+   *
+   * @param {string} key
+   * @returns {unknown}
+   */
   static get(key) {
     // Backwards-compat aliases (older builds / migrations)
     if (key === 'enableQuest') key = 'enableQuestSystem';
@@ -279,6 +290,13 @@ export class JanusConfig {
     }
   }
 
+  /**
+   * Writes a JANUS7 setting value.
+   *
+   * @param {string} key
+   * @param {unknown} value
+   * @returns {Promise<unknown>}
+   */
   static async set(key, value) {
     return game.settings.set(MODULE_ID, key, value);
   }
@@ -307,6 +325,7 @@ export class JanusConfig {
    * User-facing Kill-Switch: whether a subsystem is enabled.
    * Keep this API small and explicit so we can harden + test it.
    * @param {"simulation"|"atmosphere"|"ui"|"quests"} subsystem
+   * @returns {boolean}
    */
   static isSubsystemEnabled(subsystem) {
     switch (subsystem) {
@@ -318,10 +337,21 @@ export class JanusConfig {
     }
   }
 
+  /**
+   * Returns the configured global debug level.
+   *
+   * @returns {unknown}
+   */
   static debugLevel() {
     return this.get('debugLevel');
   }
 
+  /**
+   * Applies the configured log level to a logger instance when supported.
+   *
+   * @param {{ setLevel?: (level: unknown) => void }|null|undefined} logger
+   * @returns {void}
+   */
   static applyToLogger(logger) {
     if (!logger || typeof logger.setLevel !== 'function') return;
     const level = this.debugLevel();
@@ -337,8 +367,8 @@ export class JanusConfig {
   /**
    * Reads a client-scoped UI preference.
    * @param {'uiHighContrast'} key
-   * @param {*} [fallback]
-   * @returns {*}
+   * @param {unknown} [fallback]
+   * @returns {unknown}
    */
   static getUIPreference(key, fallback = undefined) {
     try {
@@ -351,8 +381,8 @@ export class JanusConfig {
   /**
    * Writes a client-scoped UI preference.
    * @param {'uiHighContrast'} key
-   * @param {*} value
-   * @returns {Promise<void>}
+   * @param {unknown} value
+   * @returns {Promise<unknown>}
    */
   static async setUIPreference(key, value) {
     return game.settings.set(MODULE_ID, key, value);

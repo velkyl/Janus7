@@ -1,3 +1,27 @@
+/**
+ * @typedef {object} JanusDiagnosticSnapshot
+ * @property {string} moduleId
+ * @property {string} moduleVersion
+ * @property {string|null} worldId
+ * @property {string|null} foundryVersion
+ * @property {string|null} systemId
+ * @property {string|null} systemVersion
+ * @property {string} generatedAt
+ * @property {string|null} directorMode
+ * @property {Record<string, unknown>} stateStatus
+ * @property {Record<string, unknown>} graph
+ * @property {Record<string, unknown>} diagnostics
+ * @property {Record<string, unknown>} services
+ * @property {Record<string, unknown>} errors
+ * @property {{ openWindows: number, isGM: boolean, userId: string|null }} ui
+ */
+
+/**
+ * Builds a normalized diagnostics snapshot for reporting and UI consumption.
+ *
+ * @param {import('../index.js').Janus7Engine|null|undefined} engine
+ * @returns {JanusDiagnosticSnapshot}
+ */
 export function buildDiagnosticSnapshot(engine) {
   const state = engine?.core?.state?.get?.() ?? {};
   const graph = engine?.graph ?? null;

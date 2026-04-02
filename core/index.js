@@ -63,8 +63,8 @@ export class Janus7Engine {
   /**
    * Registers a service as ready and notifies listeners.
    * @param {string} key 
-   * @param {any} instance 
-   * @returns {any}
+   * @param {unknown} instance 
+   * @returns {unknown}
    */
   markServiceReady(key, instance) {
     if (!key || instance == null) return instance;
@@ -76,6 +76,7 @@ export class Janus7Engine {
   /**
    * Marks a service as unavailable.
    * @param {string} key 
+   * @returns {void}
    */
   markServiceUnavailable(key) {
     if (!key) return;
@@ -86,6 +87,7 @@ export class Janus7Engine {
    * Non-blocking wait for a service to become available.
    * @param {string} key 
    * @param {number} [timeoutMs] 
+   * @returns {Promise<unknown>}
    */
   async waitFor(key, timeoutMs = 10000) {
     return this.serviceRegistry.waitFor(key, { timeoutMs });
@@ -95,8 +97,9 @@ export class Janus7Engine {
    * Central error recording.
    * @param {string} phase - Phase identifier (e.g. 'phase4', 'bridge.dsa5')
    * @param {string} context - Descriptive context string
-   * @param {Error|any} err - The error or value to record
+   * @param {Error|unknown} err - The error or value to record
    * @param {string} [severity='error'] - Severity level
+   * @returns {Error|unknown}
    */
   recordError(phase, context, err, severity = 'error') {
     this.errors?.record?.(phase, context, err, severity);
@@ -109,7 +112,8 @@ export class Janus7Engine {
    * Called by _recordIssue() in janus.mjs for severity='warn' paths.
    * @param {string} phase
    * @param {string} context
-   * @param {Error|any} err
+   * @param {Error|unknown} err
+   * @returns {Error|unknown}
    */
   recordWarning(phase, context, err) {
     this.errors?.record?.(phase, context, err, 'warn');
@@ -119,6 +123,8 @@ export class Janus7Engine {
   /**
    * Phase 1 Initialization (Foundry Init Hook)
    * Focuses on settings registration and core object instantiation.
+   *
+   * @returns {void}
    */
   init() {
     // 1. Register Module Configuration
@@ -198,8 +204,8 @@ export class Janus7Engine {
 
   /**
    * AI Context Builder (Proxy to JanusAiService)
-   * @param {Object} [opts] 
-   * @returns {Object}
+   * @param {Record<string, unknown>} [opts] 
+   * @returns {Record<string, unknown>}
    */
   getAiContext(opts = {}) {
     return this.core.ai?.getContext(opts) ?? { error: 'ai_service_offline' };
@@ -208,6 +214,8 @@ export class Janus7Engine {
   /**
    * Phase 2 Readiness (Foundry Ready Hook)
    * Focuses on state loading, persistent validation, and feature bridge activation.
+   *
+   * @returns {Promise<void>}
    */
   async ready() {
     this.version = game.modules.get(MODULE_ID)?.version || "?.?.?";
@@ -297,6 +305,8 @@ export class Janus7Engine {
 
   /**
    * Cleanup services on module shutdown or reload.
+   *
+   * @returns {void}
    */
   cleanup() {
     this.logger?.info("JANUS7 | Engine shutdown sequence initiated.");
@@ -327,6 +337,11 @@ export function getJanusCore() {
   return engine?.core || engine || null;
 }
 
+/**
+ * Returns the active JANUS7 engine singleton reference.
+ *
+ * @returns {Janus7Engine|null}
+ */
 export function getJanus7() {
   return JANUS_GLOBAL.engine;
 }

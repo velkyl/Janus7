@@ -24,6 +24,37 @@ const BLOCKED_SEGMENTS = new Set(['constructor', 'prototype', '__proto__']);
 const IDENTIFIER_RE = /^[A-Za-z_][A-Za-z0-9_]*$/;
 const PATH_RE = /^[A-Za-z_][A-Za-z0-9_.]*$/;
 
+/**
+ * @typedef {object} SafeExprLiteralNode
+ * @property {'literal'} type
+ * @property {string|number|boolean|null} value
+ */
+
+/**
+ * @typedef {object} SafeExprIdentifierNode
+ * @property {'identifier'} type
+ * @property {string} value
+ */
+
+/**
+ * @typedef {object} SafeExprUnaryNode
+ * @property {'unary'} type
+ * @property {'!'} operator
+ * @property {SafeExprAst} argument
+ */
+
+/**
+ * @typedef {object} SafeExprBinaryNode
+ * @property {'binary'} type
+ * @property {'&&'|'||'|'=='|'!='|'>'|'>='|'<'|'<='} operator
+ * @property {SafeExprAst} left
+ * @property {SafeExprAst} right
+ */
+
+/**
+ * @typedef {SafeExprLiteralNode|SafeExprIdentifierNode|SafeExprUnaryNode|SafeExprBinaryNode} SafeExprAst
+ */
+
 function _isDigit(ch) {
   return ch >= '0' && ch <= '9';
 }
@@ -282,6 +313,12 @@ function _evaluate(node, ctx) {
   }
 }
 
+/**
+ * Compiles a restricted boolean expression into a safe predicate function.
+ *
+ * @param {string} expr
+ * @returns {(ctx?: Record<string, unknown>) => boolean}
+ */
 export function compileSafeBoolExpr(expr) {
   const source = String(expr ?? '').trim();
   if (!source) return () => true;
@@ -296,12 +333,25 @@ export function compileSafeBoolExpr(expr) {
   };
 }
 
+/**
+ * Parses a restricted expression string into an abstract syntax tree.
+ *
+ * @param {string} expr
+ * @returns {SafeExprAst|null}
+ */
 export function parseSafeExpr(expr) {
   const source = String(expr ?? '').trim();
   if (!source) return null;
   return _parse(_tokenize(source));
 }
 
+/**
+ * Evaluates a previously parsed expression tree against a context object.
+ *
+ * @param {SafeExprAst|null} ast
+ * @param {Record<string, unknown>} [ctx]
+ * @returns {boolean}
+ */
 export function evalSafeAst(ast, ctx = {}) {
   try {
     return Boolean(_evaluate(ast, ctx));
@@ -310,5 +360,18 @@ export function evalSafeAst(ast, ctx = {}) {
   }
 }
 
+/**
+ * Normalizes a nullable input into a trimmed string.
+ *
+ * @param {unknown} v
+ * @returns {string}
+ */
 export function safeString(v) { return String(v ?? '').trim(); }
+
+/**
+ * Converts a value to a finite number and falls back to `0` for invalid input.
+ *
+ * @param {unknown} v
+ * @returns {number}
+ */
 export function toNumber(v) { const n = Number(v); return Number.isFinite(n) ? n : 0; }

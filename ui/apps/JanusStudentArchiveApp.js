@@ -54,6 +54,7 @@ export class JanusStudentArchiveApp extends HandlebarsApplicationMixin(JanusBase
     this._query = '';
     this._results = [];
     this._isBuilding = false;
+    this._searchToken = null;
     
     // Bind search handler with debounce
     this._onSearchInput = foundry.utils.debounce(this._performSearch.bind(this), 300);
@@ -74,12 +75,16 @@ export class JanusStudentArchiveApp extends HandlebarsApplicationMixin(JanusBase
 
   async _onRender(context, options) {
     await super._onRender(context, options);
-    
-    // Attach input listeners
-    const input = this.element.querySelector('input[name="query"]');
-    if (input) {
-      input.addEventListener('input', (e) => {
-        this._query = e.target.value;
+
+    const root = this.domElement;
+    if (!root) return;
+
+    if (root.dataset.janusArchiveBindings !== 'true') {
+      root.dataset.janusArchiveBindings = 'true';
+      root.addEventListener('input', (event) => {
+        const input = event.target?.closest?.('input[name="query"]');
+        if (!input) return;
+        this._query = input.value;
         this._onSearchInput();
       });
     }
@@ -89,14 +94,21 @@ export class JanusStudentArchiveApp extends HandlebarsApplicationMixin(JanusBase
       this._isBuilding = true;
       this.refresh();
       
-      this.libraryService?.ensureIndex({ documentNames: ['Item', 'Actor', 'Scene', 'Macro', 'RollTable', 'JournalEntry'] }).then(() => {
-        this._isBuilding = false;
-        this._performSearch();
-      });
+      Promise.resolve(this.libraryService?.ensureIndex?.({ documentNames: ['Item', 'Actor', 'Scene', 'Macro', 'RollTable', 'JournalEntry'] }))
+        .then(() => this._performSearch())
+        .catch((err) => {
+          this._getLogger().warn?.('[StudentArchive] Index-Aufbau fehlgeschlagen', err);
+        })
+        .finally(() => {
+          this._isBuilding = false;
+          this.refresh();
+        });
     }
   }
 
   async _performSearch() {
+    const token = Symbol('archive-search');
+    this._searchToken = token;
     const query = this._query?.trim() || '';
     
     if (!this.libraryService) return;
@@ -114,6 +126,7 @@ export class JanusStudentArchiveApp extends HandlebarsApplicationMixin(JanusBase
         types: ['journal'],
         limit: 1000 // Get all to filter locally
       });
+      if (this._searchToken !== token) return;
 
       // Filtere sicherheitsrelevante Module heraus (Whitelist-Ansatz)
       const safeJournals = allJournals.filter(entry => SAFE_ARCHIVE_PACKAGES.includes(entry.packageName));
@@ -122,7 +135,8 @@ export class JanusStudentArchiveApp extends HandlebarsApplicationMixin(JanusBase
       this._results.sort((a,b) => a.name.localeCompare(b.name, 'de'));
 
     } catch (err) {
-      this._logger?.warn('[StudentArchive] Suche fehlgeschlagen', err);
+      if (this._searchToken !== token) return;
+      this._getLogger().warn?.('[StudentArchive] Suche fehlgeschlagen', err);
       this._results = [];
     }
     
@@ -161,7 +175,7 @@ export class JanusStudentArchiveApp extends HandlebarsApplicationMixin(JanusBase
         ui.notifications?.warn(`Dokument ${uuid} konnte nicht aufgelöst werden.`);
       }
     } catch(err) {
-      inst._logger?.error('Fehler beim Öffnen des Archiv-Eintrags', err);
+      inst._getLogger().error?.('Fehler beim Öffnen des Archiv-Eintrags', err);
     }
   }
 }

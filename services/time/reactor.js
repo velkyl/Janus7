@@ -86,12 +86,28 @@ export class JanusTimeReactor {
   }
 
   /** Alias für konsistente Service-API. */
+  /**
+   * Starts the time reactor.
+   *
+   * @returns {void}
+   */
   start() { this.register(); }
 
   /** Alias für konsistente Service-API. */
+  /**
+   * Stops the time reactor and removes registered hooks.
+   *
+   * @returns {void}
+   */
   stop() { this.unregister(); }
 
   /** Öffentlicher Tick-Einstieg für Tests/Diagnostik. */
+  /**
+   * Executes one public reactor tick for tests and diagnostics.
+   *
+   * @param {{ previous?: Record<string, unknown>, current?: Record<string, unknown>, reason?: string, _meta?: Record<string, unknown> }} payload
+   * @returns {Promise<void>}
+   */
   async tick(payload) { return this._handleDateChanged(payload); }
 
   // ── Reaktionen ──────────────────────────────────────────────────────────

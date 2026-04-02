@@ -1,3 +1,8 @@
+/**
+ * Canonical JANUS7 hook topic names used across runtime, services, and UI.
+ *
+ * @type {Readonly<Record<string, string>>}
+ */
 export const HOOKS = Object.freeze({
   ENGINE_READY:    'janus7.ready',
   STATE_LOADED:    'janus7.state.loaded',
@@ -49,6 +54,11 @@ export const HOOKS = Object.freeze({
   DSA5_INDEX_UPDATED:     'janus7.dsa5.index.updated',
 });
 
+/**
+ * Legacy hook aliases mapped by canonical topic for backwards compatibility.
+ *
+ * @type {Readonly<Record<string, readonly string[]>>}
+ */
 export const HOOK_ALIASES = Object.freeze({
   ['janus7.ready']:                   ['janus7Ready'],
   ['janus7.state.loaded']:            ['janus7StateLoaded'],

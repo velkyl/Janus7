@@ -525,6 +525,13 @@ export async function runJanusDiagnostics(engine, { notify = true, edgeCases = f
   return report;
 }
 
+/**
+ * Creates a serializable bug report payload from the current runtime state.
+ *
+ * @param {import('./index.js').Janus7Engine|null|undefined} engine
+ * @param {JanusBugReportOptions} [options]
+ * @returns {Record<string, unknown>}
+ */
 export function generateBugReport(engine, { failedTestId = null, testData = null } = {}) {
   const moduleId = engine?.moduleId ?? 'janus7';
   const moduleVersion = game?.modules?.get?.(moduleId)?.version ?? null;
@@ -577,3 +584,8 @@ export function generateBugReport(engine, { failedTestId = null, testData = null
       : ['- none'])
   ].join('\n');
 }
+/**
+ * @typedef {object} JanusBugReportOptions
+ * @property {string|null} [failedTestId]
+ * @property {Record<string, unknown>|null} [testData]
+ */

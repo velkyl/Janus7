@@ -58,15 +58,18 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
 
   async _onRender(context, options) {
     await super._onRender(context, options);
+    const root = this.domElement;
+    if (!root) return;
+    if (root.dataset.janusConfigBindings === 'true') return;
+    root.dataset.janusConfigBindings = 'true';
 
-    // Scene-Picker: Auswahl → UUID-Feld automatisch füllen
-    this.element?.querySelectorAll?.('[data-scene-picker]').forEach((select) => {
-      select.addEventListener('change', (ev) => {
-        const uuid = ev.currentTarget.value;
-        const row = ev.currentTarget.closest('[data-scene-row]');
-        const uuidInput = row?.querySelector?.('[data-scene-uuid]');
-        if (uuidInput && uuid) uuidInput.value = uuid;
-      });
+    root.addEventListener('change', (ev) => {
+      const select = ev.target?.closest?.('[data-scene-picker]');
+      if (!select) return;
+      const uuid = select.value;
+      const row = select.closest('[data-scene-row]');
+      const uuidInput = row?.querySelector?.('[data-scene-uuid]');
+      if (uuidInput && uuid) uuidInput.value = uuid;
     });
   }
 
