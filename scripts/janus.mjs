@@ -738,6 +738,18 @@ const janusToolsRecord = {
     visible: toolVisible,
     onChange: runTool(openControlPanel)
   },
+  openMasterDashboard: {
+    name: 'openMasterDashboard',
+    title: 'Master Dashboard (Balancing / Heat / Rumors)',
+    icon: 'fas fa-crown',
+    order: 0.5,
+    button: true,
+    visible: toolVisible,
+    onChange: runTool(async () => {
+      const { JanusMasterDashboard } = await import('./ui/master-dashboard.js');
+      new JanusMasterDashboard().render({ force: true, focus: true });
+    })
+  },
   openAcademyOverview: {
     name: 'openAcademyOverview',
     title: 'Academy Overview öffnen',

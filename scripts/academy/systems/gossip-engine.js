@@ -43,47 +43,96 @@ export class JanusGossipEngine {
 
 export class JanusRumorManager {
     /**
-     * Lädt ein zufälliges Gerücht basierend auf der Situation
+     * Lädt ein zufälliges Gerücht basierend auf der Situation und ersetzt Platzhalter.
      * @param {string} category - staff, students, arcane, city
      */
     static async getRandomRumor(category) {
         const response = await fetch("modules/janus7/data/profiles/punin/rumors.json");
         const data = await response.json();
-        const pool = data.rumors.filter(r => r.category === category);
+        const templates = data.rumor_templates[category];
         
-        return pool[Math.floor(Math.random() * pool.length)];
+        if (!templates?.length) return null;
+
+        const template = templates[Math.floor(Math.random() * templates.length)];
+        const processedText = await this._replacePlaceholders(template.text);
+        
+        return {
+            ...template,
+            content: processedText // Das UI erwartet 'content'
+        };
+    }
+
+    /**
+     * Ersetzt [Platzhalter] durch reale Daten aus dem Modul.
+     */
+    static async _replacePlaceholders(text) {
+        const replacements = {
+            "[Instructor]": async () => {
+                const npcs = await Janus7.DataApi.getNpcs() || [];
+                const staff = npcs.filter(n => n.tags?.includes("staff") || n.type === "instructor");
+                return staff.length ? staff[Math.floor(Math.random() * staff.length)].name : "Ein Magister";
+            },
+            "[Student]": async () => {
+                const npcs = await Janus7.DataApi.getNpcs() || [];
+                const pupils = npcs.filter(n => n.tags?.includes("student") || n.type === "pupil");
+                return pupils.length ? pupils[Math.floor(Math.random() * pupils.length)].name : "Ein Scholar";
+            },
+            "[Location]": async () => {
+                const locs = await Janus7.DataApi.getLocations() || [];
+                return locs.length ? locs[Math.floor(Math.random() * locs.length)].name : "Ein geheimer Ort";
+            },
+            "[Subject]": async () => {
+                const subs = await Janus7.DataApi.getSubjects() || []; // Existiert laut User
+                return subs.length ? subs[Math.floor(Math.random() * subs.length)].name : "Ein magisches Fach";
+            },
+            "[Item]": () => "ein rätselhaftes Artefakt",
+            "[NPC]": async () => {
+                const npcs = await Janus7.DataApi.getNpcs() || [];
+                return npcs.length ? npcs[Math.floor(Math.random() * npcs.length)].name : "Jemand Unbekanntes";
+            }
+        };
+
+        let result = text;
+        for (const [placeholder, resolver] of Object.entries(replacements)) {
+            if (result.includes(placeholder)) {
+                const val = await resolver();
+                result = result.replace(new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), val);
+            }
+        }
+        return result;
     }
 
     /**
      * "Aktiviert" ein Gerücht für einen Spieler. 
-     * Das Gerücht wird als "Wissens-Item" im Actor gespeichert.
      */
-    static async learnRumor(actor, rumorId) {
+    static async learnRumor(actor, rumorData) {
         let learned = actor.getFlag("janus7", "learned_rumors") || [];
-        if (!learned.includes(rumorId)) {
-            learned.push(rumorId);
+        // Wir speichern das ganze Objekt, da 'content' nun dynamisch generiert wurde
+        if (!learned.find(r => r.id === rumorData.id && r.content === rumorData.content)) {
+            learned.push(rumorData);
             await actor.setFlag("janus7", "learned_rumors", learned);
-            ui.notifications.info(`[Janus7] Neues Gerücht aufgeschnappt: ID ${rumorId}`);
+            ui.notifications.info(`[Janus7] Neues Gerücht aufgeschnappt: ${rumorData.content}`);
         }
     }
 
     /**
      * Wendet den mechanischen Effekt eines Gerüchts an.
-     * @param {string} rumorId 
-     * @param {object} context - VTT Context (Probe, NPC, Location)
      */
     static async resolveRumorEffect(rumorId, context) {
-        // Logik zur Umsetzung der Tabelle (Mapping ID zu Effekt)
+        // Erweitertes Mapping basierend auf den neuen 'effect' Keys
         switch(rumorId) {
-            case "R_026": 
-                context.modifier += 2; // Bonus gegen Sequin
+            case "ST01":
+            case "S03":
+            case "S11":
+                // Blackmail Logik
+                context.modifier += 2; 
                 break;
-            case "R_051":
-                if (context.aspCost) context.aspCost -= 2; // Matrix-Anomalie Nutzen
+            case "A01":
+                if (context.spellMod) context.spellMod += 2;
                 break;
-            case "R_080":
-                // Spezialfall: Heat Senkung
-                game.modules.get("janus7").api?.HeatEngine?.modifyHeat(-3);
+            case "C05":
+                // Stress Heilung
+                game.modules.get("janus7").api?.TimeStressEngine?.addStress(context.actor, -3);
                 break;
         }
         return context;

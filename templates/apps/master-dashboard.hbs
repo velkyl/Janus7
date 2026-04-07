@@ -1,0 +1,267 @@
+<div class="janus-master-dashboard janus7-page">
+  <header class="janus7-toolbar">
+    <div class="janus7-toolbar__left">
+      <i class="fas fa-crown"></i>
+      <span class="janus7-title">Master Dashboard: Punin</span>
+    </div>
+    <div class="janus7-toolbar__right">
+      <button type="button" class="janus-btn" data-action="refresh"><i class="fas fa-sync"></i></button>
+    </div>
+  </header>
+
+  <div class="dashboard-grid">
+    {{!-- Linke Spalte: Globaler Status & Heat --}}
+    <aside class="dashboard-side">
+      <section class="janus7-card status-card">
+        <div class="j7-card-head">
+          <h3><i class="fas fa-fire-alt"></i> Akademie-Status</h3>
+        </div>
+        
+        <div class="kpi-group">
+          <div class="kpi">
+            <div class="kpi__label">Discovery Heat</div>
+            <div class="kpi__value {{#if (gt globalHeat 10)}}heat-high{{/if}}">{{globalHeat}} / 20</div>
+            <div class="kpi__bar"><div class="bar-fill" style="width:{{globalHeatPercent}}%"></div></div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi__label">Inquisitions-Verdacht</div>
+            <div class="kpi__value">{{inquisitionLevel}} / 15</div>
+            <div class="kpi__bar"><div class="bar-fill" style="width:{{inqPercent}}%; background: var(--j7-accent-danger);"></div></div>
+          </div>
+        </div>
+
+        <div class="dashboard-actions">
+          <button type="button" class="janus-btn btn-sm" data-action="adjustHeat" data-delta="-1">-1 Heat</button>
+          <button type="button" class="janus-btn btn-sm" data-action="adjustHeat" data-delta="+1">+1 Heat</button>
+        </div>
+      </section>
+
+      <section class="janus7-card rumor-distributor">
+        <div class="j7-card-head">
+          <h3><i class="fas fa-comment-dots"></i> Gerüchte-Verteiler</h3>
+        </div>
+        <div class="janus7-formrow">
+          <label>Ziel-Akteur</label>
+          <select name="targetActorId">
+            {{#each actors}}
+              <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </select>
+        </div>
+        <div class="janus7-formrow">
+          <label>Kategorie</label>
+          <select name="rumorCategory">
+            <option value="staff">Lehrerschaft (Staff)</option>
+            <option value="students">Schüler (Students)</option>
+            <option value="arcane">Arkanes (Arcane)</option>
+            <option value="city">Stadt (City)</option>
+          </select>
+        </div>
+        <button type="button" class="janus-btn" data-action="distributeRumor">
+          <i class="fas fa-paper-plane"></i> Gerücht generieren & senden
+        </button>
+      </section>
+    </aside>
+
+    {{!-- Hauptbereich: SC-Stress & NPC-Radar --}}
+    <main class="dashboard-main">
+      <section class="janus7-card">
+        <div class="j7-card-head">
+          <h3><i class="fas fa-brain"></i> Novizen-Stress-Monitor</h3>
+          <p class="j7-card-head__hint">Schwellen: 1/3 KO = Betäubung I · 2/3 KO = Betäubung II · KO = Zusammenbruch</p>
+        </div>
+        <div class="actor-stress-list">
+          {{#each actors}}
+          <div class="actor-stress-row {{#if isCritical}}stress-critical{{else if isDanger}}stress-danger{{else if isWarn}}stress-warn{{/if}}" data-actor-id="{{id}}">
+
+            {{!-- Collapse-Icon --}}
+            <div class="stress-icon">
+              {{#if isCritical}}
+                <i class="fas fa-skull stress-icon__pulse" title="ZUSAMMENBRUCH!"></i>
+              {{else if isDanger}}
+                <i class="fas fa-heartbeat stress-icon__pulse" title="Betäubung II"></i>
+              {{else if isWarn}}
+                <i class="fas fa-exclamation-triangle" title="Betäubung I"></i>
+              {{else}}
+                <i class="fas fa-user"></i>
+              {{/if}}
+            </div>
+
+            <div class="actor-meta">
+              <strong>{{name}}</strong>
+              <span class="janus7-muted stress-state-label">{{stressStateLabel}}</span>
+            </div>
+
+            <div class="stress-meter">
+              {{!-- Threshold markers --}}
+              <div class="stress-bar">
+                <div class="stress-fill {{#if isCritical}}critical{{else if isDanger}}danger{{else if isWarn}}warn{{/if}}"
+                     style="width:{{stressPercent}}%"></div>
+                <div class="stress-marker" style="left: 33.3%" title="Betäubung I"></div>
+                <div class="stress-marker" style="left: 66.6%" title="Betäubung II"></div>
+              </div>
+              <span class="stress-label {{#if isCritical}}label-critical{{/if}}">{{stress}} / {{ko}}</span>
+            </div>
+
+            <div class="stress-actions">
+              <button type="button" class="janus-btn btn-icon" data-action="modifyStress" data-actor-id="{{id}}" data-delta="-1" title="Stress -1"><i class="fas fa-minus"></i></button>
+              <button type="button" class="janus-btn btn-icon" data-action="modifyStress" data-actor-id="{{id}}" data-delta="+1" title="Stress +1"><i class="fas fa-plus"></i></button>
+            </div>
+
+            {{!-- Breakdown Banner --}}
+            {{#if isCritical}}
+            <div class="breakdown-banner">⚠ ZUSAMMENBRUCH: {{name}} ist handlungsunfähig!</div>
+            {{/if}}
+          </div>
+          {{/each}}
+        </div>
+      </section>
+
+      <section class="janus7-card">
+        <div class="j7-card-head">
+          <h3><i class="fas fa-users"></i> Social Radar (NSC-Beziehungen)</h3>
+        </div>
+        <div class="janus7-table-wrap">
+          <table class="janus7-table">
+            <thead>
+              <tr>
+                <th>NSC</th>
+                <th>Status</th>
+                <th>Attitude</th>
+                <th>Aktionen</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each npcRelationships}}
+              <tr>
+                <td><strong>{{name}}</strong></td>
+                <td><span class="tag tag-{{statusClass}}">{{status}}</span></td>
+                <td class="num">{{attitude}}</td>
+                <td>
+                  <button type="button" class="janus-btn btn-sm" data-action="adjustAttitude" data-npc-id="{{id}}" data-delta="-1">-1</button>
+                  <button type="button" class="janus-btn btn-sm" data-action="adjustAttitude" data-npc-id="{{id}}" data-delta="+1">+1</button>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<style>
+  /* ── Layout ───────────────────────────────────────────────────────── */
+  .dashboard-grid { display: grid; grid-template-columns: 280px 1fr; gap: 1rem; margin-top: 1rem; }
+
+  /* ── Stress Row Base ─────────────────────────────────────────────── */
+  .actor-stress-row {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem;
+    padding: 0.5rem 0.4rem; border-radius: 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.4s, box-shadow 0.4s;
+    position: relative;
+  }
+
+  /* ── Stress States ───────────────────────────────────────────────── */
+  .actor-stress-row.stress-warn {
+    background: rgba(245, 158, 11, 0.06);
+    box-shadow: inset 3px 0 0 #f59e0b;
+  }
+  .actor-stress-row.stress-danger {
+    background: rgba(239, 68, 68, 0.08);
+    box-shadow: inset 3px 0 0 #ef4444;
+    animation: j7-stress-pulse 2s ease-in-out infinite;
+  }
+  .actor-stress-row.stress-critical {
+    background: rgba(239, 68, 68, 0.18);
+    box-shadow: inset 3px 0 0 #ef4444, 0 0 12px rgba(239,68,68,0.4);
+    animation: j7-stress-critical 0.8s ease-in-out infinite;
+  }
+
+  @keyframes j7-stress-pulse {
+    0%, 100% { box-shadow: inset 3px 0 0 #ef4444, 0 0 4px rgba(239,68,68,0.1); }
+    50%       { box-shadow: inset 3px 0 0 #ef4444, 0 0 14px rgba(239,68,68,0.5); }
+  }
+  @keyframes j7-stress-critical {
+    0%, 100% { background: rgba(239,68,68,0.18); }
+    50%       { background: rgba(239,68,68,0.32); }
+  }
+
+  /* ── Stress Icon ─────────────────────────────────────────────────── */
+  .stress-icon { width: 20px; text-align: center; font-size: 0.9rem; }
+  .stress-icon__pulse {
+    display: inline-block;
+    animation: j7-icon-pulse 1s ease-in-out infinite;
+    color: #ef4444;
+  }
+  @keyframes j7-icon-pulse {
+    0%, 100% { transform: scale(1);   opacity: 1; }
+    50%       { transform: scale(1.3); opacity: 0.7; }
+  }
+
+  /* ── Stress Bar & Markers ────────────────────────────────────────── */
+  .actor-meta { width: 110px; display: flex; flex-direction: column; }
+  .stress-state-label { font-size: 0.72rem; }
+  .stress-meter { flex-grow: 1; display: flex; align-items: center; gap: 0.5rem; }
+  .stress-bar {
+    flex-grow: 1; height: 10px;
+    background: rgba(0,0,0,0.3); border-radius: 5px;
+    overflow: visible; position: relative;
+  }
+  .stress-fill {
+    height: 100%; width: 0; border-radius: 5px;
+    background: var(--j7-accent, #4a9eff);
+    transition: width 0.4s cubic-bezier(.4,0,.2,1), background 0.3s;
+  }
+  .stress-fill.warn     { background: #f59e0b; }
+  .stress-fill.danger   { background: #ef4444; }
+  .stress-fill.critical {
+    background: linear-gradient(90deg, #ef4444, #fca5a5);
+    animation: j7-fill-flicker 0.5s ease-in-out infinite;
+  }
+  @keyframes j7-fill-flicker {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.7; }
+  }
+
+  /* Threshold tick marks */
+  .stress-marker {
+    position: absolute; top: -3px; width: 2px; height: 16px;
+    background: rgba(255,255,255,0.25); border-radius: 1px;
+    transform: translateX(-50%);
+  }
+
+  /* ── Stress Label ────────────────────────────────────────────────── */
+  .stress-label { font-size: 0.8rem; white-space: nowrap; min-width: 38px; text-align: right; }
+  .stress-label.label-critical { color: #ef4444; font-weight: bold; animation: j7-icon-pulse 0.8s infinite; }
+
+  /* ── Breakdown Banner ────────────────────────────────────────────── */
+  .breakdown-banner {
+    width: 100%; margin-top: 0.25rem;
+    padding: 0.25rem 0.5rem; border-radius: 3px;
+    background: rgba(239, 68, 68, 0.25);
+    border: 1px solid #ef4444;
+    color: #fca5a5; font-size: 0.8rem; font-weight: bold;
+    text-align: center;
+    animation: j7-stress-critical 0.8s infinite;
+  }
+
+  /* ── KPI Bars ────────────────────────────────────────────────────── */
+  .kpi-bar { height: 4px; background: rgba(0,0,0,0.3); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--j7-accent-gold, #c8a340); transition: width 0.4s; }
+  .heat-high { color: #f59e0b; font-weight: bold; animation: j7-icon-pulse 2s infinite; }
+
+  /* ── NPC Tags ────────────────────────────────────────────────────── */
+  .tag { display: inline-block; padding: 1px 6px; border-radius: 10px; font-size: 0.72rem; }
+  .tag-friendly  { background: rgba(52,211,153,0.2); color: #34d399; }
+  .tag-ally      { background: rgba(59,130,246,0.2); color: #60a5fa; }
+  .tag-neutral   { background: rgba(156,163,175,0.2); color: #9ca3af; }
+  .tag-wary      { background: rgba(245,158,11,0.2); color: #fbbf24; }
+  .tag-hostile   { background: rgba(239,68,68,0.2);  color: #f87171; }
+
+  .stress-actions { display: flex; gap: 0.25rem; }
+  .btn-icon { padding: 2px 6px !important; font-size: 0.75rem; }
+</style>
