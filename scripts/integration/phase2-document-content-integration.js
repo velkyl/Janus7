@@ -1,5 +1,4 @@
-﻿import { emitHook, HOOKS } from '../../core/hooks/emitter.js';
-import { MODULE_ID } from '../../core/common.js';
+import { emitHook, HOOKS, MODULE_ID } from '../core/public-api.mjs';
 import {
   JANUS_LESSON_DEFAULT_IMG,
   JANUS_LESSON_FLAG_SCOPE,

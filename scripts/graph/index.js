@@ -5,8 +5,7 @@ import { AcademyGraphProvider } from './providers/AcademyGraphProvider.js';
 import { StateGraphProvider } from './providers/StateGraphProvider.js';
 import { Dsa5IndexGraphProvider } from './providers/Dsa5IndexGraphProvider.js';
 import { JanusGraphCache } from '../../services/graph/JanusGraphCache.js';
-import { HOOKS } from '../../core/hooks/topics.js';
-import { cleanupEngineHookBucket, registerEngineHook } from '../../core/hooks/runtime.js';
+import { HOOKS, cleanupEngineHookBucket, registerEngineHook } from '../core/public-api.mjs';
 
 /**
  * Registers the knowledge graph service on the given engine.  The

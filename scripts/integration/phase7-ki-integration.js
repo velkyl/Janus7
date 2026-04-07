@@ -12,8 +12,7 @@ import { JanusKiImportService } from '../../phase7/import/JanusKiImportService.j
 import { JanusKiIoService } from '../../phase7/io/JanusKiIoService.js';
 import { JanusKnowledgeBridge } from '../../phase7/ki/knowledge-bridge.js';
 import { Prompts } from '../../phase7/ki/prompts.js';
-import { HOOKS } from '../../core/hooks/topics.js';
-import { registerRuntimeHook } from '../../core/hooks/runtime.js';
+import { HOOKS, registerRuntimeHook } from '../core/public-api.mjs';
 
 export function attachPhase7Ki(engine) {
   if (!engine) return null;

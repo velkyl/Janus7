@@ -1,26 +1,22 @@
 /**
- * Phase 6: UI Integration
+ * @file scripts/integration/phase6-ui-integration.js
+ * @phase 6 (UI)
  *
  * Responsibilities:
- * - Register UI apps and menus
  * - Attach commands + UI registry to engine
  * - Provide basic scene controls entrypoint
+ *
+ * Architecture: Imports ONLY from public-api.mjs (Phase ≤1 symbols).
+ * Foundry-Core-Hooks stay in scripts/janus.mjs (A3 contract).
  */
 
-import { MODULE_ID } from '../../core/common.js';
-import { HOOKS } from '../../core/hooks/emitter.js';
-import { registerRuntimeHook } from '../../core/hooks/runtime.js';
-
-// UI + Commands are Phase 6 deliverables.
+import { MODULE_ID, HOOKS, registerRuntimeHook } from '../core/public-api.mjs';
 import { JanusUI } from '../../ui/index.js';
 import { JanusCommands } from '../../ui/commands/index.js';
 
+// FIX P1-01: Top-Level-Code war wirkungslos — game.janus7 ist zum Import-Zeitpunkt
+// noch nicht initialisiert. Die verlässliche Attach-Logik ist im ENGINE_READY Hook.
 
-// FIX P1-01: Der folgende Top-Level-Code war immer wirkungslos.
-// game.janus7 ist zum ESModule-Import-Zeitpunkt noch nicht initialisiert.
-// Die verlässliche Attach-Logik findet im ENGINE_READY Hook statt (siehe unten).
-
-// Keep engine links consistent at the moment the engine is declared ready.
 registerRuntimeHook('janus7:ready:phase6-ui', HOOKS.ENGINE_READY, (engine) => {
   try {
     engine.commands = engine.commands ?? JanusCommands;

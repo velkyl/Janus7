@@ -1,4 +1,4 @@
-import { moduleTemplatePath } from '../../core/common.js';
+import { moduleTemplatePath } from '../core/public-api.mjs';
 /**
  * Event Popup - Shows event with contextual Quest / Rumor data.
  */

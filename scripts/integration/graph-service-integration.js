@@ -4,8 +4,7 @@
  * the graph to the engine.  It defers loading of the graph code
  * until needed to avoid increasing the initial bundle size.
  */
-import { HOOKS } from '../../core/hooks/topics.js';
-import { registerRuntimeHook } from '../../core/hooks/runtime.js';
+import { HOOKS, registerRuntimeHook } from '../core/public-api.mjs';
 
 registerRuntimeHook('janus7:ready:graph-service', HOOKS.ENGINE_READY, async (engine) => {
   const logger = engine?.core?.logger ?? console;

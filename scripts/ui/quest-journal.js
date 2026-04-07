@@ -1,5 +1,4 @@
-import { moduleTemplatePath } from '../../core/common.js';
-import { HOOKS } from '../../core/hooks/topics.js';
+import { moduleTemplatePath, HOOKS } from '../core/public-api.mjs';
 import { JanusBaseApp } from '../../ui/core/base-app.js';
 
 /**

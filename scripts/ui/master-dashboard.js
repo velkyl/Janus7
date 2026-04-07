@@ -1,4 +1,4 @@
-import { moduleTemplatePath } from '../../core/common.js';
+import { moduleTemplatePath } from '../core/public-api.mjs';
 import { JanusRumorManager } from '../academy/systems/gossip-engine.js';
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;

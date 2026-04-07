@@ -9,6 +9,8 @@ import { JanusActivityEngine } from '../../academy/activity-engine.js';
 registerRuntimeHook('janus7:ready:academy-progression', HOOKS.ENGINE_READY, async (engine) => {
   const logger = engine?.core?.logger ?? console;
   try {
+    const state = engine?.core?.state;
+    const academyData = engine?.academy?.data;
     const calendar = engine?.academy?.calendar ?? engine?.simulation?.calendar ?? engine?.calendar;
     const dsa5Bridge = engine?.bridge?.dsa5 ?? engine?.dsa5 ?? null;
     if (!state || !academyData) {

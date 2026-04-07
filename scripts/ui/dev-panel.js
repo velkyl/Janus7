@@ -1,4 +1,4 @@
-import { moduleTemplatePath } from '../../core/common.js';
+import { moduleTemplatePath } from '../core/public-api.mjs';
 /**
  * Developer Panel - Testing & Debug Interface
  */

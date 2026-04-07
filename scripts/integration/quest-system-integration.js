@@ -12,8 +12,7 @@ import { JanusConditionContextProvider } from '../academy/conditions/context-pro
 import { JanusConditionEvaluator } from '../academy/conditions/condition-evaluator.js';
 import { JanusEventsEngineExtended as JanusEventsEngine } from '../academy/events/event-engine.js';
 import { JanusQuestEngine } from '../academy/quests/quest-engine.js';
-import { HOOKS } from '../../core/hooks/topics.js';
-import { registerRuntimeHook } from '../../core/hooks/runtime.js';
+import { HOOKS, registerRuntimeHook } from '../core/public-api.mjs';
 
 /** @returns {import('../../core/logger.js').JanusLogger|Console} */
 const _qlog = () => game?.janus7?.core?.logger ?? console;
