@@ -1,0 +1,25 @@
+{
+  "id": "Q_NIGHTMARKET_RUN",
+  "title": "Schmuggel in den Gassen Punins",
+  "type": "stealth_pointcrawl",
+  "domain": "punin_city",
+  "state": {
+    "status": "active",
+    "resources": {
+      "heat": { "current": 0, "max": 8, "label": "Auffälligkeit (Heat)", "visible_to_players": true },
+      "path_progress": { "current": 0, "max": 4, "label": "Wegpunkte erreicht", "visible_to_players": true }
+    }
+  },
+  "milestones": [
+    {
+      "id": "market_reached",
+      "condition": "path_progress >= 4",
+      "events": [{ "type": "quest_complete", "text": "Ihr habt den Hehler am Nachtmarkt erreicht, bevor die Garde euch fand." }]
+    },
+    {
+      "id": "garde_encounter",
+      "condition": "heat >= 8",
+      "events": [{ "type": "combat_encounter", "text": "Eine Patrouille der Praiosgarde stellt euch den Weg! Heat-Maximum erreicht." }]
+    }
+  ]
+}

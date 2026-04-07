@@ -1,0 +1,28 @@
+{
+  "id": "Q_ALCHEMY_HAZARD",
+  "title": "Labor-Nachsitzen: Die flüchtige Tinktur",
+  "type": "push_your_luck",
+  "domain": "academy_punin",
+  "state": {
+    "status": "active",
+    "resources": {
+      "stability": { "current": 0, "max": 10, "label": "Trank-Stabilität (QS)", "visible_to_players": true },
+      "pressure": { "current": 0, "max": 5, "label": "Kesseldruck", "visible_to_players": true }
+    }
+  },
+  "milestones": [
+    {
+      "id": "alchemy_success",
+      "condition": "stability >= 10",
+      "events": [{ "type": "quest_complete", "text": "Die Tinktur ist stabil. Magistra Cerylia ist (widerwillig) beeindruckt." }]
+    },
+    {
+      "id": "alchemy_explosion",
+      "condition": "pressure >= 5",
+      "events": [
+        { "type": "narrative_escalation", "text": "Der Kessel explodiert! (Jeder erhält 1W3 SP durch Säure)." },
+        { "type": "social_encounter", "npc_id": "magistra_cerylia", "text": "Magistra stürmt herein. Sozialer Konflikt beginnt." }
+      ]
+    }
+  ]
+}
