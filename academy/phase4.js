@@ -26,6 +26,7 @@ import { JanusLessonsEngine } from './lessons.js';
 import { RollScoringConnector } from './roll-scoring-connector.js';
 import { JanusSocialSync } from './social-sync.js';
 import { JanusExamConditionHooks } from './exam-condition-hooks.js';
+import { JanusMechanicGateEngine } from './mechanic-gate-engine.js';
 import { HOOKS } from '../core/hooks/topics.js';
 import { registerRuntimeHook } from '../core/hooks/runtime.js';
 
@@ -284,6 +285,58 @@ registerRuntimeHook('janus7:ready:academy-phase4', HOOKS.ENGINE_READY, async (en
     } catch (connErr) {
       engine?.recordWarning?.('phase4', 'rollConnector.init', connErr);
       logger?.warn?.('[JANUS7] Phase 4: RollScoringConnector init fehlgeschlagen (non-fatal)', { err: connErr?.message });
+    }
+
+    // ── MechanicGateEngine ────────────────────────────────────────────────
+    let gateEngine = null;
+    try {
+      gateEngine = new JanusMechanicGateEngine({ state, academyData, logger });
+      safeRegister(gateEngine, 'gateEngine');
+      engine.academy.gateEngine = gateEngine;
+      engine?.markServiceReady?.('academy.gateEngine', gateEngine);
+
+      // Hook: Lektion abgeschlossen → Gates auswerten
+      registerRuntimeHook('janus7:academy-phase4:gate-lesson', HOOKS.LESSON_STARTED, async (data) => {
+        const lessonId = data?.lessonId ?? data?.id ?? null;
+        if (!lessonId) return;
+        try { await gateEngine.evaluateGatesForLesson(lessonId); } catch (err) {
+          logger?.warn?.('[JANUS7] GateEngine: Lektions-Evaluation fehlgeschlagen.', { err: err?.message });
+        }
+      });
+
+      // Hook: Prüfungsergebnis → Gates auswerten
+      registerRuntimeHook('janus7:academy-phase4:gate-exam', HOOKS.EXAM_RESULT_RECORDED, async (data) => {
+        const examId = data?.examId ?? data?.id ?? null;
+        const status = data?.status ?? null;
+        if (!examId) return;
+        try { await gateEngine.evaluateGatesForExam(examId, status); } catch (err) {
+          logger?.warn?.('[JANUS7] GateEngine: Prüfungs-Evaluation fehlgeschlagen.', { err: err?.message });
+        }
+      });
+
+      // Hook: Trimester abgeschlossen → Gates auswerten
+      registerRuntimeHook('janus7:academy-phase4:gate-trimester', HOOKS.TRIMESTER_COMPLETED, async (data) => {
+        const year = Number(data?.year ?? 0);
+        const trimester = Number(data?.trimester ?? 0);
+        if (!year || !trimester) return;
+        try { await gateEngine.evaluateGatesForTrimester(year, trimester); } catch (err) {
+          logger?.warn?.('[JANUS7] GateEngine: Trimester-Evaluation fehlgeschlagen.', { err: err?.message });
+        }
+      });
+
+      // Hook: Event gezeigt → Event-Slot-Gates auswerten
+      registerRuntimeHook('janus7:academy-phase4:gate-event-slot', HOOKS.EVENT_SHOWN, async (data) => {
+        const eventId = data?.eventId ?? data?.id ?? null;
+        if (!eventId) return;
+        try { await gateEngine.evaluateGatesForEventSlot(eventId); } catch (err) {
+          logger?.warn?.('[JANUS7] GateEngine: EventSlot-Evaluation fehlgeschlagen.', { err: err?.message });
+        }
+      });
+
+      logger?.debug?.('[JANUS7] Phase 4: JanusMechanicGateEngine verdrahtet (4 Hooks aktiv).');
+    } catch (gateErr) {
+      engine?.recordWarning?.('phase4', 'gateEngine.init', gateErr);
+      logger?.warn?.('[JANUS7] Phase 4: JanusMechanicGateEngine init fehlgeschlagen (non-fatal)', { err: gateErr?.message });
     }
 
     logger?.info?.('[JANUS7] Phase 4 register summary', registerResults);

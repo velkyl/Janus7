@@ -52,6 +52,8 @@ export const HOOKS = Object.freeze({
   SOCIAL_LINK_CHANGED:    'janus7.progression.social.changed',
   ACADEMY_DATA_RELOADED:  'janus7.academy.data.reloaded',
   DSA5_INDEX_UPDATED:     'janus7.dsa5.index.updated',
+  MECHANIC_GATE_OPENED:   'janus7.progression.mechanic_gate.opened',
+  EVENT_POOL_ACTIVATED:   'janus7.progression.event_pool.activated',
 });
 
 /**
@@ -104,6 +106,8 @@ export const HOOK_ALIASES = Object.freeze({
   ['janus7.progression.milestone.resolved']:['janus7MilestoneResolved'],
   ['janus7.progression.collection.updated']:['janus7CollectionUpdated'],
   ['janus7.progression.social.changed']:    ['janus7SocialLinkChanged'],
-  ['janus7.academy.data.reloaded']:         ['janus7AcademyDataReloaded'],
-  ['janus7.dsa5.index.updated']:            ['janus7Dsa5IndexUpdated'],
+  ['janus7.academy.data.reloaded']:                ['janus7AcademyDataReloaded'],
+  ['janus7.dsa5.index.updated']:                   ['janus7Dsa5IndexUpdated'],
+  ['janus7.progression.mechanic_gate.opened']:     ['janus7MechanicGateOpened'],
+  ['janus7.progression.event_pool.activated']:     ['janus7EventPoolActivated'],
 });

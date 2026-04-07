@@ -36,6 +36,21 @@
           "effectIds": []
         }
       ]
+    },
+    {
+      "id": "MILESTONE_GATE_SUMMARY_T1",
+      "name": "Soziale Reife (Ende T1)",
+      "evaluationExpr": "state.academy.mechanicGates.GATE_SOCIAL_LINKS_MENTOR",
+      "outcomes": [
+        {
+          "id": "SOCIAL_AWARE",
+          "condition": "value >= 1",
+          "grantTags": [
+            "social_aware"
+          ],
+          "effectIds": []
+        }
+      ]
     }
   ]
 }

@@ -26,8 +26,9 @@ export class JanusEventsEngine {
    * @param {JanusCalendarEngine} [deps.calendar]
    * @param {JanusLogger} [deps.logger]
    * @param {any} [deps.slotResolver] - Optionaler SlotContentResolver (Phase 4).
+   * @param {any} [deps.state] - JanusStateCore (optional). Wenn vorhanden, werden Event-Pools gegen academy.activeEventPools gefiltert.
    */
-  constructor({ academyData, calendar, slotResolver, logger }) {
+  constructor({ academyData, calendar, slotResolver, logger, state }) {
     if (!academyData) {
       throw new Error(`${MODULE_ABBREV}: JanusEventsEngine benötigt AcademyDataApi (deps.academyData).`);
     }
@@ -36,11 +37,13 @@ export class JanusEventsEngine {
     this.academyData = academyData;
     /** @type {JanusCalendarEngine|null} */
     this.calendar = calendar ?? null;
-    
+
     /** @type {any|null} */
     this.slotResolver = slotResolver ?? null;
     /** @type {JanusLogger|Console} */
     this.logger = logger ?? console;
+    /** @type {any|null} */
+    this.state = state ?? null;
   }
 
   /**
@@ -66,7 +69,27 @@ export class JanusEventsEngine {
   listEventsForSlot(slotRef) {
     if (!slotRef) return [];
 
-    const resolvedEvents = this.slotResolver?.resolveSlot ? (this.slotResolver.resolveSlot(slotRef)?.events ?? []) : [];
+    let resolvedEvents = this.slotResolver?.resolveSlot ? (this.slotResolver.resolveSlot(slotRef)?.events ?? []) : [];
+
+    // Wenn activeEventPools im State gesetzt ist (Array), nur Ereignisse aus aktiven Pools zurückgeben.
+    // null = Gating-System deaktiviert (legacy/kein Gate-System) → kein Filtern.
+    const activePools = this.state?.get?.('academy.activeEventPools');
+    if (Array.isArray(activePools)) {
+      // Baue eine Reverse-Map: eventId → poolId aus dem poolIndex
+      const poolIndex = this.academyData?.getPoolIndex?.() ?? [];
+      const eventPoolMap = new Map();
+      for (const pool of poolIndex) {
+        for (const eventId of (Array.isArray(pool.events) ? pool.events : [])) {
+          eventPoolMap.set(eventId, pool.poolId);
+        }
+      }
+      // Behalte nur Events deren Pool aktiv ist (oder Events ohne Pool-Zuordnung)
+      resolvedEvents = resolvedEvents.filter((ev) => {
+        const poolId = eventPoolMap.get(ev?.id);
+        if (!poolId) return true; // Kein Pool → immer anzeigen
+        return activePools.includes(poolId);
+      });
+    }
 
     try {
       const legacy = this.academyData.listEventsForDay(slotRef) ?? [];

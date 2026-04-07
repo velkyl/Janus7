@@ -221,6 +221,17 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
 
     const storyHookQueue = this._buildStoryHookQueueView(engine, npcs, pcs);
 
+    const gateEngine = engine?.academy?.gateEngine ?? null;
+    const socialLinksGateOpen = gateEngine
+      ? gateEngine.isGateOpen('GATE_SOCIAL_LINKS_MENTOR')
+      : true; // Kein Gate-System aktiv → alles anzeigen (legacy-Kompatibilität)
+    const socialLinksFullOpen = gateEngine
+      ? gateEngine.isGateOpen('GATE_SOCIAL_LINKS_FULL')
+      : true;
+    const npcAttitudeGateOpen = gateEngine
+      ? gateEngine.isGateOpen('GATE_NPC_ATTITUDE_DISPLAY')
+      : true;
+
     return {
       notReady: false,
       isGM: game.user?.isGM ?? false,
@@ -231,7 +242,10 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
       attitude,
       outgoing: outgoingView,
       livingHistory,
-      storyHookQueue
+      storyHookQueue,
+      socialLinksGateOpen,
+      socialLinksFullOpen,
+      npcAttitudeGateOpen,
     };
   }
 }

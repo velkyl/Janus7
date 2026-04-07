@@ -54,6 +54,8 @@ export const DEFAULT_STATE = Object.freeze({
     },
     examResults: {},
     alumni: { records: {}, history: [] },
+    mechanicGates: {},
+    activeEventPools: null,
   },
   actors: { pcs: {}, npcs: {} },
   questStates: {},
@@ -120,7 +122,7 @@ export function migrateStateSchema(stateObj) {
 
   // 3. Deep-Healing for Academy (Phase 7/8 support)
   if (stateObj.academy) {
-    const academyKeys = ['social', 'scoring', 'examResults', 'alumni'];
+    const academyKeys = ['social', 'scoring', 'examResults', 'alumni', 'mechanicGates'];
     for (const key of academyKeys) {
       const path = `academy.${key}`;
       const val = foundry.utils.getProperty(stateObj, path);

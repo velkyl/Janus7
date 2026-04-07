@@ -318,6 +318,12 @@ export function getCollection(id) {
 }
 export function getSchoolStatsConfig() { return getExtendedDataset('school_stats')?.stats ?? []; }
 export function getResourcesConfig() { return getExtendedDataset('resources')?.resources ?? []; }
+export function getMechanicGates() { return getExtendedDataset('mechanic_gates')?.gates ?? []; }
+export function getMechanicGate(id) {
+  const key = String(id ?? '').trim();
+  return getMechanicGates().find((row) => String(row?.id ?? '') === key) ?? null;
+}
+export function getPoolIndex() { return getAcademyCache()?.poolIndex ?? []; }
 
 export function getLocationActivityModifiers(locationId, activityType = null) {
   const key = String(locationId ?? '').trim();
