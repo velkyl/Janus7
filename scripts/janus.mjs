@@ -18,7 +18,7 @@
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import { Janus7Engine, JANUS_GLOBAL, getJanus7, getJanusCore } from '../core/index.js';
 import { JanusConfig } from '../core/config.js';
-import { MODULE_ID, STATE_PATHS, AVENTURIAN_CALENDAR } from '../core/common.js';
+import { MODULE_ID, STATE_PATHS, AVENTURIAN_CALENDAR, moduleAssetPath } from '../core/common.js';
 import { JanusCapabilities } from '../core/capabilities.js';
 import { JanusTimeReactor } from '../services/time/reactor.js';
 import { JanusCron } from '../services/cron/JanusCron.js';
@@ -630,7 +630,7 @@ try {
         game.dsa5.apps.journalBrowser.books.push({
           id: "JanusAcademy",
           name: "JANUS Akademie-Archiv",
-          path: "modules/Janus7/data/academy/academy-book-de.json",
+          path: moduleAssetPath('data/academy/academy-book-de.json'),
           visible: true
         });
       }
@@ -714,7 +714,9 @@ const openControlPanel = async () => {
     if (uiReg?.openShell) return uiReg.openShell();
     if (uiReg?.openControlPanel) return uiReg.openControlPanel();
     const { JanusShellApp } = await import('../ui/apps/JanusShellApp.js');
-    return JanusShellApp.showSingleton();
+    const app = JanusShellApp.showSingleton();
+    app.render?.({ force: true, focus: true });
+    return app;
   } catch (err) {
     logger.error?.('[JANUS7] Scene control openControlPanel fehlgeschlagen:', { message: err?.message });
   }

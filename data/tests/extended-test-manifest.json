@@ -1369,6 +1369,18 @@
       "hasRun": true
     },
     {
+      "id": "P6-TC-23",
+      "title": "Scene-control fallback renders shell singleton explicitly",
+      "importPath": "./tests/p6/P6_TC_23__scene_control_shell_fallback_renders.test.js",
+      "suiteClass": "binding",
+      "kind": "auto",
+      "phase": 6,
+      "phases": [
+        6
+      ],
+      "hasRun": false
+    },
+    {
       "id": "P7-TC-01",
       "title": "KI Export Bundle validates against schema (AI = legacy alias)",
       "importPath": "./tests/p7/P7_TC_01__ai_export_bundle_valid.test.js",
