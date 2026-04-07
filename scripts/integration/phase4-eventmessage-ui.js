@@ -19,9 +19,7 @@
  *   Phase 4 engine → emitHook(HOOKS.EVENT_MESSAGE) → this file → ChatMessage.create()
  */
 
-import { JanusConfig } from '../../core/config.js';
-import { emitHook, HOOKS } from '../../core/hooks/emitter.js';
-import { cleanupEngineHookBucket, registerEngineHook, registerRuntimeHook } from '../../core/hooks/runtime.js';
+import { JanusConfig, emitHook, HOOKS, cleanupEngineHookBucket, registerEngineHook, registerRuntimeHook } from '../core/public-api.mjs';
 
 const TAG = '[JANUS7][EventMessageUI]';
 

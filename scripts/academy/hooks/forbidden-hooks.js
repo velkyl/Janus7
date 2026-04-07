@@ -4,9 +4,10 @@ Hooks.on("dsa5.roll", (rollData) => {
     const actor = game.actors.get(rollData.speaker.actor);
     if (!actor || !actor.hasPlayerOwner) return;
 
-    // Hole den aktuellen Zeit-Slot (0=Vormittag, 1=Nachmittag, 2=Nacht)
-    const timeSlot = game.settings.get("janus7", "current_time_slot_idx"); 
+    // SSOT: Zeit-Slot kommt aus core.state (academy.time.slotIndex), nicht aus game.settings
+    const timeSlot = game.janus7?.core?.state?.get('academy.time.slotIndex') ?? 0;
     const qId = "Q_FORBIDDEN_ARCHIVES";
+
 
     if (timeSlot === 2 && Janus7.QuestEngine.isActive(qId)) {
         const skillName = rollData.source.name;

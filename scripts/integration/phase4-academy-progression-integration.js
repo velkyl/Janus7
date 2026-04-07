@@ -1,19 +1,14 @@
-
-import { HOOKS } from '../../core/hooks/topics.js';
-import { emitHook } from '../../core/hooks/emitter.js';
+import { HOOKS, emitHook, cleanupEngineHookBucket, registerEngineHook, registerRuntimeHook } from '../core/public-api.mjs';
 import { JanusRuleEvaluator } from '../../academy/rule-evaluator.js';
 import { JanusResourcesEngine } from '../../academy/resources-engine.js';
 import { JanusSocialEngine } from '../../academy/social-engine.js';
 import { JanusMilestoneEngine } from '../../academy/milestone-engine.js';
 import { JanusCollectionEngine } from '../../academy/collection-engine.js';
 import { JanusActivityEngine } from '../../academy/activity-engine.js';
-import { cleanupEngineHookBucket, registerEngineHook, registerRuntimeHook } from '../../core/hooks/runtime.js';
 
 registerRuntimeHook('janus7:ready:academy-progression', HOOKS.ENGINE_READY, async (engine) => {
   const logger = engine?.core?.logger ?? console;
   try {
-    const state = engine?.core?.state;
-    const academyData = engine?.academy?.data;
     const calendar = engine?.academy?.calendar ?? engine?.simulation?.calendar ?? engine?.calendar;
     const dsa5Bridge = engine?.bridge?.dsa5 ?? engine?.dsa5 ?? null;
     if (!state || !academyData) {

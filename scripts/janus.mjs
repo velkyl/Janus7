@@ -515,8 +515,9 @@ try {
 
     if (!engine._cron) {
       try {
-        const cronWeekly    = (() => { try { return game.settings.get('janus7', 'cronWeeklyEnabled')    !== false; } catch { return true; } })();
-        const cronTrimester = (() => { try { return game.settings.get('janus7', 'cronTrimesterEnabled') !== false; } catch { return true; } })();
+        // A1 FIX: game.settings.get() → JanusConfig.get() (SSOT Gateway)
+        const cronWeekly    = JanusConfig.get('cronWeeklyEnabled')    !== false;
+        const cronTrimester = JanusConfig.get('cronTrimesterEnabled') !== false;
         engine._cron = new JanusCron({ engine, logger: engine.core?.logger, builtinWeekly: cronWeekly, builtinTrimester: cronTrimester });
         engine._cron.register();
         engine.services ??= {};

@@ -6,10 +6,8 @@
  * Lightweight test-runner integration.
  * Exposes manual APIs without loading the heavy test catalog during world boot.
  */
-import { HOOKS } from '../../core/hooks/topics.js';
-import { registerRuntimeHook } from '../../core/hooks/runtime.js';
+import { HOOKS, registerRuntimeHook, JanusConfig, MODULE_ID } from '../core/public-api.mjs';
 
-const MODULE_ID = 'Janus7';
 let _resultApp = null;
 let _manualApp = null;
 let _harness = null;
@@ -147,7 +145,8 @@ registerRuntimeHook('janus7:ready:test-runner', HOOKS.ENGINE_READY, (engine) => 
   };
   engine?.markServiceReady?.('test.api', engine.test);
   try {
-    const enabled = game.settings.get(MODULE_ID, 'enableTestRunner');
+    // A1 FIX: game.settings.get() → JanusConfig.get() (SSOT Gateway)
+    const enabled = JanusConfig.get('enableTestRunner');
     if (enabled && game.user.isGM) {
       (engine?.core?.logger ?? console).info?.('[JANUS7] Test Runner auto-run disabled for lazy-loading; use the UI or console to start tests manually.');
     }

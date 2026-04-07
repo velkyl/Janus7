@@ -33,10 +33,12 @@ export class JanusTimeStressEngine {
 
     // --- ZEIT MANAGEMENT & ERHOLUNG ---
     static async advanceTimeSlot() {
-        let currentSlotIdx = game.settings.get("janus7", "current_time_slot_idx") || 0;
+        // SSOT: Zeit-Slot kommt aus core.state, nicht aus game.settings
+        const state = game.janus7?.core?.state;
+        let currentSlotIdx = state?.get('academy.time.slotIndex') ?? 0;
         let nextSlotIdx = (currentSlotIdx + 1) % 3;
-        
-        await game.settings.set("janus7", "current_time_slot_idx", nextSlotIdx);
+
+        await state?.set('academy.time.slotIndex', nextSlotIdx);
         const slotName = this.TIME_SLOTS[nextSlotIdx];
         
         ChatMessage.create({
