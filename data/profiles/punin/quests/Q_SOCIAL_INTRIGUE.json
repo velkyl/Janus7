@@ -1,0 +1,29 @@
+{
+  "id": "Q_SOCIAL_INTRIGUE",
+  "title": "Das Netz der Spinnen: Klatsch & Tratsch",
+  "type": "social_pvp",
+  "domain": "academy_punin",
+  "visibility": "gm_and_players",
+  "state": {
+    "status": "active",
+    "resources": {
+      "gossip_points": { "current": 0, "max": 20, "label": "Gesammeltes Druckmittel (Gossip)", "visible_to_players": true }
+    }
+  },
+  "milestones": [
+    {
+      "id": "blackmail_minor_unlocked",
+      "condition": "gossip_points >= 10",
+      "events": [
+        { "type": "narrative_unlock", "text": "Ihr habt genug Schmutz gesammelt, um einen Novizen oder Bediensteten zu erpressen." }
+      ]
+    },
+    {
+      "id": "blackmail_major_unlocked",
+      "condition": "gossip_points >= 20",
+      "events": [
+        { "type": "narrative_unlock", "text": "Ein brisantes Geheimnis über einen Magister ist in euren Besitz gelangt. Rufmord-Aktion freigeschaltet!" }
+      ]
+    }
+  ]
+}

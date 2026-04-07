@@ -1,0 +1,43 @@
+[
+  {
+    "id": "evt_meister_disputatio",
+    "title": "Die unerbittliche Disputatio",
+    "trigger": {
+      "type": "cron",
+      "schedule": "10:00",
+      "location": "scene_region_hoersaal_haupt"
+    },
+    "content": "Magister Robak von Punin blickt streng über den Rand seiner Brille auf die Scholaren herab. 'Kommen wir zur Magica Controllaria. Erläutert die theoretischen Implikationen eines gescheiterten IMPERAVI in einer extrem verdichteten astralen Matrix!' Der Druck im Raum ist greifbar, Staubkörnchen tanzen im fahlen Licht. Antworte blitzschnell mit fundiertem Wissen über @Check[type:skill|id:magiekunde|dc:9], um seine hohen Erwartungen zu erfüllen. Wer versagt, kann versuchen, sich mit @Check[type:skill|id:etikette|dc:7] galant aus der Affäre zu ziehen und die Frage geschickt an die arroganten Scholaren der Invocatoren-Fraktion weiterzuleiten.",
+    "mechanics": {
+      "onSuccess": "Reputation(Robak_von_Punin) +2",
+      "onFail": "Status(Blamiert) +1"
+    }
+  },
+  {
+    "id": "evt_meister_naechtlicher_streit",
+    "title": "Geflüster im Korridor",
+    "trigger": {
+      "type": "location",
+      "region": "scene_region_magister_trakt"
+    },
+    "content": "Hinter der massiven Eichentür zum Arbeitszimmer der Spektabilität Sirdon Kosmaar dringen gedämpfte, aber unerbittliche Stimmen auf den dunklen Flur. 'Das Labyrinth muss versiegelt bleiben, Sirdon! Die uralten Schutzglyphen von Fran-Horas schwächen sich ab!' zischt eine Stimme, die man der Invocatoren-Leiterin Madalena Mirabilia zuordnen könnte. Wer im Schatten der Säulen heimlich weiterlauschen möchte, benötigt @Check[type:skill|id:verbergen|dc:6] gepaart mit @Check[type:skill|id:sinnesschaerfe|dc:8]. Ein Fehler bedeutet, dass die Tür unvermittelt aufgerissen wird und die Magister euch beim Lauschen ertappen.",
+    "mechanics": {
+      "onSuccess": "Insight(Siegel_des_Horas) unlocked",
+      "onFail": "Stress +2, Reputation(Sirdon_Kosmaar) -2"
+    }
+  },
+  {
+    "id": "evt_meister_schatten_demonstratio",
+    "title": "Schatten in der Demonstratio",
+    "trigger": {
+      "type": "cron",
+      "schedule": "15:00",
+      "location": "scene_region_labor_elementar"
+    },
+    "content": "Während einer eigentlich harmlosen praktischen Vorführung zur elementaren Matrixzauberei verdunkeln sich plötzlich die magischen Lichter im Laboratorium. Der beschworene Feuergeist flackert unnatürlich grünlich und nimmt für den Bruchteil einer Sekunde eine fratzenhafte, gehörnte Gestalt an, bevor der Magister den Cantus hastig und schweißgebadet abbricht. 'Ein… lokales Störfeld im Yaquirtal. Nichts weiter', behauptet er mit zitternder Stimme. Wer sich nicht von der Ausrede täuschen lässt und die bedrohliche, unheilige Interferenz analysieren will, würfelt @Check[type:skill|id:sphaerenkunde|dc:7].",
+    "mechanics": {
+      "onSuccess": "Condition(Furcht) +1, Insight(Dämonische_Interferenz) unlocked",
+      "onFail": "Keine Auswirkungen"
+    }
+  }
+]

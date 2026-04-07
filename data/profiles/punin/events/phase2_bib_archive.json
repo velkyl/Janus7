@@ -1,0 +1,60 @@
+{
+  "events": [
+    {
+      "id": "evt_bib_fluesterndes_pergament",
+      "title": "Das flüsternde Pergament",
+      "trigger": {
+        "type": "location",
+        "region": "scene_region_hauptbibliothek"
+      },
+      "content": "Zwischen den gewaltigen Regalen der Hauptbibliothek herrscht eine beklemmende Stille, die plötzlich von einem trockenen Rascheln durchbrochen wird. Eine uralte Pergamentrolle hat sich selbstständig aus ihrer Halterung gelöst und rollt über den steinernen Boden. Wer die Zeichen im Vorbeigehen entziffern will, benötigt einen raschen Blick und @Check[type:skill|id:sagen-legenden|dc:6]. Wer das Pergament achtlos aufhebt, spürt ein eisiges Stechen, das sich den Arm hinaufzieht – eine Abwehrglyphe! Rette dich mit @Check[type:skill|id:selbstbeherrschung|dc:7].",
+      "mechanics": {
+        "onSuccess": "Insight(Glyphenkunde) +1",
+        "onFail": "Damage(1d6) + Condition(Betäubung)"
+      }
+    },
+    {
+      "id": "evt_bib_strenge_aufsicht",
+      "title": "Aufsicht der Grauen Stäbe",
+      "trigger": {
+        "type": "social",
+        "condition": "Reputation(Graue_Staebe) < 5"
+      },
+      "content": "Ein grimmig dreinblickender Wächter des Ordens der Grauen Stäbe tritt aus dem Schatten einer Bücherwand. Sein Blick fixiert die Mitschriften der Scholaren. 'Dieser Sektor ist für Studien der niederen Sphären nicht freigegeben', schnarrt er. Um ihn davon zu überzeugen, dass man lediglich an einer theoretischen Abhandlung für Magister Kosmaar arbeitet, erfordert es feines Taktgefühl mit @Check[type:skill|id:etikette|dc:5] oder eine fachlich brillante Notlüge mit @Check[type:skill|id:magiekunde|dc:8].",
+      "mechanics": {
+        "onSuccess": "Reputation(Graue_Staebe) +1",
+        "onFail": "Status(Verwarnt) +1"
+      }
+    },
+    {
+      "id": "evt_bib_astrale_spiegelung",
+      "title": "Die astrale Spiegelung",
+      "trigger": {
+        "type": "cron",
+        "schedule": "23:30",
+        "location": "scene_region_ostfluegel"
+      },
+      "content": "Tief in der Nacht, wenn das Licht der verzauberten Leselampen flackert, spiegeln sich die Regale im glatt polierten Marmorboden. Ein aufmerksamer Scholar bemerkt mit @Check[type:skill|id:sinnesschaerfe|dc:7], dass das Spiegelbild nicht der Realität entspricht: Ein zusätzlicher, pechschwarzer Gang führt in der Reflexion in die Tiefe. Wer versucht, die Magie des Phänomens mit @Check[type:skill|id:sphaerenkunde|dc:8] zu ergründen, erkennt die flüchtige Signatur eines Limbus-Risses, der von den Meistern absichtlich verborgen wird.",
+      "mechanics": {
+        "onSuccess": "Insight(Verborgene Pforten) unlocked",
+        "onFail": "Stress +2"
+      }
+    }
+  ],
+  "quests": [
+    {
+      "id": "qst_bib_verbotene_abteilung",
+      "title": "Exkursion in die Finsternis",
+      "trigger": {
+        "type": "event",
+        "condition": "Quest(qst_hook_verschollenes_wissen).status == 'completed'"
+      },
+      "content": "Das geborgene Buch aus dem Fundus von Fran-Horas pulsiert leicht in den Händen der Scholaren. Die verschlüsselten Seiten verweisen auf ein Kompendium, das zwingend von einem Magister decodiert werden muss. Doch bevor man sich an die Lehrmeister wendet, muss das Buch von den gröbsten astralen Verunreinigungen gesäubert werden, um keine unerwünschte Aufmerksamkeit zu erregen. Dies erfordert ein ruhiges Händchen und @Check[type:skill|id:alchimie|dc:7] in einem der Studentenlabore. Anschließend muss der Text mit @Check[type:skill|id:sprachen-kennen|modifier:bosparano|dc:6] grob übersetzt werden, um die richtige Spektabilität für die weitere Entschlüsselung zu identifizieren. Jeder Fehler könnte den Geist des Lesers mit finsteren Visionen der Niederhöllen belasten.",
+      "rewards": {
+        "xp": 10,
+        "item": "Gereinigtes Horas-Kompendium",
+        "next_stage": "qst_meister_das_verhoer"
+      }
+    }
+  ]
+}

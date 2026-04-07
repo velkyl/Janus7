@@ -425,5 +425,47 @@
     "pool": "social_minor",
     "file": "data/events/pools/social_minor.json",
     "highImpact": false
+  },
+  {
+    "eventId": "evt_meister_disputatio",
+    "title": "Die unerbittliche Disputatio",
+    "pool": "meister_events",
+    "file": "data/profiles/punin/events/pools/meister_events.json",
+    "highImpact": true
+  },
+  {
+    "eventId": "evt_meister_naechtlicher_streit",
+    "title": "Geflüster im Korridor",
+    "pool": "meister_events",
+    "file": "data/profiles/punin/events/pools/meister_events.json",
+    "highImpact": true
+  },
+  {
+    "eventId": "evt_meister_schatten_demonstratio",
+    "title": "Schatten in der Demonstratio",
+    "pool": "meister_events",
+    "file": "data/profiles/punin/events/pools/meister_events.json",
+    "highImpact": true
+  },
+  {
+    "eventId": "evt_lab_verschiebung",
+    "title": "Wandelnde Wände",
+    "pool": "labyrinth_events",
+    "file": "data/profiles/punin/events/pools/labyrinth_events.json",
+    "highImpact": true
+  },
+  {
+    "eventId": "evt_lab_limbus_hauch",
+    "title": "Der Hauch des Limbus",
+    "pool": "labyrinth_events",
+    "file": "data/profiles/punin/events/pools/labyrinth_events.json",
+    "highImpact": true
+  },
+  {
+    "eventId": "evt_lab_horasianische_glyphe",
+    "title": "Das Erbe des Fran",
+    "pool": "labyrinth_events",
+    "file": "data/profiles/punin/events/pools/labyrinth_events.json",
+    "highImpact": true
   }
 ]

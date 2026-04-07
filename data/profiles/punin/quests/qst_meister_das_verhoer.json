@@ -1,0 +1,14 @@
+{
+  "id": "qst_meister_das_verhoer",
+  "title": "Das Tor in die Tiefe",
+  "trigger": {
+    "type": "event",
+    "condition": "Quest(qst_bib_verbotene_abteilung).status == 'completed'"
+  },
+  "content": "Mit dem mühsam gereinigten Horas-Kompendium tretet ihr vor Magister Kosmaar. Sein sonst so kontrolliertes Gesicht erbleicht schlagartig, als er die entschlüsselten bosparanischen Zeilen überfliegt. 'Wo habt ihr das gefunden? Wisst ihr überhaupt, was das ist? Das sind die Baupläne der Dunklen Pforten tief unten in den Katakomben!' Die akademische Fassade fällt komplett. Er verlangt, dass ihr ihn sofort, ohne jemandem ein Wort zu sagen, in die tiefsten Kellergewölbe begleitet. Das Buch weist auf eine akute Schwächung der Eindämmungssiegel hin. Die Helden müssen dem Magister helfen, die alten Matrix-Strukturen notdürftig zu stabilisieren. Dies verlangt @Check[type:skill|id:magiekunde|dc:8] zur korrekten Intonation der vielschichtigen Schutzformeln und @Check[type:skill|id:willenskraft|dc:6], um dem unnatürlichen, lockenden Flüstern zu widerstehen, das aus den dunklen Schächten unter dem Akademie-Fundament aufsteigt.",
+  "rewards": {
+    "xp": 15,
+    "reputation": "Sirdon_Kosmaar +8",
+    "next_stage": "qst_labyrinth_siegelbruch"
+  }
+}

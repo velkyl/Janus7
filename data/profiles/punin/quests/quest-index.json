@@ -154,7 +154,38 @@
     "questId": "__WIZARD_LIFE__",
     "title": "Wizard Life Quests",
     "category": "wizard_life",
-    "file": "data/quests/wizard_life_quests.json",
-    "tags": [ "life", "path" ]
+    "file": "data/quests/wizard_life_quests.json"
+  },
+  {
+    "questId": "Q_SOCIAL_INTRIGUE",
+    "title": "Das Netz der Spinnen: Klatsch & Tratsch",
+    "category": "social",
+    "file": "data/profiles/punin/quests/Q_SOCIAL_INTRIGUE.json",
+    "tags": [
+      "social",
+      "gossip",
+      "pvp"
+    ]
+  },
+  {
+    "questId": "qst_meister_das_verhoer",
+    "title": "Das Tor in die Tiefe",
+    "category": "meister",
+    "file": "data/profiles/punin/quests/qst_meister_das_verhoer.json",
+    "tags": [
+      "meister",
+      "story"
+    ]
+  },
+  {
+    "questId": "qst_labyrinth_siegelbruch",
+    "title": "Der Riss in der Realität",
+    "category": "labyrinth",
+    "file": "data/profiles/punin/quests/qst_labyrinth_siegelbruch.json",
+    "tags": [
+      "labyrinth",
+      "finale",
+      "story"
+    ]
   }
 ]
