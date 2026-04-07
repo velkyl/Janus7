@@ -1,0 +1,169 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Modulare Gerüchte & Innuendo Datenbank für Punin",
+    "total_rumors": 100
+  },
+  "rumors": [
+    {
+      "id": "R_001",
+      "category": "staff",
+      "content": "Magister [Name] hat die Korrekturschlüssel im Schreibtisch gelassen.",
+      "truth": "+/-",
+      "cost": 5,
+      "effect": "Erleichtert den nächsten Einbruch in [Location] um +3."
+    },
+    {
+      "id": "R_002",
+      "category": "staff",
+      "content": "Die Prüfung in [Fach] wurde von [NPC] manipuliert.",
+      "truth": "+",
+      "cost": 8,
+      "effect": "Schaltet eine Erpresser-Option für [NPC] frei."
+    },
+    {
+      "id": "R_003",
+      "category": "staff",
+      "content": "Magistra [Name] ist empfänglich für seltene Kräuter-Geschenke.",
+      "truth": "+",
+      "cost": 3,
+      "effect": "Social Link Steigerung bei [NPC] kostet 50% weniger Zeit."
+    },
+    {
+      "id": "R_004",
+      "category": "staff",
+      "content": "Spektabilität Kosmaar wurde beim Fluchen über den Basilius-Rat gehört.",
+      "truth": "+",
+      "cost": 10,
+      "effect": "Senkt die Gossip-Kosten für 'Politische Intervention' um 5."
+    },
+    {
+      "id": "R_005",
+      "category": "staff",
+      "content": "Magister [Name] leidet heimlich unter dem Teclador-Effekt.",
+      "truth": "+",
+      "cost": 6,
+      "effect": "Analyse-Proben bei diesem Lehrer sind automatisch QS 1 höher."
+    },
+    {
+      "id": "R_026",
+      "category": "students",
+      "content": "Sequin von Hagenberg hat Angst vor [Kreatur/Phänomen].",
+      "truth": "+",
+      "cost": 4,
+      "effect": "Duell-Aktion 'Einschüchtern' senkt Sequins Ego um zusätzliche 2 Punkte."
+    },
+    {
+      "id": "R_027",
+      "category": "students",
+      "content": "Die [Clique] plant einen Streich gegen die Helden.",
+      "truth": "+",
+      "cost": 5,
+      "effect": "Senkt die Überraschungs-Chance bei der nächsten nächtlichen Quest."
+    },
+    {
+      "id": "R_028",
+      "category": "students",
+      "content": "[Schüler-NPC] hat eine verbotene Romanze mit [NPC].",
+      "truth": "+",
+      "cost": 10,
+      "effect": "Schaltet Sabotage-Aktion 'Rufmord' frei (Kosten: 5 Gossip)."
+    },
+    {
+      "id": "R_029",
+      "category": "students",
+      "content": "Jemand verkauft gefälschte AsP-Tränke auf dem Campus.",
+      "truth": "-",
+      "cost": 2,
+      "effect": "Einsatz führt zu +2 Stress (Placebo-Effekt)."
+    },
+    {
+      "id": "R_030",
+      "category": "students",
+      "content": "[Schüler-NPC] lernt nachts heimlich im Giftschrank.",
+      "truth": "+",
+      "cost": 7,
+      "effect": "Heat-Aufbau für die Helden wird in dieser Nacht halbiert (Sündenbock)."
+    },
+    {
+      "id": "R_051",
+      "category": "arcane",
+      "content": "In der [Location] schwingt eine Matrix-Anomalie.",
+      "truth": "+",
+      "cost": 6,
+      "effect": "Nächster Zauber in dieser Zone kostet 2 AsP weniger."
+    },
+    {
+      "id": "R_052",
+      "category": "arcane",
+      "content": "Das Passwort für die Tür zu [Raum] wurde geändert.",
+      "truth": "+/-",
+      "cost": 4,
+      "effect": "Erfordert eine Probe auf Gassenwissen (QS 2) statt Schlösserknacken."
+    },
+    {
+      "id": "R_053",
+      "category": "arcane",
+      "content": "Der Geist von Zulipan erscheint nur, wenn [Bedingung] erfüllt ist.",
+      "truth": "+",
+      "cost": 5,
+      "effect": "Schaltet Hinweis für die Geister-Sprechstunde-Quest frei."
+    },
+    {
+      "id": "R_054",
+      "category": "arcane",
+      "content": "Im Keller lagert ein Artefakt aus der Zeit des Fran-Horas.",
+      "truth": "+",
+      "cost": 8,
+      "effect": "Erhöht den Fortschritt in der Forschungs-Quest um +3 QS."
+    },
+    {
+      "id": "R_055",
+      "category": "arcane",
+      "content": "Die Schutzsiegel am Giftschrank reagieren auf [Merkmal]-Magie.",
+      "truth": "+",
+      "cost": 6,
+      "effect": "Zauber mit diesem Merkmal generieren +2 Heat statt +1."
+    },
+    {
+      "id": "R_076",
+      "category": "city",
+      "content": "Die Praios-Garde patrouilliert heute verstärkt am [Ort].",
+      "truth": "+",
+      "cost": 4,
+      "effect": "Verdoppelt Heat-Generierung in dieser Zone für 24h."
+    },
+    {
+      "id": "R_077",
+      "category": "city",
+      "content": "Ein Hehler auf dem Nachtmarkt sucht nach [Gegenstand].",
+      "truth": "+",
+      "cost": 2,
+      "effect": "Verdoppelt den Verkaufspreis für dieses Item."
+    },
+    {
+      "id": "R_078",
+      "category": "city",
+      "content": "Die Boron-Kirche hat einen Spion in die Akademie geschickt.",
+      "truth": "+/-",
+      "cost": 10,
+      "effect": "Eine zufällige Social-Aktion schlägt fehl (Paranoia)."
+    },
+    {
+      "id": "R_079",
+      "category": "city",
+      "content": "In der Kanalisation unter [Ort] gibt es einen geheimen Zugang.",
+      "truth": "+",
+      "cost": 6,
+      "effect": "Erlaubt das Umgehen der Wachen am Haupteingang."
+    },
+    {
+      "id": "R_080",
+      "category": "city",
+      "content": "Der Inquisitor [Name] ist bestechlich durch [Information].",
+      "truth": "+",
+      "cost": 15,
+      "effect": "Senkt die Discovery Heat permanent um 3 gegen Abgabe von 10 Gossip."
+    }
+  ]
+}

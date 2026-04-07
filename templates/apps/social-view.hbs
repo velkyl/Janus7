@@ -196,5 +196,31 @@
     </div>
   </section>
 
+  <section class="janus7-card">
+    <div class="j7-card-head">
+      <div class="j7-card-head__copy">
+        <h3><i class="fas fa-comments"></i> Dein Wissens-Inventar</h3>
+        <p class="j7-card-head__hint">Aktiviere taktische Ger&uuml;chte, um Proben zu modifizieren oder Geheimnisse zu nutzen.</p>
+      </div>
+    </div>
+    <div class="rumor-inventory">
+      <ul class="janus7-list">
+        {{#each learnedRumors as |rumor|}}
+        <li class="rumor-card" data-rumor-id="{{rumor.id}}" style="display:flex; justify-content:space-between; align-items:center; padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <div class="rumor-info">
+              <span class="rumor-content"><strong>[{{rumor.id}}]</strong> {{rumor.content}}</span>
+              <div class="janus7-muted" style="font-size: 0.8rem;">{{rumor.effect}}</div>
+            </div>
+            <button type="button" class="janus-btn use-rumor-btn" data-action="useRumor" data-rumor-id="{{rumor.id}}" title="Dieses Wissen einsetzen (Kosten: {{rumor.cost}} Gossip)">
+                <i class="fas fa-bolt"></i> Nutzen
+            </button>
+        </li>
+        {{else}}
+        <li class="janus7-muted">Noch keine n&uuml;tzlichen Ger&uuml;chte gesammelt.</li>
+        {{/each}}
+      </ul>
+    </div>
+  </section>
+
   {{/if}}
 </form>

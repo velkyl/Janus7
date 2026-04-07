@@ -40,3 +40,52 @@ export class JanusGossipEngine {
         }
     }
 }
+
+export class JanusRumorManager {
+    /**
+     * Lädt ein zufälliges Gerücht basierend auf der Situation
+     * @param {string} category - staff, students, arcane, city
+     */
+    static async getRandomRumor(category) {
+        const response = await fetch("modules/janus7/data/profiles/punin/rumors.json");
+        const data = await response.json();
+        const pool = data.rumors.filter(r => r.category === category);
+        
+        return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    /**
+     * "Aktiviert" ein Gerücht für einen Spieler. 
+     * Das Gerücht wird als "Wissens-Item" im Actor gespeichert.
+     */
+    static async learnRumor(actor, rumorId) {
+        let learned = actor.getFlag("janus7", "learned_rumors") || [];
+        if (!learned.includes(rumorId)) {
+            learned.push(rumorId);
+            await actor.setFlag("janus7", "learned_rumors", learned);
+            ui.notifications.info(`[Janus7] Neues Gerücht aufgeschnappt: ID ${rumorId}`);
+        }
+    }
+
+    /**
+     * Wendet den mechanischen Effekt eines Gerüchts an.
+     * @param {string} rumorId 
+     * @param {object} context - VTT Context (Probe, NPC, Location)
+     */
+    static async resolveRumorEffect(rumorId, context) {
+        // Logik zur Umsetzung der Tabelle (Mapping ID zu Effekt)
+        switch(rumorId) {
+            case "R_026": 
+                context.modifier += 2; // Bonus gegen Sequin
+                break;
+            case "R_051":
+                if (context.aspCost) context.aspCost -= 2; // Matrix-Anomalie Nutzen
+                break;
+            case "R_080":
+                // Spezialfall: Heat Senkung
+                game.modules.get("janus7").api?.HeatEngine?.modifyHeat(-3);
+                break;
+        }
+        return context;
+    }
+}
