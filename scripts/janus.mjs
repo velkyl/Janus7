@@ -337,6 +337,18 @@ try {
     globalThis.janus7 = engine;
     if (globalThis.game) globalThis.game.janus7 = engine;
 
+    // ─── Phase-X integration: DSA5 system-deep registry ────────────────────────
+    // Align with other official modules like dsa5-core or dsa5-bestiary.
+    if (game.dsa5?.config) {
+      game.dsa5.config.helpContent.push(
+        { name: "janus",  command: "/janus",  example: "/janus" },
+        { name: "academy", command: "/academy", example: "/academy" }
+      );
+    }
+    if (game.dsa5?.apps) {
+      game.dsa5.apps.janus7 = engine;
+    }
+
     // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // Foundry Core Hook Delegation (Architekturvertrag)
     // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -596,6 +608,35 @@ try {
     });
 
     log.debug?.('[JANUS7] ready.pipeline complete');
+
+    // ─── Phase-X integration: DSA5 Ecosystem Expansion ──────────────────────────
+    try {
+      if (game.dsa5?.apps?.playerMenu) {
+        log.debug?.('[JANUS7] registerSubApp in DSA5 playerMenu');
+        game.dsa5.apps.playerMenu.registerSubApp({
+          name: "JANUS Student Terminal",
+          icon: "fas fa-university",
+          render: (app) => {
+             const uiReg = game.janus7?.ui;
+             if (uiReg?.openShell) return uiReg.openShell();
+             if (uiReg?.openControlPanel) return uiReg.openControlPanel();
+          }
+        });
+      }
+      
+      // Opt-in for Journal Browser (book index) if localized.
+      if (game.dsa5?.apps?.journalBrowser && game.i18n.lang === 'de') {
+        log.debug?.('[JANUS7] push to DSA5 journalBrowser');
+        game.dsa5.apps.journalBrowser.books.push({
+          id: "JanusAcademy",
+          name: "JANUS Akademie-Archiv",
+          path: "modules/Janus7/data/academy/academy-book-de.json",
+          visible: true
+        });
+      }
+    } catch (ecosystemErr) {
+      log.warn?.('[JANUS7] DSA5 ecosystem integration failed (non-critical)', _readyErrMeta(ecosystemErr));
+    }
   });
 
   // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
