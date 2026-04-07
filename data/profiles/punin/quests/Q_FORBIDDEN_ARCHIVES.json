@@ -1,0 +1,28 @@
+{
+  "id": "Q_FORBIDDEN_ARCHIVES",
+  "title": "Der Giftschrank: Versuchung des Wissens",
+  "type": "risk_reward_heist",
+  "domain": "academy_punin",
+  "state": {
+    "status": "active",
+    "resources": {
+      "forbidden_lore": { "current": 0, "max": 10, "label": "Verbotenes Wissen (QS)", "visible_to_players": true },
+      "discovery_heat": { "current": 0, "max": 10, "label": "Entdeckungsrisiko (%)", "visible_to_players": true }
+    }
+  },
+  "milestones": [
+    {
+      "id": "lore_unlocked",
+      "condition": "forbidden_lore >= 10",
+      "events": [{ "type": "grant_item", "itemName": "Thesis: Dämonenschild", "text": "Formel erfolgreich abgeschrieben!" }]
+    },
+    {
+      "id": "busted",
+      "condition": "discovery_heat >= 10",
+      "events": [
+        { "type": "narrative_escalation", "text": "Die Bibliotheksgarde erwischt euch! Akademie-Arrest verhängt." },
+        { "type": "macro_trigger", "macroId": "Janus7_Apply_Arrest_Debuff" }
+      ]
+    }
+  ]
+}
