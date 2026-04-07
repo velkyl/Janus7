@@ -119,6 +119,7 @@ export async function initAcademyData() {
     collections: 'academy/collections.json',
     school_stats: 'academy/school_stats.json',
     resources: 'academy/resources.json',
+    mechanic_gates: 'academy/mechanic-gates.json',
   });
   const extensions = {};
   for (const [key, rel] of Object.entries(extensionFiles)) {

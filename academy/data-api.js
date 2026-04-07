@@ -72,6 +72,9 @@ import {
   getCollection,
   getSchoolStatsConfig,
   getResourcesConfig,
+  getMechanicGates,
+  getMechanicGate,
+  getPoolIndex,
   getLocationActivityModifiers,
   buildQuestSummary,
   buildRumorBoard,
@@ -247,6 +250,9 @@ export class AcademyDataApi {
   getCollection(id) { return AcademyDataApi.getCollection(id); }
   getSchoolStatsConfig() { return AcademyDataApi.getSchoolStatsConfig(); }
   getResourcesConfig() { return AcademyDataApi.getResourcesConfig(); }
+  getMechanicGates() { return AcademyDataApi.getMechanicGates(); }
+  getMechanicGate(id) { return AcademyDataApi.getMechanicGate(id); }
+  getPoolIndex() { return AcademyDataApi.getPoolIndex(); }
   buildQuestSummary(state = null) { return AcademyDataApi.buildQuestSummary(state); }
   buildRumorBoard(state = null) { return AcademyDataApi.buildRumorBoard(state); }
   buildFactionStanding(state = null) { return AcademyDataApi.buildFactionStanding(state); }
@@ -334,6 +340,9 @@ export class AcademyDataApi {
   static getCollection(id) { return getCollection(id); }
   static getSchoolStatsConfig() { return getSchoolStatsConfig(); }
   static getResourcesConfig() { return getResourcesConfig(); }
+  static getMechanicGates() { return getMechanicGates(); }
+  static getMechanicGate(id) { return getMechanicGate(id); }
+  static getPoolIndex() { return getPoolIndex(); }
   static getLocationActivityModifiers(locationId, activityType = null) { return getLocationActivityModifiers(locationId, activityType); }
   static buildQuestSummary(state = null) { return buildQuestSummary(state); }
   static buildRumorBoard(state = null) { return buildRumorBoard(state); }
