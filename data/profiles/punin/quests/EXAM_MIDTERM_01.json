@@ -1,0 +1,25 @@
+{
+  "id": "EXAM_MIDTERM_01",
+  "title": "Zwischenprüfung: Magietheorie & Sphärenlogik",
+  "type": "academy_exam",
+  "domain": "academy_punin",
+  "visibility": "gm_and_players",
+  "state": {
+    "status": "active",
+    "requirements": {
+      "Magiekunde": 15,
+      "Sphärenkunde": 10,
+      "Götter & Kulte": 8
+    }
+  },
+  "consequences": {
+    "pass": [
+      { "type": "grant_resource", "resource": "glory", "amount": 2, "text": "Hervorragende Leistung! Das Ansehen in der Akademie steigt." },
+      { "type": "reduce_stress", "amount": 3, "text": "Die Erleichterung nach der Prüfung baut Stress ab." }
+    ],
+    "fail": [
+      { "type": "apply_condition", "condition": "Arrest", "text": "Durchgefallen! Akademie-Arrest verhängt (Nacht-Aktionen blockiert)." },
+      { "type": "add_stress", "amount": 5, "text": "Die Schande und der Druck des Versagens lasten schwer." }
+    ]
+  }
+}

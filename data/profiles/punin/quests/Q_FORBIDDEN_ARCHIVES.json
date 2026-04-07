@@ -3,25 +3,35 @@
   "title": "Der Giftschrank: Versuchung des Wissens",
   "type": "risk_reward_heist",
   "domain": "academy_punin",
+  "visibility": "gm_and_players",
   "state": {
     "status": "active",
     "resources": {
-      "forbidden_lore": { "current": 0, "max": 10, "label": "Verbotenes Wissen (QS)", "visible_to_players": true },
-      "discovery_heat": { "current": 0, "max": 10, "label": "Entdeckungsrisiko (%)", "visible_to_players": true }
+      "forbidden_lore": { "current": 0, "max": 20, "label": "Verbotenes Wissen (QS)", "visible_to_players": true },
+      "discovery_heat": { "current": 0, "max": 10, "label": "Entdeckungsrisiko (Heat)", "visible_to_players": true }
     }
   },
   "milestones": [
     {
-      "id": "lore_unlocked",
+      "id": "lore_unlock_tier1",
       "condition": "forbidden_lore >= 10",
-      "events": [{ "type": "grant_item", "itemName": "Thesis: Dämonenschild", "text": "Formel erfolgreich abgeschrieben!" }]
+      "events": [
+        { "type": "grant_item", "itemName": "Thesis-Fragment: Dämonenschild", "text": "Ein brüchiges Pergament mit einer verbotenen Matrix-Struktur." }
+      ]
     },
     {
-      "id": "busted",
+      "id": "lore_unlock_tier2",
+      "condition": "forbidden_lore >= 20",
+      "events": [
+        { "type": "grant_item", "itemName": "Das Compendium Prodigiosis", "text": "Das ultimative Geheimnis liegt in euren Händen." }
+      ]
+    },
+    {
+      "id": "busted_by_guards",
       "condition": "discovery_heat >= 10",
       "events": [
-        { "type": "narrative_escalation", "text": "Die Bibliotheksgarde erwischt euch! Akademie-Arrest verhängt." },
-        { "type": "macro_trigger", "macroId": "Janus7_Apply_Arrest_Debuff" }
+        { "type": "narrative_escalation", "text": "ALARM! Die magischen Wächtersiegel heulen auf. Die Spektabilität wurde benachrichtigt." },
+        { "type": "add_stress", "amount": 5, "text": "Panik bei der Flucht!" }
       ]
     }
   ]
