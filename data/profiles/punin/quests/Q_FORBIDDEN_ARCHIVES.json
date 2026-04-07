@@ -34,5 +34,13 @@
         { "type": "add_stress", "amount": 5, "text": "Panik bei der Flucht!" }
       ]
     }
+  ],
+  "lore_entries": [
+    { "id": "LORE_01", "title": "Die Matrix des Schweigens", "content": "Eine Formel, die Geräusche im Umkreis von 3 Schritt schluckt. Schaltet das VTT-Gadget 'Stille-Fiole' frei." },
+    { "id": "LORE_02", "title": "Zulipans Schattenpfad", "content": "Eine Karte der geheimen Gänge unter dem Ars-Arcana-Museum. Entfernt Sichtkegel von 2 Wachen auf der Map." },
+    { "id": "LORE_03", "title": "Die Frequenz der Götter", "content": "Fragmentarische Notizen, wie man Hesindes Segen in AsP umwandelt (3/10 Korruption)." },
+    { "id": "LORE_04", "title": "Der Korobar-Bericht", "content": "Beweise für dämonische Infiltration in der Weißen Gilde. Schaltet die Fraktion 'Die Societas Prodigiosis' frei." },
+    { "id": "LORE_05", "title": "Matrix-Instabilität (Temporal)", "content": "Anleitung zum Verlangsamen der VTT-Zeit (Gegner bewegen sich nur jedes zweite Intervall)." },
+    { "id": "LORE_06", "title": "Pher Drodonts Aufzeichnungen", "content": "Wissen über den geistigen Kontakt mit Drachen. Gibt +2 auf Sagen & Legenden." }
   ]
 }

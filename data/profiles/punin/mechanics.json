@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Hard-Rules & Balancing for Janus7 (DSA5 Integration)",
+    "profile": "punin"
+  },
+  "stress": {
+    "max_pool_multiplier": "KO",
+    "thresholds": [
+      { "at": "KO / 3", "apply": "1 Stufe Betäubung" },
+      { "at": "(KO / 3) * 2", "apply": "2 Stufen Betäubung" },
+      { "at": "KO", "apply": "Status Handlungsunfähig (1W3 Tage)" }
+    ],
+    "generation": {
+      "failed_probe": 1,
+      "fumble": 3,
+      "night_action": 2
+    },
+    "recovery": {
+      "full_rest": "-(1W3 + KO/4)",
+      "relax_action": "-(QS Selbstbeherrschung)"
+    }
+  },
+  "study_system": {
+    "interval": "1 Ingame-Woche",
+    "location_modifier": 1,
+    "stress_cost_per_effort": 1,
+    "graduation": {
+      "pass": { "qs_range": [10, 14], "reward": "5 AP (Zweckgebunden)" },
+      "good": { "qs_range": [15, 19], "reward": "10 AP + 1 Punkt permanenter Bonus (Limit: FW 10)" },
+      "excellent": { "qs_range": [20, null], "reward": "15 AP + Basilius-Privileg (Gesperrte Archive)" }
+    }
+  },
+  "familiar_missions": {
+    "success_roll": "1W20 + Bond-Level",
+    "difficulty_tiers": {
+      "einfach": 8,
+      "schwer": 14,
+      "gefährlich": 18
+    },
+    "failure_consequences": {
+      "standard": "+2 Stress (Empathischer Schock)",
+      "captured_on_20": "Startet Quest: 'Befreie den Vertrauten'"
+    }
+  },
+  "forbidden_lore": {
+    "discovery_check": "1W20 + Heat vs 20",
+    "heat_generation": {
+      "successful_research": 1,
+      "failed_probe": 3,
+      "noise": "X"
+    },
+    "corruption_tradeoff": "KL/3 Reduktion auf Lern-Intervalle vs +1 Stufe Verderbtheit"
+  },
+  "social_sabotage": {
+    "prices": {
+      "rival_diskreditieren": 5,
+      "lehrer_bestechen": 10,
+      "inquisitor_ablenken": 15
+    },
+    "effects": {
+      "rival_diskreditieren": "-2 QS in nächster Prüfung",
+      "lehrer_bestechen": "+1 Erleichterung für 1 Monat",
+      "inquisitor_ablenken": "-3 Inquisitions-Verdacht"
+    }
+  }
+}

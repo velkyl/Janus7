@@ -22,5 +22,13 @@
         "failure": [{ "type": "add_stress", "amount": 1, "text": "Dein Tier kehrt verletzt zurück. Du spürst seinen Schmerz über das Band." }]
       }
     }
-  ]
+  ],
+  "loot_tables": {
+    "alchemy_ingredients_low": [
+      { "id": "ITEM_TIGERMOHN", "name": "Tigermohn-Samen", "effect": "Reduziert Stress um 2 (Gefahr: Wachkoma bei Patzer)", "chance": 0.3 },
+      { "id": "ITEM_MOOS_FEUER", "name": "Feuermoos-Sporen", "effect": "Zutat für Stinkbomben (Status: Brennend kl. Fläche)", "chance": 0.2 },
+      { "id": "ITEM_EBNALER_BEERE", "name": "Ebnaler Beere", "effect": "Erhöht Konstitution für 1 Zeit-Slot um +1", "chance": 0.3 },
+      { "id": "ITEM_GLANZ_GLIMMER", "name": "Glanzglimmer", "effect": "Zutat für Ablenkungs-Pulver (+1 auf Verbergen)", "chance": 0.2 }
+    ]
+  }
 }
