@@ -343,7 +343,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(foundry.ap
     event.preventDefault();
     const categoryId = target.dataset.categoryId;
     this._selectedCategory = categoryId;
-    this.render();
+    this.render({ force: true });
   }
   // ─── Lifecycle ─────────────────────────────────────────────────────────────
 
