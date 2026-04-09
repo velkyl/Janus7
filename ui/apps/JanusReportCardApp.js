@@ -57,8 +57,8 @@ export class JanusReportCardApp extends HandlebarsApplicationMixin(ApplicationV2
    * This avoids blocking the UI lock during complex result aggregation.
    * @override
    */
-  async _preRender(context, options) {
-    await super._preRender(context, options);
+  async _preRender(options) {
+    await super._preRender(options);
     try {
       const data = await this.#service.buildArtifacts();
       this.__renderCache = {

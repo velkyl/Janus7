@@ -34,8 +34,8 @@ export default {
     await JanusConfig.set('activeProfile', 'festum');
     const resFestum = svc.resolve(spec);
 
-    if (!resFestum.path.includes('JANUS7 (Akademie von Licht und Dunkelheit (Festum))')) {
-      return { ok: false, summary: `Expected 'JANUS7 (Akademie von Licht und Dunkelheit (Festum))' in path, got: ${JSON.stringify(resFestum.path)}` };
+    if (!resFestum.path.includes('JANUS7 (Halle des Quecksilbers (Festum))')) {
+      return { ok: false, summary: `Expected 'JANUS7 (Halle des Quecksilbers (Festum))' in path, got: ${JSON.stringify(resFestum.path)}` };
     }
     if (!resFestum.key.endsWith('.festum')) {
       return { ok: false, summary: `Expected cache key to end with .festum, got ${resFestum.key}` };

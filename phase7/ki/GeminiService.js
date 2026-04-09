@@ -64,7 +64,12 @@ export class JanusGeminiService {
     const includeState = opts.includeState !== false;
     const context = includeState ? this.aiService?.getContext(opts) : null;
     
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${opts.model || 'gemini-1.5-flash'}:generateContent?key=${this.apiKey}`;
+    let model = opts.model || JanusConfig.get('geminiTextModel') || 'gemini-1.5-flash';
+    // User override for specific names
+    if (model === 'gemini-3-flash') model = 'gemini-1.5-flash-latest'; // Mapping placeholder
+    if (model.startsWith('models/')) model = model.substring(7);
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
     
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), opts.timeout ?? 15000);
@@ -183,8 +188,11 @@ export class JanusGeminiService {
   async generateAndSaveImage(prompt, opts = {}) {
     if (!this.isEnabled) throw new Error('Gemini is not enabled.');
 
-    // We use Imagen 3 for generation
-    const model = 'imagen-3.0-generate-001';
+    // We use configured model or default
+    let model = opts.model || JanusConfig.get('geminiVisualModel') || 'imagen-3.0-generate-001';
+    if (model === 'nano-banana') model = 'imagen-3.0-generate-001'; // Mapping placeholder
+    if (model.startsWith('models/')) model = model.substring(7);
+
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:predict?key=${this.apiKey}`;
     
     // Apply visual system prompt as style override
@@ -265,5 +273,39 @@ export class JanusGeminiService {
     const state = this.aiService?.getContext() || {};
     const prompt = Prompts.ENRICHMENT.atmosphere({ situation, state });
     return this.generateContent(prompt, { includeState: false });
+  }
+
+  /**
+   * Fetches the list of available models from the Google API.
+   * @returns {Promise<Array<{id: string, name: string}>>}
+   */
+  async fetchAvailableModels() {
+    if (!this.apiKey) throw new Error('API Key missing.');
+    const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${this.apiKey}`;
+    
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+      const data = await response.json();
+      
+      const models = (data.models || []).map(m => ({
+        id: m.name, // e.g. "models/gemini-1.5-flash"
+        name: m.displayName || m.name.split('/').pop()
+      }));
+
+      // Add user requested placeholders if not present
+      if (!models.find(m => m.id === 'gemini-3-flash')) {
+        models.unshift({ id: 'gemini-3-flash', name: 'Gemini 3 Flash (Auto)' });
+      }
+      if (!models.find(m => m.id === 'nano-banana')) {
+        models.unshift({ id: 'nano-banana', name: 'Nano Banana (Gemini 2.5 Flash Preview)' });
+      }
+
+      await JanusConfig.set('availableGeminiModels', models);
+      return models;
+    } catch (err) {
+      this.logger?.error?.('GeminiService: Failed to fetch models', err);
+      throw err;
+    }
   }
 }

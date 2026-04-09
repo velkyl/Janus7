@@ -43,9 +43,13 @@ export class JanusAlumniApp extends HandlebarsApplicationMixin(ApplicationV2) {
     }
   };
 
-  /** @override */
-  async _prepareContext(options) {
-    return await this.service.getOverview();
+  async _preRender(options) {
+    await super._preRender(options);
+    this.__renderCache = await this.service.getOverview();
+  }
+
+  _prepareContext(options) {
+    return this.__renderCache ?? {};
   }
 
   // -------------------------

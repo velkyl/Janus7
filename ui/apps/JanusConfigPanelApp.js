@@ -1,11 +1,11 @@
-﻿import { moduleTemplatePath } from '../../core/common.js';
+import { moduleTemplatePath } from '../../core/common.js';
 /**
  * @file ui/apps/JanusConfigPanelApp.js
  * @module janus7/ui
  * @phase 6
  *
  * Konfigurationspanel für Scene-Mappings und Feature-Flags.
- * GM-only. Schreibt ausschließlich über JanusConfig.set() → game.settings.
+ * GM-only. Schreibt ausschließlich über JanusConfig.set() -> game.settings.
  * Kein direkter State-Zugriff.
  */
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -18,11 +18,9 @@ import { JanusConfig } from '../../core/config.js';
  * Konfigurationspanel für Einstellungen, die NICHT im Foundry-Standard-
  * Settings-Dialog erscheinen (config: false) oder eine bessere UX brauchen:
  *
- * 1. Scene-Mappings  (key → Scene-UUID, z.B. "beamer" → UUID)
+ * 1. Scene-Mappings  (key -> Scene-UUID, z.B. "beamer" -> UUID)
  * 2. Feature-Flags   (atmosphere, autoMood, beamer, academySimulation)
- *
- * GM-only. Schreibt ausschließlich über JanusConfig.set() → game.settings.
- * Kein direkter State-Zugriff.
+ * 3. AI-Models       (Gemini Text/Visual model selection)
  *
  * @extends {HandlebarsApplicationMixin(JanusBaseApp)}
  */
@@ -49,6 +47,8 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
       addSceneMap:      JanusConfigPanelApp.onAddSceneMap,
       removeSceneMap:   JanusConfigPanelApp.onRemoveSceneMap,
       saveFeatureFlags: JanusConfigPanelApp.onSaveFeatureFlags,
+      fetchGeminiModels: JanusConfigPanelApp.onFetchGeminiModels,
+      saveAiModels:     JanusConfigPanelApp.onSaveAiModels,
     }
   };
 
@@ -81,10 +81,6 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
     this.refresh();
   }
 
-  /**
-   * Speichert alle Scene-Mapping-Rows aus dem Formular in game.settings.
-   * Leere Keys oder leere UUIDs werden übersprungen.
-   */
   static async onSaveSceneMaps(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return ui.notifications.warn('Nur GM darf Konfiguration ändern.');
@@ -103,20 +99,14 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
       ui.notifications.info('JANUS7: Scene-Mappings gespeichert.');
       this.refresh();
     } catch (err) {
-      this._getLogger().error?.('JANUS7 | saveSceneMaps failed', err);
-      ui.notifications.error('Speichern fehlgeschlagen – Details in Konsole.');
+      ui.notifications.error('Speichern fehlgeschlagen.');
     }
   }
 
-  /**
-   * Fügt eine leere Zeile für ein neues Scene-Mapping hinzu.
-   * Kein direkter Save – der User füllt aus und klickt dann Speichern.
-   */
   static async onAddSceneMap(event, _target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return;
 
-    // Direkt in DOM einfügen – kein Round-Trip nötig
     const container = this.element?.querySelector?.('[data-scene-rows]');
     if (!container) return;
 
@@ -151,18 +141,12 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
     container.appendChild(row);
   }
 
-  /**
-   * Entfernt eine Scene-Mapping-Zeile aus dem DOM (noch kein Save).
-   */
   static async onRemoveSceneMap(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return;
     target.closest('[data-scene-row]')?.remove();
   }
 
-  /**
-   * Speichert alle Feature-Flags aus den Checkboxen.
-   */
   static async onSaveFeatureFlags(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return ui.notifications.warn('Nur GM darf Feature-Flags ändern.');
@@ -180,8 +164,38 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
       ui.notifications.info('JANUS7: Feature-Flags gespeichert.');
       this.refresh();
     } catch (err) {
-      this._getLogger().error?.('JANUS7 | saveFeatureFlags failed', err);
-      ui.notifications.error('Speichern fehlgeschlagen – Details in Konsole.');
+      ui.notifications.error('Speichern fehlgeschlagen.');
+    }
+  }
+
+  static async onFetchGeminiModels(event, target) {
+    event?.preventDefault?.();
+    if (!game.user?.isGM) return;
+    const gemini = game.janus7?.ki?.gemini;
+    if (!gemini) return ui.notifications.error('Gemini Service nicht verfügbar.');
+    try {
+      ui.notifications.info('JANUS7: Modelle werden abgerufen...');
+      await gemini.fetchAvailableModels();
+      ui.notifications.info('JANUS7: Modellliste aktualisiert.');
+      this.refresh();
+    } catch (err) {
+      ui.notifications.error(`Fehler beim Abrufen: ${err.message}`);
+    }
+  }
+
+  static async onSaveAiModels(event, target) {
+    event?.preventDefault?.();
+    if (!game.user?.isGM) return;
+    const el = this.element;
+    const textModel = el?.querySelector?.('[data-setting="geminiTextModel"]')?.value;
+    const visualModel = el?.querySelector?.('[data-setting="geminiVisualModel"]')?.value;
+    try {
+      if (textModel) await JanusConfig.set('geminiTextModel', textModel);
+      if (visualModel) await JanusConfig.set('geminiVisualModel', visualModel);
+      ui.notifications.info('JANUS7: KI-Modell-Einstellungen gespeichert.');
+      this.refresh();
+    } catch (err) {
+      ui.notifications.error('Speichern fehlgeschlagen.');
     }
   }
 
@@ -191,21 +205,13 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
 
   /** @override */
   async _prepareContext(_options) {
-    if (!game.user?.isGM) {
-      return { notReady: true, notGM: true };
-    }
+    if (!game.user?.isGM) return { notReady: true, notGM: true };
 
-    // Scene-Mappings: Object → Array für Template-Iteration
-    let rawMappings = {};
-    try { rawMappings = JanusConfig.get('sceneMappings') ?? {}; } catch { /* unregistered */ }
-
+    const rawMappings = JanusConfig.get('sceneMappings') ?? {};
     const sceneMappings = Object.entries(rawMappings).map(([key, uuid]) => ({ key, uuid }));
 
-    // Feature-Flags
-    let features = { atmosphere: false, autoMood: false, beamer: false, academySimulation: false };
-    try { features = { ...features, ...(JanusConfig.get('features') ?? {}) }; } catch { /* unregistered */ }
+    const features = { atmosphere: false, autoMood: false, beamer: false, academySimulation: false, ...(JanusConfig.get('features') ?? {}) };
 
-    // Kill-Switches (für Info-Anzeige – editierbar im Foundry-Settings-Dialog)
     const killSwitches = {
       enableSimulation:  this._getBool('enableSimulation', true),
       enableAtmosphere:  this._getBool('enableAtmosphere', true),
@@ -214,11 +220,14 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
       enableTestRunner:  this._getBool('enableTestRunner', false),
     };
 
-    // Verfügbare Szenen als UUID-Picker-Optionen
     const scenes = (game.scenes?.contents ?? []).map(s => ({
       uuid: s.uuid,
       name: s.name ?? s.id,
     })).sort((a, b) => a.name.localeCompare(b.name));
+
+    const availableModels = JanusConfig.get('availableGeminiModels') || [];
+    const currentTextModel = JanusConfig.get('geminiTextModel');
+    const currentVisualModel = JanusConfig.get('geminiVisualModel');
 
     return {
       notReady: false,
@@ -228,13 +237,12 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
       features,
       killSwitches,
       scenes,
+      availableModels,
+      currentTextModel,
+      currentVisualModel,
     };
   }
 
-  /**
-   * Sicherer Settings-Getter mit Fallback.
-   * @private
-   */
   _getBool(key, fallback = false) {
     try { return Boolean(JanusConfig.get(key)); } catch { return fallback; }
   }

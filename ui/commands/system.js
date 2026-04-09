@@ -74,9 +74,8 @@ export const systemCommands = {
       } else {
         ui.notifications.warn(`JANUS7 Health Check: Problem erkannt (${result.status})`);
       }
-      
-      console.log('[JANUS7][HealthCheck]', result);
-      return { success: result.status === 'ok', result };
+
+      return { report: result, results: result.checks };
     });
   },
 

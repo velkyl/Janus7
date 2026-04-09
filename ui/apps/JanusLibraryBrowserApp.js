@@ -143,7 +143,8 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
     this.refresh();
   }
 
-  async _prepareContext(_options) {
+  async _preRender(options) {
+    await super._preRender(options);
     const libStats = this.libraryService?.stats() ?? { packs: 0, entries: 0, built: false };
     
     // Map internal types to user readable
@@ -153,7 +154,7 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
       isExecutable: r.documentName === 'Macro' || r.documentName === 'RollTable'
     }));
 
-    return {
+    this.__renderCache = {
       query: this._query,
       typeFilter: this._typeFilter,
       stats: libStats,
@@ -161,6 +162,12 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
       results: safeResults,
       limit: 100,
       overflow: safeResults.length >= 100
+    };
+  }
+
+  _prepareContext(_options) {
+    return {
+      ...(this.__renderCache ?? {})
     };
   }
 

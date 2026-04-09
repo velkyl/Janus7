@@ -148,8 +148,8 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    * @param {Object} _force
    * @param {Object} _options
    */
-  async _preRender(_force, _options) {
-    await super._preRender?.(_force, _options);
+  async _preRender(options) {
+    await super._preRender(options);
     const engine = resolveEngine(this);
     const mode = this._exportMode;
     const ki = (engine?.capabilities?.ki ?? engine?.ki);

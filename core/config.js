@@ -310,6 +310,38 @@ export class JanusConfig {
       default: 'Digital Art, DSA Style, Cinematic Lighting, Highly Detailed, Aventurian Aesthetic.',
       type: String
     });
+
+    // Gemini Models selection
+    game.settings.register(MODULE_ID, 'geminiTextModel', {
+      name: 'JANUS7.Settings.GeminiTextModel.Name',
+      hint: 'JANUS7.Settings.GeminiTextModel.Hint',
+      scope: 'world',
+      config: true,
+      default: 'models/gemini-1.5-flash',
+      type: String
+    });
+
+    game.settings.register(MODULE_ID, 'geminiVisualModel', {
+      name: 'JANUS7.Settings.GeminiVisualModel.Name',
+      hint: 'JANUS7.Settings.GeminiVisualModel.Hint',
+      scope: 'world',
+      config: true,
+      default: 'models/imagen-3.0-generate-001',
+      type: String
+    });
+
+    game.settings.register(MODULE_ID, 'availableGeminiModels', {
+      name: 'JANUS7: Available Gemini Models',
+      hint: 'Gecachte Liste der verfügbaren Modelle von der Google API.',
+      scope: 'world',
+      config: false,
+      type: Array,
+      default: [
+        { id: 'models/gemini-1.5-flash', name: 'Gemini 1.5 Flash' },
+        { id: 'models/gemini-1.5-pro', name: 'Gemini 1.5 Pro' },
+        { id: 'models/imagen-3.0-generate-001', name: 'Imagen 3.0' }
+      ]
+    });
   }
 
   /**

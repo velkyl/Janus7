@@ -443,8 +443,8 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
    * Fetches data models asynchronously but defers HTML rendering to the Handlebars Partials.
    * @override
    */
-  async _preRender(context, options) {
-    await super._preRender?.(context, options);
+  async _preRender(options) {
+    await super._preRender(options);
     
     const engine = this._getEngine();
     const view = getView(this._viewId) ?? getView('director');
