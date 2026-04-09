@@ -1,0 +1,79 @@
+{
+  "meta": {
+    "moduleVersion": "0.9.12.6",
+    "type": "world_lore",
+    "description": "Detaillierte Beschreibungen der aventurischen Regionen basierend auf der Geographia Aventurica."
+  },
+  "regions": [
+    {
+      "id": "bornland",
+      "name": "Bornland",
+      "description": "Das Bornland ist eine feudal geprägte Adelsrepublik im Nordosten Aventuriens. Es ist geprägt durch weite Wälder (Bornwald), fruchtbares Festenland und die Leibeigenschaft der Bauern unter den Bronnjaren.",
+      "capital": "Festum",
+      "government": "Adelsrepublik (Bronnjarenherrschaft)",
+      "notable_locations": ["Festum", "Norburg", "Neersand", "Bornwald", "Ehernes Schwert"],
+      "climate": "Kalt-gemäßigt, schneereiche Winter.",
+      "religion": "Zwölfgötter (besonders Rondra, Travia, Firun, Mokoscha)"
+    },
+    {
+      "id": "mittelreich",
+      "name": "Mittelreich (Neues Reich)",
+      "description": "Das größte Menschenreich Aventuriens, regiert vom Kaiserhaus in Gareth. Es ist das Herzland des Zwölfgötterglaubens und ritterlicher Tugenden.",
+      "capital": "Gareth",
+      "government": "Feudales Kaiserreich",
+      "notable_locations": ["Gareth", "Havena", "Punin", "Perricum", "Wehrheim"],
+      "climate": "Gemäßigt bis mild-subtropisch im Süden (Almada).",
+      "religion": "Zwölfgötterglaube (SSOT-Zentrum)"
+    },
+    {
+      "id": "horasreich",
+      "name": "Horasreich (Liebliches Feld)",
+      "description": "Ein hochzivilisiertes, dicht besiedeltes Reich im Westen. Zentrum der Bildung, Kunst und Wissenschaft, aber auch der Intrigen.",
+      "capital": "Vinsalt",
+      "government": "Absolutes Kaiserreich",
+      "notable_locations": ["Vinsalt", "Kuslik", "Belhanka", "Grangor", "Bethana"],
+      "climate": "Mild und mediterran.",
+      "religion": "Zwölfgötter (besonders Hesinde, Rahja, Horasverehrung)"
+    },
+    {
+      "id": "thorwal",
+      "name": "Thorwal",
+      "description": "Land der freien Seefahrer und Krieger im Nordwesten. Bekannt für ihre Drachenschiffe und den Swafnirglauben.",
+      "capital": "Thorwal (Stadt)",
+      "government": "Demokratisches Hetleute-System",
+      "notable_locations": ["Thorwal", "Prem", "Olport", "Bodir"],
+      "climate": "Raues Meeresklima.",
+      "religion": "Swafnirglaube"
+    },
+    {
+      "id": "kalifat",
+      "name": "Kalifat von Unau",
+      "description": "Das Reich der Novadis in der Wüste Khôm. Strenger Eingottglaube an Rastullah.",
+      "capital": "Unau",
+      "government": "Theokratische Monarchie",
+      "notable_locations": ["Unau", "Mherwed", "Keft", "Khôm-Wüste"],
+      "climate": "Extrem heiß und trocken.",
+      "religion": "Rastullah"
+    },
+    {
+      "id": "aranien",
+      "name": "Aranien",
+      "description": "Ein prachtvolles, matriarchalisch geprägtes Land am Perlenmeer. Bekannt für Rosen, Wein und tulamidische Gastfreundschaft.",
+      "capital": "Zorgan",
+      "government": "Matriarchale Monarchie (Mhaharani)",
+      "notable_locations": ["Zorgan", "Baburin", "Llanka"],
+      "climate": "Heiß und feucht am Mhanadi.",
+      "religion": "Zwölfgötter (besonders Phex und Rahja)"
+    },
+    {
+      "id": "alanfa",
+      "name": "Stadtstaat Al'Anfa",
+      "description": "Das 'Schwarze Al'Anfa', größte Metropole des Südens. Beherrscht von Grandenfamilien und dem schwarzen Boronglauben. Zentrum des Sklavenhandels.",
+      "capital": "Al'Anfa",
+      "government": "Theokratische Grandenherrschaft",
+      "notable_locations": ["Al'Anfa", "Goldene Allianz", "Regengebirge"],
+      "climate": "Tropisch heiß.",
+      "religion": "Boron (Al'Anfaner Ritus)"
+    }
+  ]
+}

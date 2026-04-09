@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "version": "1.1.0",
+    "source": "Aventurischer Bote & Historia Aventurica",
+    "lastUpdate": "2026-04-09T00:00:00.000Z"
+  },
+  "chronicle": [
+    {
+      "id": "bote_1025_01_01",
+      "date": "1025-01-01",
+      "label": "Neujahrssegen in Gareth",
+      "description": "Reichsregentin Emer und Königin Rohaja empfangen den Segen des Lichts. Gerüchte über Unruhen in den Grenzgrafschaften zu den Schwarzen Landen verdichten sich.",
+      "location": "Garetien",
+      "tags": ["politik", "praios"]
+    },
+    {
+      "id": "bote_1025_01_05",
+      "date": "1025-01-05",
+      "label": "Sichtung der Fliegenden Festung",
+      "description": "Späher berichten von einer gewaltigen Schattenmasse über den Drachensteinen. Es wird vermutet, dass Galotta seine fliegende Festung erneut in Bewegung setzt.",
+      "location": "Drachensteine",
+      "tags": ["militaer", "borbaradianer"]
+    },
+    {
+      "id": "bote_1025_02_12",
+      "date": "1025-02-12",
+      "label": "Festumer Handelstag",
+      "description": "Haus Stoerrebrandt kündigt massive Investitionen in die Sicherung der Bornmündung an, um der Piraterie der Blutigen See entgegenzuwirken.",
+      "location": "Festum",
+      "tags": ["handel", "militaer"]
+    },
+    {
+      "id": "bote_1025_03_20",
+      "date": "1025-03-20",
+      "label": "Geistige Umnachtung in Punin",
+      "description": "Mehrere Adepten der Akademie klagen über Alpträume von schwarzen Kelchen. Die Spektabilität Prishya von Garlischgrötz ordnet eine Untersuchung an.",
+      "location": "Punin",
+      "tags": ["magie", "mystery"]
+    },
+    {
+      "id": "bote_1025_04_01",
+      "date": "1025-04-01",
+      "label": "Aufruf zur Heerfahrt",
+      "description": "Walpurga von Löwenhaupt ruft die weidener Ritterschaft zur Sicherung der Pässe auf. Der Druck durch orkische Streifen aus dem Svelltland nimmt zu.",
+      "location": "Weiden",
+      "tags": ["militaer", "orks"]
+    },
+    {
+      "id": "bote_1025_06_15",
+      "date": "1025-06-15",
+      "label": "Die Schatten über Gareth",
+      "description": "Die Bürger von Gareth werden von kollektiven Alpträumen geplagt. Dunkle Wolken in Form von Gesichtern werden über der Stadt gesichtet. Es heißt, Galotta sende seine Grüße.",
+      "location": "Gareth",
+      "tags": ["magie", "horror"]
+    },
+    {
+      "id": "bote_1025_08_02",
+      "date": "1025-08-02",
+      "label": "Gefecht vor der Zyklopenküste",
+      "description": "Horasische Galeeren treffen auf eine Flotte thorwalscher Ottas. Der Seekrieg im Westmeer weitet sich aus.",
+      "location": "Zyklopeninseln",
+      "tags": ["militaer", "seekrieg"]
+    },
+    {
+      "id": "bote_1025_10_10",
+      "date": "1025-10-10",
+      "label": "Gedenken an die Ogerschlacht",
+      "description": "Zehn Jahre nach der Schlacht an der Trollpforte finden im ganzen Reich Gedenkfeiern statt. Die Angst vor einer Rückkehr der Ogerhorden ist noch immer spürbar.",
+      "location": "Mittelreich",
+      "tags": ["kultur", "geschichte"]
+    }
+  ]
+}

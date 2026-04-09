@@ -1,4 +1,4 @@
-﻿import { moduleTemplatePath } from '../../../core/common.js';
+import { moduleTemplatePath } from '../../../core/common.js';
 /**
  * @file ui/apps/ki-roundtrip/JanusKiRoundtripApp.js
  * @module janus7/ui
@@ -140,17 +140,39 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
   get _exportMode() { return this.__exportMode ?? 'lite'; }
   set _exportMode(v) { this.__exportMode = ['lite','week','full'].includes(v) ? v : 'lite'; }
 
+  /**
+   * Pre-render hook (async — may await freely, runs before the render lock).
+   * Fetches the KI export bundle and caches it on the instance so that
+   * _prepareContext() can read it synchronously without awaiting.
+   *
+   * @param {Object} _force
+   * @param {Object} _options
+   */
+  async _preRender(_force, _options) {
+    await super._preRender?.(_force, _options);
+    const engine = resolveEngine(this);
+    const mode = this._exportMode;
+    try {
+      const bundle = await (engine?.capabilities?.ki ?? engine?.ki)?.exportBundle?.({ mode }) ?? null;
+      this.__exportCache = bundle ? JSON.stringify(bundle, null, 2) : '';
+    } catch (err) {
+      this._getLogger().warn?.('[JANUS7][KI Roundtrip] _preRender: Failed to fetch export bundle', err);
+      // Keep previous cache on error so the UI doesn't blank out
+      this.__exportCache ??= '';
+    }
+  }
+
+  /**
+   * Prepare the Handlebars context. Reads from the cache populated by
+   * _preRender() — no async KI calls here (ApplicationV2 render-lock safe).
+   *
+   * @param {Object} options
+   */
   async _prepareContext(options) {
     const context = (await super._prepareContext(options)) || {};
     const engine = resolveEngine(this);
-    const mode = this._exportMode;
-    let json = '';
-    try {
-      const bundle = await (engine?.capabilities?.ki ?? engine?.ki)?.exportBundle?.({ mode }) ?? null;
-      if (bundle) json = JSON.stringify(bundle, null, 2);
-    } catch (err) {
-      this._getLogger().warn?.('[JANUS7][KI Roundtrip] Failed to fetch export bundle', err);
-    }
+    // Read the bundle JSON from the pre-render cache (populated in _preRender)
+    const json = this.__exportCache ?? '';
     let history = [];
     try {
       history = (engine?.capabilities?.ki ?? engine?.ki)?.getImportHistory?.() ?? [];
@@ -160,7 +182,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
     context.json = json;
     context.history = history;
     context.isGM = game.user?.isGM ?? false;
-    context.activeMode = mode;
+    context.activeMode = this._exportMode;
     context.jsonSize = json ? json.length.toLocaleString('de-DE') : null;
     // Preview state (diffs + selection) lives on the instance; render uses it.
     const diffs = Array.isArray(this.__previewDiffs) ? this.__previewDiffs : [];

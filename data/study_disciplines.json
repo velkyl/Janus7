@@ -1,0 +1,34 @@
+{
+  "disciplines": [
+    {
+      "id": "arcana",
+      "name": "Magiekunde",
+      "description": "Theoretisches Wissen über die Struktur der Magie.",
+      "complexity": "high"
+    },
+    {
+      "id": "alchemy",
+      "name": "Alchimie",
+      "description": "Die Kunst der Tränke und Elixiere.",
+      "complexity": "medium"
+    },
+    {
+      "id": "antimagic",
+      "name": "Antimagie",
+      "description": "Bannung und Schutz vor feindlicher Zauberei.",
+      "complexity": "very_high"
+    },
+    {
+      "id": "calligraphy",
+      "name": "Kalligraphie",
+      "description": "Das präzise Zeichnen von Runen und Glyphen.",
+      "complexity": "low"
+    },
+    {
+      "id": "demonology",
+      "name": "Dämonologie",
+      "description": "Wissen über die siebte Sphäre (Verboten/Spezialisiert).",
+      "complexity": "extreme"
+    }
+  ]
+}

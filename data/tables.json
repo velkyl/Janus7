@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "moduleVersion": "0.9.12.6",
+    "description": "Aggregierte Zufallstabellen für den Spielleiter in Janus7."
+  },
+  "tables": [
+    {
+      "id": "aventurian_rumors",
+      "name": "Aventurische Gerüchte",
+      "entries": [
+        "In Gareth wurde ein Falschmünzerring ausgehoben, der angeblich bis in den hohen Adel reicht.",
+        "Man sagt, die Seeschlange im Golf von Perricum sei wieder erwacht.",
+        "Ein reisender Händler behauptet, im Bornland liege ein Fluch auf dem Winterweizen.",
+        "In den Kneipen von Kuslik wird gemunkelt, die Spektabilität plane eine geheime Expedition ins Riesland.",
+        "Ein Bote aus Thorwal berichtet von seltsamen Lichtern über dem Olport-Hafen.",
+        "Angeblich wurde in Al'Anfa ein Sklave mit magischem Talent entdeckt, der die Flucht ergriff."
+      ]
+    },
+    {
+      "id": "academy_daily_events",
+      "name": "Akademie-Werkalltag",
+      "entries": [
+        "Ein Magister hat seine Brille im Alchimielabor verlegt und verdächtigt die Scholaren.",
+        "In der Bibliothek wurde ein flüsterndes Buch gefunden, das niemandem gehört.",
+        "Ein fehlgeschlagener Verwandlungszauber hat einen Hund mit Entenfüßen hervorgebracht.",
+        "Die Abendmahlzeit im Gemeinschaftssaal riecht verdächtig nach Schwefel.",
+        "Ein Scholar hat sich beim Üben eines Ignifaxius die Augenbrauen versengt.",
+        "Der Hausmeister hat einen Geheimgang entdeckt, der mit klebrigem Schleim überzogen ist."
+      ]
+    },
+    {
+      "id": "weather_aventuria",
+      "name": "Wetter in Aventurien",
+      "entries": [
+        "Strahlender Sonnenschein (Praios' Lächeln).",
+        "Leichter Nieselregen (Efferd weint).",
+        "Aufziehendes Gewitter mit kräftigen Blitzen (Rondras Zorn).",
+        "Dichter Nebel, der die Sicht auf wenige Schritt begrenzt.",
+        "Unerwarteter Hagelschauer, der die Ernte bedroht.",
+        "Klarer, sternenreicher Himmel mit Nordlichtern (Ifirns Schleier)."
+      ]
+    },
+    {
+      "id": "npc_moods",
+      "name": "NPC-Stimmung",
+      "entries": [
+        "Geistesabwesend (vertieft in Formeln)",
+        "Gereizt (Schlafentzug durch Experimente)",
+        "Euphorisch (Durchbruch in der Forschung)",
+        "Verschwiegen (Geheimes Projekt)",
+        "Herablassend (Gegenüber Jüngeren)",
+        "Hektisch (Eile zu einer Vorlesung)"
+      ]
+    },
+    {
+      "id": "ambient_noises",
+      "name": "Akademie-Hintergrundgeräusche",
+      "entries": [
+        "Das Klirren von Alchimie-Glas",
+        "Ein fernes Murmeln von Beschwörungsformeln",
+        "Das Kratzen von Federn auf Pergament",
+        "Ein plötzlicher, gedämpfter Knall aus den Laboren",
+        "Das Rascheln von schweren Roben auf Steinboden",
+        "Ein rhythmischer Singsang aus der Bibliothek"
+      ]
+    },
+    {
+      "id": "magical_mishaps",
+      "name": "Magische Missgeschicke",
+      "entries": [
+        "Temporäre Verfärbung der Fingerspitzen (Blau)",
+        "Kurzzeitiges Schweben kleiner Objekte (5 Min)",
+        "Funkenflug beim Sprechen",
+        "Der Geruch von verbranntem Zimt",
+        "Echo-Effekt bei der eigenen Stimme",
+        "Haare stehen statisch zu Berge"
+      ]
+    }
+  ]
+}

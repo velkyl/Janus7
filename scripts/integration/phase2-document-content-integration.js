@@ -167,7 +167,7 @@ export function registerLessonDocuments() {
   } catch (_err) { /* fallback below */ }
 
   try {
-    Items.registerSheet(MODULE_ID, JanusLessonItemSheet, {
+    Item.registerSheet(MODULE_ID, JanusLessonItemSheet, {
       types: [JANUS_LESSON_ITEM_TYPE],
       label: 'JANUS Lesson',
       makeDefault: false

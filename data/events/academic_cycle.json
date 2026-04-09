@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Zyklische Ereignisse des akademischen Jahres für Janus7 Academies."
+  },
+  "cycle_events": [
+    {
+      "id": "exam_midterm",
+      "name": "Zwischenprüfung",
+      "recurrence": "quarterly",
+      "triggers": ["date_10_quarterly"],
+      "effects": {
+        "stress": "+10",
+        "study_level": "check",
+        "reward": "rank_up_probability"
+      },
+      "description": "Die Professoren prüfen den Fortschritt der Studenten. Hoher Leistungsdruck in der gesamten Akademie."
+    },
+    {
+      "id": "festival_hesinde",
+      "name": "Hesindetag-Disput",
+      "recurrence": "yearly",
+      "triggers": ["date_30_hesinde"],
+      "effects": {
+        "prestige": "+5",
+        "knowledge_gain": "arcana"
+      },
+      "description": "Ein öffentlicher Disput über magische Theorie. Eine Chance, vor der Spektabilität zu glänzen."
+    },
+    {
+      "id": "market_day_alchemist",
+      "name": "Alchimistenmarkt",
+      "recurrence": "monthly",
+      "triggers": ["date_01_monthly"],
+      "effects": {
+        "item_availability": "rare_herbs",
+        "cost_modifier": 0.9
+      },
+      "description": "Händler aus dem Umland bringen seltene Zutaten zur Akademie."
+    }
+  ]
+}

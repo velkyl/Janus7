@@ -1,0 +1,16 @@
+[
+  {
+    "id": "gareth_academy_hall",
+    "name": "Große Aula der Rüstung",
+    "description": "Ein weiter, von Marmorsäulen getragener Saal. An den Wänden hängen Banner der weißen Gilde und des Reiches.",
+    "atmosphere": "formal_echoing",
+    "features": ["Büste von Rohal dem Weisen", "Magische Wächterstatuen"]
+  },
+  {
+    "id": "gareth_academy_library",
+    "name": "Bibliothek der Bannsprüche",
+    "description": "Eine der spezialisiertesten Bibliotheken für Antimagie in Aventurien. Streng bewacht.",
+    "atmosphere": "quiet_dusty_paper",
+    "features": ["Gesperrte Sektion", "Lesehallen mit Prunkfenstern"]
+  }
+]

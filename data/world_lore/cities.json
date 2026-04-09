@@ -1,0 +1,63 @@
+{
+  "meta": {
+    "moduleVersion": "0.9.12.6",
+    "type": "city_lore",
+    "description": "Detaillierte Beschreibungen der wichtigsten aventurischen Städte."
+  },
+  "cities": [
+    {
+      "id": "gareth",
+      "name": "Gareth",
+      "region": "mittelreich",
+      "population": 200000,
+      "description": "Die Kaiserstadt und größte Metropole Aventuriens. Sitz des Mittelreiches, Zentrum der Praios-Kirche und Knotenpunkt aller Wege.",
+      "notable_features": ["Alte Residenz", "Praiostempel (Stadt des Lichts)", "Kaiser-Hal-Kanal"],
+      "academies": ["Akademie der Geistigen Kraft"]
+    },
+    {
+      "id": "alanfa",
+      "name": "Al'Anfa",
+      "region": "alanfa",
+      "population": 85000,
+      "description": "Das Haupt der Perle, kühn auf den Klippen erbaut. Berühmt für ihre dekadenten Granden, die Arena und den schwarzen Borontempel.",
+      "notable_features": ["Silberberg", "Die Arena", "Tempel des Schwarzen Boron"],
+      "academies": ["Halle der Erleuchtung"]
+    },
+    {
+      "id": "festum",
+      "name": "Festum",
+      "region": "bornland",
+      "population": 27000,
+      "description": "Freie Stadt an der Bornmündung. Handelszentrum des Nordens, Sitz der Nordlandbank und des Hauses Stoerrebrandt.",
+      "notable_features": ["Speicherinsel", "Goblinviertel", "Admiral-von-Seweritz-Schule"],
+      "academies": ["Halle des Quecksilbers"]
+    },
+    {
+      "id": "kuslik",
+      "name": "Kuslik",
+      "region": "horasreich",
+      "population": 22000,
+      "description": "Die Stadt der Hesinde. Zentrum der Gelehrsamkeit und des Buchdrucks. Hier befindet sich der größte Hesindetempel Aventuriens.",
+      "notable_features": ["Hesindetempel", "Halle der Metamorphosen"],
+      "academies": ["Halle der Metamorphosen"]
+    },
+    {
+      "id": "punin",
+      "name": "Punin",
+      "region": "mittelreich",
+      "population": 21000,
+      "description": "Hauptstadt Almadas und Stadt der Magie. Berühmt für ihre Akademie der Hohen Magie und die Gelehrsamkeit.",
+      "notable_features": ["Akademie der Hohen Magie", "Yaquir-Brücke"],
+      "academies": ["Akademie der Hohen Magie"]
+    },
+    {
+      "id": "havena",
+      "name": "Havena",
+      "region": "mittelreich",
+      "population": 26000,
+      "description": "Küstenstadt an der Mündung des Großen Flusses. Berühmt für ihre versunkene Unterstadt und die strikten Magiegesetze.",
+      "notable_features": ["Prinzessin-Emer-Brücke", "Stadt der Schreine"],
+      "academies": ["Akademie von Licht und Dunkelheit (verboten/versteckt)"]
+    }
+  ]
+}

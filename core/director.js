@@ -206,7 +206,7 @@ export class JanusDirector {
   async importState(snapshot, opts = {}) {
     this._assertGM();
 
-    // io.importState doesn't exist – correct method is importStateFromObject.
+    // io.importState doesn't exist â€“ correct method is importStateFromObject.
     // lenient mode = validate:false so old/partial snapshots can be imported.
     const lenient = (opts.mode ?? 'lenient') === 'lenient';
     const validate = opts.validate ?? !lenient;
@@ -233,7 +233,7 @@ export class JanusDirector {
   }
 
   /**
-   * Fügt einen Actor dedupliziert in academy.roster.<role> ein.
+   * Fgt einen Actor dedupliziert in academy.roster.<role> ein.
    *
    * @param {'teachers'|'students'|'npcs'} role
    * @param {string} actorUuid
@@ -245,7 +245,7 @@ export class JanusDirector {
     const normalizedRole = String(role ?? '').trim();
     const normalizedActorUuid = String(actorUuid ?? '').trim();
     if (!['teachers', 'students', 'npcs'].includes(normalizedRole)) {
-      throw new Error(`Ungültige roster-Rolle: ${normalizedRole || '<leer>'}`);
+      throw new Error(`Ungltige roster-Rolle: ${normalizedRole || '<leer>'}`);
     }
     if (!normalizedActorUuid) {
       throw new Error('actorUuid ist erforderlich.');
@@ -348,9 +348,9 @@ export class JanusDirector {
   // ---------------------------------------------------------------------------
 
   /**
-   * Setzt den Akademiekalender auf den definierten Startzustand zurück.
+   * Setzt den Akademiekalender auf den definierten Startzustand zurck.
    *
-   * @param {Object} [opts={}] Optionen für Persistenz und Kalender-Reset.
+   * @param {Object} [opts={}] Optionen fr Persistenz und Kalender-Reset.
    * @returns {Promise<object|undefined>} Aktuelle Slot-Referenz nach dem Reset.
    */
   async resetCalendar(opts = {}) {
@@ -362,11 +362,11 @@ export class JanusDirector {
   }
 
   /**
-   * Interner Kalender-Helfer für Vor-/Weiter-Schaltoperationen.
+   * Interner Kalender-Helfer fr Vor-/Weiter-Schaltoperationen.
    *
    * @private
    * @param {string} fnName Name der aufzurufenden Kalender-Methode.
-   * @param {Object} [opts={}] Optionen für Kalender und Persistenz.
+   * @param {Object} [opts={}] Optionen fr Kalender und Persistenz.
    * @returns {Promise<object|undefined>} Aktuelle Slot-Referenz nach der Mutation.
    */
   async _advance(fnName, opts = {}) {
@@ -384,7 +384,7 @@ export class JanusDirector {
    * @private
    * @param {number} dayIndex Ziel-Tag im internen Kalenderindex.
    * @param {number} slotIndex Ziel-Slot innerhalb des Tages.
-   * @param {Object} [opts={}] Optionen für Kalender und Persistenz.
+   * @param {Object} [opts={}] Optionen fr Kalender und Persistenz.
    * @returns {Promise<object|undefined>} Aktuelle Slot-Referenz nach der Mutation.
    */
   async _setSlot(dayIndex, slotIndex, opts = {}) {
@@ -400,10 +400,10 @@ export class JanusDirector {
   // ---------------------------------------------------------------------------
 
   /**
-   * Aktiviert einen Atmosphären-Mood über den Atmosphere-Controller.
+   * Aktiviert einen Atmosphren-Mood ber den Atmosphere-Controller.
    *
    * @param {string} moodId ID des Ziel-Moods.
-   * @param {Object} [opts={}] Optionen für Persistenz und Engine-Verhalten.
+   * @param {Object} [opts={}] Optionen fr Persistenz und Engine-Verhalten.
    * @returns {Promise<void>}
    */
   async applyMood(moodId, opts = {}) {
@@ -411,7 +411,7 @@ export class JanusDirector {
     // FIX P0-05: atmosphere kann null sein wenn Phase 5 (Atmosphere) nicht geladen ist.
     const atmo = this._engine()?.atmosphere;
     if (!atmo?.applyMood) {
-      (this._engine()?.core?.logger ?? console).warn?.('[JANUS7][Director] atmosphere.applyMood() nicht verfügbar (Phase 5 bereit?)');
+      (this._engine()?.core?.logger ?? console).warn?.('[JANUS7][Director] atmosphere.applyMood() nicht verfgbar (Phase 5 bereit?)');
       return;
     }
     await atmo.applyMood(moodId);
@@ -422,19 +422,19 @@ export class JanusDirector {
   // Director Kernel (Welle 1.1)
   // ---------------------------------------------------------------------------
 
-  /** Liefert eine kompakte Laufzeit-Zusammenfassung für Director/UI/Debug. */
+  /** Liefert eine kompakte Laufzeit-Zusammenfassung fr Director/UI/Debug. */
   getDirectorSummary(opts = {}) {
     return this.getRuntimeSummary(opts);
   }
 
-  /** Legacy-/Convenience-Alias für Makros und Tests. */
+  /** Legacy-/Convenience-Alias fr Makros und Tests. */
   async startDirectorDay(opts = {}) {
     return this.startDay(opts);
   }
 
   /**
-   * Liefert einen kompakten Überblick über den aktuellen Director-Laufzeitkontext.
-   * Keine Mutation, GM-Gate nicht nötig.
+   * Liefert einen kompakten berblick ber den aktuellen Director-Laufzeitkontext.
+   * Keine Mutation, GM-Gate nicht ntig.
    */
   getRuntimeSummary({ actorId = 'party' } = {}) {
     const engine = this._engine();
@@ -470,8 +470,8 @@ export class JanusDirector {
   }
 
   /**
-   * Startet einen Akademietag kontrolliert: optional Tageswechsel, Rücksetzung auf Slot 0
-   * und anschließende Orchestrierung von Queue/Social/Quest/Lesson.
+   * Startet einen Akademietag kontrolliert: optional Tageswechsel, Rcksetzung auf Slot 0
+   * und anschlieende Orchestrierung von Queue/Social/Quest/Lesson.
    */
   async startDay({
     actorId = 'party',
@@ -485,9 +485,12 @@ export class JanusDirector {
   } = {}) {
     this._assertGM();
     const calendar = this._engine().calendar ?? this._engine().academy?.calendar;
-    if (!calendar) throw new Error('JANUS7: Calendar engine nicht verfügbar.');
+    if (!calendar) throw new Error('JANUS7: Calendar engine nicht verfgbar.');
 
-    if (advanceDay) await calendar.advanceDay({ days });
+    if (advanceDay) {
+      const nDays = Number(days);
+      await calendar.advanceDay({ days: Number.isFinite(nDays) ? nDays : 1 });
+    }
 
     const current = calendar.getCurrentSlotRef?.() ?? this.time.getRef();
     if (Number.isFinite(current?.dayIndex) && Number.isFinite(current?.slotIndex) && current.slotIndex !== 0) {
@@ -519,7 +522,7 @@ export class JanusDirector {
     return result;
   }
 
-  /** Emittiert lesson.started für die erste Lesson im aktuellen Slot. */
+  /** Emittiert lesson.started fr die erste Lesson im aktuellen Slot. */
   async runLesson({ actorId = 'party', save = false } = {}) {
     this._assertGM();
     const engine = this._engine();
@@ -554,7 +557,7 @@ export class JanusDirector {
     return { ok: true, ...payload };
   }
 
-  /** Präsentiert ein Event über die registrierte Event-Engine. */
+  /** Prsentiert ein Event ber die registrierte Event-Engine. */
   async triggerEvent(eventId, { actorId = 'party', save = false } = {}) {
     this._assertGM();
     const eventsEngine = this._engine()?.academy?.events ?? null;
@@ -566,13 +569,14 @@ export class JanusDirector {
     return { ok: true, eventId, actorId, ...presentation };
   }
 
-  /** Zieht Runtime-Events aus der Queue und präsentiert sie optional. */
+  /** Zieht Runtime-Events aus der Queue und prsentiert sie optional. */
   async dequeueQueuedEvents({ actorId = 'party', limit = 3, present = true, save = true } = {}) {
     this._assertGM();
     const rawQueue = this.state.get('academy.runtimeQueuedEvents');
     if (!Array.isArray(rawQueue) || !rawQueue.length) return { processed: [], remainingCount: 0 };
 
-    const capped = Math.max(0, Number(limit ?? 0) || 0);
+    const nLimit = Number(limit);
+    const capped = Math.max(0, Number.isFinite(nLimit) ? nLimit : 0);
     const pickedCount = capped > 0 ? capped : rawQueue.length;
     const picked = foundry.utils.deepClone(rawQueue.slice(0, pickedCount));
     const remaining = rawQueue.slice(pickedCount);
@@ -598,7 +602,7 @@ export class JanusDirector {
     return { processed, remainingCount: remaining.length };
   }
 
-  /** Führt Social-Link-Progression einmal explizit aus. */
+  /** Fhrt Social-Link-Progression einmal explizit aus. */
   async evaluateSocialLinks({ actorId = 'party', save = true } = {}) {
     this._assertGM();
     const socialProgression = this._engine()?.academy?.progression?.socialEngine ?? null;
@@ -611,10 +615,10 @@ export class JanusDirector {
   }
 
   /**
-   * Erzeugt Quest-Vorschläge aus dem Graph-Kontext des aktuellen Slots.
-   * NOTE (P2-02): Diese Methode ist überwiegend lesend — kein _assertGM() notwendig.
+   * Erzeugt Quest-Vorschlge aus dem Graph-Kontext des aktuellen Slots.
+   * NOTE (P2-02): Diese Methode ist berwiegend lesend â€” kein _assertGM() notwendig.
    * graph.build() kann jedoch den Graph-Cache aktualisieren (Schreibseiteneffekt).
-   * graph.isDirty() kann das dirty-Flag zurücksetzen (Seiteneffekt), daher
+   * graph.isDirty() kann das dirty-Flag zurcksetzen (Seiteneffekt), daher
    * sollte die Methode nur aus GM-Kontext aufgerufen werden (UI-Layer garantiert dies).
    */
   async generateQuests({ actorId = 'party', limit = 5, context = {} } = {}) {
@@ -642,9 +646,10 @@ export class JanusDirector {
     };
 
     const activeQuestIds = new Set((engine?.academy?.quests?.listQuests?.({ actorId, status: 'active' }) ?? []).map((q) => q?.questId).filter(Boolean));
+    const nLimit = Number(limit);
     const suggestions = (graph.query.suggestQuests(graphContext) ?? [])
       .filter((entry) => !activeQuestIds.has(entry?.quest?.id))
-      .slice(0, Math.max(0, Number(limit ?? 5) || 5));
+      .slice(0, Math.max(0, Number.isFinite(nLimit) ? nLimit : 5));
 
     return {
       available: true,
@@ -679,11 +684,11 @@ export class JanusDirector {
   }
 
   // ---------------------------------------------------------------------------
-  // UI-Shortcuts — Direktzugriff auf häufig benötigte Panels
+  // UI-Shortcuts â€” Direktzugriff auf hufig bentigte Panels
   // ---------------------------------------------------------------------------
 
   /**
-   * Öffnet das Control Panel.
+   * ffnet das Control Panel.
    * @returns {ApplicationV2|null}
    */
   openControlPanel() {
@@ -691,7 +696,7 @@ export class JanusDirector {
   }
 
   /**
-   * Öffnet das Sync-Panel (Welt-Synchronisation NSC/Szenen/Playlists).
+   * ffnet das Sync-Panel (Welt-Synchronisation NSC/Szenen/Playlists).
    * @returns {ApplicationV2|null}
    */
   openSyncPanel() {
@@ -699,7 +704,7 @@ export class JanusDirector {
   }
 
   /**
-   * Öffnet das Config-Panel (Einstellungen & Feature-Flags).
+   * ffnet das Config-Panel (Einstellungen & Feature-Flags).
    * @returns {ApplicationV2|null}
    */
   openConfigPanel() {
@@ -707,7 +712,7 @@ export class JanusDirector {
   }
 
   /**
-   * Öffnet das Atmosphere-DJ-Panel.
+   * ffnet das Atmosphere-DJ-Panel.
    * @returns {ApplicationV2|null}
    */
   openAtmosphereDJ() {
@@ -715,7 +720,7 @@ export class JanusDirector {
   }
 
   /**
-   * Öffnet das Test-Ergebnisfenster und führt alle Tests aus.
+   * ffnet das Test-Ergebnisfenster und fhrt alle Tests aus.
    * @returns {Promise<void>}
    */
   async openTestResults() {
@@ -731,7 +736,7 @@ export class JanusDirector {
   _assertGM() {
     // For now we gate mutations to GM. Read operations are open.
     if (game?.user && !game.user.isGM) {
-      throw new Error('JANUS7: Diese Aktion ist nur für Spielleiter (GM) erlaubt.');
+      throw new Error('JANUS7: Diese Aktion ist nur fr Spielleiter (GM) erlaubt.');
     }
   }
 
@@ -744,14 +749,14 @@ export class JanusDirector {
   _scoring() {
     const e = this._engine();
     const scoring = e?.simulation?.scoring ?? e?.academy?.scoring;
-    if (!scoring) throw new Error('JANUS7: Scoring engine nicht verfügbar (Phase 4 noch nicht bereit).');
+    if (!scoring) throw new Error('JANUS7: Scoring engine nicht verfgbar (Phase 4 noch nicht bereit).');
     return scoring;
   }
 
   _social() {
     const e = this._engine();
     const social = e?.simulation?.social ?? e?.academy?.social;
-    if (!social) throw new Error('JANUS7: Social engine nicht verfügbar (Phase 4 noch nicht bereit).');
+    if (!social) throw new Error('JANUS7: Social engine nicht verfgbar (Phase 4 noch nicht bereit).');
     return social;
   }
 
@@ -765,7 +770,7 @@ export class JanusDirector {
   /**
    * Wird vom Engine-Ready-Zyklus aufgerufen (core/index.js Zeile 376).
    * FIX P2-06: Stub-Implementierung, damit der opionale Guard nicht immer ein No-Op ist.
-   * Kann überschrieben werden um künftige Director-Ready-Logik zu implementieren.
+   * Kann berschrieben werden um knftige Director-Ready-Logik zu implementieren.
    */
   async onReady() {
     // Reserved for future Director ready-phase initialization.

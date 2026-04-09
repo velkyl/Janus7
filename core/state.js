@@ -191,7 +191,9 @@ export class JanusStateCore {
           data: storedSetting
         }));
       }
-    } catch (_err) { /* no-op */ }
+    } catch (err) {
+      this.logger?.debug?.('JanusStateCore.load(): Pre-load backup failed', err);
+    }
 
     // 1) Primary state (coreState)
     let stored = game.settings.get(MODULE_ID, this.settingsKey);
@@ -208,7 +210,9 @@ export class JanusStateCore {
           this.logger?.info?.('JanusStateCore: Legacy state (state) found - migrating to coreState.');
           this._dirty = true;
         }
-      } catch (_e) { /* ignore */ }
+      } catch (e) {
+        this.logger?.debug?.('JanusStateCore.load(): Legacy state migration check failed', e);
+      }
     }
 
     let isNew = false;

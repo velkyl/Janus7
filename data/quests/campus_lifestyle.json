@@ -1,0 +1,131 @@
+{
+  "meta": {
+    "moduleVersion": "0.9.12.6",
+    "type": "quests",
+    "description": "Alltags-Quests und Campus-Ereignisse inspiriert von Academagia und Life as a Wizard."
+  },
+  "quests": [
+    {
+      "id": "quest_kuechen_verschwoerung",
+      "title": "Die Küchenverschwörung",
+      "description": "Die Köchin behauptet, dass nachts Vorräte verschwinden, aber keine Spuren von Einbruch zu finden sind. Werden die Elfen oder Geister dafür verantwortlich gemacht?",
+      "difficulty": "Einfach",
+      "reward": "Gutes Essen (+1 KO für den nächsten Tag), 5 Silbertaler",
+      "steps": [
+        "Beobachte die Küche nachts (Sinnesschärfe-Probe).",
+        "Folge den Spuren in den Keller (Fährtensuchen).",
+        "Stelle den Dieb (Überreden oder Kampf gegen eine Rattenplage)."
+      ]
+    },
+    {
+      "id": "quest_verlorene_folianten",
+      "title": "Das flüsternde Buch",
+      "description": "Ein Scholar hat ein Buch in der Bibliothek geliehen, das nun ununterbrochen Geheimnisse über andere Schüler flüstert. Es muss zurückgebracht werden, bevor es Chaos anrichtet.",
+      "difficulty": "Mittel",
+      "reward": "Gute Reputation bei den Bibliothekaren, +5 Magiekunde",
+      "steps": [
+        "Identifiziere das Buch (Magiekunde-Probe).",
+        "Bringe das Buch zum Schweigen (Antimagie oder Willenskraft).",
+        "Schmuggelt es zurück in den Giftschrank (Schleichen)."
+      ]
+    },
+    {
+      "id": "quest_artefakt_rache",
+      "title": "Die Rache der Artefaktmagier",
+      "description": "Ein misslungener Versuch eines Mitschülers, einen automatischen Putzwedel zu erschaffen, ist außer Kontrolle geraten. Jetzt jagen 'fliegende Besen' jeden, der unordentlich aussieht.",
+      "difficulty": "Mittel",
+      "reward": "Ein kleiner magischer Talisman, +10 AP",
+      "steps": [
+        "Weiche den Besen aus (Körperbeherrschung).",
+        "Finde den Ursprung der Animation (Analysys Arcanops).",
+        "Deaktiviere das Hauptartefakt (Kraftfokus oder Grobe Gewalt)."
+      ]
+    },
+    {
+      "id": "punin_library_specter",
+      "name": "Der Geist der verbotenen Tiefe",
+      "type": "investigation",
+      "location": "punin_academy_library",
+      "description": "Ein flackerndes Licht wurde in der gesperrten Sektion der Bibliothek gesehen. Die Bibliothekare haben Angst, den Bereich zu betreten.",
+      "steps": [
+        "Recherche über verstorbene Magister",
+        "Nächtliches Einschleichen in die Bibliothek",
+        "Geisterbannung oder Kommunikation"
+      ],
+      "rewards": {
+        "prestige": 10,
+        "item": "ancient_scroll",
+        "knowledge": "ghost Lore"
+      }
+    },
+    {
+      "id": "festum_mercury_heist",
+      "name": "Der Quecksilber-Diebstahl",
+      "type": "stealth",
+      "location": "festum_hafen_speicherinsel",
+      "description": "Eine Ladung veredeltes Quecksilber ist auf dem Weg zur Akademie verschwunden. Meister Sanderwik vermutet Sabotage durch einen Konkurrenten.",
+      "steps": [
+        "Befragung der Goblins im Gerberviertel",
+        "Beschattung verdächtiger Fuhrleute",
+        "Wiederbeschaffung der Fässer"
+      ],
+      "rewards": {
+        "favor": "Meister Sanderwik",
+        "money": 50,
+        "trait": "resourceful"
+      }
+    },
+    {
+      "id": "generic_rival_familiar",
+      "name": "Das entlaufene Vertrautentier",
+      "type": "social",
+      "location": "any_academy",
+      "description": "Das Vertrautentier eines Mitschülers ist entwischt und richtet Chaos im Speisesaal an. Fange es ein, bevor es jemand verletzt.",
+      "steps": [
+        "Identifizierung der Tierart",
+        "Anlocken mit Ködern (Tierkunde)",
+        "Beruhigen und Zurückbringen"
+      ],
+      "rewards": {
+        "relationship": 5,
+        "stress": -5
+      }
+    },
+    {
+      "id": "loaw_necromancy_invitation",
+      "name": "Die Schwarze Einladung",
+      "description": "Eine Gruppe maskierter Gestalten nähert sich dir nachts. Sie schlagen dir vor, dem geheimen Zirkel der Nekromanten beizutreten.",
+      "steps": [
+        "Untersuche die Absichten der Gestalten.",
+        "Entscheide dich für oder gegen die Mitgliedschaft.",
+        "Verrate den Zirkel an Spektabilität Lacius (optional)."
+      ],
+      "reward": "Verbotenes Wissen (Nekromantie) oder Loyalität der Gilde",
+      "atmosphere": "dark_secretive"
+    },
+    {
+      "id": "loaw_transmutation_accident",
+      "name": "Der Glas-Unfall",
+      "description": "In der Transmutations-Klasse ist ein Zauber wild geworden. Die Wände verwandeln sich in Glas und das Dach droht einzustürzen.",
+      "steps": [
+        "Hilf den verletzten Mitschülern (Heilkunde).",
+        "Stabilisiere die Struktur (Magiekunde).",
+        "Rette wertvolle Folianten."
+      ],
+      "reward": "Ruf-Bonus in der Akademie",
+      "atmosphere": "chaotic_dangerous"
+    },
+    {
+      "id": "loaw_familiar_search",
+      "name": "Die Suche nach dem Vertrauten",
+      "description": "Du suchst nach einem permanenten magischen Begleiter. Eine Schlange, eine Katze oder ein Rabe stehen zur Wahl.",
+      "steps": [
+        "Führe das Beschwörungsritual durch.",
+        "Binde das Wesen an deine Seele.",
+        "Wähle einen Namen für deinen Vertrauten."
+      ],
+      "reward": "Vertrautes Tier",
+      "atmosphere": "magical_focused"
+    }
+  ]
+}

@@ -1,28 +1,70 @@
 {
   "meta": {
-    "version": "1.0.0-festum",
-    "lastUpdate": "2026-03-31T00:00:00.000Z",
-    "description": "Initial NPC list for Academy of Light and Darkness (Festum)"
+    "version": "1.1.0-festum",
+    "lastUpdate": "2026-04-09T00:00:00.000Z",
+    "description": "Erweiterte NPC-Liste für die Halle des Quecksilbers (Festum) und Umgebung."
   },
   "npcs": [
     {
-      "id": "festum_archmage_xy",
+      "id": "festum_spektabilitaet_tasha",
       "name": "Erzmagierin Tasha von Festum",
-      "role": "teacher",
-      "specialization": "Elementarismus",
+      "role": "spektabilitaet",
+      "specialization": "Alchimie, Transformation",
       "features": {
-        "voice": "festive_bornland",
-        "personality": "stoisch"
-      }
+        "voice": "bornlaendisch_aristokratisch",
+        "personality": "Pragmatisch, geschäftstüchtig, bornland-treu",
+        "portrait_prompt": "An elderly human woman with sharp features, wearing silver and white robes with mercury-drop patterns. A silver necklace with a drop of liquid mercury in glass."
+      },
+      "lore": "Leiterin der Halle des Quecksilbers. Sie pflegt enge Kontakte zum Haus Stoerrebrandt und sorgt dafür, dass die Akademie finanziell unabhängig bleibt."
     },
     {
-      "id": "festum_student_01",
-      "name": "Janko von den Bornauen",
+      "id": "festum_yppolita_von_gareth",
+      "name": "Prinzessin Yppolita von Gareth",
       "role": "student",
       "circle": "first",
+      "specialization": "Antimagie, Hellsicht",
       "features": {
-        "origin": "Festum"
-      }
+        "voice": "garethisch_hoefisch",
+        "personality": "Ruhig, tiefgründig, etwas umschattet durch das Exil",
+        "portrait_prompt": "A beautiful young woman with blonde hair and doe-brown eyes, wearing a simple but high-quality student robe of the Festum academy. She looks like a twin of Empress Rohaja."
+      },
+      "lore": "Zwillingsschwester von Rohaja. Nach einem Putschversuch (basierend auf gefälschten Dokumenten) wurde sie ins Bornland verbannt. Sie lernt in Festum Antimagie und Form."
+    },
+    {
+      "id": "festum_stover_stoerrebrandt",
+      "name": "Stover Regolan Stoerrebrandt",
+      "role": "patron",
+      "specialization": "Handel, Finanzen",
+      "features": {
+        "voice": "jovial_maechtig",
+        "personality": "Onkelhaft aber knallhart im Geschäft",
+        "portrait_prompt": "A portly older man with white-grey hair, expensive mercantile clothing, and a warm but calculating expression. Surrounded by ledgers and ink-wells."
+      },
+      "lore": "Patriarch des Handelshauses Stoerrebrandt. Er ist der wichtigste Mäzen der Akademie und einer der mächtigsten Männer Aventuriens."
+    },
+    {
+      "id": "festum_meister_sanderwik",
+      "name": "Meister Sanderwik",
+      "role": "teacher",
+      "specialization": "Mechanik, Ingenieurskunst",
+      "features": {
+        "voice": "tueftlerisch_begeistert",
+        "personality": "Brillanter Erfinder, oft in seine Arbeit vertieft",
+        "portrait_prompt": "A middle-aged man with oil-stained fingers, wearing goggles around his neck and a leather apron full of tools."
+      },
+      "lore": "Der bekannteste Mechanikus des Nordens. Er unterrichtet die theoretischen Grundlagen der Mechanik und arbeitet an geheimen Projekten für das Haus Stoerrebrandt."
+    },
+    {
+      "id": "festum_mantka_riiba",
+      "name": "Mantka Riiba",
+      "role": "contact",
+      "specialization": "Goblin-Schamanismus",
+      "features": {
+        "voice": "krächzend_geheimnisvoll",
+        "personality": "Gerissen, faszinierend, unheimlich",
+        "portrait_prompt": "An ancient female goblin with reddish-brown fur and violet eyes, adorned with bones and silver jewelry. Her gaze is unnervingly intelligent."
+      },
+      "lore": "Kunga Suula (Hochschamanin) der Festumer Goblins. Sie kontrolliert die Unterwelt der Goblins und ist eine wertvolle Informantin in der Stadt."
     }
   ]
 }

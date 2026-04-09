@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Informationen über die Akademie der Magischen Rüstung zu Gareth."
+  },
+  "academy": {
+    "name": "Akademie der Magischen Rüstung",
+    "city": "Gareth",
+    "alignment": "white",
+    "focus": ["Antimagie", "Schutzmagie"],
+    "spectability": "Aldare Firdayon (bis 1024), danach wechselnd/kommissarisch"
+  },
+  "npcs": [
+    {
+      "id": "gareth_magister_arcanus",
+      "name": "Magister Arcanus Alrik",
+      "role": "Dozent für De-Incantatio",
+      "personality": "Streng, pedantisch, aber loyal zum Reich.",
+      "hooks": ["Sucht nach einem verlorenen Folianten über die Bannung von Flugdämonen."]
+    },
+    {
+      "id": "gareth_adept_hesindia",
+      "name": "Adeptin Hesindia von Garlischgrötz",
+      "role": "Schülerin",
+      "personality": "Ehrgeizig, gut vernetzt im Horasreich.",
+      "hooks": ["Erhält verschlüsselte Briefe aus Vinsalt."]
+    }
+  ]
+}

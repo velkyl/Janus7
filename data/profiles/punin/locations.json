@@ -1,20 +1,39 @@
 {
   "meta": {
-    "version": "1.0.0-punin",
-    "description": "Orte in der Akademie zu Punin"
+    "version": "1.0",
+    "description": "Erweiterte Locations der Akademie in Punin (Redesign Integration)."
   },
   "locations": [
     {
-      "id": "punin_great_hall",
-      "name": "Große Halle des Salpikon",
-      "type": "indoor",
-      "atmosphere": "scholarly"
+      "id": "loc_eingangshalle",
+      "name": "Eingangshalle des Pentagrammatons",
+      "type": "hall",
+      "description": "Eine gewaltige, fünfeckige Halle aus braun-grünem Raschtulsmarmor. In der Luft schweben sieben gläserne Sphären.",
+      "atmosphere": "Ehrfurchtgebietend. Musik: Getragene Choräle.",
+      "notable_features": ["Sieben Orbs", "Fran-Horas-Statue"]
     },
     {
-      "id": "punin_library",
-      "name": "Erzmagierliche Bibliothek",
-      "type": "library",
-      "atmosphere": "quiet"
+      "id": "loc_lesesaal",
+      "name": "Magister-Faysharan-Lesesaal",
+      "type": "archive",
+      "description": "Ein Labyrinth-Trakt innerhalb der Bibliothek. Staubig und voller Geheimnisse.",
+      "atmosphere": "Beklemmend. Ideal für Schleichpassagen.",
+      "is_locked": true
+    },
+    {
+      "id": "loc_beschwoerungssaal",
+      "name": "Alter Beschwörungssaal",
+      "type": "lab",
+      "description": "Ein ungenutzter, kuppelförmiger Saal mit einem siebenstrahligen Stern. Risse in der Realität sind hier spürbar.",
+      "atmosphere": "Bedrohlich. Geruch nach Schwefel.",
+      "is_locked": true
+    },
+    {
+      "id": "loc_academy_park",
+      "name": "Akademiepark",
+      "type": "garden",
+      "description": "Parkanlage mit exotischen Blumen und der Statue der Nekromantin Aroqa.",
+      "atmosphere": "Friedlich bei Tag, geheimnisvoll bei Nacht."
     }
   ]
 }

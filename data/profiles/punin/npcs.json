@@ -1,28 +1,65 @@
 {
   "meta": {
-    "version": "1.0.0-punin",
-    "lastUpdate": "2026-04-01T00:00:00.000Z",
-    "description": "Initial NPC list for Academy of Advanced Magic (Punin)"
+    "version": "1.0",
+    "project": "JANUS7",
+    "file": "data/profiles/punin/npcs.json",
+    "description": "Vollständige NSC-Stammdaten für Punin - Erweiterte Version."
   },
   "npcs": [
     {
-      "id": "punin_archmage_xyz",
-      "name": "Spektabilität Salpikon Küper",
+      "id": "sirdon_kosmaar",
+      "name": "Sirdon Kosmaar",
       "role": "teacher",
-      "specialization": "Metamagie",
-      "features": {
-        "voice": "scholarly_punin",
-        "personality": "exzentrisch"
-      }
+      "tags": ["spektabilität", "magister_magnus", "metamagie", "traditionalist"],
+      "short_profile": "Gestrenger und erztraditioneller Akademieleiter.",
+      "lore_profile": {
+        "background": "Geboren 972 BF. Meisterhafter Metamagier und aktuelle Spektabilität des Pentagrammatons.",
+        "personality": "Konservativ, streng und intolerant gegenüber Fehlern.",
+        "secrets": "Überwacht heimlich die Forschung in Kuslik.",
+        "plot_hooks": "Beauftragt Scholaren mit diskreten Untersuchungen."
+      },
+      "portrait_prompt": "A highly detailed, atmospheric digital painting of Sirdon Kosmaar, a stern elderly male wizard with sharp features, wearing magnificent grey traditional mage robes. Dark fantasy RPG character portrait, Das Schwarze Auge style, grand magical academy library background, dramatic lighting, epic, masterpiece, high resolution."
     },
     {
-      "id": "punin_student_01",
-      "name": "Alrik von Punin",
+      "id": "asterion_barratos",
+      "name": "Asterion Barratos",
+      "role": "teacher",
+      "tags": ["magister_extraordinarius", "magietheorie"],
+      "short_profile": "Fahriger Forscher des Kraftliniennetzes.",
+      "lore_profile": {
+        "background": "Widmet sich der Erforschung astraler Strömungen.",
+        "personality": "Tief in Gedanken versunken, fahrig aber freundlich.",
+        "secrets": "Hat eine drohende astrale Erschütterung entdeckt.",
+        "plot_hooks": "Benötigt Messungen in den versiegelten Kellern."
+      },
+      "portrait_prompt": "A highly detailed, atmospheric digital painting of Asterion Barratos, a middle-aged absent-minded male wizard massaging his neck, wearing slightly disheveled grey robes. Dark fantasy RPG character portrait, Das Schwarze Auge style, cluttered study room with glowing floating astral maps, dramatic lighting, epic, masterpiece, high resolution."
+    },
+    {
+      "id": "nariwen_saba_zulhamin",
+      "name": "Nariwen saba Zulhamin",
+      "role": "staff",
+      "tags": ["archivarin", "graue_wacht", "tulamidin"],
+      "short_profile": "Geschichtenliebende Archivarin der Grauen Wacht.",
+      "lore_profile": {
+        "background": "Hütet die Schätze der Grauen Wacht.",
+        "personality": "Liebt Bequemlichkeit und alte Legenden.",
+        "secrets": "Gewährt Zugang zum 'Giftschrank' gegen Gefälligkeiten.",
+        "plot_hooks": "Ein verfluchtes Buch wurde entwendet."
+      },
+      "portrait_prompt": "A highly detailed, atmospheric digital painting of Nariwen saba Zulhamin, a elegant Tulamydian female archivist, wearing luxurious flowing grey and gold robes. Dark fantasy RPG character portrait, Das Schwarze Auge style, ancient restricted library background, mysterious lighting, epic, masterpiece, high resolution."
+    },
+    {
+      "id": "regolon_dachsfell",
+      "name": "Regolon Dachsfell",
       "role": "student",
-      "circle": "second",
-      "features": {
-        "origin": "Punin"
-      }
+      "year": 3,
+      "short_profile": "Extrem disziplinierter Eleve.",
+      "lore_profile": {
+        "background": "Bestand die Aufnahmeprüfung ohne Vorschule.",
+        "personality": "Humorlos strebsam, verachtet Faulheit.",
+        "secrets": "Nutzt heimlich Stimulanzien um dem Druck standzuhalten."
+      },
+      "portrait_prompt": "A highly detailed, atmospheric digital painting of Regolon Dachsfell, young exhausted but determined male wizard student, grey student robe. Dark fantasy RPG character portrait, Das Schwarze Auge style, stacks of books background, dramatic lighting."
     }
   ]
 }
