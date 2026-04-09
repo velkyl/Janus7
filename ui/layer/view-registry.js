@@ -333,6 +333,52 @@ function matchesSearch(value, searchTerms = []) {
   return searchTerms.every((term) => haystack.includes(term));
 }
 
+function buildChronicleExportSeed({ focusDate, locationFilter, tagFilter, search, focusDay, monthlyAnchors, yearlyMasterHooks }) {
+  const lines = [
+    'JANUS7 Bote Chronicle Export',
+    `Fokusdatum: ${focusDate ?? '—'}`,
+    `Ortsfilter: ${locationFilter || 'alle Orte'}`,
+    `Tag-Filter: ${tagFilter || 'alle Tags'}`,
+    `Suche: ${search || 'keine'}`,
+    '',
+    'Fokus-Tag:',
+  ];
+
+  const dayEntries = Array.isArray(focusDay?.entries) ? focusDay.entries : [];
+  if (dayEntries.length) {
+    for (const entry of dayEntries.slice(0, 8)) {
+      lines.push(`- ${entry.label} | ${entry.category} | ${entry.location}`);
+      lines.push(`  ${entry.description}`);
+    }
+  } else {
+    lines.push('- Keine passenden Tageseintraege.');
+  }
+
+  lines.push('', 'Monatsanker:');
+  if (Array.isArray(monthlyAnchors) && monthlyAnchors.length) {
+    for (const day of monthlyAnchors.slice(0, 6)) {
+      lines.push(`- ${day.date}: ${day.anchorEntries.map((entry) => entry?.label ?? entry?.id).filter(Boolean).join(', ')}`);
+    }
+  } else {
+    lines.push('- Keine passenden Monatsanker.');
+  }
+
+  lines.push('', 'Meisterinformationen im Jahr:');
+  if (Array.isArray(yearlyMasterHooks) && yearlyMasterHooks.length) {
+    for (const hook of yearlyMasterHooks.slice(0, 8)) {
+      lines.push(`- ${hook.title} | ${hook.location}`);
+      lines.push(`  ${hook.hook}`);
+    }
+  } else {
+    lines.push('- Keine passenden Meisterinformationen.');
+  }
+
+  return {
+    title: 'Bote Chronicle Seed',
+    text: lines.join('\n'),
+  };
+}
+
 async function buildChronicleBrowserView(engine, app) {
   const state = engine?.core?.state?.get?.() ?? {};
   const viewState = app?._getViewState?.('chronicleBrowser') ?? {};
@@ -440,6 +486,15 @@ async function buildChronicleBrowserView(engine, app) {
     days.filter((day) => Number(String(day?.date ?? '').slice(0, 4)) === targetYear),
     (masterinfoHooks?.hooks ?? []).filter((hook) => Number(hook?.bfYear ?? 0) === targetYear)
   ).slice(0, 24);
+  const chronicleExportSeed = buildChronicleExportSeed({
+    focusDate: focusDay?.date ?? bfDate,
+    locationFilter,
+    tagFilter,
+    search,
+    focusDay,
+    monthlyAnchors,
+    yearlyMasterHooks,
+  });
 
   return {
     unavailable: false,
@@ -459,6 +514,7 @@ async function buildChronicleBrowserView(engine, app) {
     yearlyMasterHooks,
     availableLocations,
     availableTags,
+    chronicleExportSeed,
   };
 }
 

@@ -82,5 +82,26 @@ export const Prompts = {
       instructions,
       'Output must be valid JSON and nothing else.'
     ].join('');
+  },
+
+  /**
+   * Real-time enrichment templates for different types.
+   */
+  ENRICHMENT: {
+    event: ({ text, meta }) => `Enrich the following event description for a Dark Eye (DSA5) campaign.
+Context: Magic Academy in Aventuria.
+Original Text: "${text}"
+Metadata: ${JSON.stringify(meta)}
+Produce a detailed, atmospheric, and lore-friendly description in German.`,
+    
+    situation: ({ text, meta }) => `Describe the following situation in a magic academy. 
+Original: "${text}"
+Context: ${JSON.stringify(meta)}
+Provide choices and sensory details.`,
+    
+    visual: ({ text, meta }) => `Generate a highly detailed visual prompt for an AI image generator (like Midjourney or DALL-E) based on this description:
+"${text}"
+Context: ${JSON.stringify(meta)}
+Focus on light, composition, and Aventurian aesthetics.`
   }
 };

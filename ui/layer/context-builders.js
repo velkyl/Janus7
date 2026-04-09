@@ -59,6 +59,7 @@ export function buildSystemView({ engine }) {
     enableUI: getSetting('enableUI'),
     enableQuestSystem: getSetting('enableQuestSystem'),
     enablePhase7: getSetting('enablePhase7'),
-    enableGemini: getSetting('enableGemini')
+    enableGemini: getSetting('enableGemini'),
+    geminiReady: !!game.janus7?.ki?.gemini?.apiKey
   };
 }

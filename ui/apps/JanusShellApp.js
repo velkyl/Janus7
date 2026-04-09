@@ -119,6 +119,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       copySeed: JanusShellApp.onCopySeed,
       chroniclePickDate: JanusShellApp.onChroniclePickDate,
       chronicleSearch: JanusShellApp.onChronicleSearch,
+      chronicleJumpPeriod: JanusShellApp.onChronicleJumpPeriod,
 
       // Control Panel Extracted Actions
       clearSlotBuilder: JanusShellApp.onClearSlotBuilder,
@@ -129,6 +130,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       kiApplyImport: JanusShellApp.onKiApplyImport,
       kiPreviewImport: JanusShellApp.onKiPreviewImport,
       kiSearch: JanusShellApp.onKiSearch,
+      kiGeminiTest: JanusShellApp.onKiGeminiTest,
       
       startDirectorDay: JanusShellApp.onStartDirectorDay,
       directorRunLesson: JanusShellApp.onDirectorRunLesson,
@@ -579,6 +581,52 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this?._setViewState?.('chronicleBrowser', { search: value });
   }
 
+  static async onChronicleJumpPeriod(event, _target) {
+    event?.preventDefault?.();
+    const D2 = foundry?.applications?.api?.DialogV2;
+    if (!D2?.prompt) {
+      ui.notifications?.warn?.('DialogV2 nicht verfuegbar.');
+      return;
+    }
+
+    const current = this?._getViewState?.('chronicleBrowser') ?? {};
+    const currentDate = String(current?.focusDate ?? '').trim();
+    const year = /^\d{4}-\d{2}-\d{2}$/.test(currentDate) ? currentDate.slice(0, 4) : '1047';
+    const month = /^\d{4}-\d{2}-\d{2}$/.test(currentDate) ? currentDate.slice(5, 7) : '01';
+    const content = `
+      <div class="janus7-card j7-dialog-card-reset">
+        <p class="j7-dialog-heading"><strong>Bote-Chronik: Monat/Jahr anspringen</strong></p>
+        <div class="j7-dialog-form-row">
+          <label for="janus7-chronicle-year" class="j7-dialog-label-fixed">Jahr</label>
+          <input type="text" id="janus7-chronicle-year" class="j7-dialog-input-grow" placeholder="1047" value="${escHtml(year)}" />
+        </div>
+        <div class="j7-dialog-form-row">
+          <label for="janus7-chronicle-month" class="j7-dialog-label-fixed">Monat</label>
+          <input type="text" id="janus7-chronicle-month" class="j7-dialog-input-grow" placeholder="05" value="${escHtml(month)}" />
+        </div>
+      </div>
+    `;
+
+    const result = await D2.prompt({
+      window: { title: 'Bote-Chronik Monat/Jahr' },
+      content,
+      ok: { label: 'Anspringen', icon: 'fas fa-arrow-right' },
+      rejectClose: false,
+      modal: true,
+    }).catch(() => null);
+    if (result === null) return;
+
+    const nextYear = document.getElementById('janus7-chronicle-year')?.value?.trim?.() ?? '';
+    const nextMonth = document.getElementById('janus7-chronicle-month')?.value?.trim?.() ?? '';
+    if (!/^\d{4}$/.test(nextYear) || !/^\d{1,2}$/.test(nextMonth)) {
+      ui.notifications?.warn?.('Erwartet: Jahr JJJJ und Monat 1-12.');
+      return;
+    }
+
+    const normalizedMonth = String(Math.min(12, Math.max(1, Number(nextMonth)))).padStart(2, '0');
+    this?._setViewState?.('chronicleBrowser', { focusDate: `${nextYear}-${normalizedMonth}-01`, offset: 0 });
+  }
+
   // ═══════════════════════════════════════════════════════════════════════════
   // Director Native Drag & Drop Logic
   // ═══════════════════════════════════════════════════════════════════════════
@@ -845,6 +893,24 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     } catch(err) {
       console.error('[JANUS7]', err);
       ui.notifications?.error('Abfrage \u00fcber KI Knowledge Bridge fehlgeschlagen.');
+    }
+  }
+
+  static async onKiGeminiTest(event) {
+    event?.preventDefault?.();
+    const gemini = game.janus7?.ki?.gemini;
+    if (!gemini) {
+      ui.notifications?.error('Gemini Service nicht verf\u00fcgbar.');
+      return;
+    }
+
+    ui.notifications?.info('Verbindung zu Google Gemini wird getestet...');
+    const result = await gemini.testConnection();
+    
+    if (result) {
+      ui.notifications?.info('Verbindung erfolgreich! Gemini ist bereit.');
+    } else {
+      ui.notifications?.error('Verbindung fehlgeschlagen. Bitte API-Key und Internetverbindung pr\u00fcfen.');
     }
   }
 

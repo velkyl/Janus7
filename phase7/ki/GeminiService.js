@@ -8,6 +8,7 @@
  */
 
 import { JanusConfig } from '../../core/config.js';
+import { Prompts } from './prompts.js';
 
 /**
  * JanusGeminiService
@@ -63,6 +64,9 @@ export class JanusGeminiService {
     
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${opts.model || 'gemini-1.5-flash'}:generateContent?key=${this.apiKey}`;
     
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), opts.timeout ?? 15000);
+    
     // Construct parts
     const parts = [];
     if (context) {
@@ -91,7 +95,8 @@ export class JanusGeminiService {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        signal: controller.signal
       });
 
       if (!response.ok) {
@@ -110,8 +115,31 @@ export class JanusGeminiService {
 
       return text;
     } catch (err) {
+      if (err.name === 'AbortError') {
+        throw new Error('Gemini API request timed out (15s).');
+      }
       this.logger?.error?.('GeminiService: Generation failed', err);
       throw err;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  /**
+   * Tests the connection to Gemini API.
+   * @returns {Promise<boolean>}
+   */
+  async testConnection() {
+    try {
+      const res = await this.generateContent('Hello, are you online? Respond with only "OK".', { 
+        includeState: false, 
+        model: 'gemini-1.5-flash',
+        timeout: 5000 
+      });
+      return res.trim().toUpperCase().includes('OK');
+    } catch (err) {
+      this.logger?.error?.('GeminiService: Connection test failed', err);
+      return false;
     }
   }
 
@@ -124,14 +152,17 @@ export class JanusGeminiService {
    * @returns {Promise<string>}
    */
   async enrich(type, sourceText, meta = {}) {
-    const prompt = `Enrich the following ${type} description. 
-Context: Dark Fantasy / Magic Academy in Aventuria (The Dark Eye / DSA5).
-Maintain the established tone and lore.
-Original Text: "${sourceText}"
-Additional Meta: ${JSON.stringify(meta)}
+    const templateFn = Prompts.ENRICHMENT[type] || Prompts.ENRICHMENT.situation;
+    const prompt = templateFn({ text: sourceText, meta });
 
-Please provide a more atmospheric, detailed version. If options or consequences are requested, include them as a list.`;
+    return this.generateContent(prompt, { includeDirector: true });
+  }
 
+  /**
+   * Suggests an AI image prompt.
+   */
+  async suggestVisual(sourceText, meta = {}) {
+    const prompt = Prompts.ENRICHMENT.visual({ text: sourceText, meta });
     return this.generateContent(prompt, { includeDirector: true });
   }
 }

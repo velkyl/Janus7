@@ -38,6 +38,9 @@
           <button type="button" class="j7-shell__btn" data-action="chroniclePickDate">
             <i class="fas fa-calendar-plus"></i> Datum waehlen
           </button>
+          <button type="button" class="j7-shell__btn" data-action="chronicleJumpPeriod">
+            <i class="fas fa-calendar-alt"></i> Monat/Jahr
+          </button>
           <button type="button" class="j7-shell__btn" data-action="chronicleSearch">
             <i class="fas fa-search"></i> Suche
           </button>
@@ -110,6 +113,28 @@
           </button>
         {{/each}}
       </div>
+    </article>
+
+    <article class="j7-shell__card j7-mt-sm">
+      <header class="j7-shell__card-head">
+        <div>
+          <h3><i class="fas fa-file-export j7-shell__card-icon" aria-hidden="true"></i><span>Export</span></h3>
+          <p>Kopierbarer Seed der aktuell gefilterten Chronikansicht.</p>
+        </div>
+      </header>
+      {{#if chronicleExportSeed}}
+        <div class="j7-seed-grid">
+          <article class="j7-seed-card">
+            <header>
+              <strong>{{chronicleExportSeed.title}}</strong>
+              <button type="button" class="janus-btn small" data-action="copySeed"><i class="fas fa-copy"></i> Kopieren</button>
+            </header>
+            <textarea rows="16">{{chronicleExportSeed.text}}</textarea>
+          </article>
+        </div>
+      {{else}}
+        <p class="muted">Kein exportierbarer Seed verfuegbar.</p>
+      {{/if}}
     </article>
 
     <article class="j7-shell__card j7-mt-sm">
