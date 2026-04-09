@@ -83,6 +83,162 @@ function hasCalendarDuplicate(page, { title, dsa5Date, location }) {
   });
 }
 
+async function promptChronicleCalendarJournal({ preferredJournalId = '', title = 'DSA5 Kalender-Export', summary = '' } = {}) {
+  const journals = listCalendarJournals();
+  if (!journals.length) {
+    ui.notifications?.warn?.('Kein Journal mit dsacalendar-Page gefunden.');
+    return null;
+  }
+
+  const D2 = foundry?.applications?.api?.DialogV2;
+  if (!D2?.prompt) {
+    ui.notifications?.warn?.('DialogV2 nicht verfuegbar.');
+    return null;
+  }
+
+  const options = journals
+    .map((journal) => `<option value="${escHtml(journal.id)}" ${journal.id === preferredJournalId ? 'selected' : ''}>${escHtml(journal.name)}</option>`)
+    .join('');
+  const content = `
+    <div class="janus7-card j7-dialog-card-reset">
+      <p class="j7-dialog-heading"><strong>${escHtml(title)}</strong></p>
+      <div class="j7-dialog-form-row">
+        <label for="janus7-chronicle-calendar-journal" class="j7-dialog-label-fixed">Kalenderjournal</label>
+        <select id="janus7-chronicle-calendar-journal" class="j7-dialog-input-grow">${options}</select>
+      </div>
+      ${summary ? `<p class="j7-dialog-subtext">${escHtml(summary)}</p>` : ''}
+    </div>
+  `;
+
+  const result = await D2.prompt({
+    window: { title },
+    content,
+    ok: { label: 'Exportieren', icon: 'fas fa-calendar-plus' },
+    rejectClose: false,
+    modal: true,
+  }).catch(() => null);
+  if (result === null) return null;
+
+  const journalId = document.getElementById('janus7-chronicle-calendar-journal')?.value?.trim?.() ?? '';
+  if (!journalId) {
+    ui.notifications?.warn?.('Kein Kalenderjournal ausgewaehlt.');
+    return null;
+  }
+  return journalId;
+}
+
+async function exportChronicleEntriesToCalendar({ journalId, entriesByDate = [] } = {}) {
+  const calendarSync = new DSA5CalendarSync({ logger: console });
+  const page = calendarSync.getCalendarPage(journalId);
+  if (!page) {
+    ui.notifications?.warn?.('Im ausgewaehlten Journal wurde keine dsacalendar-Page gefunden.');
+    return null;
+  }
+
+  let created = 0;
+  let skipped = 0;
+  for (const day of entriesByDate) {
+    const focusDate = String(day?.date ?? '').trim();
+    const dsa5Date = toChronicleDsa5Date(focusDate);
+    if (!focusDate || !dsa5Date) {
+      skipped += Array.isArray(day?.entries) ? day.entries.length : 0;
+      continue;
+    }
+
+    for (const entry of (day?.entries ?? [])) {
+      const title = String(entry?.label ?? '').trim();
+      const location = String(entry?.location ?? 'Akademie').trim() || 'Akademie';
+      if (!title) {
+        skipped++;
+        continue;
+      }
+      if (hasCalendarDuplicate(page, { title, dsa5Date, location })) {
+        skipped++;
+        continue;
+      }
+      const ok = await calendarSync.addCalendarEventForDate({
+        journalId,
+        title,
+        content: buildChronicleCalendarEntryContent(entry, focusDate),
+        dsa5Date,
+        location,
+        category: 2,
+      });
+      if (ok) created++;
+      else skipped++;
+    }
+  }
+
+  return { created, skipped };
+}
+
+function clearNode(node) {
+  node?.replaceChildren?.();
+}
+
+function renderAiStatus(outputBox, { iconClass = '', message = '', muted = true } = {}) {
+  if (!outputBox) return;
+  clearNode(outputBox);
+  const paragraph = document.createElement('p');
+  paragraph.className = muted ? 'muted animate-pulse' : '';
+  if (iconClass) {
+    const icon = document.createElement('i');
+    icon.className = iconClass;
+    paragraph.append(icon, document.createTextNode(' '));
+  }
+  paragraph.append(document.createTextNode(message));
+  outputBox.append(paragraph);
+}
+
+function renderAiImageResult(outputBox, imagePath) {
+  if (!outputBox) return;
+  clearNode(outputBox);
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'ai-generated-image';
+
+  const image = document.createElement('img');
+  image.src = imagePath;
+  image.style.maxWidth = '100%';
+  image.style.borderRadius = '4px';
+  image.style.boxShadow = '0 4px 12px rgba(0,0,0,0.5)';
+  wrapper.append(image);
+
+  const pathParagraph = document.createElement('p');
+  pathParagraph.className = 'mt-sm';
+  const strong = document.createElement('strong');
+  strong.textContent = 'Pfad:';
+  const code = document.createElement('code');
+  code.textContent = imagePath;
+  pathParagraph.append(strong, document.createTextNode(' '), code);
+  wrapper.append(pathParagraph);
+
+  outputBox.append(wrapper);
+}
+
+function renderAiError(outputBox, error) {
+  if (!outputBox) return;
+  clearNode(outputBox);
+  const paragraph = document.createElement('p');
+  paragraph.className = 'error';
+  paragraph.textContent = `Fehler: ${error?.message ?? error ?? 'Unbekannter Fehler'}`;
+  outputBox.append(paragraph);
+}
+
+function renderAiTextResponse(outputBox, text) {
+  if (!outputBox) return;
+  clearNode(outputBox);
+  const wrapper = document.createElement('div');
+  wrapper.className = 'ai-response';
+  const chunks = String(text ?? '').split(/\r?\n/);
+  for (const chunk of chunks) {
+    const line = document.createElement('p');
+    line.textContent = chunk || ' ';
+    wrapper.append(line);
+  }
+  outputBox.append(wrapper);
+}
+
 const APP_LAUNCHER_EXCLUDE = new Set(['shell', 'controlPanel', 'sessionPrepWizard', 'lessons', 'aiRoundtrip', 'commandCenter', 'settingsTestHarness']);
 
 const APP_NAV_META = Object.freeze({
@@ -168,6 +324,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       chronicleSearch: JanusShellApp.onChronicleSearch,
       chronicleJumpPeriod: JanusShellApp.onChronicleJumpPeriod,
       chronicleExportCalendar: JanusShellApp.onChronicleExportCalendar,
+      chronicleExportMonthCalendar: JanusShellApp.onChronicleExportMonthCalendar,
 
       // Control Panel Extracted Actions
       clearSlotBuilder: JanusShellApp.onClearSlotBuilder,
@@ -182,6 +339,10 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       kiGenerateConsequences: JanusShellApp.onKiGenerateConsequences,
       kiGenerateAtmosphere: JanusShellApp.onKiGenerateAtmosphere,
       kiGenerateVisual: JanusShellApp.onKiGenerateVisual,
+      kiGenerateImage: JanusShellApp.onKiGenerateImage,
+      kiApplySceneBackground: JanusShellApp.onKiApplySceneBackground,
+      kiApplyAsPortrait: JanusShellApp.onKiApplyAsPortrait,
+      kiApplyAsIcon: JanusShellApp.onKiApplyAsIcon,
       
       startDirectorDay: JanusShellApp.onStartDirectorDay,
       directorRunLesson: JanusShellApp.onDirectorRunLesson,
@@ -789,6 +950,51 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   // Director Native Drag & Drop Logic
   // ═══════════════════════════════════════════════════════════════════════════
 
+  static async onChronicleExportMonthCalendar(event, _target) {
+    event?.preventDefault?.();
+    if (!game?.user?.isGM) {
+      ui.notifications?.warn?.('Nur der GM kann Kalender-Eintraege exportieren.');
+      return;
+    }
+    if (game?.system?.id !== 'dsa5') {
+      ui.notifications?.warn?.('Der Export ist nur im DSA5-System verfuegbar.');
+      return;
+    }
+
+    const monthlyAnchors = Array.isArray(this?._prefetchedShell?.viewModel?.monthlyAnchors)
+      ? this._prefetchedShell.viewModel.monthlyAnchors
+      : [];
+    const exportDays = monthlyAnchors
+      .map((day) => ({
+        date: String(day?.date ?? '').trim(),
+        entries: Array.isArray(day?.anchorEntries) ? day.anchorEntries : [],
+      }))
+      .filter((day) => day.date && day.entries.length);
+    if (!exportDays.length) {
+      ui.notifications?.warn?.('Im aktuellen BF-Monat liegen keine exportierbaren Monatsanker vor.');
+      return;
+    }
+
+    const current = this?._getViewState?.('chronicleBrowser') ?? {};
+    const focusDate = String(this?._prefetchedShell?.viewModel?.focusDate ?? '').trim();
+    const monthLabel = /^\d{4}-\d{2}-\d{2}$/.test(focusDate) ? focusDate.slice(0, 7) : 'aktueller Monat';
+    const totalEntries = exportDays.reduce((sum, day) => sum + day.entries.length, 0);
+    const journalId = await promptChronicleCalendarJournal({
+      preferredJournalId: String(current?.calendarJournalId ?? '').trim(),
+      title: 'DSA5 Monatsanker-Export',
+      summary: `${monthLabel} · ${exportDays.length} Tage · ${totalEntries} Anker`,
+    });
+    if (!journalId) return;
+
+    const result = await exportChronicleEntriesToCalendar({ journalId, entriesByDate: exportDays });
+    if (!result) return;
+
+    this?._setViewState?.('chronicleBrowser', { calendarJournalId: journalId });
+    this._lastActionResult = `Monatsanker-Export ${monthLabel}: ${result.created} erstellt, ${result.skipped} uebersprungen.`;
+    if (result.created > 0) ui.notifications?.info?.(`${result.created} Monatsanker exportiert, ${result.skipped} uebersprungen.`);
+    else ui.notifications?.warn?.(`Keine neuen Monatsanker exportiert. ${result.skipped} uebersprungen.`);
+  }
+
   _enableDirectorDragDrop() {
     const el = this.domElement;
     if (!el || this._directorDnDEnabled) return;
@@ -1072,7 +1278,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async onKiGenerateConsequences(event, target) {
+  static async onKiGenerateConsequences(event, _target) {
     event?.preventDefault?.();
     const input = document.getElementById('j7-ai-input')?.value?.trim();
     if (!input) return ui.notifications.warn('Bitte beschreibe zuerst eine Situation oder Aktion.');
@@ -1080,7 +1286,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this._runAiTask('generateConsequences', input);
   }
 
-  static async onKiGenerateAtmosphere(event, target) {
+  static async onKiGenerateAtmosphere(event, _target) {
     event?.preventDefault?.();
     const input = document.getElementById('j7-ai-input')?.value?.trim();
     if (!input) return ui.notifications.warn('Bitte beschreibe zuerst eine Situation.');
@@ -1088,7 +1294,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this._runAiTask('suggestAtmosphere', input);
   }
 
-  static async onKiGenerateVisual(event, target) {
+  static async onKiGenerateVisual(event, _target) {
     event?.preventDefault?.();
     const input = document.getElementById('j7-ai-input')?.value?.trim();
     if (!input) return ui.notifications.warn('Bitte beschreibe zuerst ein Motiv.');
@@ -1096,18 +1302,79 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this._runAiTask('suggestVisual', input);
   }
 
+  static async onKiGenerateImage(event, _target) {
+    event?.preventDefault?.();
+    const input = document.getElementById('j7-ai-input')?.value?.trim();
+    if (!input) return ui.notifications.warn('Bitte beschreibe zuerst das gewünschte Motiv.');
+
+    const type = document.getElementById('j7-ai-image-type')?.value || 'scene';
+    const gemini = game.janus7?.ki?.gemini;
+    const outputBox = document.getElementById('j7-ai-output');
+    const resultActions = document.getElementById('j7-ai-result-actions');
+    if (!outputBox || !gemini?.isEnabled) return;
+
+    renderAiStatus(outputBox, { iconClass: 'fas fa-magic', message: `Gemini generiert ${type}...` });
+    if (resultActions) resultActions.style.display = 'none';
+
+    try {
+      const opts = {
+        aspectRatio: type === 'scene' ? '16:9' : '1:1',
+        filename: `${type}_${Date.now()}.png`
+      };
+      const imagePath = await gemini.generateAndSaveImage(input, opts);
+      renderAiImageResult(outputBox, imagePath);
+      if (resultActions) {
+        resultActions.style.display = 'flex';
+        resultActions.dataset.imagePath = imagePath;
+        
+        // Toggle visibility of specific apply buttons
+        document.getElementById('j7-btn-apply-scene').style.display = type === 'scene' ? 'inline-block' : 'none';
+        document.getElementById('j7-btn-apply-portrait').style.display = type === 'portrait' ? 'inline-block' : 'none';
+        document.getElementById('j7-btn-apply-icon').style.display = type === 'icon' ? 'inline-block' : 'none';
+      }
+      ui.notifications.info('Bild erfolgreich generiert.');
+    } catch (err) {
+      renderAiError(outputBox, err);
+    }
+  }
+
+  static async onKiApplyAsPortrait(event, _target) {
+    event?.preventDefault?.();
+    const path = document.getElementById('j7-ai-result-actions')?.dataset.imagePath;
+    if (!path) return;
+
+    // Use current targeted actor if any, otherwise prompt
+    const actor = game.user.targets.size > 0 
+      ? game.user.targets.first().actor 
+      : canvas.tokens.controlled[0]?.actor;
+
+    if (!actor) return ui.notifications.warn('Bitte markiere zuerst einen Token (NSC).');
+    
+    await actor.update({ img: path });
+    ui.notifications.info(`Portr\u00e4t f\u00fcr "${actor.name}" aktualisiert.`);
+  }
+
+  static async onKiApplyAsIcon(event, _target) {
+    event?.preventDefault?.();
+    const path = document.getElementById('j7-ai-result-actions')?.dataset.imagePath;
+    if (!path) return;
+
+    ui.notifications.info('Icon generiert. Du kannst den Pfad nun in Items verwenden: ' + path);
+    // Optionally: if a sidebar item is selected or similar.
+  }
+
   static async _runAiTask(method, input) {
     const gemini = game.janus7?.ki?.gemini;
     const outputBox = document.getElementById('j7-ai-output');
     if (!outputBox || !gemini?.isEnabled) return;
 
-    outputBox.innerHTML = '<p class="muted animate-pulse"><i class="fas fa-spinner fa-spin"></i> KI analysiert Situation...</p>';
+    renderAiStatus(outputBox, { iconClass: 'fas fa-spinner fa-spin', message: 'KI analysiert Situation...' });
     
     try {
       const result = await gemini[method](input);
-      outputBox.innerHTML = `<div class="ai-response">${result.replace(/\n/g, '<br>')}</div>`;
+      renderAiTextResponse(outputBox, result);
     } catch (err) {
-      outputBox.innerHTML = `<p class="error">Fehler: ${err.message}</p>`;
+      renderAiError(outputBox, err);
     }
   }
 

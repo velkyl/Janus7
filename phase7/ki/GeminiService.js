@@ -7,6 +7,7 @@
  * Direct integration with Google Gemini API for real-time enrichment and generation.
  */
 
+import { MODULE_ID } from '../../core/common.js';
 import { JanusConfig } from '../../core/config.js';
 import { Prompts } from './prompts.js';
 
@@ -59,6 +60,7 @@ export class JanusGeminiService {
       throw new Error('Gemini API key is missing.');
     }
 
+    const systemPrompt = JanusConfig.get('geminiSystemPrompt') || '';
     const includeState = opts.includeState !== false;
     const context = includeState ? this.aiService?.getContext(opts) : null;
     
@@ -69,6 +71,9 @@ export class JanusGeminiService {
     
     // Construct parts
     const parts = [];
+    if (systemPrompt) {
+      parts.push({ text: `SYSTEM INSTRUCTION: ${systemPrompt}\n\n` });
+    }
     if (context) {
       parts.push({ text: `JANUS7 SYSTEM CONTEXT (JSON):\n${JSON.stringify(context, null, 2)}\n\n---\n` });
     }
@@ -164,6 +169,84 @@ export class JanusGeminiService {
   async suggestVisual(sourceText, meta = {}) {
     const prompt = Prompts.ENRICHMENT.visual({ text: sourceText, meta });
     return this.generateContent(prompt, { includeDirector: true });
+  }
+
+  /**
+   * Generates an image using Gemini (Imagen) and saves it to the Foundry server.
+   * 
+   * @param {string} prompt - Visual prompt.
+   * @param {Object} [opts] - Options.
+   * @param {string} [opts.filename] - Desired filename.
+   * @param {string} [opts.aspectRatio='1:1'] - '1:1', '16:9', '4:3', '3:4'
+   * @returns {Promise<string>} - The web path to the saved image.
+   */
+  async generateAndSaveImage(prompt, opts = {}) {
+    if (!this.isEnabled) throw new Error('Gemini is not enabled.');
+
+    // We use Imagen 3 for generation
+    const model = 'imagen-3.0-generate-001';
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:predict?key=${this.apiKey}`;
+    
+    // Apply visual system prompt as style override
+    const stylePrompt = JanusConfig.get('imagenSystemPrompt') || '';
+    const fullPrompt = stylePrompt ? `${prompt}. Style: ${stylePrompt}` : prompt;
+
+    // Imagen 3 request structure
+    const body = {
+      instances: [{ prompt: fullPrompt }],
+      parameters: {
+        sampleCount: 1,
+        aspectRatio: opts.aspectRatio || "1:1",
+        outputMimeType: "image/png"
+      }
+    };
+
+    try {
+      this.logger?.info?.('GeminiService: Generating image...', { prompt });
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(`Gemini Image Error: ${err.error?.message || response.statusText}`);
+      }
+
+      const result = await response.json();
+      const base64Data = result.predictions?.[0]?.bytesBase64Encoded || result.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+
+      if (!base64Data) {
+        throw new Error('No image data received from Gemini.');
+      }
+
+      // 2. Save to Foundry
+      const name = opts.filename || `gen_${Date.now()}.png`;
+      const folderPath = `modules/${MODULE_ID}/assets/generated`;
+      
+      // Convert to blob
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/png' });
+      const file = new File([blob], name, { type: 'image/png' });
+
+      // Upload via Foundry FilePicker
+      // We assume the directory exists or FilePicker creates it (usually needs manual dir creation via FilePicker.createDirectory)
+      try { await FilePicker.createDirectory('data', folderPath); } catch (e) { /* ignore if already exists */ }
+      
+      const uploadRes = await FilePicker.upload('data', folderPath, file, {});
+      this.logger?.info?.('GeminiService: Image saved', { path: uploadRes.path });
+
+      return uploadRes.path;
+    } catch (err) {
+      this.logger?.error?.('GeminiService: Image generation failed', err);
+      throw err;
+    }
   }
 
   /**

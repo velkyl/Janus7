@@ -287,6 +287,26 @@ export class JanusConfig {
       type: Boolean,
       default: false,
     });
+
+    // Gemini System Prompt
+    game.settings.register(MODULE_ID, 'geminiSystemPrompt', {
+      name: 'JANUS7.Settings.GeminiSystemPrompt.Name',
+      hint: 'JANUS7.Settings.GeminiSystemPrompt.Hint',
+      scope: 'world',
+      config: true,
+      default: 'Wahre die Lore von Aventurien und den Tonfall eines erfahrenen Spielleiters. Antworte auf Deutsch.',
+      type: String
+    });
+
+    // Imagen Visual Prompt (Style)
+    game.settings.register(MODULE_ID, 'imagenSystemPrompt', {
+      name: 'JANUS7.Settings.ImagenSystemPrompt.Name',
+      hint: 'JANUS7.Settings.ImagenSystemPrompt.Hint',
+      scope: 'world',
+      config: true,
+      default: 'Digital Art, DSA Style, Cinematic Lighting, Highly Detailed, Aventurian Aesthetic.',
+      type: String
+    });
   }
 
   /**

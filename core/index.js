@@ -26,6 +26,7 @@ import { JanusErrorAggregator } from './error-aggregator.js';
 import { JanusAiService } from './ai.js';
 import { installUiWriteGuard } from './guards/ui-write-guard.js';
 import { runJanusDiagnostics, generateBugReport } from './diagnostics.js';
+import { JanusAssetGuard } from './services/asset-guard.js';
 
 /**
  * Janus7Engine
@@ -58,6 +59,7 @@ export class Janus7Engine {
     this.academy = { data: null, debug: null };
     this.bridge = { dsa5: null };
     this.services = { registry: this.serviceRegistry };
+    this.assetGuard = new JanusAssetGuard(this);
   }
 
   /**
