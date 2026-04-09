@@ -29,7 +29,14 @@ export const questCommands = {
       label: 'Quest ID', 
       defaultValue: 'Q_DEMO_LIBRARY' 
     });
-    const actorId = dataset.actorId || game.user.character?.uuid;
+    let actorId = dataset.actorId || game.user.character?.uuid;
+    if (!actorId) {
+      actorId = await JanusUI.prompt({
+        title: 'Start Quest',
+        label: 'Actor UUID',
+        defaultValue: ''
+      });
+    }
     
     if (!questId || !actorId) return { cancelled: true };
     
@@ -37,6 +44,47 @@ export const questCommands = {
       const result = await engine.academy.quests.startQuest(questId, { actorId });
       ui.notifications.info(`Quest started: ${questId}`);
       return result;
+    });
+  },
+
+  /**
+   * Spawn a random event from a configured pool and open it immediately.
+   */
+  async spawnEventFromPool(dataset = {}) {
+    if (!_checkPermission('spawnEventFromPool')) return { success: false, cancelled: true };
+
+    const engine = _engine();
+    if (!engine?.academy?.events) throw new Error('Event Engine not available');
+
+    const poolId = dataset.poolId || await JanusUI.prompt({
+      title: 'Spawn Event Pool',
+      label: 'Pool ID',
+      defaultValue: ''
+    });
+    let actorId = dataset.actorId || game.user.character?.uuid;
+    if (!actorId) {
+      actorId = await JanusUI.prompt({
+        title: 'Spawn Event Pool',
+        label: 'Actor UUID',
+        defaultValue: ''
+      });
+    }
+
+    if (!poolId || !actorId) return { cancelled: true };
+
+    return await _wrap('spawnEventFromPool', async () => {
+      const event = await engine.academy.events.spawnFromPool(poolId, { actorId });
+      if (!event) {
+        ui.notifications.info(`Kein ausloesbares Event in Pool: ${poolId}`);
+        return { success: true, spawned: false, poolId, actorId };
+      }
+
+      const open = game.janus7Quest?.showEvent;
+      const eventId = event?.eventId ?? event?.id ?? null;
+      if (eventId && typeof open === 'function') open(eventId, actorId);
+
+      ui.notifications.info(`Event aus Pool gestartet: ${event?.title ?? eventId ?? poolId}`);
+      return { success: true, spawned: true, poolId, actorId, eventId, event };
     });
   },
 
@@ -110,13 +158,13 @@ export const questCommands = {
       const questState = engine.core.state.get(STATE_PATHS.QUEST_STATES) || engine.core.state.get(STATE_PATHS.ACADEMY_QUESTS) || {};
       const exported = JSON.stringify(questState, null, 2);
       
-      const blob = new Blob([exported], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
+      const blob = new globalThis.Blob([exported], { type: 'application/json' });
+      const url = globalThis.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = `janus7-quests-${Date.now()}.json`;
       a.click();
-      URL.revokeObjectURL(url);
+      globalThis.URL.revokeObjectURL(url);
       
       ui.notifications.info('Quests exported');
       return { exported: true, size: exported.length };

@@ -337,6 +337,81 @@
   </section>
 
   <section class="j7-panel">
+    <h3><i class="fas fa-bolt"></i> Akademie-Hooks ausspielen</h3>
+    {{#if view.academyActionHooks}}
+      <div class="j7-seed-grid">
+        <article class="j7-seed-card">
+          <header>
+            <strong>Queststarts</strong>
+            <span class="j7-text-dim">{{view.academyActionHooks.questStarts.length}}</span>
+          </header>
+          {{#if view.academyActionHooks.questStarts.length}}
+            <ul class="j7-plain-list">
+              {{#each view.academyActionHooks.questStarts as |item|}}
+                <li>
+                  <strong>{{item.title}}</strong><br>
+                  <span class="j7-text-dim">{{item.category}}{{#if item.tags.length}} · {{#each item.tags as |tag|}}{{tag}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}</span><br>
+                  <button type="button" class="janus-btn small" data-action="executeShellAction" data-command="startQuest" data-quest-id="{{item.questId}}" data-actor-id="{{../view.academyActionHooks.defaultActorId}}">
+                    <i class="fas fa-play"></i> Quest starten
+                  </button>
+                </li>
+              {{/each}}
+            </ul>
+          {{else}}
+            <p class="j7-text-dim">Keine startbaren Questpfade im Profilindex gefunden.</p>
+          {{/if}}
+        </article>
+
+        <article class="j7-seed-card">
+          <header>
+            <strong>Event-Pools</strong>
+            <span class="j7-text-dim">{{view.academyActionHooks.poolLaunchers.length}}</span>
+          </header>
+          {{#if view.academyActionHooks.poolLaunchers.length}}
+            <ul class="j7-plain-list">
+              {{#each view.academyActionHooks.poolLaunchers as |item|}}
+                <li>
+                  <strong>{{item.title}}</strong><br>
+                  <span class="j7-text-dim">{{item.eventCount}} Events{{#if item.eventTitles.length}} · {{#each item.eventTitles as |title|}}{{title}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}</span><br>
+                  <button type="button" class="janus-btn small" data-action="executeShellAction" data-command="spawnEventFromPool" data-pool-id="{{item.poolId}}" data-actor-id="{{../view.academyActionHooks.defaultActorId}}">
+                    <i class="fas fa-dice"></i> Pool ausspielen
+                  </button>
+                </li>
+              {{/each}}
+            </ul>
+          {{else}}
+            <p class="j7-text-dim">Keine spielbaren Event-Pools im Profilindex gefunden.</p>
+          {{/if}}
+        </article>
+
+        <article class="j7-seed-card">
+          <header>
+            <strong>Aktuelle Event-Hooks</strong>
+            <span class="j7-text-dim">{{view.academyActionHooks.currentEventLaunchers.length}}</span>
+          </header>
+          {{#if view.academyActionHooks.currentEventLaunchers.length}}
+            <ul class="j7-plain-list">
+              {{#each view.academyActionHooks.currentEventLaunchers as |item|}}
+                <li>
+                  <strong>{{item.title}}</strong><br>
+                  <span class="j7-text-dim">{{item.type}}</span><br>
+                  <button type="button" class="janus-btn small" data-action="executeShellAction" data-command="openEventPopup" data-event-id="{{item.eventId}}" data-actor-id="{{../view.academyActionHooks.defaultActorId}}">
+                    <i class="fas fa-scroll"></i> Event oeffnen
+                  </button>
+                </li>
+              {{/each}}
+            </ul>
+          {{else}}
+            <p class="j7-text-dim">Im aktuellen Slot liegen keine direkt oeffenbaren Event-Hooks.</p>
+          {{/if}}
+        </article>
+      </div>
+    {{else}}
+      <p class="j7-text-dim">Keine direkt ausspielbaren Akademie-Hooks aus den aktuellen Profildaten ableitbar.</p>
+    {{/if}}
+  </section>
+
+  <section class="j7-panel">
     <h3><i class="fas fa-school"></i> Akademie-Ueberblick</h3>
     {{#if view.academyOverview}}
       <p class="j7-text-dim">{{view.academyOverview.profileName}} · {{view.academyOverview.region}} · {{view.academyOverview.focus}}</p>

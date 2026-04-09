@@ -44,8 +44,9 @@ export class JanusSessionPrepService {
     const chroniclePreview = await this._collectChroniclePreview({ engine, academyData, questsSummary, state, worldChronicleEntries });
     const socialStoryHookQueue = this._collectSocialStoryHookQueue({ state, academyData });
     const chronicleSeed = this._buildChronicleSeed({ slotRef, prepAgenda, chroniclePreview, questsSummary, activeLocation });
-    const academyOverview = this._buildAcademyOverview({ academyData, slotRef, questsSummary, activeLocation });
-    const academySeed = this._buildAcademySeed({ academyOverview, slotRef, questsSummary, prepAgenda, activeLocation });
+    const academyActionHooks = this._buildAcademyActionHooks({ academyData, slotRef, currentSlot, currentCast, questsSummary });
+    const academyOverview = this._buildAcademyOverview({ academyData, slotRef, questsSummary, activeLocation, academyActionHooks });
+    const academySeed = this._buildAcademySeed({ academyOverview, academyActionHooks, slotRef, questsSummary, prepAgenda, activeLocation });
     const gradeEntries = this._collectGradeEntries({ engine, academyData });
     const gradeOverview = this._buildGradeOverview({ gradeEntries, academyData });
     const gradeLedger = this._buildGradeLedger({ gradeEntries, slotRef });
@@ -72,6 +73,7 @@ export class JanusSessionPrepService {
       chroniclePreview,
       socialStoryHookQueue,
       chronicleSeed,
+      academyActionHooks,
       academyOverview,
       academySeed,
       gradeOverview,
@@ -91,6 +93,7 @@ export class JanusSessionPrepService {
         chronicleCount: chroniclePreview.length,
         socialStoryHookCount: socialStoryHookQueue.items.length,
         chronicleSeedLength: chronicleSeed.text.length,
+        academyActionHookCount: academyActionHooks.questStarts.length + academyActionHooks.poolLaunchers.length + academyActionHooks.currentEventLaunchers.length,
         academySeedLength: academySeed.text.length,
         gradeEntryCount: gradeEntries.length,
         gradeLedgerCount: gradeLedger.items.length,
@@ -1302,7 +1305,66 @@ export class JanusSessionPrepService {
     };
   }
 
-  _buildAcademyOverview({ academyData, slotRef, questsSummary, activeLocation }) {
+  _buildAcademyActionHooks({ academyData, slotRef, currentSlot, currentCast, questsSummary }) {
+    const questIndex = academyData?.getQuestIndex?.() ?? [];
+    const poolIndex = academyData?.getPoolIndex?.() ?? [];
+    const defaultActorId = currentCast.find((entry) => entry?.actorUuid)?.actorUuid
+      ?? (questsSummary?.items ?? []).find((entry) => entry?.actorId)?.actorId
+      ?? game?.user?.character?.uuid
+      ?? '';
+
+    const questStarts = questIndex.slice(0, 5).map((entry) => ({
+      questId: entry?.questId ?? '',
+      title: entry?.title ?? entry?.questId ?? 'Quest',
+      category: entry?.category ?? 'quest',
+      tags: Array.isArray(entry?.tags) ? entry.tags : [],
+    })).filter((entry) => entry.questId);
+
+    const poolLaunchers = poolIndex.slice(0, 5).map((entry) => {
+      const eventIds = Array.isArray(entry?.events) ? entry.events : [];
+      const eventTitles = eventIds
+        .map((eventId) => academyData?.content?.by?.event?.get?.(eventId)?.title ?? academyData?.getEvent?.(eventId)?.title ?? eventId)
+        .filter(Boolean)
+        .slice(0, 3);
+      return {
+        poolId: entry?.poolId ?? '',
+        title: entry?.title ?? entry?.poolId ?? 'Event-Pool',
+        eventCount: eventIds.length,
+        eventTitles,
+      };
+    }).filter((entry) => entry.poolId);
+
+    const currentEventLaunchers = (currentSlot?.events ?? []).slice(0, 4).map((entry) => ({
+      eventId: entry?.eventId ?? entry?.id ?? '',
+      title: entry?.title ?? entry?.id ?? 'Event',
+      type: entry?.type ?? 'event',
+    })).filter((entry) => entry.eventId);
+
+    const activeQuestThreads = (questsSummary?.items ?? []).slice(0, 5).map((entry) => ({
+      questId: entry?.questId ?? '',
+      title: entry?.title ?? entry?.questId ?? 'Quest',
+      actorId: entry?.actorId ?? '',
+      currentNodeTitle: entry?.currentNodeTitle ?? entry?.currentNodeId ?? '—',
+      currentEventId: entry?.currentEventId ?? '',
+    })).filter((entry) => entry.questId);
+
+    const currentLessonHooks = academyData?.getTeachingSessionsForSlot?.(slotRef)?.slice(0, 4).map((entry) => ({
+      label: entry?.subject ?? entry?.id ?? 'Lehrtermin',
+      teacher: entry?.teacher ?? '—',
+      room: entry?.room ?? '—',
+    })) ?? [];
+
+    return {
+      defaultActorId,
+      questStarts,
+      poolLaunchers,
+      currentEventLaunchers,
+      activeQuestThreads,
+      currentLessonHooks,
+    };
+  }
+
+  _buildAcademyOverview({ academyData, slotRef, questsSummary, activeLocation, academyActionHooks }) {
     const activeProfile = JanusProfileRegistry.getActive();
     const lessons = academyData?.getLessons?.() ?? [];
     const npcs = academyData?.getNpcs?.() ?? [];
@@ -1331,6 +1393,8 @@ export class JanusSessionPrepService {
         socialLinks: socialLinks.length,
         currentSessions: sessions.length,
         openQuests: Number(questsSummary?.total ?? 0),
+        questStarts: academyActionHooks?.questStarts?.length ?? 0,
+        poolLaunchers: academyActionHooks?.poolLaunchers?.length ?? 0,
       },
       nextHooks: {
         lessons: lessons.slice(0, 3).map((entry) => entry?.name ?? entry?.id).filter(Boolean),
@@ -1340,7 +1404,7 @@ export class JanusSessionPrepService {
     };
   }
 
-  _buildAcademySeed({ academyOverview, slotRef, questsSummary, prepAgenda, activeLocation }) {
+  _buildAcademySeed({ academyOverview, academyActionHooks, slotRef, questsSummary, prepAgenda, activeLocation }) {
     const lines = [
       'JANUS7 Academy Seed',
       `Profil: ${academyOverview?.profileName ?? 'â€”'} (${academyOverview?.profileId ?? 'â€”'})`,
@@ -1358,11 +1422,17 @@ export class JanusSessionPrepService {
       `- Event-Pools: ${academyOverview?.counts?.pools ?? 0}`,
       `- Fraktionen: ${academyOverview?.counts?.factions ?? 0}`,
       `- Social Links: ${academyOverview?.counts?.socialLinks ?? 0}`,
+      `- Startbare Quests: ${academyOverview?.counts?.questStarts ?? 0}`,
+      `- Spielbare Pool-Hooks: ${academyOverview?.counts?.poolLaunchers ?? 0}`,
       '',
       'Naechste Hooks:',
       `- Unterricht: ${(academyOverview?.nextHooks?.lessons ?? []).join(', ') || 'â€”'}`,
       `- Quests: ${(academyOverview?.nextHooks?.quests ?? []).join(', ') || 'â€”'}`,
       `- Fraktionen: ${(academyOverview?.nextHooks?.factions ?? []).join(', ') || 'â€”'}`,
+      '',
+      'Direkt ausspielbar:',
+      ...((academyActionHooks?.questStarts ?? []).slice(0, 3).map((quest) => `- Queststart: ${quest?.title ?? quest?.questId ?? 'Quest'} | ${quest?.category ?? 'quest'}`)),
+      ...((academyActionHooks?.poolLaunchers ?? []).slice(0, 2).map((pool) => `- Event-Pool: ${pool?.title ?? pool?.poolId ?? 'Pool'} | ${pool?.eventTitles?.join(', ') || 'ohne Eventtitel'}`)),
       '',
       'Aktive Quests:',
       ...((questsSummary?.items ?? []).slice(0, 4).map((quest) => `- ${quest?.title ?? quest?.questId ?? 'Quest'} | Node: ${quest?.currentNodeTitle ?? quest?.currentNodeId ?? 'â€”'}`)),
