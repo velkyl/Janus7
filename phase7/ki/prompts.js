@@ -102,6 +102,20 @@ Provide choices and sensory details.`,
     visual: ({ text, meta }) => `Generate a highly detailed visual prompt for an AI image generator (like Midjourney or DALL-E) based on this description:
 "${text}"
 Context: ${JSON.stringify(meta)}
-Focus on light, composition, and Aventurian aesthetics.`
+Focus on light, composition, and Aventurian aesthetics.`,
+
+    dialogue: ({ text, meta }) => `Generate a dialogue snippet for an NPC in a Dark Eye academy.
+NPC Meta: ${JSON.stringify(meta.npc)}
+Player Relationship: ${meta.relationship}
+Context: ${text}
+The response should be in German, immersive, and reflect the NPC's status and personality.`,
+
+    consequences: ({ action, state }) => `Based on the player action "${action}" and the current academy state, propose three cinematic and mechanically relevant consequences.
+State: ${JSON.stringify(state)}
+Respond in German with "Option 1", "Option 2", "Option 3".`,
+
+    atmosphere: ({ situation, state }) => `Suggest atmospheric changes for this situation: "${situation}".
+Current State: ${JSON.stringify(state)}
+Include: Lighting color (hex), a music mood (e.g., 'mystic', 'tense'), and a short sensory description (Smell, Temperature).`
   }
 };

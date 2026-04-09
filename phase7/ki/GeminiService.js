@@ -165,4 +165,22 @@ export class JanusGeminiService {
     const prompt = Prompts.ENRICHMENT.visual({ text: sourceText, meta });
     return this.generateContent(prompt, { includeDirector: true });
   }
+
+  /**
+   * Proposes consequences for an action.
+   */
+  async generateConsequences(action, stateOverride = null) {
+    const state = stateOverride || this.aiService?.getContext() || {};
+    const prompt = Prompts.ENRICHMENT.consequences({ action, state });
+    return this.generateContent(prompt, { includeState: false }); // state already in prompt
+  }
+
+  /**
+   * Suggests atmospheric changes.
+   */
+  async suggestAtmosphere(situation) {
+    const state = this.aiService?.getContext() || {};
+    const prompt = Prompts.ENRICHMENT.atmosphere({ situation, state });
+    return this.generateContent(prompt, { includeState: false });
+  }
 }

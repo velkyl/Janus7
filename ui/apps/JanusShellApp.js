@@ -6,6 +6,7 @@ import { getView, getViews } from '../layer/view-registry.js';
 import { runShellAction } from '../layer/action-router.js';
 import { JanusUI } from '../helpers.js';
 import { prepareDirectorRuntimeSummary, buildDirectorRunbookView, buildDirectorWorkflowView } from '../layer/director-context.js';
+import { DSA5CalendarSync } from '../../bridge/dsa5/calendar-sync.js';
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { renderTemplate: renderHbsTemplate } = foundry.applications.handlebars;
@@ -34,6 +35,52 @@ function mapViewCards(cards = []) {
     cardIndex,
     actions: mapActions(card.actions ?? [])
   }));
+}
+
+function toChronicleDsa5Date(value) {
+  const text = String(value ?? '').trim();
+  const match = text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return null;
+  const [, yearRaw, monthRaw, dayRaw] = match;
+  const year = Number(yearRaw);
+  const month = Number(monthRaw);
+  const dayOfMonth = Number(dayRaw);
+  if (!year || month < 1 || month > 12 || dayOfMonth < 1 || dayOfMonth > 31) return null;
+  return { year, month: month - 1, dayOfMonth };
+}
+
+function buildChronicleCalendarEntryContent(entry = {}, focusDate = '') {
+  const lines = [
+    `<p><strong>JANUS7 Bote-Chronik</strong></p>`,
+    `<p><strong>Datum:</strong> ${escHtml(focusDate || '—')}</p>`,
+    `<p><strong>Kategorie:</strong> ${escHtml(entry?.category ?? '—')}</p>`,
+    `<p><strong>Quelle:</strong> ${escHtml(entry?.sourceType ?? '—')}</p>`,
+  ];
+  if (entry?.tags) lines.push(`<p><strong>Tags:</strong> ${escHtml(entry.tags)}</p>`);
+  lines.push(`<p>${escHtml(entry?.description ?? '—')}</p>`);
+  return lines.join('\n');
+}
+
+function listCalendarJournals() {
+  const journals = [];
+  for (const journal of game?.journal ?? []) {
+    const hasCalendarPage = journal?.pages?.some?.((page) => page?.type === 'dsacalendar');
+    if (!hasCalendarPage) continue;
+    journals.push({ id: journal.id, name: journal.name ?? journal.id });
+  }
+  return journals.sort((a, b) => a.name.localeCompare(b.name, 'de'));
+}
+
+function hasCalendarDuplicate(page, { title, dsa5Date, location }) {
+  const entries = Object.values(page?.system?.calendarentries ?? {});
+  return entries.some((entry) => {
+    const from = entry?.from ?? {};
+    return String(entry?.title ?? '').trim() === String(title ?? '').trim()
+      && Number(from?.year ?? 0) === Number(dsa5Date?.year ?? 0)
+      && Number(from?.month ?? -1) === Number(dsa5Date?.month ?? -1)
+      && Number(from?.dayOfMonth ?? 0) === Number(dsa5Date?.dayOfMonth ?? 0)
+      && String(entry?.location ?? '').trim() === String(location ?? '').trim();
+  });
 }
 
 const APP_LAUNCHER_EXCLUDE = new Set(['shell', 'controlPanel', 'sessionPrepWizard', 'lessons', 'aiRoundtrip', 'commandCenter', 'settingsTestHarness']);
@@ -120,6 +167,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       chroniclePickDate: JanusShellApp.onChroniclePickDate,
       chronicleSearch: JanusShellApp.onChronicleSearch,
       chronicleJumpPeriod: JanusShellApp.onChronicleJumpPeriod,
+      chronicleExportCalendar: JanusShellApp.onChronicleExportCalendar,
 
       // Control Panel Extracted Actions
       clearSlotBuilder: JanusShellApp.onClearSlotBuilder,
@@ -131,6 +179,9 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       kiPreviewImport: JanusShellApp.onKiPreviewImport,
       kiSearch: JanusShellApp.onKiSearch,
       kiGeminiTest: JanusShellApp.onKiGeminiTest,
+      kiGenerateConsequences: JanusShellApp.onKiGenerateConsequences,
+      kiGenerateAtmosphere: JanusShellApp.onKiGenerateAtmosphere,
+      kiGenerateVisual: JanusShellApp.onKiGenerateVisual,
       
       startDirectorDay: JanusShellApp.onStartDirectorDay,
       directorRunLesson: JanusShellApp.onDirectorRunLesson,
@@ -627,6 +678,113 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this?._setViewState?.('chronicleBrowser', { focusDate: `${nextYear}-${normalizedMonth}-01`, offset: 0 });
   }
 
+  static async onChronicleExportCalendar(event, _target) {
+    event?.preventDefault?.();
+    if (!game?.user?.isGM) {
+      ui.notifications?.warn?.('Nur der GM kann Kalender-Eintraege exportieren.');
+      return;
+    }
+    if (game?.system?.id !== 'dsa5') {
+      ui.notifications?.warn?.('Der Export ist nur im DSA5-System verfuegbar.');
+      return;
+    }
+
+    const focusDate = String(this?._prefetchedShell?.viewModel?.focusDate ?? '').trim();
+    const focusEntries = Array.isArray(this?._prefetchedShell?.viewModel?.focusDay?.entries)
+      ? this._prefetchedShell.viewModel.focusDay.entries
+      : [];
+    if (!focusDate || !focusEntries.length) {
+      ui.notifications?.warn?.('Am Fokusdatum liegen keine exportierbaren Chronik-Eintraege vor.');
+      return;
+    }
+
+    const dsa5Date = toChronicleDsa5Date(focusDate);
+    if (!dsa5Date) {
+      ui.notifications?.warn?.('Das Fokusdatum ist nicht als BF-Datum interpretierbar.');
+      return;
+    }
+
+    const journals = listCalendarJournals();
+    if (!journals.length) {
+      ui.notifications?.warn?.('Kein Journal mit dsacalendar-Page gefunden.');
+      return;
+    }
+
+    const D2 = foundry?.applications?.api?.DialogV2;
+    if (!D2?.prompt) {
+      ui.notifications?.warn?.('DialogV2 nicht verfuegbar.');
+      return;
+    }
+
+    const current = this?._getViewState?.('chronicleBrowser') ?? {};
+    const preferredJournalId = String(current?.calendarJournalId ?? '').trim();
+    const options = journals
+      .map((journal) => `<option value="${escHtml(journal.id)}" ${journal.id === preferredJournalId ? 'selected' : ''}>${escHtml(journal.name)}</option>`)
+      .join('');
+    const content = `
+      <div class="janus7-card j7-dialog-card-reset">
+        <p class="j7-dialog-heading"><strong>Bote-Chronik in DSA5-Kalender exportieren</strong></p>
+        <div class="j7-dialog-form-row">
+          <label for="janus7-chronicle-calendar-journal" class="j7-dialog-label-fixed">Kalenderjournal</label>
+          <select id="janus7-chronicle-calendar-journal" class="j7-dialog-input-grow">${options}</select>
+        </div>
+        <p class="j7-dialog-subtext">${escHtml(focusDate)} · ${focusEntries.length} Eintraege am Fokus-Tag</p>
+      </div>
+    `;
+
+    const result = await D2.prompt({
+      window: { title: 'DSA5 Kalender-Export' },
+      content,
+      ok: { label: 'Exportieren', icon: 'fas fa-calendar-plus' },
+      rejectClose: false,
+      modal: true,
+    }).catch(() => null);
+    if (result === null) return;
+
+    const journalId = document.getElementById('janus7-chronicle-calendar-journal')?.value?.trim?.() ?? '';
+    if (!journalId) {
+      ui.notifications?.warn?.('Kein Kalenderjournal ausgewaehlt.');
+      return;
+    }
+
+    const calendarSync = new DSA5CalendarSync({ logger: console });
+    const page = calendarSync.getCalendarPage(journalId);
+    if (!page) {
+      ui.notifications?.warn?.('Im ausgewaehlten Journal wurde keine dsacalendar-Page gefunden.');
+      return;
+    }
+
+    let created = 0;
+    let skipped = 0;
+    for (const entry of focusEntries) {
+      const title = String(entry?.label ?? '').trim();
+      const location = String(entry?.location ?? 'Akademie').trim() || 'Akademie';
+      if (!title) {
+        skipped++;
+        continue;
+      }
+      if (hasCalendarDuplicate(page, { title, dsa5Date, location })) {
+        skipped++;
+        continue;
+      }
+      const ok = await calendarSync.addCalendarEventForDate({
+        journalId,
+        title,
+        content: buildChronicleCalendarEntryContent(entry, focusDate),
+        dsa5Date,
+        location,
+        category: 2,
+      });
+      if (ok) created++;
+      else skipped++;
+    }
+
+    this?._setViewState?.('chronicleBrowser', { calendarJournalId: journalId });
+    this._lastActionResult = `Kalenderexport ${focusDate}: ${created} erstellt, ${skipped} uebersprungen.`;
+    if (created > 0) ui.notifications?.info?.(`${created} Kalendereintraege exportiert, ${skipped} uebersprungen.`);
+    else ui.notifications?.warn?.(`Keine neuen Kalendereintraege exportiert. ${skipped} uebersprungen.`);
+  }
+
   // ═══════════════════════════════════════════════════════════════════════════
   // Director Native Drag & Drop Logic
   // ═══════════════════════════════════════════════════════════════════════════
@@ -911,6 +1069,45 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       ui.notifications?.info('Verbindung erfolgreich! Gemini ist bereit.');
     } else {
       ui.notifications?.error('Verbindung fehlgeschlagen. Bitte API-Key und Internetverbindung pr\u00fcfen.');
+    }
+  }
+
+  static async onKiGenerateConsequences(event, target) {
+    event?.preventDefault?.();
+    const input = document.getElementById('j7-ai-input')?.value?.trim();
+    if (!input) return ui.notifications.warn('Bitte beschreibe zuerst eine Situation oder Aktion.');
+
+    this._runAiTask('generateConsequences', input);
+  }
+
+  static async onKiGenerateAtmosphere(event, target) {
+    event?.preventDefault?.();
+    const input = document.getElementById('j7-ai-input')?.value?.trim();
+    if (!input) return ui.notifications.warn('Bitte beschreibe zuerst eine Situation.');
+
+    this._runAiTask('suggestAtmosphere', input);
+  }
+
+  static async onKiGenerateVisual(event, target) {
+    event?.preventDefault?.();
+    const input = document.getElementById('j7-ai-input')?.value?.trim();
+    if (!input) return ui.notifications.warn('Bitte beschreibe zuerst ein Motiv.');
+
+    this._runAiTask('suggestVisual', input);
+  }
+
+  static async _runAiTask(method, input) {
+    const gemini = game.janus7?.ki?.gemini;
+    const outputBox = document.getElementById('j7-ai-output');
+    if (!outputBox || !gemini?.isEnabled) return;
+
+    outputBox.innerHTML = '<p class="muted animate-pulse"><i class="fas fa-spinner fa-spin"></i> KI analysiert Situation...</p>';
+    
+    try {
+      const result = await gemini[method](input);
+      outputBox.innerHTML = `<div class="ai-response">${result.replace(/\n/g, '<br>')}</div>`;
+    } catch (err) {
+      outputBox.innerHTML = `<p class="error">Fehler: ${err.message}</p>`;
     }
   }
 

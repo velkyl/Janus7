@@ -575,6 +575,14 @@ registerView({
 });
 
 registerView({
+  id: 'director_ai',
+  title: 'KI-Regisseur',
+  icon: 'fas fa-hat-wizard',
+  description: 'Echtzeit-KI-Unterst\u00fctzung f\u00fcr Konsequenzen und Atmosph\u00e4re.',
+  build: (engine) => ({})
+});
+
+registerView({
   id: 'chronicleBrowser',
   title: 'Bote-Chronik',
   icon: 'fas fa-newspaper',

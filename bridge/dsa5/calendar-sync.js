@@ -261,6 +261,79 @@ export class DSA5CalendarSync {
     }
   }
 
+  /**
+   * Registriert einen DSA5-Kalender-Event fuer ein direktes BF-/DSA5-Datum.
+   *
+   * @param {object} opts
+   * @param {string} opts.journalId
+   * @param {string} opts.title
+   * @param {string} [opts.content]
+   * @param {{ year: number, month: number, dayOfMonth: number }} opts.dsa5Date
+   * @param {string} [opts.location='Akademie']
+   * @param {number} [opts.category=2]
+   * @returns {Promise<boolean>}
+   */
+  async addCalendarEventForDate({ journalId, title, content = '', dsa5Date, location = 'Akademie', category = 2 }) {
+    if (!game.user?.isGM) return false;
+
+    try {
+      const page = this.getCalendarPage(journalId);
+      if (!page) {
+        this.logger?.warn?.(`[CalendarSync] Keine dsacalendar-Page in ${journalId}`);
+        return false;
+      }
+
+      const year = Number(dsa5Date?.year ?? 0);
+      const month = Number(dsa5Date?.month ?? 0);
+      const dayOfMonth = Number(dsa5Date?.dayOfMonth ?? 0);
+      if (!year || !Number.isFinite(month) || !dayOfMonth) {
+        this.logger?.warn?.('[CalendarSync] Ungueltiges DSA5-Datum fuer Kalender-Event.', { dsa5Date });
+        return false;
+      }
+
+      const totalDays = this._daysFromEpoch(year, month, dayOfMonth);
+      const entryKey = `janus_${Date.now()}_${foundry.utils.randomID(4)}`;
+      const existing = page.system?.calendarentries ?? {};
+      await page.update({
+        'system.calendarentries': {
+          ...existing,
+          [entryKey]: {
+            title,
+            content,
+            location,
+            from: {
+              dayOfMonth,
+              month,
+              year,
+              day: totalDays,
+            },
+            category,
+            visible: true,
+            recurring: false,
+          },
+        },
+      });
+
+      this.logger?.info?.(`[CalendarSync] Kalender-Event erstellt: ${title}`);
+      return true;
+    } catch (err) {
+      this.logger?.warn?.('[CalendarSync] addCalendarEventForDate fehlgeschlagen', { err });
+      return false;
+    }
+  }
+
+  /**
+   * Liefert die erste dsacalendar-Page eines Journals oder null.
+   *
+   * @param {string} journalId
+   * @returns {JournalEntryPage|null}
+   */
+  getCalendarPage(journalId) {
+    const journal = game.journal?.get(journalId) ?? game.journal?.getName(journalId);
+    if (!journal) return null;
+    return journal.pages?.find((p) => p.type === 'dsacalendar') ?? null;
+  }
+
   // ─── Private ─────────────────────────────────────────────────────────────
 
   /** @private */

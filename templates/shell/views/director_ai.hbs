@@ -1,0 +1,55 @@
+<div class="j7-shell__view j7-shell__view--director-ai">
+  <div class="janus7-two-col">
+    <!-- AI Director Controls -->
+    <article class="j7-shell__card">
+      <header class="j7-shell__card-head">
+        <div>
+          <h3><i class="fas fa-hat-wizard j7-shell__card-icon" aria-hidden="true"></i><span>KI-Regisseur</span></h3>
+          <p>Echtzeit-Unterstützung für die Spielleitung.</p>
+        </div>
+      </header>
+      
+      <div class="j7-shell__form j7-p-sm">
+        <div class="j7-form-group">
+          <label>Aktuelle Situation / Spieleraktion</label>
+          <textarea id="j7-ai-input" class="j7-input" placeholder="z.B. Spieler bricht nachts in die Bibliothek ein..."></textarea>
+        </div>
+      </div>
+
+      <div class="j7-shell__card-actions j7-mt-sm">
+        <button type="button" class="j7-shell__btn" data-action="kiGenerateConsequences">
+          <i class="fas fa-code-branch"></i> Konsequenzen (3 Optionen)
+        </button>
+        <button type="button" class="j7-shell__btn" data-action="kiGenerateAtmosphere">
+          <i class="fas fa-wand-sparkles"></i> Atmosphäre & Regie
+        </button>
+        <button type="button" class="j7-shell__btn" data-action="kiGenerateVisual">
+          <i class="fas fa-image"></i> Bild-Prompt (AI)
+        </button>
+      </div>
+    </article>
+
+    <!-- AI Output / Result -->
+    <article class="j7-shell__card">
+      <header class="j7-shell__card-head">
+        <div>
+          <h3><i class="fas fa-comment-dots j7-shell__card-icon" aria-hidden="true"></i><span>KI-Vorschlag</span></h3>
+          <p>Vorschläge basierend auf dem aktuellen Campus-State.</p>
+        </div>
+      </header>
+      <div class="j7-shell__content j7-p-sm">
+        <div id="j7-ai-output" class="j7-ai-output-box">
+          <p class="muted italic">Noch keine Anfrage gesendet. Beschreibe links eine Situation.</p>
+        </div>
+      </div>
+      <div class="j7-shell__card-actions j7-mt-sm" id="j7-ai-result-actions" style="display: none;">
+        <button type="button" class="j7-shell__btn" data-action="kiApplyAtmosphere">
+          <i class="fas fa-check"></i> Atmosphäre übernehmen
+        </button>
+        <button type="button" class="j7-shell__btn" data-action="kiCopyPrompt">
+          <i class="fas fa-copy"></i> Prompt kopieren
+        </button>
+      </div>
+    </article>
+  </div>
+</div>

@@ -127,7 +127,10 @@
           <article class="j7-seed-card">
             <header>
               <strong>{{chronicleExportSeed.title}}</strong>
-              <button type="button" class="janus-btn small" data-action="copySeed"><i class="fas fa-copy"></i> Kopieren</button>
+              <div class="j7-shell__card-actions">
+                <button type="button" class="janus-btn small" data-action="copySeed"><i class="fas fa-copy"></i> Kopieren</button>
+                <button type="button" class="janus-btn small" data-action="chronicleExportCalendar"><i class="fas fa-calendar-plus"></i> In DSA5-Kalender</button>
+              </div>
             </header>
             <textarea rows="16">{{chronicleExportSeed.text}}</textarea>
           </article>
