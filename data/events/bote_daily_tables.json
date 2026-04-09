@@ -1,0 +1,46 @@
+{
+  "meta": {
+    "moduleVersion": "0.9.12.46",
+    "description": "Tägliche Boten-/Chronik-Hooks für JANUS7. Drei Kategorien pro Tag ermöglichen mehrere Einträge ohne vollständigen Kanonanspruch."
+  },
+  "categories": [
+    {
+      "id": "headline_politics",
+      "name": "Politik und Macht",
+      "entries": [
+        "Ein lokaler Würdenträger dementiert Gerüchte, die gestern noch als sicher galten.",
+        "Ein Bote aus einer Nachbarprovinz fordert Unterstützung, ohne alle Gründe offenzulegen.",
+        "Eine Tempel- oder Hofentscheidung sorgt in Kaufmanns- und Gelehrtenkreisen für sichtbare Unruhe.",
+        "Mehrere Parteien deuten dasselbe Ereignis öffentlich völlig gegensätzlich."
+      ]
+    },
+    {
+      "id": "headline_local_color",
+      "name": "Alltag und Stadtleben",
+      "entries": [
+        "Markt, Hafen oder Karawanenplatz geraten wegen eines seltenen Fundes in Aufruhr.",
+        "Eine kleine Festivität zieht mehr wichtige Beobachter an, als dem Veranstalter lieb ist.",
+        "Eine Handwerker- oder Händlerzunft bittet diskret um Hilfe gegen Sabotage oder schlechte Gerüchte.",
+        "Ein lokales Wunder, Missgeschick oder Omen wird von jedem Viertel anders erzählt."
+      ]
+    },
+    {
+      "id": "headline_arcane",
+      "name": "Magie und Geheimnisse",
+      "entries": [
+        "Ein Lehrhaus sucht seltenes Material, das auf legalem Weg kaum kurzfristig zu beschaffen ist.",
+        "Mehrere Gelehrte berichten voneinander unabhängig von demselben Symbol, Traum oder Zitat.",
+        "Ein harmlos wirkendes Randereignis entpuppt sich bei genauer Betrachtung als Folge älterer Forschung.",
+        "Eine alte Handschrift, Sternkonstellation oder Störung des Astralflusses liefert neuen Gesprächsstoff."
+      ]
+    }
+  ],
+  "usage": {
+    "perDaySuggestion": [
+      "headline_politics",
+      "headline_local_color",
+      "headline_arcane"
+    ],
+    "notes": "Für jeden Ingame-Tag kann JANUS mindestens einen Eintrag aus jeder Kategorie ziehen und mit Region, Stadt, Akademie oder NSC verknüpfen."
+  }
+}

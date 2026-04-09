@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "moduleVersion": "0.9.12.46",
+    "profile": "lowangen",
+    "description": "Akademie-Basisdaten für die Akademie der Verformungen zu Lowangen."
+  },
+  "academy": {
+    "id": "lowangen",
+    "name": "Akademie der Verformungen zu Lowangen",
+    "trimester": 1,
+    "year": 1039,
+    "week": 1,
+    "day": "Feuertag",
+    "phase": "Morgen"
+  },
+  "configuration": {
+    "autoSave": true,
+    "enableUI": true,
+    "enableSimulation": true
+  }
+}

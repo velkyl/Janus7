@@ -4,6 +4,7 @@ import { GraphDiagnostics } from './GraphDiagnostics.js';
 import { AcademyGraphProvider } from './providers/AcademyGraphProvider.js';
 import { StateGraphProvider } from './providers/StateGraphProvider.js';
 import { Dsa5IndexGraphProvider } from './providers/Dsa5IndexGraphProvider.js';
+import { WorldLoreGraphProvider } from './providers/WorldLoreGraphProvider.js';
 import { JanusGraphCache } from '../../services/graph/JanusGraphCache.js';
 import { HOOKS, cleanupEngineHookBucket, registerEngineHook } from '../core/public-api.mjs';
 
@@ -22,7 +23,8 @@ export async function registerGraphService({ engine, core, academyData, dsa5Inde
   const providers = [
     new AcademyGraphProvider({ academyData, logger }),
     new StateGraphProvider({ state: core.state, logger }),
-    new Dsa5IndexGraphProvider({ index: dsa5Index, academyData, logger })
+    new Dsa5IndexGraphProvider({ index: dsa5Index, academyData, logger }),
+    new WorldLoreGraphProvider({ logger })
   ];
   const builder = new GraphBuilder({ providers, logger });
   const queryCache = new JanusGraphCache();

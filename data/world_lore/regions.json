@@ -1,79 +1,300 @@
 {
   "meta": {
-    "moduleVersion": "0.9.12.6",
+    "moduleVersion": "0.9.12.46",
     "type": "world_lore",
-    "description": "Detaillierte Beschreibungen der aventurischen Regionen basierend auf der Geographia Aventurica."
+    "description": "Kuratiertes Aventurien-Regionswissen für JANUS7, verdichtet aus lokalen Regionalordnern, Aventurischem Almanach und Geographia Aventurica."
   },
   "regions": [
     {
-      "id": "bornland",
-      "name": "Bornland",
-      "description": "Das Bornland ist eine feudal geprägte Adelsrepublik im Nordosten Aventuriens. Es ist geprägt durch weite Wälder (Bornwald), fruchtbares Festenland und die Leibeigenschaft der Bauern unter den Bronnjaren.",
-      "capital": "Festum",
-      "government": "Adelsrepublik (Bronnjarenherrschaft)",
-      "notable_locations": ["Festum", "Norburg", "Neersand", "Bornwald", "Ehernes Schwert"],
-      "climate": "Kalt-gemäßigt, schneereiche Winter.",
-      "religion": "Zwölfgötter (besonders Rondra, Travia, Firun, Mokoscha)"
-    },
-    {
       "id": "mittelreich",
-      "name": "Mittelreich (Neues Reich)",
-      "description": "Das größte Menschenreich Aventuriens, regiert vom Kaiserhaus in Gareth. Es ist das Herzland des Zwölfgötterglaubens und ritterlicher Tugenden.",
+      "name": "Mittelreich",
       "capital": "Gareth",
       "government": "Feudales Kaiserreich",
-      "notable_locations": ["Gareth", "Havena", "Punin", "Perricum", "Wehrheim"],
-      "climate": "Gemäßigt bis mild-subtropisch im Süden (Almada).",
-      "religion": "Zwölfgötterglaube (SSOT-Zentrum)"
+      "climate": "Überwiegend gemäßigt, nach Süden milder und trockener.",
+      "religion": "Zwölfgötterglaube mit starkem Praios-, Rondra- und Travia-Einfluss.",
+      "notable_locations": [
+        "Gareth",
+        "Punin",
+        "Weiden",
+        "Perricum",
+        "Almada"
+      ],
+      "description": "Das Neue Reich ist politisches und kulturelles Schwergewicht Aventuriens. Es vereint kaiserliche Zentralmacht, Provinzinteressen, Kirchenmacht und Rittertum in einer oft angespannten Balance.",
+      "gm_summary": "Für Spielleitungen eignet sich das Mittelreich für Hofpolitik, Glaubenskonflikte, Grenzsicherung, Reichsverwaltung, Adelsfehden und klassische Heldenaufträge.",
+      "source": {
+        "primary": [
+          "Aventurischer Almanach",
+          "Geographia Aventurica"
+        ],
+        "directories": [
+          "D:/RPG Lokal/DSA Wissen/Garethien und Almada",
+          "D:/RPG Lokal/DSA Wissen/Weiden"
+        ]
+      }
+    },
+    {
+      "id": "almada",
+      "name": "Almada",
+      "capital": "Punin",
+      "government": "Kaiserliche Provinz mit starkem Granden- und Caballero-Einfluss",
+      "climate": "Warm, trocken und yaquirnah geprägt.",
+      "religion": "Zwölfgötterglaube, besonders Rahja, Phex und Boron.",
+      "notable_locations": [
+        "Punin",
+        "Taladur",
+        "Yaquir",
+        "Ragath"
+      ],
+      "description": "Almada verbindet südländische Lebensart, Fehdekultur, Pferdezucht, Stadtgelehrsamkeit und alte Familiennetzwerke. Zwischen Punin, Yaquirtal und Grenzadel mischen sich Gelehrsamkeit und Klingenstolz.",
+      "gm_summary": "Stark für Intrigen, Duelle, ehrverletzende Kleinigkeiten, romantische Verwicklungen, Phexhandel und gelehrte Ermittlungen.",
+      "source": {
+        "primary": [
+          "Geographia Aventurica"
+        ],
+        "directories": [
+          "D:/RPG Lokal/DSA Wissen/Garethien und Almada",
+          "D:/RPG Lokal/DSA Wissen/Yaquir"
+        ]
+      }
+    },
+    {
+      "id": "bornland",
+      "name": "Bornland",
+      "capital": "Festum",
+      "government": "Adelsrepublik unter Bronnjaren und freien Städten",
+      "climate": "Kalt-gemäßigt bis rau, mit langen Wintern.",
+      "religion": "Zwölfgötterglaube, regional stark durch Firun, Rondra und Travia geprägt.",
+      "notable_locations": [
+        "Festum",
+        "Norburg",
+        "Neersand",
+        "Bornwald"
+      ],
+      "description": "Das Bornland ist geprägt von Bronnjarenherrschaft, Stadtfreiheit, Handel über Festum und einer dauernden Spannung zwischen alter Leibeigenschaft und aufstrebenden Kräften.",
+      "gm_summary": "Geeignet für Winterreisen, Standeskonflikte, Sumpf- und Waldexpeditionen, Goblinthemen und bornische Politik.",
+      "source": {
+        "primary": [
+          "Aventurischer Almanach"
+        ],
+        "directories": [
+          "D:/RPG Lokal/DSA Wissen/Bornland"
+        ]
+      }
     },
     {
       "id": "horasreich",
-      "name": "Horasreich (Liebliches Feld)",
-      "description": "Ein hochzivilisiertes, dicht besiedeltes Reich im Westen. Zentrum der Bildung, Kunst und Wissenschaft, aber auch der Intrigen.",
+      "name": "Horasreich",
       "capital": "Vinsalt",
-      "government": "Absolutes Kaiserreich",
-      "notable_locations": ["Vinsalt", "Kuslik", "Belhanka", "Grangor", "Bethana"],
-      "climate": "Mild und mediterran.",
-      "religion": "Zwölfgötter (besonders Hesinde, Rahja, Horasverehrung)"
+      "government": "Hochkultiviertes Kaiserreich mit starker Stadt- und Adelsschicht",
+      "climate": "Mild bis mediterran.",
+      "religion": "Zwölfgötterglaube, stark hesindisch, rahjagefärbt und höfisch ritualisiert.",
+      "notable_locations": [
+        "Vinsalt",
+        "Kuslik",
+        "Belhanka",
+        "Grangor",
+        "Bethana"
+      ],
+      "description": "Das Liebliche Feld steht für Kunst, Wissenschaft, Mode, Diplomatie und Gift im selben Atemzug. Bildung, Seefahrt und Gesellschaftsspiel sind hier politische Machtmittel.",
+      "gm_summary": "Optimal für Salons, Duellrecht, Gelehrtenzirkel, Reisen per Schiff, Handelskriege und elegante Intrigen.",
+      "source": {
+        "primary": [
+          "Geographia Aventurica"
+        ],
+        "directories": [
+          "D:/RPG Lokal/DSA Wissen/Horasreich Liebliches Feld"
+        ]
+      }
     },
     {
       "id": "thorwal",
       "name": "Thorwal",
-      "description": "Land der freien Seefahrer und Krieger im Nordwesten. Bekannt für ihre Drachenschiffe und den Swafnirglauben.",
-      "capital": "Thorwal (Stadt)",
-      "government": "Demokratisches Hetleute-System",
-      "notable_locations": ["Thorwal", "Prem", "Olport", "Bodir"],
-      "climate": "Raues Meeresklima.",
-      "religion": "Swafnirglaube"
-    },
-    {
-      "id": "kalifat",
-      "name": "Kalifat von Unau",
-      "description": "Das Reich der Novadis in der Wüste Khôm. Strenger Eingottglaube an Rastullah.",
-      "capital": "Unau",
-      "government": "Theokratische Monarchie",
-      "notable_locations": ["Unau", "Mherwed", "Keft", "Khôm-Wüste"],
-      "climate": "Extrem heiß und trocken.",
-      "religion": "Rastullah"
+      "capital": "Thorwal",
+      "government": "Hetleute-System mit starkem Gemeinschaftsethos",
+      "climate": "Raues Küsten- und Nordmeerklima.",
+      "religion": "Swafnir, Efferd, Ifirn.",
+      "notable_locations": [
+        "Thorwal",
+        "Olport",
+        "Prem",
+        "Bodir"
+      ],
+      "description": "Thorwal lebt von Seefahrt, Sippenstolz, Erzählkultur und dem Ideal persönlicher Freiheit. Fremde werden an Taten gemessen, nicht an Titeln.",
+      "gm_summary": "Gut für Fahrtenabenteuer, Ehrenfragen, Wettstreit, Sturmgeschichten und Begegnungen mit Skalden, Hetleuten und Runajasko-Tradition.",
+      "source": {
+        "primary": [
+          "Aventurischer Almanach"
+        ],
+        "directories": [
+          "D:/RPG Lokal/DSA Wissen/Thorwal",
+          "D:/RPG Lokal/DSA Wissen/See und Meer"
+        ]
+      }
     },
     {
       "id": "aranien",
       "name": "Aranien",
-      "description": "Ein prachtvolles, matriarchalisch geprägtes Land am Perlenmeer. Bekannt für Rosen, Wein und tulamidische Gastfreundschaft.",
       "capital": "Zorgan",
-      "government": "Matriarchale Monarchie (Mhaharani)",
-      "notable_locations": ["Zorgan", "Baburin", "Llanka"],
-      "climate": "Heiß und feucht am Mhanadi.",
-      "religion": "Zwölfgötter (besonders Phex und Rahja)"
+      "government": "Mhaharani-Monarchie",
+      "climate": "Warm bis heiß, entlang des Mhanadi fruchtbar.",
+      "religion": "Zwölfgötter mit tulamidischer Prägung, besonders Rahja, Phex, Hesinde.",
+      "notable_locations": [
+        "Zorgan",
+        "Baburin",
+        "Llanka",
+        "Mhanadi"
+      ],
+      "description": "Aranien verbindet tulamidische Höflichkeit, matriarchale Machtstrukturen, Karawanenwirtschaft und eine ausgeprägte Kultur städtischer und höfischer Raffinesse.",
+      "gm_summary": "Stark für Karawanenspiel, Handel, Hofintrige, Rosenromantik, Phexstreiche und urbane Abenteuer.",
+      "source": {
+        "primary": [
+          "Aventurischer Almanach"
+        ],
+        "directories": [
+          "D:/RPG Lokal/DSA Wissen/Aranien"
+        ]
+      }
     },
     {
       "id": "alanfa",
-      "name": "Stadtstaat Al'Anfa",
-      "description": "Das 'Schwarze Al'Anfa', größte Metropole des Südens. Beherrscht von Grandenfamilien und dem schwarzen Boronglauben. Zentrum des Sklavenhandels.",
+      "name": "Al'Anfa",
       "capital": "Al'Anfa",
-      "government": "Theokratische Grandenherrschaft",
-      "notable_locations": ["Al'Anfa", "Goldene Allianz", "Regengebirge"],
-      "climate": "Tropisch heiß.",
-      "religion": "Boron (Al'Anfaner Ritus)"
+      "government": "Grandenoligarchie mit schwarzem Boronkult",
+      "climate": "Tropisch-heiß und schwer.",
+      "religion": "Boron im alanfanischen Ritus, dazu Machtkulte und Familienfrömmigkeit.",
+      "notable_locations": [
+        "Al'Anfa",
+        "Arena",
+        "Silberberg",
+        "Kolonialhäfen"
+      ],
+      "description": "Die schwarze Perle des Südens ist reich, brutal, effizient und dekadent. Grandenpolitik, Sklavenwirtschaft, Flottenmacht und Intrigen greifen ineinander.",
+      "gm_summary": "Geeignet für Unterwelt, Machtpolitik, Kolonialthemen, Gladiatoren, schwarze Liturgie und Schifffahrt.",
+      "source": {
+        "primary": [
+          "Geographia Aventurica"
+        ],
+        "directories": [
+          "D:/RPG Lokal/DSA Wissen/Al Anfa"
+        ]
+      }
+    },
+    {
+      "id": "nostria_andergast",
+      "name": "Nostria und Andergast",
+      "capital": "Kein gemeinsames Zentrum",
+      "government": "Zwei rivalisierende Königreiche",
+      "climate": "Feucht, waldreich und regenlastig.",
+      "religion": "Zwölfgötter, regional bodenständig und wenig prunkvoll.",
+      "notable_locations": [
+        "Nostria",
+        "Andergast",
+        "Salzerhaven",
+        "Joborn"
+      ],
+      "description": "Die alten Rivalen leben von Grenzstreit, Forstwirtschaft, regionalem Stolz und einer rauen Alltagskultur. Jeder kleine Vorfall kann zum Symbol eines großen Nachbarschaftskonflikts werden.",
+      "gm_summary": "Perfekt für Grenzkonflikte, Waldabenteuer, diplomatische Missverständnisse und bodenständige Heldengeschichten.",
+      "source": {
+        "primary": [
+          "Aventurischer Almanach"
+        ],
+        "directories": [
+          "D:/RPG Lokal/DSA Wissen/Nostria und Andergast"
+        ]
+      }
+    },
+    {
+      "id": "kosch_nordmarken",
+      "name": "Kosch und Nordmarken",
+      "capital": "Uneinheitlich regional organisiert",
+      "government": "Herzogtümer, Grafschaften und Bergfreiheiten",
+      "climate": "Mittelgebirgig, kühler und regenreicher in Höhenlagen.",
+      "religion": "Zwölfgötter, besonders Ingerimm, Praios und Angrosch bei Zwergen.",
+      "notable_locations": [
+        "Angbar",
+        "Xorlosch",
+        "Nordmarken",
+        "Eisenwald"
+      ],
+      "description": "Zwischen Bergbau, Zwergenmacht, Reichstreue und Grenzsicherung entstehen Abenteuer an Handelswegen, Burgen, Klöstern und alten Stollen.",
+      "gm_summary": "Gut für Zwerge, Tunnel, Ingerimm-Handwerk, Reichsdienst, Wagenzüge und Gebirgsreisen.",
+      "source": {
+        "primary": [
+          "Geographia Aventurica"
+        ],
+        "directories": [
+          "D:/RPG Lokal/DSA Wissen/Kosch und die Nordmarken"
+        ]
+      }
+    },
+    {
+      "id": "weiden",
+      "name": "Weiden",
+      "capital": "Trallop",
+      "government": "Herzogtum mit starkem Ritter- und Heerbanncharakter",
+      "climate": "Gemäßigt, fruchtbar, aber grenzgefährdet.",
+      "religion": "Rondra, Praios, Travia.",
+      "notable_locations": [
+        "Trallop",
+        "Baliho",
+        "Trollpforte"
+      ],
+      "description": "Weiden ist vom Pflichtgefühl der Grenzverteidigung, Rondratreue und dem langen Gedächtnis vergangener Kriege geprägt.",
+      "gm_summary": "Sehr geeignet für Ritterdrama, Orkabwehr, Heerschau, Wallfahrten und klassische Bedrohungsszenarien.",
+      "source": {
+        "primary": [
+          "Aventurischer Almanach"
+        ],
+        "directories": [
+          "D:/RPG Lokal/DSA Wissen/Weiden"
+        ]
+      }
+    },
+    {
+      "id": "tobrien",
+      "name": "Tobrien",
+      "capital": "Perricum als Machtanker, regionale Zentren wechselhaft",
+      "government": "Krisenregion mit militärischer und kirchlicher Präsenz",
+      "climate": "Gemäßigt bis karg, durch Kriegsfolgen schwer gezeichnet.",
+      "religion": "Rondra, Boron, Praios.",
+      "notable_locations": [
+        "Warunk",
+        "Perricum",
+        "Transysilien"
+      ],
+      "description": "Tobrien ist von Verwüstung, Wiederaufbau, Grenzangst und Glaubenshärte geprägt. Viele Orte tragen sichtbar die Narben der Schwarzen Lande.",
+      "gm_summary": "Stark für düstere Nachkriegsabenteuer, Wiederaufbau, Untotengefahr, Sühne und Rondra/Boron-Konflikte.",
+      "source": {
+        "primary": [
+          "Aventurischer Almanach"
+        ],
+        "directories": [
+          "D:/RPG Lokal/DSA Wissen/Tobrien"
+        ]
+      }
+    },
+    {
+      "id": "havena_region",
+      "name": "Havena und Großer Fluss",
+      "capital": "Havena",
+      "government": "Freie Stadt mit fürstlicher und städtischer Machtbalance",
+      "climate": "Nass, windig, kühl und nebelreich.",
+      "religion": "Efferd, Phex, Nandus und städtische Mischfrömmigkeit.",
+      "notable_locations": [
+        "Havena",
+        "Unterstadt",
+        "Großer Fluss"
+      ],
+      "description": "Die Region um Havena ist maritim, feucht, nebelverhangen und voller alter Geheimnisse. Handel, Schmuggel, Fischerei und urbane Legenden sind allgegenwärtig.",
+      "gm_summary": "Ideal für Hafenplots, Unterstadtmysterien, Schmuggler, Nebelabenteuer und sozial gemischte Stadtkampagnen.",
+      "source": {
+        "primary": [
+          "Geographia Aventurica"
+        ],
+        "directories": [
+          "D:/RPG Lokal/DSA Wissen/Havena"
+        ]
+      }
     }
   ]
 }

@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "version": "1.1.0-lowangen",
+    "description": "Kurze Lowanger Profil-NSC."
+  },
+  "npcs": [
+    {
+      "id": "lowangen_formmeister",
+      "name": "Magister Dario Svelt",
+      "role": "Lehrer für Formmagie",
+      "personality": "Pragmatisch, nervös, innovationsfreudig.",
+      "hooks": [
+        "Benötigt seltenes Material, das offiziell nicht verfügbar ist."
+      ]
+    },
+    {
+      "id": "lowangen_border_student",
+      "name": "Adeptin Jadvige Rhen",
+      "role": "Schülerin aus dem Grenzland",
+      "personality": "Misstrauisch, belastbar, scharf beobachtend.",
+      "hooks": [
+        "Kennt Schmugglerpfade, die auch für Reichsfeinde nützlich wären."
+      ]
+    }
+  ]
+}

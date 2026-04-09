@@ -1,0 +1,279 @@
+{
+  "meta": {
+    "moduleVersion": "0.9.12.46",
+    "type": "academy_lore",
+    "description": "Kuratiertes Akademienverzeichnis für JANUS7 auf Basis lokaler DSA4/DSA5-Magiequellen."
+  },
+  "academies": [
+    {
+      "id": "punin_high_magic",
+      "name": "Akademie der Hohen Magie zu Punin",
+      "cityId": "punin",
+      "regionId": "almada",
+      "profileId": "punin",
+      "guild": "grau",
+      "focus": [
+        "Verständigung",
+        "Antimagie",
+        "Metamagie"
+      ],
+      "tone": "gelehrt, diszipliniert, prestigeträchtig",
+      "description": "Eine der traditionsreichsten und politisch einflussreichsten Gildenakademien Aventuriens. Punin steht für theoretische Strenge, hohe Repräsentation und tiefen Zugriff auf Bibliotheken und gelehrte Netzwerke.",
+      "janusHooks": [
+        "akademische Intrigen",
+        "Bibliotheksrecherchen",
+        "Mentorenkonflikte",
+        "reichsweite Korrespondenzen"
+      ],
+      "source": {
+        "verifiedBy": [
+          "Hallen arkaner Macht",
+          "Rohals Erben"
+        ],
+        "notes": "Punin ist bestehendes Kernprofil in JANUS7."
+      }
+    },
+    {
+      "id": "festum_mercury",
+      "name": "Halle des Quecksilbers zu Festum",
+      "cityId": "festum",
+      "regionId": "bornland",
+      "profileId": "festum",
+      "guild": "grau",
+      "focus": [
+        "Transformation",
+        "Alchimie",
+        "nördliche Gildenpraxis"
+      ],
+      "tone": "nordisch, praktisch, forschungsnah",
+      "description": "Festums Halle des Quecksilbers verbindet bornische Härte mit praxisnaher Magie und alchimistischer Experimentierfreude. Die Stadtlage macht Handel, Hafen und Außeneinflüsse ständig spürbar.",
+      "janusHooks": [
+        "Hafenaufträge",
+        "Materialbeschaffung",
+        "Goblinkontakte",
+        "bornländische Winterereignisse"
+      ],
+      "source": {
+        "verifiedBy": [
+          "Hallen arkaner Macht"
+        ],
+        "notes": "In JANUS7 bereits als Profil angelegt, hier als Weltwissenseintrag normalisiert."
+      }
+    },
+    {
+      "id": "gareth_sword_staff",
+      "name": "Akademie Schwert und Stab zu Gareth",
+      "cityId": "gareth",
+      "regionId": "mittelreich",
+      "profileId": "gareth",
+      "guild": "weiß",
+      "focus": [
+        "Kampfmagie",
+        "Reichsdienst",
+        "Gildenverwaltung"
+      ],
+      "tone": "reichstreu, streng, militärisch",
+      "description": "Die Akademie Schwert und Stab gilt als machtnahe Lehrstätte mit hoher Bedeutung für Gildenverwaltung und Reichsdienst. Ausbildung und Repräsentation sind eng mit Politik und Hierarchie verzahnt.",
+      "janusHooks": [
+        "reichsnahe Sonderaufträge",
+        "Duellwesen",
+        "Hofintrigen",
+        "Militäreskorten"
+      ],
+      "source": {
+        "verifiedBy": [
+          "Hallen arkaner Macht"
+        ],
+        "notes": "Im DSA4-Band ausdrücklich als gildenverwaltungsrelevant genannt."
+      }
+    },
+    {
+      "id": "gareth_magic_armor",
+      "name": "Akademie der Magischen Rüstung zu Gareth",
+      "cityId": "gareth",
+      "regionId": "mittelreich",
+      "profileId": "gareth",
+      "guild": "weiß",
+      "focus": [
+        "Antimagie",
+        "Schutzmagie",
+        "Abwehr"
+      ],
+      "tone": "formal, defensiv, pflichtbetont",
+      "description": "Die Akademie der Magischen Rüstung steht für Schutz, Bannung und die praktische Absicherung gegen feindliche Magie. Gareths politische Lage verleiht ihr besonderes strategisches Gewicht.",
+      "janusHooks": [
+        "Bannungsfälle",
+        "Schutzgeleite",
+        "Artefaktsicherung",
+        "Reichsinspektionen"
+      ],
+      "source": {
+        "verifiedBy": [
+          "Hallen arkaner Macht"
+        ],
+        "notes": "Als Gareth-Akademie in lokalen Bestandsdaten bereits vorbereitet."
+      }
+    },
+    {
+      "id": "kuslik_metamorphosis",
+      "name": "Halle der Metamorphosen zu Kuslik",
+      "cityId": "kuslik",
+      "regionId": "horasreich",
+      "profileId": null,
+      "guild": "grau",
+      "focus": [
+        "Verwandlung",
+        "Theorie",
+        "hesindische Gelehrsamkeit"
+      ],
+      "tone": "elegant, anspruchsvoll, diskursiv",
+      "description": "Kusliks Halle der Metamorphosen steht für horasische Feinkultur, starke Theoriebasis und ein Umfeld, in dem Wissen, Stil und Status ineinandergreifen.",
+      "janusHooks": [
+        "gelehrte Dispute",
+        "salonfähige Magie",
+        "verwandlungsmagische Experimente"
+      ],
+      "source": {
+        "verifiedBy": [
+          "Hallen arkaner Macht"
+        ],
+        "notes": "Im Inhaltsverzeichnis und Akademienetz des Bandes belegt."
+      }
+    },
+    {
+      "id": "lowangen_reformations",
+      "name": "Akademie der Verformungen zu Lowangen",
+      "cityId": "lowangen",
+      "regionId": "nostria_andergast",
+      "profileId": "lowangen",
+      "guild": "grau",
+      "focus": [
+        "Formmagie",
+        "Grenzlandpragmatik",
+        "Anpassung"
+      ],
+      "tone": "experimentell, robust, unsicher",
+      "description": "Lowangen verbindet akademische Forschung mit der Unsicherheit des Svelltlandes. Die Lehre ist von Zweckmäßigkeit, Improvisation und dem Druck einer gefährdeten Region geprägt.",
+      "janusHooks": [
+        "Grenzkrisen",
+        "orkische Bedrohung",
+        "riskante Forschung",
+        "städtische Loyalitätsfragen"
+      ],
+      "source": {
+        "verifiedBy": [
+          "Hallen arkaner Macht"
+        ],
+        "notes": "Im Band als eigene Schule geführt."
+      }
+    },
+    {
+      "id": "fasar_mind_power",
+      "name": "Akademie der Geistigen Kraft zu Fasar",
+      "cityId": "fasar",
+      "regionId": "aranien",
+      "profileId": null,
+      "guild": "grau",
+      "focus": [
+        "Geistmagie",
+        "Selbstbehauptung",
+        "stadtnahe Machtspiele"
+      ],
+      "tone": "hart, ehrgeizig, urban",
+      "description": "Fasars Akademie steht für scharfen Konkurrenzdruck, geistige Stärke und einen Lehrbetrieb, der nicht von der rauen Stadtwirklichkeit zu trennen ist.",
+      "janusHooks": [
+        "Machtzirkel",
+        "Schülerfehden",
+        "Karawanenwissen",
+        "Tulamidenintrigen"
+      ],
+      "source": {
+        "verifiedBy": [
+          "Hallen arkaner Macht"
+        ],
+        "notes": "Im Band unter den bedeutenden Schulen geführt."
+      }
+    },
+    {
+      "id": "olport_runajasko",
+      "name": "Olporter Runajasko",
+      "cityId": "olport",
+      "regionId": "thorwal",
+      "profileId": null,
+      "guild": "traditionsnah",
+      "focus": [
+        "nordische Zaubertradition",
+        "Runen",
+        "Wetter- und Seefahrtseinfluss"
+      ],
+      "tone": "rau, gemeinschaftlich, traditionsverbunden",
+      "description": "Die Runajasko hebt sich im Lehrstil stark von klassischen Gildenhäusern ab. Klima, Langhäuser, Fahrt und Tradition prägen den Alltag stärker als formale Akademieroutine.",
+      "janusHooks": [
+        "Wetterorakel",
+        "Fahrtvorbereitung",
+        "Sippenkonflikte",
+        "Nordmeeromene"
+      ],
+      "source": {
+        "verifiedBy": [
+          "Hallen arkaner Macht"
+        ],
+        "notes": "Im Band mehrfach als stark eigenständige Schule beschrieben."
+      }
+    },
+    {
+      "id": "elburum_pain",
+      "name": "Schule der Schmerzen zu Elburum",
+      "cityId": "elburum",
+      "regionId": "aranien",
+      "profileId": null,
+      "guild": "schwarz",
+      "focus": [
+        "dunkle Disziplin",
+        "Grenzrauhheit",
+        "schmerzhafte Lehrmethoden"
+      ],
+      "tone": "fremdartig, hart, umstritten",
+      "description": "Elburums Schule besitzt einen schlechten Ruf selbst unter Magiern und ist mit strengen, abschreckenden Lehrbildern verbunden. Gerade dadurch bietet sie hohes Konfliktpotenzial für Janus-Ereignisse.",
+      "janusHooks": [
+        "moralische Dilemmata",
+        "harte Prüfungen",
+        "Grenzpolitik",
+        "schwarze Gildenspannungen"
+      ],
+      "source": {
+        "verifiedBy": [
+          "Hallen arkaner Macht"
+        ],
+        "notes": "Lokal per Texttreffer zur Schule der Schmerzen in Elburum belegt."
+      }
+    },
+    {
+      "id": "rashdul_pentagram",
+      "name": "Fächer der Macht zu Rashdul",
+      "cityId": "zorgan",
+      "regionId": "aranien",
+      "profileId": null,
+      "guild": "grau",
+      "focus": [
+        "Elemente",
+        "Tulamidenmagie",
+        "alte Machtlinien"
+      ],
+      "tone": "traditionsreich, offen, astral aufgeladen",
+      "description": "Rashdul steht im lokalen Quellenmaterial vor allem als markante Zauberstadt und Bibliotheksstandort. Für JANUS7 ist die Schule besonders als Quelle alter Linien, Elemente und tulamidischer Magiekultur interessant.",
+      "janusHooks": [
+        "Elementarereignisse",
+        "Linienmagie",
+        "Bibliotheksaufträge",
+        "tulamidische Gelehrtenreisen"
+      ],
+      "source": {
+        "verifiedBy": [
+          "Hallen arkaner Macht"
+        ],
+        "notes": "Im Band mehrfach als prägende Zauberstadt und Bibliotheksort erwähnt; Detailverifikation bleibt ausbaubar."
+      }
+    }
+  ]
+}

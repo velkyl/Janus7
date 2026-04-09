@@ -12,6 +12,10 @@ export const GRAPH_NODE_TYPES = Object.freeze({
   NPC:        'npc',      // Non‑player characters from the academy data
   LESSON:     'lesson',   // Lessons defined in the academy schedule
   LOCATION:   'location', // Physical or conceptual places within the academy
+  REGION:     'region',
+  CITY:       'city',
+  ACADEMY:    'academy_lore',
+  CHRONICLE:  'chronicle',
   THREAD:     'thread',   // Story or quest threads tracked in the state
   QUEST:      'quest',    // Quests that are active or available to players
   SUBJECT:    'subject',
@@ -47,5 +51,6 @@ export const GRAPH_EDGE_TYPES = Object.freeze({
 export const GRAPH_SOURCES = Object.freeze({
   ACADEMY:    'academy',    // Data pulled from the academy JSON definitions
   STATE:      'state',      // Dynamic state managed by JanusStateCore
-  DSA5_INDEX: 'dsa5-index'  // Data indexed from DSA5 compendia (optional)
+  DSA5_INDEX: 'dsa5-index', // Data indexed from DSA5 compendia (optional)
+  WORLD_LORE: 'world-lore'
 });

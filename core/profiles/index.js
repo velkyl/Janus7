@@ -18,6 +18,7 @@ import { JanusConfig } from '../config.js';
 export const PROFILES = {
   PUNIN: 'punin',
   FESTUM: 'festum',
+  GARETH: 'gareth',
   LOWANGEN: 'lowangen',
   CUSTOM: 'custom'
 };
@@ -42,7 +43,7 @@ const PUNIN_PROFILE = {
 
 const FESTUM_PROFILE = {
   id: PROFILES.FESTUM,
-  name: 'Akademie von Licht und Dunkelheit (Festum)',
+  name: 'Halle des Quecksilbers (Festum)',
   locationId: 'festum_akademie',
   meta: {
     region: 'Bornland',
@@ -50,9 +51,31 @@ const FESTUM_PROFILE = {
   }
 };
 
+const GARETH_PROFILE = {
+  id: PROFILES.GARETH,
+  name: 'Garether Akademien',
+  locationId: 'gareth_schwert_und_stab',
+  meta: {
+    region: 'Mittelreich',
+    focus: 'Reichsdienst, Bannmagie, Schutzmagie'
+  }
+};
+
+const LOWANGEN_PROFILE = {
+  id: PROFILES.LOWANGEN,
+  name: 'Akademie der Verformungen (Lowangen)',
+  locationId: 'lowangen_verformungen',
+  meta: {
+    region: 'Svelltland',
+    focus: 'Formmagie, Grenzlandpragmatik'
+  }
+};
+
 const PROFILES_MAP = {
   [PROFILES.PUNIN]: PUNIN_PROFILE,
-  [PROFILES.FESTUM]: FESTUM_PROFILE
+  [PROFILES.FESTUM]: FESTUM_PROFILE,
+  [PROFILES.GARETH]: GARETH_PROFILE,
+  [PROFILES.LOWANGEN]: LOWANGEN_PROFILE
 };
 
 /**

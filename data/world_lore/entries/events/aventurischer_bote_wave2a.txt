@@ -1,0 +1,27 @@
+Aventurischer Bote - Welle 2A
+
+Quelle: D:\RPG Lokal\DSA Wissen\DSA - Aventurischer Bote
+Extrahierte Meisterinformations-Hooks: 396
+Datierbare Hooks mit eingestreuter Tageszuordnung: 201
+Taegliche Chronikabdeckung: 1025-01-01 bis 1047-12-31
+Tage im Kalender: 8400
+Basiseintraege pro Tag: 3
+
+Beispielhafte Meisterinformations-Hooks:
+- Ausgeschmuggelt | unbekannt BF | ohne feste Ortszuordnung
+- Der Fall des gestohlenen Kelches – Ein Bericht aus dem Gardearchiv von Notmark | unbekannt BF | ohne feste Ortszuordnung
+- Der Horas ist erwacht! | unbekannt BF | ohne feste Ortszuordnung
+- Der gütigen Peraine wurden die Hörner aufgesetzt | unbekannt BF | ohne feste Ortszuordnung
+- Falsche Silbertaler in Gratenfels aufgetaucht! | unbekannt BF | ohne feste Ortszuordnung
+- Fasarer Forscher entdeckt unbekannte Spezies auf Marktplatz | unbekannt BF | Fasar
+- Gedenken an Brunhilde, die Magierin | unbekannt BF | ohne feste Ortszuordnung
+- Gratulation! | unbekannt BF | ohne feste Ortszuordnung
+- Kosmologi- sche Sensation? | unbekannt BF | ohne feste Ortszuordnung
+- Prinzessin im Glück | unbekannt BF | ohne feste Ortszuordnung
+- Rettung vor dem Suppentod! | unbekannt BF | ohne feste Ortszuordnung
+- Schleichende Invasion dämonischer Gegenstände | unbekannt BF | ohne feste Ortszuordnung
+
+Verwendung in JANUS7:
+- bote_masterinfo_hooks.json fuer source-nahe Quest- und Regionalhaken
+- bote_daily_chronicle.json fuer mehrfache Tageseintraege ueber den kompletten BF-Zeitraum
+- tables.json fuer Foundry-taugliche Zufallstabellen auf Basis der verdichteten Bote-Lage

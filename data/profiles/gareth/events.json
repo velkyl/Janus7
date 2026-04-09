@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "version": "1.1.0-gareth",
+    "description": "Kurze Garether Profilereignisse."
+  },
+  "events": [
+    {
+      "id": "gareth_event_inspection",
+      "name": "Reichsinspektion",
+      "type": "political",
+      "summary": "Ein Besuch hochrangiger Prüfer zwingt Lehrkörper und Adepten zu makellosem Auftreten.",
+      "locationId": "gareth_schwert_und_stab"
+    },
+    {
+      "id": "gareth_event_duel",
+      "name": "Unerlaubte Herausforderung",
+      "type": "social",
+      "summary": "Eine formell verbotene Herausforderung droht in einen größeren Konflikt umzuschlagen.",
+      "locationId": "gareth_magische_ruestung"
+    }
+  ]
+}

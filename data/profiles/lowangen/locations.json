@@ -1,0 +1,41 @@
+{
+  "meta": {
+    "version": "1.1.0-lowangen",
+    "description": "Kurze Lowanger Profilorte."
+  },
+  "locations": [
+    {
+      "id": "lowangen_verformungen",
+      "name": "Akademie der Verformungen",
+      "type": "academy",
+      "description": "Werkstattnahe Lehrstätte mit improvisiertem, aber zähem Forschergeist.",
+      "features": [
+        "Transformationsräume",
+        "Werkhof",
+        "Grenzarchiv"
+      ]
+    },
+    {
+      "id": "lowangen_svelltmarkt",
+      "name": "Svelltmarkt",
+      "type": "public",
+      "description": "Knotenpunkt für Gerüchte, Grenzhandel und politisch heikle Begegnungen.",
+      "features": [
+        "Karawanen",
+        "Grenzhändler",
+        "Informanten"
+      ]
+    },
+    {
+      "id": "lowangen_ostwall",
+      "name": "Ostwall",
+      "type": "fortification",
+      "description": "Mauerwerk und Wachposten erinnern täglich daran, dass Lowangen im Grenzland lebt.",
+      "features": [
+        "Wachgänge",
+        "Alarmglocke",
+        "provisorische Reparaturen"
+      ]
+    }
+  ]
+}

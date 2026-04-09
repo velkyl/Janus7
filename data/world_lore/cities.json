@@ -1,8 +1,8 @@
 {
   "meta": {
-    "moduleVersion": "0.9.12.6",
+    "moduleVersion": "0.9.12.46",
     "type": "city_lore",
-    "description": "Detaillierte Beschreibungen der wichtigsten aventurischen Städte."
+    "description": "Kuratiertes Aventurien-Städtewissen für JANUS7, fokussiert auf schnell nutzbare Spielleiterinformationen."
   },
   "cities": [
     {
@@ -10,54 +10,195 @@
       "name": "Gareth",
       "region": "mittelreich",
       "population": 200000,
-      "description": "Die Kaiserstadt und größte Metropole Aventuriens. Sitz des Mittelreiches, Zentrum der Praios-Kirche und Knotenpunkt aller Wege.",
-      "notable_features": ["Alte Residenz", "Praiostempel (Stadt des Lichts)", "Kaiser-Hal-Kanal"],
-      "academies": ["Akademie der Geistigen Kraft"]
+      "academies": [
+        "Akademie der Magischen Rüstung",
+        "Akademie Schwert und Stab"
+      ],
+      "description": "Kaiserstadt, Verwaltungszentrum und Brennglas für Reichspolitik. Tempel, Hof, Militär, Flüchtlingsquartiere und Unterwelt existieren dicht nebeneinander.",
+      "notable_features": [
+        "Stadt des Lichts",
+        "Drom",
+        "Alte Residenz",
+        "Pentagontempel"
+      ],
+      "gm_summary": "Für Reichspolitik, Großstadtintrigen, Kirchenmacht und soziale Kontraste."
     },
     {
-      "id": "alanfa",
-      "name": "Al'Anfa",
-      "region": "alanfa",
-      "population": 85000,
-      "description": "Das Haupt der Perle, kühn auf den Klippen erbaut. Berühmt für ihre dekadenten Granden, die Arena und den schwarzen Borontempel.",
-      "notable_features": ["Silberberg", "Die Arena", "Tempel des Schwarzen Boron"],
-      "academies": ["Halle der Erleuchtung"]
+      "id": "punin",
+      "name": "Punin",
+      "region": "almada",
+      "population": 21000,
+      "academies": [
+        "Akademie der Hohen Magie zu Punin"
+      ],
+      "description": "Punin ist zugleich gelehrt, fromm und höfisch. Die Stadt verbindet Almadaner Lebensart mit hoher Dichte an Juristen, Magiern, Schreibern und Geweihten.",
+      "notable_features": [
+        "Akademie der Hohen Magie",
+        "Boronanger Nähe",
+        "Yaquir-Brücken",
+        "Gelehrtenviertel"
+      ],
+      "gm_summary": "Sehr stark für Magie, Gelehrsamkeit, Ermittlungen, Hof- und Familienintrigen."
     },
     {
       "id": "festum",
       "name": "Festum",
       "region": "bornland",
       "population": 27000,
-      "description": "Freie Stadt an der Bornmündung. Handelszentrum des Nordens, Sitz der Nordlandbank und des Hauses Stoerrebrandt.",
-      "notable_features": ["Speicherinsel", "Goblinviertel", "Admiral-von-Seweritz-Schule"],
-      "academies": ["Halle des Quecksilbers"]
+      "academies": [
+        "Halle des Quecksilbers"
+      ],
+      "description": "Freie Hafenstadt des Bornlands, kosmopolitisch, geschäftig und kulturell durchmischt. Handelshäuser, Goblins und bornländischer Adel reiben sich hier dauerhaft aneinander.",
+      "notable_features": [
+        "Speicherinsel",
+        "Goblinviertel",
+        "Hafen",
+        "Nordlandbank"
+      ],
+      "gm_summary": "Gut für Handel, Nordlandatmosphäre, Hafenpolitik und soziale Reibung."
+    },
+    {
+      "id": "lowangen",
+      "name": "Lowangen",
+      "region": "nostria_andergast",
+      "population": 12000,
+      "academies": [
+        "Akademie der Verformungen zu Lowangen"
+      ],
+      "description": "Stadt des Svelltlands, geprägt von Grenzlage, kultureller Durchmischung und dem langen Schatten orkischer Bedrohung.",
+      "notable_features": [
+        "Svelltmarkt",
+        "Grenzhändler",
+        "akademische Werkstätten"
+      ],
+      "gm_summary": "Geeignet für Grenzlanddrama, Mischkultur, gefährliche Forschung und politische Unsicherheit."
     },
     {
       "id": "kuslik",
       "name": "Kuslik",
       "region": "horasreich",
       "population": 22000,
-      "description": "Die Stadt der Hesinde. Zentrum der Gelehrsamkeit und des Buchdrucks. Hier befindet sich der größte Hesindetempel Aventuriens.",
-      "notable_features": ["Hesindetempel", "Halle der Metamorphosen"],
-      "academies": ["Halle der Metamorphosen"]
+      "academies": [
+        "Halle der Metamorphosen zu Kuslik"
+      ],
+      "description": "Kuslik ist Zentrum hesindegefälliger Gelehrsamkeit, Buchdruck und Debattenkultur. Wissen ist hier Währung und Statussymbol.",
+      "notable_features": [
+        "Großer Hesindetempel",
+        "Buchdruckereien",
+        "Gelehrtenviertel"
+      ],
+      "gm_summary": "Ideal für Gelehrtenstreit, Druckwerke, Debatten und elegante Stadtabenteuer."
     },
     {
-      "id": "punin",
-      "name": "Punin",
-      "region": "mittelreich",
-      "population": 21000,
-      "description": "Hauptstadt Almadas und Stadt der Magie. Berühmt für ihre Akademie der Hohen Magie und die Gelehrsamkeit.",
-      "notable_features": ["Akademie der Hohen Magie", "Yaquir-Brücke"],
-      "academies": ["Akademie der Hohen Magie"]
+      "id": "fasar",
+      "name": "Fasar",
+      "region": "aranien",
+      "population": 30000,
+      "academies": [
+        "Akademie der Geistigen Kraft zu Fasar"
+      ],
+      "description": "Fasar ist alt, dicht, gefährlich und von konkurrierenden Machtblöcken geprägt. Karawanen, Magie, Armut und Reichtum liegen eng beieinander.",
+      "notable_features": [
+        "Altstadtviertel",
+        "Karawanenplätze",
+        "Magierviertel"
+      ],
+      "gm_summary": "Stark für urbane Härte, tulamidische Politik, Machtzirkel und magische Schattenseiten."
+    },
+    {
+      "id": "olport",
+      "name": "Olport",
+      "region": "thorwal",
+      "population": 5000,
+      "academies": [
+        "Olporter Runajasko"
+      ],
+      "description": "Ein rauer Hafenort des Nordens, geprägt von Thorwaler Freiheit, Swafnirfrömmigkeit und der eigenwilligen Tradition der Runajasko.",
+      "notable_features": [
+        "Hafen",
+        "Langhäuser",
+        "Wetterzeichen"
+      ],
+      "gm_summary": "Für Seefahrt, nordische Rituale, harte Gemeinschaft und sturmgeprägte Abenteuer."
+    },
+    {
+      "id": "elburum",
+      "name": "Elburum",
+      "region": "aranien",
+      "population": 9000,
+      "academies": [
+        "Schule der Schmerzen zu Elburum"
+      ],
+      "description": "Grenznahe Stadt mit düsterem Ruf, militärischer Härte und einer Akademie, deren Ruf selbst unter Magiern polarisiert.",
+      "notable_features": [
+        "Befestigungen",
+        "tulamidische Handelswege",
+        "strenges Akademiegelände"
+      ],
+      "gm_summary": "Gut für moralisch graue Akademieplots, Grenzdruck und dunklere Magiethemen."
+    },
+    {
+      "id": "bethana",
+      "name": "Bethana",
+      "region": "horasreich",
+      "population": 8000,
+      "academies": [
+        "Bethanaer Magiertraditionen"
+      ],
+      "description": "Horasische Provinzstadt mit alter Gelehrtentradition und starker Einbindung in die Kultur des Lieblichen Feldes.",
+      "notable_features": [
+        "Hesindenahe Zirkel",
+        "Horasischer Stadtkern"
+      ],
+      "gm_summary": "Für kleinere, höfisch-gelehrte Abenteuer mit starkem Kulturaspekt."
     },
     {
       "id": "havena",
       "name": "Havena",
-      "region": "mittelreich",
+      "region": "havena_region",
       "population": 26000,
-      "description": "Küstenstadt an der Mündung des Großen Flusses. Berühmt für ihre versunkene Unterstadt und die strikten Magiegesetze.",
-      "notable_features": ["Prinzessin-Emer-Brücke", "Stadt der Schreine"],
-      "academies": ["Akademie von Licht und Dunkelheit (verboten/versteckt)"]
+      "academies": [
+        "Keine offene Gildenakademie im Stadtbild"
+      ],
+      "description": "Nebelstadt, Hafenmetropole und Stadt der versunkenen Unterstadt. Havena lebt von Wasser, Geschichten, Schmuggel und urbaner Zähigkeit.",
+      "notable_features": [
+        "Unterstadt",
+        "Prinzessin-Emer-Brücke",
+        "Hafenbecken"
+      ],
+      "gm_summary": "Ideal für Wasser, Nebel, Schmuggel, Unterstadtmysterien und soziale Abenteuer."
+    },
+    {
+      "id": "alanfa",
+      "name": "Al'Anfa",
+      "region": "alanfa",
+      "population": 85000,
+      "academies": [
+        "Südaventurische Lehrhäuser und Tempelschulen"
+      ],
+      "description": "Metropole des Südens, von Grandeninteressen, schwarzem Boron und imperialer Selbstsicherheit geprägt.",
+      "notable_features": [
+        "Arena",
+        "Silberberg",
+        "Tempelbezirke"
+      ],
+      "gm_summary": "Für große Machtspiele, zynische Politik und gefährliche Patronage."
+    },
+    {
+      "id": "zorgan",
+      "name": "Zorgan",
+      "region": "aranien",
+      "population": 18000,
+      "academies": [
+        "Aranische Lehrzirkel"
+      ],
+      "description": "Blühende Hauptstadt Araniens mit höfischer Etikette, Handel, Gärten und Mhanadi-Anbindung.",
+      "notable_features": [
+        "Palastbezirke",
+        "Gärten",
+        "Karawanenhöfe"
+      ],
+      "gm_summary": "Für Hofspiel, Diplomatie und tulamidisch-aranische Eleganz."
     }
   ]
 }

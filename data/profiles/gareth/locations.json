@@ -1,16 +1,41 @@
-[
-  {
-    "id": "gareth_academy_hall",
-    "name": "Große Aula der Rüstung",
-    "description": "Ein weiter, von Marmorsäulen getragener Saal. An den Wänden hängen Banner der weißen Gilde und des Reiches.",
-    "atmosphere": "formal_echoing",
-    "features": ["Büste von Rohal dem Weisen", "Magische Wächterstatuen"]
+{
+  "meta": {
+    "version": "1.1.0-gareth",
+    "description": "Kurze Garether Profilorte."
   },
-  {
-    "id": "gareth_academy_library",
-    "name": "Bibliothek der Bannsprüche",
-    "description": "Eine der spezialisiertesten Bibliotheken für Antimagie in Aventurien. Streng bewacht.",
-    "atmosphere": "quiet_dusty_paper",
-    "features": ["Gesperrte Sektion", "Lesehallen mit Prunkfenstern"]
-  }
-]
+  "locations": [
+    {
+      "id": "gareth_schwert_und_stab",
+      "name": "Akademie Schwert und Stab",
+      "type": "academy",
+      "description": "Reichsnahe Lehrstätte mit klarer Hierarchie, Übungshöfen und strengem Auftreten.",
+      "features": [
+        "Exerzierhof",
+        "Duellsaal",
+        "Instruktionsräume"
+      ]
+    },
+    {
+      "id": "gareth_magische_ruestung",
+      "name": "Akademie der Magischen Rüstung",
+      "type": "academy",
+      "description": "Auf Schutz, Bannung und Abwehr ausgerichtete Lehrstätte mit nüchterner, pflichtbetonter Atmosphäre.",
+      "features": [
+        "Bannzirkel",
+        "Artefaktkammer",
+        "Abwehrsaal"
+      ]
+    },
+    {
+      "id": "gareth_drom",
+      "name": "Drom",
+      "type": "district",
+      "description": "Ein sozial spannungsreicher Ort, an dem Flüchtlinge, Gerüchte und Gewalt jederzeit ineinandergreifen können.",
+      "features": [
+        "Flüchtlingsunterkünfte",
+        "Schwarzmärkte",
+        "verdeckte Informanten"
+      ]
+    }
+  ]
+}

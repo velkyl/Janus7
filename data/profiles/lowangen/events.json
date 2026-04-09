@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "version": "1.1.0-lowangen",
+    "description": "Kurze Lowanger Profilereignisse."
+  },
+  "events": [
+    {
+      "id": "lowangen_event_border_alarm",
+      "name": "Grenzalarm",
+      "type": "threat",
+      "summary": "Ein falscher oder echter Alarm bringt Stadtwache, Händler und Akademie gleichzeitig in Bewegung.",
+      "locationId": "lowangen_ostwall"
+    },
+    {
+      "id": "lowangen_event_market_offer",
+      "name": "Seltenes Angebot am Markt",
+      "type": "opportunity",
+      "summary": "Ein Händler bietet Material an, das für Formmagie hochinteressant und politisch heikel ist.",
+      "locationId": "lowangen_svelltmarkt"
+    }
+  ]
+}

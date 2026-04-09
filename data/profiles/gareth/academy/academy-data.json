@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "moduleVersion": "0.9.12.46",
+    "profile": "gareth",
+    "description": "Akademie-Basisdaten für die Garether Lehrhäuser."
+  },
+  "academy": {
+    "id": "gareth",
+    "name": "Garether Akademien",
+    "trimester": 1,
+    "year": 1039,
+    "week": 1,
+    "day": "Praiostag",
+    "phase": "Morgen"
+  },
+  "configuration": {
+    "autoSave": true,
+    "enableUI": true,
+    "enableSimulation": true
+  }
+}

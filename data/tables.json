@@ -1,7 +1,7 @@
 {
   "meta": {
-    "moduleVersion": "0.9.12.6",
-    "description": "Aggregierte Zufallstabellen für den Spielleiter in Janus7."
+    "moduleVersion": "0.9.12.46",
+    "description": "Aggregierte Zufallstabellen fuer Spielleitung, Weltwissen und Akademiealltag in JANUS7."
   },
   "tables": [
     {
@@ -11,8 +11,8 @@
         "In Gareth wurde ein Falschmünzerring ausgehoben, der angeblich bis in den hohen Adel reicht.",
         "Man sagt, die Seeschlange im Golf von Perricum sei wieder erwacht.",
         "Ein reisender Händler behauptet, im Bornland liege ein Fluch auf dem Winterweizen.",
-        "In den Kneipen von Kuslik wird gemunkelt, die Spektabilität plane eine geheime Expedition ins Riesland.",
-        "Ein Bote aus Thorwal berichtet von seltsamen Lichtern über dem Olport-Hafen.",
+        "In den Kneipen von Kuslik wird gemunkelt, eine Expedition suche nach einer verlorenen Bibliothek.",
+        "Ein Bote aus Thorwal berichtet von seltsamen Lichtern über dem Olporter Hafen.",
         "Angeblich wurde in Al'Anfa ein Sklave mit magischem Talent entdeckt, der die Flucht ergriff."
       ]
     },
@@ -20,12 +20,36 @@
       "id": "academy_daily_events",
       "name": "Akademie-Werkalltag",
       "entries": [
-        "Ein Magister hat seine Brille im Alchimielabor verlegt und verdächtigt die Scholaren.",
-        "In der Bibliothek wurde ein flüsterndes Buch gefunden, das niemandem gehört.",
-        "Ein fehlgeschlagener Verwandlungszauber hat einen Hund mit Entenfüßen hervorgebracht.",
-        "Die Abendmahlzeit im Gemeinschaftssaal riecht verdächtig nach Schwefel.",
-        "Ein Scholar hat sich beim Üben eines Ignifaxius die Augenbrauen versengt.",
-        "Der Hausmeister hat einen Geheimgang entdeckt, der mit klebrigem Schleim überzogen ist."
+        "Ein Magister vermisst eine kommentierte Abschrift seines letzten Traktats.",
+        "Im Labor führt ein harmlos gemeinter Versuch zu einem peinlichen Geruchsproblem.",
+        "Ein Adept behauptet, ein bestimmtes Buch habe ihm nachts geantwortet.",
+        "Der Küchendienst ist heute so unbeliebt wie eine Nachprüfung.",
+        "Im Innenhof wird ein Duell verabredet, das offiziell niemals stattgefunden haben wird.",
+        "Ein Hausmeister entdeckt einen Zugang, den laut Bauplan niemand kennen dürfte."
+      ]
+    },
+    {
+      "id": "academy_city_hooks",
+      "name": "Akademie und Stadt",
+      "entries": [
+        "Die Stadtwache bittet die Akademie um diskrete Unterstützung in einer peinlichen Angelegenheit.",
+        "Ein Händler bietet der Akademie Material an, das zu selten und zu billig zugleich ist.",
+        "Ein Tempel fordert Aufklärung über eine magische Nebenwirkung im Viertel.",
+        "Ein Adliger sucht einen Tutor, meint aber in Wahrheit einen Problemlöser.",
+        "Eine Gildenentscheidung stößt im Stadtrat auf Widerstand.",
+        "Eine Studentengruppe gerät außerhalb der Mauern in Schwierigkeiten und braucht Rückendeckung."
+      ]
+    },
+    {
+      "id": "bote_daily_hooks",
+      "name": "Aventurischer-Bote-Tageshaken",
+      "entries": [
+        "Politische Gegendarstellungen machen die Wahrheit wertvoller als Gold.",
+        "Ein lokales Omen wird zur Schlagzeile, bevor jemand es geprüft hat.",
+        "Eine überregionale Nachricht lässt sich hervorragend für private Fehden ausschlachten.",
+        "Jemand nutzt die Botenlage, um einen eigenen Skandal im Schatten zu halten.",
+        "Ein Meisterinformation-Splitter deutet auf ein kommendes Abenteuer statt auf eine abgeschlossene Geschichte.",
+        "Eine Randnotiz im Boten ist für Helden bedeutsamer als die eigentliche Schlagzeile."
       ]
     },
     {
@@ -33,47 +57,65 @@
       "name": "Wetter in Aventurien",
       "entries": [
         "Strahlender Sonnenschein (Praios' Lächeln).",
-        "Leichter Nieselregen (Efferd weint).",
-        "Aufziehendes Gewitter mit kräftigen Blitzen (Rondras Zorn).",
-        "Dichter Nebel, der die Sicht auf wenige Schritt begrenzt.",
-        "Unerwarteter Hagelschauer, der die Ernte bedroht.",
-        "Klarer, sternenreicher Himmel mit Nordlichtern (Ifirns Schleier)."
+        "Leichter Nieselregen und träge Straßen.",
+        "Aufziehendes Gewitter mit kräftigen Blitzen.",
+        "Dichter Nebel, der Stimmen näher wirken lässt als sie sind.",
+        "Unerwarteter Hagelschauer bedroht Feld und Reiseplan.",
+        "Klarer, sternreicher Himmel mit ungewöhnlich scharfer Sicht."
       ]
     },
     {
       "id": "npc_moods",
       "name": "NPC-Stimmung",
       "entries": [
-        "Geistesabwesend (vertieft in Formeln)",
-        "Gereizt (Schlafentzug durch Experimente)",
-        "Euphorisch (Durchbruch in der Forschung)",
-        "Verschwiegen (Geheimes Projekt)",
-        "Herablassend (Gegenüber Jüngeren)",
-        "Hektisch (Eile zu einer Vorlesung)"
+        "Geistesabwesend",
+        "Gereizt",
+        "Euphorisch",
+        "Verschwiegen",
+        "Herablassend",
+        "Hektisch"
       ]
     },
     {
-      "id": "ambient_noises",
-      "name": "Akademie-Hintergrundgeräusche",
+      "id": "bote_meisterinfo_hooks",
+      "name": "Aventurischer Bote - Meisterinformationen",
       "entries": [
-        "Das Klirren von Alchimie-Glas",
-        "Ein fernes Murmeln von Beschwörungsformeln",
-        "Das Kratzen von Federn auf Pergament",
-        "Ein plötzlicher, gedämpfter Knall aus den Laboren",
-        "Das Rascheln von schweren Roben auf Steinboden",
-        "Ein rhythmischer Singsang aus der Bibliothek"
+        "Ausgeschmuggelt (unbekannt BF)",
+        "Der Fall des gestohlenen Kelches – Ein Bericht aus dem Gardearchiv von Notmark (unbekannt BF)",
+        "Der Horas ist erwacht! (unbekannt BF)",
+        "Der gütigen Peraine wurden die Hörner aufgesetzt (unbekannt BF)",
+        "Falsche Silbertaler in Gratenfels aufgetaucht! (unbekannt BF)",
+        "Fasarer Forscher entdeckt unbekannte Spezies auf Marktplatz (unbekannt BF)",
+        "Gedenken an Brunhilde, die Magierin (unbekannt BF)",
+        "Gratulation! (unbekannt BF)",
+        "Kosmologi- sche Sensation? (unbekannt BF)",
+        "Prinzessin im Glück (unbekannt BF)",
+        "Rettung vor dem Suppentod! (unbekannt BF)",
+        "Schleichende Invasion dämonischer Gegenstände (unbekannt BF)",
+        "Trauer muss der Kosch tragen (unbekannt BF)",
+        "Vermeintliche ‚Heldengruppe‘ hinterlässt Spur der Verwüstung (unbekannt BF)",
+        "Versteigerung des Monats! (unbekannt BF)",
+        "Yaquirbruch durch Graf Rimon Sâlingor befriedet! (unbekannt BF)",
+        "Adeptus aus Nostria stirbt in Ausübung seiner Pflicht (1038 BF)",
+        "Doppelhochzeit auf dem Löwenschloss (1038 BF)",
+        "Erschüttert, doch ungebrochen! (1038 BF)",
+        "Heißes Blut und kühler Kopf (1038 BF)",
+        "Heißes Blut und kühler Kopf (1038 BF)",
+        "Höret! Höret! Der Adel wählt! (1038 BF)",
+        "Licht des Glaubens für die Schwarze Sichel (1038 BF)",
+        "Magierakademie Punin entwickelt neuen Zauber! (1038 BF)"
       ]
     },
     {
-      "id": "magical_mishaps",
-      "name": "Magische Missgeschicke",
+      "id": "bote_daily_pressure",
+      "name": "Aventurischer Bote - Drucklagen",
       "entries": [
-        "Temporäre Verfärbung der Fingerspitzen (Blau)",
-        "Kurzzeitiges Schweben kleiner Objekte (5 Min)",
-        "Funkenflug beim Sprechen",
-        "Der Geruch von verbranntem Zimt",
-        "Echo-Effekt bei der eigenen Stimme",
-        "Haare stehen statisch zu Berge"
+        "Eine Schlagzeile bestaetigt nichts, veraendert aber sofort das Verhalten lokaler Machttraeger.",
+        "Mehrere Wahrheiten konkurrieren gleichzeitig um denselben Vorfall.",
+        "Ein Meisterinformationssplitter wirkt wie Hintergrund, ist aber in Wirklichkeit ein Queststarter.",
+        "Ein Geruecht wird erst gefaehrlich, als eine offizielle Stelle darauf reagieren muss.",
+        "Eine lokale Bagatelle erhaelt ploetzlich ueberregionale Bedeutung.",
+        "Eine verspätete Nachricht loest heute Folgen aus, obwohl das eigentliche Ereignis schon Wochen zurueckliegt."
       ]
     }
   ]

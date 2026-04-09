@@ -1,73 +1,241 @@
 {
   "meta": {
-    "version": "1.1.0",
-    "source": "Aventurischer Bote & Historia Aventurica",
-    "lastUpdate": "2026-04-09T00:00:00.000Z"
+    "version": "1.2.0",
+    "source": "Historia Aventurica, Aventurischer Bote und kuratierte Tageshaken",
+    "lastUpdate": "2026-04-09T00:00:00.000Z",
+    "coverage": {
+      "from": "1025-01-01",
+      "to": "1047-12-31"
+    },
+    "note": "Diese Datei enthält kanonisch orientierte Fixereignisse plus spielbare Tageshaken. Sie ist kein vollständiges tägliches Kanonregister."
   },
   "chronicle": [
     {
-      "id": "bote_1025_01_01",
+      "id": "bote_1025_01_01_01",
       "date": "1025-01-01",
       "label": "Neujahrssegen in Gareth",
-      "description": "Reichsregentin Emer und Königin Rohaja empfangen den Segen des Lichts. Gerüchte über Unruhen in den Grenzgrafschaften zu den Schwarzen Landen verdichten sich.",
-      "location": "Garetien",
-      "tags": ["politik", "praios"]
-    },
-    {
-      "id": "bote_1025_01_05",
-      "date": "1025-01-05",
-      "label": "Sichtung der Fliegenden Festung",
-      "description": "Späher berichten von einer gewaltigen Schattenmasse über den Drachensteinen. Es wird vermutet, dass Galotta seine fliegende Festung erneut in Bewegung setzt.",
-      "location": "Drachensteine",
-      "tags": ["militaer", "borbaradianer"]
-    },
-    {
-      "id": "bote_1025_02_12",
-      "date": "1025-02-12",
-      "label": "Festumer Handelstag",
-      "description": "Haus Stoerrebrandt kündigt massive Investitionen in die Sicherung der Bornmündung an, um der Piraterie der Blutigen See entgegenzuwirken.",
-      "location": "Festum",
-      "tags": ["handel", "militaer"]
-    },
-    {
-      "id": "bote_1025_03_20",
-      "date": "1025-03-20",
-      "label": "Geistige Umnachtung in Punin",
-      "description": "Mehrere Adepten der Akademie klagen über Alpträume von schwarzen Kelchen. Die Spektabilität Prishya von Garlischgrötz ordnet eine Untersuchung an.",
-      "location": "Punin",
-      "tags": ["magie", "mystery"]
-    },
-    {
-      "id": "bote_1025_04_01",
-      "date": "1025-04-01",
-      "label": "Aufruf zur Heerfahrt",
-      "description": "Walpurga von Löwenhaupt ruft die weidener Ritterschaft zur Sicherung der Pässe auf. Der Druck durch orkische Streifen aus dem Svelltland nimmt zu.",
-      "location": "Weiden",
-      "tags": ["militaer", "orks"]
-    },
-    {
-      "id": "bote_1025_06_15",
-      "date": "1025-06-15",
-      "label": "Die Schatten über Gareth",
-      "description": "Die Bürger von Gareth werden von kollektiven Alpträumen geplagt. Dunkle Wolken in Form von Gesichtern werden über der Stadt gesichtet. Es heißt, Galotta sende seine Grüße.",
+      "description": "In Gareth wird das neue Jahr mit praiosgefälliger Öffentlichkeit, höfischem Pomp und ersten Gerüchten über Unruhe an den Reichsgrenzen eröffnet.",
       "location": "Gareth",
-      "tags": ["magie", "horror"]
+      "tags": [
+        "politik",
+        "praios",
+        "reich"
+      ]
     },
     {
-      "id": "bote_1025_08_02",
-      "date": "1025-08-02",
-      "label": "Gefecht vor der Zyklopenküste",
-      "description": "Horasische Galeeren treffen auf eine Flotte thorwalscher Ottas. Der Seekrieg im Westmeer weitet sich aus.",
-      "location": "Zyklopeninseln",
-      "tags": ["militaer", "seekrieg"]
+      "id": "bote_1025_01_01_02",
+      "date": "1025-01-01",
+      "label": "Akademische Korrespondenz aus Punin",
+      "description": "Puniner Gelehrte nehmen den Jahreswechsel zum Anlass, offene Forschungsvorhaben, Reisepläne und Lehrbitten für das kommende Studienjahr neu zu ordnen.",
+      "location": "Punin",
+      "tags": [
+        "magie",
+        "gelehrsamkeit"
+      ]
     },
     {
-      "id": "bote_1025_10_10",
-      "date": "1025-10-10",
-      "label": "Gedenken an die Ogerschlacht",
-      "description": "Zehn Jahre nach der Schlacht an der Trollpforte finden im ganzen Reich Gedenkfeiern statt. Die Angst vor einer Rückkehr der Ogerhorden ist noch immer spürbar.",
+      "id": "bote_1025_03_20_01",
+      "date": "1025-03-20",
+      "label": "Unruhige Träume in Punin",
+      "description": "Mehrere Adepten berichten von ähnlichen Albträumen, die in Kollegenkreisen als mögliches Zeichen astraler Resonanz diskutiert werden.",
+      "location": "Punin",
+      "tags": [
+        "magie",
+        "omen"
+      ]
+    },
+    {
+      "id": "bote_1025_06_15_01",
+      "date": "1025-06-15",
+      "label": "Schatten über Gareth",
+      "description": "In der Reichsmetropole verdichten sich Berichte über düstere Vorzeichen, Gerüchte um dämonische Aktivitäten und allgemeine Verunsicherung.",
+      "location": "Gareth",
+      "tags": [
+        "krieg",
+        "horror",
+        "reich"
+      ]
+    },
+    {
+      "id": "bote_1026_02_03_01",
+      "date": "1026-02-03",
+      "label": "Bornländische Handelssorgen",
+      "description": "Festumer und bornische Kaufleute melden wachsende Unsicherheit auf einigen Routen, was Preise, Vorräte und lokale Politik zugleich beeinflusst.",
+      "location": "Festum",
+      "tags": [
+        "handel",
+        "bornland"
+      ]
+    },
+    {
+      "id": "bote_1026_08_11_01",
+      "date": "1026-08-11",
+      "label": "Diskussionen über magische Verantwortung",
+      "description": "In mehreren Gelehrtenstädten wird die Rolle der Magier nach den Verheerungen der jüngsten Jahre schärfer debattiert als zuvor.",
+      "location": "Aventurien",
+      "tags": [
+        "magie",
+        "gesellschaft"
+      ]
+    },
+    {
+      "id": "bote_1027_04_18_01",
+      "date": "1027-04-18",
+      "label": "Gerüchte über seltene Manuskripte",
+      "description": "Zwischen Punin, Gareth und Festum kursieren Hinweise auf verschollene Handschriften, deren Besitz hohen Status und erhebliche Risiken verspricht.",
+      "location": "Aventurien",
+      "tags": [
+        "bibliothek",
+        "intrige"
+      ]
+    },
+    {
+      "id": "bote_1030_09_07_01",
+      "date": "1030-09-07",
+      "label": "Reichsweite Klagen über Grenzbelastung",
+      "description": "Aus mehreren Provinzen mehren sich Nachrichten über erschöpfte Garnisonen, belastete Landbevölkerung und stockende Wiederaufbauarbeiten.",
       "location": "Mittelreich",
-      "tags": ["kultur", "geschichte"]
+      "tags": [
+        "militär",
+        "gesellschaft"
+      ]
+    },
+    {
+      "id": "bote_1034_07_12_01",
+      "date": "1034-07-12",
+      "label": "Totenlichter in der Warunkei",
+      "description": "Sumpflichter, Verschollene und Berichte über unruhige Tote nähren die Furcht in den verwundeten Landstrichen Tobriens.",
+      "location": "Tobrien",
+      "tags": [
+        "tobrien",
+        "untote",
+        "horror"
+      ]
+    },
+    {
+      "id": "bote_1035_03_22_01",
+      "date": "1035-03-22",
+      "label": "Horasische Druckwerke verbreiten neue Debatten",
+      "description": "Aus Kuslik und anderen Städten gelangen vermehrt Traktate nach Aventurien, die alte Lehrmeinungen über Magie und Standesordnung in Frage stellen.",
+      "location": "Kuslik",
+      "tags": [
+        "horasreich",
+        "gelehrsamkeit"
+      ]
+    },
+    {
+      "id": "bote_1038_05_16_01",
+      "date": "1038-05-16",
+      "label": "Wiederbelebter Handel in Festum",
+      "description": "Nach harten Jahren fassen Händler vorsichtig wieder langfristige Pläne. Nordrouten, Flusshandel und Lagerhäuser gewinnen erneut Gewicht.",
+      "location": "Festum",
+      "tags": [
+        "handel",
+        "bornland"
+      ]
+    },
+    {
+      "id": "bote_1039_11_03_01",
+      "date": "1039-11-03",
+      "label": "Nordmeerzeichen vor Olport",
+      "description": "Seltsame Wetterlagen und ungewöhnliche Sichtungen werden in thorwalschen Häfen als mögliche Vorzeichen einer harten Saison gedeutet.",
+      "location": "Olport",
+      "tags": [
+        "thorwal",
+        "wetter",
+        "omen"
+      ]
+    },
+    {
+      "id": "bote_1041_01_14_01",
+      "date": "1041-01-14",
+      "label": "Diskrete Suche nach Gelehrten",
+      "description": "Mehrere Häuser und Tempel entsenden Boten, um besonders fähige Schreiber, Magier und Kartografen für vertrauliche Unternehmungen anzuwerben.",
+      "location": "Aventurien",
+      "tags": [
+        "gelehrsamkeit",
+        "auftrag"
+      ]
+    },
+    {
+      "id": "bote_1043_09_02_01",
+      "date": "1043-09-02",
+      "label": "Akademische Konkurrenz um Sponsoren",
+      "description": "Zwischen mehreren Lehrhäusern entbrennt ein stiller Wettstreit um Mäzene, Druckkapazitäten und seltene Materialien.",
+      "location": "Aventurien",
+      "tags": [
+        "magie",
+        "intrige",
+        "wirtschaft"
+      ]
+    },
+    {
+      "id": "bote_1045_12_19_01",
+      "date": "1045-12-19",
+      "label": "Unruhe im Grenzgebiet Nostria-Andergast",
+      "description": "Kleinere Überfälle und widersprüchliche Schuldzuweisungen nähren erneut das alte Misstrauen beider Reiche.",
+      "location": "Nostria und Andergast",
+      "tags": [
+        "grenze",
+        "konflikt"
+      ]
+    },
+    {
+      "id": "bote_1046_08_09_01",
+      "date": "1046-08-09",
+      "label": "Almadanische Sagen gewinnen neue Popularität",
+      "description": "Im Zuge neuer Wallfahrten, Sammlungen und Erzählabende gewinnen alte almadanische Legenden auch außerhalb der Region neue Hörer.",
+      "location": "Almada",
+      "tags": [
+        "almada",
+        "kultur",
+        "sage"
+      ]
+    },
+    {
+      "id": "bote_1046_11_19_01",
+      "date": "1046-11-19",
+      "label": "Zwergische Einigungsfragen bewegen den Norden",
+      "description": "Berichte aus den Bergen lassen erkennen, dass Bündnisse, Bedrohungen und alte Schwüre der Zwergenvölker wieder an Gewicht gewinnen.",
+      "location": "Kosch und Nordmarken",
+      "tags": [
+        "zwerge",
+        "politik"
+      ]
+    },
+    {
+      "id": "bote_1047_03_19_01",
+      "date": "1047-03-19",
+      "label": "Neue Meisterinformationen aus dem Boten",
+      "description": "Die jüngeren Botenjahrgänge bieten zahlreiche Abenteueraufhänger zu Wiederaufbau, Lokalpolitik, Rätseln, gestohlenen Artefakten und verdeckten Konflikten.",
+      "location": "Aventurien",
+      "tags": [
+        "bote",
+        "quest_hook"
+      ]
+    },
+    {
+      "id": "bote_1047_05_19_01",
+      "date": "1047-05-19",
+      "label": "Fasar im Fokus drachischer Gerüchte",
+      "description": "Jüngere Berichte aus dem Aventurischen Boten stellen Fasar, isenhagische Machtfragen und regionale Eskalationsrisiken in einen gemeinsamen Horizont.",
+      "location": "Fasar",
+      "tags": [
+        "drache",
+        "fasar",
+        "politik"
+      ]
+    },
+    {
+      "id": "bote_1047_09_18_01",
+      "date": "1047-09-18",
+      "label": "Späte Ernte, spitze Klingen",
+      "description": "Überregionale Nachrichten deuten auf angespannte Versorgungslagen, politische Schuldzuweisungen und einen raueren Ton zwischen mehreren Machtzentren hin.",
+      "location": "Aventurien",
+      "tags": [
+        "versorgung",
+        "politik"
+      ]
     }
   ]
 }
