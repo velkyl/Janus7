@@ -44,6 +44,7 @@
     "templates/shell/janus-shell.hbs",
     "templates/shell/panels/default-panel.hbs",
     "templates/shell/views/academy.hbs",
+    "templates/shell/views/chronicleBrowser.hbs",
     "templates/shell/views/director.hbs",
     "templates/shell/views/tools.hbs",
     "templates/sidebar/janus-sidebar.hbs"

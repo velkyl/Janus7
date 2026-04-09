@@ -1,5 +1,5 @@
 // v2 registry cache bypass
-import { getPanels, getPanel } from './panel-registry.js';
+import { getPanel } from './panel-registry.js';
 // FIX P2-08: JanusSessionPrepService wird lazy importiert um zu verhindern dass ein
 // fehlender/kaputter Phase8-Import die gesamte Shell (view-registry.js) blockiert.
 // Der Statische Top-Level-Import wurde daher entfernt und durch einen lazy-Import ersetzt.
@@ -29,8 +29,10 @@ async function getAlumniService() {
 }
 import { buildLocationsView, buildPeopleView, buildKiContext, buildSyncView, buildSystemView } from './context-builders.js';
 import { prepareDirectorRuntimeSummary, buildDirectorRunbookView, buildDirectorWorkflowView } from './director-context.js';
+import JanusAssetResolver from '../../core/services/asset-resolver.js';
 
 const VIEW_REGISTRY = new Map();
+const VIEW_JSON_CACHE = new Map();
 
 export function registerView(definition = {}) {
   const id = String(definition.id ?? '').trim();
@@ -52,6 +54,26 @@ export function getView(id) {
 
 export function getViews() {
   return [...VIEW_REGISTRY.values()];
+}
+
+async function loadModuleJson(path) {
+  const key = String(path ?? '').trim();
+  if (!key) return null;
+  if (VIEW_JSON_CACHE.has(key)) return VIEW_JSON_CACHE.get(key);
+
+  const request = (async () => {
+    const response = await fetch(JanusAssetResolver.data(key), { cache: 'no-cache' });
+    if (!response.ok) throw new Error(`HTTP ${response.status} for ${key}`);
+    return response.json();
+  })();
+
+  VIEW_JSON_CACHE.set(key, request);
+  try {
+    return await request;
+  } catch (err) {
+    VIEW_JSON_CACHE.delete(key);
+    throw err;
+  }
 }
 
 function buildDirectorView(engine, app) {
@@ -193,7 +215,7 @@ function buildScheduleView(engine, app) {
   };
 }
 
-async function buildPeopleViewLocal(engine, app) {
+async function buildPeopleViewLocal(engine, _app) {
   const state = engine?.core?.state?.get?.() ?? {};
   const peopleView = buildPeopleView({ state, actors: game?.actors });
   const AlumniService = await getAlumniService();
@@ -203,7 +225,7 @@ async function buildPeopleViewLocal(engine, app) {
   return { peopleView, alumniView };
 }
 
-function buildPlacesViewLocal(engine, app) {
+function buildPlacesViewLocal(engine, _app) {
   const state = engine?.core?.state?.get?.() ?? {};
   const { locations, locationView } = buildLocationsView({ state, academyData: engine?.academy?.data });
   return { locations, locationView };
@@ -257,6 +279,109 @@ function buildToolsView(engine) {
         cards: buildPanelCards(engine, ['sessionPrep', 'dataStudio', 'ki', 'sync', 'diagnostics', 'stateInspector', 'config', 'tests', 'backups'])
       }
     ]
+  };
+}
+
+function pickBfDateFromState(state = {}) {
+  const time = state?.time ?? {};
+  const year = Number(time?.year ?? 0);
+  const month = Number(time?.month ?? 1);
+  const day = Number(time?.dayOfMonth ?? 1);
+  if (!Number.isFinite(year) || year <= 0) return null;
+  const safeMonth = Number.isFinite(month) && month >= 1 && month <= 12 ? month : 1;
+  const safeDay = Number.isFinite(day) && day >= 1 && day <= 31 ? day : 1;
+  return `${year.toString().padStart(4, '0')}-${safeMonth.toString().padStart(2, '0')}-${safeDay.toString().padStart(2, '0')}`;
+}
+
+function countAnchors(entries = []) {
+  return entries.filter((entry) => entry?.sourceType && entry.sourceType !== 'generated_daily_hook').length;
+}
+
+async function buildChronicleBrowserView(engine) {
+  const state = engine?.core?.state?.get?.() ?? {};
+  const bfDate = pickBfDateFromState(state) ?? '1025-01-01';
+  const targetYear = Number(String(bfDate).slice(0, 4)) || 1025;
+  const targetMonth = Number(String(bfDate).slice(5, 7)) || 1;
+
+  let dailyChronicle;
+  let masterinfoHooks;
+  try {
+    [dailyChronicle, masterinfoHooks] = await Promise.all([
+      loadModuleJson('events/bote_daily_chronicle.json'),
+      loadModuleJson('events/bote_masterinfo_hooks.json'),
+    ]);
+  } catch (err) {
+    return {
+      unavailable: true,
+      error: err?.message ?? String(err),
+      focusDate: bfDate,
+      summary: { dayCount: 0, baseEntriesPerDay: 0, curatedAnchorCount: 0, meisterinfoAnchorCount: 0 },
+      focusDay: null,
+      nearbyDays: [],
+      monthlyAnchors: [],
+      yearlyMasterHooks: [],
+    };
+  }
+
+  const days = Array.isArray(dailyChronicle?.days) ? dailyChronicle.days : [];
+  const exactIndex = days.findIndex((day) => day?.date === bfDate);
+  const yearFallbackIndex = days.findIndex((day) => Number(String(day?.date ?? '').slice(0, 4)) === targetYear);
+  const fallbackIndex = exactIndex >= 0 ? exactIndex : (yearFallbackIndex >= 0 ? yearFallbackIndex : 0);
+  const focusDay = days[fallbackIndex] ?? null;
+  const nearbyDays = days.slice(Math.max(0, fallbackIndex - 2), fallbackIndex + 3).map((day) => ({
+    date: day?.date ?? '—',
+    monthName: day?.monthName ?? '—',
+    entryCount: Array.isArray(day?.entries) ? day.entries.length : 0,
+    anchorCount: countAnchors(day?.entries ?? []),
+    labels: (day?.entries ?? []).slice(0, 3).map((entry) => entry?.label ?? entry?.id).filter(Boolean),
+  }));
+  const monthlyAnchors = days
+    .filter((day) => Number(String(day?.date ?? '').slice(0, 4)) === targetYear && Number(String(day?.date ?? '').slice(5, 7)) === targetMonth)
+    .map((day) => ({
+      date: day?.date ?? '—',
+      monthName: day?.monthName ?? '—',
+      anchorEntries: (day?.entries ?? []).filter((entry) => entry?.sourceType && entry.sourceType !== 'generated_daily_hook'),
+    }))
+    .filter((day) => day.anchorEntries.length > 0)
+    .slice(0, 12);
+  const yearlyMasterHooks = (masterinfoHooks?.hooks ?? [])
+    .filter((hook) => Number(hook?.bfYear ?? 0) === targetYear)
+    .slice(0, 16)
+    .map((hook) => ({
+      title: hook?.title ?? hook?.id ?? '—',
+      location: hook?.location ?? 'ohne feste Ortszuordnung',
+      issue: hook?.issue ?? '—',
+      tags: Array.isArray(hook?.tags) ? hook.tags.join(', ') : '—',
+      hook: hook?.hook ?? '—',
+      approximateDate: hook?.approximateDate ?? null,
+    }));
+
+  return {
+    unavailable: false,
+    focusDate: bfDate,
+    summary: {
+      dayCount: Number(dailyChronicle?.meta?.dayCount ?? 0),
+      baseEntriesPerDay: Number(dailyChronicle?.meta?.baseEntriesPerDay ?? 0),
+      curatedAnchorCount: Number(dailyChronicle?.meta?.curatedAnchorCount ?? 0),
+      meisterinfoAnchorCount: Number(dailyChronicle?.meta?.meisterinfoAnchorCount ?? 0),
+    },
+    focusDay: focusDay
+      ? {
+          date: focusDay.date ?? '—',
+          monthName: focusDay.monthName ?? '—',
+          entries: (focusDay.entries ?? []).map((entry) => ({
+            label: entry?.label ?? entry?.id ?? '—',
+            location: entry?.location ?? '—',
+            category: entry?.category ?? '—',
+            sourceType: entry?.sourceType ?? '—',
+            description: entry?.description ?? '—',
+            tags: Array.isArray(entry?.tags) ? entry.tags.join(', ') : '—',
+          })),
+        }
+      : null,
+    nearbyDays,
+    monthlyAnchors,
+    yearlyMasterHooks,
   };
 }
 
@@ -314,6 +439,14 @@ registerView({
   icon: 'fas fa-screwdriver-wrench',
   description: 'Werkzeuge, Panels und technische Subsysteme.',
   build: buildToolsView
+});
+
+registerView({
+  id: 'chronicleBrowser',
+  title: 'Bote-Chronik',
+  icon: 'fas fa-newspaper',
+  description: 'GM-Browser fuer taegliche Bote-Lage, Chronikanker und Meisterinformationen.',
+  build: buildChronicleBrowserView
 });
 
 async function buildSessionPrepView(engine) {

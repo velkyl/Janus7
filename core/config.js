@@ -267,7 +267,25 @@ export class JanusConfig {
       default: true,
     });
 
+    // ── Gemini AI Konfiguration ──────────────────────────────────────────
 
+    game.settings.register(MODULE_ID, 'geminiApiKey', {
+      name: 'JANUS7.Settings.GeminiApiKey.Name',
+      hint: 'JANUS7.Settings.GeminiApiKey.Hint',
+      scope: 'world',
+      config: true,
+      type: String,
+      default: '',
+    });
+
+    game.settings.register(MODULE_ID, 'enableGemini', {
+      name: 'JANUS7.Settings.EnableGemini.Name',
+      hint: 'JANUS7.Settings.EnableGemini.Hint',
+      scope: 'world',
+      config: true,
+      type: Boolean,
+      default: false,
+    });
   }
 
   /**

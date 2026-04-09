@@ -1,0 +1,134 @@
+<div class="j7-shell__view j7-shell__view--chronicle-browser">
+  {{#if unavailable}}
+    <article class="j7-shell__card">
+      <header class="j7-shell__card-head">
+        <div>
+          <h3><i class="fas fa-triangle-exclamation j7-shell__card-icon" aria-hidden="true"></i><span>Bote-Chronik nicht verfuegbar</span></h3>
+          <p>Die Daten konnten nicht geladen werden.</p>
+        </div>
+      </header>
+      <p class="muted">{{error}}</p>
+    </article>
+  {{else}}
+    <div class="janus7-two-col">
+      <article class="j7-shell__card">
+        <header class="j7-shell__card-head">
+          <div>
+            <h3><i class="fas fa-calendar-day j7-shell__card-icon" aria-hidden="true"></i><span>Fokusdatum</span></h3>
+            <p>Aktueller BF-Tag aus dem State oder Fallback auf den Chronikbeginn.</p>
+          </div>
+        </header>
+        <div class="j7-shell__metrics">
+          <div class="j7-shell__metric"><span>Datum</span><strong>{{focusDate}}</strong></div>
+          <div class="j7-shell__metric"><span>Tage gesamt</span><strong>{{summary.dayCount}}</strong></div>
+          <div class="j7-shell__metric"><span>Basis/Tag</span><strong>{{summary.baseEntriesPerDay}}</strong></div>
+          <div class="j7-shell__metric"><span>Kanonanker</span><strong>{{summary.curatedAnchorCount}}</strong></div>
+          <div class="j7-shell__metric"><span>Meisterinfo-Anker</span><strong>{{summary.meisterinfoAnchorCount}}</strong></div>
+        </div>
+      </article>
+
+      <article class="j7-shell__card">
+        <header class="j7-shell__card-head">
+          <div>
+            <h3><i class="fas fa-road j7-shell__card-icon" aria-hidden="true"></i><span>Umgebungstage</span></h3>
+            <p>Kurzer Browse-Fokus fuer die naheliegenden Chronikfenster.</p>
+          </div>
+        </header>
+        {{#if nearbyDays.length}}
+          <div class="j7-shell__list">
+            {{#each nearbyDays}}
+              <div class="j7-shell__list-row">
+                <span>{{date}} · {{monthName}}</span>
+                <strong>{{entryCount}} Eintraege{{#if anchorCount}} · {{anchorCount}} Anker{{/if}}</strong>
+              </div>
+            {{/each}}
+          </div>
+        {{else}}
+          <p class="muted">Keine Nachbartage verfuegbar.</p>
+        {{/if}}
+      </article>
+    </div>
+
+    <article class="j7-shell__card j7-mt-sm">
+      <header class="j7-shell__card-head">
+        <div>
+          <h3><i class="fas fa-book-bookmark j7-shell__card-icon" aria-hidden="true"></i><span>Eintraege am Fokusdatum</span></h3>
+          <p>Mehrere Taegeseintraege aus der verdichteten Bote-Chronik.</p>
+        </div>
+      </header>
+      {{#if focusDay}}
+        <div class="j7-seed-grid">
+          {{#if focusDay.entries.length}}
+            {{#each focusDay.entries}}
+              <article class="j7-seed-card">
+                <header>
+                  <strong>{{label}}</strong>
+                  <span class="j7-text-dim">{{category}} · {{sourceType}}</span>
+                </header>
+                <p class="j7-text-dim">{{location}}{{#if tags}} · {{tags}}{{/if}}</p>
+                <p>{{description}}</p>
+              </article>
+            {{/each}}
+          {{else}}
+            <p class="muted">Fuer den Fokus-Tag sind keine Eintraege vorhanden.</p>
+          {{/if}}
+        </div>
+      {{else}}
+        <p class="muted">Fuer den Fokus-Tag sind keine Eintraege vorhanden.</p>
+      {{/if}}
+    </article>
+
+    <div class="janus7-two-col j7-mt-sm">
+      <article class="j7-shell__card">
+        <header class="j7-shell__card-head">
+          <div>
+            <h3><i class="fas fa-anchor j7-shell__card-icon" aria-hidden="true"></i><span>Monatsanker</span></h3>
+            <p>Tage im aktuellen BF-Monat mit kuratierten oder meisterinformationsbasierten Zusatzankern.</p>
+          </div>
+        </header>
+        {{#if monthlyAnchors.length}}
+          <div class="j7-shell__list">
+            {{#each monthlyAnchors}}
+              <div class="j7-shell__list-row">
+                <span>{{date}}</span>
+                <strong>{{anchorEntries.length}} Anker</strong>
+              </div>
+              <ul class="janus7-list">
+                {{#each anchorEntries}}
+                  <li><span class="tag">{{sourceType}}</span> <strong>{{label}}</strong> {{#if location}}· {{location}}{{/if}}</li>
+                {{/each}}
+              </ul>
+            {{/each}}
+          </div>
+        {{else}}
+          <p class="muted">Im aktuellen BF-Monat wurden keine Zusatzanker gefunden.</p>
+        {{/if}}
+      </article>
+
+      <article class="j7-shell__card">
+        <header class="j7-shell__card-head">
+          <div>
+            <h3><i class="fas fa-scroll j7-shell__card-icon" aria-hidden="true"></i><span>Meisterinformationen im Jahr</span></h3>
+            <p>Aus den Bote-PDFs extrahierte Hooks fuer das aktuelle BF-Jahr.</p>
+          </div>
+        </header>
+        {{#if yearlyMasterHooks.length}}
+          <div class="j7-seed-grid">
+            {{#each yearlyMasterHooks}}
+              <article class="j7-seed-card">
+                <header>
+                  <strong>{{title}}</strong>
+                  <span class="j7-text-dim">{{issue}}</span>
+                </header>
+                <p class="j7-text-dim">{{location}}{{#if approximateDate}} · {{approximateDate}}{{/if}}{{#if tags}} · {{tags}}{{/if}}</p>
+                <p>{{hook}}</p>
+              </article>
+            {{/each}}
+          </div>
+        {{else}}
+          <p class="muted">Fuer dieses BF-Jahr liegen keine Meisterinformations-Hooks vor.</p>
+        {{/if}}
+      </article>
+    </div>
+  {{/if}}
+</div>
