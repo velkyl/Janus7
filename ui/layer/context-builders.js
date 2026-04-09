@@ -58,6 +58,7 @@ export function buildSystemView({ engine }) {
     enableAtmosphere: getSetting('enableAtmosphere'),
     enableUI: getSetting('enableUI'),
     enableQuestSystem: getSetting('enableQuestSystem'),
-    enablePhase7: getSetting('enablePhase7')
+    enablePhase7: getSetting('enablePhase7'),
+    enableGemini: getSetting('enableGemini')
   };
 }

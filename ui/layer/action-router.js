@@ -1,7 +1,7 @@
 
 import { JanusCommands } from '../commands/index.js';
 
-async function _notifyResult(result, fallbackLabel = 'JANUS7') {
+async function _notifyResult(result, _fallbackLabel = 'JANUS7') {
   if (!result) return result;
   const ok = result.ok !== false;
   const summary = result.summary ?? result.message ?? null;
@@ -41,6 +41,23 @@ export async function runShellAction(app, descriptor = {}) {
     }
     case 'setView': {
       app?._setView?.(descriptor.viewId ?? 'director');
+      return { ok: true };
+    }
+    case 'setViewState': {
+      const key = String(descriptor.key ?? '').trim();
+      if (!key) return { ok: false, summary: 'View-State-Key fehlt.' };
+      const mode = String(descriptor.mode ?? 'set').trim().toLowerCase();
+      const rawValue = descriptor.value ?? '';
+      const current = app?._getViewState?.(descriptor.viewId ?? null) ?? {};
+      let nextValue = rawValue;
+
+      if (mode === 'delta') {
+        nextValue = Number(current?.[key] ?? 0) + Number(rawValue ?? 0);
+      } else if (mode === 'clear') {
+        nextValue = '';
+      }
+
+      app?._setViewState?.(descriptor.viewId ?? null, { [key]: nextValue });
       return { ok: true };
     }
     case 'closePanel': {

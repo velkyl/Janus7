@@ -22,7 +22,8 @@ export class JanusConfig {
     atmosphere: 'enableAtmosphere',
     ui: 'enableUI',
     quests: 'enableQuestSystem',
-    phase7: 'enablePhase7'
+    phase7: 'enablePhase7',
+    gemini: 'enableGemini'
   });
 
   /**
@@ -351,6 +352,7 @@ export class JanusConfig {
       case 'atmosphere': return Boolean(this.get('enableAtmosphere'));
       case 'ui': return Boolean(this.get('enableUI'));
       case 'quests': return Boolean(this.get('enableQuestSystem'));
+      case 'gemini': return Boolean(this.get('enableGemini'));
       default: return true;
     }
   }

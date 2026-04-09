@@ -25,6 +25,23 @@
           <div class="j7-shell__metric"><span>Kanonanker</span><strong>{{summary.curatedAnchorCount}}</strong></div>
           <div class="j7-shell__metric"><span>Meisterinfo-Anker</span><strong>{{summary.meisterinfoAnchorCount}}</strong></div>
         </div>
+        <div class="j7-shell__card-actions j7-mt-sm">
+          <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-target-view-id="chronicleBrowser" data-view-state-key="offset" data-view-state-mode="delta" data-view-state-value="-1">
+            <i class="fas fa-chevron-left"></i> Vorheriger Tag
+          </button>
+          <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-target-view-id="chronicleBrowser" data-view-state-key="offset" data-view-state-mode="delta" data-view-state-value="1">
+            <i class="fas fa-chevron-right"></i> Naechster Tag
+          </button>
+          <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-target-view-id="chronicleBrowser" data-view-state-key="offset" data-view-state-value="0">
+            <i class="fas fa-bullseye"></i> Zum State-Tag
+          </button>
+          <button type="button" class="j7-shell__btn" data-action="chroniclePickDate">
+            <i class="fas fa-calendar-plus"></i> Datum waehlen
+          </button>
+          <button type="button" class="j7-shell__btn" data-action="chronicleSearch">
+            <i class="fas fa-search"></i> Suche
+          </button>
+        </div>
       </article>
 
       <article class="j7-shell__card">
@@ -48,6 +65,52 @@
         {{/if}}
       </article>
     </div>
+
+    <article class="j7-shell__card j7-mt-sm">
+      <header class="j7-shell__card-head">
+        <div>
+          <h3><i class="fas fa-filter j7-shell__card-icon" aria-hidden="true"></i><span>Ortsfilter</span></h3>
+          <p>Filtert Tageschronik, Monatsanker und Meisterinformationen auf Stadt oder Region.</p>
+        </div>
+      </header>
+      <p class="j7-text-dim">Aktiver Filter: {{#if locationFilter}}{{locationFilter}}{{else}}alle Orte{{/if}}</p>
+      <div class="j7-shell__card-actions j7-mt-sm" style="flex-wrap: wrap;">
+        <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-target-view-id="chronicleBrowser" data-view-state-key="location" data-view-state-mode="clear">
+          <i class="fas fa-globe"></i> Alle Orte
+        </button>
+        {{#each availableLocations}}
+          <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-target-view-id="chronicleBrowser" data-view-state-key="location" data-view-state-value="{{this}}">
+            <i class="fas fa-location-dot"></i> {{this}}
+          </button>
+        {{/each}}
+      </div>
+    </article>
+
+    <article class="j7-shell__card j7-mt-sm">
+      <header class="j7-shell__card-head">
+        <div>
+          <h3><i class="fas fa-magnifying-glass j7-shell__card-icon" aria-hidden="true"></i><span>Suche & Tags</span></h3>
+          <p>Durchsucht Labels, Beschreibungen, Orte und Tags der Chronik sowie Meisterinformationen.</p>
+        </div>
+      </header>
+      <p class="j7-text-dim">Suchbegriff: {{#if search}}{{search}}{{else}}keiner{{/if}}{{#if tagFilter}} · Tag: {{tagFilter}}{{/if}}</p>
+      <div class="j7-shell__card-actions j7-mt-sm" style="flex-wrap: wrap;">
+        <button type="button" class="j7-shell__btn" data-action="chronicleSearch">
+          <i class="fas fa-keyboard"></i> Suchbegriff setzen
+        </button>
+        <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-target-view-id="chronicleBrowser" data-view-state-key="search" data-view-state-mode="clear">
+          <i class="fas fa-eraser"></i> Suche leeren
+        </button>
+        <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-target-view-id="chronicleBrowser" data-view-state-key="tag" data-view-state-mode="clear">
+          <i class="fas fa-tags"></i> Alle Tags
+        </button>
+        {{#each availableTags}}
+          <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-target-view-id="chronicleBrowser" data-view-state-key="tag" data-view-state-value="{{this}}">
+            <i class="fas fa-tag"></i> {{this}}
+          </button>
+        {{/each}}
+      </div>
+    </article>
 
     <article class="j7-shell__card j7-mt-sm">
       <header class="j7-shell__card-head">

@@ -1,6 +1,11 @@
 <div class="janus7-event-popup">
   <div class="event-toolbar">
     <div class="event-toolbar__meta"><i class="fas fa-location-dot"></i> Ort: {{activeLocationId}}</div>
+    {{#if geminiEnabled}}
+    <button type="button" class="janus-btn ai-enrich-btn" data-action="enrichEvent" title="Durch Gemini anreichern">
+      <i class="fas fa-sparkles"></i> KI Enrich
+    </button>
+    {{/if}}
     <button type="button" class="janus-btn" data-action="refreshPopup"><i class="fas fa-sync"></i> Refresh</button>
   </div>
   <div class="event-layout">

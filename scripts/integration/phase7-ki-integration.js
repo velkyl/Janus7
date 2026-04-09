@@ -12,6 +12,7 @@ import { JanusKiImportService } from '../../phase7/import/JanusKiImportService.j
 import { JanusKiIoService } from '../../phase7/io/JanusKiIoService.js';
 import { JanusKnowledgeBridge } from '../../phase7/ki/knowledge-bridge.js';
 import { Prompts } from '../../phase7/ki/prompts.js';
+import { JanusGeminiService } from '../../phase7/ki/GeminiService.js';
 import { HOOKS, registerRuntimeHook } from '../core/public-api.mjs';
 
 export function attachPhase7Ki(engine) {
@@ -34,6 +35,7 @@ export function attachPhase7Ki(engine) {
     
     const dsaBridge = engine?.bridge?.dsa5 ?? null;
     services.knowledgeBridge ??= new JanusKnowledgeBridge({ bridge: dsaBridge, state, logger });
+    services.geminiService ??= new JanusGeminiService({ logger, aiService: engine.ai || engine.ki });
 
     // Export / import APIs
     engine.ki.exportBundle = (opts = {}) => services.exportService.exportBundle(opts);
@@ -52,6 +54,7 @@ export function attachPhase7Ki(engine) {
     engine.ki.executeAction = (type, uuid, params) => services.knowledgeBridge.executeAction(type, uuid, params);
     
     engine.ki.prompts = Prompts;
+    engine.ki.gemini = services.geminiService;
 
     // Legacy alias: engine.ai.* delegates to engine.ki.* (Phase 7 SSOT)
     if (!engine.ai) engine.ai = {};

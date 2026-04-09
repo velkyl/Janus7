@@ -1,8 +1,7 @@
 import { moduleTemplatePath } from '../../core/common.js';
-import { JanusConfig } from '../../core/config.js';
 import { JanusBaseApp } from '../core/base-app.js';
 import { listJanusUiAppStatus } from '../app-manifest.js';
-import { getPanel, getQuickPanels, getPanels } from '../layer/panel-registry.js';
+import { getPanel, getQuickPanels } from '../layer/panel-registry.js';
 import { getView, getViews } from '../layer/view-registry.js';
 import { runShellAction } from '../layer/action-router.js';
 import { JanusUI } from '../helpers.js';
@@ -118,6 +117,8 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       executeShellAction: JanusShellApp.onExecuteShellAction,
       togglePalette: JanusShellApp.onTogglePalette,
       copySeed: JanusShellApp.onCopySeed,
+      chroniclePickDate: JanusShellApp.onChroniclePickDate,
+      chronicleSearch: JanusShellApp.onChronicleSearch,
 
       // Control Panel Extracted Actions
       clearSlotBuilder: JanusShellApp.onClearSlotBuilder,
@@ -150,6 +151,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this._activePanelId = options.panelId ?? null;
     this._paletteOpen = false;
     this._lastActionResult = null;
+    this._viewState = {};
 
     // Director State
     this._slotBuilder = [];
@@ -188,6 +190,18 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
 
   _setActivePanel(panelId = null) {
     this._activePanelId = panelId ? (getPanel(panelId)?.id ?? null) : null;
+    this.refresh?.();
+  }
+
+  _getViewState(viewId = this._viewId) {
+    const key = String(viewId ?? this._viewId ?? 'director').trim();
+    return this._viewState?.[key] ?? {};
+  }
+
+  _setViewState(viewId = this._viewId, patch = {}, { replace = false } = {}) {
+    const key = String(viewId ?? this._viewId ?? 'director').trim();
+    const current = replace ? {} : (this._viewState?.[key] ?? {});
+    this._viewState[key] = { ...current, ...(patch ?? {}) };
     this.refresh?.();
   }
 
@@ -286,7 +300,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     return buildDirectorRunbookView(runtime, workflow);
   }
 
-  _buildHeaderContext(engine) {
+  _buildHeaderContext(_engine) {
     const time = this._getStateTime();
     const activeView = getView(this._viewId) ?? getView('director');
     return {
@@ -476,6 +490,14 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       descriptor = { kind: 'setView', viewId: target.dataset.viewId };
     } else if (target?.dataset?.appKey) {
       descriptor = { kind: 'openApp', appKey: target.dataset.appKey };
+    } else if (target?.dataset?.viewStateKey) {
+      descriptor = {
+        kind: 'setViewState',
+        viewId: target?.dataset?.targetViewId ?? this?._viewId ?? 'director',
+        key: target.dataset.viewStateKey,
+        value: target.dataset.viewStateValue ?? '',
+        mode: target.dataset.viewStateMode ?? 'set',
+      };
     } else if (target?.dataset?.command) {
       descriptor = { kind: 'command', command: target.dataset.command, dataset: target.dataset };
     }
@@ -484,6 +506,77 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     const result = await runShellAction(this, descriptor);
     if (result?.summary) this._lastActionResult = result.summary;
     this.refresh?.();
+  }
+
+  static async onChroniclePickDate(event, _target) {
+    event?.preventDefault?.();
+    const D2 = foundry?.applications?.api?.DialogV2;
+    if (!D2?.prompt) {
+      ui.notifications?.warn?.('DialogV2 nicht verfuegbar.');
+      return;
+    }
+
+    const current = this?._getViewState?.('chronicleBrowser') ?? {};
+    const currentDate = String(current?.focusDate ?? '').trim();
+    const content = `
+      <div class="janus7-card j7-dialog-card-reset">
+        <p class="j7-dialog-heading"><strong>Bote-Chronik: BF-Datum waehlen</strong></p>
+        <div class="j7-dialog-form-row">
+          <label for="janus7-chronicle-date" class="j7-dialog-label-fixed">BF-Datum</label>
+          <input type="text" id="janus7-chronicle-date" class="j7-dialog-input-grow" placeholder="1047-05-19" value="${escHtml(currentDate)}" />
+        </div>
+      </div>
+    `;
+
+    const result = await D2.prompt({
+      window: { title: 'Bote-Chronik Datum' },
+      content,
+      ok: { label: 'Datum setzen', icon: 'fas fa-calendar-check' },
+      rejectClose: false,
+      modal: true,
+    }).catch(() => null);
+    if (result === null) return;
+
+    const value = document.getElementById('janus7-chronicle-date')?.value?.trim?.() ?? '';
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      ui.notifications?.warn?.('Format erwartet: JJJJ-MM-TT');
+      return;
+    }
+
+    this?._setViewState?.('chronicleBrowser', { focusDate: value, offset: 0 });
+  }
+
+  static async onChronicleSearch(event, _target) {
+    event?.preventDefault?.();
+    const D2 = foundry?.applications?.api?.DialogV2;
+    if (!D2?.prompt) {
+      ui.notifications?.warn?.('DialogV2 nicht verfuegbar.');
+      return;
+    }
+
+    const current = this?._getViewState?.('chronicleBrowser') ?? {};
+    const currentSearch = String(current?.search ?? '').trim();
+    const content = `
+      <div class="janus7-card j7-dialog-card-reset">
+        <p class="j7-dialog-heading"><strong>Bote-Chronik: Suche</strong></p>
+        <div class="j7-dialog-form-row">
+          <label for="janus7-chronicle-search" class="j7-dialog-label-fixed">Suchbegriff</label>
+          <input type="text" id="janus7-chronicle-search" class="j7-dialog-input-grow" placeholder="z.B. Fasar, Drache, Wiederaufbau" value="${escHtml(currentSearch)}" />
+        </div>
+      </div>
+    `;
+
+    const result = await D2.prompt({
+      window: { title: 'Bote-Chronik Suche' },
+      content,
+      ok: { label: 'Suche setzen', icon: 'fas fa-search' },
+      rejectClose: false,
+      modal: true,
+    }).catch(() => null);
+    if (result === null) return;
+
+    const value = document.getElementById('janus7-chronicle-search')?.value?.trim?.() ?? '';
+    this?._setViewState?.('chronicleBrowser', { search: value });
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -654,12 +747,12 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   // Director Shell Internal Actions
   // ═══════════════════════════════════════════════════════════════════════════
 
-  static async onClearSlotBuilder(event, target) {
+  static async onClearSlotBuilder(_event, _target) {
     this._slotBuilder = [];
     this.refresh();
   }
 
-  static async onGenerateSlotJournal(event, target) {
+  static async onGenerateSlotJournal(_event, _target) {
     const e = this._getEngine();
     if (!e) return false;
     const st = e?.core?.state?.get?.() ?? {};

@@ -29,7 +29,8 @@ export class JanusEventPopup extends HandlebarsApplicationMixin(ApplicationV2) {
     actions: {
       selectOption: this._onSelectOption,
       close: this._onClose,
-      refreshPopup: this._onRefresh
+      refreshPopup: this._onRefresh,
+      enrichEvent: this._onEnrichEvent
     }
   };
 
@@ -62,7 +63,8 @@ export class JanusEventPopup extends HandlebarsApplicationMixin(ApplicationV2) {
       availableRumors,
       hasActiveQuests: activeQuests.length > 0,
       hasRumors: availableRumors.length > 0,
-      activeLocationId: eventContext.activeLocationId ?? '—'
+      activeLocationId: eventContext.activeLocationId ?? '—',
+      geminiEnabled: game.janus7?.ki?.gemini?.isEnabled ?? false
     };
   }
 
@@ -92,5 +94,34 @@ export class JanusEventPopup extends HandlebarsApplicationMixin(ApplicationV2) {
   static _onClose(event, _target) {
     event?.preventDefault?.();
     this.close();
+  }
+
+  static async _onEnrichEvent(event, target) {
+    event?.preventDefault?.();
+    if (!game.janus7.ki.gemini.isEnabled) return;
+
+    try {
+      const originalDescription = this.event?.description || '';
+      const originalTitle = this.event?.title || '';
+
+      ui.notifications.info('Gemini analysiert die Situation...');
+      
+      const enrichedText = await game.janus7.ki.gemini.enrich('event', originalDescription, {
+        title: originalTitle,
+        eventId: this.eventId,
+        location: this.activeLocationId
+      });
+
+      // Temporary override for display - we don't persist it to the JSON source automatically
+      // but we show it to the GM.
+      if (this.event) {
+        this.event.description = enrichedText;
+        this.render({ force: true });
+      }
+
+      ui.notifications.info('Text erfolgreich angereichert.');
+    } catch (err) {
+      ui.notifications.error(`KI Fehler: ${err.message}`);
+    }
   }
 }

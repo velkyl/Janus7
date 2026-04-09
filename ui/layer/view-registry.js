@@ -297,9 +297,46 @@ function countAnchors(entries = []) {
   return entries.filter((entry) => entry?.sourceType && entry.sourceType !== 'generated_daily_hook').length;
 }
 
-async function buildChronicleBrowserView(engine) {
+function uniqueSortedLocations(days = []) {
+  const bucket = new Set();
+  for (const day of days) {
+    for (const entry of (day?.entries ?? [])) {
+      const location = String(entry?.location ?? '').trim();
+      if (location) bucket.add(location);
+    }
+  }
+  return [...bucket].sort((a, b) => a.localeCompare(b, 'de'));
+}
+
+function uniqueSortedTags(days = [], hooks = []) {
+  const bucket = new Set();
+  for (const day of days) {
+    for (const entry of (day?.entries ?? [])) {
+      for (const tag of (entry?.tags ?? [])) {
+        const normalized = String(tag ?? '').trim();
+        if (normalized) bucket.add(normalized);
+      }
+    }
+  }
+  for (const hook of hooks) {
+    for (const tag of (hook?.tags ?? [])) {
+      const normalized = String(tag ?? '').trim();
+      if (normalized) bucket.add(normalized);
+    }
+  }
+  return [...bucket].sort((a, b) => a.localeCompare(b, 'de'));
+}
+
+function matchesSearch(value, searchTerms = []) {
+  const haystack = String(value ?? '').toLowerCase();
+  if (!searchTerms.length) return true;
+  return searchTerms.every((term) => haystack.includes(term));
+}
+
+async function buildChronicleBrowserView(engine, app) {
   const state = engine?.core?.state?.get?.() ?? {};
-  const bfDate = pickBfDateFromState(state) ?? '1025-01-01';
+  const viewState = app?._getViewState?.('chronicleBrowser') ?? {};
+  const bfDate = String(viewState?.focusDate ?? '').trim() || pickBfDateFromState(state) || '1025-01-01';
   const targetYear = Number(String(bfDate).slice(0, 4)) || 1025;
   const targetMonth = Number(String(bfDate).slice(5, 7)) || 1;
 
@@ -324,28 +361,69 @@ async function buildChronicleBrowserView(engine) {
   }
 
   const days = Array.isArray(dailyChronicle?.days) ? dailyChronicle.days : [];
+  const search = String(viewState?.search ?? '').trim();
+  const searchTerms = search.toLowerCase().split(/\s+/).filter(Boolean);
+  const tagFilter = String(viewState?.tag ?? '').trim();
   const exactIndex = days.findIndex((day) => day?.date === bfDate);
   const yearFallbackIndex = days.findIndex((day) => Number(String(day?.date ?? '').slice(0, 4)) === targetYear);
-  const fallbackIndex = exactIndex >= 0 ? exactIndex : (yearFallbackIndex >= 0 ? yearFallbackIndex : 0);
-  const focusDay = days[fallbackIndex] ?? null;
-  const nearbyDays = days.slice(Math.max(0, fallbackIndex - 2), fallbackIndex + 3).map((day) => ({
+  const baseIndex = exactIndex >= 0 ? exactIndex : (yearFallbackIndex >= 0 ? yearFallbackIndex : 0);
+  const offset = Number(viewState?.offset ?? 0) || 0;
+  const focusIndex = Math.min(Math.max(baseIndex + offset, 0), Math.max(days.length - 1, 0));
+  const locationFilter = String(viewState?.location ?? '').trim();
+  const focusDayRaw = days[focusIndex] ?? null;
+  const focusDay = focusDayRaw
+    ? {
+        date: focusDayRaw.date ?? '—',
+        monthName: focusDayRaw.monthName ?? '—',
+        entries: (focusDayRaw.entries ?? [])
+          .filter((entry) => !locationFilter || String(entry?.location ?? '').trim() === locationFilter)
+          .filter((entry) => !tagFilter || (entry?.tags ?? []).includes(tagFilter))
+          .filter((entry) => matchesSearch([entry?.label, entry?.description, entry?.location, ...(entry?.tags ?? [])].join(' '), searchTerms))
+          .map((entry) => ({
+            label: entry?.label ?? entry?.id ?? '—',
+            location: entry?.location ?? '—',
+            category: entry?.category ?? '—',
+            sourceType: entry?.sourceType ?? '—',
+            description: entry?.description ?? '—',
+            tags: Array.isArray(entry?.tags) ? entry.tags.join(', ') : '—',
+          })),
+      }
+    : null;
+  const nearbyDays = days.slice(Math.max(0, focusIndex - 2), focusIndex + 3).map((day) => ({
     date: day?.date ?? '—',
     monthName: day?.monthName ?? '—',
-    entryCount: Array.isArray(day?.entries) ? day.entries.length : 0,
-    anchorCount: countAnchors(day?.entries ?? []),
-    labels: (day?.entries ?? []).slice(0, 3).map((entry) => entry?.label ?? entry?.id).filter(Boolean),
+    entryCount: (day?.entries ?? [])
+      .filter((entry) => !locationFilter || String(entry?.location ?? '').trim() === locationFilter)
+      .filter((entry) => !tagFilter || (entry?.tags ?? []).includes(tagFilter))
+      .filter((entry) => matchesSearch([entry?.label, entry?.description, entry?.location, ...(entry?.tags ?? [])].join(' '), searchTerms))
+      .length,
+    anchorCount: countAnchors((day?.entries ?? [])
+      .filter((entry) => !locationFilter || String(entry?.location ?? '').trim() === locationFilter)
+      .filter((entry) => !tagFilter || (entry?.tags ?? []).includes(tagFilter))
+      .filter((entry) => matchesSearch([entry?.label, entry?.description, entry?.location, ...(entry?.tags ?? [])].join(' '), searchTerms))),
   }));
   const monthlyAnchors = days
     .filter((day) => Number(String(day?.date ?? '').slice(0, 4)) === targetYear && Number(String(day?.date ?? '').slice(5, 7)) === targetMonth)
     .map((day) => ({
       date: day?.date ?? '—',
       monthName: day?.monthName ?? '—',
-      anchorEntries: (day?.entries ?? []).filter((entry) => entry?.sourceType && entry.sourceType !== 'generated_daily_hook'),
+      anchorEntries: (day?.entries ?? [])
+        .filter((entry) => entry?.sourceType && entry.sourceType !== 'generated_daily_hook')
+        .filter((entry) => !locationFilter || String(entry?.location ?? '').trim() === locationFilter),
+      anchorEntriesSearchFiltered: (day?.entries ?? [])
+        .filter((entry) => entry?.sourceType && entry.sourceType !== 'generated_daily_hook')
+        .filter((entry) => !locationFilter || String(entry?.location ?? '').trim() === locationFilter)
+        .filter((entry) => !tagFilter || (entry?.tags ?? []).includes(tagFilter))
+        .filter((entry) => matchesSearch([entry?.label, entry?.description, entry?.location, ...(entry?.tags ?? [])].join(' '), searchTerms)),
     }))
+    .map((day) => ({ ...day, anchorEntries: day.anchorEntriesSearchFiltered }))
     .filter((day) => day.anchorEntries.length > 0)
     .slice(0, 12);
   const yearlyMasterHooks = (masterinfoHooks?.hooks ?? [])
     .filter((hook) => Number(hook?.bfYear ?? 0) === targetYear)
+    .filter((hook) => !locationFilter || String(hook?.location ?? '').trim() === locationFilter)
+    .filter((hook) => !tagFilter || (hook?.tags ?? []).includes(tagFilter))
+    .filter((hook) => matchesSearch([hook?.title, hook?.location, hook?.issue, hook?.hook, ...(hook?.tags ?? [])].join(' '), searchTerms))
     .slice(0, 16)
     .map((hook) => ({
       title: hook?.title ?? hook?.id ?? '—',
@@ -355,33 +433,32 @@ async function buildChronicleBrowserView(engine) {
       hook: hook?.hook ?? '—',
       approximateDate: hook?.approximateDate ?? null,
     }));
+  const availableLocations = uniqueSortedLocations(
+    days.filter((day) => Number(String(day?.date ?? '').slice(0, 4)) === targetYear)
+  ).slice(0, 24);
+  const availableTags = uniqueSortedTags(
+    days.filter((day) => Number(String(day?.date ?? '').slice(0, 4)) === targetYear),
+    (masterinfoHooks?.hooks ?? []).filter((hook) => Number(hook?.bfYear ?? 0) === targetYear)
+  ).slice(0, 24);
 
   return {
     unavailable: false,
-    focusDate: bfDate,
+    focusDate: focusDay?.date ?? bfDate,
+    locationFilter,
+    tagFilter,
+    search,
     summary: {
       dayCount: Number(dailyChronicle?.meta?.dayCount ?? 0),
       baseEntriesPerDay: Number(dailyChronicle?.meta?.baseEntriesPerDay ?? 0),
       curatedAnchorCount: Number(dailyChronicle?.meta?.curatedAnchorCount ?? 0),
       meisterinfoAnchorCount: Number(dailyChronicle?.meta?.meisterinfoAnchorCount ?? 0),
     },
-    focusDay: focusDay
-      ? {
-          date: focusDay.date ?? '—',
-          monthName: focusDay.monthName ?? '—',
-          entries: (focusDay.entries ?? []).map((entry) => ({
-            label: entry?.label ?? entry?.id ?? '—',
-            location: entry?.location ?? '—',
-            category: entry?.category ?? '—',
-            sourceType: entry?.sourceType ?? '—',
-            description: entry?.description ?? '—',
-            tags: Array.isArray(entry?.tags) ? entry.tags.join(', ') : '—',
-          })),
-        }
-      : null,
+    focusDay,
     nearbyDays,
     monthlyAnchors,
     yearlyMasterHooks,
+    availableLocations,
+    availableTags,
   };
 }
 
