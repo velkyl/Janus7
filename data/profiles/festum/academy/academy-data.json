@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "moduleVersion": "0.9.12.46",
+    "profile": "festum",
+    "description": "Akademie-Basisdaten fuer die Halle des Quecksilbers zu Festum."
+  },
+  "academy": {
+    "id": "festum",
+    "name": "Halle des Quecksilbers zu Festum",
+    "trimester": 1,
+    "year": 1039,
+    "week": 1,
+    "day": "Praiostag",
+    "phase": "Morgen"
+  },
+  "configuration": {
+    "autoSave": true,
+    "enableUI": true,
+    "enableSimulation": true
+  }
+}

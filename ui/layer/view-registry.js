@@ -31,6 +31,7 @@ import { buildLocationsView, buildPeopleView, buildKiContext, buildSyncView, bui
 import { prepareDirectorRuntimeSummary, buildDirectorRunbookView, buildDirectorWorkflowView } from './director-context.js';
 import JanusAssetResolver from '../../core/services/asset-resolver.js';
 import { DSA5CalendarSync } from '../../bridge/dsa5/calendar-sync.js';
+import { JanusProfileRegistry } from '../../core/profiles/index.js';
 
 const VIEW_REGISTRY = new Map();
 const VIEW_JSON_CACHE = new Map();
@@ -150,46 +151,104 @@ function buildDirectorView(engine, app) {
   };
 }
 
-function buildAcademyView(engine) {
+async function buildAcademyView(engine) {
   const academy = engine?.academy?.data ?? engine?.academy?.dataApi ?? null;
   const calendar = engine?.academy?.calendar ?? null;
   const time = engine?.core?.state?.get?.('time') ?? {};
+  const activeProfile = JanusProfileRegistry.getActive();
+  let profileContract = null;
+  try {
+    profileContract = await loadModuleJson(`profiles/${activeProfile?.id ?? 'punin'}/profile-contract.json`);
+  } catch (_err) {
+    profileContract = null;
+  }
+
   const dayEntries = calendar?.getCalendarEntriesForDay?.({
     year: time?.year,
     trimester: time?.trimester,
     week: time?.week,
     day: time?.dayName ?? time?.day
   }) ?? [];
-  const lessons = academy?.listLessonIds?.(999) ?? [];
-  const npcs = academy?.listNpcIds?.(999) ?? [];
-  const locations = academy?.listLocationIds?.(999) ?? [];
+  const lessons = academy?.getLessons?.() ?? [];
+  const npcs = academy?.getNpcs?.() ?? [];
+  const locations = academy?.getLocations?.() ?? [];
+  const events = academy?.getEvents?.() ?? [];
+  const questIndex = academy?.getQuestIndex?.() ?? [];
+  const poolIndex = academy?.getPoolIndex?.() ?? [];
+  const factions = academy?.getFactions?.() ?? [];
+  const socialLinks = academy?.getSocialLinks?.() ?? [];
+  const sessions = academy?.getTeachingSessionsForSlot?.({
+    year: time?.year,
+    trimester: time?.trimester,
+    week: time?.week,
+    day: time?.dayName ?? time?.day,
+    phase: time?.phase ?? time?.slotName
+  }) ?? [];
+  const nextLessonHooks = lessons.slice(0, 4).map((entry) => ({
+    label: entry?.name ?? entry?.title ?? entry?.id ?? 'Lektion',
+    value: entry?.teacherNpcId ?? entry?.teacherNpcIds?.[0] ?? entry?.id ?? 'lesson'
+  }));
+  const nextQuestHooks = questIndex.slice(0, 4).map((entry) => ({
+    label: entry?.title ?? entry?.questId ?? 'Quest',
+    value: entry?.questId ?? entry?.status ?? 'quest'
+  }));
+
   return {
     cards: [
       {
+        title: 'Profil & Vertrag',
+        icon: 'fas fa-school-flag',
+        description: 'Aktives Akademieprofil, Vertragsstatus und Referenzrolle.',
+        metrics: [
+          { label: 'Profil', value: activeProfile?.name ?? '?' },
+          { label: 'Level', value: profileContract?.validatedLevel ?? profileContract?.targetLevel ?? '?' },
+          { label: 'Rolle', value: profileContract?.referenceRole ?? '?' },
+          { label: 'Region', value: activeProfile?.meta?.region ?? '?' }
+        ],
+        items: [
+          { label: 'Fokus', value: activeProfile?.meta?.focus ?? '?' },
+          { label: 'Datenwurzel', value: profileContract?.dataRoot ?? '?' },
+          { label: 'Ziel', value: profileContract?.targetLevel ?? '?' }
+        ],
+        actions: [
+          { kind: 'setView', viewId: 'sessionPrep', label: 'Session Prep', icon: 'fas fa-wand-magic-sparkles' },
+          { kind: 'setView', viewId: 'chronicleBrowser', label: 'Chronik', icon: 'fas fa-newspaper' }
+        ]
+      },
+      {
         title: 'Akademie-Woche',
         icon: 'fas fa-calendar-days',
-        description: 'Heutige Einträge und Raster-Einstieg.',
+        description: 'Heutige Eintraege, aktuelle Lehrtermine und Raster-Einstieg.',
         metrics: [
-          { label: 'Einträge heute', value: dayEntries.length },
-          { label: 'Woche', value: time?.week ?? '—' },
-          { label: 'Trimester', value: time?.trimester ?? '—' }
+          { label: 'Eintraege heute', value: dayEntries.length },
+          { label: 'Sessions jetzt', value: sessions.length },
+          { label: 'Woche', value: time?.week ?? '?' },
+          { label: 'Trimester', value: time?.trimester ?? '?' }
         ],
         items: dayEntries.slice(0, 6).map((entry) => ({
           label: entry?.phase ?? entry?.slot ?? 'Slot',
           value: entry?.title ?? entry?.id ?? 'Eintrag'
         })),
         actions: [
-          { kind: 'openApp', appKey: 'academyOverview', label: 'Overview öffnen', icon: 'fas fa-school' }
+          { kind: 'openApp', appKey: 'academyOverview', label: 'Overview oeffnen', icon: 'fas fa-school' },
+          { kind: 'setView', viewId: 'sessionPrep', label: 'Prep oeffnen', icon: 'fas fa-list-check' }
         ]
       },
       {
         title: 'Akademie-Daten',
         icon: 'fas fa-book',
-        description: 'Schnellzugriff auf Datendomänen.',
+        description: 'Schnellzugriff auf Datendomaenen, Hooks und soziale Struktur.',
         metrics: [
           { label: 'Lektionen', value: lessons.length },
           { label: 'NPCs', value: npcs.length },
-          { label: 'Orte', value: locations.length }
+          { label: 'Orte', value: locations.length },
+          { label: 'Events', value: events.length }
+        ],
+        items: [
+          { label: 'Questpfade', value: questIndex.length },
+          { label: 'Event-Pools', value: poolIndex.length },
+          { label: 'Fraktionen', value: factions.length },
+          { label: 'Social Links', value: socialLinks.length }
         ],
         actions: [
           { kind: 'openPanel', panelId: 'dataStudio', label: 'Data Studio', icon: 'fas fa-table' },
@@ -197,12 +256,14 @@ function buildAcademyView(engine) {
         ]
       },
       {
-        title: 'Sozial & Wertung',
+        title: 'Naechste Hooks',
         icon: 'fas fa-people-group',
-        description: 'Brücke zu Social und Scoring.',
+        description: 'Direkte Hook-Sicht fuer Unterricht, Quests und soziale Dynamik.',
+        items: [...nextLessonHooks, ...nextQuestHooks].slice(0, 8),
         actions: [
           { kind: 'openPanel', panelId: 'social', label: 'Social', icon: 'fas fa-users' },
-          { kind: 'openPanel', panelId: 'scoring', label: 'Scoring', icon: 'fas fa-trophy' }
+          { kind: 'openPanel', panelId: 'scoring', label: 'Scoring', icon: 'fas fa-trophy' },
+          { kind: 'setView', viewId: 'chronicleBrowser', label: 'Bote-Chronik', icon: 'fas fa-newspaper' }
         ]
       }
     ]
@@ -774,6 +835,9 @@ async function buildSessionPrepView(engine) {
       prepAgenda: [],
       chroniclePreview: [],
       chronicleSeed: null,
+      academyOverview: null,
+      academySeed: null,
+      socialStoryHookQueue: { items: [], summary: { recentChanges: [] } },
       gradeOverview: { schemeId: null, schemeName: '—', items: [], summary: { total: 0, excellent: 0, passed: 0, failed: 0 } },
       gradeLedger: { periodLabel: 'Jahr — · Trimester —', items: [], summary: { actorCount: 0, currentTrimesterTagged: 0 } },
       trimesterGrades: { schemeId: null, schemeName: '—', periodLabel: 'Jahr — · Trimester —', items: [], summary: { actorCount: 0, criticalCount: 0, provisionalCount: 0 } },
@@ -807,6 +871,9 @@ async function buildSessionPrepView(engine) {
     prepAgenda: report.prepAgenda ?? [],
     chroniclePreview: report.chroniclePreview ?? [],
     chronicleSeed: report.chronicleSeed ?? null,
+    academyOverview: report.academyOverview ?? null,
+    academySeed: report.academySeed ?? null,
+    socialStoryHookQueue: report.socialStoryHookQueue ?? { items: [], summary: { recentChanges: [] } },
     gradeOverview: report.gradeOverview ?? { schemeId: null, schemeName: '—', items: [], summary: { total: 0, excellent: 0, passed: 0, failed: 0 } },
     gradeLedger: report.gradeLedger ?? { periodLabel: 'Jahr — · Trimester —', items: [], summary: { actorCount: 0, currentTrimesterTagged: 0 } },
     trimesterGrades: report.trimesterGrades ?? { schemeId: null, schemeName: '—', periodLabel: 'Jahr — · Trimester —', items: [], summary: { actorCount: 0, criticalCount: 0, provisionalCount: 0 } },

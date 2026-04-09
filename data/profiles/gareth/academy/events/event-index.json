@@ -1,0 +1,44 @@
+[
+  {
+    "eventId": "E_GARETH_INSPECTION_NOTICE",
+    "title": "Reichsinspektion angesetzt",
+    "pool": "inspection_pressure",
+    "file": "data/events/pools/inspection_pressure.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_GARETH_FILE_SEARCH",
+    "title": "Suche nach der fehlenden Akte",
+    "pool": "inspection_pressure",
+    "file": "data/events/pools/inspection_pressure.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_GARETH_INSPECTION_DECISION",
+    "title": "Aktenlage vor dem Reich",
+    "pool": "inspection_pressure",
+    "file": "data/events/pools/inspection_pressure.json",
+    "highImpact": true
+  },
+  {
+    "eventId": "E_GARETH_DUEL_RUMOR",
+    "title": "Geruecht um ein Duell",
+    "pool": "patronage_conflicts",
+    "file": "data/events/pools/patronage_conflicts.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_GARETH_PATRON_PRESSURE",
+    "title": "Patronaler Druck",
+    "pool": "patronage_conflicts",
+    "file": "data/events/pools/patronage_conflicts.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_GARETH_DUEL_HEARING",
+    "title": "Anhoerung nach dem Duell",
+    "pool": "patronage_conflicts",
+    "file": "data/events/pools/patronage_conflicts.json",
+    "highImpact": true
+  }
+]

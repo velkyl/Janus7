@@ -1,0 +1,18 @@
+[
+  {
+    "poolId": "border_pressure",
+    "events": [
+      "E_LOWANGEN_BORDER_RUMOR",
+      "E_LOWANGEN_BORDER_PATROL",
+      "E_LOWANGEN_BORDER_DECISION"
+    ]
+  },
+  {
+    "poolId": "workshop_tension",
+    "events": [
+      "E_LOWANGEN_STOCK_SHORTAGE",
+      "E_LOWANGEN_MARKET_DEAL",
+      "E_LOWANGEN_WORKSHOP_FALLOUT"
+    ]
+  }
+]

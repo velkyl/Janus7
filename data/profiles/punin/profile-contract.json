@@ -30,10 +30,7 @@
       "locations.json",
       "npcs.json"
     ],
-    "allowedDuplicateMismatches": [
-      "locations.json",
-      "npcs.json"
-    ]
+    "allowedDuplicateMismatches": []
   },
   "twoB": {
     "questFocus": [

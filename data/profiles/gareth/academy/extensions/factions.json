@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "version": "1.0.0-gareth",
+    "description": "Fraktionen und Lager der Garether Akademien."
+  },
+  "factions": [
+    {
+      "id": "FAC_GARETH_REICHSLINIE",
+      "type": "house",
+      "name": "Reichslinie",
+      "headOfHouse": "gareth_mentor_bann",
+      "traits": {
+        "bonus": "Zugang zu offiziellen Pruefern",
+        "flaw": "Hoher Erwartungsdruck"
+      }
+    },
+    {
+      "id": "FAC_GARETH_PATRONATE",
+      "type": "circle",
+      "name": "Patronatskreis",
+      "headOfHouse": "gareth_cadet_duelist",
+      "rivalry": "FAC_GARETH_REICHSLINIE",
+      "traits": {
+        "bonus": "Starke Netzwerke",
+        "flaw": "Abhaengigkeit von Foerderern"
+      }
+    }
+  ]
+}

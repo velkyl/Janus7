@@ -119,6 +119,7 @@ Begruendung:
 
 ### Punin
 
+- aktueller validierter Status: `full-profile`
 - Zielstatus nach 2B.2: `full-profile`
 
 ### Lowangen
@@ -135,8 +136,9 @@ Begruendung:
 
 ### Festum
 
-- derzeit strukturell tief, aber fachlich noch nicht als 2B-Referenz validiert
-- vorerst nicht als Referenz behandeln
+- aktueller validierter Status: `foundation`
+- strukturell tief, aber fachlich noch nicht als 2B-Referenz validiert
+- bewusst als Bestandsprofil und nicht als 2B-Referenz behandeln
 
 ## Konsequenz fuer 2B.2
 
@@ -147,3 +149,15 @@ Begruendung:
 - Gareth wird danach als `core-profile` institutionell-politisch kalibriert
 
 Erst danach ist es sinnvoll, den Vollvertrag breiter auszurollen.
+
+## Stand nach Umsetzung
+
+- `punin` ist als `full-profile` technisch konsistent und ohne verbleibende Root-/`academy/`-Divergenzen in den vertraglich sensiblen Kernsets aufgeloest.
+- `lowangen` ist als `core-profile` angehoben.
+- `gareth` ist als `core-profile` angehoben.
+
+Damit ist Variante A abgeschlossen:
+
+- Referenzprofil: `punin`
+- belastbare Gegenproben: `lowangen`, `gareth`
+- Festum: vertraglich eingehegt, aber bewusst kein Referenzprofil

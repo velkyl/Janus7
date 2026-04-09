@@ -1,0 +1,35 @@
+[
+  {
+    "eventId": "E_LOWANGEN_STOCK_SHORTAGE",
+    "pool": "workshop_tension",
+    "triggerExpr": "slotName == 'Morgen'",
+    "title": "Leerer Werkhof",
+    "description": "Die Vorratsbuecher stimmen nicht mehr mit den realen Bestaenden ueberein. Ohne Ersatzmaterial droht der Unterricht fuer mehrere Tage auszufallen.",
+    "highImpact": false,
+    "relatedStoryThreads": [
+      "lowangen_supply_pressure"
+    ]
+  },
+  {
+    "eventId": "E_LOWANGEN_MARKET_DEAL",
+    "pool": "workshop_tension",
+    "triggerExpr": "slotName == 'Mittag' || slotName == 'Abend'",
+    "title": "Heikler Handel",
+    "description": "Ein Grenzhaendler bietet Formstein und seltene Zuschnitte an. Der Preis ist nicht nur Silber, sondern auch Schweigen.",
+    "highImpact": false,
+    "relatedStoryThreads": [
+      "lowangen_supply_pressure"
+    ]
+  },
+  {
+    "eventId": "E_LOWANGEN_WORKSHOP_FALLOUT",
+    "pool": "workshop_tension",
+    "triggerExpr": "slotName == 'Nachmittag'",
+    "title": "Nachhall im Transformationsraum",
+    "description": "Improvisierte Materialien erzeugen unerwartete Resonanzen. Der Unterrichtsraum selbst wird zum Beweis, dass Lowangen staendig am Rand des Kontrollierbaren arbeitet.",
+    "highImpact": true,
+    "relatedStoryThreads": [
+      "lowangen_supply_pressure"
+    ]
+  }
+]

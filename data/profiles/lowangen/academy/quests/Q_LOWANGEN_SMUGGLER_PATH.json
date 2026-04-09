@@ -1,0 +1,41 @@
+{
+  "questId": "Q_LOWANGEN_SMUGGLER_PATH",
+  "title": "Der Pfad jenseits des Ostwalls",
+  "description": "Eine Schuelerin aus dem Grenzland kennt einen verborgenen Schmugglerpfad. Die Akademie muss entscheiden, ob sie ihn fuer Aufklaerung, Material oder politische Einflussnahme nutzt.",
+  "category": "border",
+  "tags": [
+    "border",
+    "smuggling",
+    "lowangen"
+  ],
+  "startNodeId": "QN_LOWANGEN_BORDER_START",
+  "nodes": [
+    {
+      "nodeId": "QN_LOWANGEN_BORDER_START",
+      "type": "event",
+      "eventId": "E_LOWANGEN_BORDER_RUMOR",
+      "nextNodeId": "QN_LOWANGEN_BORDER_PATROL",
+      "failforwardNodeId": null
+    },
+    {
+      "nodeId": "QN_LOWANGEN_BORDER_PATROL",
+      "type": "event",
+      "eventId": "E_LOWANGEN_BORDER_PATROL",
+      "nextNodeId": "QN_LOWANGEN_BORDER_DECISION",
+      "failforwardNodeId": null
+    },
+    {
+      "nodeId": "QN_LOWANGEN_BORDER_DECISION",
+      "type": "event",
+      "eventId": "E_LOWANGEN_BORDER_DECISION",
+      "nextNodeId": null,
+      "completesQuest": true,
+      "failforwardNodeId": null
+    }
+  ],
+  "rewards": {
+    "tags": [
+      "lowangen_border_access"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+[
+  {
+    "eventId": "E_GARETH_DUEL_RUMOR",
+    "pool": "patronage_conflicts",
+    "triggerExpr": "slotName == 'Mittag' || slotName == 'Abend'",
+    "title": "Geruecht um ein Duell",
+    "description": "Ein unerlaubtes Duell wird im Flurfunk bereits als Karrierefrage und Ehrsache adeliger Familien verhandelt.",
+    "highImpact": false,
+    "relatedStoryThreads": [
+      "gareth_patronage_pressure"
+    ]
+  },
+  {
+    "eventId": "E_GARETH_PATRON_PRESSURE",
+    "pool": "patronage_conflicts",
+    "triggerExpr": "slotName == 'Nachmittag'",
+    "title": "Patronaler Druck",
+    "description": "Ein Patron verlangt diskrete Einflussnahme, um den Ausgang der Sache zu kontrollieren. Wer gehorcht, gewinnt Schutz und verliert Unabhaengigkeit.",
+    "highImpact": false,
+    "relatedStoryThreads": [
+      "gareth_patronage_pressure"
+    ]
+  },
+  {
+    "eventId": "E_GARETH_DUEL_HEARING",
+    "pool": "patronage_conflicts",
+    "triggerExpr": "slotName == 'Morgen'",
+    "title": "Anhoerung nach dem Duell",
+    "description": "Die Anhoerung nach dem Vorfall entscheidet nicht nur ueber Strafe, sondern ueber den weiteren Aufstieg der beteiligten Adepten.",
+    "highImpact": true,
+    "relatedStoryThreads": [
+      "gareth_patronage_pressure"
+    ]
+  }
+]

@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "version": "1.0.0-gareth",
+    "description": "Sozialbeziehungen der Garether Schluesselpersonen."
+  },
+  "socialLinks": [
+    {
+      "id": "SLINK_GARETH_LEUDARA",
+      "npcId": "gareth_mentor_bann",
+      "arcana": "judgement",
+      "maxRank": 3,
+      "ranks": [
+        {
+          "level": 1,
+          "unlockCondition": "player.schoolStats.disziplin >= 1",
+          "eventTriggerId": "E_GARETH_INSPECTION_NOTICE"
+        }
+      ]
+    },
+    {
+      "id": "SLINK_GARETH_CORVIN",
+      "npcId": "gareth_cadet_duelist",
+      "arcana": "chariot",
+      "maxRank": 3,
+      "ranks": [
+        {
+          "level": 1,
+          "unlockCondition": "player.schoolStats.mut >= 1",
+          "eventTriggerId": "E_GARETH_DUEL_RUMOR"
+        }
+      ]
+    }
+  ]
+}

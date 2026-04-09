@@ -5,8 +5,8 @@
     "description": "2B-Vertragsmanifest fuer die quellennahe Lowangen-Gegenprobe."
   },
   "contract": {
-    "targetLevel": "core-profile",
-    "validatedLevel": "core-profile",
+    "targetLevel": "full-profile",
+    "validatedLevel": "full-profile",
     "preferredDataRoot": "academy",
     "referenceRole": "source-bound-counterprobe",
     "seedMode": "derived",
@@ -39,6 +39,11 @@
         "source-conflict-frame",
         "sl-short-profile"
       ]
-    }
+    },
+    "fullProfileFocus": [
+      "border",
+      "workshop",
+      "regional-pressure"
+    ]
   }
 }

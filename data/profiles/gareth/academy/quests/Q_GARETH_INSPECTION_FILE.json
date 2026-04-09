@@ -1,0 +1,36 @@
+{
+  "questId": "Q_GARETH_INSPECTION_FILE",
+  "title": "Die Akte vor der Reichsinspektion",
+  "description": "Vor einer Reichsinspektion ist eine kritische Akte verschwunden. Der Umgang mit ihr entscheidet ueber Ruf, Karrierepfade und die Abhaengigkeit von Patronen.",
+  "category": "political",
+  "tags": [
+    "inspection",
+    "politics",
+    "gareth"
+  ],
+  "startNodeId": "QN_GARETH_FILE_START",
+  "nodes": [
+    {
+      "nodeId": "QN_GARETH_FILE_START",
+      "type": "event",
+      "eventId": "E_GARETH_INSPECTION_NOTICE",
+      "nextNodeId": "QN_GARETH_FILE_SEARCH",
+      "failforwardNodeId": null
+    },
+    {
+      "nodeId": "QN_GARETH_FILE_SEARCH",
+      "type": "event",
+      "eventId": "E_GARETH_FILE_SEARCH",
+      "nextNodeId": "QN_GARETH_FILE_DECISION",
+      "failforwardNodeId": null
+    },
+    {
+      "nodeId": "QN_GARETH_FILE_DECISION",
+      "type": "event",
+      "eventId": "E_GARETH_INSPECTION_DECISION",
+      "nextNodeId": null,
+      "completesQuest": true,
+      "failforwardNodeId": null
+    }
+  ]
+}

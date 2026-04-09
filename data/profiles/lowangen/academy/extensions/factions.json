@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "version": "1.0.0-lowangen",
+    "description": "Fraktionen der Akademie der Verformungen."
+  },
+  "factions": [
+    {
+      "id": "FAC_LOWANGEN_WORKSHOP",
+      "type": "clique",
+      "name": "Werkhof-Pragmatiker",
+      "headOfHouse": "lowangen_formmeister",
+      "traits": {
+        "bonus": "Improvisation im Unterricht",
+        "flaw": "Regelgrenzen werden leicht ueberschritten"
+      }
+    },
+    {
+      "id": "FAC_LOWANGEN_BORDER",
+      "type": "circle",
+      "name": "Grenzbeobachter",
+      "headOfHouse": "lowangen_border_student",
+      "rivalry": "FAC_LOWANGEN_WORKSHOP",
+      "traits": {
+        "bonus": "Geruechte und Wege im Grenzland",
+        "flaw": "Misstrauen gegenueber Fremden"
+      }
+    }
+  ]
+}

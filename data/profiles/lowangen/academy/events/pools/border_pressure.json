@@ -1,0 +1,35 @@
+[
+  {
+    "eventId": "E_LOWANGEN_BORDER_RUMOR",
+    "pool": "border_pressure",
+    "triggerExpr": "slotName == 'Morgen' || slotName == 'Abend'",
+    "title": "Geruecht am Ostwall",
+    "description": "Am Ostwall geht das Geruecht um, dass ein alter Schmugglerpfad wieder offen ist. Schueler und Stadtwache hoeren dieselben Namen, ziehen aber andere Schluesse.",
+    "highImpact": false,
+    "relatedStoryThreads": [
+      "lowangen_border_pressure"
+    ]
+  },
+  {
+    "eventId": "E_LOWANGEN_BORDER_PATROL",
+    "pool": "border_pressure",
+    "triggerExpr": "slotName == 'Nacht' || slotName == 'Abend'",
+    "title": "Wachgang im Nebel",
+    "description": "Ein Wachgang am Ostwall zeigt, dass jemand die alten Markierungen am Mauerwerk erneuert hat. Die Akademie kann das ignorieren oder selbst aktiv werden.",
+    "highImpact": false,
+    "relatedStoryThreads": [
+      "lowangen_border_pressure"
+    ]
+  },
+  {
+    "eventId": "E_LOWANGEN_BORDER_DECISION",
+    "pool": "border_pressure",
+    "triggerExpr": "slotName == 'Nacht'",
+    "title": "Der Pfad wird genutzt",
+    "description": "Jetzt muss entschieden werden, ob der Schmugglerpfad fuer Aufklaerung, Material oder politische Erpressung genutzt wird.",
+    "highImpact": true,
+    "relatedStoryThreads": [
+      "lowangen_border_pressure"
+    ]
+  }
+]

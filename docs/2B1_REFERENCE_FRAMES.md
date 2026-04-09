@@ -137,19 +137,29 @@ Primaere Aussenform:
 
 Gareth ist redaktionell der instabilste Rahmen der drei. Es besteht ein reales Risiko, dass der Karrierepfad-Fokus spaeter zugunsten einer staerkeren Institutionenlogik korrigiert werden muss.
 
-## 2B.1 Abschlussbewertung
+## Abschlussbewertung nach Variante A
 
 ### Wahrscheinlich tragfaehig
 
 - Punin als `full-profile`
 - Lowangen als quellennahe `core-profile`-Gegenprobe
 
-### Noch unsicher
+### Weiter kritisch zu beobachten
 
 - Gareth als Karrierepfad-zentrierte offizielle Akademie
 
-### Klare Folge fuer 2B.2
+### Umgesetzter Stand
 
-1. Punin wird strukturell und inhaltlich als `full-profile` stabilisiert.
-2. Lowangen wird als quellengebundenes `core-profile` aufgebaut.
-3. Gareth wird danach gegen die tatsaechlichen Quellen und vorhandenen Daten nochmals kritisch gegengeprueft, bevor ein Ausbaupfad festgezogen wird.
+1. Punin ist strukturell als `full-profile` stabilisiert.
+2. Lowangen ist als quellengebundenes `core-profile` aufgebaut.
+3. Gareth ist als `core-profile` aufgebaut, bleibt aber redaktionell der am kritischsten zu beobachtende Rahmen.
+
+### Konsequenz fuer weitere Wellen
+
+Variante A ist abgeschlossen.
+
+Weitere Arbeit an 2B waere keine Vertragsstabilisierung mehr, sondern ein neuer Ausbauschritt:
+
+- Gareth redaktionell nachschaerfen
+- Lowangen auf `full-profile` erweitern
+- Gareth auf `full-profile` erweitern

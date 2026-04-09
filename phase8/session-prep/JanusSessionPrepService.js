@@ -2,6 +2,7 @@ import { JanusSlotResolver } from '../../academy/slot-resolver.js';
 import { JanusContentSuggestionService } from '../on-the-fly/JanusContentSuggestionService.js';
 import { STATE_PATHS } from '../../core/common.js';
 import JanusAssetResolver from '../../core/services/asset-resolver.js';
+import { JanusProfileRegistry } from '../../core/profiles/index.js';
 
 export class JanusSessionPrepService {
   constructor({ engine, logger } = {}) {
@@ -43,6 +44,8 @@ export class JanusSessionPrepService {
     const chroniclePreview = await this._collectChroniclePreview({ engine, academyData, questsSummary, state, worldChronicleEntries });
     const socialStoryHookQueue = this._collectSocialStoryHookQueue({ state, academyData });
     const chronicleSeed = this._buildChronicleSeed({ slotRef, prepAgenda, chroniclePreview, questsSummary, activeLocation });
+    const academyOverview = this._buildAcademyOverview({ academyData, slotRef, questsSummary, activeLocation });
+    const academySeed = this._buildAcademySeed({ academyOverview, slotRef, questsSummary, prepAgenda, activeLocation });
     const gradeEntries = this._collectGradeEntries({ engine, academyData });
     const gradeOverview = this._buildGradeOverview({ gradeEntries, academyData });
     const gradeLedger = this._buildGradeLedger({ gradeEntries, slotRef });
@@ -69,6 +72,8 @@ export class JanusSessionPrepService {
       chroniclePreview,
       socialStoryHookQueue,
       chronicleSeed,
+      academyOverview,
+      academySeed,
       gradeOverview,
       gradeLedger,
       trimesterGrades,
@@ -86,6 +91,7 @@ export class JanusSessionPrepService {
         chronicleCount: chroniclePreview.length,
         socialStoryHookCount: socialStoryHookQueue.items.length,
         chronicleSeedLength: chronicleSeed.text.length,
+        academySeedLength: academySeed.text.length,
         gradeEntryCount: gradeEntries.length,
         gradeLedgerCount: gradeLedger.items.length,
         trimesterGradeCount: trimesterGrades.items.length,
@@ -1293,6 +1299,82 @@ export class JanusSessionPrepService {
       id: 'campaign-chronicle-seed',
       title: 'Campaign Chronicle Seed',
       text,
+    };
+  }
+
+  _buildAcademyOverview({ academyData, slotRef, questsSummary, activeLocation }) {
+    const activeProfile = JanusProfileRegistry.getActive();
+    const lessons = academyData?.getLessons?.() ?? [];
+    const npcs = academyData?.getNpcs?.() ?? [];
+    const locations = academyData?.getLocations?.() ?? [];
+    const events = academyData?.getEvents?.() ?? [];
+    const questIndex = academyData?.getQuestIndex?.() ?? [];
+    const poolIndex = academyData?.getPoolIndex?.() ?? [];
+    const factions = academyData?.getFactions?.() ?? [];
+    const socialLinks = academyData?.getSocialLinks?.() ?? [];
+    const sessions = academyData?.getTeachingSessionsForSlot?.(slotRef) ?? [];
+
+    return {
+      profileId: activeProfile?.id ?? 'unknown',
+      profileName: activeProfile?.name ?? 'Unbekannt',
+      focus: activeProfile?.meta?.focus ?? 'â€”',
+      region: activeProfile?.meta?.region ?? 'â€”',
+      activeLocationName: activeLocation?.name ?? 'â€”',
+      counts: {
+        lessons: lessons.length,
+        npcs: npcs.length,
+        locations: locations.length,
+        events: events.length,
+        quests: questIndex.length,
+        pools: poolIndex.length,
+        factions: factions.length,
+        socialLinks: socialLinks.length,
+        currentSessions: sessions.length,
+        openQuests: Number(questsSummary?.total ?? 0),
+      },
+      nextHooks: {
+        lessons: lessons.slice(0, 3).map((entry) => entry?.name ?? entry?.id).filter(Boolean),
+        quests: questIndex.slice(0, 3).map((entry) => entry?.title ?? entry?.questId).filter(Boolean),
+        factions: factions.slice(0, 3).map((entry) => entry?.name ?? entry?.id).filter(Boolean),
+      },
+    };
+  }
+
+  _buildAcademySeed({ academyOverview, slotRef, questsSummary, prepAgenda, activeLocation }) {
+    const lines = [
+      'JANUS7 Academy Seed',
+      `Profil: ${academyOverview?.profileName ?? 'â€”'} (${academyOverview?.profileId ?? 'â€”'})`,
+      `Region: ${academyOverview?.region ?? 'â€”'}`,
+      `Fokus: ${academyOverview?.focus ?? 'â€”'}`,
+      `Zeitfenster: Woche ${slotRef?.week ?? 'â€”'} · ${slotRef?.day ?? 'â€”'} / ${slotRef?.phase ?? 'â€”'}`,
+      `Aktiver Ort: ${activeLocation?.name ?? 'â€”'}`,
+      '',
+      'Bestand:',
+      `- Lektionen: ${academyOverview?.counts?.lessons ?? 0}`,
+      `- NPCs: ${academyOverview?.counts?.npcs ?? 0}`,
+      `- Orte: ${academyOverview?.counts?.locations ?? 0}`,
+      `- Events: ${academyOverview?.counts?.events ?? 0}`,
+      `- Questpfade: ${academyOverview?.counts?.quests ?? 0}`,
+      `- Event-Pools: ${academyOverview?.counts?.pools ?? 0}`,
+      `- Fraktionen: ${academyOverview?.counts?.factions ?? 0}`,
+      `- Social Links: ${academyOverview?.counts?.socialLinks ?? 0}`,
+      '',
+      'Naechste Hooks:',
+      `- Unterricht: ${(academyOverview?.nextHooks?.lessons ?? []).join(', ') || 'â€”'}`,
+      `- Quests: ${(academyOverview?.nextHooks?.quests ?? []).join(', ') || 'â€”'}`,
+      `- Fraktionen: ${(academyOverview?.nextHooks?.factions ?? []).join(', ') || 'â€”'}`,
+      '',
+      'Aktive Quests:',
+      ...((questsSummary?.items ?? []).slice(0, 4).map((quest) => `- ${quest?.title ?? quest?.questId ?? 'Quest'} | Node: ${quest?.currentNodeTitle ?? quest?.currentNodeId ?? 'â€”'}`)),
+      '',
+      'Vorbereitungsagenda:',
+      ...((prepAgenda ?? []).slice(0, 4).map((entry) => `- ${entry?.slotLabel ?? 'Slot'} / ${entry?.typeLabel ?? 'Eintrag'}: ${entry?.title ?? 'â€”'} | ${entry?.focus ?? 'â€”'}`)),
+    ];
+
+    return {
+      id: 'academy-seed',
+      title: 'Academy Seed',
+      text: lines.join('\n'),
     };
   }
 

@@ -1,0 +1,44 @@
+[
+  {
+    "eventId": "E_LOWANGEN_BORDER_RUMOR",
+    "title": "Geruecht am Ostwall",
+    "pool": "border_pressure",
+    "file": "data/events/pools/border_pressure.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_LOWANGEN_BORDER_PATROL",
+    "title": "Wachgang im Nebel",
+    "pool": "border_pressure",
+    "file": "data/events/pools/border_pressure.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_LOWANGEN_BORDER_DECISION",
+    "title": "Der Pfad wird genutzt",
+    "pool": "border_pressure",
+    "file": "data/events/pools/border_pressure.json",
+    "highImpact": true
+  },
+  {
+    "eventId": "E_LOWANGEN_STOCK_SHORTAGE",
+    "title": "Leerer Werkhof",
+    "pool": "workshop_tension",
+    "file": "data/events/pools/workshop_tension.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_LOWANGEN_MARKET_DEAL",
+    "title": "Heikler Handel",
+    "pool": "workshop_tension",
+    "file": "data/events/pools/workshop_tension.json",
+    "highImpact": false
+  },
+  {
+    "eventId": "E_LOWANGEN_WORKSHOP_FALLOUT",
+    "title": "Nachhall im Transformationsraum",
+    "pool": "workshop_tension",
+    "file": "data/events/pools/workshop_tension.json",
+    "highImpact": true
+  }
+]

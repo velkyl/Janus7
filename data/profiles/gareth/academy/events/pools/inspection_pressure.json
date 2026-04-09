@@ -1,0 +1,35 @@
+[
+  {
+    "eventId": "E_GARETH_INSPECTION_NOTICE",
+    "pool": "inspection_pressure",
+    "triggerExpr": "slotName == 'Morgen'",
+    "title": "Reichsinspektion angesetzt",
+    "description": "Eine Reichsinspektion wird frueher als erwartet angekuendigt. Lehrkoerper, Aktenfuehrung und Karriereplaene geraten gleichzeitig unter Druck.",
+    "highImpact": false,
+    "relatedStoryThreads": [
+      "gareth_inspection_pressure"
+    ]
+  },
+  {
+    "eventId": "E_GARETH_FILE_SEARCH",
+    "pool": "inspection_pressure",
+    "triggerExpr": "slotName == 'Nachmittag'",
+    "title": "Suche nach der fehlenden Akte",
+    "description": "Eine sensible Akte ist unauffindbar. Jede Minute ohne Fund verschiebt Schuld, Patronage und Rangfragen neu.",
+    "highImpact": false,
+    "relatedStoryThreads": [
+      "gareth_inspection_pressure"
+    ]
+  },
+  {
+    "eventId": "E_GARETH_INSPECTION_DECISION",
+    "pool": "inspection_pressure",
+    "triggerExpr": "slotName == 'Abend'",
+    "title": "Aktenlage vor dem Reich",
+    "description": "Vor der Inspektion muss entschieden werden, ob die Wahrheit offengelegt, umgedeutet oder einem Patron zum Schutz ueberlassen wird.",
+    "highImpact": true,
+    "relatedStoryThreads": [
+      "gareth_inspection_pressure"
+    ]
+  }
+]

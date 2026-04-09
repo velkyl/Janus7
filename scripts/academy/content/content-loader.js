@@ -1,5 +1,5 @@
 import { JanusContentRegistry } from './content-registry.js';
-import { JanusAssetResolver } from '../../../core/services/asset-resolver.js';
+import { loadDataJson } from '../../../academy/data-api-store.js';
 
 /**
  * Phase 2 content loader:
@@ -14,6 +14,14 @@ export class JanusContentLoader {
     this.registry = new JanusContentRegistry();
   }
 
+  _normalizeDataPath(path) {
+    return String(path ?? '')
+      .trim()
+      .replace(/^\/+/, '')
+      .replace(/^modules\/[^/]+\//, '')
+      .replace(/^data\//, '');
+  }
+
   async _loadJSON(path) {
     if (this.io && typeof this.io.loadJSON === 'function') return await this.io.loadJSON(path);
     this.logger?.debug?.(`Falling back to fetch: ${path}`);
@@ -22,31 +30,34 @@ export class JanusContentLoader {
     return await response.json();
   }
 
+  async _loadProfileJSON(path) {
+    const rel = this._normalizeDataPath(path);
+    if (!rel) throw new Error('Missing profile-relative data path');
+    return await loadDataJson(rel);
+  }
+
   _poolFile(poolName) {
-    const safe = String(poolName ?? 'uncategorized').replace(/[^a-zA-Z0-9_\-]+/g, '_') || 'uncategorized';
+    const safe = String(poolName ?? 'uncategorized').replace(/[^a-zA-Z0-9_-]+/g, '_') || 'uncategorized';
     return safe;
   }
 
   async _loadSplit() {
-    // Phase 8: Use absolute resolver paths
-    const questIndex = await this._loadJSON(JanusAssetResolver.data('quests/quest-index.json'));
-    const eventIndex = await this._loadJSON(JanusAssetResolver.data('events/event-index.json'));
-    const effectIndex = await this._loadJSON(JanusAssetResolver.data('academy/effects/effect-index.json'));
-    const options = await this._loadJSON(JanusAssetResolver.data('events/options.json'));
-    const pools = await this._loadJSON(JanusAssetResolver.data('events/pool-index.json'));
+    const questIndex = await this._loadProfileJSON('quests/quest-index.json');
+    const eventIndex = await this._loadProfileJSON('events/event-index.json');
+    const effectIndex = await this._loadProfileJSON('academy/effects/effect-index.json');
+    const options = await this._loadProfileJSON('events/options.json');
+    const pools = await this._loadProfileJSON('events/pool-index.json');
 
     // Quests + nodes
     const quests = [];
     const questNodes = [];
     for (const qi of questIndex) {
-      // Use qi.file if available, fallback to questId.json
-      const relFile = qi.file ? String(qi.file) : `data/quests/${qi.questId}.json`;
-      const fullPath = JanusAssetResolver.asset(relFile);      
       let res;
       try {
-        res = await this._loadJSON(fullPath);
+        const relFile = qi.file ? this._normalizeDataPath(qi.file) : `quests/${qi.questId}.json`;
+        res = await this._loadProfileJSON(relFile);
       } catch (err) {
-        this.logger?.warn?.(`Quest file missing: ${fullPath}`, { questId: qi.questId });
+        this.logger?.warn?.('Quest file missing', { questId: qi.questId, file: qi?.file ?? `quests/${qi.questId}.json` });
         continue;
       }
 
@@ -72,16 +83,15 @@ export class JanusContentLoader {
     const poolFiles = new Set((eventIndex ?? []).map(e => e.file).filter(Boolean));
     const events = [];
     for (const relFile of poolFiles) {
-      const fullPath = JanusAssetResolver.asset(relFile);
-      const arr = await this._loadJSON(fullPath);
+      const arr = await this._loadProfileJSON(relFile);
       if (Array.isArray(arr)) events.push(...arr);
     }
 
     // Effects
     const effects = [];
     for (const ei of effectIndex) {
-      const fullPath = JanusAssetResolver.asset(`data/academy/effects/${ei.effectId}.json`);
-      const eff = await this._loadJSON(fullPath);
+      const relFile = ei.file ? this._normalizeDataPath(ei.file) : `academy/effects/${ei.effectId}.json`;
+      const eff = await this._loadProfileJSON(relFile);
       effects.push(eff);
     }
 

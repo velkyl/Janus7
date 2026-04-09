@@ -1,0 +1,41 @@
+{
+  "questId": "Q_LOWANGEN_FORM_STOCK",
+  "title": "Formstein und Vorratsdruck",
+  "description": "Im Werkhof fehlen kritische Materialien fuer den Unterricht. Eine harmlose Beschaffungsmission kann schnell in politischen Druck und kompromittierende Handelswege kippen.",
+  "category": "academy",
+  "tags": [
+    "academy",
+    "materials",
+    "formmagic"
+  ],
+  "startNodeId": "QN_LOWANGEN_STOCK_START",
+  "nodes": [
+    {
+      "nodeId": "QN_LOWANGEN_STOCK_START",
+      "type": "event",
+      "eventId": "E_LOWANGEN_STOCK_SHORTAGE",
+      "nextNodeId": "QN_LOWANGEN_MARKET_DEAL",
+      "failforwardNodeId": null
+    },
+    {
+      "nodeId": "QN_LOWANGEN_MARKET_DEAL",
+      "type": "event",
+      "eventId": "E_LOWANGEN_MARKET_DEAL",
+      "nextNodeId": "QN_LOWANGEN_WORKSHOP_FALLOUT",
+      "failforwardNodeId": null
+    },
+    {
+      "nodeId": "QN_LOWANGEN_WORKSHOP_FALLOUT",
+      "type": "event",
+      "eventId": "E_LOWANGEN_WORKSHOP_FALLOUT",
+      "nextNodeId": null,
+      "completesQuest": true,
+      "failforwardNodeId": null
+    }
+  ],
+  "rewards": {
+    "schoolStats": {
+      "pragmatik": 1
+    }
+  }
+}

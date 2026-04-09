@@ -1,0 +1,18 @@
+[
+  {
+    "poolId": "inspection_pressure",
+    "events": [
+      "E_GARETH_INSPECTION_NOTICE",
+      "E_GARETH_FILE_SEARCH",
+      "E_GARETH_INSPECTION_DECISION"
+    ]
+  },
+  {
+    "poolId": "patronage_conflicts",
+    "events": [
+      "E_GARETH_DUEL_RUMOR",
+      "E_GARETH_PATRON_PRESSURE",
+      "E_GARETH_DUEL_HEARING"
+    ]
+  }
+]

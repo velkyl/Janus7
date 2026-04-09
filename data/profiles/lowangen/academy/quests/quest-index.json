@@ -1,0 +1,24 @@
+[
+  {
+    "questId": "Q_LOWANGEN_SMUGGLER_PATH",
+    "title": "Der Pfad jenseits des Ostwalls",
+    "category": "border",
+    "file": "data/quests/Q_LOWANGEN_SMUGGLER_PATH.json",
+    "tags": [
+      "border",
+      "smuggling",
+      "lowangen"
+    ]
+  },
+  {
+    "questId": "Q_LOWANGEN_FORM_STOCK",
+    "title": "Formstein und Vorratsdruck",
+    "category": "academy",
+    "file": "data/quests/Q_LOWANGEN_FORM_STOCK.json",
+    "tags": [
+      "academy",
+      "materials",
+      "formmagic"
+    ]
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "questId": "Q_GARETH_INSPECTION_FILE",
+    "title": "Die Akte vor der Reichsinspektion",
+    "category": "political",
+    "file": "data/quests/Q_GARETH_INSPECTION_FILE.json",
+    "tags": [
+      "inspection",
+      "politics",
+      "gareth"
+    ]
+  },
+  {
+    "questId": "Q_GARETH_PATRON_DUEL",
+    "title": "Patronat und unerlaubtes Duell",
+    "category": "social",
+    "file": "data/quests/Q_GARETH_PATRON_DUEL.json",
+    "tags": [
+      "duel",
+      "reputation",
+      "gareth"
+    ]
+  }
+]

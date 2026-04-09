@@ -1,14 +1,14 @@
 {
   "meta": {
     "moduleVersion": "0.9.12.46",
-    "profile": "gareth",
-    "description": "2B-Vertragsmanifest fuer die Garether Systemgegenprobe."
+    "profile": "festum",
+    "description": "2B-Vertragsmanifest fuer das bestehende Festumer Bestandsprofil."
   },
   "contract": {
-    "targetLevel": "full-profile",
-    "validatedLevel": "full-profile",
+    "targetLevel": "foundation",
+    "validatedLevel": "foundation",
     "preferredDataRoot": "academy",
-    "referenceRole": "political-counterprobe",
+    "referenceRole": "non-reference",
     "seedMode": "derived",
     "tableMode": "derived"
   },
@@ -28,22 +28,16 @@
       "locations.json",
       "npcs.json"
     ],
-    "allowedDuplicateMismatches": []
+    "allowedDuplicateMismatches": [
+      "locations.json",
+      "npcs.json"
+    ]
   },
   "twoB": {
-    "focusAxes": [
-      "factions",
-      "institutional-competition",
-      "career-paths"
-    ],
-    "careerDriver": [
-      "exams",
-      "networks",
-      "reputation"
-    ],
-    "externalPressure": [
-      "aristocratic",
-      "patrician"
+    "status": "inventory-only",
+    "notes": [
+      "Festum ist aktuell nicht als 2B-Referenzprofil freigegeben.",
+      "Bestehende Daten enthalten deutliche Altbestand- und Driftspuren."
     ]
   }
 }

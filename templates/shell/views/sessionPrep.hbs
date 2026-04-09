@@ -337,6 +337,43 @@
   </section>
 
   <section class="j7-panel">
+    <h3><i class="fas fa-school"></i> Akademie-Ueberblick</h3>
+    {{#if view.academyOverview}}
+      <p class="j7-text-dim">{{view.academyOverview.profileName}} · {{view.academyOverview.region}} · {{view.academyOverview.focus}}</p>
+      <div class="j7-seed-grid">
+        <article class="j7-seed-card">
+          <header>
+            <strong>Bestand</strong>
+            <span class="j7-text-dim">{{view.academyOverview.activeLocationName}}</span>
+          </header>
+          <ul class="j7-plain-list">
+            <li>Lektionen: {{view.academyOverview.counts.lessons}}</li>
+            <li>NPCs: {{view.academyOverview.counts.npcs}}</li>
+            <li>Orte: {{view.academyOverview.counts.locations}}</li>
+            <li>Events: {{view.academyOverview.counts.events}}</li>
+            <li>Questpfade: {{view.academyOverview.counts.quests}}</li>
+            <li>Event-Pools: {{view.academyOverview.counts.pools}}</li>
+            <li>Fraktionen: {{view.academyOverview.counts.factions}}</li>
+            <li>Social Links: {{view.academyOverview.counts.socialLinks}}</li>
+            <li>Sessions jetzt: {{view.academyOverview.counts.currentSessions}}</li>
+            <li>Offene Quests: {{view.academyOverview.counts.openQuests}}</li>
+          </ul>
+        </article>
+        <article class="j7-seed-card">
+          <header>
+            <strong>Naechste Hooks</strong>
+          </header>
+          <p><strong>Unterricht:</strong> {{#if view.academyOverview.nextHooks.lessons.length}}{{#each view.academyOverview.nextHooks.lessons as |entry|}}{{entry}}{{#unless @last}}, {{/unless}}{{/each}}{{else}}—{{/if}}</p>
+          <p><strong>Quests:</strong> {{#if view.academyOverview.nextHooks.quests.length}}{{#each view.academyOverview.nextHooks.quests as |entry|}}{{entry}}{{#unless @last}}, {{/unless}}{{/each}}{{else}}—{{/if}}</p>
+          <p><strong>Fraktionen:</strong> {{#if view.academyOverview.nextHooks.factions.length}}{{#each view.academyOverview.nextHooks.factions as |entry|}}{{entry}}{{#unless @last}}, {{/unless}}{{/each}}{{else}}—{{/if}}</p>
+        </article>
+      </div>
+    {{else}}
+      <p class="j7-text-dim">Kein belastbarer Akademie-Ueberblick aus den aktuellen Daten ableitbar.</p>
+    {{/if}}
+  </section>
+
+  <section class="j7-panel">
     <h3><i class="fas fa-book-bookmark"></i> Chronik-Vorschau</h3>
     <div class="j7-seed-grid">
       {{#if view.chroniclePreview.length}}
@@ -418,6 +455,23 @@
       </div>
     {{else}}
       <p class="j7-text-dim">Kein exportierbarer Chronik-Seed aus den aktuellen Daten ableitbar.</p>
+    {{/if}}
+  </section>
+
+  <section class="j7-panel">
+    <h3><i class="fas fa-graduation-cap"></i> Akademie-Seed</h3>
+    {{#if view.academySeed}}
+      <div class="j7-seed-grid">
+        <article class="j7-seed-card">
+          <header>
+            <strong>{{view.academySeed.title}}</strong>
+            <button type="button" class="janus-btn small" data-action="copySeed"><i class="fas fa-copy"></i> Kopieren</button>
+          </header>
+          <textarea rows="14">{{view.academySeed.text}}</textarea>
+        </article>
+      </div>
+    {{else}}
+      <p class="j7-text-dim">Kein exportierbarer Akademie-Seed aus den aktuellen Daten ableitbar.</p>
     {{/if}}
   </section>
 

@@ -1,0 +1,36 @@
+{
+  "questId": "Q_GARETH_PATRON_DUEL",
+  "title": "Patronat und unerlaubtes Duell",
+  "description": "Ein unerlaubtes Duell droht durch adelige Foerderer und ehrgeizige Adepten zu einer grossen Reputationsfrage zu werden.",
+  "category": "social",
+  "tags": [
+    "duel",
+    "reputation",
+    "gareth"
+  ],
+  "startNodeId": "QN_GARETH_DUEL_START",
+  "nodes": [
+    {
+      "nodeId": "QN_GARETH_DUEL_START",
+      "type": "event",
+      "eventId": "E_GARETH_DUEL_RUMOR",
+      "nextNodeId": "QN_GARETH_DUEL_PATRON",
+      "failforwardNodeId": null
+    },
+    {
+      "nodeId": "QN_GARETH_DUEL_PATRON",
+      "type": "event",
+      "eventId": "E_GARETH_PATRON_PRESSURE",
+      "nextNodeId": "QN_GARETH_DUEL_HEARING",
+      "failforwardNodeId": null
+    },
+    {
+      "nodeId": "QN_GARETH_DUEL_HEARING",
+      "type": "event",
+      "eventId": "E_GARETH_DUEL_HEARING",
+      "nextNodeId": null,
+      "completesQuest": true,
+      "failforwardNodeId": null
+    }
+  ]
+}

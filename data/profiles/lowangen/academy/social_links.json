@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "version": "1.0.0-lowangen",
+    "description": "Sozialbeziehungen der Lowanger Schluesselpersonen."
+  },
+  "socialLinks": [
+    {
+      "id": "SLINK_LOWANGEN_DARIO",
+      "npcId": "lowangen_formmeister",
+      "arcana": "magician",
+      "maxRank": 3,
+      "ranks": [
+        {
+          "level": 1,
+          "unlockCondition": "player.schoolStats.pragmatik >= 1",
+          "eventTriggerId": "E_LOWANGEN_STOCK_SHORTAGE"
+        }
+      ]
+    },
+    {
+      "id": "SLINK_LOWANGEN_JADVIGE",
+      "npcId": "lowangen_border_student",
+      "arcana": "moon",
+      "maxRank": 3,
+      "ranks": [
+        {
+          "level": 1,
+          "unlockCondition": "player.schoolStats.mut >= 1",
+          "eventTriggerId": "E_LOWANGEN_BORDER_RUMOR"
+        }
+      ]
+    }
+  ]
+}
