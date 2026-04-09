@@ -1,4 +1,5 @@
 import { JanusBaseApp } from '../core/base-app.js';
+import { MODULE_ID, moduleTemplatePath } from '../../core/common.js';
 import { getJanusCore } from '../../core/index.js';
 
 export class JanusDoomApp extends JanusBaseApp {
@@ -19,7 +20,7 @@ export class JanusDoomApp extends JanusBaseApp {
 
   static PARTS = {
     content: {
-      template: 'modules/Janus7/templates/extensions/doom-engine/doom-app.hbs'
+      template: moduleTemplatePath('extensions/doom-engine/doom-app.hbs')
     }
   };
 

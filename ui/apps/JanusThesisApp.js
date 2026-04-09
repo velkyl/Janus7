@@ -1,5 +1,5 @@
 import { JanusBaseApp } from '../core/base-app.js';
-import { moduleTemplatePath } from '../../core/common.js';
+import { MODULE_ID, moduleTemplatePath } from '../../core/common.js';
 import { getJanusCore } from '../../core/index.js';
 
 /**
@@ -25,7 +25,7 @@ export class JanusThesisApp extends JanusBaseApp {
 
   static PARTS = {
     content: {
-      template: 'modules/Janus7/templates/extensions/thesis-manager/thesis-app.hbs'
+      template: moduleTemplatePath('extensions/thesis-manager/thesis-app.hbs')
     }
   };
 
@@ -75,7 +75,8 @@ export class JanusThesisApp extends JanusBaseApp {
   }
 
   #createDragDropHandlers() {
-    return [new DragDrop({
+    const DragDropImpl = foundry.applications?.ux?.DragDrop || globalThis.DragDrop;
+    return [new DragDropImpl({
       dropSelector: '.j7-thesis-drop-zone',
       callbacks: {
         drop: this.#onDrop.bind(this)

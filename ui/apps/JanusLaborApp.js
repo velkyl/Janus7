@@ -1,4 +1,5 @@
 import { JanusBaseApp } from '../core/base-app.js';
+import { MODULE_ID, moduleTemplatePath } from '../../core/common.js';
 import { getJanusCore } from '../../core/index.js';
 
 export class JanusLaborApp extends JanusBaseApp {
@@ -20,7 +21,7 @@ export class JanusLaborApp extends JanusBaseApp {
 
   static PARTS = {
     content: {
-      template: 'modules/Janus7/templates/extensions/labor-interface/labor-app.hbs'
+      template: moduleTemplatePath('extensions/labor-interface/labor-app.hbs')
     }
   };
 

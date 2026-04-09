@@ -1,4 +1,4 @@
-import { moduleTemplatePath } from '../../core/common.js';
+import { MODULE_ID, moduleTemplatePath } from '../../core/common.js';
 import { JanusBaseApp } from '../core/base-app.js';
 import { listJanusUiAppStatus } from '../app-manifest.js';
 import { getPanel, getQuickPanels } from '../layer/panel-registry.js';
