@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "version": "1.0.0-lowangen",
+    "description": "2B-Unterrichtskern fuer Lowangen."
+  },
+  "lessons": [
+    {
+      "id": "LOWANGEN_Y1_FORM_01",
+      "name": "Grundlagen der Formmagie",
+      "subject": "formmagie",
+      "yearRange": [1, 1],
+      "summary": "Eintritt in die kontrollierte Veraenderung von Form und Material unter Grenzlandbedingungen.",
+      "tags": ["formmagie", "grundlagen", "praxis"],
+      "teacherNpcId": "lowangen_formmeister",
+      "durationSlots": 1
+    },
+    {
+      "id": "LOWANGEN_Y1_BORDER_01",
+      "name": "Grenzpraktikum und Materialkunde",
+      "subject": "grenzpraxis",
+      "yearRange": [1, 2],
+      "summary": "Lehrgang zu improvisierter Beschaffung, Werkhofroutine und politisch heikler Materialpruefung.",
+      "tags": ["grenzland", "materialkunde", "pragmatik"],
+      "teacherNpcId": "lowangen_formmeister",
+      "durationSlots": 1
+    }
+  ]
+}

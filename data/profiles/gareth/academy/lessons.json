@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "version": "1.0.0-gareth",
+    "description": "2B-Unterrichtskern fuer Gareth."
+  },
+  "lessons": [
+    {
+      "id": "GARETH_Y1_BANN_01",
+      "name": "Bann- und Schutzmagie I",
+      "subject": "bannmagie",
+      "yearRange": [1, 1],
+      "summary": "Grundlagen des kontrollierten Schutzes, formeller Disziplin und korrekter Bannpraxis im Reichsdienst.",
+      "tags": ["bannmagie", "schutz", "disziplin"],
+      "teacherNpcId": "gareth_mentor_bann",
+      "durationSlots": 1
+    },
+    {
+      "id": "GARETH_Y1_REPUTATION_01",
+      "name": "Audienz, Etikette und Auftreten",
+      "subject": "etikette",
+      "yearRange": [1, 2],
+      "summary": "Praktischer Unterricht zu Auftritt, Gehorsam, Rufpflege und dem Verhalten in Gegenwart von Patronen und Amtstraegern.",
+      "tags": ["etikette", "reputation", "karriere"],
+      "teacherNpcId": "gareth_mentor_bann",
+      "durationSlots": 1
+    }
+  ]
+}

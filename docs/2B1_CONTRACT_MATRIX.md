@@ -123,13 +123,13 @@ Begruendung:
 
 ### Lowangen
 
-- aktueller validierter Status: `foundation`
+- aktueller validierter Status: `core-profile`
 - Zielstatus fuer die erste Gegenprobe: `core-profile`
 - spaeter moeglich: `full-profile`
 
 ### Gareth
 
-- aktueller validierter Status: `foundation`
+- aktueller validierter Status: `core-profile`
 - Zielstatus fuer die erste Gegenprobe: `core-profile`
 - spaeter moeglich: `full-profile`
 

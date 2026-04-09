@@ -6,7 +6,7 @@
   },
   "contract": {
     "targetLevel": "core-profile",
-    "validatedLevel": "foundation",
+    "validatedLevel": "core-profile",
     "preferredDataRoot": "academy",
     "referenceRole": "political-counterprobe",
     "seedMode": "derived",

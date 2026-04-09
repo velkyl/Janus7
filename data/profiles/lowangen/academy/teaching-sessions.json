@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "version": "1.0.0-lowangen",
+    "plans": ["LOWANGEN_CORE_Y1"],
+    "count": 4
+  },
+  "sessions": [
+    {
+      "id": "SES_LOWANGEN_CORE_Y1_MONDAY_TS_0800_1000",
+      "planId": "LOWANGEN_CORE_Y1",
+      "day": "MONDAY",
+      "slotId": "TS_0800_1000",
+      "start": "08:00",
+      "end": "10:00",
+      "subject": "Grundlagen der Formmagie",
+      "subjectKey": "formmagie",
+      "teacher": "Magister Dario Svelt",
+      "room": "Transformationsraeume",
+      "type": "lesson",
+      "templateIds": ["LOWANGEN_Y1_FORM_01"],
+      "npcIdCandidates": ["lowangen_formmeister"],
+      "locationIdCandidates": ["lowangen_verformungen"]
+    },
+    {
+      "id": "SES_LOWANGEN_CORE_Y1_MONDAY_TS_1000_1200",
+      "planId": "LOWANGEN_CORE_Y1",
+      "day": "MONDAY",
+      "slotId": "TS_1000_1200",
+      "start": "10:00",
+      "end": "12:00",
+      "subject": "Werkhofpraxis",
+      "subjectKey": "werkhofpraxis",
+      "teacher": "Magister Dario Svelt",
+      "room": "Werkhof",
+      "type": "lesson",
+      "templateIds": ["LOWANGEN_Y1_FORM_01"],
+      "npcIdCandidates": ["lowangen_formmeister"],
+      "locationIdCandidates": ["lowangen_verformungen"]
+    },
+    {
+      "id": "SES_LOWANGEN_CORE_Y1_WEDNESDAY_TS_0800_1000",
+      "planId": "LOWANGEN_CORE_Y1",
+      "day": "WEDNESDAY",
+      "slotId": "TS_0800_1000",
+      "start": "08:00",
+      "end": "10:00",
+      "subject": "Grenzpraktikum und Materialkunde",
+      "subjectKey": "grenzpraxis",
+      "teacher": "Magister Dario Svelt",
+      "room": "Svelltmarkt",
+      "type": "lesson",
+      "templateIds": ["LOWANGEN_Y1_BORDER_01"],
+      "npcIdCandidates": ["lowangen_formmeister"],
+      "locationIdCandidates": ["lowangen_svelltmarkt"]
+    },
+    {
+      "id": "SES_LOWANGEN_CORE_Y1_WEDNESDAY_TS_1400_1600",
+      "planId": "LOWANGEN_CORE_Y1",
+      "day": "WEDNESDAY",
+      "slotId": "TS_1400_1600",
+      "start": "14:00",
+      "end": "16:00",
+      "subject": "Archivarbeit",
+      "subjectKey": "grenzarchiv",
+      "teacher": "Magister Dario Svelt",
+      "room": "Grenzarchiv",
+      "type": "lesson",
+      "templateIds": ["LOWANGEN_Y1_BORDER_01"],
+      "npcIdCandidates": ["lowangen_formmeister"],
+      "locationIdCandidates": ["lowangen_verformungen"]
+    }
+  ]
+}

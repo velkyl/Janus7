@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "version": "1.0.0-gareth",
+    "plans": ["GARETH_CORE_Y1"],
+    "count": 4
+  },
+  "sessions": [
+    {
+      "id": "SES_GARETH_CORE_Y1_MONDAY_TS_0800_1000",
+      "planId": "GARETH_CORE_Y1",
+      "day": "MONDAY",
+      "slotId": "TS_0800_1000",
+      "start": "08:00",
+      "end": "10:00",
+      "subject": "Bann- und Schutzmagie I",
+      "subjectKey": "bannmagie",
+      "teacher": "Magistra Leudara von Eslamshagen",
+      "room": "Abwehrsaal",
+      "type": "lesson",
+      "templateIds": ["GARETH_Y1_BANN_01"],
+      "npcIdCandidates": ["gareth_mentor_bann"],
+      "locationIdCandidates": ["gareth_magische_ruestung"]
+    },
+    {
+      "id": "SES_GARETH_CORE_Y1_MONDAY_TS_1000_1200",
+      "planId": "GARETH_CORE_Y1",
+      "day": "MONDAY",
+      "slotId": "TS_1000_1200",
+      "start": "10:00",
+      "end": "12:00",
+      "subject": "Exerzierte Bannpraxis",
+      "subjectKey": "bannpraxis",
+      "teacher": "Magistra Leudara von Eslamshagen",
+      "room": "Exerzierhof",
+      "type": "lesson",
+      "templateIds": ["GARETH_Y1_BANN_01"],
+      "npcIdCandidates": ["gareth_mentor_bann"],
+      "locationIdCandidates": ["gareth_schwert_und_stab"]
+    },
+    {
+      "id": "SES_GARETH_CORE_Y1_THURSDAY_TS_0800_1000",
+      "planId": "GARETH_CORE_Y1",
+      "day": "THURSDAY",
+      "slotId": "TS_0800_1000",
+      "start": "08:00",
+      "end": "10:00",
+      "subject": "Audienz, Etikette und Auftreten",
+      "subjectKey": "etikette",
+      "teacher": "Magistra Leudara von Eslamshagen",
+      "room": "Instruktionsraeume",
+      "type": "lesson",
+      "templateIds": ["GARETH_Y1_REPUTATION_01"],
+      "npcIdCandidates": ["gareth_mentor_bann"],
+      "locationIdCandidates": ["gareth_schwert_und_stab"]
+    },
+    {
+      "id": "SES_GARETH_CORE_Y1_THURSDAY_TS_1400_1600",
+      "planId": "GARETH_CORE_Y1",
+      "day": "THURSDAY",
+      "slotId": "TS_1400_1600",
+      "start": "14:00",
+      "end": "16:00",
+      "subject": "Duell- und Verhaltensfallstudien",
+      "subjectKey": "duellpraxis",
+      "teacher": "Magistra Leudara von Eslamshagen",
+      "room": "Duellsaal",
+      "type": "lesson",
+      "templateIds": ["GARETH_Y1_REPUTATION_01"],
+      "npcIdCandidates": ["gareth_mentor_bann"],
+      "locationIdCandidates": ["gareth_schwert_und_stab"]
+    }
+  ]
+}

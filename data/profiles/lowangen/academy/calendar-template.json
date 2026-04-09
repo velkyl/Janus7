@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "version": "1.0.0-lowangen",
+    "plans": 1,
+    "timeSlots": 4
+  },
+  "timeSlots": [
+    {
+      "id": "TS_0800_1000",
+      "start": "08:00",
+      "end": "10:00",
+      "label": "08:00-10:00"
+    },
+    {
+      "id": "TS_1000_1200",
+      "start": "10:00",
+      "end": "12:00",
+      "label": "10:00-12:00"
+    },
+    {
+      "id": "TS_1200_1400",
+      "start": "12:00",
+      "end": "14:00",
+      "label": "12:00-14:00"
+    },
+    {
+      "id": "TS_1400_1600",
+      "start": "14:00",
+      "end": "16:00",
+      "label": "14:00-16:00"
+    }
+  ],
+  "plans": [
+    {
+      "id": "LOWANGEN_CORE_Y1",
+      "name": "Grundzyklus Lowangen",
+      "track": "grundzyklus",
+      "semesters": [1, 2],
+      "days": {
+        "MONDAY": [
+          {
+            "start": "08:00",
+            "end": "10:00",
+            "subject": "Grundlagen der Formmagie",
+            "teacher": "Magister Dario Svelt",
+            "room": "Transformationsraeume",
+            "type": "lesson",
+            "slotId": "TS_0800_1000",
+            "details": {}
+          },
+          {
+            "start": "10:00",
+            "end": "12:00",
+            "subject": "Werkhofpraxis",
+            "teacher": "Magister Dario Svelt",
+            "room": "Werkhof",
+            "type": "lesson",
+            "slotId": "TS_1000_1200",
+            "details": {}
+          }
+        ],
+        "WEDNESDAY": [
+          {
+            "start": "08:00",
+            "end": "10:00",
+            "subject": "Grenzpraktikum und Materialkunde",
+            "teacher": "Magister Dario Svelt",
+            "room": "Svelltmarkt",
+            "type": "lesson",
+            "slotId": "TS_0800_1000",
+            "details": {}
+          },
+          {
+            "start": "14:00",
+            "end": "16:00",
+            "subject": "Archivarbeit",
+            "teacher": "Magister Dario Svelt",
+            "room": "Grenzarchiv",
+            "type": "lesson",
+            "slotId": "TS_1400_1600",
+            "details": {}
+          }
+        ]
+      }
+    }
+  ]
+}
