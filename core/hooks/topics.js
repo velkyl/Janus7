@@ -54,6 +54,7 @@ export const HOOKS = Object.freeze({
   DSA5_INDEX_UPDATED:     'janus7.dsa5.index.updated',
   MECHANIC_GATE_OPENED:   'janus7.progression.mechanic_gate.opened',
   EVENT_POOL_ACTIVATED:   'janus7.progression.event_pool.activated',
+  LIBRARY_INDEX_PROGRESS: 'janusLibraryProgress',
 });
 
 /**
