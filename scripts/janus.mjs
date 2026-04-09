@@ -305,16 +305,6 @@ function runReadySanityCheck(engine) {
   return issues;
 }
 
-/**
- * Legacy no-op kept for compatibility with older audits.
- * Active harness loading lives in scripts/integration/test-runner-integration.js.
- * @param {Janus7Engine} _engine
- */
-async function maybeLoadTestHarness(_engine) {
-  // Legacy no-op: active test harness loading lives in scripts/integration/test-runner-integration.js.
-  return null;
-}
-
 // ─── HOOK: init  (Phase 1 bootstrap) ─────────────────────────────────
 if (_shouldRegister) {
   Hooks.once('init', () => {
@@ -649,7 +639,7 @@ try {
         game.dsa5.apps.playerMenu.registerSubApp({
           name: "JANUS Student Terminal",
           icon: "fas fa-university",
-          render: (app) => {
+          render: (_app) => {
              const uiReg = game.janus7?.ui;
              if (uiReg?.openShell) return uiReg.openShell();
              if (uiReg?.openControlPanel) return uiReg.openControlPanel();
@@ -721,24 +711,6 @@ try {
           return null;
         }
         return top.find((c) => names.includes(c?.name)) ?? null;
-      };
-
-      const getToolsContainer = (controlSet) => {
-        if (!controlSet) return null;
-        if (isObject(controlSet.tools)) return controlSet.tools;
-        if (Array.isArray(controlSet.tools)) return controlSet.tools;
-        controlSet.tools = isRecord ? {} : [];
-        return controlSet.tools;
-      };
-
-      const addTool = (tools, tool) => {
-        if (!tools) return;
-        if (Array.isArray(tools)) {
-          const exists = tools.some((t) => t?.name === tool.name);
-          if (!exists) tools.push(tool);
-          return;
-        }
-        if (!tools[tool.name]) tools[tool.name] = tool;
       };
 
 const openControlPanel = async () => {

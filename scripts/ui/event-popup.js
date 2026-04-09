@@ -96,7 +96,7 @@ export class JanusEventPopup extends HandlebarsApplicationMixin(ApplicationV2) {
     this.close();
   }
 
-  static async _onEnrichEvent(event, target) {
+  static async _onEnrichEvent(event, _target) {
     event?.preventDefault?.();
     if (!game.janus7.ki.gemini.isEnabled) return;
 

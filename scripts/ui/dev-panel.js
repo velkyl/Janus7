@@ -33,7 +33,7 @@ export class JanusDevPanel extends HandlebarsApplicationMixin(ApplicationV2) {
     }
   };
 
-  async _prepareContext(options) {
+  async _prepareContext(_options) {
     const actor = game.user.character || game.actors.find(a => a.type === 'character');
     const actorId = actor?.uuid;
 

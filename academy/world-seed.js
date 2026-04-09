@@ -160,7 +160,7 @@ export function renderAcademyRecord(kind, record) {
 
 async function _findExistingJournalById(janusId) {
   try {
-    const uuid = game?.settings?.get?.(MODULE_ID, 'entityUUIDs')?.[janusId] ?? null;
+    const uuid = JanusConfig.get('entityUUIDs')?.[janusId] ?? null;
     if (uuid) {
       const doc = await (globalThis.fromUuid?.(uuid) ?? globalThis.fromUuidSync?.(uuid));
       if (doc?.documentName === 'JournalEntry') return doc;
@@ -173,7 +173,7 @@ async function _findExistingJournalById(janusId) {
 
 async function _findExistingItemById(janusId) {
   try {
-    const uuid = game?.settings?.get?.(MODULE_ID, 'entityUUIDs')?.[janusId] ?? null;
+    const uuid = JanusConfig.get('entityUUIDs')?.[janusId] ?? null;
     if (uuid) {
       const doc = await (globalThis.fromUuid?.(uuid) ?? globalThis.fromUuidSync?.(uuid));
       if (doc?.documentName === 'Item') return doc;

@@ -335,7 +335,7 @@ export class RollScoringConnector {
    * Patzer-Condition: Bei Zauberpatzer → magic_shock.
    * Erfordert aktive DSA5-Bridge.
    */
-  async _applyFumbleCondition(event, actorRef) {
+  async _applyFumbleCondition(event, _actorRef) {
     if (!this.bridge) return;
 
     // Nur bei Zaubern/Liturgien — nicht bei normalen Talentproben

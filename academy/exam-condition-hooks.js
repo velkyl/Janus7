@@ -129,7 +129,7 @@ export class JanusExamConditionHooks {
    * @param {import('./group-exam.js').GroupExamOutcome} data
    * @private
    */
-  async _onGroupExamCompleted({ examId, gradingPerActor, gcResult }) {
+  async _onGroupExamCompleted({ examId, gradingPerActor, gcResult: _gcResult }) {
     if (!gradingPerActor?.length) return;
 
     this.logger?.info?.(`${MODULE_ABBREV} | ExamConditionHooks | GC abgeschlossen`, {

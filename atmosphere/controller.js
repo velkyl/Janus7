@@ -14,6 +14,7 @@
  */
 
 import { MODULE_ID, MODULE_ABBREV } from '../core/common.js';
+import { JanusConfig } from '../core/config.js';
 import { emitHook, HOOKS } from '../core/hooks/emitter.js';
 import { JanusProfileRegistry } from '../core/profiles/index.js';
 import { MusicDiscoveryEngine } from './MusicDiscoveryEngine.js';
@@ -796,7 +797,7 @@ export class JanusAtmosphereController {
 
   _isEnabled() {
     try {
-      return !!game?.settings?.get?.(MODULE_ID, 'state')?.features?.atmosphere?.enabled
+      return JanusConfig.isSubsystemEnabled('atmosphere')
         || !!this.state?.get?.('features.atmosphere.enabled');
     } catch {
       return false;

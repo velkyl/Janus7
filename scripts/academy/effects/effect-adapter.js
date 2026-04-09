@@ -3,7 +3,7 @@ import { emitHook, HOOKS } from '../../../core/hooks/emitter.js';
 export class JanusEffectAdapter{
   constructor({state,validator,logger,registry}){this.state=state;this.validator=validator;this.logger=logger;this.registry=registry;}
   async applyEffects(effectIds,context={}){
-    const{actorId,source='unknown',reason=''}=context;
+    const{actorId,source:_source='unknown',reason:_reason=''}=context;
     if(!effectIds||effectIds.length===0)return{success:true,changes:[]};
     try{
       const result=await this.state.transaction(async()=>{

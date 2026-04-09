@@ -35,7 +35,7 @@ export class JanusMasterDashboard extends HandlebarsApplicationMixin(Application
     }
   };
 
-  async _prepareContext(options) {
+  async _prepareContext(_options) {
     const dataApi = game.janus7.academy.data;
     const state = game.janus7.core.state;
     

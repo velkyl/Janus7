@@ -3,7 +3,7 @@
  * Shared cache + low-level helpers for AcademyDataApi.
  */
 
-import { MODULE_ID, moduleAssetPath } from '../core/common.js';
+import { moduleAssetPath } from '../core/common.js';
 import { getJanusCore } from '../core/index.js';
 
 let _academyCache = null;
@@ -260,7 +260,7 @@ async function _resolveAsset(base) {
 export async function loadJson(filename) {
   const response = await _resolveAsset(filename);
   if (!response) {
-    console.error(`[JANUS7:academy:data] CRITICAL: JSON "${filename}" could not be loaded from any expected path.`);
+    getJanusCore()?.logger?.error?.(`[JANUS7:academy:data] CRITICAL: JSON "${filename}" could not be loaded from any expected path.`);
     throw new Error(`JANUS7: Kann JSON "${filename}" nicht laden. (404 an allen Fallback-Paths)`);
   }
   return response.json();

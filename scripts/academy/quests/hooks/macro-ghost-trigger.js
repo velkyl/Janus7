@@ -1,7 +1,5 @@
 // Makro für Spieler (z.B. "Räucherwerk anzünden", "Licht dimmen")
 const qId = "Q_GHOST_PUZZLE";
-const currentResonance = Janus7.QuestEngine.getResource(qId, "resonance").current;
-
 // Logik: Prüfe, ob die richtige Kondition getriggert wurde (z.B. Blaues Licht)
 if (args[0] === "correct_trigger") {
     Janus7.QuestEngine.updateResource(qId, "resonance", 1);

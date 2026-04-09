@@ -169,7 +169,7 @@ export class JanusFateTracker {
    * Verarbeitet janus7SchipUsed-Ereignis.
    * @private
    */
-  async _onSchipUsed({ actorId, actorName, source, used, previous, next, remaining, worldTime }) {
+  async _onSchipUsed({ actorId, actorName, source, used, previous, next: _next, remaining, worldTime }) {
     const isPersonal  = source === 0; // SCHIP_SOURCE.PERSONAL
     const duringExam  = this._isExamActive();
 

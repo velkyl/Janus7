@@ -1,5 +1,7 @@
 // ui/layer/context-builders.js
 
+import { JanusConfig } from '../../core/config.js';
+
 export function buildLocationsView({ state, academyData }) {
   const activeLocId = state?.activeLocation ?? null;
   const locs = academyData?.listLocationIds?.(100) ?? [];
@@ -48,10 +50,8 @@ export function buildSyncView({ state }) {
 }
 
 export function buildSystemView({ engine }) {
-  // FIX P1-05: game.settings.get() kann eine Exception werfen wenn das Setting
-  // noch nicht registriert ist (z.B. bei frühem Render vor registerSettings()).
   const getSetting = (key, def = false) => {
-    try { return !!game.settings.get('janus7', key); } catch { return def; }
+    try { return !!JanusConfig.get(key); } catch { return def; }
   };
   return {
     enableSimulation: getSetting('enableSimulation'),

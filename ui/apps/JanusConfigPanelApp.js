@@ -37,6 +37,16 @@ function ensureSelectedModel(options = [], selectedId = '') {
   return Array.from(deduped.values());
 }
 
+function isGeminiTextModel(model) {
+  const id = String(model?.id ?? '').trim();
+  return id.startsWith('models/gemini-') && !/(image|tts|embedding|aqa|live|audio)/i.test(id);
+}
+
+function isGeminiImageModel(model) {
+  const id = String(model?.id ?? '').trim();
+  return id.startsWith('models/imagen-') || /models\/gemini-.*(image|vision)/i.test(id);
+}
+
 /**
  * JanusConfigPanelApp
  *
@@ -256,11 +266,11 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
     const currentVisualModel = JanusConfig.get('geminiVisualModel');
     const legacyModels = JanusConfig.get('availableGeminiModels') || [];
     const textModels = ensureSelectedModel(
-      JanusConfig.get('availableGeminiTextModels') || legacyModels.filter((model) => String(model?.id ?? '').startsWith('models/gemini-')),
+      JanusConfig.get('availableGeminiTextModels') || legacyModels.filter((model) => isGeminiTextModel(model)),
       currentTextModel
     );
     const imageModels = ensureSelectedModel(
-      JanusConfig.get('availableGeminiImageModels') || legacyModels.filter((model) => String(model?.id ?? '').startsWith('models/imagen-')),
+      JanusConfig.get('availableGeminiImageModels') || legacyModels.filter((model) => isGeminiImageModel(model)),
       currentVisualModel
     );
 

@@ -10,7 +10,7 @@
  * Foundry-Core-Hooks stay in scripts/janus.mjs (A3 contract).
  */
 
-import { MODULE_ID, HOOKS, registerRuntimeHook } from '../core/public-api.mjs';
+import { HOOKS, registerRuntimeHook } from '../core/public-api.mjs';
 import { JanusUI } from '../../ui/index.js';
 import { JanusCommands } from '../../ui/commands/index.js';
 

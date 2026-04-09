@@ -65,6 +65,56 @@ export class JanusGeminiService {
     return Array.from(deduped.values()).sort((a, b) => a.name.localeCompare(b.name));
   }
 
+  _hasGenerationMethod(model, method) {
+    return new Set(model?.supportedGenerationMethods ?? []).has(method);
+  }
+
+  _isTextGenerationModel(model) {
+    const id = String(model?.name ?? '').trim();
+    const shortId = id.replace(/^models\//, '');
+    if (!id.startsWith('models/gemini-')) return false;
+    if (!this._hasGenerationMethod(model, 'generateContent')) return false;
+    if (/(image|tts|embedding|aqa|live|audio)/i.test(shortId)) return false;
+    return true;
+  }
+
+  _isImageGenerationModel(model) {
+    const id = String(model?.name ?? '').trim();
+    const shortId = id.replace(/^models\//, '');
+    const methods = new Set(model?.supportedGenerationMethods ?? []);
+    if (!id) return false;
+    if (id.startsWith('models/imagen-')) return true;
+    if (methods.has('predict')) return /(imagen|image|vision)/i.test(shortId) || id.startsWith('models/gemini-');
+    if (id.startsWith('models/gemini-') && (methods.has('generateImages') || methods.has('generateImage'))) return true;
+    return false;
+  }
+
+  async _fetchJson(url, { timeout = 15000, method = 'GET', headers, body } = {}) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, {
+        method,
+        headers,
+        body,
+        signal: controller.signal
+      });
+      if (!response.ok) {
+        const errJson = await response.json().catch(() => ({}));
+        const msg = errJson.error?.message || response.statusText;
+        throw new Error(`Gemini API Error: ${msg}`);
+      }
+      return await response.json();
+    } catch (err) {
+      if (err?.name === 'AbortError') {
+        throw new Error(`Gemini API request timed out (${timeout}ms).`);
+      }
+      throw err;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   _getDefaultTextModels() {
     return this._dedupeModels([
       { id: this._normalizeModelId(JanusConfig.get('geminiTextModel') || 'models/gemini-1.5-flash') },
@@ -77,21 +127,13 @@ export class JanusGeminiService {
     return this._dedupeModels([
       { id: this._normalizeModelId(JanusConfig.get('geminiVisualModel') || 'models/imagen-3.0-generate-001') },
       ...(JanusConfig.get('availableGeminiImageModels') || []),
-      ...(JanusConfig.get('availableGeminiModels') || []).filter((model) => String(model?.id ?? '').startsWith('models/imagen-'))
+      ...(JanusConfig.get('availableGeminiModels') || []).filter((model) => this._isImageGenerationModel({ name: model?.id, supportedGenerationMethods: model?.supportedGenerationMethods }))
     ]);
   }
 
   _selectTextModels(rawModels = []) {
     const models = rawModels
-      .filter((model) => {
-        const id = String(model?.name ?? '').trim();
-        const shortId = id.replace(/^models\//, '');
-        const methods = new Set(model?.supportedGenerationMethods ?? []);
-        if (!id.startsWith('models/gemini-')) return false;
-        if (!methods.has('generateContent')) return false;
-        if (/(image|tts|embedding|aqa|live|audio)/i.test(shortId)) return false;
-        return true;
-      })
+      .filter((model) => this._isTextGenerationModel(model))
       .map((model) => ({
         id: model.name,
         name: this._displayModelName(model.name, model.displayName)
@@ -101,12 +143,7 @@ export class JanusGeminiService {
 
   _selectImageModels(rawModels = []) {
     const models = rawModels
-      .filter((model) => {
-        const id = String(model?.name ?? '').trim();
-        const shortId = id.replace(/^models\//, '');
-        const methods = new Set(model?.supportedGenerationMethods ?? []);
-        return id.startsWith('models/imagen-') || (methods.has('predict') && /^imagen-/i.test(shortId));
-      })
+      .filter((model) => this._isImageGenerationModel(model))
       .map((model) => ({
         id: model.name,
         name: this._displayModelName(model.name, model.displayName)
@@ -139,9 +176,6 @@ export class JanusGeminiService {
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
     
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), opts.timeout ?? 15000);
-    
     // Construct parts
     const parts = [];
     if (systemPrompt) {
@@ -167,23 +201,15 @@ export class JanusGeminiService {
 
     try {
       this.logger?.debug?.('GeminiService: Sending request...', { promptSnippet: prompt.substring(0, 100) });
-      
-      const response = await fetch(url, {
+
+      const result = await this._fetchJson(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(body),
-        signal: controller.signal
+        timeout: opts.timeout ?? 15000
       });
-
-      if (!response.ok) {
-        const errJson = await response.json().catch(() => ({}));
-        const msg = errJson.error?.message || response.statusText;
-        throw new Error(`Gemini API Error: ${msg}`);
-      }
-
-      const result = await response.json();
       const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
 
       if (!text) {
@@ -193,13 +219,8 @@ export class JanusGeminiService {
 
       return text;
     } catch (err) {
-      if (err.name === 'AbortError') {
-        throw new Error('Gemini API request timed out (15s).');
-      }
       this.logger?.error?.('GeminiService: Generation failed', err);
       throw err;
-    } finally {
-      clearTimeout(timeout);
     }
   }
 
@@ -210,9 +231,9 @@ export class JanusGeminiService {
   async testConnection() {
     try {
       const res = await this.generateContent('Hello, are you online? Respond with only "OK".', {
-        includeState: false, 
-        model: this._normalizeModelId(JanusConfig.get('geminiTextModel') || 'models/gemini-1.5-flash'),
-        timeout: 5000 
+        includeState: false,
+        model: 'models/gemini-1.5-flash',
+        timeout: 5000
       });
       return res.trim().toUpperCase().includes('OK');
     } catch (err) {
@@ -277,18 +298,12 @@ export class JanusGeminiService {
 
     try {
       this.logger?.info?.('GeminiService: Generating image...', { prompt });
-      const response = await fetch(url, {
+      const result = await this._fetchJson(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        timeout: opts.timeout ?? 30000
       });
-
-      if (!response.ok) {
-        const err = await response.json().catch(() => ({}));
-        throw new Error(`Gemini Image Error: ${err.error?.message || response.statusText}`);
-      }
-
-      const result = await response.json();
       const base64Data = result.predictions?.[0]?.bytesBase64Encoded || result.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
 
       if (!base64Data) {
@@ -355,9 +370,7 @@ export class JanusGeminiService {
       do {
         const tokenQuery = pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : '';
         const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${this.apiKey}${tokenQuery}`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-        const data = await response.json();
+        const data = await this._fetchJson(url, { timeout: 15000 });
         rawModels.push(...(data.models || []));
         pageToken = data.nextPageToken || '';
       } while (pageToken);

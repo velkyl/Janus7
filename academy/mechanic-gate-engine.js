@@ -155,7 +155,7 @@ export class JanusMechanicGateEngine {
    * @param {object} gate
    */
   async _applyGate(gate) {
-    const { id, unlocks, playerNotification } = gate;
+    const { id, unlocks, playerNotification: _playerNotification } = gate;
 
     // 1. State-Transaktion: Gate-Flag + Pool-Aktivierung
     await this.state?.transaction?.(async (tx) => {
