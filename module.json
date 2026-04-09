@@ -19,9 +19,12 @@
   "styles": [
     "styles/janus7-layers.css",
     "styles/janus7-v13-overlay.css",
-    "styles/janus7-ui-bundle.css"
+    "styles/janus7-ui-bundle.css",
+    "styles/phase8-extensions.css"
   ],
   "templates": [
+    "templates/extensions/thesis-manager/thesis-app.hbs",
+    "templates/extensions/labor-interface/labor-app.hbs",
     "templates/apps/academy-overview.hbs",
     "templates/apps/atmosphere-dj.hbs",
     "templates/apps/command-center.hbs",

@@ -275,6 +275,6 @@ export async function loadDataJson(relPath) {
 }
 
 export function sanitizePoolFile(poolName) {
-  const safe = String(poolName ?? 'uncategorized').replace(/[^a-zA-Z0-9_\-]+/g, '_');
+  const safe = String(poolName ?? 'uncategorized').replace(/[^a-zA-Z0-9_-]+/g, '_');
   return safe.length ? safe : 'uncategorized';
 }

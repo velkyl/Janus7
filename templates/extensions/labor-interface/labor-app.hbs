@@ -1,0 +1,83 @@
+<div class="janus-labor-app">
+    <header class="j7-labor-header">
+        <h1><i class="fas fa-vials"></i> Alchimie-Labor</h1>
+        <div class="j7-stash-info">
+            <span class="muted">Materiallager:</span>
+            <strong>{{stashActorName}}</strong>
+        </div>
+    </header>
+
+    <div class="j7-labor-content">
+        <aside class="j7-recipe-sidebar">
+            <div class="j7-search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Rezepte filtern..." class="j7-recipe-filter">
+            </div>
+            <ul class="j7-recipe-list">
+                {{#each recipes}}
+                    <li class="j7-recipe-item {{#if (eq ../activeRecipeId this.id)}}active{{/if}}" data-action="selectRecipe" data-recipe-id="{{this.id}}">
+                        <img src="{{this.img}}" class="j7-recipe-icon">
+                        <div class="j7-recipe-info">
+                            <span class="j7-recipe-name">{{this.name}}</span>
+                            <span class="j7-recipe-type">Alchimie</span>
+                        </div>
+                        {{#if this.canBrew}}
+                            <i class="fas fa-check-circle success"></i>
+                        {{/if}}
+                    </li>
+                {{/each}}
+            </ul>
+        </aside>
+
+        <main class="j7-recipe-details">
+            {{#if activeRecipe}}
+                <div class="j7-recipe-full">
+                    <div class="j7-recipe-header">
+                        <img src="{{activeRecipe.img}}" class="j7-recipe-hero-icon">
+                        <div class="j7-recipe-title-block">
+                            <h2>{{activeRecipe.name}}</h2>
+                            <p class="muted">{{activeRecipe.description}}</p>
+                        </div>
+                    </div>
+
+                    <div class="j7-ingredients-grid">
+                        <h3><i class="fas fa-mortar-pestle"></i> Benötigte Zutaten</h3>
+                        <ul class="j7-ingredients-list">
+                            {{#each activeRecipe.ingredients}}
+                                <li class="j7-ingredient-row {{#if this.hasEnough}}available{{else}}missing{{/if}}">
+                                    <div class="j7-ingredient-status">
+                                        {{#if this.hasEnough}}
+                                            <i class="fas fa-check success"></i>
+                                        {{else}}
+                                            <i class="fas fa-times error"></i>
+                                        {{/if}}
+                                    </div>
+                                    <div class="j7-ingredient-name">{{this.name}}</div>
+                                    <div class="j7-ingredient-quantity">
+                                        <span class="j7-current">{{this.currentQty}}</span>
+                                        <span class="j7-needed">/ {{this.neededQty}}</span>
+                                    </div>
+                                </li>
+                            {{/each}}
+                        </ul>
+                    </div>
+
+                    <footer class="j7-brew-actions">
+                        <div class="j7-brew-settings">
+                            <label>Brau-Modifikator:</label>
+                            <input type="number" value="0" class="j7-mod-input">
+                        </div>
+                        <button class="j7-btn primary large {{#if activeRecipe.canBrew}}{{else}}disabled{{/if}}" data-action="brewRecipe">
+                            <i class="fas fa-fire-alt"></i> Rezept brauen
+                        </button>
+                    </footer>
+                </div>
+            {{else}}
+                <div class="j7-empty-state">
+                    <i class="fas fa-scroll-old"></i>
+                    <p>Wähle ein Rezept aus der Liste aus.</p>
+                </div>
+            {{/if}}
+        </main>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="janus-doom-app">
+    <header class="j7-doom-header">
+        <h1><i class="fas fa-skull-crossbones"></i> Risiko-Tracker</h1>
+        <p class="muted">Überwache den Einfluss dunkler Mächte auf die Akademie.</p>
+    </header>
+
+    <div class="j7-doom-content">
+        <div class="j7-doom-meter-container">
+            <div class="j7-doom-meter">
+                <div class="j7-doom-meter-inner">
+                    <div class="j7-doom-level" style="height: {{doomPercentage}}%"></div>
+                    <div class="j7-doom-value">{{doomValue}}</div>
+                </div>
+            </div>
+            <div class="j7-doom-labels">
+                <div class="j7-label high">Inquisition alarmiert (100)</div>
+                <div class="j7-label mid">Direktorat besorgt (50)</div>
+                <div class="j7-label low">Sicher (0)</div>
+            </div>
+        </div>
+
+        <div class="j7-doom-controls">
+            <h3><i class="fas fa-edit"></i> Manuelle Anpassung</h3>
+            <div class="j7-btn-group">
+                <button class="j7-btn error" data-action="adjustDoom" data-value="1">+1 Doom</button>
+                <button class="j7-btn error" data-action="adjustDoom" data-value="5">+5 Doom</button>
+                <button class="j7-btn secondary" data-action="adjustDoom" data-value="-1">-1 Doom</button>
+                <button class="j7-btn secondary" data-action="adjustDoom" data-value="-5">-5 Doom</button>
+            </div>
+        </div>
+
+        <div class="j7-doom-events">
+            <h3><i class="fas fa-history"></i> Vorfälle</h3>
+            {{#if events.length}}
+                <ul class="j7-event-list">
+                    {{#each events}}
+                        <li class="j7-event-item">
+                            <span class="j7-event-time">{{this.time}}</span>
+                            <span class="j7-event-desc">{{this.msg}}</span>
+                        </li>
+                    {{/each}}
+                </ul>
+            {{else}}
+                <p class="muted">Keine kritischen Vorfälle verzeichnet.</p>
+            {{/if}}
+        </div>
+    </div>
+</div>

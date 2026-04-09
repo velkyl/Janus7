@@ -1,0 +1,81 @@
+<div class="janus-thesis-app">
+    <header class="j7-thesis-header">
+        <h1><i class="fas fa-microscope"></i> Forschungs-Zentrum</h1>
+        <p class="muted">Verwalte die akademischen Arbeiten deiner Scholaren.</p>
+    </header>
+
+    <div class="j7-thesis-manager-content">
+        {{#if theses.length}}
+            <div class="j7-theses-list">
+                {{#each theses}}
+                    <div class="j7-thesis-card" data-thesis-id="{{this.id}}">
+                        <div class="j7-thesis-main">
+                            <div class="j7-thesis-info">
+                                <h3>{{this.title}}</h3>
+                                <div class="j7-thesis-meta">
+                                    <span class="j7-tag"><i class="fas fa-user-graduate"></i> {{this.scholarName}}</span>
+                                    <span class="j7-tag {{this.status}}">{{this.statusLabel}}</span>
+                                </div>
+                                <div class="j7-topic-tags">
+                                    {{#each this.topicTags}}
+                                        <span class="j7-topic-chip">{{this}}</span>
+                                    {{/each}}
+                                </div>
+                            </div>
+                            
+                            <div class="j7-thesis-progress">
+                                <div class="j7-progress-ring-container">
+                                    <div class="j7-progress-label">{{this.progress}}%</div>
+                                    <div class="j7-qs-label">{{this.currentQS}} / {{this.requiredQS}} QS</div>
+                                </div>
+                                <div class="j7-progress-bar-flat">
+                                    <div class="j7-progress-fill" style="width: {{this.progress}}%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="j7-thesis-sources">
+                            <h4><i class="fas fa-archive"></i> Quellen</h4>
+                            <div class="j7-thesis-drop-zone">
+                                {{#if this.sources.length}}
+                                    <ul class="j7-source-list">
+                                        {{#each this.sources}}
+                                            <li class="j7-source-item" data-uuid="{{this}}">
+                                                <i class="fas fa-file-alt"></i> 
+                                                <span class="j7-source-uuid">{{this}}</span>
+                                                <button class="j7-icon-btn error" data-action="removeSource" data-uuid="{{this}}" title="Quelle entfernen">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </li>
+                                        {{/each}}
+                                    </ul>
+                                {{else}}
+                                    <div class="j7-drop-hint">
+                                        <i class="fas fa-plus-circle"></i>
+                                        <p>Ziehe Journal-Einträge hierher, um sie als Quellen hinzuzufügen.</p>
+                                    </div>
+                                {{/if}}
+                            </div>
+                        </div>
+
+                        <footer class="j7-thesis-actions">
+                            <button class="j7-btn primary" data-action="evaluateSource" {{#if this.isReady}}disabled{{/if}}>
+                                <i class="fas fa-dice"></i> Quelle auswerten (Magiekunde)
+                            </button>
+                            {{#if this.isReady}}
+                                <button class="j7-btn success pulse">
+                                    <i class="fas fa-gavel"></i> Verteidigung einleiten
+                                </button>
+                            {{/if}}
+                        </footer>
+                    </div>
+                {{/each}}
+            </div>
+        {{else}}
+            <div class="j7-empty-state">
+                <i class="fas fa-scroll"></i>
+                <p>Aktuell laufen keine Forschungsarbeiten.</p>
+            </div>
+        {{/if}}
+    </div>
+</div>

@@ -1,5 +1,5 @@
 function parseEffectExpr(expr){
-  const m=expr.match(/^(.+?):([\+\-=])(.+)$/);
+  const m=expr.match(/^(.+?):([+\-=])(.+)$/);
   if(!m)return null;
   return{key:m[1].trim(),op:m[2],value:parseFloat(m[3])};
 }

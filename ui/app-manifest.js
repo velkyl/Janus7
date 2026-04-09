@@ -20,7 +20,10 @@ export const JANUS_UI_APP_STATUS = Object.freeze({
   controlPanel: { className: 'JanusShellApp', maturity: 'compat/shell-alias', mode: 'view/admin', shell: true, editable: false, admin: true, aliasOf: 'shell', preferred: false },
   settingsTestHarness: { className: 'JanusSettingsTestHarnessApp', maturity: 'intern/test/debug', mode: 'debug', shell: false, editable: false, admin: true },
   lessons: { className: 'JanusLessonLibraryApp', maturity: 'compat/alias', mode: 'view/workflow', shell: false, editable: true, admin: false, aliasOf: 'lessonLibrary', preferred: false },
-  aiRoundtrip: { className: 'JanusKiRoundtripApp', maturity: 'compat/alias', mode: 'admin/edit', shell: false, editable: true, admin: true, aliasOf: 'kiRoundtrip', preferred: false }
+  aiRoundtrip: { className: 'JanusKiRoundtripApp', maturity: 'compat/alias', mode: 'admin/edit', shell: false, editable: true, admin: true, aliasOf: 'kiRoundtrip', preferred: false },
+  thesisManager: { className: 'JanusThesisApp', maturity: 'teilproduktiv', mode: 'edit/workflow', shell: false, editable: true, admin: false },
+  laborInterface: { className: 'JanusLaborApp', maturity: 'teilproduktiv', mode: 'edit/workflow', shell: false, editable: true, admin: false },
+  doomMonitor: { className: 'JanusDoomApp', maturity: 'teilproduktiv', mode: 'view/admin', shell: false, editable: false, admin: true }
 });
 
 export function listJanusUiAppStatus() {

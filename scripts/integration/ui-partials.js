@@ -6,6 +6,7 @@
  * Registers shell views and panels as Handlebars partials to support
  * declarative rendering in JanusShellApp.
  */
+/* global Handlebars */
 
 const PARTIALS = [
   // Views

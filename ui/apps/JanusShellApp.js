@@ -260,7 +260,10 @@ const APP_NAV_META = Object.freeze({
   commandCenter: { title: 'Command Center', icon: 'fas fa-terminal', description: 'Legacy Power Tools für Debug und Spezialpfade.' },
   testResults: { title: 'Test Results', icon: 'fas fa-clipboard-check', description: 'Testergebnisse und Ausführungsberichte.' },
   guidedManualTests: { title: 'Guided Manual Tests', icon: 'fas fa-vial', description: 'Geführte manuelle Prüfschritte.' },
-  settingsTestHarness: { title: 'Settings Harness', icon: 'fas fa-flask', description: 'Spezialwerkzeug für Settings-Tests.' }
+  settingsTestHarness: { title: 'Settings Harness', icon: 'fas fa-flask', description: 'Spezialwerkzeug für Settings-Tests.' },
+  thesisManager: { title: 'Thesis Manager', icon: 'fas fa-microscope', description: 'Recherche-Fortschritt und Quellen-Management.' },
+  laborInterface: { title: 'Labor Interface', icon: 'fas fa-vials', description: 'Alchimie-Lager und Brau-Workflow.' },
+  doomMonitor: { title: 'Doom Monitor', icon: 'fas fa-skull', description: 'Überwachung des Risikos dunkler Magie.' }
 });
 
 function classifyAppNavGroup(meta = {}) {

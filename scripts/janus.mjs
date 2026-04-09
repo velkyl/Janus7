@@ -198,6 +198,40 @@ async function loadPhaseIntegrations(engine) {
     logger?.info?.('[JANUS7] Phase 7 disabled (enablePhase7=false).');
   }
 
+  // Phase 8 Meta-Layer Extensions
+  try {
+    if (JanusConfig.isFeatureEnabled('thesisManager')) {
+      const mod = await import('../extensions/thesis-manager/thesis-manager.js');
+      if (mod.bootThesisManager) mod.bootThesisManager();
+      logger?.debug?.('[JANUS7] Thesis-Manager loaded.');
+    }
+  } catch (err) {
+    _recordIssue(engine, 'phase8', 'thesisManager-load', err);
+    logger?.warn?.('[JANUS7] Thesis-Manager failed to load.', { message: err?.message });
+  }
+
+  try {
+    if (JanusConfig.isFeatureEnabled('laborInterface')) {
+      const mod = await import('../extensions/labor-interface/labor-interface.js');
+      if (mod.bootLaborInterface) mod.bootLaborInterface();
+      logger?.debug?.('[JANUS7] Labor-Interface loaded.');
+    }
+  } catch (err) {
+    _recordIssue(engine, 'phase8', 'laborInterface-load', err);
+    logger?.warn?.('[JANUS7] Labor-Interface failed to load.', { message: err?.message });
+  }
+
+  try {
+    if (JanusConfig.isFeatureEnabled('doomEngine')) {
+      const mod = await import('../extensions/doom-engine/doom-engine.js');
+      if (mod.bootDoomEngine) mod.bootDoomEngine();
+      logger?.debug?.('[JANUS7] Doom-Engine loaded.');
+    }
+  } catch (err) {
+    _recordIssue(engine, 'phase8', 'doomEngine-load', err);
+    logger?.warn?.('[JANUS7] Doom-Engine failed to load.', { message: err?.message });
+  }
+
   // Optional: Test Runner (always best-effort)
   try {
     await import('../scripts/integration/test-runner-integration.js');

@@ -124,7 +124,10 @@ export class JanusConfig {
         atmosphere: false,
         autoMood: false,
         beamer: false,
-        academySimulation: false
+        academySimulation: false,
+        thesisManager: true,
+        laborInterface: true,
+        doomEngine: true
       }
     });
 

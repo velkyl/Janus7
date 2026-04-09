@@ -1,0 +1,220 @@
+/* Phase 8 Extensions - Premium Styles */
+
+.janus7-thesis-manager, .janus7-labor-interface {
+    background: var(--j7-bg-deep, #0a0c10);
+    color: var(--j7-text-main, #e0e0e0);
+    border: 1px solid var(--j7-accent-muted, #3a3f4b);
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.8);
+    overflow: hidden;
+}
+
+.j7-thesis-header {
+    background: linear-gradient(135deg, #1a1f26 0%, #0d1117 100%);
+    padding: 1.5rem;
+    border-bottom: 2px solid #232d3b;
+}
+
+.j7-thesis-header h1 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    margin: 0;
+    font-size: 1.8rem;
+    color: #4facfe;
+    text-shadow: 0 0 10px rgba(79, 172, 254, 0.3);
+}
+
+.j7-thesis-card {
+    background: rgba(255, 255, 255, 0.03);
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.j7-thesis-card:hover {
+    border-color: rgba(79, 172, 254, 0.4);
+    transform: translateY(-2px);
+}
+
+.j7-thesis-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.j7-thesis-info { flex: 1; }
+
+.j7-thesis-info h3 {
+    margin: 0 0 0.5rem 0;
+    color: #fff;
+}
+
+.j7-thesis-meta {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.j7-tag {
+    font-size: 0.75rem;
+    background: rgba(0,0,0,0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.j7-tag.in_progress { border-color: #f6ad55; color: #f6ad55; }
+.j7-tag.ready_for_defense { border-color: #68d391; color: #68d391; }
+
+.j7-topic-chip {
+    font-size: 0.7rem;
+    background: #2d3748;
+    color: #a0aec0;
+    padding: 1px 6px;
+    border-radius: 12px;
+    margin-right: 4px;
+}
+
+.j7-thesis-progress {
+    text-align: right;
+    min-width: 120px;
+}
+
+.j7-progress-ring-container {
+    margin-bottom: 0.5rem;
+}
+
+.j7-progress-label {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #4facfe;
+}
+
+.j7-qs-label {
+    font-size: 0.8rem;
+    color: #718096;
+}
+
+.j7-progress-bar-flat {
+    height: 4px;
+    background: #1a202c;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.j7-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    box-shadow: 0 0 8px rgba(0, 242, 254, 0.5);
+    transition: width 0.5s ease;
+}
+
+.j7-thesis-sources {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+}
+
+.j7-thesis-sources h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #718096;
+}
+
+.j7-thesis-drop-zone {
+    min-height: 40px;
+    border: 2px dashed rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 0.5rem;
+    transition: border-color 0.2s;
+}
+
+.j7-thesis-drop-zone:hover {
+    border-color: rgba(79, 172, 254, 0.5);
+}
+
+.j7-source-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.j7-source-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 4px 8px;
+    background: rgba(255,255,255,0.05);
+    margin-bottom: 4px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.j7-source-uuid {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #cbd5e0;
+}
+
+.j7-drop-hint {
+    text-align: center;
+    color: #4a5568;
+    padding: 1rem;
+}
+
+.j7-drop-hint i { font-size: 1.2rem; }
+.j7-drop-hint p { margin: 0.5rem 0 0 0; font-size: 0.8rem; }
+
+.j7-thesis-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Common Components */
+.j7-btn {
+    flex: 1;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: filter 0.2s, transform 0.1s;
+}
+
+.j7-btn:active { transform: scale(0.98); }
+.j7-btn.primary { background: #3182ce; color: #fff; }
+.j7-btn.success { background: #38a169; color: #fff; }
+.j7-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.j7-icon-btn {
+    border: none;
+    background: transparent;
+    padding: 4px;
+    cursor: pointer;
+    border-radius: 4px;
+    color: #718096;
+    transition: color 0.2s;
+}
+
+.j7-icon-btn.error:hover { color: #f56565; }
+
+/* Pulse Animation */
+.pulse { animation: j7-pulse 2s infinite; }
+@keyframes j7-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(56, 161, 105, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(56, 161, 105, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(56, 161, 105, 0); }
+}
