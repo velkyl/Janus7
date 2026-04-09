@@ -1,11 +1,13 @@
 import { JanusSlotResolver } from '../../academy/slot-resolver.js';
 import { JanusContentSuggestionService } from '../on-the-fly/JanusContentSuggestionService.js';
 import { STATE_PATHS } from '../../core/common.js';
+import JanusAssetResolver from '../../core/services/asset-resolver.js';
 
 export class JanusSessionPrepService {
   constructor({ engine, logger } = {}) {
     this.engine = engine ?? globalThis.game?.janus7 ?? null;
     this.logger = logger ?? this.engine?.core?.logger ?? console;
+    this._moduleJsonCache = new Map();
   }
 
   async buildReport({ horizonSlots = 3 } = {}) {
@@ -37,7 +39,8 @@ export class JanusSessionPrepService {
     const sceneChecklist = this._buildSceneChecklist({ engine, academyData, slotRef, currentSlot, currentCast, upcoming, activeLocation, suggestedMoods });
     const prepAgenda = this._buildPrepAgenda({ academyData, slotRef, currentSlot, currentCast, upcoming, sceneChecklist, questsSummary });
     const suggestions = this._buildSuggestions({ slotRef, currentSlot, upcoming, questsSummary, activeLocation, diagnosticsSummary, prepAgenda });
-    const chroniclePreview = this._collectChroniclePreview({ engine, academyData, questsSummary, state });
+    const worldChronicleEntries = await this._collectWorldChronicleEntries({ academyData, activeLocation, slotRef });
+    const chroniclePreview = await this._collectChroniclePreview({ engine, academyData, questsSummary, state, worldChronicleEntries });
     const socialStoryHookQueue = this._collectSocialStoryHookQueue({ state, academyData });
     const chronicleSeed = this._buildChronicleSeed({ slotRef, prepAgenda, chroniclePreview, questsSummary, activeLocation });
     const gradeEntries = this._collectGradeEntries({ engine, academyData });
@@ -408,7 +411,7 @@ export class JanusSessionPrepService {
   }
 
 
-  _collectChroniclePreview({ engine, academyData, questsSummary, state = null }) {
+  async _collectChroniclePreview({ engine, academyData, questsSummary, state = null, worldChronicleEntries = [] }) {
     const rootState = state ?? engine?.core?.state ?? null;
     const entries = [
       ...this._collectQuestChronicleEntries({ state: rootState, academyData, questsSummary }),
@@ -417,13 +420,111 @@ export class JanusSessionPrepService {
       ...this._collectSocialChronicleEntries({ state: rootState, academyData, questsSummary }),
       ...this._collectResourceChronicleEntries({ state: rootState, academyData }),
       ...this._collectActivityChronicleEntries({ state: rootState, academyData }),
+      ...worldChronicleEntries,
     ];
 
     return entries
       .filter((entry) => entry && entry.title)
       .sort((a, b) => Number(b?.priorityScore ?? 0) - Number(a?.priorityScore ?? 0) || this._chronicleAt(b.at) - this._chronicleAt(a.at))
       .slice(0, 12)
-      .map((entry) => ({ ...entry, atLabel: this._formatChronicleAt(entry.at) }));
+      .map((entry) => ({ ...entry, atLabel: entry?.atLabel ?? this._formatChronicleAt(entry.at) }));
+  }
+
+  async _loadModuleJsonData(path) {
+    const key = String(path ?? '').trim();
+    if (!key) return null;
+    if (this._moduleJsonCache.has(key)) return this._moduleJsonCache.get(key);
+
+    const promise = (async () => {
+      const response = await fetch(JanusAssetResolver.data(key), { cache: 'no-cache' });
+      if (!response.ok) throw new Error(`HTTP ${response.status} for ${key}`);
+      return response.json();
+    })();
+
+    this._moduleJsonCache.set(key, promise);
+    try {
+      return await promise;
+    } catch (err) {
+      this._moduleJsonCache.delete(key);
+      throw err;
+    }
+  }
+
+  _deriveRelevantWorldLocations({ academyData, activeLocation, cityRows = [] }) {
+    const tokens = new Set();
+    const addCityMatches = (value) => {
+      const normalized = String(value ?? '').trim().toLowerCase();
+      if (!normalized) return;
+      for (const row of cityRows) {
+        const cityName = String(row?.name ?? '').trim();
+        const cityKey = cityName.toLowerCase();
+        if (!cityKey) continue;
+        if (normalized.includes(cityKey) || cityKey.includes(normalized)) tokens.add(cityName);
+      }
+    };
+
+    addCityMatches(activeLocation?.name ?? '');
+
+    const locations = typeof academyData?.listLocations === 'function' ? academyData.listLocations() : [];
+    for (const location of Array.isArray(locations) ? locations.slice(0, 40) : []) {
+      addCityMatches(location?.name ?? '');
+    }
+
+    return [...tokens];
+  }
+
+  async _collectWorldChronicleEntries({ academyData, activeLocation, slotRef }) {
+    const targetYear = Number(slotRef?.year ?? 0);
+    if (!Number.isFinite(targetYear) || targetYear <= 0) return [];
+
+    let dailyChronicle;
+    let cityLore;
+    try {
+      [dailyChronicle, cityLore] = await Promise.all([
+        this._loadModuleJsonData('events/bote_daily_chronicle.json'),
+        this._loadModuleJsonData('world_lore/cities.json'),
+      ]);
+    } catch (err) {
+      this.logger?.warn?.('[JANUS7] SessionPrep: world chronicle load failed', { message: err?.message });
+      return [];
+    }
+
+    const relevantLocations = this._deriveRelevantWorldLocations({
+      academyData,
+      activeLocation,
+      cityRows: Array.isArray(cityLore?.cities) ? cityLore.cities : [],
+    });
+
+    const exactMatches = [];
+    const fallbackMatches = [];
+    for (const day of (dailyChronicle?.days ?? [])) {
+      if (Number(String(day?.date ?? '').slice(0, 4)) !== targetYear) continue;
+      for (const entry of (day?.entries ?? [])) {
+        if (!entry?.label) continue;
+        const mapped = {
+          category: 'world',
+          icon: 'fa-newspaper',
+          at: `${day?.date ?? ''}T00:00:00Z`,
+          atLabel: `${day?.date ?? 'unbekannt'} BF`,
+          title: `Bote: ${entry.label}`,
+          detail: [
+            entry?.location ?? null,
+            entry?.sourceType === 'curated_anchor' ? 'Kanonanker' : null,
+            entry?.sourceType === 'meisterinfo_inferred_date' ? 'Meisterinfo' : null,
+            entry?.description ?? null,
+          ].filter(Boolean).join(' · '),
+          priorityScore: entry?.sourceType === 'curated_anchor' ? 4 : (entry?.sourceType === 'meisterinfo_inferred_date' ? 3 : 1),
+        };
+
+        if (relevantLocations.length && relevantLocations.includes(String(entry?.location ?? '').trim())) {
+          exactMatches.push(mapped);
+        } else if (entry?.sourceType !== 'generated_daily_hook') {
+          fallbackMatches.push(mapped);
+        }
+      }
+    }
+
+    return [...exactMatches.slice(0, 4), ...fallbackMatches.slice(0, Math.max(0, 4 - exactMatches.length))];
   }
 
   _collectQuestChronicleEntries({ state, academyData, questsSummary }) {
