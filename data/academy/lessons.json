@@ -1,7 +1,9 @@
 {
   "meta": {
     "version": "1.1.0",
-    "generatedAt": "2026-02-01T07:06:10",
+    "generatedAt": "2026-04-09T18:02:37Z",
+    "count": 19,
+    "schema": "janus7:academy:lessons:v1",
     "sources": [
       "Unterrichtsplan Zauberakademie zu Punin.md",
       "DSA_Zauberakademie_komplett.docx",
@@ -14,6 +16,45 @@
     ]
   },
   "lessons": [
+    {
+      "id": "PUNIN_Y1_METAMAGIC_01",
+      "name": "Einführung in die Metamagie",
+      "subject": "metamagie",
+      "yearRange": [
+        1,
+        1
+      ],
+      "summary": "Die Theorie der Matrix-Manipulation und die Grundlagen der Kraftmanipulation.",
+      "tags": [
+        "metamagie",
+        "theorie",
+        "matrix"
+      ],
+      "teacherNpcId": "punin_archmage_xyz",
+      "durationSlots": 1,
+      "mechanics": {
+        "skills": [
+          {
+            "systemSkillId": "TALENT_MAGIEKUNDE",
+            "weight": 1
+          }
+        ],
+        "checks": [
+          {
+            "type": "knowledge-check",
+            "difficulty": "hard",
+            "targetSkillId": "TALENT_MAGIEKUNDE"
+          }
+        ]
+      },
+      "scoringImpact": {
+        "diligence": 2,
+        "housePointsRange": [
+          -1,
+          3
+        ]
+      }
+    },
     {
       "id": "LES_Y1_T1_ARITH_01",
       "name": "Rechnen – Grundlagen",

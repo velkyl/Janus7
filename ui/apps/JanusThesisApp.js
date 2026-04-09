@@ -2,11 +2,13 @@ import { JanusBaseApp } from '../core/base-app.js';
 import { MODULE_ID, moduleTemplatePath } from '../../core/common.js';
 import { getJanusCore } from '../../core/index.js';
 
+const { HandlebarsApplicationMixin } = foundry.applications.api;
+
 /**
  * JanusThesisApp
  * ApplicationV2 for managing scholar research progress.
  */
-export class JanusThesisApp extends JanusBaseApp {
+export class JanusThesisApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   static DEFAULT_OPTIONS = {
     id: 'janus7-thesis-manager',
     classes: ['janus7-app', 'janus7-thesis-manager', 'premium-surface'],
@@ -107,7 +109,7 @@ export class JanusThesisApp extends JanusBaseApp {
         }
     });
 
-    this.render();
+    this.refresh();
   }
 
   static async onEvaluateSource(event, target) {
@@ -151,7 +153,7 @@ export class JanusThesisApp extends JanusBaseApp {
             logger.info(`JANUS | Thesis ${thesisId} Progress: +${rollResult.qs} QS`);
         });
         
-        this.render();
+        this.refresh();
     } else {
         ui.notifications.warn("Scholar beherrscht keine Magiekunde.");
     }
@@ -171,7 +173,7 @@ export class JanusThesisApp extends JanusBaseApp {
               state.set('academy.theses', theses);
           }
       });
-      this.render();
+      this.refresh();
   }
 
   static showSingleton() {
@@ -181,7 +183,7 @@ export class JanusThesisApp extends JanusBaseApp {
       return this._instance;
     }
     this._instance = new this();
-    this._instance.render(true);
+    this._instance.render({ force: true });
     return this._instance;
   }
 }

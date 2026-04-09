@@ -723,7 +723,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       const panel = getPanel(panelId);
       descriptor = panel?.actions?.[actionIndex] ?? null;
     } else if (Number.isInteger(cardIndex) && cardIndex >= 0 && Number.isInteger(actionIndex) && actionIndex >= 0) {
-      const model = this._prefetchedShell?.viewModel ?? { cards: [], cardSections: [] };
+      const model = this.__renderCache?.viewModel ?? { cards: [], cardSections: [] };
       if (sectionId) {
         const section = Array.isArray(model?.cardSections) ? model.cardSections.find((entry) => entry?.id === sectionId) : null;
         descriptor = section?.cards?.[cardIndex]?.actions?.[actionIndex] ?? null;
@@ -880,9 +880,9 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       return;
     }
 
-    const focusDate = String(this?._prefetchedShell?.viewModel?.focusDate ?? '').trim();
-    const focusEntries = Array.isArray(this?._prefetchedShell?.viewModel?.focusDay?.entries)
-      ? this._prefetchedShell.viewModel.focusDay.entries
+    const focusDate = String(this?.__renderCache?.viewModel?.focusDate ?? '').trim();
+    const focusEntries = Array.isArray(this?.__renderCache?.viewModel?.focusDay?.entries)
+      ? this.__renderCache.viewModel.focusDay.entries
       : [];
     if (!focusDate || !focusEntries.length) {
       ui.notifications?.warn?.('Am Fokusdatum liegen keine exportierbaren Chronik-Eintraege vor.');
@@ -991,8 +991,8 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       return;
     }
 
-    const monthlyAnchors = Array.isArray(this?._prefetchedShell?.viewModel?.monthlyAnchors)
-      ? this._prefetchedShell.viewModel.monthlyAnchors
+    const monthlyAnchors = Array.isArray(this?.__renderCache?.viewModel?.monthlyAnchors)
+      ? this.__renderCache.viewModel.monthlyAnchors
       : [];
     const exportDays = monthlyAnchors
       .map((day) => ({
@@ -1006,7 +1006,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
 
     const current = this?._getViewState?.('chronicleBrowser') ?? {};
-    const focusDate = String(this?._prefetchedShell?.viewModel?.focusDate ?? '').trim();
+    const focusDate = String(this?.__renderCache?.viewModel?.focusDate ?? '').trim();
     const monthLabel = /^\d{4}-\d{2}-\d{2}$/.test(focusDate) ? focusDate.slice(0, 7) : 'aktueller Monat';
     const totalEntries = exportDays.reduce((sum, day) => sum + day.entries.length, 0);
     const journalId = await promptChronicleCalendarJournal({
@@ -1420,7 +1420,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     // Optionally: if a sidebar item is selected or similar.
   }
 
-  static async _runAiTask(method, input) {
+  async _runAiTask(method, input) {
     const gemini = game.janus7?.ki?.gemini;
     const outputBox = document.getElementById('j7-ai-output');
     if (!outputBox || !gemini?.isEnabled) return;

@@ -1,4 +1,4 @@
-﻿import { moduleTemplatePath } from '../../core/common.js';
+import { moduleTemplatePath } from '../../core/common.js';
 /**
  * @file ui/apps/JanusCommandCenterApp.js
  * @module janus7/ui
@@ -21,10 +21,11 @@
 import { JanusCommands } from '../commands/index.js';
 import { JanusPermissions } from '../permissions.js';
 import { JanusConfig } from '../../core/config.js';
+import { JanusBaseApp } from '../core/base-app.js';
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
-export class JanusCommandCenterApp extends HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
+export class JanusCommandCenterApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   
   static DEFAULT_OPTIONS = {
     id: 'janus-command-center',

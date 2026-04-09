@@ -6,9 +6,9 @@
     "sources": [
       "NPC_DATENBANK_AKADEMIE_V5_KANONISCH.md"
     ],
-    "count": 19,
+    "count": 21,
     "schema": "janus7:academy:npcs:v1",
-    "generatedAt": "2026-01-21T19:28:53Z"
+    "generatedAt": "2026-04-09T18:02:37Z"
   },
   "npcs": [
     {
@@ -814,6 +814,75 @@
         "version": "5.0 KANONISCH",
         "date": "2025-12-14",
         "group": "👑 LEHRPERSONAL (KANONISCH)"
+      }
+    },
+    {
+      "id": "punin_archmage_xyz",
+      "name": "Spektabilität Salpikon Küper",
+      "role": "teacher",
+      "tags": [
+        "punin",
+        "spektabilitaet",
+        "metamagie",
+        "teacher"
+      ],
+      "house": null,
+      "year": null,
+      "relations": [],
+      "foundry": {
+        "actorKey": "npc_salpikon_kueper_spektabilitaet",
+        "actorUuid": null
+      },
+      "profile": {
+        "subtitle": "SPEKTABILITÄT ⭐",
+        "roleText": "Spektabilität der Akademie der Hohen Magie zu Punin",
+        "titles": "Magister, Spektabilität",
+        "species": "Mensch",
+        "origin": "Punin",
+        "sections": {
+          "Aussehen": "Ein älterer Mann mit einem wilden, weißen Bart und tiefen Lachfalten um die Augen. Er trägt prachtvolle, aber oft etwas zerknitterte Roben der Akademie.",
+          "Persönlichkeit": "Brillant, aber exzentrisch. Er neigt dazu, mitten im Satz in theoretische Monologe über Metamagie zu verfallen. Er ist bekannt für seine 'Heureka'-Momente, die ihn oft nachts in die Bibliothek treiben.",
+          "Metamagie-Vortrag": "Seine Vorlesungen sind legendär schwierig, aber wer ihm folgen kann, lernt die wahre Flexibilität der Matrix kennen."
+        }
+      },
+      "source": {
+        "file": "Janus7 Console Log",
+        "version": "Live Export",
+        "date": "2026-04-09",
+        "group": "👑 LEHRPERSONAL (EXTRA)"
+      }
+    },
+    {
+      "id": "punin_student_01",
+      "name": "Alrik von Punin",
+      "role": "student",
+      "tags": [
+        "punin",
+        "scholar",
+        "student"
+      ],
+      "house": "Air",
+      "year": 1,
+      "relations": [],
+      "foundry": {
+        "actorKey": "npc_alrik_von_punin",
+        "actorUuid": null
+      },
+      "profile": {
+        "subtitle": "LOKALER SCHOLAR",
+        "roleText": "Scholar im 1. Jahrgang",
+        "species": "Mensch",
+        "origin": "Punin",
+        "sections": {
+          "Aussehen": "Ein junger Mann mit wachem Blick und stets ordentlich sitzender Kleidung. Er trägt das Emblem des Hauses Luft mit Stolz.",
+          "Persönlichkeit": "Ehrgeizig und ein bisschen ein Besserwisser. Da er aus Punin stammt, fühlt er sich auf dem Campus wie zu Hause und hilft (ungefragt) gerne anderen bei der Orientierung."
+        }
+      },
+      "source": {
+        "file": "Janus7 Console Log",
+        "version": "Live Export",
+        "date": "2026-04-09",
+        "group": "🎓 SCHÜLER (EXTRA)"
       }
     }
   ]

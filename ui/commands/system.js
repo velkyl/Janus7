@@ -61,6 +61,25 @@ export const systemCommands = {
     });
   },
 
+  async runHealthCheck(_dataset = {}) {
+    if (!_checkPermission('runHealthCheck')) return { success: false, cancelled: true };
+    return await _wrap('runHealthCheck', async () => {
+      const caps = _engine()?.capabilities;
+      if (!caps?.state?.runHealthCheck) throw new Error('Health Check Capability nicht verfügbar.');
+      const result = await caps.state.runHealthCheck();
+      
+      // Notify result
+      if (result.status === 'ok') {
+        ui.notifications.info('JANUS7 Health Check: System ist gesund ✓');
+      } else {
+        ui.notifications.warn(`JANUS7 Health Check: Problem erkannt (${result.status})`);
+      }
+      
+      console.log('[JANUS7][HealthCheck]', result);
+      return { success: result.status === 'ok', result };
+    });
+  },
+
 
 async openSessionPrepWizard(_dataset = {}) {
   if (!_checkPermission('openSessionPrepWizard')) return { success: false, cancelled: true };

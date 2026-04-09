@@ -218,3 +218,37 @@
     70% { box-shadow: 0 0 0 10px rgba(56, 161, 105, 0); }
     100% { box-shadow: 0 0 0 0 rgba(56, 161, 105, 0); }
 }
+
+/* Janus7 Shell Glassmorphism & Premium UI */
+.janus7-shell {
+    background: rgba(10, 12, 16, 0.9) !important;
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6) !important;
+}
+
+.j7-shell__sidebar {
+    background: rgba(13, 17, 23, 0.5) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.janus7-card, .j7-dialog-card-reset {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(8px);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.janus7-card:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(79, 172, 254, 0.5) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.j7-glass-panel {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+}

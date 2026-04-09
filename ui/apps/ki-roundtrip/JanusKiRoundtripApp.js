@@ -152,13 +152,15 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
     await super._preRender?.(_force, _options);
     const engine = resolveEngine(this);
     const mode = this._exportMode;
+    const ki = (engine?.capabilities?.ki ?? engine?.ki);
     try {
-      const bundle = await (engine?.capabilities?.ki ?? engine?.ki)?.exportBundle?.({ mode }) ?? null;
+      const bundle = await ki?.exportBundle?.({ mode }) ?? null;
       this.__exportCache = bundle ? JSON.stringify(bundle, null, 2) : '';
+      this.__historyCache = ki?.getImportHistory?.() ?? [];
     } catch (err) {
-      this._getLogger().warn?.('[JANUS7][KI Roundtrip] _preRender: Failed to fetch export bundle', err);
-      // Keep previous cache on error so the UI doesn't blank out
+      this._getLogger().warn?.('[JANUS7][KI Roundtrip] _preRender: Failed to fetch export data', err);
       this.__exportCache ??= '';
+      this.__historyCache ??= [];
     }
   }
 
@@ -168,23 +170,19 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    *
    * @param {Object} options
    */
-  async _prepareContext(options) {
-    const context = (await super._prepareContext(options)) || {};
-    const engine = resolveEngine(this);
-    // Read the bundle JSON from the pre-render cache (populated in _preRender)
+  _prepareContext(options) {
+    const context = super._prepareContext(options) || {};
+    // Read from pre-render cache (populated in async _preRender)
     const json = this.__exportCache ?? '';
-    let history = [];
-    try {
-      history = (engine?.capabilities?.ki ?? engine?.ki)?.getImportHistory?.() ?? [];
-    } catch (err) {
-      this._getLogger().warn?.('[JANUS7][KI Roundtrip] Failed to fetch import history', err);
-    }
+    const history = this.__historyCache ?? [];
+
     context.json = json;
     context.history = history;
     context.isGM = game.user?.isGM ?? false;
     context.activeMode = this._exportMode;
     context.jsonSize = json ? json.length.toLocaleString('de-DE') : null;
-    // Preview state (diffs + selection) lives on the instance; render uses it.
+
+    // Preview state (diffs + selection) lives on the instance
     const diffs = Array.isArray(this.__previewDiffs) ? this.__previewDiffs : [];
     context.diffs = diffs;
     context.diffCount = diffs.length;

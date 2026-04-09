@@ -6,9 +6,9 @@
     "sources": [
       "ORTSDATENBANK_AKADEMIE_PUNIN_V1.md"
     ],
-    "count": 24,
+    "count": 28,
     "schema": "janus7:academy:locations:v1",
-    "generatedAt": "2026-01-21T19:28:53Z"
+    "generatedAt": "2026-04-09T18:02:37Z"
   },
   "locations": [
     {
@@ -855,6 +855,112 @@
       "source": {
         "file": "ORTSDATENBANK_AKADEMIE_PUNIN_V1.md",
         "group": "🌳 AUSSENBEREICH"
+      }
+    },
+    {
+      "id": "punin_classroom_metamagic",
+      "name": "Hörsaal IV (Metamagie)",
+      "type": "classroom",
+      "tags": [
+        "punin",
+        "classroom",
+        "metamagie"
+      ],
+      "defaultMoodKey": "academy_classroom_theory",
+      "foundry": {
+        "sceneKey": "scene_punin_metamagic",
+        "sceneUuid": null
+      },
+      "profile": {
+        "size": "Groß (Hörsaal)",
+        "light": "Helles Tageslicht, magische Fokus-Leuchten",
+        "sections": {
+          "Beschreibung": "Hörsaal IV ist speziell für die theoretische Metamagie ausgestattet. Überall finden sich schwebende Kreidezeichnungen von arkanen Matrizen.",
+          "Atmosphäre": "Konzentriert, leises Summen magischer Energie."
+        }
+      },
+      "source": {
+        "file": "Janus7 Console Log",
+        "group": "🏛️ HAUPTGEBÄUDE"
+      }
+    },
+    {
+      "id": "punin_library_forbidden",
+      "name": "Verbotene Sektion (Punin)",
+      "type": "library",
+      "tags": [
+        "punin",
+        "library",
+        "forbidden"
+      ],
+      "defaultMoodKey": "academy_library_forbidden",
+      "foundry": {
+        "sceneKey": "scene_punin_forbidden",
+        "sceneUuid": null
+      },
+      "profile": {
+        "size": "Mittel (Gewölbe)",
+        "light": "Kerzenlicht, schwaches blaues Leuchten",
+        "sections": {
+          "Beschreibung": "Ein tief gelegener Teil der Bibliothek, der nur für autorisierte Magister zugänglich ist.",
+          "Atmosphäre": "Bedrückend, geheimnisvoll."
+        }
+      },
+      "source": {
+        "file": "Janus7 Console Log",
+        "group": "📖 BIBLIOTHEK & ARCHIVE"
+      }
+    },
+    {
+      "id": "punin_grounds_courtyard",
+      "name": "Akademiegarten & Kreuzgang",
+      "type": "outdoor",
+      "tags": [
+        "punin",
+        "outdoor"
+      ],
+      "defaultMoodKey": "academy_courtyard",
+      "foundry": {
+        "sceneKey": "scene_punin_courtyard",
+        "sceneUuid": null
+      },
+      "profile": {
+        "size": "Sehr groß",
+        "light": "Natürliches Licht",
+        "sections": {
+          "Beschreibung": "Die weitläufigen Außenanlagen der Akademie mit Blick auf den Yaquir.",
+          "Atmosphäre": "Belebt, akademisch."
+        }
+      },
+      "source": {
+        "file": "Janus7 Console Log",
+        "group": "🌳 AUSSENBEREICH"
+      }
+    },
+    {
+      "id": "LOC_KUECHE_VORRATSKELLER",
+      "name": "KÜCHE & VORRATSKELLER",
+      "type": "utility",
+      "tags": [
+        "utility",
+        "keller"
+      ],
+      "defaultMoodKey": "academy_kitchen",
+      "foundry": {
+        "sceneKey": "scene_kitchen",
+        "sceneUuid": null
+      },
+      "profile": {
+        "size": "Groß",
+        "light": "Feuerschimmer, Kerzen",
+        "sections": {
+          "Beschreibung": "Der Ort, an dem die Mahlzeiten für die gesamte Akademie zubereitet werden. Es duftet nach Brot und herzhaften Eintöpfen.",
+          "Atmosphäre": "Hektisch, warm, einladend."
+        }
+      },
+      "source": {
+        "file": "Janus7 Console Log",
+        "group": "🏛️ HAUPTGEBÄUDE"
       }
     }
   ]
