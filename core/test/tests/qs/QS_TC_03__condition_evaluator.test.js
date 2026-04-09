@@ -1,5 +1,5 @@
 export default {
-  id: "QS-TC-03",
+  id: "TC-QS-03",
   title: "Condition Evaluator Parsing & Execution",
   phases: [4],
   kind: "auto",

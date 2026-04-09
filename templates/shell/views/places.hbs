@@ -10,18 +10,18 @@
         </div>
       </header>
       <div class="j7-shell__metrics">
-        <div class="j7-shell__metric"><span>Name</span><strong>{{locationView.activeLocationName}}</strong></div>
-        <div class="j7-shell__metric"><span>ID</span><strong>{{locationView.activeLocationId}}</strong></div>
-        <div class="j7-shell__metric"><span>Mood</span><strong>{{locationView.defaultMoodKey}}</strong></div>
+        <div class="j7-shell__metric"><span>Name</span><strong>{{view.locationView.activeLocationName}}</strong></div>
+        <div class="j7-shell__metric"><span>ID</span><strong>{{view.locationView.activeLocationId}}</strong></div>
+        <div class="j7-shell__metric"><span>Mood</span><strong>{{view.locationView.defaultMoodKey}}</strong></div>
 
-        <div class="j7-dropzone j7-dropzone--medium j7-mt-sm" data-dropzone="location" data-location-id="{{locationView.activeLocationId}}">
+        <div class="j7-dropzone j7-dropzone--medium j7-mt-sm" data-dropzone="location" data-location-id="{{view.locationView.activeLocationId}}">
           <div class="j7-dropzone__label"><i class="fas fa-link"></i> Scene/Playlist/Journal hier ablegen</div>
         </div>
       </div>
 
       <div class="j7-shell__card-actions j7-mt-sm">
-        <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-command="activateLocationScene" data-dataset-location-id="{{locationView.activeLocationId}}"><i class="fas fa-map"></i> Scene aktivieren</button>
-        <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-command="applyLocationMood" data-dataset-location-id="{{locationView.activeLocationId}}"><i class="fas fa-music"></i> Mood setzen</button>
+        <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-command="activateLocationScene" data-dataset-location-id="{{view.locationView.activeLocationId}}"><i class="fas fa-map"></i> Scene aktivieren</button>
+        <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-command="applyLocationMood" data-dataset-location-id="{{view.locationView.activeLocationId}}"><i class="fas fa-music"></i> Mood setzen</button>
       </div>
     </article>
 
@@ -33,9 +33,9 @@
         </div>
       </header>
       <div class="j7-shell__listj7-shell__metrics">
-        {{#if locationView.locations.length}}
+        {{#if view.locationView.locations.length}}
           <ul class="janus7-list j7-mt-sm">
-            {{#each locationView.locations}}
+            {{#each view.locationView.locations}}
               <li><span class="tag">LOC</span> <strong>{{name}}</strong> <span class="muted j7-ml-sm">{{type}}</span></li>
             {{/each}}
           </ul>

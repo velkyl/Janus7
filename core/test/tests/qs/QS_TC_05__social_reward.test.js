@@ -1,5 +1,5 @@
 export default {
-  id: "QS-TC-05",
+  id: "TC-QS-05",
   title: "Social & Reward Integration (Mocked)",
   phases: [4],
   kind: "auto",

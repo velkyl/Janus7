@@ -11,9 +11,9 @@
       <div class="j7-shell__metrics">
         <div class="j7-dropzone j7-dropzone--large j7-mt-sm" data-dropzone="ki-context">
           <div class="j7-dropzone__label"><i class="fas fa-plus-circle"></i> Drop-Zone: KI-Kontext</div>
-          {{#if kiContext.items.length}}
+          {{#if view.kiContext.items.length}}
             <ul class="janus7-list j7-mt-sm">
-              {{#each kiContext.items}}
+              {{#each view.kiContext.items}}
                 <li><span class="tag">{{kind}}</span> <strong>{{label}}</strong></li>
               {{/each}}
             </ul>
@@ -37,10 +37,10 @@
         </div>
       </header>
       <div class="j7-shell__metrics">
-        <div class="j7-shell__metric"><span>Simulation</span><strong>{{#if system.enableSimulation}}✅{{else}}❌{{/if}}</strong></div>
-        <div class="j7-shell__metric"><span>Atmosphere</span><strong>{{#if system.enableAtmosphere}}✅{{else}}❌{{/if}}</strong></div>
-        <div class="j7-shell__metric"><span>UI</span><strong>{{#if system.enableUI}}✅{{else}}❌{{/if}}</strong></div>
-        <div class="j7-shell__metric"><span>Quest Engine</span><strong>{{#if system.enableQuestSystem}}✅{{else}}❌{{/if}}</strong></div>
+        <div class="j7-shell__metric"><span>Simulation</span><strong>{{#if view.system.enableSimulation}}✅{{else}}❌{{/if}}</strong></div>
+        <div class="j7-shell__metric"><span>Atmosphere</span><strong>{{#if view.system.enableAtmosphere}}✅{{else}}❌{{/if}}</strong></div>
+        <div class="j7-shell__metric"><span>UI</span><strong>{{#if view.system.enableUI}}✅{{else}}❌{{/if}}</strong></div>
+        <div class="j7-shell__metric"><span>Quest Engine</span><strong>{{#if view.system.enableQuestSystem}}✅{{else}}❌{{/if}}</strong></div>
       </div>
       <div class="j7-shell__card-actions j7-mt-sm">
         <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-app-key="stateInspector"><i class="fas fa-database"></i> State Inspector</button>
@@ -57,9 +57,9 @@
         </div>
       </header>
       <div class="j7-shell__metrics">
-        {{#if syncView.hasLinks}}
+        {{#if view.syncView.hasLinks}}
           <ul class="janus7-list">
-            {{#each syncView.links}}
+            {{#each view.syncView.links}}
               <li><span class="tag">{{type}}</span> <strong>{{key}}</strong></li>
             {{/each}}
           </ul>
@@ -78,11 +78,11 @@
         </div>
       </header>
       <div class="j7-shell__metrics">
-        <div class="j7-shell__metric"><span>Aktiviert</span><strong>{{#if system.enableGemini}}✅{{else}}❌{{/if}}</strong></div>
-        <div class="j7-shell__metric"><span>API Key</span><strong>{{#if system.geminiReady}}Bereit ✅{{else}}Fehlt ⚠️{{/if}}</strong></div>
+        <div class="j7-shell__metric"><span>Aktiviert</span><strong>{{#if view.system.enableGemini}}✅{{else}}❌{{/if}}</strong></div>
+        <div class="j7-shell__metric"><span>API Key</span><strong>{{#if view.system.geminiReady}}Bereit ✅{{else}}Fehlt ⚠️{{/if}}</strong></div>
       </div>
       <div class="j7-shell__card-actions j7-mt-sm">
-        <button type="button" class="j7-shell__btn" data-action="kiGeminiTest" {{#unless system.enableGemini}}disabled{{/unless}}>
+        <button type="button" class="j7-shell__btn" data-action="kiGeminiTest" {{#unless view.system.enableGemini}}disabled{{/unless}}>
           <i class="fas fa-vial"></i> Verbindung testen
         </button>
       </div>

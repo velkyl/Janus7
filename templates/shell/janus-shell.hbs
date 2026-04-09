@@ -68,12 +68,18 @@
     </aside>
 
     <main class="j7-shell__content" aria-label="View Content">
-      {{{viewHtml}}}
+      {{#if viewPartial}}
+        {{> (lookup . 'viewPartial')}}
+      {{else}}
+        <div class="j7-shell__view-error">No view partial defined.</div>
+      {{/if}}
     </main>
 
     {{#if panelOpen}}
       <section class="j7-shell__panelHost" aria-label="Aktives Panel">
-        {{{panelHtml}}}
+        {{#if panelPartial}}
+          {{> (lookup . 'panelPartial') panel }}
+        {{/if}}
       </section>
     {{/if}}
   </div>

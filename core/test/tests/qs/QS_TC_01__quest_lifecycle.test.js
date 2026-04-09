@@ -1,5 +1,5 @@
 export default {
-  id: "QS-TC-01",
+  id: "TC-QS-01",
   title: "Quest System Lifecycle (Mocked)",
   phases: [4],
   kind: "auto",

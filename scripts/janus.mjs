@@ -284,7 +284,11 @@ async function maybeLoadTestHarness(_engine) {
 // ─── HOOK: init  (Phase 1 bootstrap) ─────────────────────────────────
 if (_shouldRegister) {
   Hooks.once('init', () => {
-    try { registerLessonDocuments(); } catch (err) { console.warn('[JANUS7] registerLessonDocuments failed', err); }
+    try { 
+      registerLessonDocuments(); 
+      // Optimized Pass 1: Register UI Partials for declarative rendering
+      import('./integration/ui-partials.js').then(m => m.registerShellPartials());
+    } catch (err) { console.warn('[JANUS7] registerLessonDocuments or partials failed', err); }
     console.log(`
  _______________________________________________________________
  _____ ___  _   _ _   _ ____  ______   __ __     _______ _____

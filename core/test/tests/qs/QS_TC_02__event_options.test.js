@@ -1,5 +1,5 @@
 export default {
-  id: "QS-TC-02",
+  id: "TC-QS-02",
   title: "Quest Event Spawning & Options",
   phases: [4],
   kind: "auto",

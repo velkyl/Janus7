@@ -72,28 +72,34 @@
       "title": "Calendar Progression"
     },
     {
-      "id": "P4B-TC-01",
-      "phase": "4b",
+      "id": "TC-QS-01",
+      "phase": 4,
       "kind": "auto",
-      "title": "Quest Start"
+      "title": "Quest System Lifecycle (Auto)"
     },
     {
-      "id": "P4B-TC-02",
-      "phase": "4b",
+      "id": "TC-QS-02",
+      "phase": 4,
       "kind": "auto",
-      "title": "Quest Node Progression"
+      "title": "Quest Event Spawning & Options"
     },
     {
-      "id": "P4B-TC-03",
-      "phase": "4b",
+      "id": "TC-QS-03",
+      "phase": 4,
       "kind": "auto",
-      "title": "Quest Completion"
+      "title": "Quest Condition Evaluator"
     },
     {
-      "id": "P4B-TC-04",
-      "phase": "4b",
+      "id": "TC-QS-04",
+      "phase": 4,
       "kind": "auto",
-      "title": "Quest Engine Suite 04-10"
+      "title": "Quest State Persistence"
+    },
+    {
+      "id": "TC-QS-05",
+      "phase": 4,
+      "kind": "auto",
+      "title": "Social & Reward Integration (Quest)"
     },
     {
       "id": "P5-TC-04",

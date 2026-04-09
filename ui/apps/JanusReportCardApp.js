@@ -12,12 +12,13 @@ const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
  * - Nutzt JanusReportCardOutputService für Datenaufbereitung.
  */
 export class JanusReportCardApp extends HandlebarsApplicationMixin(ApplicationV2) {
-  constructor(options = {}) {
-    super(options);
-    this.service = new JanusReportCardOutputService();
-    this._data = { drafts: [], periodLabel: '' };
-  }
+  /** @type {JanusReportCardOutputService} */
+  #service = new JanusReportCardOutputService();
 
+  /** @type {object|null} Transient cache for sanitized render data */
+  __renderCache = null;
+
+  /** @inheritdoc */
   static DEFAULT_OPTIONS = {
     id: 'janus-report-cards',
     classes: ['janus7', 'j7-app', 'j7-report-cards-window'],
@@ -43,6 +44,7 @@ export class JanusReportCardApp extends HandlebarsApplicationMixin(ApplicationV2
     }
   };
 
+  /** @inheritdoc */
   static PARTS = {
     main: {
       template: `modules/${MODULE_ID}/templates/apps/report-cards.hbs`,
@@ -50,14 +52,35 @@ export class JanusReportCardApp extends HandlebarsApplicationMixin(ApplicationV2
     }
   };
 
-  /** @override */
-  async _prepareContext(options) {
-    const { drafts, pdfBundle } = await this.service.buildArtifacts();
-    this._data = {
-      drafts: drafts ?? [],
-      periodLabel: pdfBundle?.periodLabel ?? 'Aktuelles Trimester'
+  /**
+   * Moves async data fetching out of the render pipeline into _preRender.
+   * This avoids blocking the UI lock during complex result aggregation.
+   * @override
+   */
+  async _preRender(context, options) {
+    await super._preRender(context, options);
+    try {
+      const data = await this.#service.buildArtifacts();
+      this.__renderCache = {
+        drafts: data?.drafts ?? [],
+        periodLabel: data?.pdfBundle?.periodLabel ?? game.i18n.localize('JANUS7.ReportCards.CurrentTrimester')
+      };
+    } catch (err) {
+      console.error('[JANUS7][ReportCard] Failed to build artifacts in _preRender:', err);
+      this.__renderCache = { drafts: [], periodLabel: 'Error', error: err.message };
+    }
+  }
+
+  /**
+   * Strictly synchronous context preparation.
+   * Reads from the validated __renderCache to ensure instant painting.
+   * @override
+   */
+  _prepareContext(options) {
+    return {
+      ...(this.__renderCache ?? { drafts: [], periodLabel: '' }),
+      isGM: game.user.isGM
     };
-    return this._data;
   }
 
   // -------------------------
@@ -67,20 +90,20 @@ export class JanusReportCardApp extends HandlebarsApplicationMixin(ApplicationV2
   static async _onExportPdf(event, target) {
     const app = this;
     try {
-      ui.notifications.info('Bereite Zeugnis-Export vor...');
-      await app.service.exportPdf();
+      ui.notifications.info(game.i18n.localize('JANUS7.Notifications.PreparingExport'));
+      await app.#service.exportPdf();
     } catch (err) {
-      ui.notifications.error(`Export fehlgeschlagen: ${err.message}`);
+      ui.notifications.error(`Export Error: ${err.message}`);
     }
   }
 
   static async _onWriteJournals(event, target) {
     const app = this;
     try {
-      const result = await app.service.writeJournals();
-      ui.notifications.info(`Journal-Sync abgeschlossen: ${result.journalName}`);
+      const result = await app.#service.writeJournals();
+      ui.notifications.info(`${game.i18n.localize('JANUS7.Notifications.SyncDone')}: ${result.journalName}`);
     } catch (err) {
-      ui.notifications.error(`Sync fehlgeschlagen: ${err.message}`);
+      ui.notifications.error(`Sync Error: ${err.message}`);
     }
   }
 

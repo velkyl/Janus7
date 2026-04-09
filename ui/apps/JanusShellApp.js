@@ -374,13 +374,14 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this._kiContextItems = [];
     this._directorWorkflow = { lastAction: null, lastRunAt: null, lastResult: null, lastError: null, history: [] };
     this._directorDnDEnabled = false;
-    this._prefetchedShell = {
+
+    // Internal cache for synchronous prepareContext (Pass 1 Optimization)
+    this.__renderCache = {
       viewId: null,
       panelId: null,
       viewModel: { cards: [], cardSections: [], tiles: [] },
       panelModel: { metrics: [], items: [], actions: [] },
-      viewHtml: '',
-      panelHtml: ''
+      playerStats: []
     };
   }
 
@@ -401,12 +402,12 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
 
   _setView(viewId = 'director') {
     this._viewId = getView(viewId)?.id ?? 'director';
-    this.refresh?.();
+    this.render({ force: true });
   }
 
   _setActivePanel(panelId = null) {
     this._activePanelId = panelId ? (getPanel(panelId)?.id ?? null) : null;
-    this.refresh?.();
+    this.render({ force: true });
   }
 
   _getViewState(viewId = this._viewId) {
@@ -418,9 +419,10 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     const key = String(viewId ?? this._viewId ?? 'director').trim();
     const current = replace ? {} : (this._viewState?.[key] ?? {});
     this._viewState[key] = { ...current, ...(patch ?? {}) };
-    this.refresh?.();
+    this.render({ force: true });
   }
 
+  /** @override */
   async _onRender(context, options) {
     await super._onRender(context, options);
     this.enableAutoRefresh([
@@ -429,15 +431,44 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       'janus7RelationChanged',
       'janus7StoryHookChanged',
       'janus7Ready',
-      'janusCampaignStateUpdated' // von Config-Panel
+      'janusCampaignStateUpdated'
     ], 180);
   }
 
-  async _preRender(options) {
-    await super._preRender?.(options);
-    await this.#prefetchShellData();
+  /**
+   * Refactored Pass 1: Modular Pre-rendering
+   * Fetches data models asynchronously but defers HTML rendering to the Handlebars Partials.
+   * @override
+   */
+  async _preRender(context, options) {
+    await super._preRender?.(context, options);
+    
+    const engine = this._getEngine();
+    const view = getView(this._viewId) ?? getView('director');
+    const panel = this._activePanelId ? getPanel(this._activePanelId) : null;
+
+    // 1. Fetch View Data
+    const viewModel = await this.#buildViewModel(engine, view);
+    
+    // 2. Fetch Panel Data
+    const panelModel = this.#buildPanelModel(engine, panel);
+
+    // 3. Fetch Live Statistics via Bridge (Pass 2 Integration)
+    const playerStats = this.#getLivePlayerStats(engine);
+
+    // 4. Populate Transient Cache
+    this.__renderCache = {
+      viewId: view.id,
+      panelId: panel?.id ?? null,
+      viewModel,
+      panelModel,
+      playerStats,
+      viewPartial: `modules/${MODULE_ID}/templates/shell/views/${view.id}.hbs`,
+      panelPartial: panel ? `modules/${MODULE_ID}/templates/shell/panels/default-panel.hbs` : null
+    };
   }
   
+  /** @override */
   _onPostRender(context, options) {
     super._onPostRender?.(context, options);
     this._enableDirectorDragDrop();
@@ -446,6 +477,31 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   // ═══════════════════════════════════════════════════════════════════════════
   // Context Building
   // ═══════════════════════════════════════════════════════════════════════════
+
+  /**
+   * Fetches raw player statistics via the DSA5 Bridge.
+   * Optimized Pass 2: Limits lookup to active students and player characters
+   * to avoid O(N) scaling issues in large worlds.
+   * @private
+   */
+  #getLivePlayerStats(engine) {
+    const bridge = engine?.bridge?.dsa5?.attributes;
+    if (!bridge) return [];
+    
+    // Filter optimization: Only process actors that are likely "active students"
+    // or designated player characters.
+    return game.actors
+      .filter(a => {
+        if (a.type !== 'character') return false;
+        const flags = a.flags?.[MODULE_ID] ?? {};
+        // Priority 1: Specifically marked as Janus7 student/actor
+        if (flags.role === 'student' || flags.managed) return true;
+        // Priority 2: Player-owned characters (fallback for party views)
+        return a.hasPlayerOwner && !a.isToken;
+      })
+      .slice(0, 20) // Safety cap for UI display
+      .map(a => bridge.getFullSnapshot(a));
+  }
 
   _getStateTime() {
     const state = this._getEngine()?.core?.state;
@@ -533,25 +589,6 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     };
   }
 
-  async #prefetchShellData() {
-    const engine = this._getEngine();
-    const view = getView(this._viewId) ?? getView('director');
-    const panel = this._activePanelId ? getPanel(this._activePanelId) : null;
-    const viewModel = await this.#buildViewModel(engine, view);
-    const panelModel = this.#buildPanelModel(engine, panel);
-    const viewHtml = await this.#renderViewHtml(view, viewModel);
-    const panelHtml = await this.#renderPanelHtml(panel, panelModel);
-
-    this._prefetchedShell = {
-      viewId: view?.id ?? 'director',
-      panelId: panel?.id ?? null,
-      viewModel,
-      panelModel,
-      viewHtml,
-      panelHtml
-    };
-  }
-
   async #buildViewModel(engine, view) {
     const model = await view?.build?.(engine, this) ?? { cards: [], cardSections: [], tiles: [] };
     return {
@@ -575,58 +612,46 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     };
   }
 
-  async #renderViewHtml(view, viewModel) {
-    const path = moduleTemplatePath(`shell/views/${view.id}.hbs`);
-    try {
-      return await renderHbsTemplate(path, {
-        view,
-        ...viewModel
-      });
-    } catch (_) {
-      const fallback = moduleTemplatePath('shell/views/director.hbs');
-      return renderHbsTemplate(fallback, {
-        view,
-        ...viewModel
-      });
-    }
-  }
-
-  async #renderPanelHtml(panel, panelModel) {
-    if (!panel) return '';
-    return renderHbsTemplate(moduleTemplatePath('shell/panels/default-panel.hbs'), {
-      panel,
-      ...panelModel
-    });
-  }
-
-  _prepareContext(_options) {
+  /**
+   * Refactored Pass 1: Synchronous Context Mapping
+   * Delegates the view/panel rendering to Handlebars dynamic partials.
+   * @override
+   */
+  _prepareContext(options) {
     const engine = this._getEngine();
     const views = getViews().map((view) => ({
       ...view,
       isActive: view.id === this._viewId
     }));
-    const header = this._buildHeaderContext(engine);
-    const panel = this._activePanelId ? getPanel(this._activePanelId) : null;
-    const questActorCandidates = this._getQuestActorCandidates();
+    
+    // Core summary blocks
     const { directorSummary, directorRuntime } = this._buildDirectorRuntimeContext();
     const directorWorkflow = this._buildDirectorWorkflowView(directorRuntime);
     const directorRunbook = this._buildDirectorRunbookView(directorRuntime, directorWorkflow);
 
     return {
       isReady: !!engine,
-      header,
+      header: this._buildHeaderContext(engine),
       views,
       appNavSections: buildAppLauncherSections(this._viewId),
       activeViewId: this._viewId,
+      
+      // Real-time metrics
       directorSummary,
       directorRuntime,
       directorWorkflow,
       directorRunbook,
-      questActorCandidates,
-      viewHtml: this._prefetchedShell.viewHtml,
-      panelHtml: this._prefetchedShell.panelHtml,
-      panelOpen: !!panel,
-      panelTitle: panel?.title ?? null,
+      questActorCandidates: this._getQuestActorCandidates(),
+      
+      // View & Panel State (Delegated to Partials)
+      viewPartial: this.__renderCache.viewPartial,
+      panelPartial: this.__renderCache.panelPartial,
+      view: this.__renderCache.viewModel,
+      panel: this.__renderCache.panelModel,
+      playerStats: this.__renderCache.playerStats,
+      
+      panelOpen: !!this.__renderCache.panelPartial,
+      panelTitle: getPanel(this._activePanelId)?.title ?? null,
       shellPaletteHint: 'Power Tools'
     };
   }

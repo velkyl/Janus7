@@ -1663,8 +1663,8 @@
       "hasRun": false
     },
     {
-      "id": "QS-TC-01",
-      "title": "Quest System Lifecycle",
+      "id": "TC-QS-01",
+      "title": "Quest System Lifecycle (Auto)",
       "importPath": "./tests/qs/QS_TC_01__quest_lifecycle.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -1675,7 +1675,7 @@
       "hasRun": false
     },
     {
-      "id": "QS-TC-02",
+      "id": "TC-QS-02",
       "title": "Quest Event Spawning & Options",
       "importPath": "./tests/qs/QS_TC_02__event_options.test.js",
       "suiteClass": "extended-auto",
@@ -1687,8 +1687,8 @@
       "hasRun": false
     },
     {
-      "id": "QS-TC-03",
-      "title": "Condition Evaluator",
+      "id": "TC-QS-03",
+      "title": "Quest Condition Evaluator",
       "importPath": "./tests/qs/QS_TC_03__condition_evaluator.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",
@@ -1699,7 +1699,7 @@
       "hasRun": false
     },
     {
-      "id": "QS-TC-04",
+      "id": "TC-QS-04",
       "title": "Quest State Persistence",
       "importPath": "./tests/qs/QS_TC_04__state_persistence.test.js",
       "suiteClass": "extended-auto",
@@ -1711,8 +1711,8 @@
       "hasRun": false
     },
     {
-      "id": "QS-TC-05",
-      "title": "Social & Reward Integration",
+      "id": "TC-QS-05",
+      "title": "Social & Reward Integration (Quest)",
       "importPath": "./tests/qs/QS_TC_05__social_reward.test.js",
       "suiteClass": "extended-auto",
       "kind": "auto",

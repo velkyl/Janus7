@@ -12,9 +12,9 @@
         <div class="j7-dropzone j7-dropzone--medium" data-dropzone="people" data-role="teachers">
           <div class="j7-dropzone__label"><i class="fas fa-user-plus"></i> Actors hier ablegen</div>
         </div>
-        {{#if peopleView.teachers.length}}
+        {{#if view.peopleView.teachers.length}}
           <ul class="janus7-list j7-mt-sm">
-            {{#each peopleView.teachers}}
+            {{#each view.peopleView.teachers}}
               <li><span class="tag">L</span> <strong>{{name}}</strong></li>
             {{/each}}
           </ul>
@@ -35,9 +35,9 @@
         <div class="j7-dropzone j7-dropzone--medium" data-dropzone="people" data-role="students">
           <div class="j7-dropzone__label"><i class="fas fa-user-plus"></i> Actors hier ablegen</div>
         </div>
-        {{#if peopleView.students.length}}
+        {{#if view.peopleView.students.length}}
           <ul class="janus7-list j7-mt-sm">
-            {{#each peopleView.students}}
+            {{#each view.peopleView.students}}
               <li><span class="tag">S</span> <strong>{{name}}</strong></li>
             {{/each}}
           </ul>
@@ -58,9 +58,9 @@
         <div class="j7-dropzone j7-dropzone--medium" data-dropzone="people" data-role="npcs">
           <div class="j7-dropzone__label"><i class="fas fa-user-plus"></i> Actors hier ablegen</div>
         </div>
-        {{#if peopleView.npcs.length}}
+        {{#if view.peopleView.npcs.length}}
           <ul class="janus7-list j7-mt-sm">
-            {{#each peopleView.npcs}}
+            {{#each view.peopleView.npcs}}
               <li><span class="tag">NPC</span> <strong>{{name}}</strong></li>
             {{/each}}
           </ul>
@@ -76,13 +76,13 @@
     <p class="j7-text-dim">Read-only Uebersicht plus kleine GM-Verwaltung fuer ehemalige Schueler. Grundlage ist `academy.alumni` im State, nicht das Lore-Archiv.</p>
 
     <div class="j7-shell__metrics">
-      <div><strong>Gesamt:</strong> {{alumniView.summary.total}}</div>
-      <div><strong>Mentoren:</strong> {{alumniView.summary.mentors}}</div>
-      <div><strong>Rueckkehr-NSCs:</strong> {{alumniView.summary.returned}}</div>
-      <div><strong>Inaktiv:</strong> {{alumniView.summary.inactive}}</div>
-      <div><strong>Mit Bewertungsstand:</strong> {{alumniView.summary.graded}}</div>
-      <div><strong>Wiedereinsatz-Hinweise:</strong> {{alumniView.summary.suggested}}</div>
-      <div><strong>Narrative Haken:</strong> {{alumniView.summary.narrativeHooks}}</div>
+      <div><strong>Gesamt:</strong> {{view.alumniView.summary.total}}</div>
+      <div><strong>Mentoren:</strong> {{view.alumniView.summary.mentors}}</div>
+      <div><strong>Rueckkehr-NSCs:</strong> {{view.alumniView.summary.returned}}</div>
+      <div><strong>Inaktiv:</strong> {{view.alumniView.summary.inactive}}</div>
+      <div><strong>Mit Bewertungsstand:</strong> {{view.alumniView.summary.graded}}</div>
+      <div><strong>Wiedereinsatz-Hinweise:</strong> {{view.alumniView.summary.suggested}}</div>
+      <div><strong>Narrative Haken:</strong> {{view.alumniView.summary.narrativeHooks}}</div>
     </div>
 
     <div class="j7-seed-grid">
@@ -90,9 +90,9 @@
         <header>
           <strong>Verfolgte Alumni</strong>
         </header>
-        {{#if alumniView.alumni.length}}
+        {{#if view.alumniView.alumni.length}}
           <ul class="janus7-list">
-            {{#each alumniView.alumni}}
+            {{#each view.alumniView.alumni}}
               <li>
                 <div>
                   <strong>{{name}}</strong>
@@ -117,9 +117,9 @@
         <header>
           <strong>Kandidaten aus NPC-Daten</strong>
         </header>
-        {{#if alumniView.candidates.length}}
+        {{#if view.alumniView.candidates.length}}
           <ul class="janus7-list">
-            {{#each alumniView.candidates}}
+            {{#each view.alumniView.candidates}}
               <li>
                 <div>
                   <strong>{{name}}</strong>
@@ -138,9 +138,9 @@
         <header>
           <strong>Wiedereinsatz-Hinweise</strong>
         </header>
-        {{#if alumniView.reentrySuggestions.length}}
+        {{#if view.alumniView.reentrySuggestions.length}}
           <ul class="janus7-list">
-            {{#each alumniView.reentrySuggestions}}
+            {{#each view.alumniView.reentrySuggestions}}
               <li>
                 <div>
                   <strong>{{name}}</strong>
@@ -166,9 +166,9 @@
         <header>
           <strong>Letzte Aenderungen</strong>
         </header>
-        {{#if alumniView.recentChanges.length}}
+        {{#if view.alumniView.recentChanges.length}}
           <ul class="janus7-list">
-            {{#each alumniView.recentChanges}}
+            {{#each view.alumniView.recentChanges}}
               <li><strong>{{name}}</strong> <span class="j7-text-dim">{{actionLabel}} · {{statusLabel}}</span></li>
             {{/each}}
           </ul>
