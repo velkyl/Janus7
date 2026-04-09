@@ -46,7 +46,9 @@ export class JanusSessionPrepService {
     const chronicleSeed = this._buildChronicleSeed({ slotRef, prepAgenda, chroniclePreview, questsSummary, activeLocation });
     const academyActionHooks = this._buildAcademyActionHooks({ academyData, slotRef, currentSlot, currentCast, questsSummary });
     const academyOverview = this._buildAcademyOverview({ academyData, slotRef, questsSummary, activeLocation, academyActionHooks });
-    const academySeed = this._buildAcademySeed({ academyOverview, academyActionHooks, slotRef, questsSummary, prepAgenda, activeLocation });
+    const academyFollowUp = this._collectAcademyFollowUp({ academyData, state, questsSummary });
+    const academySeed = this._buildAcademySeed({ academyOverview, academyActionHooks, academyFollowUp, slotRef, questsSummary, prepAgenda, activeLocation });
+    const consequenceSeed = this._buildConsequenceSeed({ academyFollowUp, slotRef, activeLocation });
     const gradeEntries = this._collectGradeEntries({ engine, academyData });
     const gradeOverview = this._buildGradeOverview({ gradeEntries, academyData });
     const gradeLedger = this._buildGradeLedger({ gradeEntries, slotRef });
@@ -76,6 +78,8 @@ export class JanusSessionPrepService {
       academyActionHooks,
       academyOverview,
       academySeed,
+      academyFollowUp,
+      consequenceSeed,
       gradeOverview,
       gradeLedger,
       trimesterGrades,
@@ -95,6 +99,8 @@ export class JanusSessionPrepService {
         chronicleSeedLength: chronicleSeed.text.length,
         academyActionHookCount: academyActionHooks.questStarts.length + academyActionHooks.poolLaunchers.length + academyActionHooks.currentEventLaunchers.length,
         academySeedLength: academySeed.text.length,
+        academyFollowUpCount: academyFollowUp.summary.totalHotItems,
+        consequenceSeedLength: consequenceSeed.text.length,
         gradeEntryCount: gradeEntries.length,
         gradeLedgerCount: gradeLedger.items.length,
         trimesterGradeCount: trimesterGrades.items.length,
@@ -1404,7 +1410,83 @@ export class JanusSessionPrepService {
     };
   }
 
-  _buildAcademySeed({ academyOverview, academyActionHooks, slotRef, questsSummary, prepAgenda, activeLocation }) {
+  _collectAcademyFollowUp({ academyData, state, questsSummary }) {
+    const queuedEvents = Array.isArray(state?.academy?.runtimeQueuedEvents) ? state.academy.runtimeQueuedEvents : [];
+    const factionStanding = academyData?.buildFactionStanding?.(state) ?? [];
+    const socialSummary = academyData?.buildSocialLinksSummary?.(state) ?? [];
+    const questSummary = academyData?.buildQuestSummary?.(state) ?? (questsSummary?.items ?? []);
+
+    const queueItems = queuedEvents.slice(-8).reverse().map((entry) => {
+      const eventId = String(entry?.eventId ?? '').trim();
+      const event = eventId ? academyData?.content?.by?.event?.get?.(eventId) ?? academyData?.getEvent?.(eventId) ?? null : null;
+      const source = String(entry?.source ?? 'runtime').trim();
+      const priority = source === 'social-link' ? 'sofort ausspielen' : (source === 'resource-threshold' ? 'beobachten' : 'nachhalten');
+      return {
+        eventId,
+        title: event?.title ?? eventId ?? 'Event',
+        source,
+        detail: entry?.linkId ?? entry?.resourceId ?? 'runtime',
+        priorityLabel: priority,
+        atLabel: entry?.at ? new Date(entry.at).toISOString() : '—',
+      };
+    });
+
+    const factionPressure = factionStanding
+      .filter((entry) => Number(entry?.points ?? 0) > 0 || Number(entry?.reputation ?? 0) > 0)
+      .sort((a, b) => (Number(b?.reputation ?? 0) + Number(b?.points ?? 0)) - (Number(a?.reputation ?? 0) + Number(a?.points ?? 0)))
+      .slice(0, 6)
+      .map((entry) => ({
+        id: entry?.id ?? '',
+        name: entry?.name ?? entry?.id ?? 'Fraktion',
+        points: Number(entry?.points ?? 0),
+        reputation: Number(entry?.reputation ?? 0),
+        type: entry?.type ?? 'faction',
+        pressureLabel: Number(entry?.reputation ?? 0) >= 3 ? 'sofort ausspielen' : 'beobachten',
+      }));
+
+    const socialPressure = socialSummary
+      .filter((entry) => Number(entry?.rank ?? 0) > 0 || String(entry?.pendingEventId ?? '').trim())
+      .slice(0, 6)
+      .map((entry) => ({
+        id: entry?.id ?? '',
+        npcId: entry?.npcId ?? '',
+        npcName: academyData?.getNpc?.(entry?.npcId)?.name ?? entry?.npcId ?? 'NPC',
+        rank: Number(entry?.rank ?? 0),
+        maxRank: Number(entry?.maxRank ?? 0),
+        pendingEventId: entry?.pendingEventId ?? '',
+        pressureLabel: entry?.pendingEventId ? 'sofort ausspielen' : 'beobachten',
+        perks: Array.isArray(entry?.perks) ? entry.perks : [],
+      }));
+
+    const questPressure = questSummary
+      .filter((entry) => String(entry?.status ?? '') === 'active')
+      .slice(0, 6)
+      .map((entry) => ({
+        questId: entry?.questId ?? '',
+        title: entry?.title ?? entry?.questId ?? 'Quest',
+        actorId: entry?.actorId ?? '',
+        currentNodeTitle: entry?.currentNodeTitle ?? entry?.currentNodeId ?? '—',
+        currentEventId: entry?.currentEventId ?? '',
+        startedAt: entry?.startedAt ?? null,
+        pressureLabel: entry?.currentEventId ? 'sofort ausspielen' : 'nachhalten',
+      }));
+
+    return {
+      queuedEvents: queueItems,
+      factionPressure,
+      socialPressure,
+      questPressure,
+      summary: {
+        queuedEvents: queueItems.length,
+        factionPressure: factionPressure.length,
+        socialPressure: socialPressure.length,
+        questPressure: questPressure.length,
+        totalHotItems: queueItems.length + factionPressure.length + socialPressure.length + questPressure.length,
+      },
+    };
+  }
+
+  _buildAcademySeed({ academyOverview, academyActionHooks, academyFollowUp, slotRef, questsSummary, prepAgenda, activeLocation }) {
     const lines = [
       'JANUS7 Academy Seed',
       `Profil: ${academyOverview?.profileName ?? 'â€”'} (${academyOverview?.profileId ?? 'â€”'})`,
@@ -1434,6 +1516,11 @@ export class JanusSessionPrepService {
       ...((academyActionHooks?.questStarts ?? []).slice(0, 3).map((quest) => `- Queststart: ${quest?.title ?? quest?.questId ?? 'Quest'} | ${quest?.category ?? 'quest'}`)),
       ...((academyActionHooks?.poolLaunchers ?? []).slice(0, 2).map((pool) => `- Event-Pool: ${pool?.title ?? pool?.poolId ?? 'Pool'} | ${pool?.eventTitles?.join(', ') || 'ohne Eventtitel'}`)),
       '',
+      'Nachlaufende Konsequenzen:',
+      ...((academyFollowUp?.queuedEvents ?? []).slice(0, 3).map((entry) => `- Queue: ${entry?.title ?? entry?.eventId ?? 'Event'} | ${entry?.priorityLabel ?? 'beobachten'} | ${entry?.source ?? 'runtime'}`)),
+      ...((academyFollowUp?.socialPressure ?? []).slice(0, 2).map((entry) => `- Social: ${entry?.npcName ?? entry?.npcId ?? 'NPC'} | Rang ${entry?.rank ?? 0}/${entry?.maxRank ?? 0} | ${entry?.pressureLabel ?? 'beobachten'}`)),
+      ...((academyFollowUp?.factionPressure ?? []).slice(0, 2).map((entry) => `- Fraktion: ${entry?.name ?? entry?.id ?? 'Fraktion'} | Ruf ${entry?.reputation ?? 0} | ${entry?.pressureLabel ?? 'beobachten'}`)),
+      '',
       'Aktive Quests:',
       ...((questsSummary?.items ?? []).slice(0, 4).map((quest) => `- ${quest?.title ?? quest?.questId ?? 'Quest'} | Node: ${quest?.currentNodeTitle ?? quest?.currentNodeId ?? 'â€”'}`)),
       '',
@@ -1444,6 +1531,33 @@ export class JanusSessionPrepService {
     return {
       id: 'academy-seed',
       title: 'Academy Seed',
+      text: lines.join('\n'),
+    };
+  }
+
+  _buildConsequenceSeed({ academyFollowUp, slotRef, activeLocation }) {
+    const lines = [
+      'JANUS7 Consequence Seed',
+      `Zeitfenster: Woche ${slotRef?.week ?? '—'} · ${slotRef?.day ?? '—'} / ${slotRef?.phase ?? '—'}`,
+      `Aktiver Ort: ${activeLocation?.name ?? '—'}`,
+      '',
+      'Sofort ausspielen:',
+      ...((academyFollowUp?.queuedEvents ?? []).slice(0, 4).map((entry) => `- Queue-Event: ${entry?.title ?? entry?.eventId ?? 'Event'} | ${entry?.source ?? 'runtime'} | ${entry?.detail ?? '—'}`)),
+      ...((academyFollowUp?.socialPressure ?? []).filter((entry) => entry?.pendingEventId).slice(0, 2).map((entry) => `- Social-Link: ${entry?.npcName ?? entry?.npcId ?? 'NPC'} | Pending ${entry?.pendingEventId}`)),
+      '',
+      'Beobachten:',
+      ...((academyFollowUp?.factionPressure ?? []).slice(0, 4).map((entry) => `- Fraktion: ${entry?.name ?? entry?.id ?? 'Fraktion'} | Punkte ${entry?.points ?? 0} | Ruf ${entry?.reputation ?? 0}`)),
+      ...((academyFollowUp?.questPressure ?? []).slice(0, 4).map((entry) => `- Quest: ${entry?.title ?? entry?.questId ?? 'Quest'} | Node ${entry?.currentNodeTitle ?? '—'} | ${entry?.pressureLabel ?? 'nachhalten'}`)),
+      '',
+      'Schreibe daraus:',
+      '- 1 Absatz zu den dringendsten Nachbeben an der Akademie',
+      '- 3 Bullet-Points fuer sofortige SL-Folgeentscheidungen',
+      '- 2 Bullet-Points fuer spaeteren Druckaufbau',
+    ];
+
+    return {
+      id: 'academy-consequence-seed',
+      title: 'Academy Consequence Seed',
       text: lines.join('\n'),
     };
   }

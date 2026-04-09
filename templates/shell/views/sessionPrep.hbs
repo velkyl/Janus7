@@ -449,6 +449,87 @@
   </section>
 
   <section class="j7-panel">
+    <h3><i class="fas fa-bell"></i> Nachlaufende Konsequenzen</h3>
+    <p class="j7-text-dim">Queue: {{view.academyFollowUp.summary.queuedEvents}} · Fraktionen: {{view.academyFollowUp.summary.factionPressure}} · Social: {{view.academyFollowUp.summary.socialPressure}} · Quests: {{view.academyFollowUp.summary.questPressure}}</p>
+    <div class="j7-seed-grid">
+      <article class="j7-seed-card">
+        <header>
+          <strong>Runtime-Queue</strong>
+        </header>
+        {{#if view.academyFollowUp.queuedEvents.length}}
+          <ul class="j7-plain-list">
+            {{#each view.academyFollowUp.queuedEvents as |item|}}
+              <li>
+                <strong>{{item.title}}</strong><br>
+                <span class="j7-text-dim">{{item.source}} · {{item.detail}} · {{item.priorityLabel}}</span><br>
+                <button type="button" class="janus-btn small" data-action="executeShellAction" data-command="openEventPopup" data-event-id="{{item.eventId}}">
+                  <i class="fas fa-scroll"></i> Event oeffnen
+                </button>
+              </li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <p class="j7-text-dim">Keine offenen Runtime-Queue-Eintraege.</p>
+        {{/if}}
+      </article>
+
+      <article class="j7-seed-card">
+        <header>
+          <strong>Fraktionsdruck</strong>
+        </header>
+        {{#if view.academyFollowUp.factionPressure.length}}
+          <ul class="j7-plain-list">
+            {{#each view.academyFollowUp.factionPressure as |item|}}
+              <li>
+                <strong>{{item.name}}</strong><br>
+                <span class="j7-text-dim">{{item.type}} · Punkte {{item.points}} · Ruf {{item.reputation}} · {{item.pressureLabel}}</span>
+              </li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <p class="j7-text-dim">Kein akuter Fraktionsdruck im aktuellen Akademiestatus.</p>
+        {{/if}}
+      </article>
+
+      <article class="j7-seed-card">
+        <header>
+          <strong>Social-Folgen</strong>
+        </header>
+        {{#if view.academyFollowUp.socialPressure.length}}
+          <ul class="j7-plain-list">
+            {{#each view.academyFollowUp.socialPressure as |item|}}
+              <li>
+                <strong>{{item.npcName}}</strong><br>
+                <span class="j7-text-dim">Rang {{item.rank}}/{{item.maxRank}} · {{item.pressureLabel}}{{#if item.pendingEventId}} · {{item.pendingEventId}}{{/if}}</span>
+              </li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <p class="j7-text-dim">Keine sichtbaren Social-Nachbeben im aktuellen Akademiestatus.</p>
+        {{/if}}
+      </article>
+
+      <article class="j7-seed-card">
+        <header>
+          <strong>Quest-Nachbeben</strong>
+        </header>
+        {{#if view.academyFollowUp.questPressure.length}}
+          <ul class="j7-plain-list">
+            {{#each view.academyFollowUp.questPressure as |item|}}
+              <li>
+                <strong>{{item.title}}</strong><br>
+                <span class="j7-text-dim">{{item.currentNodeTitle}} · {{item.pressureLabel}}</span>
+              </li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <p class="j7-text-dim">Keine aktiven Quest-Nachbeben im aktuellen Akademiestatus.</p>
+        {{/if}}
+      </article>
+    </div>
+  </section>
+
+  <section class="j7-panel">
     <h3><i class="fas fa-book-bookmark"></i> Chronik-Vorschau</h3>
     <div class="j7-seed-grid">
       {{#if view.chroniclePreview.length}}
@@ -547,6 +628,23 @@
       </div>
     {{else}}
       <p class="j7-text-dim">Kein exportierbarer Akademie-Seed aus den aktuellen Daten ableitbar.</p>
+    {{/if}}
+  </section>
+
+  <section class="j7-panel">
+    <h3><i class="fas fa-link"></i> Konsequenz-Seed</h3>
+    {{#if view.consequenceSeed}}
+      <div class="j7-seed-grid">
+        <article class="j7-seed-card">
+          <header>
+            <strong>{{view.consequenceSeed.title}}</strong>
+            <button type="button" class="janus-btn small" data-action="copySeed"><i class="fas fa-copy"></i> Kopieren</button>
+          </header>
+          <textarea rows="12">{{view.consequenceSeed.text}}</textarea>
+        </article>
+      </div>
+    {{else}}
+      <p class="j7-text-dim">Kein exportierbarer Konsequenz-Seed aus den aktuellen Daten ableitbar.</p>
     {{/if}}
   </section>
 
