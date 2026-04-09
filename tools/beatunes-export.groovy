@@ -1,11 +1,8 @@
 /**
- * beaTunes beaTlet for Janus7
- * Exports selected songs to JANUS7 music-catalog.json format.
+ * beaTunes beaTlet for Janus7 (V3 Format)
+ * Exports selected songs to JANUS7 janus_audio_index_v3.json format.
  * 
- * Install: 
- * 1. Save as 'JanusExport.groovy' in beaTunes/Plugins directory.
- * 2. Restart beaTunes.
- * 3. Select songs, Go to Tools -> Export to Janus7.
+ * This ensures compatibility between the deep Python Analyzer and manual beaTunes exports.
  */
 
 import com.tagtraum.beatunes.action.AbstractSongSelectionAction
@@ -13,15 +10,11 @@ import com.tagtraum.beatunes.Song
 import groovy.json.JsonBuilder
 import javax.swing.JFileChooser
 import javax.swing.filechooser.FileNameExtensionFilter
-import java.nio.file.Paths
 
-class JanusExportAction extends AbstractSongSelectionAction {
+class JanusV3ExportAction extends AbstractSongSelectionAction {
 
-    @Override
-    String getId() { "JanusExportAction" }
-
-    @Override
-    String getName() { "Export to Janus7..." }
+    @Override String getId() { "JanusV3ExportAction" }
+    @Override String getName() { "Export to Janus7 (V3 Index)..." }
 
     @Override
     void actionPerformed(java.awt.event.ActionEvent e) {
@@ -29,62 +22,66 @@ class JanusExportAction extends AbstractSongSelectionAction {
         if (songs.length == 0) return
 
         def chooser = new JFileChooser()
-        chooser.dialogTitle = "Export Janus7 Music Catalog"
+        chooser.dialogTitle = "Export Janus7 V3 Catalog"
         chooser.fileFilter = new FileNameExtensionFilter("JSON Files", "json")
         if (chooser.showSaveDialog(null) != JFileChooser.APPROVE_OPTION) return
 
         def file = chooser.selectedFile
-        if (!file.name.endsWith(".json")) {
-            file = new File(file.absolutePath + ".json")
-        }
+        if (!file.name.endsWith(".json")) file = new File(file.absolutePath + ".json")
 
         def catalog = [
-            version: "1.0.0",
-            generatedAt: new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC")),
-            songs: songs.collect { song ->
-                // Normalizing path for Foundry VTT
-                // We assume the user creates a stable path relative to the module
-                // or we use the absolute path (less recommended for sharing)
+            generator_version: "beaTunes Janus-Bridge 1.0",
+            generated_at: System.currentTimeMillis() / 1000,
+            tracks: songs.collect { song ->
                 def fullPath = song.getFile().absolutePath
-                
-                // Heuristic: If path contains 'modules/Janus7', we trim it to module path
                 def foundryPath = fullPath
                 if (fullPath.contains("modules/Janus7")) {
                     foundryPath = "modules/Janus7" + fullPath.split("modules/Janus7")[1].replaceAll("\\\\", "/")
                 }
 
+                // Map beaTunes Color to Janus Energy/Mood heuristics
+                def energyLevel = mapColorToEnergy(song.color)
+                
                 return [
-                    id: "track_" + song.id,
-                    path: foundryPath,
+                    file_path: foundryPath,
+                    rel_path: song.getFile().getName(),
                     title: song.title,
-                    artist: song.artist,
-                    metadata: [
-                        bpm: song.bpm as Integer,
-                        mood: song.mood,
-                        genre: song.genre,
-                        key: song.key?.toString(),
-                        color: song.color,
-                        tags: (song.mood ? [song.mood.toLowerCase()] : []) + (song.genre ? [song.genre.toLowerCase()] : [])
+                    tags: [
+                        mood: song.mood ? [song.mood.toLowerCase()] : [],
+                        energy: energyLevel > 0.7 ? "high" : (energyLevel < 0.3 ? "low" : "medium"),
+                        setting: [], 
+                        situation: [],
+                        theme: [],
+                        instruments: [],
+                        use_for: [],
+                        genres: song.genre ? [song.genre.toLowerCase()] : []
                     ],
-                    ai_scores: [
-                        // Default neutral scores, user can adjust or we could map colors
-                        neutral: 1.0,
-                        academy_morning: mapColorToScore(song.color, "morning"),
-                        dungeon: mapColorToScore(song.color, "dark")
+                    analysis: [
+                        duration: song.duration / 1000.0,
+                        tempo_bpm: song.bpm,
+                        energy_level: energyLevel,
+                        color: song.color,
+                        key: song.key?.toString(),
+                        notes: ["beatunes_export"]
+                    ],
+                    external: [
+                        artist: song.artist,
+                        album: song.album,
+                        sources: ["beatunes"]
                     ]
                 ]
             }
         ]
 
         file.text = new JsonBuilder(catalog).toPrettyString()
-        println "Janus7: Exported ${songs.length} songs to ${file.absolutePath}"
     }
 
-    private float mapColorToScore(String color, String mood) {
+    private float mapColorToEnergy(String color) {
         if (!color) return 0.5f
-        // Simple mapping example
-        if (mood == "morning" && (color.contains("yellow") || color.contains("bright"))) return 0.9f
-        if (mood == "dark" && (color.contains("blue") || color.contains("dark"))) return 0.9f
+        color = color.toLowerCase()
+        if (color.contains("red") || color.contains("orange") || color.contains("bright")) return 0.85f
+        if (color.contains("dark") || color.contains("blue") || color.contains("black")) return 0.25f
+        if (color.contains("green") || color.contains("yellow")) return 0.5f
         return 0.5f
     }
 }

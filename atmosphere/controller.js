@@ -648,11 +648,19 @@ export class JanusAtmosphereController {
     if (this.discovery.isReady) {
       const locId = this.state.get?.('academy.currentLocationId') ?? 'unknown';
       const slot = this.engine?.academy?.calendar?.getCurrentSlot?.();
+      const phase = slot?.phase?.toLowerCase() ?? 'neutral';
+
+      // Dynamische Heuristik für Energie-Level
+      let targetEnergy = 0.5;
+      if (['nacht', 'abend', 'mitternacht'].includes(phase)) targetEnergy = 0.2;
+      if (['mittag', 'nachmittag'].includes(phase)) targetEnergy = 0.6;
+      if (phase === 'prüfung') targetEnergy = 0.8;
       
       const success = await this.playDiscoveryTrack({ 
         sceneKey: locId, 
-        mood: slot?.phase,
-        tags: ['auto-discovery'] 
+        mood: phase,
+        energy: targetEnergy,
+        tags: [locId, phase, 'auto-discovery'] 
       }, { broadcast: false });
       
       if (success) return true;
