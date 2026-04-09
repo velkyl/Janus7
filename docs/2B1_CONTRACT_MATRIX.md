@@ -8,12 +8,24 @@ Diese Matrix ist die vorlaeufige 2B.1-Einstufung der Datendomänen. Sie ist bewu
 
 ## Ausgangslage
 
-Der vorher angenommene einheitliche Vollvertrag ist wahrscheinlich zu schwer fuer fruehe Gegenproben. Daher ist fuer 2B.1 eine Zweiteilung sinnvoller:
+Der vorher angenommene einheitliche Vollvertrag ist wahrscheinlich zu schwer fuer fruehe Gegenproben. Daher ist fuer 2B.1 eine gestufte Einordnung sinnvoller:
 
+- `foundation`
 - `core-profile`
 - `full-profile`
 
 ## Vertragsstufen
+
+### Foundation
+
+Ein Profil ist `foundation`, wenn der quellen- oder datenbasierte Grundschnitt fuer 2B belastbar hinterlegt ist, aber Unterricht/Pruefungen und Vollfunktionalitaet noch nicht komplett validiert wurden.
+
+Pflicht:
+
+- `academy/academy-data.json`
+- `npcs.json`
+- `locations.json`
+- `events.json`
 
 ### Core Profile
 
@@ -111,11 +123,13 @@ Begruendung:
 
 ### Lowangen
 
+- aktueller validierter Status: `foundation`
 - Zielstatus fuer die erste Gegenprobe: `core-profile`
 - spaeter moeglich: `full-profile`
 
 ### Gareth
 
+- aktueller validierter Status: `foundation`
 - Zielstatus fuer die erste Gegenprobe: `core-profile`
 - spaeter moeglich: `full-profile`
 

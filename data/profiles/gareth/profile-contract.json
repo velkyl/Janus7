@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "moduleVersion": "0.9.12.46",
+    "profile": "gareth",
+    "description": "2B-Vertragsmanifest fuer die Garether Systemgegenprobe."
+  },
+  "contract": {
+    "targetLevel": "core-profile",
+    "validatedLevel": "foundation",
+    "preferredDataRoot": "academy",
+    "referenceRole": "political-counterprobe",
+    "seedMode": "derived",
+    "tableMode": "derived"
+  },
+  "provenance": {
+    "allowed": [
+      "kanonisch",
+      "verdichtet",
+      "adaptiert",
+      "experimentell"
+    ],
+    "experimentalVisibility": "filterable-only"
+  },
+  "validation": {
+    "duplicateSensitiveFiles": [
+      "academy-data.json",
+      "events.json",
+      "locations.json",
+      "npcs.json"
+    ],
+    "allowedDuplicateMismatches": []
+  },
+  "twoB": {
+    "focusAxes": [
+      "factions",
+      "institutional-competition",
+      "career-paths"
+    ],
+    "careerDriver": [
+      "exams",
+      "networks",
+      "reputation"
+    ],
+    "externalPressure": [
+      "aristocratic",
+      "patrician"
+    ]
+  }
+}

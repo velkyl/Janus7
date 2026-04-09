@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "moduleVersion": "0.9.12.46",
+    "profile": "punin",
+    "description": "2B-Vertragsmanifest fuer das Puniner Referenzprofil."
+  },
+  "contract": {
+    "targetLevel": "full-profile",
+    "validatedLevel": "full-profile",
+    "preferredDataRoot": "academy",
+    "referenceRole": "primary-reference",
+    "seedMode": "derived",
+    "tableMode": "derived"
+  },
+  "provenance": {
+    "allowed": [
+      "kanonisch",
+      "verdichtet",
+      "adaptiert",
+      "experimentell"
+    ],
+    "experimentalVisibility": "filterable-only"
+  },
+  "validation": {
+    "duplicateSensitiveFiles": [
+      "academy-data.json",
+      "calendar.json",
+      "events.json",
+      "lessons.json",
+      "locations.json",
+      "npcs.json"
+    ],
+    "allowedDuplicateMismatches": [
+      "locations.json",
+      "npcs.json"
+    ]
+  },
+  "twoB": {
+    "questFocus": [
+      "archive",
+      "research",
+      "ritual"
+    ],
+    "counterAxes": [
+      "instruction",
+      "social-play",
+      "institution"
+    ],
+    "stressDomains": [
+      "magical",
+      "social",
+      "institutional",
+      "quest"
+    ],
+    "priorityStressDomains": [
+      "magical",
+      "quest"
+    ]
+  }
+}

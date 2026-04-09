@@ -9,12 +9,13 @@
     "lint:report": "eslint scripts/ academy/ -f json -o lint-report.json || true",
     "validate:json": "node tools/validate-json.mjs",
     "validate:security": "node tools/validate-security.mjs",
-    "validate": "node tools/validate-json.mjs && node tools/validate-academy-data.mjs && node tools/validate-security.mjs && node tools/validate-imports.mjs && node tools/validate-test-registry.mjs && node tools/validate-test-manifest.mjs && node tools/validate-no-hardcoded-module-paths.mjs && node tools/validate-version-sync.mjs",
+    "validate": "node tools/validate-json.mjs && node tools/validate-academy-data.mjs && node tools/validate-profile-contracts.mjs && node tools/validate-security.mjs && node tools/validate-imports.mjs && node tools/validate-test-registry.mjs && node tools/validate-test-manifest.mjs && node tools/validate-no-hardcoded-module-paths.mjs && node tools/validate-version-sync.mjs",
     "validate:imports": "node tools/validate-imports.mjs",
     "validate:test-manifest": "node tools/validate-test-manifest.mjs",
     "validate:test-registry": "node tools/validate-test-registry.mjs",
     "validate:no-hardcoded-module-paths": "node tools/validate-no-hardcoded-module-paths.mjs",
     "validate:academy": "node tools/validate-academy-data.mjs",
+    "validate:profiles": "node tools/validate-profile-contracts.mjs",
     "validate:versions": "node tools/validate-version-sync.mjs"
   },
   "devDependencies": {
