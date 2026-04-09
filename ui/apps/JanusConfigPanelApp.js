@@ -12,6 +12,31 @@ const { HandlebarsApplicationMixin } = foundry.applications.api;
 import { JanusBaseApp } from '../core/base-app.js';
 import { JanusConfig } from '../../core/config.js';
 
+function normalizeModelOption(option) {
+  const id = String(option?.id ?? '').trim();
+  if (!id) return null;
+  const name = String(option?.name ?? '').trim() || id.replace(/^models\//, '');
+  return { id, name };
+}
+
+function ensureSelectedModel(options = [], selectedId = '') {
+  const normalized = (Array.isArray(options) ? options : [])
+    .map(normalizeModelOption)
+    .filter(Boolean);
+  const selected = String(selectedId ?? '').trim();
+  if (selected && !normalized.some((option) => option.id === selected)) {
+    normalized.unshift({
+      id: selected,
+      name: `${selected.replace(/^models\//, '')} (gespeichert)`
+    });
+  }
+  const deduped = new Map();
+  for (const option of normalized) {
+    if (!deduped.has(option.id)) deduped.set(option.id, option);
+  }
+  return Array.from(deduped.values());
+}
+
 /**
  * JanusConfigPanelApp
  *
@@ -175,8 +200,10 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
     if (!gemini) return ui.notifications.error('Gemini Service nicht verfügbar.');
     try {
       ui.notifications.info('JANUS7: Modelle werden abgerufen...');
-      await gemini.fetchAvailableModels();
-      ui.notifications.info('JANUS7: Modellliste aktualisiert.');
+      const result = await gemini.fetchAvailableModels();
+      const textCount = Array.isArray(result?.textModels) ? result.textModels.length : 0;
+      const imageCount = Array.isArray(result?.imageModels) ? result.imageModels.length : 0;
+      ui.notifications.info(`JANUS7: Modellliste aktualisiert (${textCount} Text, ${imageCount} Bild).`);
       this.refresh();
     } catch (err) {
       ui.notifications.error(`Fehler beim Abrufen: ${err.message}`);
@@ -225,9 +252,17 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
       name: s.name ?? s.id,
     })).sort((a, b) => a.name.localeCompare(b.name));
 
-    const availableModels = JanusConfig.get('availableGeminiModels') || [];
     const currentTextModel = JanusConfig.get('geminiTextModel');
     const currentVisualModel = JanusConfig.get('geminiVisualModel');
+    const legacyModels = JanusConfig.get('availableGeminiModels') || [];
+    const textModels = ensureSelectedModel(
+      JanusConfig.get('availableGeminiTextModels') || legacyModels.filter((model) => String(model?.id ?? '').startsWith('models/gemini-')),
+      currentTextModel
+    );
+    const imageModels = ensureSelectedModel(
+      JanusConfig.get('availableGeminiImageModels') || legacyModels.filter((model) => String(model?.id ?? '').startsWith('models/imagen-')),
+      currentVisualModel
+    );
 
     return {
       notReady: false,
@@ -237,7 +272,8 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
       features,
       killSwitches,
       scenes,
-      availableModels,
+      textModels,
+      imageModels,
       currentTextModel,
       currentVisualModel,
     };

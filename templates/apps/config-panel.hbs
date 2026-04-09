@@ -136,17 +136,25 @@
       <div class="janus7-config-row">
         <label class="janus7-label">Textmodell:</label>
         <select class="janus7-select" data-setting="geminiTextModel">
-          {{#each availableModels}}
-          <option value="{{this.id}}" {{#eq this.id ../currentTextModel}}selected{{/eq}}>{{this.name}}</option>
-          {{/each}}
+          {{#if textModels.length}}
+            {{#each textModels}}
+            <option value="{{this.id}}" {{#eq this.id ../currentTextModel}}selected{{/eq}}>{{this.name}}</option>
+            {{/each}}
+          {{else}}
+            <option value="{{currentTextModel}}" selected>{{currentTextModel}}</option>
+          {{/if}}
         </select>
       </div>
       <div class="janus7-config-row">
         <label class="janus7-label">Bildmodell (Imagen):</label>
         <select class="janus7-select" data-setting="geminiVisualModel">
-          {{#each availableModels}}
-          <option value="{{this.id}}" {{#eq this.id ../currentVisualModel}}selected{{/eq}}>{{this.name}}</option>
-          {{/each}}
+          {{#if imageModels.length}}
+            {{#each imageModels}}
+            <option value="{{this.id}}" {{#eq this.id ../currentVisualModel}}selected{{/eq}}>{{this.name}}</option>
+            {{/each}}
+          {{else}}
+            <option value="{{currentVisualModel}}" selected>{{currentVisualModel}}</option>
+          {{/if}}
         </select>
       </div>
     </div>

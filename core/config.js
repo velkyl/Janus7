@@ -316,7 +316,7 @@ export class JanusConfig {
       name: 'JANUS7.Settings.GeminiTextModel.Name',
       hint: 'JANUS7.Settings.GeminiTextModel.Hint',
       scope: 'world',
-      config: true,
+      config: false,
       default: 'models/gemini-1.5-flash',
       type: String
     });
@@ -325,9 +325,32 @@ export class JanusConfig {
       name: 'JANUS7.Settings.GeminiVisualModel.Name',
       hint: 'JANUS7.Settings.GeminiVisualModel.Hint',
       scope: 'world',
-      config: true,
+      config: false,
       default: 'models/imagen-3.0-generate-001',
       type: String
+    });
+
+    game.settings.register(MODULE_ID, 'availableGeminiTextModels', {
+      name: 'JANUS7: Available Gemini Text Models',
+      hint: 'Gecachte Liste der verfÃ¼gbaren Textmodelle von der Google API.',
+      scope: 'world',
+      config: false,
+      type: Array,
+      default: [
+        { id: 'models/gemini-1.5-flash', name: 'Gemini 1.5 Flash' },
+        { id: 'models/gemini-1.5-pro', name: 'Gemini 1.5 Pro' }
+      ]
+    });
+
+    game.settings.register(MODULE_ID, 'availableGeminiImageModels', {
+      name: 'JANUS7: Available Gemini Image Models',
+      hint: 'Gecachte Liste der verfÃ¼gbaren Bildmodelle von der Google API.',
+      scope: 'world',
+      config: false,
+      type: Array,
+      default: [
+        { id: 'models/imagen-3.0-generate-001', name: 'Imagen 3.0' }
+      ]
     });
 
     game.settings.register(MODULE_ID, 'availableGeminiModels', {

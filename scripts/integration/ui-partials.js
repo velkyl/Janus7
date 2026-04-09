@@ -8,6 +8,8 @@
  */
 /* global Handlebars */
 
+const getTemplate = foundry?.applications?.handlebars?.getTemplate;
+
 const PARTIALS = [
   // Views
   'templates/shell/views/academy.hbs',
@@ -31,6 +33,9 @@ const PARTIALS = [
  */
 export async function registerShellPartials() {
   const MODULE_ID = 'Janus7';
+  if (typeof getTemplate !== 'function') {
+    throw new Error('[JANUS7] foundry.applications.handlebars.getTemplate ist nicht verfügbar.');
+  }
   const promises = PARTIALS.map(async (relative) => {
     const path = `modules/${MODULE_ID}/${relative}`;
     try {

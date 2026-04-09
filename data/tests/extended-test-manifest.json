@@ -575,6 +575,19 @@
       "hasRun": false
     },
     {
+      "id": "P16-TC-24",
+      "title": "JanusConfigPanelApp: getrennte Gemini-Listen fÃ¼r Text und Bild",
+      "importPath": "./tests/p16/P16_TC_24__config_panel_gemini_model_lists.test.js",
+      "suiteClass": "binding",
+      "kind": "auto",
+      "phase": 6,
+      "phases": [
+        6,
+        7
+      ],
+      "hasRun": false
+    },
+    {
       "id": "P2-TC-01",
       "title": "AcademyDataApi lÃ¤dt Basisdaten",
       "importPath": "./tests/p2/P2_TC_01__json_loader_laedt_akademie_daten.test.js",

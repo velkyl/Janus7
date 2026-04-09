@@ -172,6 +172,7 @@ export const BUILTIN_AUTO_MODULES = [
   './tests/p16/P16_TC_11__quest_journal_metagame_guard.test.js',
   './tests/p16/P16_TC_12__ui_layer_overlay_uses_base_app.test.js',
   './tests/p16/P16_TC_13__ui_apps_bind_once_on_render.test.js',
+  './tests/p16/P16_TC_24__config_panel_gemini_model_lists.test.js',
 
   // Quest System (Core)
   './tests/qs/QS_TC_01__quest_lifecycle.test.js',

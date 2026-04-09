@@ -43,6 +43,77 @@ export class JanusGeminiService {
     return JanusConfig.get('geminiApiKey') || '';
   }
 
+  _normalizeModelId(model, fallback = '') {
+    let value = String(model || fallback || '').trim();
+    if (value === 'gemini-3-flash') value = 'models/gemini-1.5-flash-latest';
+    if (value === 'nano-banana') value = 'models/imagen-3.0-generate-001';
+    return value.startsWith('models/') ? value : `models/${value}`;
+  }
+
+  _displayModelName(id, displayName = '') {
+    if (displayName) return displayName;
+    return String(id ?? '').replace(/^models\//, '');
+  }
+
+  _dedupeModels(models = []) {
+    const deduped = new Map();
+    for (const model of Array.isArray(models) ? models : []) {
+      const id = String(model?.id ?? '').trim();
+      if (!id || deduped.has(id)) continue;
+      deduped.set(id, { id, name: this._displayModelName(id, model?.name) });
+    }
+    return Array.from(deduped.values()).sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  _getDefaultTextModels() {
+    return this._dedupeModels([
+      { id: this._normalizeModelId(JanusConfig.get('geminiTextModel') || 'models/gemini-1.5-flash') },
+      ...(JanusConfig.get('availableGeminiTextModels') || []),
+      ...(JanusConfig.get('availableGeminiModels') || []).filter((model) => String(model?.id ?? '').startsWith('models/gemini-'))
+    ]);
+  }
+
+  _getDefaultImageModels() {
+    return this._dedupeModels([
+      { id: this._normalizeModelId(JanusConfig.get('geminiVisualModel') || 'models/imagen-3.0-generate-001') },
+      ...(JanusConfig.get('availableGeminiImageModels') || []),
+      ...(JanusConfig.get('availableGeminiModels') || []).filter((model) => String(model?.id ?? '').startsWith('models/imagen-'))
+    ]);
+  }
+
+  _selectTextModels(rawModels = []) {
+    const models = rawModels
+      .filter((model) => {
+        const id = String(model?.name ?? '').trim();
+        const shortId = id.replace(/^models\//, '');
+        const methods = new Set(model?.supportedGenerationMethods ?? []);
+        if (!id.startsWith('models/gemini-')) return false;
+        if (!methods.has('generateContent')) return false;
+        if (/(image|tts|embedding|aqa|live|audio)/i.test(shortId)) return false;
+        return true;
+      })
+      .map((model) => ({
+        id: model.name,
+        name: this._displayModelName(model.name, model.displayName)
+      }));
+    return this._dedupeModels([...this._getDefaultTextModels(), ...models]);
+  }
+
+  _selectImageModels(rawModels = []) {
+    const models = rawModels
+      .filter((model) => {
+        const id = String(model?.name ?? '').trim();
+        const shortId = id.replace(/^models\//, '');
+        const methods = new Set(model?.supportedGenerationMethods ?? []);
+        return id.startsWith('models/imagen-') || (methods.has('predict') && /^imagen-/i.test(shortId));
+      })
+      .map((model) => ({
+        id: model.name,
+        name: this._displayModelName(model.name, model.displayName)
+      }));
+    return this._dedupeModels([...this._getDefaultImageModels(), ...models]);
+  }
+
   /**
    * Core method to call Gemini API.
    * 
@@ -64,10 +135,7 @@ export class JanusGeminiService {
     const includeState = opts.includeState !== false;
     const context = includeState ? this.aiService?.getContext(opts) : null;
     
-    let model = opts.model || JanusConfig.get('geminiTextModel') || 'gemini-1.5-flash';
-    // User override for specific names
-    if (model === 'gemini-3-flash') model = 'gemini-1.5-flash-latest'; // Mapping placeholder
-    if (model.startsWith('models/')) model = model.substring(7);
+    const model = this._normalizeModelId(opts.model || JanusConfig.get('geminiTextModel') || 'models/gemini-1.5-flash').substring(7);
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
     
@@ -141,9 +209,9 @@ export class JanusGeminiService {
    */
   async testConnection() {
     try {
-      const res = await this.generateContent('Hello, are you online? Respond with only "OK".', { 
+      const res = await this.generateContent('Hello, are you online? Respond with only "OK".', {
         includeState: false, 
-        model: 'gemini-1.5-flash',
+        model: this._normalizeModelId(JanusConfig.get('geminiTextModel') || 'models/gemini-1.5-flash'),
         timeout: 5000 
       });
       return res.trim().toUpperCase().includes('OK');
@@ -189,9 +257,7 @@ export class JanusGeminiService {
     if (!this.isEnabled) throw new Error('Gemini is not enabled.');
 
     // We use configured model or default
-    let model = opts.model || JanusConfig.get('geminiVisualModel') || 'imagen-3.0-generate-001';
-    if (model === 'nano-banana') model = 'imagen-3.0-generate-001'; // Mapping placeholder
-    if (model.startsWith('models/')) model = model.substring(7);
+    const model = this._normalizeModelId(opts.model || JanusConfig.get('geminiVisualModel') || 'models/imagen-3.0-generate-001').substring(7);
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:predict?key=${this.apiKey}`;
     
@@ -281,28 +347,30 @@ export class JanusGeminiService {
    */
   async fetchAvailableModels() {
     if (!this.apiKey) throw new Error('API Key missing.');
-    const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${this.apiKey}`;
-    
+
     try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-      const data = await response.json();
-      
-      const models = (data.models || []).map(m => ({
-        id: m.name, // e.g. "models/gemini-1.5-flash"
-        name: m.displayName || m.name.split('/').pop()
-      }));
+      const rawModels = [];
+      let pageToken = '';
 
-      // Add user requested placeholders if not present
-      if (!models.find(m => m.id === 'gemini-3-flash')) {
-        models.unshift({ id: 'gemini-3-flash', name: 'Gemini 3 Flash (Auto)' });
-      }
-      if (!models.find(m => m.id === 'nano-banana')) {
-        models.unshift({ id: 'nano-banana', name: 'Nano Banana (Gemini 2.5 Flash Preview)' });
-      }
+      do {
+        const tokenQuery = pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : '';
+        const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${this.apiKey}${tokenQuery}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+        const data = await response.json();
+        rawModels.push(...(data.models || []));
+        pageToken = data.nextPageToken || '';
+      } while (pageToken);
 
-      await JanusConfig.set('availableGeminiModels', models);
-      return models;
+      const textModels = this._selectTextModels(rawModels);
+      const imageModels = this._selectImageModels(rawModels);
+      const allModels = this._dedupeModels([...textModels, ...imageModels]);
+
+      await JanusConfig.set('availableGeminiTextModels', textModels);
+      await JanusConfig.set('availableGeminiImageModels', imageModels);
+      await JanusConfig.set('availableGeminiModels', allModels);
+
+      return { textModels, imageModels, allModels };
     } catch (err) {
       this.logger?.error?.('GeminiService: Failed to fetch models', err);
       throw err;

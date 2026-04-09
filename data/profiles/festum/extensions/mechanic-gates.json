@@ -1,0 +1,313 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Mechanic Gate Definitionen — steuert wann Rollenspielelemente für Spieler freigeschaltet werden",
+    "schema": "janus7:academy:mechanic-gates:v1"
+  },
+  "gates": [
+    {
+      "id": "GATE_DILIGENCE_SCORING",
+      "name": "Fleiß-Tracking",
+      "description": "Spieler können ihren Fleiß (Diligence) in der Bewertungsansicht verfolgen.",
+      "trigger": { "type": "lesson-completed", "lessonId": "LES_Y1_T1_MAGIEK_01" },
+      "unlocks": {
+        "mechanic": "scoring.diligence",
+        "statePaths": ["academy.mechanicGates.GATE_DILIGENCE_SCORING"],
+        "eventPoolIds": [],
+        "uiHints": ["scoring-diligence-widget"]
+      },
+      "playerNotification": {
+        "type": "chat-message",
+        "templateId": "NOTIFY_GATE_DILIGENCE",
+        "teacher": "Spektabilität Kosmaar",
+        "inUniverseText": "Deine erste Lektion hat dir gezeigt: Das Codex Albyricus ist nicht verhandelbar. Die Akademie bewertet ab jetzt deinen Fleiß.",
+        "mechanicText": "Du kannst ab jetzt deinen Fleiß-Wert in der Bewertungsansicht (Scoring) verfolgen."
+      }
+    },
+    {
+      "id": "GATE_FOKUS_RESOURCE",
+      "name": "Fokus-Ressource",
+      "description": "Die Fokus-Ressource (Konzentration) wird im Charakterbogen sichtbar.",
+      "trigger": { "type": "lesson-completed", "lessonId": "LES_Y1_T1_MAGIEK_02" },
+      "unlocks": {
+        "mechanic": "resources.focus",
+        "statePaths": ["academy.mechanicGates.GATE_FOKUS_RESOURCE"],
+        "eventPoolIds": [],
+        "uiHints": ["resource-focus-widget"]
+      },
+      "playerNotification": {
+        "type": "chat-message",
+        "templateId": "NOTIFY_GATE_FOCUS",
+        "teacher": "Magistra für Astrale Strukturen",
+        "inUniverseText": "Astralenergie ist endlich. Wer sie nicht messen kann, wird sie verschwenden. Lerne, deine Konzentration zu spüren.",
+        "mechanicText": "Die Fokus-Ressource ist nun aktiv. Du kannst deine verbleibende tägliche Konzentration im Charakterbogen nachverfolgen."
+      }
+    },
+    {
+      "id": "GATE_NPC_ATTITUDE_DISPLAY",
+      "name": "NPC-Haltungsanzeige (Lesen)",
+      "description": "Spieler sehen die Haltungsbalken von NPCs, mit denen sie interagiert haben (nur lesen, noch keine Social Links).",
+      "trigger": { "type": "event-slot-reached", "eventId": "EVT_ACADEMY_WELCOME_DINNER" },
+      "unlocks": {
+        "mechanic": "social.attitude.display",
+        "statePaths": ["academy.mechanicGates.GATE_NPC_ATTITUDE_DISPLAY"],
+        "eventPoolIds": [],
+        "uiHints": ["npc-attitude-bar"]
+      },
+      "playerNotification": {
+        "type": "chat-message",
+        "templateId": "NOTIFY_GATE_NPC_ATTITUDE",
+        "teacher": "Akademie-Kanzlei",
+        "inUniverseText": "Das Willkommensbankett hat dir das soziale Gefüge der Akademie gezeigt. Du kennst jetzt die Gesichter, die deinen Weg begleiten werden.",
+        "mechanicText": "Du kannst ab jetzt die Haltung (Attitude) von NPCs dir gegenüber in der Social-Ansicht einsehen."
+      }
+    },
+    {
+      "id": "GATE_EVENT_POOLS_DAILY_LIFE",
+      "name": "Alltags-Event-Pools (Morgen + Mensa)",
+      "description": "Die Event-Pools 'morgen' und 'mensa' werden aktiviert und können zufällige Alltagsereignisse auslösen.",
+      "trigger": { "type": "lesson-completed", "lessonId": "LES_Y1_T1_MAGIEK_03" },
+      "unlocks": {
+        "mechanic": "events.daily-life",
+        "statePaths": ["academy.mechanicGates.GATE_EVENT_POOLS_DAILY_LIFE"],
+        "eventPoolIds": ["morgen", "mensa"],
+        "uiHints": []
+      },
+      "playerNotification": {
+        "type": "chat-message",
+        "templateId": "NOTIFY_GATE_DAILY_EVENTS",
+        "teacher": "Akademie-Kanzlei",
+        "inUniverseText": "Nun, da ihr die kosmologische Ordnung kennt, beginnt ihr, die Textur des Akademiealltags wahrzunehmen.",
+        "mechanicText": "Die Akademie erwacht: Morgen- und Mensa-Ereignisse können ab jetzt spontan auftreten."
+      }
+    },
+    {
+      "id": "GATE_FREE_TIME_ACTIONS",
+      "name": "Freizeit-Aktionswahl",
+      "description": "Spieler wählen strukturierte Freizeit-Aktionen (Lernen, Sozialisieren, Erkunden).",
+      "trigger": { "type": "trimester-completed", "year": 1, "trimester": 1, "week": 3 },
+      "unlocks": {
+        "mechanic": "freetime.actions",
+        "statePaths": ["academy.mechanicGates.GATE_FREE_TIME_ACTIONS"],
+        "eventPoolIds": ["freizeit"],
+        "uiHints": ["freetime-action-selector"]
+      },
+      "playerNotification": {
+        "type": "chat-message",
+        "templateId": "NOTIFY_GATE_FREETIME",
+        "teacher": "Akademie-Kanzlei",
+        "inUniverseText": "Was tust du nach dem Abendessen? Die Akademie schläft nie ganz — und du auch nicht.",
+        "mechanicText": "Freizeit-Aktionen sind jetzt verfügbar. Du kannst zwischen Lernen, Sozialisieren und Erkunden wählen."
+      }
+    },
+    {
+      "id": "GATE_HOUSE_POINTS",
+      "name": "Hauspunkte sichtbar",
+      "description": "Die Hauspunkte-Spalte im Scoring wird für Spieler sichtbar (nach der Zwischenprüfung).",
+      "trigger": { "type": "exam-result", "examId": "EXA_Y1_T1_MIDTERM_MAGIEK", "minStatus": "passed" },
+      "unlocks": {
+        "mechanic": "scoring.housePoints",
+        "statePaths": ["academy.mechanicGates.GATE_HOUSE_POINTS"],
+        "eventPoolIds": [],
+        "uiHints": ["scoring-house-points-column"]
+      },
+      "playerNotification": {
+        "type": "chat-message",
+        "templateId": "NOTIFY_GATE_HOUSE_POINTS",
+        "teacher": "Spektabilität Kosmaar",
+        "inUniverseText": "Die Ergebnisse der Zwischenprüfung hängen am schwarzen Brett. Eure Leistungen werden nun auch auf die Haus-Wertung angerechnet.",
+        "mechanicText": "Die Hauspunkte-Wertung ist ab jetzt in der Scoring-Ansicht sichtbar. Deine Leistungen fließen in die Kreis-Wertung ein."
+      }
+    },
+    {
+      "id": "GATE_SOCIAL_LINKS_MENTOR",
+      "name": "Social Links — Mentoren-Tier",
+      "description": "Mentoren-Social-Links werden auf Rang 0 sichtbar. Spieler verstehen die Mechanik persönlicher Bindungen.",
+      "trigger": { "type": "lesson-completed", "lessonId": "LES_Y1_T1_MEDIT_01" },
+      "unlocks": {
+        "mechanic": "socialLinks.mentor",
+        "statePaths": ["academy.mechanicGates.GATE_SOCIAL_LINKS_MENTOR"],
+        "eventPoolIds": [],
+        "uiHints": ["social-link-panel"]
+      },
+      "playerNotification": {
+        "type": "chat-message",
+        "templateId": "NOTIFY_GATE_SOCIAL_LINKS",
+        "teacher": "Meditationslehrkraft",
+        "inUniverseText": "Persönliche Bindungen sind in der Akademie keine Schwäche — sie sind Magie eigener Art. Du hast begonnen, deine Lehrerin wirklich wahrzunehmen.",
+        "mechanicText": "Das Social-Link-System ist nun aktiv. Im Social-Panel siehst du deine Mentoren-Bindungen (Rang 0). Durch Gespräche und gemeinsame Erlebnisse können diese Ränge steigen."
+      }
+    },
+    {
+      "id": "GATE_SOCIAL_CHECKS_EXPLAINED",
+      "name": "Soziale Checks erklärt",
+      "description": "Event-Ergebnisse zeigen jetzt welche sozialen Fähigkeiten relevant waren und wie NPC-Haltung das Ergebnis beeinflusste.",
+      "trigger": { "type": "lesson-completed", "lessonId": "LES_Y1_T1_ETIK_01" },
+      "unlocks": {
+        "mechanic": "social.checkExplanation",
+        "statePaths": ["academy.mechanicGates.GATE_SOCIAL_CHECKS_EXPLAINED"],
+        "eventPoolIds": [],
+        "uiHints": ["event-social-check-detail"]
+      },
+      "playerNotification": {
+        "type": "chat-message",
+        "templateId": "NOTIFY_GATE_SOCIAL_CHECKS",
+        "teacher": "Etikette-Lehrkraft",
+        "inUniverseText": "Etikette ist angewandte Magie der menschlichen Seele. Wer die Regeln kennt, kann sie nutzen — und wer sie bricht, weiß zumindest warum.",
+        "mechanicText": "Soziale Checks in Events zeigen jetzt Details: welche Fertigkeit relevant war, ob NPC-Haltung einen Bonus/Malus gab und wie das Ergebnis zustande kam."
+      }
+    },
+    {
+      "id": "GATE_MILESTONE_T1_EVAL",
+      "name": "Meilenstein-Auswertung T1",
+      "description": "Die Jahresabschlussprüfung löst die Meilenstein-Auswertung aus und vergibt In-Universe-Tags.",
+      "trigger": { "type": "exam-result", "examId": "EXA_Y1_T1_FINAL" },
+      "unlocks": {
+        "mechanic": "milestones.year1",
+        "statePaths": ["academy.mechanicGates.GATE_MILESTONE_T1_EVAL"],
+        "eventPoolIds": [],
+        "uiHints": ["milestone-tag-display"]
+      },
+      "playerNotification": {
+        "type": "journal-entry",
+        "templateId": "NOTIFY_GATE_MILESTONE_T1",
+        "teacher": "Spektabilität Kosmaar",
+        "inUniverseText": "Das Elevium liegt hinter euch. Die Akademie hat geurteilt.",
+        "mechanicText": "Dein Ergebnis-Tag aus dem ersten Jahr ist nun sichtbar (prodigy / reliable_student / underdog). Er beeinflusst zukünftige Social-Link-Bedingungen."
+      }
+    },
+    {
+      "id": "GATE_CIRCLE_RIVALRY_EVENTS",
+      "name": "Kreis-Rivalen-Events (T2)",
+      "description": "Kreis-Identität und Haus-Rivalen-Events werden mit T2 freigeschaltet.",
+      "trigger": { "type": "lesson-completed", "lessonId": "LES_Y1_T2_MAGTH_01" },
+      "unlocks": {
+        "mechanic": "events.circleRivalry",
+        "statePaths": ["academy.mechanicGates.GATE_CIRCLE_RIVALRY_EVENTS"],
+        "eventPoolIds": ["social_minor", "academy_minor"],
+        "uiHints": []
+      },
+      "playerNotification": {
+        "type": "chat-message",
+        "templateId": "NOTIFY_GATE_CIRCLE_RIVALRY",
+        "teacher": "Magietheorie-Lehrkraft",
+        "inUniverseText": "Die tiefere Theorie zeigt: Verschiedene Schulen denken verschiedene Gedanken. Euer Kreis ist nicht nur eine Gruppe — er ist eine Perspektive.",
+        "mechanicText": "Kreis-Rivalen-Events sind freigeschaltet. Die Social-Minor- und Academy-Minor-Pools sind jetzt aktiv."
+      }
+    },
+    {
+      "id": "GATE_CALENDAR_MOON_PHASES",
+      "name": "Mondphasen im Kalender",
+      "description": "Mondphasen und Feiertag-Modifikatoren werden im Kalender sichtbar.",
+      "trigger": { "type": "lesson-completed", "lessonId": "LES_Y1_T2_ASTRO_01" },
+      "unlocks": {
+        "mechanic": "calendar.moonPhases",
+        "statePaths": ["academy.mechanicGates.GATE_CALENDAR_MOON_PHASES"],
+        "eventPoolIds": [],
+        "uiHints": ["calendar-moon-phase-display"]
+      },
+      "playerNotification": {
+        "type": "chat-message",
+        "templateId": "NOTIFY_GATE_MOON_PHASES",
+        "teacher": "Astrologie-Lehrkraft",
+        "inUniverseText": "Ihr seid jetzt Sternenkundige. Der Himmel ist nicht länger Dekoration — er ist ein Fahrplan.",
+        "mechanicText": "Der Kalender zeigt jetzt Mondphasen und Feiertag-Modifikatoren. Manche Ereignisse treten nur bei bestimmten Mondphasen auf."
+      }
+    },
+    {
+      "id": "GATE_EXPLORATION_POOL",
+      "name": "Explorations-Event-Pool (T2)",
+      "description": "Der Explorations-Pool wird freigeschaltet. Spieler entdecken Verborgenes in der Akademie.",
+      "trigger": { "type": "lesson-completed", "lessonId": "LES_Y1_T2_HELL_01" },
+      "unlocks": {
+        "mechanic": "events.exploration",
+        "statePaths": ["academy.mechanicGates.GATE_EXPLORATION_POOL"],
+        "eventPoolIds": ["exploration"],
+        "uiHints": []
+      },
+      "playerNotification": {
+        "type": "chat-message",
+        "templateId": "NOTIFY_GATE_EXPLORATION",
+        "teacher": "Hellsicht-Lehrkraft",
+        "inUniverseText": "Wer wahrnehmen gelernt hat, beginnt zu sehen, was immer schon da war. Die Akademie hat viele Ecken, die auf jemanden warten.",
+        "mechanicText": "Der Explorations-Pool ist aktiv. Du kannst jetzt versteckte Orte und Gegenstände in der Akademie entdecken."
+      }
+    },
+    {
+      "id": "GATE_SOCIAL_LINKS_FULL",
+      "name": "Social Links — vollständig (Rival-Tier + Rang-Aufstieg)",
+      "description": "Rival-Tier Social Links werden sichtbar; Rang-1 → 2 Bedingungen werden aktiv.",
+      "trigger": { "type": "trimester-completed", "year": 1, "trimester": 2 },
+      "unlocks": {
+        "mechanic": "socialLinks.full",
+        "statePaths": ["academy.mechanicGates.GATE_SOCIAL_LINKS_FULL"],
+        "eventPoolIds": [],
+        "uiHints": ["social-link-rival-tier"]
+      },
+      "playerNotification": {
+        "type": "chat-message",
+        "templateId": "NOTIFY_GATE_SOCIAL_LINKS_FULL",
+        "teacher": "Akademie-Kanzlei",
+        "inUniverseText": "Ein Jahr Akademie hinterlässt Spuren. Nicht alle Bindungen sind Freundschaft — aber alle formen dich.",
+        "mechanicText": "Das Social-Link-System ist jetzt vollständig. Rivalen-Bindungen sind sichtbar; Rang-Aufstiege bis Rang 2 sind möglich."
+      }
+    },
+    {
+      "id": "GATE_DISCIPLINE_POOL",
+      "name": "Disziplin-Event-Pool (T3)",
+      "description": "Disziplin-Events (Codex-Verfahren, Verwarnungen) werden möglich.",
+      "trigger": { "type": "lesson-completed", "lessonId": "LES_Y1_T3_LAW_01" },
+      "unlocks": {
+        "mechanic": "events.discipline",
+        "statePaths": ["academy.mechanicGates.GATE_DISCIPLINE_POOL"],
+        "eventPoolIds": ["discipline"],
+        "uiHints": []
+      },
+      "playerNotification": {
+        "type": "chat-message",
+        "templateId": "NOTIFY_GATE_DISCIPLINE",
+        "teacher": "Gildenrecht-Lehrkraft",
+        "inUniverseText": "Wer das Gildenrecht kennt, kann nicht mehr sagen, er wusste es nicht. Die Akademie wird euch ab jetzt an ihren Regeln messen.",
+        "mechanicText": "Disziplin-Events sind aktiv. Das Codex-Verfahren und Verwarnungen können jetzt in Ereignissen auftreten."
+      }
+    },
+    {
+      "id": "GATE_KOBOLD_ARC",
+      "name": "Kobold-Arc + Study-Intrigue-Pool (T3)",
+      "description": "Der Kobold-Story-Arc und der Study-Intrigue-Pool werden freigeschaltet.",
+      "trigger": { "type": "lesson-completed", "lessonId": "LES_Y1_T3_ELEM_01" },
+      "unlocks": {
+        "mechanic": "events.storyArcs",
+        "statePaths": ["academy.mechanicGates.GATE_KOBOLD_ARC"],
+        "eventPoolIds": ["kobold_arc", "study_intrigue"],
+        "uiHints": []
+      },
+      "playerNotification": {
+        "type": "chat-message",
+        "templateId": "NOTIFY_GATE_KOBOLD_ARC",
+        "teacher": "Elementarlehre-Lehrkraft",
+        "inUniverseText": "Elemente können geweckt werden — auch unbeabsichtigt. Vielleicht ist in der Akademie schon etwas erwacht, das auf euch wartet.",
+        "mechanicText": "Fortgeschrittene Story-Arcs sind freigeschaltet: Kobold-Arc und Nordturm-Intrige können jetzt beginnen."
+      }
+    },
+    {
+      "id": "GATE_NACHT_POOL",
+      "name": "Nacht-Event-Pool (Jahr 2)",
+      "description": "Nacht-Events und der Study-Minor-Pool werden mit Jahr 2 freigeschaltet.",
+      "trigger": { "type": "trimester-completed", "year": 1, "trimester": 3 },
+      "unlocks": {
+        "mechanic": "events.night",
+        "statePaths": ["academy.mechanicGates.GATE_NACHT_POOL"],
+        "eventPoolIds": ["nacht", "study_minor"],
+        "uiHints": []
+      },
+      "playerNotification": {
+        "type": "chat-message",
+        "templateId": "NOTIFY_GATE_NACHT_POOL",
+        "teacher": "Akademie-Kanzlei",
+        "inUniverseText": "Ihr seid jetzt Studierende im zweiten Jahr. Die Akademie schläft nicht — und ihr habt gelernt, in der Dunkelheit zu sehen.",
+        "mechanicText": "Nacht-Events und Study-Minor-Pool sind aktiv. Die Akademie hat nach Sonnenuntergang neue Geheimnisse."
+      }
+    }
+  ]
+}
