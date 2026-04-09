@@ -16,6 +16,7 @@
 import { MODULE_ID, MODULE_ABBREV } from '../core/common.js';
 import { emitHook, HOOKS } from '../core/hooks/emitter.js';
 import { JanusProfileRegistry } from '../core/profiles/index.js';
+import { MusicDiscoveryEngine } from './MusicDiscoveryEngine.js';
 
 /**
  * @typedef {object} AtmosphereMoodBinding
@@ -89,6 +90,9 @@ export class JanusAtmosphereController {
     this._overrideTimer = null;
     /** @private */
     this._lastTickAt = 0;
+
+    /** @type {MusicDiscoveryEngine} */
+    this.discovery = new MusicDiscoveryEngine({ logger, engine });
   }
 
   // -------------------------
@@ -111,6 +115,7 @@ export class JanusAtmosphereController {
     if (!this._isEnabled()) return false;
 
     await this._loadMoods();
+    await this.discovery.loadCatalog();
 
     // Auto-assign Master (wenn keiner gesetzt und ich GM bin)
     const master = this._getMasterClientUserId();
@@ -245,6 +250,33 @@ export class JanusAtmosphereController {
       cooldownMs: this.state.get?.('atmosphere.cooldownMs') ?? 0,
       minDurationMs: this.state.get?.('atmosphere.minDurationMs') ?? 0,
     };
+  }
+
+  /**
+   * Spielt einen Track basierend auf einer dynamischen Entdeckung (beaTunes/KI).
+   * @param {object} query
+   * @param {{broadcast?:boolean}} [opts]
+   */
+  async playDiscoveryTrack(query, opts = {}) {
+    if (!this._isEnabled()) return false;
+
+    const track = this.discovery.findBestTrack(query);
+    if (!track) {
+      this.logger?.warn?.('Atmosphere: Kein passender Track im Katalog gefunden', { query });
+      return false;
+    }
+
+    this.logger?.info?.(`Atmosphere: Dynamic Match gefunden: "${track.title}"`, { score: track.ai_scores?.[query.sceneKey] });
+
+    // Ensure smooth transitions for discovery tracks
+    const playOpts = {
+      fadeInMs: 2500,
+      fadeOutMs: 2000,
+      loop: true,
+      ...opts
+    };
+
+    return this.playPlaylist(track.path, playOpts);
   }
 
   /**
@@ -612,6 +644,20 @@ export class JanusAtmosphereController {
       }
     }
 
+    // 4) Discovery Fallback (Phase 8.5)
+    if (this.discovery.isReady) {
+      const locId = this.state.get?.('academy.currentLocationId') ?? 'unknown';
+      const slot = this.engine?.academy?.calendar?.getCurrentSlot?.();
+      
+      const success = await this.playDiscoveryTrack({ 
+        sceneKey: locId, 
+        mood: slot?.phase,
+        tags: ['auto-discovery'] 
+      }, { broadcast: false });
+      
+      if (success) return true;
+    }
+
     return false;
   }
 
@@ -624,7 +670,10 @@ export class JanusAtmosphereController {
     if (!this.state.get?.('atmosphere.autoFromCalendar')) return;
 
     const mood = this.resolveMoodForSlot(slotRef);
-    if (!mood) return;
+    if (!mood) {
+      // Discovery Fallback
+      return this.playDiscoveryTrack({ mood: slotRef?.phase, tags: ['calendar-change'] }, { broadcast: false });
+    }
     await this._applyMoodLocal(mood, { source: 'calendar', reason: 'calendar-change' });
   }
 
@@ -666,7 +715,10 @@ export class JanusAtmosphereController {
 
     const locationId = payload?.locationId ?? payload?.id ?? null;
     const mood = this.resolveMoodForLocation(locationId);
-    if (!mood) return;
+    if (!mood) {
+      // Discovery Fallback
+      return this.playDiscoveryTrack({ sceneKey: locationId, tags: ['location-change'] }, { broadcast: false });
+    }
     await this._applyMoodLocal(mood, { source: 'location', reason: 'location-change' });
   }
 

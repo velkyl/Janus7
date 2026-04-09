@@ -46,7 +46,7 @@ export class JanusDevPanel extends HandlebarsApplicationMixin(ApplicationV2) {
 
     if (state && actorId) {
       const playerStateRoot = state.get('playerState') || {};
-      const questStatesRoot = state.get('questStates') || state.get('academy.quests') || {};
+      const questStatesRoot = state.get('questStates') || {};
       const eventStatesRoot = state.get('eventStates') || {};
       playerState = playerStateRoot?.[actorId] || {};
       questStates = questStatesRoot?.[actorId] || {};
@@ -172,7 +172,7 @@ export class JanusDevPanel extends HandlebarsApplicationMixin(ApplicationV2) {
 
     const state = {
       playerState: game.janus7.core.state.get('playerState', actorId),
-      questStates: game.janus7.core.state.get('questStates', actorId) || game.janus7.core.state.get('academy.quests', actorId),
+      questStates: game.janus7.core.state.get('questStates', actorId),
       eventStates: game.janus7.core.state.get('eventStates', actorId)
     };
 

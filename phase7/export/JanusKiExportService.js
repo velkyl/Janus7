@@ -275,6 +275,7 @@ export class JanusKiExportService {
     }
     if (campaignState?.actors?.npcs) campaignState.actors.npcs = filterNulls(campaignState.actors.npcs);
     if (campaignState?.academy?.calendar) campaignState.academy.calendar = filterNulls(campaignState.academy.calendar);
+    if (campaignState?.questStates) campaignState.questStates = dropTestQuestActors(campaignState.questStates) ?? {};
     if (campaignState?.academy?.quests) campaignState.academy.quests = dropTestQuestActors(campaignState.academy.quests) ?? {};
     if (campaignState?.academy?.social?.relationships) {
       campaignState.academy.social.relationships = pruneNullishDeep(campaignState.academy.social.relationships) ?? {};

@@ -149,8 +149,8 @@ function buildStatePanel(engine) {
 
 function buildDiagnosticsPanel(engine) {
   const snapshot = engine?.diagnostics?.snapshot?.() ?? {};
-  const graph = snapshot?.graph ?? engine?.graph?.diagnostics?.() ?? {};
-  const cache = graph?.cache ?? {};
+  const graph = snapshot?.graph ?? engine?.graph?.diagnostics?.run?.()?.summary ?? {};
+  const cache = graph?.cache ?? engine?.graph?.cache?.snapshot?.() ?? {};
   return {
     metrics: [
       { label: 'Nodes', value: graph?.nodes ?? graph?.nodeCount ?? 0 },

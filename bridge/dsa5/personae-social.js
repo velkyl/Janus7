@@ -303,4 +303,33 @@ export class DSA5PersonaeSocialBridge {
       .flatMap((j) => j.pages?.contents ?? [])
       .filter((p) => p.type === 'dsapersonaedramatis') ?? [];
   }
+
+  /**
+   * Stellt sicher, dass mindestens ein Journal vom Typ 'dsapersonaedramatis' existiert.
+   * Erzeugt bei Bedarf ein neues JournalEntry mit einer entsprechenden Page.
+   * 
+   * @param {string} [name="Akademie Kontakte"]
+   * @returns {Promise<JournalEntryPage>}
+   */
+  async ensurePage(name = "Akademie Kontakte") {
+    if (!game.user?.isGM) return null;
+    const pages = this.findAllPages();
+    if (pages.length) return pages[0];
+
+    this.logger?.info?.(`JANUS7 | PersonaeSocial | Erzeuge neues Journal "${name}"...`);
+    const journal = await JournalEntry.create({
+      name: name,
+      folder: null // pack it into root or a generic folder?
+    });
+
+    const [page] = await journal.createEmbeddedDocuments("JournalEntryPage", [{
+      name: name,
+      type: "dsapersonaedramatis",
+      system: {
+        personae: {}
+      }
+    }]);
+
+    return page;
+  }
 }

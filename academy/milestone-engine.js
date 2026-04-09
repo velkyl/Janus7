@@ -13,7 +13,7 @@ export class JanusMilestoneEngine {
   _readEvaluationValue(expr) {
     const source = _safeString(expr);
     if (!source) return null;
-    if (source === 'state.scoring.eleviumPoints') return Number(this.state.get('scoring.eleviumPoints') ?? 0);
+    if (source === 'state.scoring.eleviumPoints') return Number(this.state.get('academy.scoring.eleviumPoints') ?? 0);
     return Number(this.state.get(source.replace(/^state\./, '')) ?? 0);
   }
 

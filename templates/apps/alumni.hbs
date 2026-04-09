@@ -1,0 +1,100 @@
+<div class="j7-app j7-alumni">
+    <header class="j7-app__header">
+        <div class="j7-app__title">
+            <i class="fas fa-user-graduate"></i>
+            <h1>Alumni-Management</h1>
+            <p class="j7-app__subtitle">Verwaltung ehemaliger Schüler und Mentoren</p>
+        </div>
+        <div class="j7-app__summary">
+            <div class="j7-badge" title="Gesamt">
+                <i class="fas fa-users"></i> {{summary.total}}
+            </div>
+            <div class="j7-badge j7-badge--info" title="Mentoren">
+                <i class="fas fa-hands-helping"></i> {{summary.mentors}}
+            </div>
+            <div class="j7-badge j7-badge--warning" title="Rueckkehrer">
+                <i class="fas fa-user-clock"></i> {{summary.returned}}
+            </div>
+        </div>
+    </header>
+
+    <div class="j7-app__body">
+        <aside class="j7-app__sidebar">
+            <section class="j7-sidebar-section">
+                <h3>Vorschläge für Wiedereinsatz</h3>
+                <div class="j7-suggestion-list">
+                    {{#each reentrySuggestions}}
+                        <div class="j7-suggestion-item" data-npc-id="{{npcId}}">
+                            <div class="j7-suggestion-head">
+                                <strong>{{name}}</strong>
+                                <span class="j7-suggestion-score">{{score}} pts</span>
+                            </div>
+                            <p class="j7-suggestion-role">{{suggestedRole}}</p>
+                            <p class="j7-suggestion-rationale">{{rationale}}</p>
+                            <div class="j7-suggestion-actions">
+                                <button type="button" class="j7-btn j7-btn--tiny" data-action="set-focus" data-focus="mentor">Mentor</button>
+                                <button type="button" class="j7-btn j7-btn--tiny" data-action="set-focus" data-focus="return">Rückkehr</button>
+                            </div>
+                        </div>
+                    {{else}}
+                        <p class="dim">Keine aktuellen Empfehlungen.</p>
+                    {{/each}}
+                </div>
+            </section>
+
+            <section class="j7-sidebar-section">
+                <h3>Potentielle Kandidaten</h3>
+                <div class="j7-candidate-list">
+                    {{#each candidates}}
+                        <div class="j7-candidate-item">
+                            <span>{{name}}</span>
+                            <button type="button" class="j7-btn j7-btn--tiny" data-action="register" data-npc-id="{{id}}">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    {{/each}}
+                </div>
+            </section>
+        </aside>
+
+        <main class="j7-app__content">
+            <div class="j7-alumni-grid">
+                {{#each alumni}}
+                    <article class="j7-alumni-card {{#if isMentor}}is-mentor{{/if}}">
+                        <div class="j7-alumni-card__head">
+                            <i class="{{statusIcon}}"></i>
+                            <div class="j7-alumni-card__title">
+                                <h3>{{name}}</h3>
+                                <span>{{statusLabel}} · Graduiert {{graduationLabel}}</span>
+                            </div>
+                            <div class="j7-alumni-card__grade">{{latestGradeLabel}}</div>
+                        </div>
+
+                        {{#if focus}}
+                            <div class="j7-alumni-card__focus">
+                                <i class="fas fa-bullseye"></i> {{focusLabel}}
+                            </div>
+                        {{/if}}
+
+                        <div class="j7-alumni-card__actions">
+                            <select data-action="set-status" data-npc-id="{{npcId}}">
+                                <option value="graduated" {{#if (eq status 'graduated')}}selected{{/if}}>Alumni</option>
+                                <option value="mentor" {{#if (eq status 'mentor')}}selected{{/if}}>Mentor</option>
+                                <option value="returned" {{#if (eq status 'returned')}}selected{{/if}}>Rückkehr-NSC</option>
+                                <option value="inactive" {{#if (eq status 'inactive')}}selected{{/if}}>Inaktiv</option>
+                            </select>
+                            <button type="button" class="j7-btn j7-btn--icon" data-action="open-npc-sheet" data-npc-id="{{npcId}}">
+                                <i class="fas fa-external-link-alt"></i>
+                            </button>
+                        </div>
+                    </article>
+                {{else}}
+                    <div class="j7-empty-state">
+                        <i class="fas fa-user-graduate"></i>
+                        <p>Noch keine Alumni im System erfasst.</p>
+                    </div>
+                {{/each}}
+            </div>
+        </main>
+    </div>
+</div>

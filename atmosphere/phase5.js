@@ -67,6 +67,8 @@ registerRuntimeHook('janus7:ready:atmosphere-phase5', HOOKS.ENGINE_READY, (engin
     engine.atmosphere.applyBestAutoMood = (opts = {}) => controller.applyBestAutoMood(opts);
 
     engine.atmosphere.preview = (moodId, opts = {}) => controller.preview(moodId, opts);
+    engine.atmosphere.playDiscoveryTrack = (query, opts = {}) => controller.playDiscoveryTrack(query, opts);
+
 
     // Socket wiring
     if (game?.socket) {

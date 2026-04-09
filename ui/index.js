@@ -18,6 +18,8 @@ import { JanusLibraryBrowserApp } from './apps/JanusLibraryBrowserApp.js';
 import { JanusStudentArchiveApp } from './apps/JanusStudentArchiveApp.js';
 import { JanusEnrollmentApp } from './apps/JanusEnrollmentApp.js';
 import { JanusQuartermasterApp } from './apps/JanusQuartermasterApp.js';
+import { JanusReportCardApp } from './apps/JanusReportCardApp.js';
+import { JanusAlumniApp } from './apps/JanusAlumniApp.js';
 import './layer/bridge.js';
 import { JANUS_UI_APP_STATUS, listJanusUiAppStatus } from './app-manifest.js';
 import { HOOKS } from '../core/hooks/topics.js';
@@ -68,6 +70,8 @@ export const JanusUI = {
     commandCenter: JanusCommandCenterApp,
     testResults: JanusTestResultApp,
     guidedManualTests: JanusGuidedManualTestApp,
+    reportCard: JanusReportCardApp,
+    alumni: JanusAlumniApp,
     ...(JanusSettingsTestHarnessApp ? { settingsTestHarness: JanusSettingsTestHarnessApp } : {})
   },
 

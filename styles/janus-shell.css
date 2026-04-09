@@ -1,27 +1,22 @@
-/**
- * JANUS7 Shell
- * Datei: janus-shell.css
- *
- * Scope:
- * - Styles fuer die modulare Shell/Director-Ansicht und Panel-Layouts.
- * - Bewusst auf Foundry/DSA5-nahe Tokens und Pergamentflaechen ausgerichtet.
- */
+@layer janus7.shell {
 
 .janus7-shell {
   --j7s-bg: #eadfce;
-  --j7s-bg-soft: #f6efe4;
+  --j7s-bg-soft: #fcf9f4;
   --j7s-bg-strong: #dfcfb6;
-  --j7s-surface: rgba(255, 249, 240, 0.84);
-  --j7s-surface-2: rgba(236, 224, 205, 0.92);
-  --j7s-card: rgba(255, 252, 246, 0.9);
+  --j7s-surface: rgba(255, 252, 248, 0.75);
+  --j7s-surface-2: rgba(236, 224, 205, 0.85);
+  --j7s-card: rgba(255, 254, 252, 0.92);
   --j7s-border: #7c6042;
-  --j7s-border-soft: rgba(69, 46, 24, 0.2);
+  --j7s-border-soft: rgba(69, 46, 24, 0.15);
   --j7s-text: #2f2418;
-  --j7s-muted: #6e5b46;
-  --j7s-accent: #85521f;
-  --j7s-accent-soft: rgba(133, 82, 31, 0.12);
+  --j7s-muted: #7a6a58;
+  --j7s-accent: #a6611a;
+  --j7s-accent-hover: #dfc27d;
+  --j7s-accent-soft: rgba(166, 97, 26, 0.1);
   --j7s-success: #315a2f;
-  --j7s-shadow: rgba(45, 28, 15, 0.14);
+  --j7s-glass: blur(14px) saturate(180%);
+  --j7s-shadow: 0 8px 32px 0 rgba(31, 20, 10, 0.12);
   color: var(--j7s-text);
 }
 
@@ -139,9 +134,10 @@
 .j7-shell__btn:hover,
 .j7-shell__tile:hover,
 .j7-shell__panel-close:hover {
-  border-color: rgba(133, 82, 31, 0.48);
-  background: linear-gradient(180deg, rgba(255, 253, 248, 1), rgba(230, 214, 190, 0.95));
-  box-shadow: 0 2px 4px rgba(45, 28, 15, 0.12);
+  border-color: var(--j7s-accent);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(245, 235, 220, 1));
+  box-shadow: 0 4px 12px rgba(45, 28, 15, 0.15);
+  transform: translateY(-1px);
 }
 
 .j7-shell__quick {
@@ -215,12 +211,28 @@
 }
 
 .j7-shell__nav {
-  display: grid;
-  grid-template-columns: 36px minmax(0, 1fr);
-  gap: 12px;
-  align-items: start;
-  padding: 12px 13px;
-  text-align: left;
+  display: grid !important;
+  grid-template-columns: 36px 1fr !important;
+  gap: 12px !important;
+  align-items: center !important;
+  padding: 12px 13px !important;
+  text-align: left !important;
+  min-height: 60px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.j7-shell__nav-icon {
+  grid-column: 1;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.j7-shell__nav-copy {
+  grid-column: 2;
+  display: flex !important;
+  flex-direction: column;
 }
 
 .j7-shell__nav.is-active {
@@ -348,13 +360,20 @@
 .j7-shell__card,
 .j7-shell__panel {
   border: 1px solid var(--j7s-border-soft);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 249, 240, 0.88)),
-    var(--j7s-card);
-  border-radius: 14px;
-  padding: 16px;
-  box-shadow: 0 6px 16px var(--j7s-shadow);
+  background: var(--j7s-card);
+  backdrop-filter: var(--j7s-glass);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: var(--j7s-shadow);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
 }
+
+.j7-shell__card:hover {
+  transform: translateY(-2px) scale(1.005);
+  box-shadow: 0 12px 48px 0 rgba(31, 20, 10, 0.16);
+  border-color: var(--j7s-accent-soft);
+}
+
 
 .j7-shell__card-head,
 .j7-shell__panel-head {
@@ -551,3 +570,5 @@
     justify-content: flex-start;
   }
 }
+
+} /* end @layer janus7.shell */

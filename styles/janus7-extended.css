@@ -783,7 +783,7 @@
 
 .j7-input-wide { width: 70%; }
 
-} /* end @layer janus7.extended */
+
 
 
 /* v0.9.11.1 — Lesson document UI */
@@ -824,3 +824,5 @@
 .lesson-item-sheet .janus7-grid { display: grid; gap: 8px; }
 .lesson-item-sheet .janus7-grid-2col { grid-template-columns: repeat(2, minmax(0,1fr)); }
 .lesson-item-sheet .janus7-grid-3col { grid-template-columns: repeat(3, minmax(0,1fr)); }
+
+} /* end @layer janus7.extended */

@@ -181,7 +181,7 @@ export class JanusCron {
         const scoring = engine?.academy?.scoring ?? engine?.simulation?.scoring;
         if (!scoring) return;
 
-        const useWeeklyBuffer = engine?.core?.state?.getPath?.('scoring.useWeeklyBuffer') ?? false;
+        const useWeeklyBuffer = engine?.core?.state?.getPath?.('academy.scoring.useWeeklyBuffer') ?? false;
         if (!useWeeklyBuffer) return;
 
         await scoring.resetWeeklyBuffer?.({ week: current?.week });

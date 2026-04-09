@@ -13,6 +13,8 @@ export const JANUS_UI_APP_STATUS = Object.freeze({
   syncPanel: { className: 'JanusSyncPanelApp', maturity: 'teilproduktiv', mode: 'view/admin', shell: false, editable: false, admin: true },
   commandCenter: { className: 'JanusCommandCenterApp', maturity: 'intern/debug', mode: 'admin/debug', shell: false, editable: true, admin: true, preferred: false },
   testResults: { className: 'JanusTestResultApp', maturity: 'intern/test/debug', mode: 'debug', shell: false, editable: false, admin: true },
+  reportCard: { className: 'JanusReportCardApp', maturity: 'teilproduktiv', mode: 'view/workflow', shell: true, editable: false, admin: true, aliasOf: 'shell', viewId: 'reportCards' },
+  alumni: { className: 'JanusAlumniApp', maturity: 'teilproduktiv', mode: 'edit/workflow', shell: true, editable: true, admin: true, aliasOf: 'shell', viewId: 'alumni' },
   guidedManualTests: { className: 'JanusGuidedManualTestApp', maturity: 'intern/test/debug', mode: 'debug', shell: false, editable: false, admin: true },
   stateInspector: { className: 'JanusStateInspectorApp', maturity: 'intern/debug', mode: 'view-only', shell: false, editable: false, admin: true },
   controlPanel: { className: 'JanusShellApp', maturity: 'compat/shell-alias', mode: 'view/admin', shell: true, editable: false, admin: true, aliasOf: 'shell', preferred: false },

@@ -98,10 +98,18 @@ export class JanusSocialSync {
     if (!game.user?.isGM) return { imported: 0, exported: 0, skipped: 0, unmappedContacts: [], details: [] };
 
     const personae = this._getPersonaeBridge();
-    const pages = personae?.findAllPages?.() ?? [];
+    let pages = personae?.findAllPages?.() ?? [];
     if (!pages.length) {
-      this.logger?.warn?.(`${MODULE_ABBREV} | SocialSync | Keine dsapersonaedramatis-Pages gefunden.`);
-      return { imported: 0, exported: 0, skipped: 0, unmappedContacts: [], details: [] };
+      if (!dryRun) {
+        this.logger?.info?.(`${MODULE_ABBREV} | SocialSync | Keine dsapersonaedramatis-Pages gefunden. Erzeuge Standard-Journal...`);
+        const newPage = await personae.ensurePage?.("JANUS7 Social Contacts");
+        if (newPage) pages = [newPage];
+      }
+      
+      if (!pages.length) {
+        this.logger?.warn?.(`${MODULE_ABBREV} | SocialSync | Keine dsapersonaedramatis-Pages gefunden.`);
+        return { imported: 0, exported: 0, skipped: 0, unmappedContacts: [], details: [] };
+      }
     }
 
     const allRels = this.socialEngine.listAllRelationships();

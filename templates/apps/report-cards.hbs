@@ -1,0 +1,70 @@
+<div class="j7-app j7-report-cards">
+    <header class="j7-app__header">
+        <div class="j7-app__title">
+            <i class="fas fa-file-certificate"></i>
+            <h1>Akademie-Zeugnisse</h1>
+        </div>
+        <div class="j7-app__actions">
+            <button type="button" class="j7-btn j7-btn--primary" data-action="export-pdf">
+                <i class="fas fa-file-pdf"></i> PDF/Drucken
+            </button>
+            <button type="button" class="j7-btn j7-btn--secondary" data-action="write-journals">
+                <i class="fas fa-book-open"></i> Journal-Sync
+            </button>
+            <button type="button" class="j7-btn" data-action="refresh">
+                <i class="fas fa-sync"></i> Aktualisieren
+            </button>
+        </div>
+    </header>
+
+    <div class="j7-app__content">
+        {{#if drafts.length}}
+            <div class="j7-report-list">
+                {{#each drafts}}
+                    <article class="j7-report-card">
+                        <div class="j7-report-card__header">
+                            <div class="j7-report-card__actor">
+                                <img src="{{actorImg}}" alt="{{actorName}}" class="j7-report-card__img">
+                                <div>
+                                    <h3>{{actorName}}</h3>
+                                    <span class="j7-report-card__period">{{../periodLabel}}</span>
+                                </div>
+                            </div>
+                            <div class="j7-report-card__grade j7-grade-{{finalGrade}}">
+                                {{finalGradeLabel}}
+                            </div>
+                        </div>
+
+                        <div class="j7-report-card__stats">
+                            <div class="j7-report-card__stat">
+                                <label>Mittelwert</label>
+                                <span>{{payload.evaluation.avgPercentLabel}}</span>
+                            </div>
+                            <div class="j7-report-card__stat">
+                                <label>Status</label>
+                                <span>{{statusLabel}}</span>
+                            </div>
+                        </div>
+
+                        <div class="j7-report-card__narrative">
+                            <h4>Stärken</h4>
+                            <ul>
+                                {{#each payload.narrative.strengths}}
+                                    <li>{{this}}</li>
+                                {{else}}
+                                    <li class="dim">Keine markanten Stärken dokumentiert.</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </article>
+                {{/each}}
+            </div>
+        {{else}}
+            <div class="j7-empty-state">
+                <i class="fas fa-ghost"></i>
+                <p>Keine Zeugnisdaten für den aktuellen Zeitraum verfügbar.</p>
+                <p class="dim">Stelle sicher, dass im Director-Runbook Scoring-Events vorhanden sind.</p>
+            </div>
+        {{/if}}
+    </div>
+</div>

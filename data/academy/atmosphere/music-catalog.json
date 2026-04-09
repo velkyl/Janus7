@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-04-09T07:30:00Z",
+  "songs": [
+    {
+      "id": "track_001",
+      "path": "modules/Janus7/assets/audio/ambient_morning_stable.mp3",
+      "title": "Academy Morning",
+      "metadata": {
+        "bpm": 72,
+        "mood": "calm",
+        "genre": "ambient",
+        "tags": ["morning", "peaceful", "academy"]
+      },
+      "ai_scores": {
+        "academy_morning": 0.95,
+        "dungeon": 0.05
+      }
+    },
+    {
+      "id": "track_002",
+      "path": "modules/Janus7/assets/audio/tense_dungeon_shadows.mp3",
+      "title": "Deep Shadows",
+      "metadata": {
+        "bpm": 60,
+        "mood": "tense",
+        "genre": "dark ambient",
+        "tags": ["dungeon", "tense", "shadows"]
+      },
+      "ai_scores": {
+        "academy_morning": 0.1,
+        "dungeon": 0.88
+      }
+    }
+  ]
+}

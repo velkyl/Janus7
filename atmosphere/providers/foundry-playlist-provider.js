@@ -20,6 +20,8 @@ export class FoundryPlaylistProvider {
    */
   constructor({ logger }) {
     this.logger = logger;
+    /** @type {any|null} */
+    this._activeDiscoverySound = null;
   }
 
   /**
@@ -33,8 +35,6 @@ export class FoundryPlaylistProvider {
     if (playlistRef.startsWith('Playlist.') || playlistRef.startsWith('Compendium.') || playlistRef.startsWith('uuid:')) {
       try {
         const uuid = playlistRef.startsWith('uuid:') ? playlistRef.slice(5) : playlistRef;
-        // Note: fromUuid is a Foundry VTT global (not DSA5-specific).
-        // It is intentionally allowed here as it resolves Foundry Documents, not system data.
         const doc = await (globalThis.fromUuid ?? fromUuid)(uuid);
         if (doc) return doc;
       } catch {
@@ -55,24 +55,75 @@ export class FoundryPlaylistProvider {
   }
 
   /**
-   * Spielt Playlist (alle Sounds).
+   * Spielt Playlist (alle Sounds) oder eine Datei direkt.
    *
    * @param {string} playlistRef
    * @param {object} [opts]
    * @param {number} [opts.volume] 0..1 (runtime)
    * @param {number} [opts.fadeInMs] best-effort
+   * @param {number} [opts.fadeOutMs] für Cross-Fade
+   * @param {boolean} [opts.loop] für Direkt-Files
    */
   async playPlaylist(playlistRef, opts = {}) {
+    // 1. Vorherige Discovery-Sounds mit Cross-Fade stoppen
+    const oldSound = this._activeDiscoverySound;
+    this._activeDiscoverySound = null;
+
+    if (oldSound) {
+      try {
+        const fadeOut = opts.fadeOutMs ?? 1500;
+        if (fadeOut > 0 && oldSound.howl) {
+          oldSound.howl.fade(oldSound.howl.volume(), 0, fadeOut);
+          setTimeout(() => { try { oldSound.stop(); } catch {} }, fadeOut + 100);
+        } else {
+          if (typeof oldSound.stop === 'function') oldSound.stop();
+        }
+      } catch (err) {
+        this.logger?.warn?.('FoundryPlaylistProvider: Fehler beim Stoppen des Discovery-Sounds', err);
+      }
+    }
+
     const playlist = await this.resolvePlaylist(playlistRef);
     if (!playlist) {
-      this.logger?.warn?.('FoundryPlaylistProvider: Playlist nicht gefunden', { playlistRef });
+      // Fallback: Check if it's a file path
+      const isAudioFile = playlistRef.includes('/') && /\.(mp3|m4a|ogg|wav)$/i.test(playlistRef);
+      if (isAudioFile) {
+        this.logger?.info?.('FoundryPlaylistProvider: Spiele Datei direkt', { path: playlistRef });
+        if (typeof AudioHelper !== 'undefined') {
+          try {
+            // Play as a non-persistent sound
+            const sound = await AudioHelper.play({ 
+              src: playlistRef, 
+              volume: 0, // Start with 0 for fade-in
+              loop: opts.loop ?? true 
+            }, false);
+
+            this._activeDiscoverySound = sound;
+            
+            // Fade-In
+            const fadeIn = opts.fadeInMs ?? 1500;
+            const targetVol = opts.volume ?? 0.8;
+            if (fadeIn > 0 && sound?.howl) {
+               sound.howl.volume(0);
+               sound.howl.fade(0, targetVol, fadeIn);
+            } else if (sound?.howl) {
+               sound.howl.volume(targetVol);
+            }
+
+            return true;
+          } catch (err) {
+            this.logger?.error?.('FoundryPlaylistProvider: Direkt-Playback fehlgeschlagen', err);
+            return false;
+          }
+        }
+      }
+      this.logger?.warn?.('FoundryPlaylistProvider: Playlist/Datei nicht gefunden', { playlistRef });
       return false;
     }
 
     try {
-      // Start
+      // Start Playlist
       if (typeof playlist.playAll === 'function') {
-        // Manche Foundry-Versionen unterstützen Optionen; wir sind defensiv.
         try {
           await playlist.playAll(opts);
         } catch {
@@ -80,9 +131,6 @@ export class FoundryPlaylistProvider {
         }
       } else if (typeof playlist.play === 'function') {
         await playlist.play();
-      } else {
-        this.logger?.warn?.('FoundryPlaylistProvider.playPlaylist: Keine play*-Methode auf Playlist', { playlistRef });
-        return false;
       }
 
       // Runtime volume/fade
@@ -136,6 +184,14 @@ export class FoundryPlaylistProvider {
    */
   async stopAll(opts = {}) {
     try {
+      // 1. Discovery-Sound stoppen
+      if (this._activeDiscoverySound) {
+        try {
+          if (typeof this._activeDiscoverySound.stop === 'function') this._activeDiscoverySound.stop();
+          this._activeDiscoverySound = null;
+        } catch {}
+      }
+
       const list = Array.from(game?.playlists ?? []);
       for (const p of list) {
         // Nur stoppen, wenn aktiv (best-effort property)

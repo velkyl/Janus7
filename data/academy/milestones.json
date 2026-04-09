@@ -8,7 +8,7 @@
     {
       "id": "MILESTONE_YEAR_1_EXAM",
       "name": "Spectatio (Ende Elevium)",
-      "evaluationExpr": "state.scoring.eleviumPoints",
+      "evaluationExpr": "state.academy.scoring.eleviumPoints",
       "outcomes": [
         {
           "id": "A_SUMMA_CUM_LAUDE",
