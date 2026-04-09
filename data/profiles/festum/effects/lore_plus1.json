@@ -1,5 +1,0 @@
-{
-  "effectId": "lore_plus1",
-  "expr": "playerState.skills.lore:+1",
-  "humanReadable": "Wissen +1"
-}

@@ -1,5 +1,0 @@
-{
-  "effectId": "energy_plus1",
-  "expr": "playerState.energy:+1",
-  "humanReadable": "Energie +1"
-}
