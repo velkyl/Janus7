@@ -2,13 +2,32 @@
  * @file ui/core/base-app.js
  * @module janus7
  * @phase 6
- * 
- * JanusBaseApp - Render-stabile ApplicationV2 Basisklasse
+ *
+ * JanusBaseApp — Render-stable ApplicationV2 base class for all JANUS7 UI applications.
+ *
+ * Responsibilities:
+ *  - Foundry v13 ApplicationV2 compatibility shims (element accessors, setPosition guard)
+ *  - Post-render hook for stable DOM access via queueMicrotask
+ *  - Viewport sanity clamping (_applyWindowSanity)
+ *  - Centralised hook lifecycle (_registerHook / _unregisterHooks / close)
+ *  - Error boundary rendering with accessible ARIA markup
+ *  - Debounced auto-refresh via enableAutoRefresh
  */
 
 import { MODULE_ID } from '../../core/common.js';
+import { HOOKS } from '../../core/hooks/topics.js';
 
-function fallbackDeepClone(value) {
+// ---------------------------------------------------------------------------
+// Module-level polyfill — executed exactly once when the module loads.
+// Prevents every JanusBaseApp subclass constructor from re-running the guard.
+// ---------------------------------------------------------------------------
+
+/**
+ * Polyfill for foundry.utils.deepClone if absent (defensive guard for v13 edge cases).
+ * @param {*} value
+ * @returns {*}
+ */
+function _fallbackDeepClone(value) {
   if (value === undefined) return undefined;
   try {
     if (typeof structuredClone === 'function') return structuredClone(value);
@@ -20,26 +39,48 @@ function fallbackDeepClone(value) {
   }
 }
 
-function ensureFoundryDeepClone() {
+(function _ensureFoundryDeepClone() {
   const utils = globalThis.foundry?.utils;
   if (!utils || typeof utils.deepClone === 'function') return;
-  utils.deepClone = fallbackDeepClone;
-}
+  utils.deepClone = _fallbackDeepClone;
+})();
+
+// ---------------------------------------------------------------------------
+// Base class
+// ---------------------------------------------------------------------------
 
 export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
+
   constructor(options = {}) {
     super(options);
-    ensureFoundryDeepClone();
+    // FIX P1-03: ensureFoundryDeepClone() removed from constructor — called at module level.
     this.engine = options.engine ?? null;
+
+    /**
+     * AbortController for ongoing render operations.
+     * Subclasses may set this to a new AbortController before async work begins.
+     * JanusBaseApp.close() calls _cleanupRenderAbort() to abort automatically.
+     *
+     * @type {AbortController|null}
+     * @protected
+     */
     this._renderAbort = null;
+
+    /** @type {boolean} True until the first successful _onPostRender call. */
     this._isFirstRender = true;
+
+    /** @type {ReturnType<typeof setTimeout>|null} */
     this._rerenderTimer = null;
-    this._baseActionsBound = false;
   }
 
+  // ---------------------------------------------------------------------------
+  // DOM Element accessors (v12/v13 compatibility shims)
+  // ---------------------------------------------------------------------------
+
   /**
-   * Compat getter: some tests and legacy code still expect .element to be present.
-   * For ApplicationV2 we normalize to the raw HTMLElement.
+   * Compatibility getter: normalises element access across Foundry v12 (jQuery) and v13 (HTMLElement).
+   * @deprecated Will be removed after full v13 migration is confirmed stable.
+   * @returns {HTMLElement|null}
    */
   get element() {
     let raw = null;
@@ -49,44 +90,55 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
   }
 
   /**
-   * Unified DOM element accessor for ApplicationV2 compatibility.
-   * In Foundry v13+ ApplicationV2, this.element is HTMLElement (not jQuery).
+   * Unified DOM element accessor guaranteed to return a raw HTMLElement in v13+.
    * @returns {HTMLElement|null}
    */
   get domElement() {
     const raw = this.element ?? this._element ?? this._legacyElement ?? null;
     if (!raw) return null;
-    return (raw instanceof HTMLElement) ? raw : raw[0];
+    return (raw instanceof HTMLElement) ? raw : raw[0] ?? null;
   }
 
+  /**
+   * Alias for domElement kept for call-site compatibility with older internal code.
+   * @deprecated Prefer domElement.
+   * @returns {HTMLElement|null}
+   */
   get elementCompat() {
     return this.domElement;
   }
 
+  // ---------------------------------------------------------------------------
+  // Render lifecycle
+  // ---------------------------------------------------------------------------
+
+  /** @override */
   async _onRender(context, options) {
     await super._onRender(context, options);
-    
     queueMicrotask(() => {
       if (!this.rendered || !this.domElement) return;
       this._onPostRender(context, options);
     });
   }
 
+  /**
+   * Called after the DOM is painted and stable.
+   * Runs on every render; first-render guards are applied internally.
+   * @param {object} context
+   * @param {object} options
+   * @protected
+   */
   _onPostRender(context, options) {
     this._legacyElement = this.domElement;
     this._bindBaseUiActions();
 
-    // Guard: only run first-render logic once, even if offsetWidth is 0 on first microtask.
-    // _isFirstRender is reset unconditionally so that a second render with offsetWidth=0
-    // does not re-register the janusLibraryProgress hook.
     if (this._isFirstRender) {
       this._isFirstRender = false;
       this._updatePositionSafe();
       this._applyWindowSanity();
 
-      // Hook for index progress UI updates (runs on every app derived from base).
       // Registered exactly once per app lifecycle; cleaned up in close() via _unregisterHooks().
-      this._registerHook('janusLibraryProgress', (pct) => {
+      this._registerHook(HOOKS.LIBRARY_INDEX_PROGRESS, (pct) => {
         if (!this.rendered || !this.domElement) return;
         const pEl = this.domElement.querySelector('.index-progress-text');
         if (pEl) pEl.innerText = `${pct}%`;
@@ -96,10 +148,13 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
     }
   }
 
+  // ---------------------------------------------------------------------------
+  // Position management
+  // ---------------------------------------------------------------------------
+
   _updatePositionSafe() {
     const el = this.domElement;
     if (!el?.offsetWidth) return;
-    
     try {
       this._computePosition();
     } catch (err) {
@@ -107,10 +162,13 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
     }
   }
 
-  _computePosition() {
-    // Override in subclasses
-  }
+  /** Override in subclasses to apply custom initial positioning. */
+  _computePosition() {}
 
+  /**
+   * Returns the application's default window rect, derived from DEFAULT_OPTIONS.position.
+   * @returns {{ width: number, height: number, top: number, left: number }}
+   */
   _getDefaultWindowRect() {
     const fallback = { width: 900, height: 680, top: 70, left: 90 };
     const defaults = this.constructor?.DEFAULT_OPTIONS?.position ?? this.options?.position ?? {};
@@ -118,80 +176,68 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
       const parsed = Number(value);
       return Number.isFinite(parsed) ? parsed : fb;
     };
-
     return {
-      width: num(defaults.width, fallback.width),
+      width:  num(defaults.width,  fallback.width),
       height: num(defaults.height, fallback.height),
-      top: num(defaults.top, fallback.top),
-      left: num(defaults.left, fallback.left)
+      top:    num(defaults.top,    fallback.top),
+      left:   num(defaults.left,   fallback.left),
     };
   }
 
+  /**
+   * Clamps the window position and size to the current viewport.
+   * Called on every render cycle to recover off-screen windows.
+   */
   _applyWindowSanity() {
     const el = this.domElement;
     if (!el?.isConnected) return;
 
-    const viewportWidth = Math.max(window?.innerWidth ?? document?.documentElement?.clientWidth ?? 0, 640);
+    const viewportWidth  = Math.max(window?.innerWidth  ?? document?.documentElement?.clientWidth  ?? 0, 640);
     const viewportHeight = Math.max(window?.innerHeight ?? document?.documentElement?.clientHeight ?? 0, 480);
-    const gutter = 16;
+    const gutter    = 16;
     const topGutter = 32;
 
     const defaults = this._getDefaultWindowRect();
     const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-    const num = (value, fallback) => {
-      const parsed = Number(value);
-      return Number.isFinite(parsed) ? parsed : fallback;
-    };
+    const num   = (value, fallback) => { const p = Number(value); return Number.isFinite(p) ? p : fallback; };
 
-    const rect = el.getBoundingClientRect();
+    const rect    = el.getBoundingClientRect();
     const current = (this.position && typeof this.position === 'object') ? this.position : {};
 
-    const maxWidth = Math.max(320, viewportWidth - (gutter * 2));
+    const maxWidth  = Math.max(320, viewportWidth  - (gutter * 2));
     const maxHeight = Math.max(240, viewportHeight - (gutter + topGutter));
-    const minWidth = Math.min(Math.max(Math.round(defaults.width * 0.6), 420), maxWidth);
+    const minWidth  = Math.min(Math.max(Math.round(defaults.width  * 0.6), 420), maxWidth);
     const minHeight = Math.min(Math.max(Math.round(defaults.height * 0.6), 320), maxHeight);
 
-    let width = num(current.width ?? rect.width, defaults.width);
-    let height = num(current.height ?? rect.height, defaults.height);
-    let left = num(current.left ?? rect.left, defaults.left);
-    let top = num(current.top ?? rect.top, defaults.top);
+    let width   = num(current.width  ?? rect.width,  defaults.width);
+    let height  = num(current.height ?? rect.height, defaults.height);
+    let left    = num(current.left   ?? rect.left,   defaults.left);
+    let top     = num(current.top    ?? rect.top,    defaults.top);
     let changed = false;
 
-    const saneWidth = clamp(num(defaults.width, width), minWidth, maxWidth);
+    const saneWidth  = clamp(num(defaults.width,  width),  minWidth,  maxWidth);
     const saneHeight = clamp(num(defaults.height, height), minHeight, maxHeight);
 
-    if (!Number.isFinite(width) || width < minWidth || width > maxWidth) {
-      width = saneWidth;
-      changed = true;
-    }
-    if (!Number.isFinite(height) || height < minHeight || height > maxHeight) {
-      height = saneHeight;
-      changed = true;
-    }
+    if (!Number.isFinite(width)  || width  < minWidth  || width  > maxWidth)  { width  = saneWidth;  changed = true; }
+    if (!Number.isFinite(height) || height < minHeight || height > maxHeight) { height = saneHeight; changed = true; }
 
-    const maxLeft = Math.max(gutter, viewportWidth - width - gutter);
-    const maxTop = Math.max(topGutter, viewportHeight - height - gutter);
+    const maxLeft = Math.max(gutter,    viewportWidth  - width  - gutter);
+    const maxTop  = Math.max(topGutter, viewportHeight - height - gutter);
 
-    const isOffscreen = (rect.right < gutter)
+    const isOffscreen = (rect.right  < gutter)
       || (rect.bottom < topGutter)
-      || (rect.left > viewportWidth - gutter)
-      || (rect.top > viewportHeight - gutter);
+      || (rect.left   > viewportWidth  - gutter)
+      || (rect.top    > viewportHeight - gutter);
 
     if (isOffscreen || !Number.isFinite(left) || !Number.isFinite(top)) {
-      left = clamp(defaults.left, gutter, maxLeft);
-      top = clamp(defaults.top, topGutter, maxTop);
+      left    = clamp(defaults.left, gutter,    maxLeft);
+      top     = clamp(defaults.top,  topGutter, maxTop);
       changed = true;
     } else {
-      const clampedLeft = clamp(left, gutter, maxLeft);
-      const clampedTop = clamp(top, topGutter, maxTop);
-      if (clampedLeft !== left) {
-        left = clampedLeft;
-        changed = true;
-      }
-      if (clampedTop !== top) {
-        top = clampedTop;
-        changed = true;
-      }
+      const cl = clamp(left, gutter,    maxLeft);
+      const ct = clamp(top,  topGutter, maxTop);
+      if (cl !== left) { left = cl; changed = true; }
+      if (ct !== top)  { top  = ct; changed = true; }
     }
 
     if (!changed) return;
@@ -206,11 +252,11 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
     }
 
     try {
-      el.style.left = `${Math.round(left)}px`;
-      el.style.top = `${Math.round(top)}px`;
-      el.style.width = `${Math.round(width)}px`;
-      el.style.height = `${Math.round(height)}px`;
-      el.style.minWidth = `${Math.round(minWidth)}px`;
+      el.style.left      = `${Math.round(left)}px`;
+      el.style.top       = `${Math.round(top)}px`;
+      el.style.width     = `${Math.round(width)}px`;
+      el.style.height    = `${Math.round(height)}px`;
+      el.style.minWidth  = `${Math.round(minWidth)}px`;
       el.style.minHeight = `${Math.round(minHeight)}px`;
       this.position = { ...(current ?? {}), left, top, width, height };
     } catch (err) {
@@ -218,25 +264,50 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
     }
   }
 
-  // NOTE: removed duplicate close method (cleanup will be handled in the override below)
-
-  _cleanupRenderAbort() {
-    try {
-      this._renderAbort?.abort();
-      this._renderAbort = null;
-    } catch {}
+  /** @override */
+  setPosition(position = {}) {
+    const el = this.domElement;
+    if (!el?.isConnected) {
+      // Buffer position; _applyWindowSanity will reconcile on next render once element is connected.
+      this.position = { ...(this.position ?? {}), ...(position ?? {}) };
+      return this.position;
+    }
+    return super.setPosition(position);
   }
 
+  // ---------------------------------------------------------------------------
+  // Render options (v13 migration layer)
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Strips legacy root-level window metadata and resolves window.title with fallbacks.
+   *
+   * FIX P1-01a: Removed dead migration of legacyIcon → window.icon.
+   *   JANUS apps intentionally omit window icons; migrating then deleting was pure dead code.
+   *
+   * FIX P1-01b: window.controls is no longer deleted unconditionally when it is an Array.
+   *   In Foundry v13 ApplicationV2, DEFAULT_OPTIONS.window.controls is a valid array of
+   *   ApplicationHeaderControlsEntry objects. The previous code silently broke all subclass
+   *   header buttons. Controls are now only removed if they were explicitly migrated from the
+   *   legacy root-level options.controls property (not from DEFAULT_OPTIONS.window.controls).
+   *
+   * @override
+   */
   _configureRenderOptions(options = {}) {
     options = super._configureRenderOptions?.(options ?? {}) ?? (options ?? {});
     options.tag ??= this.constructor?.DEFAULT_OPTIONS?.tag ?? 'section';
     options.window = (options.window && typeof options.window === 'object') ? { ...options.window } : {};
 
-    const legacyTitle = options.title ?? this.constructor?.DEFAULT_OPTIONS?.title ?? this.options?.title;
-    const legacyIcon = options.icon ?? this.constructor?.DEFAULT_OPTIONS?.icon ?? this.options?.icon;
+    // Snapshot window.controls BEFORE any legacy migration attempt.
+    // If already populated (e.g. from DEFAULT_OPTIONS.window.controls), it must be preserved.
+    const windowControlsPreExisting = options.window.controls ?? null;
+
+    // Collect legacy root-level properties (v12-era) before stripping them.
+    const legacyTitle    = options.title    ?? this.constructor?.DEFAULT_OPTIONS?.title    ?? this.options?.title;
     const legacyControls = options.controls ?? this.constructor?.DEFAULT_OPTIONS?.controls ?? this.options?.controls;
 
-    const fallbackTitle = String(
+    // Resolve window.title with full fallback cascade.
+    options.window.title = String(
       options.window.title
       ?? this.constructor?.DEFAULT_OPTIONS?.window?.title
       ?? this.options?.window?.title
@@ -245,33 +316,43 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
       ?? 'JANUS7'
     );
 
-    options.window.title = fallbackTitle;
-
-    // Foundry 13.351 shows fragile behavior around alias/localize resolution for custom
-    // window metadata. Keep JANUS apps intentionally minimal at the window layer and
-    // aggressively migrate any legacy root-level metadata away from ApplicationV2.
+    // Strip legacy root-level properties; they have been consumed above.
+    // Foundry 13.351 shows fragile localise/alias resolution for root-level window metadata.
     delete options.title;
     delete options.icon;
     delete options.controls;
-    if (legacyIcon != null && options.window.icon == null) options.window.icon = legacyIcon;
-    if (legacyControls != null && options.window.controls == null) options.window.controls = legacyControls;
+
+    // JANUS apps intentionally omit the window icon for a minimal titlebar aesthetic.
     delete options.window.icon;
-    if (Array.isArray(options.window.controls)) delete options.window.controls;
+
+    // Only remove window.controls if they came from the legacy root-level migration
+    // (window scope was empty before this method ran, AND legacy controls existed at root level).
+    // DEFAULT_OPTIONS.window.controls (pre-existing) is always preserved.
+    if (windowControlsPreExisting == null && legacyControls != null && Array.isArray(options.window.controls)) {
+      delete options.window.controls;
+    }
+
     return options;
   }
 
+  // ---------------------------------------------------------------------------
+  // Engine & utility accessors
+  // ---------------------------------------------------------------------------
+
+  /** @returns {object|null} JANUS7 engine instance. */
   _getEngine() {
     return this.engine ?? game?.janus7 ?? null;
   }
 
   /**
-   * Safe logger accessor. Falls back to console if engine is not yet available.
+   * Safe logger accessor. Falls back to console if engine is not yet initialised.
    * @returns {import('../../core/logger.js').JanusLogger|Console}
    */
   _getLogger() {
     return this._getEngine()?.core?.logger ?? console;
   }
 
+  /** @returns {string} Installed module version or 'unknown'. */
   _getModuleVersion() {
     try {
       return game?.modules?.get?.(MODULE_ID)?.version ?? 'unknown';
@@ -280,7 +361,16 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
     }
   }
 
+  // ---------------------------------------------------------------------------
+  // i18n helpers
+  // ---------------------------------------------------------------------------
 
+  /**
+   * Localises a key; returns fallback (or the key itself) when localisation is unavailable.
+   * @param {string} key
+   * @param {string} [fallback='']
+   * @returns {string}
+   */
   _t(key, fallback = '') {
     try {
       const localized = game?.i18n?.localize?.(key);
@@ -291,6 +381,13 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
     }
   }
 
+  /**
+   * Formats a localisation key with data substitution.
+   * @param {string} key
+   * @param {object} [data={}]
+   * @param {string} [fallback='']
+   * @returns {string}
+   */
   _fmt(key, data = {}, fallback = '') {
     try {
       const formatted = game?.i18n?.format?.(key, data);
@@ -301,38 +398,56 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
     }
   }
 
+  // ---------------------------------------------------------------------------
+  // Error handling & boundary
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Central render error handler. Records to engine diagnostics and returns an
+   * accessible error boundary HTML string for inline display.
+   * @param {Error} err
+   * @param {string} [context='unknown']
+   * @returns {string} HTML error boundary markup.
+   */
   _handleRenderError(err, context = 'unknown') {
-    const logger = this._getLogger();
-    logger.error?.(`${MODULE_ID}: Render error in ${context}`, err);
+    this._getLogger().error?.(`${MODULE_ID}: Render error in ${context}`, err);
     this._trackLastError(err, context);
-    
-    // Zentrales Error-Tracking für die gesamte Engine
     try {
       const engine = this._getEngine();
       if (engine?.errors?.record) {
         engine.errors.record('phase6', `UI.${this.constructor.name}.${context}`, err);
       }
     } catch (_e) { /* engine error reporting must not crash the caller */ }
-
     return this._renderErrorBoundary(err, context);
   }
 
+  /**
+   * Stores the last UI error on the engine diagnostics object.
+   * @param {Error} err
+   * @param {string} context
+   * @protected
+   */
   _trackLastError(err, context) {
     try {
       const engine = this._getEngine();
       if (!engine?.diagnostics) return;
-      
       engine.diagnostics.lastUiError = {
         timestamp: new Date().toISOString(),
         context,
-        message: err.message,
-        stack: err.stack
+        message:   err.message,
+        stack:     err.stack,
       };
-    } catch {}
+    } catch { /* noop */ }
   }
 
+  /**
+   * Returns an accessible ARIA error boundary HTML string.
+   * @param {Error} err
+   * @param {string} context
+   * @returns {string}
+   */
   _renderErrorBoundary(err, context) {
-    const stack = String(err?.stack || err?.message || err || 'Unknown error');
+    const stack    = String(err?.stack || err?.message || err || 'Unknown error');
     const stackB64 = btoa(stack);
     const detailId = `j7-error-details-${Date.now().toString(36)}`;
 
@@ -350,7 +465,8 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
           <button class="j7-btn" type="button" data-action="copyErrorStack" data-stack="${stackB64}">
             <i class="fas fa-clipboard"></i> Details kopieren
           </button>
-          <button class="j7-btn" type="button" data-action="toggleErrorDetails" aria-controls="${detailId}" aria-expanded="false">
+          <button class="j7-btn" type="button" data-action="toggleErrorDetails"
+                  aria-controls="${detailId}" aria-expanded="false">
             <i class="fas fa-code"></i> Technische Details
           </button>
         </div>
@@ -359,16 +475,29 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
     `;
   }
 
+  /**
+   * HTML-escapes a string for safe insertion into markup.
+   * @param {string|*} s
+   * @returns {string}
+   */
   _escape(s) {
     return String(s)
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#39;');
+      .replaceAll('&',  '&amp;')
+      .replaceAll('<',  '&lt;')
+      .replaceAll('>',  '&gt;')
+      .replaceAll('"',  '&quot;')
+      .replaceAll("'",  '&#39;');
   }
 
+  // ---------------------------------------------------------------------------
+  // Base UI action binding (error boundary interactions)
+  // ---------------------------------------------------------------------------
 
+  /**
+   * Attaches delegated event listeners for base UI actions (error boundary buttons).
+   * Uses a DOM flag to prevent duplicate binding across re-renders on the same element.
+   * @protected
+   */
   _bindBaseUiActions() {
     const el = this.domElement;
     if (!el || el._janusBaseActionsBound) return;
@@ -378,6 +507,7 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
       const target = ev.target?.closest?.('[data-action]');
       if (!target) return;
       const action = target.dataset.action;
+
       if (action === 'copyErrorStack') {
         ev.preventDefault();
         const raw = target.dataset.stack ?? '';
@@ -389,7 +519,9 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
           this._getLogger().warn?.(`${MODULE_ID}: copyErrorStack failed`, err);
           ui?.notifications?.warn?.('Fehlerdetails konnten nicht kopiert werden.');
         }
+        return;
       }
+
       if (action === 'retryRender') {
         ev.preventDefault();
         try {
@@ -397,11 +529,13 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
         } catch (err) {
           this._getLogger().warn?.(`${MODULE_ID}: retryRender failed`, err);
         }
+        return;
       }
+
       if (action === 'toggleErrorDetails') {
         ev.preventDefault();
         const detailsId = target.getAttribute('aria-controls');
-        const details = detailsId ? el.querySelector(`#${CSS.escape(detailsId)}`) : null;
+        const details   = detailsId ? el.querySelector(`#${CSS.escape(detailsId)}`) : null;
         if (!details) return;
         const expanded = target.getAttribute('aria-expanded') === 'true';
         target.setAttribute('aria-expanded', expanded ? 'false' : 'true');
@@ -410,24 +544,25 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
     });
   }
 
+  // ---------------------------------------------------------------------------
+  // Render scheduling & refresh alias
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Schedules a debounced re-render. Prevents parallel timers for the same app instance.
+   * Skips render if the element is no longer connected (e.g. app is closing).
+   * @param {number} [delay=60] Delay in milliseconds.
+   */
   _scheduleRerender(delay = 60) {
     if (this._rerenderTimer != null) return;
-    
     this._rerenderTimer = setTimeout(() => {
       this._rerenderTimer = null;
       try {
-        // ApplicationV2.render() returns a Promise; errors thrown during async layout
-        // (e.g. setPosition/_updatePosition) will otherwise bypass this try/catch.
-        // Also: if the app is not currently rendered, re-rendering is pointless and can
-        // trigger Foundry's internal offsetWidth null bug under heavy hook activity.
         if (!this.rendered) return;
-        // Guard against Foundry calling ApplicationV2._updatePosition while element is null
-        // (can happen if hooks schedule rerenders while the app is closing / detaching).
         const el = this.domElement;
         if (!el || !el.isConnected) return;
-        // FIX P3-01: ApplicationV2.render() erwartet ein Options-Objekt, nicht einen boolean.
         const p = this.render({ force: true });
-        if (p?.catch) p.catch((err) => this._getLogger().error?.(`${MODULE_ID}: Rerender failed (async)`, err));
+        p?.catch?.((err) => this._getLogger().error?.(`${MODULE_ID}: Rerender failed (async)`, err));
       } catch (err) {
         this._getLogger().error?.(`${MODULE_ID}: Rerender failed`, err);
       }
@@ -435,26 +570,25 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
   }
 
   /**
-   * Compatibility alias used across JANUS UI actions.
-   *
-   * Historically many apps call `this.refresh()` from action handlers.
-   * Foundry v13's ApplicationV2 provides `render()` instead.
-   * We keep `refresh()` as a stable alias to avoid scattering UI fixes.
+   * Compatibility alias for ApplicationV2.render() used across JANUS UI action handlers.
+   * Historically many apps called `this.refresh()`; this keeps call-sites stable.
+   * @param {boolean|object} [force=true]
+   * @returns {Promise<JanusBaseApp>}
    */
   refresh(force = true) {
-    // FIX P3-01: render() auf ApplicationV2 erwartet ein Options-Objekt.
-    // 'force' als boolean wird in { force: boolean } gewrapped.
     const opts = (typeof force === 'object' && force !== null) ? force : { force: !!force };
     return this.render?.(opts);
   }
+
   // ---------------------------------------------------------------------------
-  // Phase 6: Reactive UI helpers (Hook-driven refresh)
+  // Hook lifecycle management
   // ---------------------------------------------------------------------------
 
   /**
-   * Register and track a Foundry Hook so it can be cleaned up automatically.
+   * Registers a Foundry Hook and tracks it for automatic cleanup on close().
    * @param {string} hookName
    * @param {Function} fn
+   * @returns {number} Foundry Hook ID.
    */
   _registerHook(hookName, fn) {
     this._janusHooks ??= [];
@@ -463,59 +597,66 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
     return id;
   }
 
-  /** Remove all hooks registered via _registerHook. */
+  /** Removes all hooks registered via _registerHook(). */
   _unregisterHooks() {
     if (!this._janusHooks?.length) return;
     for (const h of this._janusHooks) {
       try { Hooks.off(h.hookName, h.id); } catch (_) { /* noop */ }
     }
-    this._janusHooks = [];
-    // also reset auto-refresh flag so that enableAutoRefresh can re-register hooks on next render
+    this._janusHooks         = [];
     this._autoRefreshEnabled = false;
   }
 
   /**
-   * Enable automatic (debounced) refresh when any of the given hooks fires.
+   * Enables debounced auto-refresh when any of the supplied hooks fire.
+   * Safe to call multiple times; duplicate registration is suppressed.
    * @param {string[]} hookNames
    * @param {number} [delayMs=150]
    */
   enableAutoRefresh(hookNames, delayMs = 150) {
-    // Prevent duplicate registration if auto-refresh is already enabled
     if (this._autoRefreshEnabled) return;
     const debounced = foundry.utils.debounce(() => {
-      // Avoid rendering when app is closing / element detached
       const el = this.domElement;
       if (!el || !el.isConnected) return;
       this.refresh?.();
     }, delayMs);
-
     for (const hookName of hookNames) {
       this._registerHook(hookName, () => debounced());
     }
     this._autoRefreshEnabled = true;
   }
 
-  /** @override */
-  setPosition(position = {}) {
-    const el = this.domElement;
-    if (!el?.isConnected) {
-      this.position = { ...(this.position ?? {}), ...(position ?? {}) };
-      return this.position;
-    }
-    return super.setPosition(position);
+  // ---------------------------------------------------------------------------
+  // AbortController integration (for subclass use)
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Aborts any pending render operation tracked via this._renderAbort.
+   * Subclasses should assign `this._renderAbort = new AbortController()` before
+   * starting async render work; this base method cleans it up on close().
+   * @protected
+   */
+  _cleanupRenderAbort() {
+    try {
+      this._renderAbort?.abort();
+      this._renderAbort = null;
+    } catch { /* noop */ }
   }
+
+  // ---------------------------------------------------------------------------
+  // Close / teardown
+  // ---------------------------------------------------------------------------
 
   /** @override */
   async close(options = {}) {
-    // Consolidated cleanup: abort ongoing render, unregister hooks and reset flags
     this._cleanupRenderAbort();
     if (this._rerenderTimer != null) {
       try { clearTimeout(this._rerenderTimer); } catch (_) { /* noop */ }
       this._rerenderTimer = null;
     }
     this._unregisterHooks();
-    // allow auto refresh registration again next time this is opened
     this._autoRefreshEnabled = false;
+    // Clear singleton reference only if this instance IS the current singleton.
     if (this.constructor?._instance === this) this.constructor._instance = null;
     return super.close(options);
   }
@@ -523,4 +664,3 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
 }
 
 export default JanusBaseApp;
-
