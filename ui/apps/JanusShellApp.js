@@ -325,6 +325,8 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       chronicleJumpPeriod: JanusShellApp.onChronicleJumpPeriod,
       chronicleExportCalendar: JanusShellApp.onChronicleExportCalendar,
       chronicleExportMonthCalendar: JanusShellApp.onChronicleExportMonthCalendar,
+      chronicleSelectCalendarImport: JanusShellApp.onChronicleSelectCalendarImport,
+      chronicleClearCalendarImport: JanusShellApp.onChronicleClearCalendarImport,
 
       // Control Panel Extracted Actions
       clearSlotBuilder: JanusShellApp.onClearSlotBuilder,
@@ -993,6 +995,33 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this._lastActionResult = `Monatsanker-Export ${monthLabel}: ${result.created} erstellt, ${result.skipped} uebersprungen.`;
     if (result.created > 0) ui.notifications?.info?.(`${result.created} Monatsanker exportiert, ${result.skipped} uebersprungen.`);
     else ui.notifications?.warn?.(`Keine neuen Monatsanker exportiert. ${result.skipped} uebersprungen.`);
+  }
+
+  static async onChronicleSelectCalendarImport(event, _target) {
+    event?.preventDefault?.();
+    if (game?.system?.id !== 'dsa5') {
+      ui.notifications?.warn?.('Der Kalender-Import ist nur im DSA5-System verfuegbar.');
+      return;
+    }
+
+    const current = this?._getViewState?.('chronicleBrowser') ?? {};
+    const journalId = await promptChronicleCalendarJournal({
+      preferredJournalId: String(current?.calendarJournalId ?? '').trim(),
+      title: 'DSA5 Kalender als Chronikquelle',
+      summary: 'Liest Eintraege aus einer dsacalendar-Page und blendet sie in den Chronicle Browser ein.',
+    });
+    if (!journalId) return;
+
+    this?._setViewState?.('chronicleBrowser', { calendarJournalId: journalId });
+    this._lastActionResult = 'DSA5-Kalenderquelle fuer Chronicle Browser gesetzt.';
+    ui.notifications?.info?.('DSA5-Kalenderquelle gesetzt.');
+  }
+
+  static async onChronicleClearCalendarImport(event, _target) {
+    event?.preventDefault?.();
+    this?._setViewState?.('chronicleBrowser', { calendarJournalId: '' });
+    this._lastActionResult = 'DSA5-Kalenderquelle fuer Chronicle Browser entfernt.';
+    ui.notifications?.info?.('DSA5-Kalenderquelle entfernt.');
   }
 
   _enableDirectorDragDrop() {

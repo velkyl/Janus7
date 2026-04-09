@@ -30,6 +30,7 @@ async function getAlumniService() {
 import { buildLocationsView, buildPeopleView, buildKiContext, buildSyncView, buildSystemView } from './context-builders.js';
 import { prepareDirectorRuntimeSummary, buildDirectorRunbookView, buildDirectorWorkflowView } from './director-context.js';
 import JanusAssetResolver from '../../core/services/asset-resolver.js';
+import { DSA5CalendarSync } from '../../bridge/dsa5/calendar-sync.js';
 
 const VIEW_REGISTRY = new Map();
 const VIEW_JSON_CACHE = new Map();
@@ -333,6 +334,12 @@ function matchesSearch(value, searchTerms = []) {
   return searchTerms.every((term) => haystack.includes(term));
 }
 
+function stripHtml(value) {
+  const source = String(value ?? '').trim();
+  if (!source) return '';
+  return source.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
 function buildChronicleExportSeed({ focusDate, locationFilter, tagFilter, search, focusDay, monthlyAnchors, yearlyMasterHooks }) {
   const lines = [
     'JANUS7 Bote Chronicle Export',
@@ -385,14 +392,31 @@ async function buildChronicleBrowserView(engine, app) {
   const bfDate = String(viewState?.focusDate ?? '').trim() || pickBfDateFromState(state) || '1025-01-01';
   const targetYear = Number(String(bfDate).slice(0, 4)) || 1025;
   const targetMonth = Number(String(bfDate).slice(5, 7)) || 1;
+  const calendarJournalId = String(viewState?.calendarJournalId ?? '').trim();
 
   let dailyChronicle;
   let masterinfoHooks;
+  let importedCalendarEntries = [];
+  let importedCalendarJournal = null;
   try {
     [dailyChronicle, masterinfoHooks] = await Promise.all([
       loadModuleJson('events/bote_daily_chronicle.json'),
       loadModuleJson('events/bote_masterinfo_hooks.json'),
     ]);
+    if (calendarJournalId && game?.system?.id === 'dsa5') {
+      const calendarSync = new DSA5CalendarSync({ logger: console });
+      const journal = game.journal?.get(calendarJournalId) ?? game.journal?.getName(calendarJournalId) ?? null;
+      importedCalendarEntries = calendarSync.listCalendarEntries(calendarJournalId)
+        .filter((entry) => entry?.visible !== false)
+        .map((entry) => ({
+          ...entry,
+          label: entry?.title ?? entry?.id ?? '—',
+          description: stripHtml(entry?.content) || 'Kalendereintrag aus DSA5.',
+          sourceType: 'dsa5_calendar_import',
+          tags: ['dsa5_calendar', 'journal_import'],
+        }));
+      importedCalendarJournal = journal ? { id: journal.id, name: journal.name ?? journal.id } : { id: calendarJournalId, name: calendarJournalId };
+    }
   } catch (err) {
     return {
       unavailable: true,
@@ -403,6 +427,8 @@ async function buildChronicleBrowserView(engine, app) {
       nearbyDays: [],
       monthlyAnchors: [],
       yearlyMasterHooks: [],
+      importedCalendarJournal,
+      importedCalendarSummary: { total: 0, focusDay: 0, month: 0 },
     };
   }
 
@@ -417,6 +443,19 @@ async function buildChronicleBrowserView(engine, app) {
   const focusIndex = Math.min(Math.max(baseIndex + offset, 0), Math.max(days.length - 1, 0));
   const locationFilter = String(viewState?.location ?? '').trim();
   const focusDayRaw = days[focusIndex] ?? null;
+  const _importedFocusEntries = importedCalendarEntries
+    .filter((entry) => entry?.isoDate === (focusDayRaw?.date ?? bfDate))
+    .filter((entry) => !locationFilter || String(entry?.location ?? '').trim() === locationFilter)
+    .filter((entry) => !tagFilter || (entry?.tags ?? []).includes(tagFilter))
+    .filter((entry) => matchesSearch([entry?.label, entry?.description, entry?.location, ...(entry?.tags ?? [])].join(' '), searchTerms))
+    .map((entry) => ({
+      label: entry?.label ?? entry?.id ?? 'â€”',
+      location: entry?.location ?? 'â€”',
+      category: 'DSA5-Kalender',
+      sourceType: entry?.sourceType ?? 'dsa5_calendar_import',
+      description: entry?.description ?? 'â€”',
+      tags: Array.isArray(entry?.tags) ? entry.tags.join(', ') : 'â€”',
+    }));
   const focusDay = focusDayRaw
     ? {
         date: focusDayRaw.date ?? '—',
@@ -518,6 +557,133 @@ async function buildChronicleBrowserView(engine, app) {
   };
 }
 
+async function buildChronicleBrowserViewV2(_engine, app) {
+  const base = await buildChronicleBrowserView(_engine, app);
+  const viewState = app?._getViewState?.('chronicleBrowser') ?? {};
+  const calendarJournalId = String(viewState?.calendarJournalId ?? '').trim();
+  if (!calendarJournalId || game?.system?.id !== 'dsa5') {
+    return {
+      ...base,
+      importedCalendarJournal: null,
+      importedCalendarSummary: { total: 0, focusDay: 0, month: 0 },
+    };
+  }
+
+  const calendarSync = new DSA5CalendarSync({ logger: console });
+  const journal = game.journal?.get(calendarJournalId) ?? game.journal?.getName(calendarJournalId) ?? null;
+  const importedCalendarEntries = calendarSync.listCalendarEntries(calendarJournalId)
+    .filter((entry) => entry?.visible !== false)
+    .map((entry) => ({
+      ...entry,
+      label: entry?.title ?? entry?.id ?? '—',
+      description: stripHtml(entry?.content) || 'Kalendereintrag aus DSA5.',
+      sourceType: 'dsa5_calendar_import',
+      tags: ['dsa5_calendar', 'journal_import'],
+    }));
+
+  const focusDate = String(base?.focusDate ?? '').trim();
+  const locationFilter = String(base?.locationFilter ?? '').trim();
+  const tagFilter = String(base?.tagFilter ?? '').trim();
+  const search = String(base?.search ?? '').trim();
+  const searchTerms = search.toLowerCase().split(/\s+/).filter(Boolean);
+  const targetYear = Number(String(focusDate).slice(0, 4)) || 0;
+  const targetMonth = Number(String(focusDate).slice(5, 7)) || 0;
+
+  const importedFocusEntries = importedCalendarEntries
+    .filter((entry) => entry?.isoDate === focusDate)
+    .filter((entry) => !locationFilter || String(entry?.location ?? '').trim() === locationFilter)
+    .filter((entry) => !tagFilter || (entry?.tags ?? []).includes(tagFilter))
+    .filter((entry) => matchesSearch([entry?.label, entry?.description, entry?.location, ...(entry?.tags ?? [])].join(' '), searchTerms))
+    .map((entry) => ({
+      label: entry?.label ?? entry?.id ?? '—',
+      location: entry?.location ?? '—',
+      category: 'DSA5-Kalender',
+      sourceType: entry?.sourceType ?? 'dsa5_calendar_import',
+      description: entry?.description ?? '—',
+      tags: Array.isArray(entry?.tags) ? entry.tags.join(', ') : '—',
+    }));
+
+  const importedMonthlyAnchorMap = new Map();
+  for (const entry of importedCalendarEntries) {
+    if (!entry?.isoDate) continue;
+    if (Number(String(entry.isoDate).slice(0, 4)) !== targetYear) continue;
+    if (Number(String(entry.isoDate).slice(5, 7)) !== targetMonth) continue;
+    if (locationFilter && String(entry?.location ?? '').trim() !== locationFilter) continue;
+    if (tagFilter && !(entry?.tags ?? []).includes(tagFilter)) continue;
+    if (!matchesSearch([entry?.label, entry?.description, entry?.location, ...(entry?.tags ?? [])].join(' '), searchTerms)) continue;
+    const list = importedMonthlyAnchorMap.get(entry.isoDate) ?? [];
+    list.push({
+      label: entry?.label ?? entry?.id ?? '—',
+      location: entry?.location ?? '—',
+      sourceType: entry?.sourceType ?? 'dsa5_calendar_import',
+    });
+    importedMonthlyAnchorMap.set(entry.isoDate, list);
+  }
+
+  const mergedFocusDay = base?.focusDay
+    ? { ...base.focusDay, entries: [...(base.focusDay.entries ?? []), ...importedFocusEntries] }
+    : (importedFocusEntries.length ? { date: focusDate || '—', monthName: 'DSA5', entries: importedFocusEntries } : null);
+
+  const mergedNearbyDays = (base?.nearbyDays ?? []).map((day) => {
+    const importedCount = importedCalendarEntries
+      .filter((entry) => entry?.isoDate === day?.date)
+      .filter((entry) => !locationFilter || String(entry?.location ?? '').trim() === locationFilter)
+      .filter((entry) => !tagFilter || (entry?.tags ?? []).includes(tagFilter))
+      .filter((entry) => matchesSearch([entry?.label, entry?.description, entry?.location, ...(entry?.tags ?? [])].join(' '), searchTerms))
+      .length;
+    return {
+      ...day,
+      entryCount: Number(day?.entryCount ?? 0) + importedCount,
+      anchorCount: Number(day?.anchorCount ?? 0) + importedCount,
+    };
+  });
+
+  const mergedMonthlyAnchors = [...(base?.monthlyAnchors ?? [])];
+  for (const [date, importedEntries] of importedMonthlyAnchorMap.entries()) {
+    const existingDay = mergedMonthlyAnchors.find((day) => day?.date === date);
+    if (existingDay) existingDay.anchorEntries = [...(existingDay.anchorEntries ?? []), ...importedEntries];
+    else mergedMonthlyAnchors.push({ date, monthName: 'DSA5', anchorEntries: importedEntries });
+  }
+  mergedMonthlyAnchors.sort((a, b) => String(a?.date ?? '').localeCompare(String(b?.date ?? ''), 'de'));
+
+  const mergedAvailableLocations = [...(base?.availableLocations ?? [])];
+  for (const entry of importedCalendarEntries.filter((entry) => Number(String(entry?.isoDate ?? '').slice(0, 4)) === targetYear)) {
+    const location = String(entry?.location ?? '').trim();
+    if (location && !mergedAvailableLocations.includes(location)) mergedAvailableLocations.push(location);
+  }
+  mergedAvailableLocations.sort((a, b) => a.localeCompare(b, 'de'));
+
+  const mergedAvailableTags = [...new Set([...(base?.availableTags ?? []), 'dsa5_calendar', 'journal_import'])]
+    .sort((a, b) => a.localeCompare(b, 'de'))
+    .slice(0, 24);
+
+  const importedCalendarSummary = {
+    total: importedCalendarEntries.length,
+    focusDay: importedFocusEntries.length,
+    month: [...importedMonthlyAnchorMap.values()].reduce((sum, entries) => sum + entries.length, 0),
+  };
+
+  return {
+    ...base,
+    focusDay: mergedFocusDay,
+    nearbyDays: mergedNearbyDays,
+    monthlyAnchors: mergedMonthlyAnchors,
+    availableLocations: mergedAvailableLocations,
+    availableTags: mergedAvailableTags,
+    chronicleExportSeed: buildChronicleExportSeed({
+      focusDate: mergedFocusDay?.date ?? base?.focusDate,
+      locationFilter,
+      tagFilter,
+      search,
+      focusDay: mergedFocusDay,
+      monthlyAnchors: mergedMonthlyAnchors,
+      yearlyMasterHooks: base?.yearlyMasterHooks ?? [],
+    }),
+    importedCalendarJournal: journal ? { id: journal.id, name: journal.name ?? journal.id } : { id: calendarJournalId, name: calendarJournalId },
+    importedCalendarSummary,
+  };
+}
+
 registerView({
   id: 'director',
   title: 'Director',
@@ -579,7 +745,7 @@ registerView({
   title: 'KI-Regisseur',
   icon: 'fas fa-hat-wizard',
   description: 'Echtzeit-KI-Unterst\u00fctzung f\u00fcr Konsequenzen und Atmosph\u00e4re.',
-  build: (engine) => ({})
+  build: (_engine) => ({})
 });
 
 registerView({
@@ -587,7 +753,7 @@ registerView({
   title: 'Bote-Chronik',
   icon: 'fas fa-newspaper',
   description: 'GM-Browser fuer taegliche Bote-Lage, Chronikanker und Meisterinformationen.',
-  build: buildChronicleBrowserView
+  build: buildChronicleBrowserViewV2
 });
 
 async function buildSessionPrepView(engine) {

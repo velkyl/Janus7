@@ -334,6 +334,44 @@ export class DSA5CalendarSync {
     return journal.pages?.find((p) => p.type === 'dsacalendar') ?? null;
   }
 
+  /**
+   * Liest alle Eintraege einer dsacalendar-Page als normalisierte Liste.
+   *
+   * @param {string} journalId
+   * @returns {Array<object>}
+   */
+  listCalendarEntries(journalId) {
+    const page = this.getCalendarPage(journalId);
+    if (!page) return [];
+
+    return Object.entries(page.system?.calendarentries ?? {})
+      .map(([id, entry]) => {
+        const from = entry?.from ?? {};
+        const year = Number(from?.year ?? 0);
+        const month = Number(from?.month ?? 0);
+        const dayOfMonth = Number(from?.dayOfMonth ?? 0);
+        return {
+          id,
+          title: entry?.title ?? id,
+          content: entry?.content ?? '',
+          location: entry?.location ?? '',
+          category: Number(entry?.category ?? 0),
+          visible: entry?.visible !== false,
+          recurring: entry?.recurring === true,
+          from: {
+            year,
+            month,
+            dayOfMonth,
+            day: Number(from?.day ?? this._daysFromEpoch(year || 1, month || 0, dayOfMonth || 1)),
+          },
+          isoDate: year > 0 && dayOfMonth > 0
+            ? `${String(year).padStart(4, '0')}-${String(month + 1).padStart(2, '0')}-${String(dayOfMonth).padStart(2, '0')}`
+            : null,
+        };
+      })
+      .sort((a, b) => Number(a?.from?.day ?? 0) - Number(b?.from?.day ?? 0));
+  }
+
   // ─── Private ─────────────────────────────────────────────────────────────
 
   /** @private */
