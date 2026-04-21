@@ -10,6 +10,11 @@ import { _checkPermission, _engine, _toInt, _wrap } from './_shared.js';
 import { MODULE_ID } from '../../core/common.js';
 import { JanusFolderService } from '../../core/folder-service.js';
 import { JanusLocationsEngine } from '../../academy/locations-engine.js';
+import {
+  createJanusAlumniService,
+  createJanusReportCardOutputService,
+  createJanusSocialStoryHookService
+} from '../../scripts/extensions/phase8-api.js';
 
 function _resolveLocationsEngine(engine) {
   return engine?.academy?.locations ?? new JanusLocationsEngine({
@@ -169,8 +174,7 @@ export const academyCommands = {
 
     return await _wrap('registerAlumniRecord', async () => {
       const engine = _engine();
-      const { JanusAlumniService } = await import('../../phase8/alumni/JanusAlumniService.js');
-      const service = new JanusAlumniService({ engine, logger: engine?.core?.logger ?? console });
+      const service = await createJanusAlumniService({ engine, logger: engine?.core?.logger ?? console });
       const overview = await service.registerAlumnus({
         npcId,
         status: dataset.status ?? 'graduated',
@@ -193,8 +197,7 @@ export const academyCommands = {
 
     return await _wrap('setAlumniFocus', async () => {
       const engine = _engine();
-      const { JanusAlumniService } = await import('../../phase8/alumni/JanusAlumniService.js');
-      const service = new JanusAlumniService({ engine, logger: engine?.core?.logger ?? console });
+      const service = await createJanusAlumniService({ engine, logger: engine?.core?.logger ?? console });
       const overview = await service.setAlumniFocus({
         npcId,
         focus: dataset.focus ?? null,
@@ -216,8 +219,7 @@ export const academyCommands = {
 
     return await _wrap('queueSocialStoryHook', async () => {
       const engine = _engine();
-      const { JanusSocialStoryHookService } = await import('../../phase8/social/JanusSocialStoryHookService.js');
-      const service = new JanusSocialStoryHookService({ engine, logger: engine?.core?.logger ?? console });
+      const service = await createJanusSocialStoryHookService({ engine, logger: engine?.core?.logger ?? console });
       const root = await service.queueHook({
         hookId,
         title: dataset.title ?? '',
@@ -245,8 +247,7 @@ export const academyCommands = {
 
     return await _wrap('setSocialStoryHookStatus', async () => {
       const engine = _engine();
-      const { JanusSocialStoryHookService } = await import('../../phase8/social/JanusSocialStoryHookService.js');
-      const service = new JanusSocialStoryHookService({ engine, logger: engine?.core?.logger ?? console });
+      const service = await createJanusSocialStoryHookService({ engine, logger: engine?.core?.logger ?? console });
       const root = await service.setHookStatus({
         hookId,
         status: dataset.status ?? 'queued'
@@ -269,8 +270,7 @@ export const academyCommands = {
 
     return await _wrap('setAlumniStatus', async () => {
       const engine = _engine();
-      const { JanusAlumniService } = await import('../../phase8/alumni/JanusAlumniService.js');
-      const service = new JanusAlumniService({ engine, logger: engine?.core?.logger ?? console });
+      const service = await createJanusAlumniService({ engine, logger: engine?.core?.logger ?? console });
       const overview = await service.setAlumniStatus({
         npcId,
         status: dataset.status ?? 'graduated',
@@ -289,8 +289,7 @@ export const academyCommands = {
 
     return await _wrap('exportReportCardPdf', async () => {
       const engine = _engine();
-      const { JanusReportCardOutputService } = await import('../../phase8/report-cards/JanusReportCardOutputService.js');
-      const service = new JanusReportCardOutputService({ engine, logger: engine?.core?.logger ?? console });
+      const service = await createJanusReportCardOutputService({ engine, logger: engine?.core?.logger ?? console });
       const result = await service.exportPdf();
       return { ok: true, ...result };
     });
@@ -305,8 +304,7 @@ export const academyCommands = {
 
     return await _wrap('writeReportCardJournals', async () => {
       const engine = _engine();
-      const { JanusReportCardOutputService } = await import('../../phase8/report-cards/JanusReportCardOutputService.js');
-      const service = new JanusReportCardOutputService({ engine, logger: engine?.core?.logger ?? console });
+      const service = await createJanusReportCardOutputService({ engine, logger: engine?.core?.logger ?? console });
       const result = await service.writeJournals();
       return { ok: true, ...result };
     });
@@ -413,7 +411,7 @@ export const academyCommands = {
     const folderSvc = new JanusFolderService({ logger: _engine()?.core?.logger ?? console });
 
     return await _wrap('organizeJanusFolders', async () => {
-      const t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+      const t0 = (typeof globalThis.performance !== 'undefined' && globalThis.performance.now) ? globalThis.performance.now() : Date.now();
       const report = {
         dryRun,
         ensured: 0,
@@ -600,7 +598,7 @@ export const academyCommands = {
         catch (e) { report.errors.push(`Playlist bulk update failed: ${String(e?.message ?? e)}`); }
       }
 
-      const t1 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+      const t1 = (typeof globalThis.performance !== 'undefined' && globalThis.performance.now) ? globalThis.performance.now() : Date.now();
       report.durationMs = Math.round(t1 - t0);
 
       console.table([

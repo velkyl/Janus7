@@ -73,6 +73,10 @@ export const POST_ROLL_SCOPES = Object.freeze({
 /** Sekunden pro Zeitslot (2h Unterrichtseinheit = 7200s) */
 export const LESSON_SLOT_SECONDS = 7200;
 
+function _activeEffectAddMode() {
+  return globalThis.CONST?.ACTIVE_EFFECT_MODES?.ADD ?? 2;
+}
+
 // ─── Hauptklasse ─────────────────────────────────────────────────────────────
 
 export class DSA5PostRollBuffBridge {
@@ -270,7 +274,7 @@ export class DSA5PostRollBuffBridge {
     // Buffs → changes-Array
     const changes = bonusDef.buffs.map((buff) => ({
       key:   POST_ROLL_KEYS[buff.type],
-      mode:  CONST.ACTIVE_EFFECT_MODES.ADD,
+      mode:  _activeEffectAddMode(),
       value: `${buff.scope} ${buff.amount}`,
       // priority: 20 = Standard für add-mode
     })).filter((c) => c.key); // ungültige types herausfiltern

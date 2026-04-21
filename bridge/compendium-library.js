@@ -30,7 +30,7 @@
  */
 
 /** Foundry documentName → Kurzname für Logging */
-const DOC_LABELS = {
+const _DOC_LABELS = {
   Actor:        'NSC',
   Scene:        'Szene',
   Item:         'Item',
@@ -403,10 +403,10 @@ export class CompendiumLibrary {
    * @private
    */
   _getPackSystem(pack) {
-    return pack.metadata?.system
-        ?? pack.metadata?.systemId
-        ?? pack.metadata?.packageType === 'system' ? pack.metadata?.name : null
-        ?? null;
+    if (pack?.metadata?.system) return pack.metadata.system;
+    if (pack?.metadata?.systemId) return pack.metadata.systemId;
+    if (pack?.metadata?.packageType === 'system') return pack.metadata?.name ?? null;
+    return null;
   }
 
   /**

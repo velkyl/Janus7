@@ -1,11 +1,12 @@
 import { moduleTemplatePath } from '../core/public-api.mjs';
+import { JanusBaseApp } from '../../ui/core/base-app.js';
 /**
  * Developer Panel - Testing & Debug Interface
  */
 
-const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+const { HandlebarsApplicationMixin } = foundry.applications.api;
 
-export class JanusDevPanel extends HandlebarsApplicationMixin(ApplicationV2) {
+export class JanusDevPanel extends HandlebarsApplicationMixin(JanusBaseApp) {
   static DEFAULT_OPTIONS = {
     id: 'janus7-dev-panel',
     tag: 'div',

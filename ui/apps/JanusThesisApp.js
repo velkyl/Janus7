@@ -1,8 +1,20 @@
 import { JanusBaseApp } from '../core/base-app.js';
-import { MODULE_ID, moduleTemplatePath } from '../../core/common.js';
+import { moduleTemplatePath } from '../../core/common.js';
 import { getJanusCore } from '../../core/index.js';
+import { getDragDropClass } from '../../core/foundry-compat.js';
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
+
+function _resolveThesisScholarActor(thesis = {}) {
+  const scholarId = String(thesis?.scholarId ?? '').trim();
+  return scholarId ? game.actors.get(scholarId) ?? null : null;
+}
+
+function _normalizeThesisQuality(rollResult = {}) {
+  const quality = Number(rollResult?.quality ?? rollResult?.raw?.result?.qualityStep ?? NaN);
+  if (Number.isFinite(quality) && quality > 0) return quality;
+  return rollResult?.success ? 1 : 0;
+}
 
 /**
  * JanusThesisApp
@@ -37,47 +49,48 @@ export class JanusThesisApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   }
 
   /** @override */
-  _prepareContext(options) {
+  _prepareContext(_options) {
     const { state } = getJanusCore();
     const theses = state.get('academy.theses') || {};
-    
-    // Transform theses for display
+
     const thesesList = Object.entries(theses).map(([id, data]) => {
-        const actor = game.actors.get(data.scholarId);
-        const progress = Math.min(100, Math.round((data.currentQS / data.requiredQS) * 100));
-        
-        return {
-            id,
-            ...data,
-            scholarName: actor?.name || 'Unbekannter Scholar',
-            progress,
-            statusLabel: this.#getStatusLabel(data.status),
-            isReady: data.status === 'ready_for_defense' || progress >= 100
-        };
+      const actor = _resolveThesisScholarActor(data);
+      const currentQS = Number(data?.currentQS ?? 0);
+      const requiredQS = Math.max(1, Number(data?.requiredQS ?? 1));
+      const progress = Math.min(100, Math.round((currentQS / requiredQS) * 100));
+
+      return {
+        id,
+        ...data,
+        scholarName: actor?.name || 'Unbekannter Scholar',
+        progress,
+        statusLabel: this.#getStatusLabel(data.status),
+        isReady: data.status === 'ready_for_defense' || progress >= 100
+      };
     });
 
-    return {
-      theses: thesesList
-    };
+    return { theses: thesesList };
   }
 
   #getStatusLabel(status) {
     const labels = {
-        'in_progress': 'In Bearbeitung',
-        'ready_for_defense': 'Bereit zur Verteidigung',
-        'completed': 'Abgeschlossen'
+      in_progress: 'In Bearbeitung',
+      ready_for_defense: 'Bereit zur Verteidigung',
+      completed: 'Abgeschlossen'
     };
     return labels[status] || status;
   }
 
   /** @override */
-  _onRender(context, options) {
-    super._onRender(context, options);
-    this._dragDrop.forEach(d => d.bind(this.domElement));
+  async _onRender(context, options) {
+    await super._onRender(context, options);
+    if (!this.domElement) return;
+    this._dragDrop.forEach((dragDrop) => dragDrop.bind(this.domElement));
   }
 
   #createDragDropHandlers() {
-    const DragDropImpl = foundry.applications?.ux?.DragDrop || globalThis.DragDrop;
+    const DragDropImpl = getDragDropClass();
+    if (!DragDropImpl) return [];
     return [new DragDropImpl({
       dropSelector: '.j7-thesis-drop-zone',
       callbacks: {
@@ -88,31 +101,31 @@ export class JanusThesisApp extends HandlebarsApplicationMixin(JanusBaseApp) {
 
   async #onDrop(event) {
     const data = TextEditor.getDragEventData(event);
-    if (data.type !== "JournalEntry") return;
+    if (data.type !== 'JournalEntry') return;
 
     const thesisId = event.target.closest('[data-thesis-id]')?.dataset.thesisId;
     if (!thesisId) return;
 
     const { state, logger } = getJanusCore();
-    
-    state.transaction(() => {
-        const theses = state.get('academy.theses') || {};
-        const thesis = theses[thesisId];
-        if (!thesis) return;
 
-        thesis.sources = thesis.sources || [];
-        if (!thesis.sources.includes(data.uuid)) {
-            thesis.sources.push(data.uuid);
-            state.set('academy.theses', theses);
-            logger.info(`JANUS | Quelle ${data.uuid} zu Thesis ${thesisId} hinzugefügt.`);
-            ui.notifications.info(`Quelle erfolgreich hinzugefügt.`);
-        }
+    await state.transaction(async (tx) => {
+      const theses = foundry.utils.deepClone(tx.get('academy.theses') || {});
+      const thesis = theses[thesisId];
+      if (!thesis) return;
+
+      thesis.sources = Array.isArray(thesis.sources) ? thesis.sources : [];
+      if (!thesis.sources.includes(data.uuid)) {
+        thesis.sources.push(data.uuid);
+        tx.set('academy.theses', theses);
+        logger.info(`JANUS | Quelle ${data.uuid} zu Thesis ${thesisId} hinzugefügt.`);
+        ui.notifications.info('Quelle erfolgreich hinzugefügt.');
+      }
     });
 
-    this.refresh();
+    this.render({ force: true });
   }
 
-  static async onEvaluateSource(event, target) {
+  static async onEvaluateSource(_event, target) {
     const thesisId = target.closest('[data-thesis-id]')?.dataset.thesisId;
     if (!thesisId) return;
 
@@ -121,59 +134,70 @@ export class JanusThesisApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     const thesis = theses[thesisId];
     if (!thesis) return;
 
-    // Check if there are sources
-    if (!thesis.sources || thesis.sources.length === 0) {
-        ui.notifications.warn("Keine Quellen zum Auswerten vorhanden.");
-        return;
+    if (!Array.isArray(thesis.sources) || thesis.sources.length === 0) {
+      ui.notifications.warn('Keine Quellen zum Auswerten vorhanden.');
+      return;
     }
 
-    // Trigger Magiekunde roll via Bridge
-    // Note: This is an abstraction, assuming dsa5 bridge has a roll feature
-    const actor = game.actors.get(thesis.scholarId);
-    if (!actor) return;
+    const actor = _resolveThesisScholarActor(thesis);
+    if (!actor) {
+      ui.notifications.warn('Kein Scholar-Actor für diese Thesis gefunden.');
+      return;
+    }
 
-    // Simulate or trigger real roll. 
-    // In DSA5 system, we might need to find the skill "Magiekunde" 
-    const skill = actor.items.find(i => i.name === "Magiekunde" && i.type === "skill");
-    
-    if (skill) {
-        // Trigger roll via system API (simplified for demonstration)
-        // In a real module we would use game.dsa5.apps.DiceDSA5.xxx
-        ui.notifications.info(`${actor.name} wertet eine Quelle aus (Magiekunde)...`);
-        
-        // Let's assume a simplified success for this artifact
-        const rollResult = { qs: Math.floor(Math.random() * 3) + 1 }; 
-        
-        state.transaction(() => {
-            thesis.currentQS += rollResult.qs;
-            if (thesis.currentQS >= thesis.requiredQS) {
-                thesis.status = 'ready_for_defense';
-            }
-            state.set('academy.theses', theses);
-            logger.info(`JANUS | Thesis ${thesisId} Progress: +${rollResult.qs} QS`);
-        });
-        
-        this.refresh();
-    } else {
-        ui.notifications.warn("Scholar beherrscht keine Magiekunde.");
+    if (typeof dsa5?.rollSkill !== 'function') {
+      ui.notifications.warn('DSA5-Roll-Bridge ist nicht verfügbar.');
+      return;
+    }
+
+    try {
+      ui.notifications.info(`${actor.name} wertet eine Quelle aus (Magiekunde)...`);
+      const rollResult = await dsa5.rollSkill(actor, 'Magiekunde', {
+        silent: true,
+        dsa5: { fastForward: true, dialog: false }
+      });
+      const gainedQuality = _normalizeThesisQuality(rollResult);
+      if (!rollResult?.success || gainedQuality <= 0) {
+        ui.notifications.warn(`${actor.name} konnte keine belastbaren Erkenntnisse gewinnen.`);
+        return;
+      }
+
+      await state.transaction(async (tx) => {
+        const nextTheses = foundry.utils.deepClone(tx.get('academy.theses') || {});
+        const nextThesis = nextTheses[thesisId];
+        if (!nextThesis) return;
+
+        nextThesis.currentQS = Number(nextThesis.currentQS ?? 0) + gainedQuality;
+        if (Number(nextThesis.currentQS) >= Math.max(1, Number(nextThesis.requiredQS ?? 1))) {
+          nextThesis.status = 'ready_for_defense';
+        }
+
+        tx.set('academy.theses', nextTheses);
+        logger.info(`JANUS | Thesis ${thesisId} Progress: +${gainedQuality} QS`);
+      });
+
+      this.render({ force: true });
+    } catch (err) {
+      logger?.warn?.('JANUS | Thesis evaluation failed', err);
+      ui.notifications.warn(err?.message ?? 'Magiekunde-Probe fehlgeschlagen.');
     }
   }
 
-  static async onRemoveSource(event, target) {
-      const thesisId = target.closest('[data-thesis-id]')?.dataset.thesisId;
-      const sourceUuid = target.dataset.uuid;
-      if (!thesisId || !sourceUuid) return;
+  static async onRemoveSource(_event, target) {
+    const thesisId = target.closest('[data-thesis-id]')?.dataset.thesisId;
+    const sourceUuid = target.dataset.uuid;
+    if (!thesisId || !sourceUuid) return;
 
-      const { state } = getJanusCore();
-      state.transaction(() => {
-          const theses = state.get('academy.theses') || {};
-          const thesis = theses[thesisId];
-          if (thesis && thesis.sources) {
-              thesis.sources = thesis.sources.filter(s => s !== sourceUuid);
-              state.set('academy.theses', theses);
-          }
-      });
-      this.refresh();
+    const { state } = getJanusCore();
+    await state.transaction(async (tx) => {
+      const theses = foundry.utils.deepClone(tx.get('academy.theses') || {});
+      const thesis = theses[thesisId];
+      if (thesis && Array.isArray(thesis.sources)) {
+        thesis.sources = thesis.sources.filter((source) => source !== sourceUuid);
+        tx.set('academy.theses', theses);
+      }
+    });
+    this.render({ force: true });
   }
 
   static showSingleton() {

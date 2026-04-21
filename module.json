@@ -9,59 +9,40 @@
   "authors": [
     {
       "name": "Thomas (JANUS7 Development)",
-      "url": "https://github.com/velkyl/Janus7"
+      "url": "https://github.com/velkyl/Janus7",
+      "flags": {}
     }
   ],
-  "description": "Hybrid-first academy management system for DSA5 magic academy campaigns. Features: State Management, Calendar, Simulation Engine, Quest & Event System, DSA5 Bridge, Atmosphere Control, Control Panel UI. Includes modular JANUS Shell UI layer.",
+  "description": "Hybrid-first academy management system for DSA5 magic academy campaigns. Features: State Management, Calendar, Simulation Engine, Quest &amp; Event System, DSA5 Bridge, Atmosphere Control, Control Panel UI. Includes modular JANUS Shell UI layer.",
   "esmodules": [
     "scripts/janus.mjs"
   ],
   "styles": [
-    "styles/janus7-layers.css",
-    "styles/janus7-v13-overlay.css",
-    "styles/janus7-ui-bundle.css",
-    "styles/phase8-extensions.css"
-  ],
-  "templates": [
-    "templates/extensions/thesis-manager/thesis-app.hbs",
-    "templates/extensions/labor-interface/labor-app.hbs",
-    "templates/apps/academy-overview.hbs",
-    "templates/apps/atmosphere-dj.hbs",
-    "templates/apps/command-center.hbs",
-    "templates/apps/config-panel.hbs",
-    "templates/apps/guided-manual-tests.hbs",
-    "templates/apps/ki-backup-manager.hbs",
-    "templates/apps/ki-roundtrip.hbs",
-    "templates/apps/lesson-library.hbs",
-    "templates/apps/scoring-view.hbs",
-    "templates/apps/session-prep-wizard.hbs",
-    "templates/apps/social-view.hbs",
-    "templates/apps/state-inspector.hbs",
-    "templates/apps/sync-panel.hbs",
-    "templates/apps/test-results.hbs",
-    "templates/items/lesson-sheet.hbs",
-    "templates/quest-system/dev-panel.hbs",
-    "templates/quest-system/event-popup.hbs",
-    "templates/quest-system/quest-journal-header.hbs",
-    "templates/quest-system/quest-journal.hbs",
-    "templates/shell/janus-shell.hbs",
-    "templates/shell/panels/default-panel.hbs",
-    "templates/shell/views/academy.hbs",
-    "templates/shell/views/chronicleBrowser.hbs",
-    "templates/shell/views/director.hbs",
-    "templates/shell/views/tools.hbs",
-    "templates/sidebar/janus-sidebar.hbs"
+    {
+      "src": "styles/janus7-layers.css"
+    },
+    {
+      "src": "styles/janus7-v13-overlay.css"
+    },
+    {
+      "src": "styles/janus7-ui-bundle.css"
+    },
+    {
+      "src": "styles/phase8-extensions.css"
+    }
   ],
   "languages": [
     {
       "lang": "de",
       "name": "Deutsch",
-      "path": "lang/de.json"
+      "path": "lang/de.json",
+      "flags": {}
     },
     {
       "lang": "en",
       "name": "English",
-      "path": "lang/en.json"
+      "path": "lang/en.json",
+      "flags": {}
     }
   ],
   "relationships": {

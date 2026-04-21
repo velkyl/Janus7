@@ -1,11 +1,12 @@
 import { moduleTemplatePath } from '../core/public-api.mjs';
+import { JanusBaseApp } from '../../ui/core/base-app.js';
 /**
  * Event Popup - Shows event with contextual Quest / Rumor data.
  */
 
-const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+const { HandlebarsApplicationMixin } = foundry.applications.api;
 
-export class JanusEventPopup extends HandlebarsApplicationMixin(ApplicationV2) {
+export class JanusEventPopup extends HandlebarsApplicationMixin(JanusBaseApp) {
   constructor(options = {}) {
     super(options);
     this.eventId = options.eventId;

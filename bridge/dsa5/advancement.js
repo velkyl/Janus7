@@ -1,3 +1,5 @@
+import { JanusConfig } from '../../core/config.js';
+
 /**
  * @file bridge/dsa5/advancement.js
  * @module janus7/bridge/dsa5
@@ -57,7 +59,7 @@ export const ADVANCEMENT_COSTS = Object.freeze({
 const TALENT_VALUE_TYPES = new Set(['skill', 'combatskill']);
 
 /** Item-Typen die `system.step.value` verwenden (Stufen-basiert) */
-const STEP_VALUE_TYPES = new Set(['spell', 'liturgy', 'ritual', 'ceremony', 'blessing', 'specialability', 'advantage', 'disadvantage']);
+const _STEP_VALUE_TYPES = new Set(['spell', 'liturgy', 'ritual', 'ceremony', 'blessing', 'specialability', 'advantage', 'disadvantage']);
 
 // ─── Hilfsfunktionen ─────────────────────────────────────────────────────────
 
@@ -413,7 +415,7 @@ export class DSA5AdvancementBridge {
   async _trackApEntry(actor, description, cost) {
     try {
       // DSA5 APTracker nur wenn Einstellung aktiv
-      if (!game.settings.get('dsa5', 'enableAPTracking')) return;
+      if (!JanusConfig.getForeign('dsa5', 'enableAPTracking')) return;
 
       // Journal via DSA5 flag finden (wie JournalTracker.track)
       const journal = game.journal?.find(

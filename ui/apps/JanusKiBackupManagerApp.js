@@ -74,7 +74,7 @@ ${fileRef}`);
     try {
       const api = game?.janus7?.capabilities?.ki ?? game?.janus7?.ki ?? null;
       if (!api?.restoreBackup) throw new Error('KI Restore API fehlt');
-      await api.restoreBackup(fileRef, { validate: false, save: true });
+      await api.restoreBackup(fileRef, { validate: true, save: true });
       ui?.notifications?.info?.('Backup wiederhergestellt.');
       await this.refresh?.(true);
     } catch (err) {

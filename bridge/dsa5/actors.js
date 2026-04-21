@@ -196,7 +196,7 @@ export class DSA5ActorBridge {
     const norm = (s) =>
       String(s ?? '')
         .normalize('NFKC')
-        .replace(/[_\-]+/g, ' ')
+        .replace(/[_-]+/g, ' ')
         .replace(/\s+/g, ' ')
         .trim()
         .toLocaleLowerCase('de-DE');

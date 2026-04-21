@@ -399,6 +399,29 @@ export class JanusConfig {
   }
 
   /**
+   * Reads a non-JANUS world/system setting through the same central gateway.
+   *
+   * @param {string} namespace
+   * @param {string} key
+   * @returns {unknown}
+   */
+  static getForeign(namespace, key) {
+    return game.settings.get(String(namespace ?? ''), String(key ?? ''));
+  }
+
+  /**
+   * Writes a non-JANUS world/system setting through the central gateway.
+   *
+   * @param {string} namespace
+   * @param {string} key
+   * @param {unknown} value
+   * @returns {Promise<unknown>}
+   */
+  static async setForeign(namespace, key, value) {
+    return await game.settings.set(String(namespace ?? ''), String(key ?? ''), value);
+  }
+
+  /**
    * Resolve a configured Scene UUID by key (e.g. "mainHall", "beamer").
    * @param {string} key
    * @returns {string|null}

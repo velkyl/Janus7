@@ -1,31 +1,30 @@
 // v2 registry cache bypass
 import { getPanel } from './panel-registry.js';
+import { createJanusAlumniService, createJanusSessionPrepService } from '../../scripts/extensions/phase8-api.js';
 // FIX P2-08: JanusSessionPrepService wird lazy importiert um zu verhindern dass ein
 // fehlender/kaputter Phase8-Import die gesamte Shell (view-registry.js) blockiert.
 // Der Statische Top-Level-Import wurde daher entfernt und durch einen lazy-Import ersetzt.
-// import { JanusSessionPrepService } from '../../phase8/session-prep/JanusSessionPrepService.js';
-let _sessionPrepService = null;
-async function getSessionPrepService() {
-  if (_sessionPrepService) return _sessionPrepService;
+// Phase8-Zugriff läuft über scripts/extensions/phase8-api.js.
+let _sessionPrepServiceFactory = null;
+async function getSessionPrepServiceFactory() {
+  if (_sessionPrepServiceFactory) return _sessionPrepServiceFactory;
   try {
-    const m = await import('../../phase8/session-prep/JanusSessionPrepService.js');
-    _sessionPrepService = m.JanusSessionPrepService;
+    _sessionPrepServiceFactory = createJanusSessionPrepService;
   } catch (_err) {
     // Phase8 ist optional — Shell funktioniert ohne.
   }
-  return _sessionPrepService;
+  return _sessionPrepServiceFactory;
 }
 
-let _alumniService = null;
-async function getAlumniService() {
-  if (_alumniService) return _alumniService;
+let _alumniServiceFactory = null;
+async function getAlumniServiceFactory() {
+  if (_alumniServiceFactory) return _alumniServiceFactory;
   try {
-    const m = await import('../../phase8/alumni/JanusAlumniService.js');
-    _alumniService = m.JanusAlumniService;
+    _alumniServiceFactory = createJanusAlumniService;
   } catch (_err) {
     // Phase8 ist optional — Shell funktioniert ohne.
   }
-  return _alumniService;
+  return _alumniServiceFactory;
 }
 import { buildLocationsView, buildPeopleView, buildKiContext, buildSyncView, buildSystemView } from './context-builders.js';
 import { prepareDirectorRuntimeSummary, buildDirectorRunbookView, buildDirectorWorkflowView } from './director-context.js';
@@ -280,9 +279,9 @@ function buildScheduleView(engine, app) {
 async function buildPeopleViewLocal(engine, _app) {
   const state = engine?.core?.state?.get?.() ?? {};
   const peopleView = buildPeopleView({ state, actors: game?.actors });
-  const AlumniService = await getAlumniService();
-  const alumniView = AlumniService
-    ? await new AlumniService({ engine, logger: engine?.core?.logger ?? console }).getOverview()
+  const createAlumni = await getAlumniServiceFactory();
+  const alumniView = createAlumni
+    ? await (await createAlumni({ engine, logger: engine?.core?.logger ?? console })).getOverview()
     : { summary: { total: 0, mentors: 0, returned: 0, inactive: 0 }, alumni: [], candidates: [], recentChanges: [] };
   return { peopleView, alumniView };
 }
@@ -819,8 +818,8 @@ registerView({
 
 async function buildSessionPrepView(engine) {
   if (!engine) return { notReady: true };
-  const SessionPrepService = await getSessionPrepService();
-  if (typeof SessionPrepService !== 'function') {
+  const createSessionPrep = await getSessionPrepServiceFactory();
+  if (typeof createSessionPrep !== 'function') {
     return {
       isGM: !!game?.user?.isGM,
       generatedAt: new Date().toISOString(),
@@ -856,7 +855,7 @@ async function buildSessionPrepView(engine) {
       unavailable: true
     };
   }
-  const service = new SessionPrepService({ engine, logger: engine?.core?.logger ?? console });
+  const service = await createSessionPrep({ engine, logger: engine?.core?.logger ?? console });
   const report = await service.buildReport({ horizonSlots: 3 });
   
   const current = report.currentSlot ?? {};

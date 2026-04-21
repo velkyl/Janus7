@@ -11,11 +11,13 @@
  * - Player sieht i.d.R. nur Status (optional Diagnostics kopieren).
  */
 
-import { MODULE_ID } from '../core/common.js';
-
 /**
  * @typedef {'gm'|'trusted'|'player'|'none'} J7Role
  */
+
+function _foundryUserRoles() {
+  return globalThis.CONST?.USER_ROLES ?? null;
+}
 
 /**
  * @private
@@ -25,15 +27,16 @@ import { MODULE_ID } from '../core/common.js';
 function _role(user) {
   if (!user) return 'none';
   if (user.isGM) return 'gm';
+  const userRoles = _foundryUserRoles();
   try {
-    const gm = CONST?.USER_ROLES?.GAMEMASTER ?? 4;
+    const gm = userRoles?.GAMEMASTER ?? 4;
     if ((user.role ?? 0) >= gm) return 'gm';
   } catch {
     // ignore
   }
-  // Foundry: trusted players have role >= CONST.USER_ROLES.TRUSTED.
+  // Foundry: trusted players have role >= globalThis.CONST.USER_ROLES.TRUSTED.
   try {
-    const trusted = CONST?.USER_ROLES?.TRUSTED ?? 2;
+    const trusted = userRoles?.TRUSTED ?? 2;
     if ((user.role ?? 0) >= trusted) return 'trusted';
   } catch {
     // ignore

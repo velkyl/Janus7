@@ -1,4 +1,5 @@
 import { emitHook, HOOKS } from '../../core/hooks/emitter.js';
+import { JanusConfig } from '../../core/config.js';
 /**
  * @file bridge/dsa5/fate.js
  * @module janus7/bridge/dsa5
@@ -59,7 +60,7 @@ export const SCHIP_SOURCE = Object.freeze({
  */
 export function readGroupSchips() {
   try {
-    const raw = game.settings.get('dsa5', 'groupschips') ?? '0/0';
+    const raw = JanusConfig.getForeign('dsa5', 'groupschips') ?? '0/0';
     const [value, max] = raw.split('/').map(Number);
     return { value: value ?? 0, max: max ?? 0 };
   } catch {
@@ -78,7 +79,7 @@ export async function writeGroupSchips(value, max) {
   const current = readGroupSchips();
   const newMax   = max ?? current.max;
   const newValue = Math.max(0, Math.min(newMax, value));
-  await game.settings.set('dsa5', 'groupschips', `${newValue}/${newMax}`);
+  await JanusConfig.setForeign('dsa5', 'groupschips', `${newValue}/${newMax}`);
 }
 
 // ─── Hauptklasse ─────────────────────────────────────────────────────────────

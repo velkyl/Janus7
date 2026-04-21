@@ -349,26 +349,31 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(JanusBaseA
   // ─── Lifecycle ─────────────────────────────────────────────────────────────
 
   /** @override */
-  _onRender(context, options) {
-    super._onRender?.(context, options);
+  async _onRender(context, options) {
+    await super._onRender?.(context, options);
 
-    // Beamer-Mode CSS-Klasse
-    const el = this.element;
-    if (el) {
-      el.classList.toggle('j7-beamer-mode', Boolean(this._beamerMode));
-    }
+    const el = this.domElement;
+    if (!el) return;
 
-    // Inline-Suche verdrahten
-    const searchInput = el?.querySelector('#j7-cmd-inline-search');
+    // Beamer-Mode CSS-Klasse muss auf jedem Render mit dem View-State synchron bleiben.
+    el.classList.toggle('j7-beamer-mode', Boolean(this._beamerMode));
+
+    // Input-Wert darf pro Render aktualisiert werden, Listener aber nur einmal pro Root.
+    const searchInput = el.querySelector('#j7-cmd-inline-search');
     if (searchInput) {
       searchInput.value = this._inlineSearch;
-      searchInput.addEventListener('input', (e) => {
-        this._inlineSearch = e.target.value ?? '';
+    }
+
+    if (el.dataset.janusCommandBindings !== 'true') {
+      el.dataset.janusCommandBindings = 'true';
+
+      searchInput?.addEventListener('input', (event) => {
+        this._inlineSearch = String(event.target?.value ?? '');
         this._filterCommands(this._inlineSearch);
       });
     }
 
-    // Ctrl+K global registrieren
+    // Globaler Shortcut bleibt separat guardiert und wird in close() deregistriert.
     this._registerCtrlK();
   }
 

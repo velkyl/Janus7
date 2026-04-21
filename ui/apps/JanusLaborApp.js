@@ -1,6 +1,54 @@
 import { JanusBaseApp } from '../core/base-app.js';
-import { MODULE_ID, moduleTemplatePath } from '../../core/common.js';
+import { moduleTemplatePath } from '../../core/common.js';
 import { getJanusCore } from '../../core/index.js';
+
+function _resolveBrewerActor() {
+  return canvas?.tokens?.controlled?.[0]?.actor
+    ?? game.user?.character
+    ?? game.actors?.contents?.find((actor) => actor?.type === 'character' && actor?.isOwner)
+    ?? null;
+}
+
+function _parseBrewModifier(target) {
+  const raw = target?.closest?.('.j7-brew-actions')?.querySelector?.('.j7-mod-input')?.value ?? 0;
+  const modifier = Number(raw);
+  return Number.isFinite(modifier) ? modifier : 0;
+}
+
+function _resolveRecipeResultSpec(recipe = {}) {
+  const result = recipe?.system?.result ?? recipe?.system?.results?.[0] ?? null;
+  if (typeof result === 'string') return { name: result, quantity: 1 };
+  if (result && typeof result === 'object') return result;
+  return null;
+}
+
+async function _createBrewResult(stashActor, recipe = {}) {
+  const resultSpec = _resolveRecipeResultSpec(recipe);
+  if (!stashActor || !resultSpec) return false;
+
+  const quantity = Math.max(1, Number(resultSpec.quantity ?? resultSpec.qty ?? 1) || 1);
+  const resultName = String(resultSpec.name ?? resultSpec.label ?? '').trim();
+  if (resultName) {
+    const existing = stashActor.items.find((item) => String(item.name ?? '').trim().toLowerCase() === resultName.toLowerCase());
+    if (existing) {
+      const current = Number(existing.system?.quantity ?? 0) || 0;
+      await existing.update({ 'system.quantity': current + quantity });
+      return true;
+    }
+  }
+
+  const resultUuid = String(resultSpec.uuid ?? resultSpec.itemUuid ?? '').trim();
+  if (!resultUuid) return false;
+
+  const source = await fromUuid(resultUuid);
+  if (!source?.toObject) return false;
+
+  const itemData = source.toObject();
+  itemData.system = itemData.system ?? {};
+  itemData.system.quantity = quantity;
+  await stashActor.createEmbeddedDocuments('Item', [itemData]);
+  return true;
+}
 
 export class JanusLaborApp extends JanusBaseApp {
   static DEFAULT_OPTIONS = {
@@ -31,14 +79,13 @@ export class JanusLaborApp extends JanusBaseApp {
   }
 
   /** @override */
-  async _prepareContext(options) {
+  async _prepareContext(_options) {
     const { core } = getJanusCore();
     const stashActorId = core.config.get('stashActorId');
     const stashActor = game.actors.get(stashActorId);
-    
-    // Get recipes from stash and reachable compendiums
+
     const recipes = await this.#loadRecipes(stashActor);
-    const activeRecipe = recipes.find(r => r.id === this._activeRecipeId);
+    const activeRecipe = recipes.find((recipe) => recipe.id === this._activeRecipeId);
 
     return {
       stashActorName: stashActor?.name || 'Kein Lager konfiguriert',
@@ -49,82 +96,115 @@ export class JanusLaborApp extends JanusBaseApp {
   }
 
   async #loadRecipes(stashActor) {
-    // Collect all items of type recipe (Alchimie) the party has
     let items = [];
     if (stashActor) {
-        items = stashActor.items.filter(i => i.type === "recipe" && i.system.subtype === "Alchimie").map(i => i.toObject());
+      items = stashActor.items
+        .filter((item) => item.type === 'recipe' && item.system.subtype === 'Alchimie')
+        .map((item) => item.toObject());
     }
 
-    // Process ingredients matching with stash
-    return items.map(recipe => {
-        const ingredients = this.#processIngredients(recipe, stashActor);
-        const canBrew = ingredients.every(ing => ing.hasEnough);
-        return {
-            ...recipe,
-            ingredients,
-            canBrew
-        };
+    return items.map((recipe) => {
+      const ingredients = this.#processIngredients(recipe, stashActor);
+      const canBrew = ingredients.every((ingredient) => ingredient.hasEnough);
+      return {
+        ...recipe,
+        ingredients,
+        canBrew
+      };
     });
   }
 
   #processIngredients(recipe, stashActor) {
-    if (!recipe.system.ingredients) return [];
-    
-    // This depends on how DSA5 stores ingredients. Usually an array of objects.
-    return recipe.system.ingredients.map(ing => {
-        const stashItem = stashActor?.items.find(i => i.name === ing.name);
-        const currentQty = stashItem?.system?.quantity ?? 0;
-        return {
-            name: ing.name,
-            neededQty: ing.quantity,
-            currentQty,
-            hasEnough: currentQty >= ing.quantity
-        };
+    if (!Array.isArray(recipe?.system?.ingredients)) return [];
+
+    return recipe.system.ingredients.map((ingredient) => {
+      const stashItem = stashActor?.items.find((item) => item.name === ingredient.name);
+      const currentQty = Number(stashItem?.system?.quantity ?? 0) || 0;
+      const neededQty = Number(ingredient.quantity ?? 0) || 0;
+      return {
+        name: ingredient.name,
+        neededQty,
+        currentQty,
+        hasEnough: currentQty >= neededQty
+      };
     });
   }
 
-  static async onSelectRecipe(event, target) {
+  static async onSelectRecipe(_event, target) {
     this._activeRecipeId = target.dataset.recipeId;
-    this.render();
+    this.render({ force: true });
   }
 
-  static async onBrewRecipe(event, target) {
+  static async onBrewRecipe(_event, target) {
     const { core, dsa5 } = getJanusCore();
     const stashActorId = core.config.get('stashActorId');
     const stashActor = game.actors.get(stashActorId);
-    
+    const brewer = _resolveBrewerActor();
+    const modifier = _parseBrewModifier(target);
+
     const recipes = await this.#loadRecipes(stashActor);
-    const activeRecipe = recipes.find(r => r.id === this._activeRecipeId);
-    
+    const activeRecipe = recipes.find((recipe) => recipe.id === this._activeRecipeId);
+
     if (!activeRecipe || !activeRecipe.canBrew) {
-        ui.notifications.warn("Zutaten reichen nicht aus oder kein Rezept gewählt.");
-        return;
+      ui.notifications.warn('Zutaten reichen nicht aus oder kein Rezept gewählt.');
+      return;
     }
 
-    // 1. Roll Skill via DSA5 API
-    ui.notifications.info(`Brauprozess für ${activeRecipe.name} gestartet...`);
-    
-    // Simplified Simulation for now
-    const success = true; 
-    
-    if (success) {
-        // 2. Consume items from Stash
-        const updates = [];
-        for (const ing of activeRecipe.ingredients) {
-            const item = stashActor.items.find(i => i.name === ing.name);
-            updates.push({
-                _id: item.id,
-                "system.quantity": item.system.quantity - ing.neededQty
-            });
-        }
-        await stashActor.updateEmbeddedDocuments("Item", updates);
-        
-        // 3. Create result product
-        // Note: result item name usually in recipe.system.result
-        ui.notifications.info(`${activeRecipe.name} erfolgreich hergestellt!`);
+    if (!stashActor) {
+      ui.notifications.warn('Kein Materiallager konfiguriert.');
+      return;
     }
-    
-    this.render();
+
+    if (!brewer) {
+      ui.notifications.warn('Kein Brauender verfügbar. Wähle einen Token oder hinterlege einen Charakter.');
+      return;
+    }
+
+    if (typeof dsa5?.rollSkill !== 'function') {
+      ui.notifications.warn('DSA5-Roll-Bridge ist nicht verfügbar.');
+      return;
+    }
+
+    ui.notifications.info(`Brauprozess für ${activeRecipe.name} gestartet...`);
+
+    let brewRoll;
+    try {
+      brewRoll = await dsa5.rollSkill(brewer, 'Alchimie', {
+        modifier,
+        silent: true,
+        dsa5: { fastForward: true, dialog: false }
+      });
+    } catch (err) {
+      ui.notifications.warn(err?.message ?? 'Alchimie-Probe fehlgeschlagen.');
+      return;
+    }
+
+    if (!brewRoll?.success) {
+      ui.notifications.warn(`${brewer.name} misslingt der Brauvorgang. Zutaten wurden nicht verbraucht.`);
+      return;
+    }
+
+    const updates = [];
+    for (const ingredient of activeRecipe.ingredients) {
+      const item = stashActor.items.find((entry) => entry.name === ingredient.name);
+      if (!item) continue;
+      updates.push({
+        _id: item.id,
+        'system.quantity': Math.max(0, Number(item.system?.quantity ?? 0) - Number(ingredient.neededQty ?? 0))
+      });
+    }
+    if (updates.length) {
+      await stashActor.updateEmbeddedDocuments('Item', updates);
+    }
+
+    const createdResult = await _createBrewResult(stashActor, activeRecipe);
+    const qs = Number(brewRoll?.quality ?? 0) || 0;
+    ui.notifications.info(`${activeRecipe.name} erfolgreich hergestellt${qs > 0 ? ` (QS ${qs})` : ''}!`);
+    if (!createdResult) {
+      ui.notifications.warn('Brauergebnis konnte nicht automatisch ins Lager geschrieben werden.');
+    }
+
+    this.render({ force: true });
   }
 
   static showSingleton() {
@@ -134,7 +214,7 @@ export class JanusLaborApp extends JanusBaseApp {
       return this._instance;
     }
     this._instance = new this();
-    this._instance.render(true);
+    this._instance.render({ force: true });
     return this._instance;
   }
 }

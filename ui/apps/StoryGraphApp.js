@@ -1,6 +1,8 @@
-const { ApplicationV2 } = foundry.applications.api;
+import { JanusBaseApp } from '../core/base-app.js';
 
-export class StoryGraphApp extends ApplicationV2 {
+export class StoryGraphApp extends JanusBaseApp {
+  static _mermaidLoadPromise = null;
+
   static DEFAULT_OPTIONS = {
     id: 'janus7-story-graph',
     tag: 'div',
@@ -16,24 +18,22 @@ export class StoryGraphApp extends ApplicationV2 {
     }
   };
 
-  async _renderHTML(context, options) {
+  async _renderHTML(_context, _options) {
     const graph = game.janus7?.graph;
     if (!graph || typeof graph.getAllNodes !== 'function') {
       return `<div style="padding: 20px;">Graph-Service nicht verf&uuml;gbar oder l&auml;dt noch.</div>`;
     }
 
     let mermaidDef = 'graph TD;\n';
-    
+
     // Nodes
     const nodes = graph.getAllNodes() || [];
     for (const node of nodes) {
       const id = String(node.id).replace(/[^a-zA-Z0-9]/g, '_');
       const rawLabel = node.name || node.title || node.label || node.id;
       const label = String(rawLabel).replace(/"/g, "'").replace(/[\\{\\}\\[\\]]/g, ' ');
-      // Truncate long labels
-      const shortLabel = label.length > 35 ? label.substring(0, 35) + '...' : label;
-      
-      // Select shape/color based on node type
+      const shortLabel = label.length > 35 ? `${label.substring(0, 35)}...` : label;
+
       let shape = `["${shortLabel}"]`;
       let style = '';
       if (node.type === 'NPC') {
@@ -85,25 +85,40 @@ ${mermaidDef}
     `;
   }
 
-  _onRender(context, options) {
-    super._onRender(context, options);
-    
-    // Fallback if there's no actual content
-    if (!this.element.querySelector('.mermaid')) return;
+  async _onRender(context, options) {
+    await super._onRender(context, options);
 
-    if (!window.mermaid) {
-      import('https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs')
-        .then((m) => {
-          window.mermaid = m.default;
-          window.mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose' });
-          window.mermaid.run({ querySelector: '.mermaid' });
-        })
-        .catch(err => {
-          console.error("[JANUS7] Could not load mermaid script", err);
-          this.element.querySelector('.mermaid').textContent = `Laden von Mermaid fehlgeschlagen. Bitte Internetverbindung prüfen.`;
-        });
-    } else {
-      window.mermaid.run({ querySelector: '.mermaid' });
+    const root = this.domElement;
+    const mermaidNode = root?.querySelector('.mermaid');
+    if (!mermaidNode) return;
+
+    try {
+      const mermaid = await this.constructor._getMermaid();
+      if (!this.rendered || !this.domElement?.isConnected) return;
+      await mermaid.run({ nodes: [mermaidNode] });
+    } catch (err) {
+      console.error('[JANUS7] Could not load mermaid script', err);
+      if (mermaidNode.isConnected) {
+        mermaidNode.textContent = 'Laden von Mermaid fehlgeschlagen. Bitte Internetverbindung prüfen.';
+      }
     }
+  }
+
+  static async _getMermaid() {
+    if (globalThis.window?.mermaid) return globalThis.window.mermaid;
+    if (!this._mermaidLoadPromise) {
+      this._mermaidLoadPromise = import('https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs')
+        .then((m) => {
+          const mermaid = m.default;
+          globalThis.window.mermaid = mermaid;
+          mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose' });
+          return mermaid;
+        })
+        .catch((err) => {
+          this._mermaidLoadPromise = null;
+          throw err;
+        });
+    }
+    return this._mermaidLoadPromise;
   }
 }

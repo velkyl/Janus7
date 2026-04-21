@@ -32,7 +32,7 @@ Leitlinien:
 | 5 | Hybrid & Atmosphere | abgeschlossen |
 | 6 | UI / Shell Layer | produktiv, mit weiterem Cutover |
 | 7 | KI-Integration | abgeschlossen und produktiv nutzbar |
-| 8 | Backlog | offen |
+| 8 | Phase 8 Extensions | in Arbeit (Alumni, Session Prep, Report Cards) |
 
 ---
 

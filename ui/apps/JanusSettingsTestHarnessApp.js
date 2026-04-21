@@ -14,14 +14,14 @@
  * @see scripts/integration/phase6-ui-integration.js (registerMenu)
  */
 
-const { ApplicationV2 } = foundry.applications.api;
+import { JanusBaseApp } from '../core/base-app.js';
 
 /**
  * Settings Menu wrapper for the optional Devtools Test Harness.
  * Falls back gracefully if devtools bundle is not present.
- * @extends {ApplicationV2}
+ * @extends {JanusBaseApp}
  */
-export class JanusSettingsTestHarnessApp extends ApplicationV2 {
+export class JanusSettingsTestHarnessApp extends JanusBaseApp {
   static DEFAULT_OPTIONS = {
     id: 'janus7-settings-test-harness',
     window: { title: 'JANUS7 – Test Harness' },
@@ -40,7 +40,7 @@ export class JanusSettingsTestHarnessApp extends ApplicationV2 {
 
   /**
    * Öffnet das Devtools-Harness wenn verfügbar, zeigt sonst einen Hinweis.
-   * @returns {Promise<ApplicationV2>}
+   * @returns {Promise<JanusBaseApp>}
    */
   static async showSingleton() {
     try {

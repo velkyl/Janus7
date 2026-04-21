@@ -1,4 +1,5 @@
 import { moduleTemplatePath } from '../../../core/common.js';
+import { ensureDataDirectory, getFilePickerClass } from '../../../core/foundry-compat.js';
 /**
  * @file ui/apps/ki-roundtrip/JanusKiRoundtripApp.js
  * @module janus7/ui
@@ -449,7 +450,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
     const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
     const input = inst?.element?.querySelector?.('input[name="ki-file-name"]');
 
-    const FP = foundry?.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
+    const FP = getFilePickerClass()?.implementation ?? getFilePickerClass();
     if (!FP || !globalThis.game?.world) {
       ui.notifications?.warn?.('FilePicker nicht verfügbar.');
       return;
@@ -461,13 +462,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
     try {
       // Foundry FilePicker kennt keinen stabilen 'json' Type. Wir nutzen 'text'
       // und validieren die Endung selbst.
-      // Ensure inbox directory exists before opening FilePicker
-      const parts = dir.split('/').filter(Boolean);
-      let acc = '';
-      for (const part of parts) {
-        acc = acc ? `${acc}/${part}` : part;
-        try { await FP.createDirectory('data', acc, { notify: false }); } catch (_) {}
-      }
+      await ensureDataDirectory(dir);
 
       const picker = new FP({
         type: 'text',

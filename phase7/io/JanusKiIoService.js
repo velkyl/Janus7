@@ -11,6 +11,11 @@
 
 import { JanusKiExportService } from '../export/JanusKiExportService.js';
 import { JanusKiImportService } from '../import/JanusKiImportService.js';
+import { ensureDataDirectory, getFilePickerClass } from '../../core/foundry-compat.js';
+
+function _getFileCtor() {
+  return typeof globalThis.File === 'function' ? globalThis.File : null;
+}
 
 export class JanusKiIoService {
   /**
@@ -34,20 +39,7 @@ export class JanusKiIoService {
   }
 
   async _ensureDataDirectory(dir) {
-    const FP = foundry?.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
-    if (!FP || !dir || typeof FP.createDirectory !== 'function') return false;
-    const parts = String(dir).split('/').filter(Boolean);
-    let acc = '';
-    for (const part of parts) {
-      acc = acc ? `${acc}/${part}` : part;
-      try {
-        await FP.createDirectory('data', acc, { notify: false });
-      } catch (err) {
-        const msg = String(err?.message ?? err ?? '').toLowerCase();
-        if (msg.includes('already exists')) continue;
-      }
-    }
-    return true;
+    return ensureDataDirectory(dir);
   }
 
   _saveDataToFile(data, mime, filename) {
@@ -59,21 +51,21 @@ export class JanusKiIoService {
   }
 
   async _uploadJsonToWorld(dir, filename, json) {
-    // Foundry v13+: FilePicker namespaced. Global removed in v15.
-    const FP = foundry?.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
-    if (!FP || typeof File === 'undefined') return null;
+    const FP = getFilePickerClass()?.implementation ?? getFilePickerClass();
+    const FileCtor = _getFileCtor();
+    if (!FP || !FileCtor) return null;
     // Ensure target directory exists.
     try { await this._ensureDataDirectory(dir); } catch (err) {
       /* best effort */
       this.logger?.debug?.('[KiIoService] _ensureDataDirectory nicht verfügbar (non-fatal)', { err: err?.message });
     }
-    const file = new File([json], filename, { type: 'application/json' });
+    const file = new FileCtor([json], filename, { type: 'application/json' });
     await FP.upload('data', dir, file, { notify: false });
     return filename;
   }
 
   async listInboxFiles() {
-    const FP = foundry?.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
+    const FP = getFilePickerClass()?.implementation ?? getFilePickerClass();
     const dir = this._worldIoDir('inbox');
     if (!dir || !FP) return [];
     try {
@@ -83,7 +75,7 @@ export class JanusKiIoService {
   }
 
   async listOutboxFiles() {
-    const FP = foundry?.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
+    const FP = getFilePickerClass()?.implementation ?? getFilePickerClass();
     const dir = this._worldIoDir('outbox');
     if (!dir || !FP) return [];
     try {
@@ -152,8 +144,8 @@ export class JanusKiIoService {
     if (!ref) throw new Error('File reference missing');
 
     // Security: sanitize filename against path traversal/injection
-    const basename = ref.split(/[\/\\]/).pop();
-    if (!basename || !/^[A-Za-z0-9_\-\.]+$/.test(basename) || basename.includes('..')) {
+    const basename = ref.split(/[/\\]/).pop();
+    if (!basename || !/^[A-Za-z0-9_.-]+$/.test(basename) || basename.includes('..')) {
       throw new Error(`Ungueltiger Dateiname: ${ref}`);
     }
 

@@ -31,7 +31,7 @@ async function confirm(title, message) {
         rejectClose: false,
         close: (_ev, _html, result) => resolve(result === 'yes')
       });
-      dialog.render(true);
+      dialog.render({ force: true });
     });
   }
 
@@ -76,7 +76,7 @@ async function prompt(params = {}) {
           resolve(input?.value ?? String(defaultValue ?? ''));
         }
       });
-      dlg.render(true);
+      dlg.render({ force: true });
     });
   }
 
@@ -133,7 +133,7 @@ async function choose(params = {}) {
           resolve(select?.value ?? null);
         }
       });
-      dlg.render(true);
+      dlg.render({ force: true });
     });
   }
 
@@ -180,7 +180,7 @@ async function promptTextarea(params = {}) {
           resolve(input?.value ?? String(defaultValue ?? ''));
         }
       });
-      dlg.render(true);
+      dlg.render({ force: true });
     });
   }
 
@@ -202,7 +202,7 @@ async function showTextDialog(params = {}) {
         rejectClose: false,
         close: () => resolve(true)
       });
-      dlg.render(true);
+      dlg.render({ force: true });
     });
   }
   return true;

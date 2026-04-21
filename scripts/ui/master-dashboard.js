@@ -1,12 +1,13 @@
 import { moduleTemplatePath } from '../core/public-api.mjs';
 import { JanusRumorManager } from '../academy/systems/gossip-engine.js';
+import { JanusBaseApp } from '../../ui/core/base-app.js';
 
-const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+const { HandlebarsApplicationMixin } = foundry.applications.api;
 
 /**
  * Master Dashboard - The GM's Control Center for Academy Management
  */
-export class JanusMasterDashboard extends HandlebarsApplicationMixin(ApplicationV2) {
+export class JanusMasterDashboard extends HandlebarsApplicationMixin(JanusBaseApp) {
   static DEFAULT_OPTIONS = {
     id: 'janus7-master-dashboard',
     tag: 'div',

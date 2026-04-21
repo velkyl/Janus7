@@ -72,7 +72,11 @@ registerRuntimeHook('janus7:ready:atmosphere-phase5', HOOKS.ENGINE_READY, (engin
 
     // Socket wiring
     if (game?.socket) {
-      game.socket.on(SOCKET_CHANNEL, (msg) => controller._onSocketMessage(msg));
+      if (typeof engine._atmosphereSocketHandler === 'function') {
+        try { game.socket.off(SOCKET_CHANNEL, engine._atmosphereSocketHandler); } catch (_err) { /* noop */ }
+      }
+      engine._atmosphereSocketHandler = (msg) => controller._onSocketMessage(msg);
+      game.socket.on(SOCKET_CHANNEL, engine._atmosphereSocketHandler);
       logger?.debug?.('Atmosphere Socket registriert', { channel: SOCKET_CHANNEL });
     } else {
       logger?.warn?.('Atmosphere: game.socket nicht verfügbar – Hybrid-Routing deaktiviert.');

@@ -1,7 +1,8 @@
 import { MODULE_ID } from '../../core/common.js';
-import { JanusReportCardOutputService } from '../../phase8/report-cards/JanusReportCardOutputService.js';
+import { createJanusReportCardOutputService } from '../../scripts/extensions/phase8-api.js';
+import { JanusBaseApp } from '../core/base-app.js';
 
-const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+const { HandlebarsApplicationMixin } = foundry.applications.api;
 
 /**
  * @file ui/apps/JanusReportCardApp.js
@@ -11,12 +12,20 @@ const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
  * - Visualisierung und Export von Trimester-Zeugnissen.
  * - Nutzt JanusReportCardOutputService für Datenaufbereitung.
  */
-export class JanusReportCardApp extends HandlebarsApplicationMixin(ApplicationV2) {
-  /** @type {JanusReportCardOutputService} */
-  #service = new JanusReportCardOutputService();
+export class JanusReportCardApp extends HandlebarsApplicationMixin(JanusBaseApp) {
+  /** @type {Promise<object>|null} */
+  #servicePromise = null;
 
   /** @type {object|null} Transient cache for sanitized render data */
   __renderCache = null;
+
+  async #getService() {
+    this.#servicePromise ??= createJanusReportCardOutputService({
+      engine: game?.janus7 ?? null,
+      logger: game?.janus7?.core?.logger ?? console
+    });
+    return await this.#servicePromise;
+  }
 
   /** @inheritdoc */
   static DEFAULT_OPTIONS = {
@@ -57,10 +66,11 @@ export class JanusReportCardApp extends HandlebarsApplicationMixin(ApplicationV2
    * This avoids blocking the UI lock during complex result aggregation.
    * @override
    */
-  async _preRender(options) {
-    await super._preRender(options);
+  async _preRender(_options) {
+    await super._preRender(_options);
     try {
-      const data = await this.#service.buildArtifacts();
+      const service = await this.#getService();
+      const data = await service.buildArtifacts();
       this.__renderCache = {
         drafts: data?.drafts ?? [],
         periodLabel: data?.pdfBundle?.periodLabel ?? game.i18n.localize('JANUS7.ReportCards.CurrentTrimester')
@@ -76,7 +86,7 @@ export class JanusReportCardApp extends HandlebarsApplicationMixin(ApplicationV2
    * Reads from the validated __renderCache to ensure instant painting.
    * @override
    */
-  _prepareContext(options) {
+  _prepareContext(_options) {
     return {
       ...(this.__renderCache ?? { drafts: [], periodLabel: '' }),
       isGM: game.user.isGM
@@ -87,27 +97,29 @@ export class JanusReportCardApp extends HandlebarsApplicationMixin(ApplicationV2
   // Handlers
   // -------------------------
 
-  static async _onExportPdf(event, target) {
+  static async _onExportPdf(_event, _target) {
     const app = this;
     try {
       ui.notifications.info(game.i18n.localize('JANUS7.Notifications.PreparingExport'));
-      await app.#service.exportPdf();
+      const service = await app.#getService();
+      await service.exportPdf();
     } catch (err) {
       ui.notifications.error(`Export Error: ${err.message}`);
     }
   }
 
-  static async _onWriteJournals(event, target) {
+  static async _onWriteJournals(_event, _target) {
     const app = this;
     try {
-      const result = await app.#service.writeJournals();
+      const service = await app.#getService();
+      const result = await service.writeJournals();
       ui.notifications.info(`${game.i18n.localize('JANUS7.Notifications.SyncDone')}: ${result.journalName}`);
     } catch (err) {
       ui.notifications.error(`Sync Error: ${err.message}`);
     }
   }
 
-  static async _onRefresh(event, target) {
+  static async _onRefresh(_event, _target) {
     this.render({ force: true });
   }
 }

@@ -1,4 +1,5 @@
 import { getJanusCore } from '../../core/index.js';
+import { registerRuntimeHook } from '../../core/hooks/runtime.js';
 
 /**
  * Epic 3: Die Doom-Engine / Risiko-Tracker
@@ -39,7 +40,7 @@ export function bootDoomEngine() {
         game.janus7.openDoomMonitor = () => JanusDoomApp.showSingleton();
     }
     
-    Hooks.on("createChatMessage", (message) => {
+    registerRuntimeHook('janus7:doom:create-chat-message', 'createChatMessage', (message) => {
         const dsa5Data = message.flags?.dsa5;
         if (!dsa5Data || !dsa5Data.itemData) return;
         

@@ -1,3 +1,5 @@
+import { JanusConfig } from '../../core/config.js';
+
 /**
  * @file bridge/dsa5/library-service.js
  * @module janus7/bridge/dsa5
@@ -399,7 +401,7 @@ export class AcademyLibraryService {
   _getLibraryModulsFilter(respect) {
     if (!respect) return new Set();
     try {
-      const raw = game?.settings?.get?.('dsa5', DSA5_SETTING_LIBRARY_FILTER);
+      const raw = JanusConfig.getForeign('dsa5', DSA5_SETTING_LIBRARY_FILTER);
       if (Array.isArray(raw)) return new Set(raw);
       return new Set();
     } catch {

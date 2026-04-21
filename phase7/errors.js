@@ -1,7 +1,7 @@
 import { JanusError } from '../core/errors.js';
 
 /**
- * Custom errors for JANUS7 Phase 7 (AI roundtrip import/diff).
+ * Custom errors for JANUS7 Phase 7 (AI roundtrip import/diff).
  */
 
 /**

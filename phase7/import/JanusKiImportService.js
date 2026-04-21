@@ -15,6 +15,12 @@ import { JanusKiExportService } from '../export/JanusKiExportService.js';
 import { JanusKiDiffService } from '../diff/JanusKiDiffService.js';
 import { emitHook, HOOKS } from '../../core/hooks/emitter.js';
 import { moduleAssetPath } from '../../core/common.js';
+import { JanusConfig } from '../../core/config.js';
+import { ensureDataDirectory, getFilePickerClass } from '../../core/foundry-compat.js';
+
+function _getFileCtor() {
+  return typeof globalThis.File === 'function' ? globalThis.File : null;
+}
 
 /**
  * Service for importing KI responses (patches) into the JANUS7 state.
@@ -142,7 +148,7 @@ export class JanusKiImportService {
       if (this._isBlockedPathSegment(part)) {
         throw new JanusKiResponseInvalidError(`Blockiertes Pfadsegment: ${part}`);
       }
-      if (!/^[A-Za-z0-9_\-]+$/.test(part)) {
+      if (!/^[A-Za-z0-9_-]+$/.test(part)) {
         throw new JanusKiResponseInvalidError(`Ungueltiges Pfadsegment: ${part}`);
       }
     }
@@ -160,7 +166,7 @@ export class JanusKiImportService {
       if (this._isBlockedPathSegment(part)) {
         throw new JanusKiResponseInvalidError(`Blockiertes Pfadsegment: ${part}`);
       }
-      if (!/^[A-Za-z0-9_\-]+$/.test(part)) {
+      if (!/^[A-Za-z0-9_-]+$/.test(part)) {
         throw new JanusKiResponseInvalidError(`Ungueltiges Pfadsegment: ${part}`);
       }
     }
@@ -168,7 +174,7 @@ export class JanusKiImportService {
   }
 
   _looksLikeKeyedId(v) {
-    return typeof v === 'string' && /^(NPC|LOC|LES|SCN|JRN)_[A-Z0-9_\-]+$/.test(v);
+    return typeof v === 'string' && /^(NPC|LOC|LES|SCN|JRN)_[A-Z0-9_-]+$/.test(v);
   }
 
   _isKnownKeyedId(id) {
@@ -214,8 +220,8 @@ export class JanusKiImportService {
 
   _resolveCurrentCampaignTime() {
     try {
-      if (typeof game !== 'undefined' && game?.settings?.get) {
-        const explicit = game.settings.get('janus7', 'campaignTime');
+      if (typeof game !== 'undefined') {
+        const explicit = JanusConfig.get('campaignTime');
         if (explicit && typeof explicit === 'object') return explicit;
       }
     } catch (_) { /* ignore missing setting */ }
@@ -322,7 +328,7 @@ export class JanusKiImportService {
 
 
   _getFilePicker() {
-    return foundry?.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker ?? null;
+    return getFilePickerClass()?.implementation ?? getFilePickerClass() ?? null;
   }
 
   _backupDir() {
@@ -332,7 +338,7 @@ export class JanusKiImportService {
   }
 
   _hasWorldBackupSupport() {
-    return Boolean(this._backupDir() && this._getFilePicker() && typeof File !== 'undefined');
+    return Boolean(this._backupDir() && this._getFilePicker() && _getFileCtor());
   }
 
   _isMissingDirectoryError(err) {
@@ -341,22 +347,7 @@ export class JanusKiImportService {
   }
 
   async _ensureDataDirectory(dir) {
-    const FP = this._getFilePicker();
-    if (!FP || !dir || typeof FP.createDirectory !== 'function') return false;
-    const raw = String(dir).split('/').filter(Boolean);
-    if (!raw.length) return false;
-
-    let acc = '';
-    for (const part of raw) {
-      acc = acc ? `${acc}/${part}` : part;
-      try {
-        await FP.createDirectory('data', acc, { notify: false });
-      } catch (err) {
-        const msg = String(err?.message ?? err ?? '').toLowerCase();
-        if (msg.includes('already exists')) continue;
-      }
-    }
-    return true;
+    return ensureDataDirectory(dir);
   }
 
   _extractBackupName(fileRef) {
@@ -448,7 +439,7 @@ export class JanusKiImportService {
     }
   }
 
-  async restoreBackup(fileRef, { validate = false, save = true } = {}) {
+  async restoreBackup(fileRef, { validate = true, save = true } = {}) {
     const timestamp = new Date().toISOString();
     const hasFoundryGame = (typeof game !== 'undefined') && game?.user;
     if (hasFoundryGame && !game.user?.isGM) {
@@ -463,6 +454,7 @@ export class JanusKiImportService {
       throw new Error('Backup enthält keinen campaign_state Snapshot');
     }
 
+    // KI-Backups sind Vollsnapshots des SSOT und werden standardmäßig vor dem Restore validiert.
     if (validate && this.validator?.validateState) {
       const res = this.validator.validateState(snapshot);
       if (!res?.valid) {
@@ -494,7 +486,8 @@ export class JanusKiImportService {
       const filename = `ki_backup_${Date.now()}.json`;
       const FP = this._getFilePicker();
       const dir = this._backupDir();
-      const hasFoundry = Boolean(dir && FP && typeof File !== 'undefined');
+      const FileCtor = _getFileCtor();
+      const hasFoundry = Boolean(dir && FP && FileCtor);
       if (!hasFoundry) {
         this.logger?.debug?.('[KI Import] Backup skipped: FilePicker/File unavailable');
         return null;
@@ -507,7 +500,7 @@ export class JanusKiImportService {
       }
 
       try {
-        const file = new File([json], filename, { type: 'application/json' });
+        const file = new FileCtor([json], filename, { type: 'application/json' });
         await FP.upload('data', dir, file, { notify: false });
         await this._rotateBackups(dir);
         return filename;
@@ -592,6 +585,7 @@ export class JanusKiImportService {
    * @returns {Promise<Array<{type:string,count:number}>>}
    */
   async previewImport(response, { mode = 'strict' } = {}) {
+    void mode;
     // Basic shape and version check
     if (!response || typeof response !== 'object') {
       throw new JanusKiResponseInvalidError('Response must be an object');
@@ -722,7 +716,7 @@ export class JanusKiImportService {
       .replaceAll('&', '&amp;')
       .replaceAll('<', '&lt;')
       .replaceAll('>', '&gt;')
-      .replaceAll('\"', '&quot;')
+      .replaceAll('"', '&quot;')
       .replaceAll("'", '&#39;');
   }
 

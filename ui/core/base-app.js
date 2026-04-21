@@ -6,7 +6,7 @@
  * JanusBaseApp — Render-stable ApplicationV2 base class for all JANUS7 UI applications.
  *
  * Responsibilities:
- *  - Foundry v13 ApplicationV2 compatibility shims (element accessors, setPosition guard)
+ *  - Foundry v13/v14 ApplicationV2 compatibility shims (element accessors, setPosition guard)
  *  - Post-render hook for stable DOM access via queueMicrotask
  *  - Viewport sanity clamping (_applyWindowSanity)
  *  - Centralised hook lifecycle (_registerHook / _unregisterHooks / close)
@@ -74,12 +74,12 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
   }
 
   // ---------------------------------------------------------------------------
-  // DOM Element accessors (v12/v13 compatibility shims)
+  // DOM Element accessors (legacy/v13/v14 compatibility shims)
   // ---------------------------------------------------------------------------
 
   /**
-   * Compatibility getter: normalises element access across Foundry v12 (jQuery) and v13 (HTMLElement).
-   * @deprecated Will be removed after full v13 migration is confirmed stable.
+   * Compatibility getter: normalises element access across legacy/jQuery and ApplicationV2 DOM handling.
+   * @deprecated Will be removed after the legacy JANUS accessors are retired.
    * @returns {HTMLElement|null}
    */
   get element() {
@@ -90,7 +90,7 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
   }
 
   /**
-   * Unified DOM element accessor guaranteed to return a raw HTMLElement in v13+.
+   * Unified DOM element accessor guaranteed to return a raw HTMLElement in ApplicationV2 flows.
    * @returns {HTMLElement|null}
    */
   get domElement() {
@@ -128,7 +128,7 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
    * @param {object} options
    * @protected
    */
-  _onPostRender(context, options) {
+  _onPostRender(_context, _options) {
     this._legacyElement = this.domElement;
     this._bindBaseUiActions();
 
@@ -276,7 +276,7 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
   }
 
   // ---------------------------------------------------------------------------
-  // Render options (v13 migration layer)
+  // Render options (ApplicationV2 migration layer)
   // ---------------------------------------------------------------------------
 
   /**

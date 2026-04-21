@@ -50,7 +50,7 @@ export class JanusDoomApp extends JanusBaseApp {
         logger.info(`JANUS | Doom manually adjusted by ${value}.`);
     });
     
-    this.render();
+    this.render({ force: true });
   }
 
   static showSingleton() {
@@ -60,7 +60,7 @@ export class JanusDoomApp extends JanusBaseApp {
       return this._instance;
     }
     this._instance = new this();
-    this._instance.render(true);
+    this._instance.render({ force: true });
     return this._instance;
   }
 }

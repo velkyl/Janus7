@@ -1,7 +1,8 @@
 import { MODULE_ID } from '../../core/common.js';
-import { JanusAlumniService } from '../../phase8/alumni/JanusAlumniService.js';
+import { createJanusAlumniService } from '../../scripts/extensions/phase8-api.js';
+import { JanusBaseApp } from '../core/base-app.js';
 
-const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+const { HandlebarsApplicationMixin } = foundry.applications.api;
 
 /**
  * @file ui/apps/JanusAlumniApp.js
@@ -11,10 +12,18 @@ const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
  * - Verwaltung des Alumni-Netzwerks.
  * - Nutzt JanusAlumniService für Daten und Scoring.
  */
-export class JanusAlumniApp extends HandlebarsApplicationMixin(ApplicationV2) {
+export class JanusAlumniApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   constructor(options = {}) {
     super(options);
-    this.service = new JanusAlumniService();
+    this._servicePromise = null;
+  }
+
+  async _getService() {
+    this._servicePromise ??= createJanusAlumniService({
+      engine: game?.janus7 ?? null,
+      logger: game?.janus7?.core?.logger ?? console
+    });
+    return await this._servicePromise;
   }
 
   static DEFAULT_OPTIONS = {
@@ -43,12 +52,13 @@ export class JanusAlumniApp extends HandlebarsApplicationMixin(ApplicationV2) {
     }
   };
 
-  async _preRender(options) {
-    await super._preRender(options);
-    this.__renderCache = await this.service.getOverview();
+  async _preRender(_options) {
+    await super._preRender(_options);
+    const service = await this._getService();
+    this.__renderCache = await service.getOverview();
   }
 
-  _prepareContext(options) {
+  _prepareContext(_options) {
     return this.__renderCache ?? {};
   }
 
@@ -56,42 +66,45 @@ export class JanusAlumniApp extends HandlebarsApplicationMixin(ApplicationV2) {
   // Handlers
   // -------------------------
 
-  static async _onRegister(event, target) {
+  static async _onRegister(_event, target) {
     const npcId = target.dataset.npcId;
     if (!npcId) return;
     try {
-      await this.service.registerAlumnus({ npcId });
-      this.render();
+      const service = await this._getService();
+      await service.registerAlumnus({ npcId });
+      this.render({ force: true });
     } catch (err) {
       ui.notifications.error(err.message);
     }
   }
 
-  static async _onSetStatus(event, target) {
+  static async _onSetStatus(_event, target) {
     const npcId = target.dataset.npcId;
     const status = target.value;
     if (!npcId || !status) return;
     try {
-      await this.service.setAlumniStatus({ npcId, status });
-      this.render();
+      const service = await this._getService();
+      await service.setAlumniStatus({ npcId, status });
+      this.render({ force: true });
     } catch (err) {
       ui.notifications.error(err.message);
     }
   }
 
-  static async _onSetFocus(event, target) {
+  static async _onSetFocus(_event, target) {
     const npcId = target.closest('[data-npc-id]')?.dataset.npcId;
     const focus = target.dataset.focus;
     if (!npcId) return;
     try {
-      await this.service.setAlumniFocus({ npcId, focus });
-      this.render();
+      const service = await this._getService();
+      await service.setAlumniFocus({ npcId, focus });
+      this.render({ force: true });
     } catch (err) {
       ui.notifications.error(err.message);
     }
   }
 
-  static async _onOpenNpcSheet(event, target) {
+  static async _onOpenNpcSheet(_event, target) {
     const npcId = target.dataset.npcId;
     if (!npcId) return;
     try {
@@ -100,14 +113,14 @@ export class JanusAlumniApp extends HandlebarsApplicationMixin(ApplicationV2) {
       if (!actorKey) throw new Error('Keine Actor-Referenz vorhanden');
       
       const actor = await fromUuid(actorKey);
-      if (actor) actor.sheet.render(true);
+      if (actor) actor.sheet.render({ force: true });
       else throw new Error('Akteur nicht gefunden');
     } catch (err) {
       ui.notifications.warn(err.message);
     }
   }
 
-  static async _onRefresh(event, target) {
+  static async _onRefresh(_event, _target) {
     this.render({ force: true });
   }
 }

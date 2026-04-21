@@ -4,16 +4,17 @@
 Das Projekt "JANUS7" (Stand Version 0.9.12.42) befindet sich in einem **guten bis sehr guten Grundzustand**, ist aber an einigen Stellen noch "in progress" oder birgt technische Altlasten.
 - **Architektur:** Die Phasen 1-4 (Core, Data, Bridge, Simulation) sind robust, weisen 100% Test-Coverage in bestimmten Bereichen auf und halten sich an die Architekturvorgaben (z.B. Data-Driven, Hybrid-First).
 - **Code-Qualität:** Der Code ist strukturiert (ES6-Module, klares Routing), doch es gibt im UI-Bereich deutliche Abweichungen von den Security-Best-Practices (viele `innerHTML`-Verwendungen statt `document.createElement`).
-- **Phase 7 (KI-Integration):** Ist implementiert und grundlegend nutzbar, wenngleich in der Roadmap noch Lücken (Format-Finalisierung) vermerkt sind. Phase 8 (Multi-Setting) fehlt erwartungsgemäß.
-- **Gesundheits-Score:** 8/10. Das Fundament trägt; die Baustellen betreffen primär die Migration von Legacy-UIs in die neue Shell (Phase 6) und das Bereinigen von XSS-Risiken.
+- **Phase 7 (KI-Integration):** Ist implementiert und grundlegend nutzbar.
+- **Phase 8 (Backlog):** ✅ **IN PROGRESS**. Die ersten Module (Alumni, Session Prep, Report Cards) sind bereits in der Codebase vorhanden.
+- **Gesundheits-Score:** 8/10. Das Fundament trägt; die Baustellen betreffen primär die Migration von Legacy-UIs in die neue Shell (Phase 6), das Bereinigen von XSS-Risiken und die Synchronisation der Dokumentation.
 
 ## 2. Fortschrittsbericht (Soll/Ist laut Leitplan)
 **Vertragsbasis:** `ROADMAP.md` und `README.md`.
 - **Phase 1-4b (Core, Data, DSA5-Bridge, Simulation & Quest):** ✅ **DONE**. Alle vorgesehenen Engines (Scoring, Calendar, Lessons, Social, Quests) sind integriert.
 - **Phase 5 (Atmosphere):** ✅ **DONE**. Controller existiert und Test-Coverage ist gegeben.
 - **Phase 6 (User Interfaces):** ⚠️ **IN PROGRESS**. Die `JANUS Shell` ist als Frontdoor etabliert, jedoch sind `JanusAcademyDataStudioApp` und andere Legacy-Apps noch nicht vollständig migriert. "Edit-Fähigkeit" ist noch ein offener Punkt.
-- **Phase 7 (KI-Integration):** ✅ **DONE** (größtenteils). Export, Import und Diff existieren in `phase7/`, entgegen der Angabe "GEPLANT" in Teilen der Roadmap.
-- **Phase 8 (Backlog):** 📋 **FUTURE**. Noch nicht in der Codebase.
+- **Phase 7 (KI-Integration):** ✅ **DONE**. Export, Import und Diff existieren in `phase7/`.
+- **Phase 8 (Backlog):** ⚠️ **IN PROGRESS**. Module wie `JanusAlumniApp`, `JanusReportCardApp` und `JanusSessionPrepService` sind aktiv und folgen bereits den modernen Architekturvorgaben (ApplicationV2, _preRender).
 
 **Offene Baustellen/Lücken:**
 - Die `source-md/`-Dateien, die im Prompt erwähnt wurden, existieren in der aktuellen Codebase nicht mehr.
