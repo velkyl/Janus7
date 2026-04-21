@@ -248,7 +248,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     };
   }
 
-  async _prepareContext(_options) {
+  _prepareContext(_options) {
     const testList = this._buildList();
     const current = this._selectedTest();
     const currentSaved = current ? (this._manualResults?.[current.id] ?? null) : null;

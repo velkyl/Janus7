@@ -183,7 +183,7 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
     };
   }
 
-  async _prepareContext(_options) {
+  _prepareContext(_options) {
     const engine = game.janus7;
     const social = engine?.academy?.social;
     const academyData = engine?.academy?.data;

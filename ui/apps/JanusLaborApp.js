@@ -79,12 +79,19 @@ export class JanusLaborApp extends JanusBaseApp {
   }
 
   /** @override */
-  async _prepareContext(_options) {
+  async _preRender(options) {
+    await super._preRender(options);
     const { core } = getJanusCore();
     const stashActorId = core.config.get('stashActorId');
     const stashActor = game.actors.get(stashActorId);
+    this.__stashActorCache = stashActor ?? null;
+    this.__recipesCache = await this.#loadRecipes(stashActor);
+  }
 
-    const recipes = await this.#loadRecipes(stashActor);
+  /** @override */
+  _prepareContext(_options) {
+    const stashActor = this.__stashActorCache ?? null;
+    const recipes = this.__recipesCache ?? [];
     const activeRecipe = recipes.find((recipe) => recipe.id === this._activeRecipeId);
 
     return {

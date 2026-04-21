@@ -241,7 +241,7 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
   // ---------------------------------------------------------------------------
 
   /** @override */
-  async _prepareContext(_options) {
+  _prepareContext(_options) {
     if (!game.user?.isGM) return { notReady: true, notGM: true };
 
     const rawMappings = JanusConfig.get('sceneMappings') ?? {};

@@ -130,7 +130,7 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
     });
   }
 
-  async _prepareContext(_options) {
+  _prepareContext(_options) {
     if (this._running) return { running: true, hasResults: false };
     if (!this._testData) return { running: false, hasResults: false };
 

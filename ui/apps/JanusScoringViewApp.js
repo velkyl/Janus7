@@ -55,7 +55,7 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
   }
 
   /** @override */
-  async _prepareContext(options) {
+  _prepareContext(options) {
     const engine = game.janus7;
     const academyData = engine?.academy?.data ?? null;
     const scoring = engine?.academy?.scoring ?? engine?.simulation?.scoring ?? null;

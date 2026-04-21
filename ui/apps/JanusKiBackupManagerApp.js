@@ -83,11 +83,19 @@ ${fileRef}`);
     }
   }
 
-  async _prepareContext(_options) {
+  async _preRender(options) {
+    await super._preRender(options);
     const engine = this._getEngine();
     const kiApi = engine?.capabilities?.ki ?? engine?.ki ?? null;
-    let backups = [];
-    try { backups = await (kiApi?.listBackups?.() ?? []); } catch (_err) { backups = []; }
+    try {
+      this.__backupsCache = await (kiApi?.listBackups?.() ?? []);
+    } catch (_err) {
+      this.__backupsCache ??= [];
+    }
+  }
+
+  _prepareContext(_options) {
+    const backups = this.__backupsCache ?? [];
     return {
       isGM: !!game?.user?.isGM,
       backups,

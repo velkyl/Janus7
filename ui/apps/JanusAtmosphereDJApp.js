@@ -146,7 +146,7 @@ export class JanusAtmosphereDJApp extends HandlebarsApplicationMixin(JanusBaseAp
     } catch (err) { ui.notifications.error(err.message); }
   }
 
-  async _prepareContext(_options) {
+  _prepareContext(_options) {
     const engine = game.janus7;
     const controller = engine?.atmosphere?.controller;
 

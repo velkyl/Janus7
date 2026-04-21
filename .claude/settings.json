@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"d:/RPG Lokal/FoundryVTT/Data/modules/Janus7\" diff --stat HEAD)"
+    ]
+  }
+}

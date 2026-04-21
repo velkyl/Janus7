@@ -1394,6 +1394,18 @@
       "hasRun": false
     },
     {
+      "id": "P6-TC-24",
+      "title": "Command Center: Kategorie-Filter aktualisiert Ansicht",
+      "importPath": "./tests/p6/P6_TC_24__command_center_filter_category.test.js",
+      "suiteClass": "binding",
+      "kind": "auto",
+      "phase": 6,
+      "phases": [
+        6
+      ],
+      "hasRun": false
+    },
+    {
       "id": "P7-TC-01",
       "title": "KI Export Bundle validates against schema (AI = legacy alias)",
       "importPath": "./tests/p7/P7_TC_01__ai_export_bundle_valid.test.js",

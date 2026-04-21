@@ -1,7 +1,9 @@
 # JANUS7 - Architektur & Code Review Report
 
+**Zuletzt aktualisiert:** 2026-04-21 — ApplicationV2 Lifecycle Audit & Optimization Plan umgesetzt.
+
 ## 1. Executive Summary (Wie gesund ist das Projekt?)
-Das Projekt "JANUS7" (Stand Version 0.9.12.42) befindet sich in einem **guten bis sehr guten Grundzustand**, ist aber an einigen Stellen noch "in progress" oder birgt technische Altlasten.
+Das Projekt "JANUS7" (Stand Version 0.9.12.46) befindet sich in einem **guten bis sehr guten Grundzustand**, ist aber an einigen Stellen noch "in progress" oder birgt technische Altlasten.
 - **Architektur:** Die Phasen 1-4 (Core, Data, Bridge, Simulation) sind robust, weisen 100% Test-Coverage in bestimmten Bereichen auf und halten sich an die Architekturvorgaben (z.B. Data-Driven, Hybrid-First).
 - **Code-Qualität:** Der Code ist strukturiert (ES6-Module, klares Routing), doch es gibt im UI-Bereich deutliche Abweichungen von den Security-Best-Practices (viele `innerHTML`-Verwendungen statt `document.createElement`).
 - **Phase 7 (KI-Integration):** Ist implementiert und grundlegend nutzbar.
@@ -18,7 +20,8 @@ Das Projekt "JANUS7" (Stand Version 0.9.12.42) befindet sich in einem **guten bi
 
 **Offene Baustellen/Lücken:**
 - Die `source-md/`-Dateien, die im Prompt erwähnt wurden, existieren in der aktuellen Codebase nicht mehr.
-- Tests für das Quest-System (wie im Leitplan Phase 4b gefordert: `TC-QS-01` bis `TC-QS-05`) fehlen in der Manifest-Datei.
+- ✅ **BEHOBEN (2026-04-21):** Tests für das Quest-System (`TC-QS-01` bis `TC-QS-05`) sind im `extended-test-manifest.json` registriert. P6-TC-24 (Command Center Kategorie-Filter) ebenfalls ergänzt.
+- ✅ **BEHOBEN (2026-04-21):** ApplicationV2 Lifecycle — 3 Apps mit echten `await`-Verstößen in `_prepareContext` auf `_preRender`-Cache-Muster umgestellt (`JanusKiBackupManagerApp`, `JanusSyncPanelApp`, `JanusLaborApp`). 11 weitere Apps von unnötigem `async`-Keyword bereinigt.
 
 ## 3. Daten- & Content-Konsistenz (Probleme in den Lehrplänen/Jahres-Dateien)
 Eine Prüfung der Academy JSON-Daten (`calendar.json`, `lessons.json`, `exams.json`) zeigt folgendes:
@@ -63,4 +66,6 @@ root.appendChild(div);
 - **Problem:** `P3-TC-COND-01` war doppelt definiert, was `npm run validate` zum Absturz brachte.
 - **Lösung:** Doppelter Eintrag wurde per Git Merge Diff entfernt.
 
-**Fazit:** Abseits der `innerHTML`-Problematik ist die Code-Qualität hoch und stabil.
+**innerHTML-Status (2026-04-21):** Die im Plan identifizierten Stellen in `JanusCommandCenterApp.js` und `JanusConfigPanelApp.js` wurden im Zuge der Welle-3/4-Audits geprüft. Die `innerHTML`-Zuweisungen in `JanusCommandCenterApp.js` (Spotlight/Overlay, Lines 430/496) betreffen UI-interne Konstruktion ohne direkten User-Input — kein kritischer XSS-Pfad. Die Umstellung auf `createElement` ist als P8-Backlog-Item offen. `JanusAcademyDataStudioApp.js` und `JanusSettingsTestHarnessApp.js` sind Debug/Dev-Apps, die ausschließlich GM-Zugang haben.
+
+**Fazit:** Abseits der `innerHTML`-Problematik ist die Code-Qualität hoch und stabil. Die Lifecycle-Optimierungen aus dem 2026-04-21 Audit verbessern die ApplicationV2-Konformität signifikant.

@@ -115,7 +115,7 @@ export class JanusQuartermasterApp extends HandlebarsApplicationMixin(JanusBaseA
     this.refresh();
   }
 
-  async _prepareContext(_options) {
+  _prepareContext(_options) {
     // Wer kauft ein? Der Actor des Spielers oder ein selektierter Token des GMs
     let buyer = game.user?.character;
     if (!buyer && game.user?.isGM && canvas.tokens?.controlled?.length > 0) {

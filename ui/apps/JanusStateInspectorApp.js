@@ -61,7 +61,7 @@ export class JanusStateInspectorApp extends HandlebarsApplicationMixin(JanusBase
     }
   }
 
-  async _prepareContext(_options) {
+  _prepareContext(_options) {
     const engine = game.janus7;
     const state = engine?.core?.state;
     if (!engine || !state) return { notReady: true };

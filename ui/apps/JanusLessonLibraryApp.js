@@ -46,7 +46,7 @@ export class JanusLessonLibraryApp extends HandlebarsApplicationMixin(JanusBaseA
     this.enableAutoRefresh(['createItem', 'updateItem', 'deleteItem', 'janus7LessonDocumentsReady']);
   }
 
-  async _prepareContext(_options) {
+  _prepareContext(_options) {
     const docs = game.items?.filter((item) => isJanusLessonDocument(item)) ?? [];
     const entries = docs
       .map((item) => {

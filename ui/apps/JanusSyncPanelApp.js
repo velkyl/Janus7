@@ -98,7 +98,19 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
 
   // ─── Context ───────────────────────────────────────────────────────────────
 
-  async _prepareContext(_options) {
+  async _preRender(options) {
+    await super._preRender(options);
+    if (!game.user?.isGM) return;
+    const engine = game.janus7;
+    const ad = engine?.academy?.data;
+    if (!ad?.isReady) return;
+    const sync = this._getSync();
+    if (!this._reports[this._activeTab]) {
+      this._reports[this._activeTab] = await this._runScan(this._activeTab, ad, sync);
+    }
+  }
+
+  _prepareContext(_options) {
     if (!game.user?.isGM) return { notGM: true };
 
     const engine = game.janus7;
@@ -106,13 +118,6 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
 
     if (!ad?.isReady) {
       return { notReady: true };
-    }
-
-    const sync = this._getSync();
-
-    // Lazy-scan: nur wenn noch kein Report vorliegt
-    if (!this._reports[this._activeTab]) {
-      this._reports[this._activeTab] = await this._runScan(this._activeTab, ad, sync);
     }
 
     const report = this._reports[this._activeTab];

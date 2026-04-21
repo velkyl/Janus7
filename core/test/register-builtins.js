@@ -122,6 +122,7 @@ export const BUILTIN_AUTO_MODULES = [
   './tests/p6/P6_TC_21__shell_template_actions_present.test.js',
   './tests/p6/P6_TC_22__shell_panel_registry_seeded.test.js',
   './tests/p6/P6_TC_23__scene_control_shell_fallback_renders.test.js',
+  './tests/p6/P6_TC_24__command_center_filter_category.test.js',
 
   // Phase 7
   './tests/p7/P7_TC_01__ai_export_bundle_valid.test.js',

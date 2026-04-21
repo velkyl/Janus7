@@ -143,7 +143,7 @@ export class JanusStudentArchiveApp extends HandlebarsApplicationMixin(JanusBase
     this.refresh();
   }
 
-  async _prepareContext(_options) {
+  _prepareContext(_options) {
     const safeResults = this._results.map(r => ({
       ...r,
       img: r.img || 'icons/svg/book.svg'
