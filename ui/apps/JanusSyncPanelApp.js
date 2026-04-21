@@ -322,7 +322,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
     const uuid = target?.closest('[data-janus-id]')?.dataset?.foundryUuid;
     if (!uuid) return;
     const doc = await fromUuid(uuid);
-    doc?.sheet?.render(true);
+    doc?.sheet?.render({ force: true });
   }
 
   /** Entfernt eine UUID-Verknüpfung. */

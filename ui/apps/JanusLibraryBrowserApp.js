@@ -201,7 +201,7 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
       // Resolve lazy-loads the actual document from the compendium
       const doc = await inst.libraryService.resolve(uuid);
       if (doc && doc.sheet) {
-        doc.sheet.render(true);
+        doc.sheet.render({ force: true });
       } else {
         ui.notifications?.warn(`Dokument ${uuid} konnte nicht aufgelöst werden.`);
       }

@@ -25,7 +25,7 @@ export default {
 
       // Render deterministisch erzwingen, wenn möglich.
       if (typeof app?.render === "function") {
-        await app.render(true);
+        await app.render({ force: true });
       }
 
       // ApplicationV2 ist erst "wirklich" da, wenn ein Element existiert.

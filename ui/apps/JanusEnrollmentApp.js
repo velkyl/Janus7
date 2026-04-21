@@ -140,7 +140,7 @@ export class JanusEnrollmentApp extends HandlebarsApplicationMixin(JanusBaseApp)
 
     try {
       const doc = await inst.libraryService.resolve(uuid);
-      if (doc && doc.sheet) doc.sheet.render(true);
+      if (doc && doc.sheet) doc.sheet.render({ force: true });
     } catch(err) {
       inst._logger?.error('Fehler beim Öffnen', err);
     }
@@ -168,7 +168,7 @@ export class JanusEnrollmentApp extends HandlebarsApplicationMixin(JanusBaseApp)
       
       if (created) {
         ui.notifications?.info(`Student/NSC generiert: ${created.name}`);
-        created.sheet.render(true);
+        created.sheet.render({ force: true });
       }
     } catch(err) {
       inst._logger?.error('Fehler beim Importieren des NSC', err);

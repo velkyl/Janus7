@@ -10,7 +10,8 @@
  * @returns {typeof globalThis.FilePicker|null}
  */
 export function getFilePickerClass() {
-  return foundry?.applications?.apps?.FilePicker
+  return foundry?.applications?.ux?.FilePicker       // v14 kanonisch
+    ?? foundry?.applications?.apps?.FilePicker       // hypothetischer v13-Pfad
     ?? CONFIG?.ux?.FilePicker
     ?? globalThis.FilePicker
     ?? null;

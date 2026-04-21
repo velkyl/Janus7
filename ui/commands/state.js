@@ -125,11 +125,20 @@ export const stateCommands = {
       if (ok) {
         ui.notifications.info('JANUS7: Academy-Daten in Zwischenablage kopiert.');
       } else {
-        await Dialog.prompt({
-          title: 'JANUS7 – Academy Export',
-          content: `<textarea style="width:100%;height:300px;font-family:monospace;font-size:11px">${text}</textarea>`,
-          label: 'Schließen',
-        });
+        const _DV2 = foundry?.applications?.api?.DialogV2;
+        if (_DV2) {
+          await _DV2.prompt({
+            window: { title: 'JANUS7 – Academy Export' },
+            content: `<textarea style="width:100%;height:300px;font-family:monospace;font-size:11px">${text}</textarea>`,
+            ok: { label: 'Schließen' },
+          });
+        } else if (typeof Dialog !== 'undefined') {
+          await Dialog.prompt({
+            title: 'JANUS7 – Academy Export',
+            content: `<textarea style="width:100%;height:300px;font-family:monospace;font-size:11px">${text}</textarea>`,
+            label: 'Schließen',
+          });
+        }
       }
       return { success: true, lessonCount: snapshot.lessons.length, npcCount: snapshot.npcs.length };
     });

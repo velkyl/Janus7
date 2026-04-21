@@ -70,7 +70,7 @@ export class QuestSystemIntegration {
           onClick: () => {
             try {
               const journal = new JanusQuestJournal();
-              journal.render(true);
+              journal.render({ force: true });
             } catch (e) {
               _qlog().error?.('[JANUS7] Quest Journal open failed:', e);
             }

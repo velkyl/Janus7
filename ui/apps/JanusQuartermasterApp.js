@@ -148,7 +148,7 @@ export class JanusQuartermasterApp extends HandlebarsApplicationMixin(JanusBaseA
 
     try {
       const doc = await inst.libraryService.resolve(uuid);
-      if (doc && doc.sheet) doc.sheet.render(true);
+      if (doc && doc.sheet) doc.sheet.render({ force: true });
     } catch(err) {
       inst._logger?.error('Fehler beim Öffnen', err);
     }

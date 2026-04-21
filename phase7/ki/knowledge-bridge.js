@@ -115,7 +115,7 @@ export class JanusKnowledgeBridge {
     if (!doc) throw new Error(`Dokument nicht gefunden: ${uuid}`);
     
     if (typeof doc.sheet?.render === 'function') {
-      doc.sheet.render(true);
+      doc.sheet.render({ force: true });
       return { ok: true, uuid: doc.uuid };
     }
     return { ok: false, reason: 'No sheet available' };

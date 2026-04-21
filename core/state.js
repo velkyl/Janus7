@@ -130,7 +130,8 @@ export class JanusStateCore {
 
     // Legacy-Key for older worlds (pre v0.3.6.1)
     try {
-      if (!game.settings.settings.has(`${MODULE_ID}.state`)) {
+      const _legacyAbsent = (() => { try { game?.settings?.get?.(MODULE_ID, 'state'); return false; } catch { return true; } })();
+      if (_legacyAbsent) {
         game.settings.register(MODULE_ID, 'state', {
           name: 'JANUS7.State.Legacy.Name',
           hint: 'JANUS7.State.Legacy.Hint',
@@ -393,7 +394,8 @@ export class JanusStateCore {
     let autoSave = true;
     if (!force) {
       try {
-        if (game.settings.settings.has(`${MODULE_ID}.autoSave`)) {
+        const _hasAutoSave = (() => { try { game?.settings?.get?.(MODULE_ID, 'autoSave'); return true; } catch { return false; } })();
+        if (_hasAutoSave) {
           autoSave = JanusConfig.get('autoSave') !== false;
         }
       } catch (_e) { autoSave = true; }

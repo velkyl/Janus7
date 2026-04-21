@@ -26,6 +26,7 @@ import { SceneRegionsBridge } from '../bridges/foundry/SceneRegionsBridge.mjs';
 import { JanusShellApp } from '../ui/apps/JanusShellApp.js';
 import { registerLessonDocuments, ensureLessonDocumentsReady } from './integration/phase2-document-content-integration.js';
 import { JANUS_LESSON_ITEM_TYPE, JANUS_LESSON_SHEET_CLASS, JANUS_LESSON_SUBTYPE } from './documents/lesson-constants.js';
+import { attachJanusSceneControls } from '../ui/core/scene-controls.js';
 
 // Sidebar Tab (Foundry v13+)
 // - left scene controls are registered here during init/render lifecycle
@@ -240,6 +241,16 @@ async function loadPhaseIntegrations(engine) {
     _recordIssue(engine, 'test.runner', 'module-load', err);
     logger?.warn?.('[JANUS7] Test runner integration failed to load.', { message: err?.message });
   }
+  // ─────────────────────────────────────────────────────────────
+  // Discovery & Search Bridge
+  try {
+    await import('../discovery/phase6_5.js');
+    logger?.debug?.('[JANUS7] Phase 6.5 (Discovery) integration loaded.');
+  } catch (err) {
+    _recordIssue(engine, 'discovery', 'module-load', err);
+    logger?.warn?.('[JANUS7] Phase 6.5 (Discovery) failed to load.', { message: err?.message });
+  }
+
 
   // ─────────────────────────────────────────────────────────────
   // Graph Service Integration
@@ -288,9 +299,8 @@ function runReadySanityCheck(engine) {
   try {
     const requiredKeys = ['coreState', 'enableUI', 'enablePhase7'];
     for (const key of requiredKeys) {
-      if (!game?.settings?.settings?.has?.(`${MODULE_ID}.${key}`)) {
-        issues.push(`Fehlendes Setting: ${MODULE_ID}.${key}`);
-      }
+      const exists = (() => { try { game?.settings?.get?.(MODULE_ID, key); return true; } catch { return false; } })();
+      if (!exists) issues.push(`Fehlendes Setting: ${MODULE_ID}.${key}`);
     }
   } catch (_err) {
     issues.push('Settings-Registry konnte nicht geprüft werden.');
@@ -446,24 +456,31 @@ try {
       }
     })();
 
-    // Cleanup on world close
-    Hooks.once('closingWorld', () => {
-      try { 
-        engine.cleanup(); 
+    // Cleanup on world close — register both hook names for v13/v14 compat.
+    // v13 fires 'closingWorld'; v14 renamed it to 'worldClosing'.
+    // The handler is idempotent; whichever fires first wins.
+    let _worldCloseHandled = false;
+    const _onWorldClose = () => {
+      if (_worldCloseHandled) return;
+      _worldCloseHandled = true;
+      try {
+        engine.cleanup();
       } catch (e) {
         console.debug('[JANUS7] worldClosing: engine.cleanup failed', e);
       }
-      try { 
-        _cleanupCoreHooks(); 
+      try {
+        _cleanupCoreHooks();
       } catch (e) {
         console.debug('[JANUS7] worldClosing: _cleanupCoreHooks failed', e);
       }
-      try { 
-        globalThis[__BOOT_KEY__].registered = false; 
+      try {
+        globalThis[__BOOT_KEY__].registered = false;
       } catch (e) {
         console.debug('[JANUS7] worldClosing: boot-guard reset failed', e);
       }
-    });
+    };
+    Hooks.once('closingWorld', _onWorldClose);  // Foundry v13
+    Hooks.once('worldClosing', _onWorldClose);  // Foundry v14
   });
 
   // ─── HOOK: ready (Phase 1→6 finalize) ────────────────────────────────
@@ -680,322 +697,8 @@ try {
   });
 
   _registerCoreHook('getSceneControlButtons', (controls) => {
-    if (!game.user?.isGM) return;
     try {
-      const engine = JANUS_GLOBAL.engine;
-      const logger = JANUS_GLOBAL.engine?.core?.logger ?? console;
-      const i18n = game?.i18n;
-      const localize = (key, fallback) => i18n?.localize?.(key) ?? fallback ?? key;
-
-      const isObject = (value) => !!value && (typeof value === 'object') && !Array.isArray(value);
-      const getTopLevelControls = (value) => {
-        if (Array.isArray(value)) return value;
-        if (isObject(value?.controls)) return value.controls;
-        if (Array.isArray(value?.controls)) return value.controls;
-        if (isObject(value?.items)) return value.items;
-        if (Array.isArray(value?.items)) return value.items;
-        if (isObject(value?.data)) return value.data;
-        if (Array.isArray(value?.data)) return value.data;
-        return value;
-      };
-      const top = getTopLevelControls(controls);
-      const isRecord = isObject(top);
-      const isList = Array.isArray(top);
-      if (!isRecord && !isList) return;
-
-      const getControlSet = (...names) => {
-        if (isRecord) {
-          for (const name of names) {
-            if (top[name]) return top[name];
-          }
-          return null;
-        }
-        return top.find((c) => names.includes(c?.name)) ?? null;
-      };
-
-const openControlPanel = async () => {
-  try {
-    const uiReg = game?.janus7?.ui;
-    if (uiReg?.openShell) return uiReg.openShell();
-    if (uiReg?.openControlPanel) return uiReg.openControlPanel();
-    const { JanusShellApp } = await import('../ui/apps/JanusShellApp.js');
-    const app = JanusShellApp.showSingleton();
-    app.render?.({ force: true, focus: true });
-    return app;
-  } catch (err) {
-    logger.error?.('[JANUS7] Scene control openControlPanel fehlgeschlagen:', { message: err?.message });
-  }
-};
-
-const openUiApp = async (key, label = key, options = {}) => {
-  try {
-    return game?.janus7?.ui?.open?.(key, options);
-  } catch (err) {
-    logger.error?.(`[JANUS7] Scene control ${label} fehlgeschlagen:`, { message: err?.message });
-  }
-};
-
-const openQuestJournal = async () => {
-  try {
-    const mod = await import('../scripts/ui/quest-journal.js');
-    new mod.JanusQuestJournal().render({ force: true, focus: true });
-    return true;
-  } catch (err) {
-    logger.error?.('[JANUS7] Scene control questJournal fehlgeschlagen:', { message: err?.message });
-    ui.notifications?.error?.('Quest-Journal konnte nicht geöffnet werden.');
-    return false;
-  }
-};
-
-const openStoryGraph = async () => {
-  try {
-    const { StoryGraphApp } = await import('../ui/apps/StoryGraphApp.js');
-    new StoryGraphApp().render({ force: true, focus: true });
-    return true;
-  } catch (err) {
-    logger.error?.('[JANUS7] Scene control openStoryGraph fehlgeschlagen:', { message: err?.message });
-    ui.notifications?.error?.('Story Graph konnte nicht ge\u00f6ffnet werden.');
-    return false;
-  }
-};
-
-const openKiSearch = async () => {
-  try {
-    const { JanusShellApp } = await import('../ui/apps/JanusShellApp.js');
-    JanusShellApp.onKiSearch();
-    return true;
-  } catch (err) {
-    logger.error?.('[JANUS7] openKiSearch fehlgeschlagen:', { message: err?.message });
-    return false;
-  }
-};
-
-const runTool = (fn) => (event) => {
-  event?.preventDefault?.();
-  void fn();
-};
-
-const toolVisible = !!game?.user?.isGM;
-
-const janusToolsRecord = {
-  openControlPanel: {
-    name: 'openControlPanel',
-    title: localize('JANUS7.Menu.ControlPanel.Label', 'JANUS Shell öffnen'),
-    icon: 'fas fa-cogs',
-    order: 0,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(openControlPanel)
-  },
-  openMasterDashboard: {
-    name: 'openMasterDashboard',
-    title: 'Master Dashboard (Balancing / Heat / Rumors)',
-    icon: 'fas fa-crown',
-    order: 0.5,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(async () => {
-      const { JanusMasterDashboard } = await import('./ui/master-dashboard.js');
-      new JanusMasterDashboard().render({ force: true, focus: true });
-    })
-  },
-  openAcademyOverview: {
-    name: 'openAcademyOverview',
-    title: 'Academy Overview öffnen',
-    icon: 'fas fa-university',
-    order: 1,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(() => openUiApp('academyOverview', 'academyOverview'))
-  },
-  openScoringView: {
-    name: 'openScoringView',
-    title: 'Scoring öffnen',
-    icon: 'fas fa-trophy',
-    order: 2,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(() => openUiApp('scoringView', 'scoringView'))
-  },
-  openSocialView: {
-    name: 'openSocialView',
-    title: 'Social View öffnen',
-    icon: 'fas fa-users',
-    order: 3,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(() => openUiApp('socialView', 'socialView'))
-  },
-  openStoryGraph: {
-    name: 'openStoryGraph',
-    title: 'Story Graph \u00f6ffnen',
-    icon: 'fas fa-project-diagram',
-    order: 3.5,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(openStoryGraph)
-  },
-  openKiSearch: {
-    name: 'openKiSearch',
-    title: 'KI Semantische Suche',
-    icon: 'fas fa-search',
-    order: 3.8,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(openKiSearch)
-  },
-  openAtmosphereDJ: {
-    name: 'openAtmosphereDJ',
-    title: 'Atmosphere DJ öffnen',
-    icon: 'fas fa-music',
-    order: 4,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(() => openUiApp('atmosphereDJ', 'atmosphereDJ'))
-  },
-  openQuestJournal: {
-    name: 'openQuestJournal',
-    title: 'Quest-Journal öffnen',
-    icon: 'fas fa-book-open',
-    order: 5,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(openQuestJournal)
-  },
-  openSyncPanel: {
-    name: 'openSyncPanel',
-    title: 'Sync Panel öffnen',
-    icon: 'fas fa-link',
-    order: 12,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(() => openUiApp('syncPanel', 'syncPanel'))
-  },
-  openStateInspector: {
-    name: 'openStateInspector',
-    title: 'State Inspector öffnen',
-    icon: 'fas fa-database',
-    order: 13,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(() => openUiApp('stateInspector', 'stateInspector'))
-  },
-  openConfigPanel: {
-    name: 'openConfigPanel',
-    title: 'Config Panel öffnen',
-    icon: 'fas fa-sliders-h',
-    order: 14,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(() => openUiApp('configPanel', 'configPanel'))
-  },
-  openAcademyDataStudio: {
-    name: 'openAcademyDataStudio',
-    title: 'Academy Data Studio öffnen',
-    icon: 'fas fa-edit',
-    order: 15,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(() => openUiApp('academyDataStudio', 'academyDataStudio'))
-  },
-  openSessionPrep: {
-    name: 'openSessionPrep',
-    title: localize('JANUS7.UI.OpenSessionPrepWizard', 'Session Prep öffnen'),
-    icon: 'fas fa-wand-magic-sparkles',
-    order: 16,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(() => openUiApp('shell', 'sessionPrep', { viewId: 'sessionPrep' }))
-  },
-  openCommandCenter: {
-    name: 'openCommandCenter',
-    title: 'Power Tools öffnen',
-    icon: 'fas fa-terminal',
-    order: 17,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(() => openUiApp('commandCenter', 'commandCenter'))
-  },
-  openKiBackupManager: {
-    name: 'openKiBackupManager',
-    title: 'KI-Backups öffnen',
-    icon: 'fas fa-life-ring',
-    order: 18,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(() => openUiApp('kiBackupManager', 'kiBackupManager'))
-  },
-  openKiRoundtrip: {
-    name: 'openKiRoundtrip',
-    title: 'KI Roundtrip öffnen',
-    icon: 'fas fa-brain',
-    order: 19,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(() => openUiApp('kiRoundtrip', 'kiRoundtrip'))
-  },
-  openTestResults: {
-    name: 'openTestResults',
-    title: 'Test Results öffnen',
-    icon: 'fas fa-vial',
-    order: 20,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(() => openUiApp('testResults', 'testResults'))
-  },
-  openGuidedManualTests: {
-    name: 'openGuidedManualTests',
-    title: 'Guided Manual Tests öffnen',
-    icon: 'fas fa-route',
-    order: 21,
-    button: true,
-    visible: toolVisible,
-    onChange: runTool(() => openUiApp('guidedManualTests', 'guidedManualTests'))
-  }
-};
-
-if (isRecord) {
-  top.janus7 ??= {
-    name: 'janus7',
-    title: localize('JANUS7.Sidebar.Title', 'JANUS7'),
-    icon: 'fas fa-university',
-    visible: toolVisible,
-    activeTool: 'openControlPanel',
-    tools: janusToolsRecord
-  };
-  top.janus7.tools ??= {};
-  for (const [toolName, toolData] of Object.entries(janusToolsRecord)) {
-    top.janus7.tools[toolName] = toolData;
-  }
-  top.janus7.visible = toolVisible;
-  top.janus7.activeTool ??= 'openControlPanel';
-} else if (isList) {
-  const existing = getControlSet('janus7');
-  if (!existing) {
-    top.push({
-      name: 'janus7',
-      title: localize('JANUS7.Sidebar.Title', 'JANUS7'),
-      icon: 'fas fa-university',
-      visible: toolVisible,
-      layer: null,
-      activeTool: 'openControlPanel',
-      tools: Object.values(janusToolsRecord)
-    });
-  } else {
-    existing.title = localize('JANUS7.Sidebar.Title', 'JANUS7');
-    existing.icon = 'fas fa-university';
-    existing.visible = toolVisible;
-    existing.layer = null;
-    existing.activeTool = existing.activeTool ?? 'openControlPanel';
-    existing.tools = Object.values(janusToolsRecord);
-  }
-}
-
-      try {
-        engine?.ui?.onSceneControls?.(controls);
-      } catch (errInner) {
-        logger.warn?.('[JANUS7] ui.onSceneControls delegation failed:', { message: errInner?.message });
-      }
+      attachJanusSceneControls(controls, JANUS_GLOBAL.engine);
     } catch (err) {
       (JANUS_GLOBAL.engine?.core?.logger ?? console).warn?.('[JANUS7] getSceneControlButtons Fehler:', { message: err?.message });
     }
