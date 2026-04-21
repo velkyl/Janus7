@@ -4,7 +4,7 @@ import { spawnSync } from 'child_process';
 import { pathToFileURL } from 'url';
 
 const root = process.cwd();
-const includeRoots = ['academy', 'atmosphere', 'bridge', 'bridges', 'core', 'phase7', 'scripts', 'ui'];
+const includeRoots = ['academy', 'atmosphere', 'bridge', 'bridges', 'core', 'phase7', 'scripts', 'ui', 'services', 'discovery', 'extensions'];
 const files = [];
 
 function walk(dir) {

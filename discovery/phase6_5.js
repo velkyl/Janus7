@@ -8,7 +8,9 @@
 
 import JanusContentDiscoveryBridge from './index.js';
 
-Hooks.once('janus7Ready', async (engine) => {
+import { HOOKS } from '../core/hooks/topics.js';
+
+Hooks.once(HOOKS.ENGINE_READY, async (engine) => {
   try {
     const logger = engine?.diagnostics?.getLogger?.('discovery') ?? console;
     const bridge = new JanusContentDiscoveryBridge({ engine, logger });

@@ -91,24 +91,31 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(JanusBaseApp) 
     }
   };
 
-  async _prepareContext(_options) {
+  /** @type {object|null} Transient cache for sanitized render data */
+  __renderCache = null;
+
+  /** @override */
+  async _preRender(_options) {
+    await super._preRender(_options);
     try {
       const actor = game.user.character || game.actors.find((a) => a.type === 'character');
       if (!actor) {
-        return {
+        this.__renderCache = {
           hasActor: false,
           error: 'Kein Character gefunden. Bitte einen Character auswaehlen.'
         };
+        return;
       }
 
       const dataApi = game.janus7?.academy?.data;
       const questEngine = game.janus7?.academy?.quests;
       if (!dataApi || !questEngine) {
-        return {
+        this.__renderCache = {
           hasActor: true,
           actor: actor.name,
           error: 'Quest-System nicht initialisiert. Bitte JANUS7 laden.'
         };
+        return;
       }
 
       const actorKeys = new Set(_actorCandidates(actor));
@@ -173,7 +180,7 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(JanusBaseApp) 
         currentLocationId: eventContext.activeLocationId ?? '-'
       };
 
-      return {
+      this.__renderCache = {
         hasActor: true,
         actor: actor.name,
         actorId: actor.uuid,
@@ -193,17 +200,22 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(JanusBaseApp) 
         revealRumorTruth: revealTruth
       };
     } catch (err) {
-      this._getLogger?.().error?.('[JANUS7][QuestJournal] _prepareContext failed', err);
-      return {
+      this._getLogger?.().error?.('[JANUS7][QuestJournal] _preRender failed', err);
+      this.__renderCache = {
         hasActor: false,
         error: `Quest-Journal konnte nicht geladen werden: ${String(err?.message ?? err)}`
       };
     }
   }
 
+  /** @override */
+  _prepareContext(_options) {
+    return this.__renderCache ?? {};
+  }
+
   static async _onRefreshJournal(event, _target) {
     event?.preventDefault?.();
-    this.render({ force: true });
+    this.refresh();
   }
 
   static async _onViewQuest(event, target) {
@@ -215,18 +227,22 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(JanusBaseApp) 
 
     const quest = await dataApi?.getQuest?.(questId);
     const state = questEngine?.getActiveQuest?.(actorId, questId);
+    
+    // Sanitize inputs for HTML content
+    const esc = (s) => (this.prototype._escape ? this.prototype._escape(s) : String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])));
+    
     const content = `
-      <h3>${quest?.title ?? questId}</h3>
-      <p>${quest?.description ?? 'Keine Beschreibung vorhanden.'}</p>
+      <h3>${esc(quest?.title ?? questId)}</h3>
+      <p>${esc(quest?.description ?? 'Keine Beschreibung vorhanden.')}</p>
       ${state ? `
         <hr>
-        <p><strong>Status:</strong> ${state.status}</p>
-        <p><strong>Aktueller Knoten:</strong> ${state.currentNodeId ?? '-'}</p>
-        <p><strong>Gestartet:</strong> ${_fmtDate(state.startedAt)}</p>
+        <p><strong>Status:</strong> ${esc(state.status)}</p>
+        <p><strong>Aktueller Knoten:</strong> ${esc(state.currentNodeId ?? '-')}</p>
+        <p><strong>Gestartet:</strong> ${esc(_fmtDate(state.startedAt))}</p>
       ` : ''}
       ${Array.isArray(quest?.nodes) && quest.nodes.length ? `
         <hr>
-        <p><strong>Knoten:</strong> ${quest.nodes.map((n) => n.nodeId ?? n.id ?? '?').join(', ')}</p>
+        <p><strong>Knoten:</strong> ${quest.nodes.map((n) => esc(n.nodeId ?? n.id ?? '?')).join(', ')}</p>
       ` : ''}
     `;
 
@@ -259,7 +275,7 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(JanusBaseApp) 
     try {
       await game.janus7.academy.quests.startQuest(questId, { actorId });
       ui.notifications.info(`Quest gestartet: ${questId}`);
-      this.render({ force: true });
+      this.refresh();
     } catch (err) {
       ui.notifications.error(`Fehler beim Starten: ${err.message}`);
     }
@@ -273,7 +289,7 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(JanusBaseApp) 
     try {
       await game.janus7.academy.quests.completeQuest(questId, { actorId });
       ui.notifications.info(`Quest abgeschlossen: ${questId}`);
-      this.render({ force: true });
+      this.refresh();
     } catch (err) {
       ui.notifications.error(`Fehler: ${err.message}`);
     }

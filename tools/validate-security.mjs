@@ -31,10 +31,14 @@ const scanDirs = [
   path.join(root, 'academy'),
   path.join(root, 'atmosphere'),
   path.join(root, 'bridge'),
+  path.join(root, 'bridges'),
   path.join(root, 'core'),
+  path.join(root, 'discovery'),
+  path.join(root, 'extensions'),
   path.join(root, 'macros'),
   path.join(root, 'phase7'),
   path.join(root, 'scripts'),
+  path.join(root, 'services'),
   path.join(root, 'ui'),
 ];
 

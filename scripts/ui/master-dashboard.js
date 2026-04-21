@@ -36,79 +36,94 @@ export class JanusMasterDashboard extends HandlebarsApplicationMixin(JanusBaseAp
     }
   };
 
-  async _prepareContext(_options) {
-    const dataApi = game.janus7.academy.data;
-    const state = game.janus7.core.state;
-    
-    // Global Stats
-    const globalHeat = state.get('academy.punin.heat') || 0;
-    const inquisitionLevel = state.get('academy.punin.inquisition') || 0;
+  /** @type {object|null} Transient cache for sanitized render data */
+  __renderCache = null;
 
-    // Characters (SCs)
-    const actors = game.actors.filter(a => a.type === 'character').map(a => {
-      const ko = a.system.characteristics?.ko?.value || 10;
-      const stress = state.get(`academy.actors.${a.id}.stress`) || 0;
-      const stressPercent = Math.min(100, (stress / ko) * 100);
-      const threshold1 = ko / 3;
-      const threshold2 = (ko / 3) * 2;
-
-      const isCritical = stress >= ko;
-      const isDanger   = !isCritical && stress >= threshold2;
-      const isWarn     = !isCritical && !isDanger && stress >= threshold1;
-
-      let stressStateLabel = `KO: ${ko}`;
-      if (isCritical) stressStateLabel = '💀 Zusammenbruch!';
-      else if (isDanger) stressStateLabel = '❤ Betäubung II';
-      else if (isWarn)   stressStateLabel = '⚠ Betäubung I';
-
-      return {
-        id: a.id,
-        name: a.name,
-        ko,
-        stress,
-        stressPercent,
-        threshold1,
-        threshold2,
-        isCritical,
-        isDanger,
-        isWarn,
-        stressStateLabel
-      };
-    });
-
-    // NPCs & Relationships
-    const npcs = await dataApi.getNpcs() || [];
-    const npcRelationships = npcs.map(n => {
-      const attitude = state.get(`academy.social.global.${n.id}`) || 0;
-      let status = "Neutral";
-      let statusClass = "neutral";
-      if (attitude >= 10) { status = "Freundlich"; statusClass = "friendly"; }
-      if (attitude >= 20) { status = "Verbündet"; statusClass = "ally"; }
-      if (attitude <= -5) { status = "Abweisend"; statusClass = "wary"; }
-      if (attitude <= -15) { status = "Feindselig"; statusClass = "hostile"; }
+  /** @override */
+  async _preRender(_options) {
+    await super._preRender(_options);
+    try {
+      const dataApi = game.janus7.academy.data;
+      const state = game.janus7.core.state;
       
-      return {
-        id: n.id,
-        name: n.name,
-        attitude,
-        status,
-        statusClass
-      };
-    });
+      // Global Stats
+      const globalHeat = state.get('academy.punin.heat') || 0;
+      const inquisitionLevel = state.get('academy.punin.inquisition') || 0;
 
-    return {
-      globalHeat,
-      globalHeatPercent: Math.min(100, (globalHeat / 20) * 100),
-      inquisitionLevel,
-      inqPercent: Math.min(100, (inquisitionLevel / 15) * 100),
-      actors,
-      npcRelationships,
-      isGM: game.user.isGM
-    };
+      // Characters (SCs)
+      const actors = game.actors.filter(a => a.type === 'character').map(a => {
+        const ko = a.system.characteristics?.ko?.value || 10;
+        const stress = state.get(`academy.actors.${a.id}.stress`) || 0;
+        const stressPercent = Math.min(100, (stress / ko) * 100);
+        const threshold1 = ko / 3;
+        const threshold2 = (ko / 3) * 2;
+
+        const isCritical = stress >= ko;
+        const isDanger   = !isCritical && stress >= threshold2;
+        const isWarn     = !isCritical && !isDanger && stress >= threshold1;
+
+        let stressStateLabel = `KO: ${ko}`;
+        if (isCritical) stressStateLabel = '💀 Zusammenbruch!';
+        else if (isDanger) stressStateLabel = '❤ Betäubung II';
+        else if (isWarn)   stressStateLabel = '⚠ Betäubung I';
+
+        return {
+          id: a.id,
+          name: a.name,
+          ko,
+          stress,
+          stressPercent,
+          threshold1,
+          threshold2,
+          isCritical,
+          isDanger,
+          isWarn,
+          stressStateLabel
+        };
+      });
+
+      // NPCs & Relationships
+      const npcs = await dataApi.getNpcs() || [];
+      const npcRelationships = npcs.map(n => {
+        const attitude = state.get(`academy.social.global.${n.id}`) || 0;
+        let status = "Neutral";
+        let statusClass = "neutral";
+        if (attitude >= 10) { status = "Freundlich"; statusClass = "friendly"; }
+        if (attitude >= 20) { status = "Verbündet"; statusClass = "ally"; }
+        if (attitude <= -5) { status = "Abweisend"; statusClass = "wary"; }
+        if (attitude <= -15) { status = "Feindselig"; statusClass = "hostile"; }
+        
+        return {
+          id: n.id,
+          name: n.name,
+          attitude,
+          status,
+          statusClass
+        };
+      });
+
+      this.__renderCache = {
+        globalHeat,
+        globalHeatPercent: Math.min(100, (globalHeat / 20) * 100),
+        inquisitionLevel,
+        inqPercent: Math.min(100, (inquisitionLevel / 15) * 100),
+        actors,
+        npcRelationships,
+        isGM: game.user.isGM
+      };
+    } catch (err) {
+      console.error('[JANUS7][MasterDashboard] _preRender failed:', err);
+      this.__renderCache = { error: err.message };
+    }
+  }
+
+  /** @override */
+  _prepareContext(_options) {
+    return this.__renderCache ?? {};
   }
 
   static async _onRefresh() {
-    this.render();
+    this.refresh();
   }
 
   static async _onAdjustHeat(event, target) {
@@ -116,7 +131,7 @@ export class JanusMasterDashboard extends HandlebarsApplicationMixin(JanusBaseAp
     const state = game.janus7.core.state;
     const current = state.get('academy.punin.heat') || 0;
     await state.set('academy.punin.heat', Math.max(0, current + delta));
-    this.render();
+    this.refresh();
   }
 
   static async _onModifyStress(event, target) {
@@ -125,7 +140,7 @@ export class JanusMasterDashboard extends HandlebarsApplicationMixin(JanusBaseAp
     const state = game.janus7.core.state;
     const current = state.get(`academy.actors.${actorId}.stress`) || 0;
     await state.set(`academy.actors.${actorId}.stress`, Math.max(0, current + delta));
-    this.render();
+    this.refresh();
   }
 
   static async _onAdjustAttitude(event, target) {
@@ -134,7 +149,7 @@ export class JanusMasterDashboard extends HandlebarsApplicationMixin(JanusBaseAp
     const state = game.janus7.core.state;
     const current = state.get(`academy.social.global.${npcId}`) || 0;
     await state.set(`academy.social.global.${npcId}`, current + delta);
-    this.render();
+    this.refresh();
   }
 
   static async _onDistributeRumor(event, target) {
