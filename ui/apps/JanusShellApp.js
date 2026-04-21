@@ -239,7 +239,7 @@ function renderAiTextResponse(outputBox, text) {
   outputBox.append(wrapper);
 }
 
-const APP_LAUNCHER_EXCLUDE = new Set(['shell', 'controlPanel', 'sessionPrepWizard', 'lessons', 'aiRoundtrip', 'commandCenter', 'settingsTestHarness']);
+const APP_LAUNCHER_EXCLUDE = new Set(['shell', 'sessionPrepWizard', 'commandCenter', 'settingsTestHarness']);
 
 const APP_NAV_META = Object.freeze({
   academyOverview: { title: 'Academy Overview', icon: 'fas fa-school', description: 'Kalender, Wochenraster und Akademie-Überblick.' },

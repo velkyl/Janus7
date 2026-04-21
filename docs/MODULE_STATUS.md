@@ -24,7 +24,7 @@
 ## Bekannte offene Punkte
 
 - Weltabhaengigkeiten: Actor-UUID-Mappings fuer Academy-NPCs bleiben eine Welt-/Content-Aufgabe.
-- UI-Cutover: Shell ist die bevorzugte Frontdoor; einige Legacy-Wrapper und Alias-Keys bleiben vorerst aus Kompatibilitaetsgruenden aktiv.
+- UI-Cutover: ✅ Abgeschlossen (2026-04-21). Compat-Manifest-Eintraege entfernt; `openControlPanel()`, `CANONICAL_UI_KEYS` und Compat-Registry-Keys bleiben fuer aktiv genutzte Makros und Tests erhalten.
 - Teststatus: Repo-Validatoren und Kataloge sind vorhanden; eine Live-Abnahme in Foundry bleibt weiterhin sinnvoll.
 - P1-TC-05: Idempotent-Set-Optimierung ist weiterhin bewusst als SKIP markiert.
 
