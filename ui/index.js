@@ -23,6 +23,7 @@ import { JanusAlumniApp } from './apps/JanusAlumniApp.js';
 import { JanusThesisApp } from './apps/JanusThesisApp.js';
 import { JanusLaborApp } from './apps/JanusLaborApp.js';
 import { JanusDoomApp } from './apps/JanusDoomApp.js';
+import { JanusMishapDialog } from './apps/JanusMishapDialog.js';
 import './layer/bridge.js';
 import { JANUS_UI_APP_STATUS, listJanusUiAppStatus } from './app-manifest.js';
 import { HOOKS } from '../core/hooks/topics.js';
@@ -78,6 +79,7 @@ export const JanusUI = {
     thesisManager: JanusThesisApp,
     laborInterface: JanusLaborApp,
     doomMonitor: JanusDoomApp,
+    mishapDialog: JanusMishapDialog,
     ...(JanusSettingsTestHarnessApp ? { settingsTestHarness: JanusSettingsTestHarnessApp } : {})
   },
 

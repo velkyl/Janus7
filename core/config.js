@@ -127,7 +127,8 @@ export class JanusConfig {
         academySimulation: false,
         thesisManager: true,
         laborInterface: true,
-        doomEngine: true
+        doomEngine: true,
+        mishapGenerator: true
       }
     });
 

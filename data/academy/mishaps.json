@@ -1,0 +1,122 @@
+[
+  {
+    "id": "ink_explosion",
+    "weight": 10,
+    "title": "Tintenexplosion",
+    "text": "Der Zauberstab entlädt sich unkontrolliert. Das Gesicht des Zauberers ist 1W6 Stunden geschwärzt (Soziale Proben +1 Erschwernis)."
+  },
+  {
+    "id": "spell_echo",
+    "weight": 6,
+    "title": "Zauberechos",
+    "text": "Der Zauber hallt in der Aura wider. Der nächste Zauberversuch kostet 2 AsP zusätzlich."
+  },
+  {
+    "id": "hair_color",
+    "weight": 10,
+    "title": "Haarfärbungs-Patzer",
+    "text": "Die Haare des Zauberers wechseln schlagartig auf eine grelle, zufällige Farbe. Irreversibel für 1W6 Tage."
+  },
+  {
+    "id": "gravity_inversion",
+    "weight": 3,
+    "title": "Gravitationsinversion",
+    "text": "Der Zauberer schwebt für 1W3 Minuten unkontrolliert an die Decke. Alle anwesenden Lehrenden bemerken es garantiert."
+  },
+  {
+    "id": "time_stutter",
+    "weight": 3,
+    "title": "Zeitzittern",
+    "text": "Die Zeit flimmert um den Zauberer. In der nächsten Kampfrunde handelt er zuletzt (INI wird 1)."
+  },
+  {
+    "id": "familiar_panic",
+    "weight": 5,
+    "title": "Vertrauten-Panik",
+    "text": "Das Vertrautentier wird unkontrolliert herbeigerufen und versteckt sich in einem ungünstigen Moment in der Nähe."
+  },
+  {
+    "id": "voice_swap",
+    "weight": 7,
+    "title": "Stimmtausch",
+    "text": "Die Stimme des Zauberers klingt für 1W6 Stunden wie die einer anderen anwesenden Person. Wessen Stimme, entscheidet der SL."
+  },
+  {
+    "id": "mana_surge",
+    "weight": 6,
+    "title": "AsP-Übersurge",
+    "text": "Ein unkontrollierter Schwall Astralenergie entlädt sich. Der Zauberer verliert sofort 1W6 AsP zusätzlich."
+  },
+  {
+    "id": "illusion_leak",
+    "weight": 8,
+    "title": "Gedankenleck",
+    "text": "Die Gedanken des Zauberers werden für einen Herzschlag lang sichtbar. Alle in 5m Umkreis erhaschen einen flüchtigen Blick auf sein aktuelles Wunschbild."
+  },
+  {
+    "id": "component_fire",
+    "weight": 7,
+    "title": "Komponenten-Brand",
+    "text": "Der Zauberfokus oder eine verwendete Komponente fängt kurz Feuer. Kein dauerhafter Schaden, aber ein enormes Aufsehen ist garantiert."
+  },
+  {
+    "id": "professor_notation",
+    "weight": 9,
+    "title": "Dozenten-Notiz",
+    "text": "Der Patzer ist so spektakulär, dass der anwesende Dozent ihn in der Akte vermerkt. Dies zählt als ein negativer Eintrag in der Schülerakte."
+  },
+  {
+    "id": "reverse_spell",
+    "weight": 4,
+    "title": "Umgekehrter Effekt",
+    "text": "Der Zauber wirkt für eine kurze Dauer auf den Zauberer selbst, bevor er verpufft. Intensität und Dauer liegen im Ermessen des SL (minimal)."
+  },
+  {
+    "id": "sneeze_chain",
+    "weight": 8,
+    "title": "Nieskette",
+    "text": "Der Zauberer muss 1W3-mal hintereinander kräftig niesen. Bei jedem Niesen entweicht ein sichtbarer Funken Astrallicht."
+  },
+  {
+    "id": "book_storm",
+    "weight": 6,
+    "title": "Büchersturm",
+    "text": "Alle Bücher und losen Papiere in einem Umkreis von 3 Metern fliegen unkontrolliert auf. Das Sortieren dauert mindestens 10 Minuten."
+  },
+  {
+    "id": "aura_glow",
+    "weight": 4,
+    "title": "Leuchtende Aura",
+    "text": "Die Körperaura des Zauberers leuchtet für 1W6 Stunden sichtbar. Unsichtbarkeits-Zauber greifen nicht. Alle magisch Sensiblen in der Nähe bemerken es sofort."
+  },
+  {
+    "id": "wrong_language",
+    "weight": 6,
+    "title": "Sprachverwechslung",
+    "text": "Der Zauberer spricht für 1W6 Stunden unwillkürlich in einer anderen Sprache, die er beherrscht. Wechselt bei jedem Satz zufällig."
+  },
+  {
+    "id": "double_shadow",
+    "weight": 4,
+    "title": "Doppelschatten",
+    "text": "Der Zauberer wirft für 1W6 Stunden zwei Schatten, die sich unabhängig bewegen. Kein mechanischer Effekt, aber sozial sehr auffällig."
+  },
+  {
+    "id": "temperature_spike",
+    "weight": 7,
+    "title": "Temperaturausbruch",
+    "text": "Im Umkreis von 2 Metern steigt oder fällt die Temperatur schlagartig um ca. 10°C für 1W3 Runden. Keine Schadenswirkung."
+  },
+  {
+    "id": "random_cantrip",
+    "weight": 5,
+    "title": "Spontaner Cantrip",
+    "text": "Ein zufälliger kleiner Zauber (Flim Flam, Blitz dich flink o.ä.) wirkt sich unkontrolliert aus. Der SL wählt Ziel und Cantrip."
+  },
+  {
+    "id": "memory_blank",
+    "weight": 3,
+    "title": "Gedächtnislücke",
+    "text": "Der Zauberer kann sich an die letzten 1W6 Minuten nicht mehr erinnern. Er weiß nur, dass etwas schiefgelaufen ist."
+  }
+]

@@ -1,0 +1,41 @@
+<div class="janus7-mishap-dialog">
+
+  <header class="j7-mishap-header">
+    <span class="j7-mishap-icon"><i class="fas fa-bomb"></i></span>
+    <div class="j7-mishap-header-text">
+      <h2>Zauberei-Patzer!</h2>
+      {{#unless isEmpty}}
+        <p class="j7-mishap-meta muted">
+          {{actorName}}
+          {{#if spellName}}&nbsp;·&nbsp;Zauber: <em>{{spellName}}</em>{{/if}}
+        </p>
+      {{/unless}}
+    </div>
+  </header>
+
+  <div class="j7-mishap-body">
+    {{#if isEmpty}}
+      <p class="j7-mishap-empty muted">
+        <i class="fas fa-hourglass-half"></i>
+        Warte auf einen Zauber-Patzer im DSA5-Würfelprotokoll.
+      </p>
+    {{else}}
+      <div class="j7-mishap-result">
+        <h3 class="j7-mishap-title">{{mishap.title}}</h3>
+        <p class="j7-mishap-text">{{mishap.text}}</p>
+      </div>
+    {{/if}}
+  </div>
+
+  <footer class="j7-mishap-footer">
+    {{#unless isEmpty}}
+      <button class="j7-btn primary" type="button" data-action="postToChat">
+        <i class="fas fa-comments"></i> An alle posten
+      </button>
+    {{/unless}}
+    <button class="j7-btn secondary" type="button" data-action="reroll">
+      <i class="fas fa-dice"></i> Neu würfeln
+    </button>
+  </footer>
+
+</div>

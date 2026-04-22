@@ -233,6 +233,17 @@ async function loadPhaseIntegrations(engine) {
     logger?.warn?.('[JANUS7] Doom-Engine failed to load.', { message: err?.message });
   }
 
+  try {
+    if (JanusConfig.isFeatureEnabled('mishapGenerator')) {
+      const mod = await import('../extensions/mishap-generator/mishap-generator.js');
+      if (mod.bootMishapGenerator) mod.bootMishapGenerator();
+      logger?.debug?.('[JANUS7] Mishap-Generator loaded.');
+    }
+  } catch (err) {
+    _recordIssue(engine, 'phase8', 'mishapGenerator-load', err);
+    logger?.warn?.('[JANUS7] Mishap-Generator failed to load.', { message: err?.message });
+  }
+
   // Optional: Test Runner (always best-effort)
   try {
     await import('../scripts/integration/test-runner-integration.js');
