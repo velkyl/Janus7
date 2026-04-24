@@ -6,6 +6,7 @@ import { getView, getViews } from '../layer/view-registry.js';
 import { runShellAction } from '../layer/action-router.js';
 import { JanusUI } from '../helpers.js';
 import { prepareDirectorRuntimeSummary, buildDirectorRunbookView, buildDirectorWorkflowView } from '../layer/director-context.js';
+import { JanusConfig } from '../../core/config.js';
 import { DSA5CalendarSync } from '../../bridge/dsa5/calendar-sync.js';
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -274,8 +275,10 @@ function classifyAppNavGroup(meta = {}) {
   return 'workbench';
 }
 
-function buildAppLauncherSections(currentViewId = 'director') {
+function buildAppLauncherSections(currentViewId = 'director', app = null) {
   const appRegistry = game?.janus7?.ui?.apps ?? {};
+  const query = (app?._searchQuery || '').toLowerCase();
+  
   const groups = new Map([
     ['workbench', { id: 'workbench', title: 'Arbeitsflächen', items: [] }],
     ['admin', { id: 'admin', title: 'GM & Admin', items: [] }],
@@ -286,16 +289,66 @@ function buildAppLauncherSections(currentViewId = 'director') {
   for (const meta of listJanusUiAppStatus()) {
     if (!meta?.key || APP_LAUNCHER_EXCLUDE.has(meta.key)) continue;
     const navMeta = APP_NAV_META[meta.key] ?? {};
-    groups.get(classifyAppNavGroup(meta))?.items.push({
-      key: meta.key,
-      icon: navMeta.icon ?? 'fas fa-window-maximize',
-      title: navMeta.title ?? meta.className ?? meta.key,
-      description: navMeta.description ?? meta.mode ?? '',
-      maturity: meta.maturity ?? 'unbekannt',
-      mode: meta.mode ?? 'n/a',
-      isAvailable: !!appRegistry?.[meta.key],
-      isActive: meta.key === 'sessionPrepWizard' ? (currentViewId === 'sessionPrep') : false
-    });
+    
+    const matches = !query || 
+                    navMeta.title?.toLowerCase().includes(query) || 
+                    navMeta.description?.toLowerCase().includes(query) ||
+                    meta.key.toLowerCase().includes(query);
+
+    if (matches) {
+      groups.get(classifyAppNavGroup(meta))?.items.push({
+        key: meta.key,
+        icon: navMeta.icon ?? 'fas fa-window-maximize',
+        title: navMeta.title ?? meta.className ?? meta.key,
+        description: navMeta.description ?? meta.mode ?? '',
+        maturity: meta.maturity ?? 'unbekannt',
+        mode: meta.mode ?? 'n/a',
+        isAvailable: !!appRegistry?.[meta.key],
+        isActive: meta.key === 'sessionPrepWizard' ? (currentViewId === 'sessionPrep') : false
+      });
+    }
+  }
+
+  return [...groups.values()]
+    .map((group) => ({
+      ...group,
+      items: group.items.sort((a, b) => a.title.localeCompare(b.title, 'de'))
+    }))
+    .filter((group) => group.items.length > 0);
+}
+
+function buildViewNavSections(currentViewId = 'director', app = null) {
+  const query = (app?._searchQuery || '').toLowerCase();
+  
+  const groups = new Map([
+    ['main', { id: 'main', title: 'Hauptbereiche', items: [] }],
+    ['academy', { id: 'academy', title: 'Akademie-Betrieb', items: [] }],
+    ['system', { id: 'system', title: 'System & Tools', items: [] }]
+  ]);
+
+  const viewCategories = {
+    director: 'main',
+    academy: 'academy',
+    schedule: 'academy',
+    people: 'academy',
+    places: 'academy',
+    system: 'system',
+    tools: 'system'
+  };
+
+  for (const view of getViews()) {
+    const matches = !query || 
+                    view.title.toLowerCase().includes(query) || 
+                    view.description.toLowerCase().includes(query) ||
+                    view.id.toLowerCase().includes(query);
+    
+    if (matches) {
+      const category = viewCategories[view.id] || 'main';
+      groups.get(category)?.items.push({
+        ...view,
+        isActive: view.id === currentViewId
+      });
+    }
   }
 
   return [...groups.values()]
@@ -356,7 +409,11 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       directorAcceptQuestSuggestion: JanusShellApp.onDirectorAcceptQuestSuggestion,
       directorEvaluateSocial: JanusShellApp.onDirectorEvaluateSocial,
       directorApplyMood: JanusShellApp.onDirectorApplyMood,
-      directorRunbookNext: JanusShellApp.onDirectorRunbookNext
+      directorRunbookNext: JanusShellApp.onDirectorRunbookNext,
+      
+      // New UI/UX Actions
+      onSearch: "onSearch",
+      clearSearch: "clearSearch"
     }
   };
 
@@ -371,12 +428,16 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this._paletteOpen = false;
     this._lastActionResult = null;
     this._viewState = {};
+    this._searchQuery = '';
 
     // Director State
     this._slotBuilder = [];
     this._kiContextItems = [];
     this._directorWorkflow = { lastAction: null, lastRunAt: null, lastResult: null, lastError: null, history: [] };
     this._directorDnDEnabled = false;
+
+    // Hotkeys
+    this._boundOnKeyDown = this._onKeyDown.bind(this);
 
     // Internal cache for synchronous prepareContext (Pass 1 Optimization)
     this.__renderCache = {
@@ -436,6 +497,28 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       'janus7Ready',
       'janusCampaignStateUpdated'
     ], 180);
+    
+    // Attach hotkeys
+    window.addEventListener('keydown', this._boundOnKeyDown);
+  }
+
+  /** @override */
+  async close(options = {}) {
+    window.removeEventListener('keydown', this._boundOnKeyDown);
+    return super.close(options);
+  }
+
+  _onKeyDown(event) {
+    // Only handle if this app is in focus or global shortcuts are allowed
+    if (event.altKey) {
+      switch (event.key.toLowerCase()) {
+        case 'a': this._setView('academy'); break;
+        case 'd': this._setView('director'); break;
+        case 's': this._setView('schedule'); break;
+        case 'p': this._setView('people'); break;
+        case 't': this._setView('tools'); break;
+      }
+    }
   }
 
   /**
@@ -622,22 +705,26 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
    */
   _prepareContext(options) {
     const engine = this._getEngine();
-    const views = getViews().map((view) => ({
-      ...view,
-      isActive: view.id === this._viewId
-    }));
     
     // Core summary blocks
     const { directorSummary, directorRuntime } = this._buildDirectorRuntimeContext();
     const directorWorkflow = this._buildDirectorWorkflowView(directorRuntime);
     const directorRunbook = this._buildDirectorRunbookView(directorRuntime, directorWorkflow);
 
+    const activeView = getView(this._viewId) ?? getView('director');
+    const breadcrumbs = [
+      { label: 'JANUS7', viewId: 'director' },
+      { label: activeView.title, viewId: this._viewId, isActive: true }
+    ];
+
     return {
       isReady: !!engine,
       header: this._buildHeaderContext(engine),
-      views,
-      appNavSections: buildAppLauncherSections(this._viewId),
+      viewNavSections: buildViewNavSections(this._viewId, this),
+      appNavSections: buildAppLauncherSections(this._viewId, this),
       activeViewId: this._viewId,
+      searchQuery: this._searchQuery,
+      breadcrumbs,
       
       // Real-time metrics
       directorSummary,
@@ -655,8 +742,19 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       
       panelOpen: !!this.__renderCache.panelPartial,
       panelTitle: getPanel(this._activePanelId)?.title ?? null,
-      shellPaletteHint: 'Power Tools'
+      shellPaletteHint: 'Power Tools',
+      themeClass: JanusConfig.get('uiTheme') || 'theme-standard'
     };
+  }
+
+  onSearch(event, target) {
+    this._searchQuery = target.value;
+    this.render();
+  }
+
+  clearSearch(event, target) {
+    this._searchQuery = '';
+    this.render();
   }
 
   // ═══════════════════════════════════════════════════════════════════════════

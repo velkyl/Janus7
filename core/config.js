@@ -93,6 +93,22 @@ export class JanusConfig {
       default: false
     });
 
+    // UI: Theme selection
+    game.settings.register(MODULE_ID, 'uiTheme', {
+      name: 'JANUS7.Settings.UiTheme.Name',
+      hint: 'JANUS7.Settings.UiTheme.Hint',
+      scope: 'client',
+      config: true,
+      type: String,
+      default: 'theme-standard',
+      choices: {
+        'theme-standard': 'Standard (Deep Space)',
+        'theme-high-contrast': 'High Contrast',
+        'theme-terminal': 'Matrix / Terminal',
+        'theme-glass': 'Glassmorphism'
+      }
+    });
+
     // UI: Render Phase-4 event messages as ChatMessages (client-side, optional)
     game.settings.register(MODULE_ID, 'uiEventMessagesToChat', {
       name: 'JANUS7.Settings.UiEventMessagesToChat.Name',

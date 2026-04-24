@@ -214,3 +214,44 @@
   70% { transform: scale(1); text-shadow: 0 0 10px rgba(247, 37, 133, 0); }
   100% { transform: scale(0.95); text-shadow: 0 0 0 rgba(247, 37, 133, 0); }
 }
+
+/* Context Actions Section */
+.janus7-gm-overlay__context-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.janus7-gm-overlay__ctx-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: linear-gradient(90deg, rgba(76, 201, 240, 0.1), transparent);
+  border: 1px solid rgba(76, 201, 240, 0.2);
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.janus7-gm-overlay__ctx-btn:hover {
+  background: rgba(76, 201, 240, 0.2);
+  border-color: var(--janus7-accent-color);
+  padding-left: 16px;
+}
+
+.janus7-gm-overlay__ctx-btn i {
+  color: var(--janus7-accent-color);
+  width: 16px;
+  text-align: center;
+}
+
+.janus7-gm-overlay__ctx-btn span {
+  font-size: 0.75rem;
+  font-weight: 500;
+}

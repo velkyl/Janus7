@@ -16,6 +16,7 @@ import { HOOKS } from '../../core/hooks/topics.js';
  * @param {object} engine - The JANUS7 engine instance
  */
 export function attachJanusSceneControls(controls, engine) {
+  console.log('[JANUS7] attachJanusSceneControls triggered', { hasControls: !!controls, hasEngine: !!engine });
   if (!game.user?.isGM) return;
 
   const logger = engine?.core?.logger ?? console;
@@ -36,6 +37,7 @@ export function attachJanusSceneControls(controls, engine) {
   const top = getTopLevelControls(controls);
   const isRecord = isObject(top);
   const isList = Array.isArray(top);
+  console.log('[JANUS7] attachJanusSceneControls detection', { isRecord, isList, topCount: isList ? top.length : (isRecord ? Object.keys(top).length : 0) });
   if (!isRecord && !isList) return;
 
   const getControlSet = (...names) => {
@@ -120,7 +122,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 0,
       button: true,
       visible: toolVisible,
-      onChange: runTool(openControlPanel)
+      onClick: runTool(openControlPanel)
     },
     openMasterDashboard: {
       name: 'openMasterDashboard',
@@ -129,7 +131,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 0.5,
       button: true,
       visible: toolVisible,
-      onChange: runTool(async () => {
+      onClick: runTool(async () => {
         const { JanusMasterDashboard } = await import('../../scripts/ui/master-dashboard.js');
         new JanusMasterDashboard().render({ force: true, focus: true });
       })
@@ -141,7 +143,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 1,
       button: true,
       visible: toolVisible,
-      onChange: runTool(() => openUiApp('academyOverview', 'academyOverview'))
+      onClick: runTool(() => openUiApp('academyOverview', 'academyOverview'))
     },
     openScoringView: {
       name: 'openScoringView',
@@ -150,7 +152,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 2,
       button: true,
       visible: toolVisible,
-      onChange: runTool(() => openUiApp('scoringView', 'scoringView'))
+      onClick: runTool(() => openUiApp('scoringView', 'scoringView'))
     },
     openSocialView: {
       name: 'openSocialView',
@@ -159,7 +161,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 3,
       button: true,
       visible: toolVisible,
-      onChange: runTool(() => openUiApp('socialView', 'socialView'))
+      onClick: runTool(() => openUiApp('socialView', 'socialView'))
     },
     openStoryGraph: {
       name: 'openStoryGraph',
@@ -168,7 +170,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 3.5,
       button: true,
       visible: toolVisible,
-      onChange: runTool(openStoryGraph)
+      onClick: runTool(openStoryGraph)
     },
     openKiSearch: {
       name: 'openKiSearch',
@@ -177,7 +179,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 3.8,
       button: true,
       visible: toolVisible,
-      onChange: runTool(openKiSearch)
+      onClick: runTool(openKiSearch)
     },
     openAtmosphereDJ: {
       name: 'openAtmosphereDJ',
@@ -186,7 +188,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 4,
       button: true,
       visible: toolVisible,
-      onChange: runTool(() => openUiApp('atmosphereDJ', 'atmosphereDJ'))
+      onClick: runTool(() => openUiApp('atmosphereDJ', 'atmosphereDJ'))
     },
     openQuestJournal: {
       name: 'openQuestJournal',
@@ -195,7 +197,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 5,
       button: true,
       visible: toolVisible,
-      onChange: runTool(openQuestJournal)
+      onClick: runTool(openQuestJournal)
     },
     openSyncPanel: {
       name: 'openSyncPanel',
@@ -204,7 +206,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 12,
       button: true,
       visible: toolVisible,
-      onChange: runTool(() => openUiApp('syncPanel', 'syncPanel'))
+      onClick: runTool(() => openUiApp('syncPanel', 'syncPanel'))
     },
     openStateInspector: {
       name: 'openStateInspector',
@@ -213,7 +215,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 13,
       button: true,
       visible: toolVisible,
-      onChange: runTool(() => openUiApp('stateInspector', 'stateInspector'))
+      onClick: runTool(() => openUiApp('stateInspector', 'stateInspector'))
     },
     openConfigPanel: {
       name: 'openConfigPanel',
@@ -222,7 +224,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 14,
       button: true,
       visible: toolVisible,
-      onChange: runTool(() => openUiApp('configPanel', 'configPanel'))
+      onClick: runTool(() => openUiApp('configPanel', 'configPanel'))
     },
     openAcademyDataStudio: {
       name: 'openAcademyDataStudio',
@@ -231,7 +233,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 15,
       button: true,
       visible: toolVisible,
-      onChange: runTool(() => openUiApp('academyDataStudio', 'academyDataStudio'))
+      onClick: runTool(() => openUiApp('academyDataStudio', 'academyDataStudio'))
     },
     openSessionPrep: {
       name: 'openSessionPrep',
@@ -240,7 +242,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 16,
       button: true,
       visible: toolVisible,
-      onChange: runTool(() => openUiApp('shell', 'sessionPrep', { viewId: 'sessionPrep' }))
+      onClick: runTool(() => openUiApp('shell', 'sessionPrep', { viewId: 'sessionPrep' }))
     },
     openCommandCenter: {
       name: 'openCommandCenter',
@@ -249,7 +251,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 17,
       button: true,
       visible: toolVisible,
-      onChange: runTool(() => openUiApp('commandCenter', 'commandCenter'))
+      onClick: runTool(() => openUiApp('commandCenter', 'commandCenter'))
     },
     openKiBackupManager: {
       name: 'openKiBackupManager',
@@ -258,7 +260,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 18,
       button: true,
       visible: toolVisible,
-      onChange: runTool(() => openUiApp('kiBackupManager', 'kiBackupManager'))
+      onClick: runTool(() => openUiApp('kiBackupManager', 'kiBackupManager'))
     },
     openKiRoundtrip: {
       name: 'openKiRoundtrip',
@@ -267,7 +269,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 19,
       button: true,
       visible: toolVisible,
-      onChange: runTool(() => openUiApp('kiRoundtrip', 'kiRoundtrip'))
+      onClick: runTool(() => openUiApp('kiRoundtrip', 'kiRoundtrip'))
     },
     openTestResults: {
       name: 'openTestResults',
@@ -276,7 +278,7 @@ export function attachJanusSceneControls(controls, engine) {
       order: 20,
       button: true,
       visible: toolVisible,
-      onChange: runTool(() => openUiApp('testResults', 'testResults'))
+      onClick: runTool(() => openUiApp('testResults', 'testResults'))
     },
     openGuidedManualTests: {
       name: 'openGuidedManualTests',
@@ -285,17 +287,17 @@ export function attachJanusSceneControls(controls, engine) {
       order: 21,
       button: true,
       visible: toolVisible,
-      onChange: runTool(() => openUiApp('guidedManualTests', 'guidedManualTests'))
+      onClick: runTool(() => openUiApp('guidedManualTests', 'guidedManualTests'))
     }
   };
 
   if (isRecord) {
+    console.log('[JANUS7] attachJanusSceneControls adding category (record mode)');
     top.janus7 ??= {
       name: 'janus7',
       title: localize('JANUS7.Sidebar.Title', 'JANUS7'),
       icon: 'fas fa-university',
       visible: toolVisible,
-      activeTool: 'openControlPanel',
       tools: janusToolsRecord
     };
     top.janus7.tools ??= {};
@@ -303,9 +305,9 @@ export function attachJanusSceneControls(controls, engine) {
       top.janus7.tools[toolName] = toolData;
     }
     top.janus7.visible = toolVisible;
-    top.janus7.activeTool ??= 'openControlPanel';
   } else if (isList) {
     const existing = getControlSet('janus7');
+    console.log('[JANUS7] attachJanusSceneControls list mode', { hasExisting: !!existing });
     if (!existing) {
       top.push({
         name: 'janus7',
@@ -313,7 +315,7 @@ export function attachJanusSceneControls(controls, engine) {
         icon: 'fas fa-university',
         visible: toolVisible,
         layer: null,
-        activeTool: 'openControlPanel',
+        layer: null,
         tools: Object.values(janusToolsRecord)
       });
     } else {
@@ -321,8 +323,24 @@ export function attachJanusSceneControls(controls, engine) {
       existing.icon = 'fas fa-university';
       existing.visible = toolVisible;
       existing.layer = null;
-      existing.activeTool = existing.activeTool ?? 'openControlPanel';
+      existing.layer = null;
       existing.tools = Object.values(janusToolsRecord);
+    }
+
+    // Add a shortcut to Token Controls for easier discovery
+    const token = getControlSet('token');
+    if (token) {
+      token.tools ??= [];
+      const hasTool = token.tools.some(t => t.name === 'openJanusShellShortcut');
+      if (!hasTool) {
+        token.tools.push({
+          name: 'openJanusShellShortcut',
+          title: 'JANUS Shell (Schnellzugriff)',
+          icon: 'fas fa-layer-group',
+          button: true,
+          onClick: openControlPanel
+        });
+      }
     }
   }
 

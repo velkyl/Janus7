@@ -36,7 +36,22 @@
         {{#if view.locationView.locations.length}}
           <ul class="janus7-list j7-mt-sm">
             {{#each view.locationView.locations}}
-              <li><span class="tag">LOC</span> <strong>{{name}}</strong> <span class="muted j7-ml-sm">{{type}}</span></li>
+              <li class="j7-shell__list-row">
+                <span>
+                  <span class="j7-shell__badge">LOC</span> 
+                  <strong>{{name}}</strong> 
+                  <span class="muted j7-ml-sm">{{type}}</span>
+                </span>
+                {{#if hasScene}}
+                  <button type="button" class="j7-shell__btn j7-shell__btn--primary" 
+                          data-action="executeShellAction" 
+                          data-command="viewScene" 
+                          data-dataset-scene-id="{{sceneId}}"
+                          title="Zur Szene: {{sceneName}}">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                {{/if}}
+              </li>
             {{/each}}
           </ul>
         {{else}}

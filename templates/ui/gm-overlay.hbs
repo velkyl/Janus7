@@ -60,4 +60,19 @@
             <span>Scores</span>
         </button>
     </nav>
+
+    {{#if contextActions.length}}
+        <div class="janus7-gm-overlay__context-actions">
+            {{#each contextActions}}
+                <button type="button" class="janus7-gm-overlay__ctx-btn" 
+                        data-action="executeContextAction" 
+                        data-command="{{command}}" 
+                        data-dataset="{{json dataset}}"
+                        title="{{title}}">
+                    <i class="{{icon}}"></i>
+                    <span>{{label}}</span>
+                </button>
+            {{/each}}
+        </div>
+    {{/if}}
 </div>

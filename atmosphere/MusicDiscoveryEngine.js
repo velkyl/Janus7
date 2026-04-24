@@ -33,7 +33,7 @@ export class MusicDiscoveryEngine {
    * @param {string} [path]
    */
   async loadCatalog(path) {
-    const catalogPath = path ?? 'data/academy/atmosphere/music-catalog.json';
+    const catalogPath = path ?? 'modules/Janus7/data/academy/atmosphere/music-catalog.json';
     try {
       this.logger?.info?.('Atmosphere: Lade Musik-Katalog (V3)...', { path: catalogPath });
       

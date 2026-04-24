@@ -12,11 +12,11 @@ export default {
   phases: [6],
   kind: 'auto',
   expected: 'openControlPanel() rendert JanusShellApp im Fallback nach showSingleton().',
-  whereToFind: 'scripts/janus.mjs',
+  whereToFind: 'ui/core/scene-controls.js',
   async run() {
-    const response = await fetch(moduleAssetPath('scripts/janus.mjs'));
+    const response = await fetch(moduleAssetPath('ui/core/scene-controls.js'));
     if (!response.ok) {
-      throw new Error(`scripts/janus.mjs unreadable (${response.status})`);
+      throw new Error(`ui/core/scene-controls.js unreadable (${response.status})`);
     }
 
     const src = stripJsComments(await response.text());

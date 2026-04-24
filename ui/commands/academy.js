@@ -161,6 +161,20 @@ export const academyCommands = {
     });
   },
 
+  async viewScene(dataset = {}) {
+    if (!_checkPermission('viewScene')) return { success: false, cancelled: true };
+    const sceneId = String(dataset.sceneId ?? dataset.datasetSceneId ?? '').trim();
+    if (!sceneId) return { success: false, cancelled: true, error: 'sceneId fehlt' };
+
+    return await _wrap('viewScene', async () => {
+      const scene = game.scenes.get(sceneId) || game.scenes.getName(sceneId);
+      if (!scene) throw new Error(`Szene nicht gefunden: ${sceneId}`);
+      await scene.view();
+      ui.notifications.info(`Szene gewechselt: ${scene.name}`);
+      return { sceneId: scene.id };
+    });
+  },
+
 
   async registerAlumniRecord(dataset = {}) {
     if (!_checkPermission('registerAlumniRecord')) return { success: false, cancelled: true };

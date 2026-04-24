@@ -7,16 +7,30 @@ export function buildLocationsView({ state, academyData }) {
   const locs = academyData?.listLocationIds?.(100) ?? [];
   const locations = locs.map(id => {
     const data = academyData?.getLocation?.(id);
-    return { id, name: data?.name ?? id, type: data?.type ?? 'Ort' };
+    const sceneId = data?.foundrySceneId ?? data?.sceneId ?? null;
+    const scene = sceneId ? (game.scenes.get(sceneId) || game.scenes.getName(sceneId)) : null;
+    return { 
+      id, 
+      name: data?.name ?? id, 
+      type: data?.type ?? 'Ort',
+      sceneId: scene?.id ?? null,
+      sceneName: scene?.name ?? null,
+      hasScene: !!scene
+    };
   });
   
   const activeLocData = activeLocId ? academyData?.getLocation?.(activeLocId) : null;
+  const activeSceneId = activeLocData?.foundrySceneId ?? activeLocData?.sceneId ?? null;
+  const activeScene = activeSceneId ? (game.scenes.get(activeSceneId) || game.scenes.getName(activeSceneId)) : null;
   
   return {
     locations,
     locationView: {
       activeLocationId: activeLocId,
       activeLocationName: activeLocData?.name ?? 'Kein aktiver Ort',
+      activeSceneId: activeScene?.id ?? null,
+      activeSceneName: activeScene?.name ?? null,
+      hasActiveScene: !!activeScene,
       defaultMoodKey: activeLocData?.defaultMoodKey ?? '—',
       locations
     }

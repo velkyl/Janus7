@@ -1,10 +1,26 @@
 
-<section class="j7-shell__root janus-shell-app" aria-label="JANUS7 Shell Layer">
+<section class="j7-shell__root janus-shell-app {{themeClass}}" aria-label="JANUS7 Shell Layer">
   <header class="j7-shell__header">
     <div class="j7-shell__brand">
       <div class="j7-shell__brand-title">JANUS7</div>
       <div class="j7-shell__brand-meta">{{header.moduleVersion}} · {{header.worldTitle}}</div>
     </div>
+    
+    <div class="j7-shell__search-container">
+      <i class="fas fa-search j7-shell__search-icon"></i>
+      <input type="text" 
+             class="j7-shell__search-input" 
+             placeholder="Global suchen..." 
+             value="{{searchQuery}}"
+             data-action="onSearch"
+             oninput="this.dispatchEvent(new Event('change', { bubbles: true }))">
+      {{#if searchQuery}}
+        <button type="button" class="j7-shell__search-clear" data-action="clearSearch">
+          <i class="fas fa-times"></i>
+        </button>
+      {{/if}}
+    </div>
+
     <div class="j7-shell__status">
       <span class="j7-shell__status-pill">{{header.dayName}}</span>
       <span class="j7-shell__status-pill">{{header.phaseName}}</span>
@@ -26,22 +42,24 @@
 
   <div class="j7-shell__body">
     <aside class="j7-shell__sidebar janus-shell__nav" aria-label="Views">
-      <section class="j7-shell__sidebar-section" aria-label="Shell Views">
-        <div class="j7-shell__sidebar-heading">Shell Views</div>
-        {{#each views}}
-          <button type="button"
-                  class="j7-shell__nav {{#if isActive}}is-active{{/if}}"
-                  data-action="selectView"
-                  data-view-id="{{id}}"
-                  aria-pressed="{{#if isActive}}true{{else}}false{{/if}}">
-            <i class="{{icon}} j7-shell__nav-icon" aria-hidden="true"></i>
-            <span class="j7-shell__nav-copy">
-              <strong>{{title}}</strong>
-              <small>{{description}}</small>
-            </span>
-          </button>
-        {{/each}}
-      </section>
+      {{#each viewNavSections}}
+        <section class="j7-shell__sidebar-section" aria-label="{{title}}">
+          <div class="j7-shell__sidebar-heading">{{title}}</div>
+          {{#each items}}
+            <button type="button"
+                    class="j7-shell__nav {{#if isActive}}is-active{{/if}}"
+                    data-action="selectView"
+                    data-view-id="{{id}}"
+                    aria-pressed="{{#if isActive}}true{{else}}false{{/if}}">
+              <i class="{{icon}} j7-shell__nav-icon" aria-hidden="true"></i>
+              <span class="j7-shell__nav-copy">
+                <strong>{{title}}</strong>
+                <small>{{description}}</small>
+              </span>
+            </button>
+          {{/each}}
+        </section>
+      {{/each}}
 
       {{#each appNavSections}}
         <section class="j7-shell__sidebar-section" aria-label="{{title}}">
@@ -67,13 +85,26 @@
       {{/each}}
     </aside>
 
-    <main class="j7-shell__content" aria-label="View Content">
-      {{#if viewPartial}}
-        {{> (lookup . 'viewPartial')}}
-      {{else}}
-        <div class="j7-shell__view-error">No view partial defined.</div>
-      {{/if}}
-    </main>
+    <div class="j7-shell__main-container">
+      <nav class="j7-shell__breadcrumbs">
+        {{#each breadcrumbs}}
+          <a class="j7-shell__breadcrumb-item {{#if isActive}}is-active{{/if}}" 
+             data-action="selectView" 
+             data-view-id="{{viewId}}">
+            {{label}}
+          </a>
+          {{#unless @last}}<span class="j7-shell__breadcrumb-sep">/</span>{{/unless}}
+        {{/each}}
+      </nav>
+
+      <main class="j7-shell__content" aria-label="View Content">
+        {{#if viewPartial}}
+          {{> (lookup . 'viewPartial')}}
+        {{else}}
+          <div class="j7-shell__view-error">No view partial defined.</div>
+        {{/if}}
+      </main>
+    </div>
 
     {{#if panelOpen}}
       <section class="j7-shell__panelHost" aria-label="Aktives Panel">

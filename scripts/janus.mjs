@@ -467,6 +467,16 @@ try {
       }
     })();
 
+    // ─── Handlebars Helpers (Global) ───────────────────────────────────────
+    if (!Handlebars.helpers.json) {
+      Handlebars.registerHelper('json', (context) => {
+        try { return JSON.stringify(context); } catch (_) { return '{}'; }
+      });
+    }
+    if (!Handlebars.helpers.eq) {
+      Handlebars.registerHelper('eq', (v1, v2) => v1 === v2);
+    }
+
     // Cleanup on world close — register both hook names for v13/v14 compat.
     // v13 fires 'closingWorld'; v14 renamed it to 'worldClosing'.
     // The handler is idempotent; whichever fires first wins.
@@ -678,16 +688,32 @@ try {
       // Opt-in for Journal Browser (book index) if localized.
       if (game.dsa5?.apps?.journalBrowser && game.i18n.lang === 'de') {
         log.debug?.('[JANUS7] push to DSA5 journalBrowser');
-        game.dsa5.apps.journalBrowser.books.push({
-          id: "JanusAcademy",
-          name: "JANUS Akademie-Archiv",
-          path: moduleAssetPath('data/academy/academy-book-de.json'),
-          visible: true
-        });
+        game.dsa5.apps.journalBrowser.indexFolders ??= [];
+        game.dsa5.apps.journalBrowser.indexFolders.push("JANUS7 Academy Data");
       }
-    } catch (ecosystemErr) {
-      log.warn?.('[JANUS7] DSA5 ecosystem integration failed (non-critical)', _readyErrMeta(ecosystemErr));
+    } catch (phaseXErr) {
+      log.debug?.('[JANUS7] Phase-X integration skipped/failed', phaseXErr);
     }
+
+    // Global Hotkeys (Alt+D for Director, Alt+A for Academy)
+    window.addEventListener('keydown', (event) => {
+      // Only trigger if no input/textarea is focused, or use a more robust check
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+      
+      if (event.altKey && !event.ctrlKey && !event.shiftKey) {
+        const key = event.key.toLowerCase();
+        const viewMap = { d: 'director', a: 'academy', s: 'schedule', p: 'people', t: 'tools' };
+        
+        if (viewMap[key]) {
+          const ui = game?.janus7?.ui;
+          if (!ui) return;
+          event.preventDefault();
+          ui.openShell({ viewId: viewMap[key] });
+        }
+      }
+    });
+
+    log.info?.('[JANUS7] ready.pipeline complete');
   });
 
   // ─── HOOK: getSceneControlButtons — zentralisiert hier (Phase A3) ─────

@@ -39,7 +39,8 @@ class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       openShell: this._onOpenShell,
       advanceSlot: this._onAdvanceSlot,
       advanceDay: this._onAdvanceDay,
-      openScoring: this._onOpenScoring
+      openScoring: this._onOpenScoring,
+      executeContextAction: this._onExecuteContextAction
     }
   };
 
@@ -115,12 +116,51 @@ class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(JanusBaseApp) {
         },
         status: {
           hasAlert: (summary.activeQuestCount || 0) > 0
-        }
+        },
+        contextActions: this.#buildContextActions(director)
       };
     } catch (err) {
       this._getLogger?.().warn?.('[JANUS7][Overlay] context build failed', err);
       return { time: {}, scoring: {}, profile: { name: 'JANUS7' }, status: { hasAlert: false } };
     }
+  }
+
+  #buildContextActions(director) {
+    const actions = [];
+    const activeScene = game.scenes.active;
+    
+    if (activeScene) {
+      // Find location associated with scene
+      const api = game.janus7?.academy?.data;
+      const locations = (api?.isReady ? api.listLocationIds?.(200) : []) || [];
+      const location = locations
+        .map(id => game.janus7.academy.data.getLocation(id))
+        .find(loc => (loc.foundrySceneId === activeScene.id) || (loc.sceneId === activeScene.id) || (loc.name === activeScene.name));
+
+      if (location) {
+        actions.push({
+          command: 'applyLocationMood',
+          label: 'Mood',
+          icon: 'fas fa-music',
+          title: `Atmosphäre für ${location.name} setzen`,
+          dataset: { locationId: location.id }
+        });
+      }
+    }
+
+    // Add generic actions based on time
+    const time = director.time.getRef() || {};
+    if (time.slotName === 'Nacht') {
+      actions.push({
+        command: 'advanceDay',
+        label: 'Tag beginnen',
+        icon: 'fas fa-sun',
+        title: 'Nächsten Tag einleiten',
+        dataset: {}
+      });
+    }
+
+    return actions;
   }
 
   /* -------------------------------------------- */
@@ -149,6 +189,18 @@ class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(JanusBaseApp) {
 
   static _onOpenScoring(event) {
     game.janus7.ui.open('shell', { viewId: 'tools' });
+  }
+
+  static async _onExecuteContextAction(event, target) {
+    const command = target.dataset.command;
+    const dataset = JSON.parse(target.dataset.dataset || '{}');
+    const { JanusCommands } = await import('../commands/index.js');
+    const fn = JanusCommands[command];
+    if (typeof fn === 'function') {
+      await fn(dataset);
+    } else {
+      ui.notifications.warn(`Befehl nicht gefunden: ${command}`);
+    }
   }
 
   refresh(force = true) {

@@ -210,7 +210,15 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(JanusBaseApp) 
 
   /** @override */
   _prepareContext(_options) {
-    return this.__renderCache ?? {};
+    const defaults = {
+      revealRumorTruth: false,
+      rumors: [],
+      activeQuests: [],
+      availableQuests: [],
+      completedQuests: [],
+      factions: []
+    };
+    return this.__renderCache ? { ...defaults, ...this.__renderCache } : defaults;
   }
 
   static async _onRefreshJournal(event, _target) {
