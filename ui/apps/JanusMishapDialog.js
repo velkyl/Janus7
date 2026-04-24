@@ -5,7 +5,7 @@
  * Zeigt dem SL den gewürfelten Patzer-Eintrag.
  * Buttons: "An alle posten" (ChatMessage) · "Neu würfeln" · Schließen.
  *
- * Wird über JanusMishapDialog.showForMishap(mishap, context) geöffnet —
+ * Wird über JanusMishapDialog.showForMishap(mishap, context) geöffnet â€”
  * typischerweise aus bootMishapGenerator() heraus nach einem erkannten Patzer.
  * Kann auch manuell über JanusMishapDialog.showSingleton() geöffnet werden.
  */
@@ -26,8 +26,8 @@ export class JanusMishapDialog extends JanusBaseApp {
       icon: 'fas fa-bomb',
     },
     actions: {
-      postToChat: JanusMishapDialog.onPostToChat,
-      reroll:     JanusMishapDialog.onReroll,
+      postToChat: 'onPostToChat',
+      reroll: 'onReroll',
     },
   };
 
@@ -38,9 +38,9 @@ export class JanusMishapDialog extends JanusBaseApp {
   };
 
   /**
-   * @param {object} mishap   — Eintrag aus mishaps.json
-   * @param {object} context  — { spellName, actorName }
-   * @param {object} options  — AppV2 options
+   * @param {object} mishap   â€” Eintrag aus mishaps.json
+   * @param {object} context  â€” { spellName, actorName }
+   * @param {object} options  â€” AppV2 options
    */
   constructor(mishap = null, context = {}, options = {}) {
     super(options);
@@ -48,20 +48,20 @@ export class JanusMishapDialog extends JanusBaseApp {
     this._context = context;
   }
 
-  // ─── Kontext ──────────────────────────────────────────────────────────────
+  // â”€â”€â”€ Kontext â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   _prepareContext(_options) {
     const mishap     = this._mishap;
-    const spellName  = this._context?.spellName ?? '—';
-    const actorName  = this._context?.actorName ?? '—';
+    const spellName  = this._context?.spellName ?? 'â€”';
+    const actorName  = this._context?.actorName ?? 'â€”';
     const isEmpty    = !mishap || mishap.id === '_empty';
 
     return { mishap, spellName, actorName, isEmpty };
   }
 
-  // ─── Actions ──────────────────────────────────────────────────────────────
+  // â”€â”€â”€ Actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-  static async onPostToChat(_event, _target) {
+  async onPostToChat(_event, _target) {
     const mishap = this._mishap;
     if (!mishap || mishap.id === '_empty') return;
 
@@ -69,7 +69,7 @@ export class JanusMishapDialog extends JanusBaseApp {
       ? `<em>Zauber: ${this._context.spellName}</em> · `
       : '';
     const actorHint = this._context?.actorName
-      ? `<strong>${this._context.actorName}</strong> — `
+      ? `<strong>${this._context.actorName}</strong> â€” `
       : '';
 
     await ChatMessage.create({
@@ -90,7 +90,7 @@ export class JanusMishapDialog extends JanusBaseApp {
     await this.close();
   }
 
-  static async onReroll(_event, _target) {
+  async onReroll(_event, _target) {
     try {
       const { rollMishap } = await import('../../extensions/mishap-generator/mishap-generator.js');
       const newMishap = await rollMishap();
@@ -102,7 +102,7 @@ export class JanusMishapDialog extends JanusBaseApp {
     }
   }
 
-  // ─── Singleton-API ────────────────────────────────────────────────────────
+  // â”€â”€â”€ Singleton-API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   /**
    * Öffnet den Dialog mit einem konkreten Patzer-Ergebnis.
@@ -133,3 +133,4 @@ export class JanusMishapDialog extends JanusBaseApp {
     return this.showForMishap(empty);
   }
 }
+

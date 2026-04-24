@@ -74,7 +74,7 @@ export class JanusQuestEngine {
 
 
   _getQuestRoot() {
-    const questStates = this.state.get('questStates');
+    const questStates = this.state.get('academy.quests');
     return (questStates && typeof questStates === 'object' && !Array.isArray(questStates))
       ? foundry.utils.deepClone(questStates)
       : {};
@@ -135,7 +135,7 @@ export class JanusQuestEngine {
     const cleanStates = (questStates && typeof questStates === 'object' && !Array.isArray(questStates)) ? foundry.utils.deepClone(questStates) : {};
     if (Object.keys(cleanStates).length) root[actorKey] = cleanStates;
     else delete root[actorKey];
-    this.state.set('questStates', foundry.utils.deepClone(root));
+    this.state.set('academy.quests', foundry.utils.deepClone(root));
   }
   /**
    * Start a quest for a specific actor.
@@ -434,7 +434,7 @@ export class JanusQuestEngine {
    * @returns {object[]}
    */
   listQuests({ actorId, status } = {}) {
-    // Gather from canonical state: questStates.{actorId} or all actors
+    // Gather from canonical state: academy.quests.{actorId} or all actors
     const allQuests = [];
     try {
       const questMap = this._normalizeQuestRoot(this._getQuestRoot());

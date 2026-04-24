@@ -1,4 +1,4 @@
-﻿import { moduleTemplatePath } from '../../core/common.js';
+import { moduleTemplatePath } from '../../core/common.js';
 /**
  * @file ui/apps/JanusGuidedManualTestApp.js
  * @module janus7/ui
@@ -26,10 +26,10 @@ import {
 function statusChip(status, t = null) {
   const tt = typeof t === 'function' ? t : ((key, fallback) => fallback ?? key);
   switch (String(status ?? '').toUpperCase()) {
-    case 'PASS': return { label: 'PASS', css: 'pass', icon: '✅' };
-    case 'FAIL': return { label: 'FAIL', css: 'fail', icon: '❌' };
-    case 'SKIP': return { label: 'SKIP', css: 'skip', icon: '⏭️' };
-    default: return { label: tt('JANUS7.GuidedManual.StatusOpen', 'OFFEN'), css: 'pending', icon: '🧭' };
+    case 'PASS': return { label: 'PASS', css: 'pass', icon: '?' };
+    case 'FAIL': return { label: 'FAIL', css: 'fail', icon: '?' };
+    case 'SKIP': return { label: 'SKIP', css: 'skip', icon: '??' };
+    default: return { label: tt('JANUS7.GuidedManual.StatusOpen', 'OFFEN'), css: 'pending', icon: '??' };
   }
 }
 
@@ -69,26 +69,26 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
       resizable: true,
     },
     actions: {
-      refreshList: JanusGuidedManualTestApp.onRefreshList,
-      selectTest: JanusGuidedManualTestApp.onSelectTest,
-      prevTest: JanusGuidedManualTestApp.onPrevTest,
-      nextTest: JanusGuidedManualTestApp.onNextTest,
-      markPass: JanusGuidedManualTestApp.onMarkPass,
-      markFail: JanusGuidedManualTestApp.onMarkFail,
-      markSkip: JanusGuidedManualTestApp.onMarkSkip,
-      clearDecision: JanusGuidedManualTestApp.onClearDecision,
-      saveNotes: JanusGuidedManualTestApp.onSaveNotes,
-      resetAll: JanusGuidedManualTestApp.onResetAll,
-      verifyCatalog: JanusGuidedManualTestApp.onVerifyCatalog,
-      openResults: JanusGuidedManualTestApp.onOpenResults,
-      runAllChecks: JanusGuidedManualTestApp.onRunAllChecks,
-      runCheck: JanusGuidedManualTestApp.onRunCheck,
-      runStep: JanusGuidedManualTestApp.onRunStep,
-      markStepDone: JanusGuidedManualTestApp.onMarkStepDone,
-      clearEvidence: JanusGuidedManualTestApp.onClearEvidence,
-      copyEvidence: JanusGuidedManualTestApp.onCopyEvidence,
-      openRelevantApp: JanusGuidedManualTestApp.onOpenRelevantApp,
-      copySnippet: JanusGuidedManualTestApp.onCopySnippet
+      refreshList: 'onRefreshList',
+      selectTest: 'onSelectTest',
+      prevTest: 'onPrevTest',
+      nextTest: 'onNextTest',
+      markPass: 'onMarkPass',
+      markFail: 'onMarkFail',
+      markSkip: 'onMarkSkip',
+      clearDecision: 'onClearDecision',
+      saveNotes: 'onSaveNotes',
+      resetAll: 'onResetAll',
+      verifyCatalog: 'onVerifyCatalog',
+      openResults: 'onOpenResults',
+      runAllChecks: 'onRunAllChecks',
+      runCheck: 'onRunCheck',
+      runStep: 'onRunStep',
+      markStepDone: 'onMarkStepDone',
+      clearEvidence: 'onClearEvidence',
+      copyEvidence: 'onCopyEvidence',
+      openRelevantApp: 'onOpenRelevantApp',
+      copySnippet: 'onCopySnippet'
     }
   };
 
@@ -486,48 +486,48 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     await this.render({ force: true });
   }
 
-  static async onRefreshList() {
+  async onRefreshList() {
     await this._loadManualResults();
     await this.render({ force: true });
   }
 
-  static async onSelectTest(_event, target) {
+  async onSelectTest(_event, target) {
     const id = target?.dataset?.testId;
     if (!id) return;
     this._selectedId = id;
     await this.render({ force: true });
   }
 
-  static async onPrevTest() {
+  async onPrevTest() {
     const idx = this._selectedIndex();
     if (idx <= 0) return;
     this._selectedId = this._tests[idx - 1]?.id ?? this._selectedId;
     await this.render({ force: true });
   }
 
-  static async onNextTest() {
+  async onNextTest() {
     const idx = this._selectedIndex();
     if (idx >= this._tests.length - 1) return;
     this._selectedId = this._tests[idx + 1]?.id ?? this._selectedId;
     await this.render({ force: true });
   }
 
-  static async onMarkPass() {
+  async onMarkPass() {
     await this._persistCurrent('PASS');
     await this._finishIfComplete();
   }
 
-  static async onMarkFail() {
+  async onMarkFail() {
     await this._persistCurrent('FAIL');
     await this._finishIfComplete();
   }
 
-  static async onMarkSkip() {
+  async onMarkSkip() {
     await this._persistCurrent('SKIP');
     await this._finishIfComplete();
   }
 
-  static async onSaveNotes() {
+  async onSaveNotes() {
     const current = this._selectedTest();
     if (!current) return;
     const existing = this._manualResults?.[current.id]?.status ?? null;
@@ -539,7 +539,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     ui.notifications?.info?.(this._t('JANUS7.GuidedManual.NotesSaved', 'Notizen gespeichert.'));
   }
 
-  static async onClearDecision() {
+  async onClearDecision() {
     const current = this._selectedTest();
     if (!current) return;
     await clearManualTestResult(current.id);
@@ -547,7 +547,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     await this.render({ force: true });
   }
 
-  static async onResetAll() {
+  async onResetAll() {
     const D2 = foundry?.applications?.api?.DialogV2;
     let confirmed = true;
     try {
@@ -567,7 +567,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     await this.render({ force: true });
   }
 
-  static async onVerifyCatalog() {
+  async onVerifyCatalog() {
     const engine = game?.janus7 ?? this._getEngine();
     if (!engine?.test?.runCatalog) return ui.notifications?.warn?.(this._t('JANUS7.GuidedManual.CatalogUnavailable', 'Testkatalog nicht verfügbar.'));
     const adopted = await this._adoptReadyGuidedTests({ render: false });
@@ -582,33 +582,33 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     return data;
   }
 
-  static async onOpenResults() {
+  async onOpenResults() {
     return game?.janus7?.test?.openResults?.();
   }
 
-  static async onRunAllChecks() {
+  async onRunAllChecks() {
     return this._runAllChecks();
   }
 
-  static async onRunCheck(_event, target) {
+  async onRunCheck(_event, target) {
     const id = target?.dataset?.checkId;
     if (!id) return;
     await this._runCheckById(id);
   }
 
-  static async onRunStep(_event, target) {
+  async onRunStep(_event, target) {
     const id = target?.dataset?.stepId;
     if (!id) return;
     await this._runStepById(id);
   }
 
-  static async onMarkStepDone(_event, target) {
+  async onMarkStepDone(_event, target) {
     const id = target?.dataset?.stepId;
     if (!id) return;
     await this._runStepById(id, { markOnly: true });
   }
 
-  static async onClearEvidence() {
+  async onClearEvidence() {
     const current = this._selectedTest();
     if (!current) return;
     const bucket = this._ensureSessionBucket('evidence', current.id);
@@ -616,7 +616,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     await this.render({ force: true });
   }
 
-  static async onCopyEvidence() {
+  async onCopyEvidence() {
     const current = this._selectedTest();
     if (!current) return;
     const evidence = this._currentEvidence(current.id);
@@ -630,7 +630,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
   }
 
 
-  static async onCopySnippet(_event, target) {
+  async onCopySnippet(_event, target) {
     const current = this._selectedTest();
     if (!current) return;
     const guide = this._guideFor(current);
@@ -646,7 +646,7 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
     }
   }
 
-  static async onOpenRelevantApp() {
+  async onOpenRelevantApp() {
     const current = this._selectedTest();
     if (!current) return;
     const guide = this._guideFor(current);
@@ -675,3 +675,4 @@ export class JanusGuidedManualTestApp extends HandlebarsApplicationMixin(JanusBa
 }
 
 export default JanusGuidedManualTestApp;
+

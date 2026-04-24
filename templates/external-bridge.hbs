@@ -1,0 +1,53 @@
+<section class="janus-external-bridge">
+    <p class="notes">Monitor und Teste die externe Anbindung an SQLite und Python. Stelle sicher, dass <code>janus_bridge.py</code> im Hintergrund läuft.</p>
+
+    <div class="bridge-section">
+        <h3><i class="fas fa-database"></i> SQLite Query Test</h3>
+        <div class="form-group">
+            <label>Datenbank-Pfad</label>
+            <input type="text" name="dbPath" value="{{config.dbPath}}">
+        </div>
+        <div class="form-group">
+            <label>SQL Query</label>
+            <textarea name="sqlQuery">SELECT * FROM npcs LIMIT 5</textarea>
+        </div>
+        <button type="button" data-action="testSql">Query ausführen</button>
+        {{#if results.sql}}
+        <pre class="result-box">{{results.sql}}</pre>
+        {{/if}}
+    </div>
+
+    <hr>
+
+    <div class="bridge-section">
+        <h3><i class="fab fa-python"></i> Python Script Test</h3>
+        <div class="form-group">
+            <label>Skript-Pfad</label>
+            <input type="text" name="scriptPath" value="{{config.scriptPath}}">
+        </div>
+        <div class="form-group">
+            <label>Argumente (JSON)</label>
+            <input type="text" name="pythonArgs" value='{"test": true}'>
+        </div>
+        <button type="button" data-action="testPython">Skript ausführen</button>
+        {{#if results.python}}
+        <pre class="result-box">{{results.python}}</pre>
+        {{/if}}
+    </div>
+    <style>
+    .janus-external-bridge .result-box {
+        background: #1a1a1a;
+        color: #00ff00;
+        padding: 10px;
+        max-height: 200px;
+        overflow: auto;
+        font-family: monospace;
+        font-size: 11px;
+        margin-top: 10px;
+        border: 1px solid #444;
+    }
+    .janus-external-bridge .bridge-section {
+        margin-bottom: 20px;
+    }
+    </style>
+</section>

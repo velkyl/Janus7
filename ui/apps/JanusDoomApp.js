@@ -14,7 +14,7 @@ export class JanusDoomApp extends JanusBaseApp {
       icon: 'fas fa-skull'
     },
     actions: {
-      adjustDoom: JanusDoomApp.onAdjustDoom
+      adjustDoom: 'onAdjustDoom'
     }
   };
 
@@ -40,7 +40,7 @@ export class JanusDoomApp extends JanusBaseApp {
     };
   }
 
-  static async onAdjustDoom(event, target) {
+  async onAdjustDoom(event, target) {
     const value = parseInt(target.dataset.value);
     const { state, logger } = getJanusCore();
     
@@ -64,3 +64,4 @@ export class JanusDoomApp extends JanusBaseApp {
     return this._instance;
   }
 }
+

@@ -14,7 +14,7 @@ import { JanusUI } from '../helpers.js';
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
 /*
- * JANUS7 — Scoring View (Phase 6 UI)
+ * JANUS7 â€” Scoring View (Phase 6 UI)
  *
  * Ziel:
  * - Anzeigen: Zirkel- & Schülerpunkte + Award-Log
@@ -27,7 +27,7 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
     tag: 'section',
     classes: ['janus7-app', 'janus7', 'app', 'scoring-view'],
     window: {
-      title: 'JANUS7 — Scoring',
+      title: 'JANUS7 â€” Scoring',
       resizable: true,
       minimizable: true,
       width: 980,
@@ -50,7 +50,7 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
   _configureRenderOptions(options) {
     options = super._configureRenderOptions(options ?? {}) ?? (options ?? {});
     options.window ??= {};
-    options.window.title = 'JANUS7 — Scoring';
+    options.window.title = 'JANUS7 â€” Scoring';
     return options;
   }
 
@@ -244,7 +244,7 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
 
     if (DialogV2?.prompt) {
       const res = await DialogV2.prompt({
-        window: { title: 'JANUS7 — Zirkel/Haus anlegen' },
+        window: { title: 'JANUS7 â€” Zirkel/Haus anlegen' },
         content,
         ok: {
           label: 'Anlegen',
@@ -260,7 +260,7 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
       assignFromResult(res);
     } else {
       // Fallback (kann V1-Deprecation triggern, aber besser als keine Funktion)
-      const res = await Dialog.prompt({ title: 'JANUS7 — Zirkel/Haus anlegen', content, label: 'Anlegen' }).catch(() => null);
+      const res = await Dialog.prompt({ title: 'JANUS7 â€” Zirkel/Haus anlegen', content, label: 'Anlegen' }).catch(() => null);
       if (res === null) return;
       assignFromResult(res);
     }
@@ -300,7 +300,7 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
       const DialogV2 = foundry?.applications?.api?.DialogV2;
       if (DialogV2?.confirm) {
         confirmed = await DialogV2.confirm({
-          window: { title: 'JANUS7 — Zirkel/Haus löschen' },
+          window: { title: 'JANUS7 â€” Zirkel/Haus löschen' },
           content: `<p>Wirklich löschen: <strong>${circleId}</strong>?</p><p class="notes">Das entfernt den Eintrag aus scoring.circles (Punkte gehen verloren).</p>`,
           yes: { label: 'Löschen', icon: 'fas fa-trash' },
           no:  { label: 'Abbrechen' },
@@ -309,7 +309,7 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
         }).catch(() => false);
       } else {
         confirmed = await Dialog.confirm({
-          title: 'JANUS7 — Zirkel/Haus löschen',
+          title: 'JANUS7 â€” Zirkel/Haus löschen',
           content: `<p>Wirklich löschen: <strong>${circleId}</strong>?</p><p class="notes">Das entfernt den Eintrag aus scoring.circles (Punkte gehen verloren).</p>`,
           yes: () => true, no: () => false, defaultYes: false,
         }).catch(() => false);
@@ -383,7 +383,7 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
           circleDeltas[cid] = {
             score: cur,
             delta,
-            trend:      delta === null ? '—' : delta > 0 ? '▲' : delta < 0 ? '▼' : '—',
+            trend:      delta === null ? 'â€”' : delta > 0 ? 'â–²' : delta < 0 ? 'â–¼' : 'â€”',
             trendClass: delta === null ? 'janus7-trend-flat'
                       : delta > 0    ? 'janus7-trend-up'
                       : delta < 0    ? 'janus7-trend-down'
@@ -408,3 +408,4 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
     }
   }
 }
+

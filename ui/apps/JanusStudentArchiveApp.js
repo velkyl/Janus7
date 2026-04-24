@@ -41,7 +41,7 @@ export class JanusStudentArchiveApp extends HandlebarsApplicationMixin(JanusBase
       minimizable: true
     },
     actions: {
-      openSheet: JanusStudentArchiveApp.onOpenSheet
+      openSheet: 'onOpenSheet'
     }
   };
 
@@ -159,7 +159,7 @@ export class JanusStudentArchiveApp extends HandlebarsApplicationMixin(JanusBase
     };
   }
 
-  static async onOpenSheet(event, target) {
+  async onOpenSheet(event, target) {
     event?.preventDefault?.();
     const uuid = target?.dataset?.uuid;
     const inst = this;
@@ -181,3 +181,4 @@ export class JanusStudentArchiveApp extends HandlebarsApplicationMixin(JanusBase
 }
 
 export default JanusStudentArchiveApp;
+

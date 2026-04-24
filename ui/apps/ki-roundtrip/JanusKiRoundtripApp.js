@@ -108,17 +108,17 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
       resizable: true
     },
     actions: {
-      exportMode: JanusKiRoundtripApp.onExportMode,
-      exportJson: JanusKiRoundtripApp.onExportJson,
-      exportFile: JanusKiRoundtripApp.onExportFile,
-      preview: JanusKiRoundtripApp.onPreview,
-      apply: JanusKiRoundtripApp.onApply,
-      applySelected: JanusKiRoundtripApp.onApplySelected,
-      toggleDiff: JanusKiRoundtripApp.onToggleDiff,
-      selectAllDiffs: JanusKiRoundtripApp.onSelectAllDiffs,
-      selectNoneDiffs: JanusKiRoundtripApp.onSelectNoneDiffs,
-      loadFile: JanusKiRoundtripApp.onLoadFile,
-      browseFile: JanusKiRoundtripApp.onBrowseFile
+      exportMode: 'onExportMode',
+      exportJson: 'onExportJson',
+      exportFile: 'onExportFile',
+      preview: 'onPreview',
+      apply: 'onApply',
+      applySelected: 'onApplySelected',
+      toggleDiff: 'onToggleDiff',
+      selectAllDiffs: 'onSelectAllDiffs',
+      selectNoneDiffs: 'onSelectNoneDiffs',
+      loadFile: 'onLoadFile',
+      browseFile: 'onBrowseFile'
     }
   };
 
@@ -142,7 +142,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
   set _exportMode(v) { this.__exportMode = ['lite','week','full'].includes(v) ? v : 'lite'; }
 
   /**
-   * Pre-render hook (async — may await freely, runs before the render lock).
+   * Pre-render hook (async â€” may await freely, runs before the render lock).
    * Fetches the KI export bundle and caches it on the instance so that
    * _prepareContext() can read it synchronously without awaiting.
    *
@@ -167,7 +167,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
 
   /**
    * Prepare the Handlebars context. Reads from the cache populated by
-   * _preRender() — no async KI calls here (ApplicationV2 render-lock safe).
+   * _preRender() â€” no async KI calls here (ApplicationV2 render-lock safe).
    *
    * @param {Object} options
    */
@@ -177,7 +177,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
     const json = this.__exportCache ?? '';
     const history = this.__historyCache ?? [];
 
-    context.json = json;
+    context.bundleJsonRaw = json;
     context.history = history;
     context.isGM = game.user?.isGM ?? false;
     context.activeMode = this._exportMode;
@@ -201,7 +201,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    * @param {Event} event
    * @param {HTMLElement} target
    */
-  static async onExportMode(event, target) {
+  async onExportMode(event, target) {
     event?.preventDefault?.();
     const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
     const mode = target?.dataset?.mode ?? 'lite';
@@ -216,7 +216,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    *
    * @param {Event} event
    */
-  static async onExportJson(event) {
+  async onExportJson(event) {
     event?.preventDefault?.();
     const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
     const engine = resolveEngine(inst);
@@ -245,7 +245,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    *
    * @param {Event} event
    */
-  static async onExportFile(event) {
+  async onExportFile(event) {
     event?.preventDefault?.();
     const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
     const engine = resolveEngine(inst);
@@ -273,7 +273,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    *
    * @param {Event} event
    */
-  static async onPreview(event) {
+  async onPreview(event) {
     event?.preventDefault?.();
     const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
     const engine = resolveEngine(inst);
@@ -334,7 +334,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    *
    * @param {Event} event
    */
-  static async onApply(event) {
+  async onApply(event) {
     event?.preventDefault?.();
     const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
     const engine = resolveEngine(inst);
@@ -374,7 +374,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
   /**
    * Toggle a single diff selection checkbox.
    */
-  static async onToggleDiff(event, target) {
+  async onToggleDiff(event, target) {
     const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
     const idx = Number(target?.dataset?.diffIdx ?? target?.dataset?.idx ?? NaN);
     if (!inst || !Number.isFinite(idx)) return;
@@ -384,7 +384,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
     await inst.render({ force: true });
   }
 
-  static async onSelectAllDiffs(event) {
+  async onSelectAllDiffs(event) {
     event?.preventDefault?.();
     const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
     if (!inst) return;
@@ -393,7 +393,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
     await inst.render({ force: true });
   }
 
-  static async onSelectNoneDiffs(event) {
+  async onSelectNoneDiffs(event) {
     event?.preventDefault?.();
     const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
     if (!inst) return;
@@ -406,8 +406,8 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    * Apply only the selected diffs. This filters the KI response payload
    * by (changeKey, idx) metadata produced by previewImport.
    */
-  static async onApplySelected(event) {
-    return JanusKiRoundtripApp.onApply.call(this, event);
+  async onApplySelected(event) {
+    return this.onApply(event);
   }
 
 
@@ -418,7 +418,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    *
    * @param {Event} event
    */
-  static async onLoadFile(event) {
+  async onLoadFile(event) {
     event?.preventDefault?.();
     const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
     const engine = resolveEngine(inst);
@@ -445,7 +445,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    *
    * @param {Event} event
    */
-  static async onBrowseFile(event) {
+  async onBrowseFile(event) {
     event?.preventDefault?.();
     const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
     const input = inst?.element?.querySelector?.('input[name="ki-file-name"]');
@@ -484,3 +484,5 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
   }
 
 }
+
+

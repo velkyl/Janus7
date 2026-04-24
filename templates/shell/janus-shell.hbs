@@ -24,6 +24,11 @@
     <div class="j7-shell__status">
       <span class="j7-shell__status-pill">{{header.dayName}}</span>
       <span class="j7-shell__status-pill">{{header.phaseName}}</span>
+      {{#each moduleContent.regions}}
+        <span class="j7-shell__status-pill j7-shell__status-pill--region" title="Modul: {{title}}">
+          <i class="fas fa-map-marked-alt"></i> {{region}}
+        </span>
+      {{/each}}
       <span class="j7-shell__status-pill j7-shell__status-pill--accent">{{header.activeViewTitle}}</span>
     </div>
     <div class="j7-shell__header-actions">

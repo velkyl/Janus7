@@ -1,4 +1,4 @@
-﻿import { moduleTemplatePath } from '../../core/common.js';
+import { moduleTemplatePath } from '../../core/common.js';
 /**
  * @file ui/apps/JanusSyncPanelApp.js
  * @module janus7/ui
@@ -8,14 +8,14 @@
  *
  * Zeigt den Abgleich zwischen JANUS7-JSON-Daten und dem realen Foundry-Weltbestand.
  * Pro Entität:
- *  ✅ LINKED        — UUID vorhanden & Entität existiert
- *  🟡 FOUND-BY-NAME — Kein UUID, aber Name matcht → "Verknüpfen"-Button
- *  ❌ MISSING       — Nicht vorhanden → "Anlegen"-Button
- *  ⚠️ BROKEN       — UUID da, Entität gelöscht → "Neu anlegen / Suchen"-Button
+ *  ? LINKED        — UUID vorhanden & Entität existiert
+ *  ?? FOUND-BY-NAME — Kein UUID, aber Name matcht ? "Verknüpfen"-Button
+ *  ? MISSING       — Nicht vorhanden ? "Anlegen"-Button
+ *  ?? BROKEN       — UUID da, Entität gelöscht ? "Neu anlegen / Suchen"-Button
  *
  * Drag & Drop:
  *  - Jede MISSING/BROKEN-Zeile akzeptiert Drops von Foundry-Sidebar-Einträgen
- *    (Actors, Scenes, Playlists) → verknüpft automatisch
+ *    (Actors, Scenes, Playlists) ? verknüpft automatisch
  *  - LINKED-Zeilen können auf den Canvas gedragged werden
  */
 
@@ -41,15 +41,15 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
       resizable: true,
     },
     actions: {
-      rescan:              JanusSyncPanelApp.onRescan,
-      switchTab:           JanusSyncPanelApp.onSwitchTab,
-      linkExisting:        JanusSyncPanelApp.onLinkExisting,
-      createEntity:        JanusSyncPanelApp.onCreateEntity,
-      importFromCompendium: JanusSyncPanelApp.onImportFromCompendium,
-      importAllCompendium: JanusSyncPanelApp.onImportAllCompendium,
-      openEntity:          JanusSyncPanelApp.onOpenEntity,
-      unlinkEntity:        JanusSyncPanelApp.onUnlinkEntity,
-      syncAll:             JanusSyncPanelApp.onSyncAll,
+      rescan: 'onRescan',
+      switchTab: 'onSwitchTab',
+      linkExisting: 'onLinkExisting',
+      createEntity: 'onCreateEntity',
+      importFromCompendium: 'onImportFromCompendium',
+      importAllCompendium: 'onImportAllCompendium',
+      openEntity: 'onOpenEntity',
+      unlinkEntity: 'onUnlinkEntity',
+      syncAll: 'onSyncAll',
     }
   };
 
@@ -66,7 +66,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
   }
 
   /**
-   * Mappt UI-Tab → persistenter Link-Typ (State.foundryLinks.*)
+   * Mappt UI-Tab ? persistenter Link-Typ (State.foundryLinks.*)
    * @private
    */
   _linkTypeForTab(tab) {
@@ -78,7 +78,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
     return null;
   }
 
-  // ─── Engine ────────────────────────────────────────────────────────────────
+  // --- Engine ----------------------------------------------------------------
 
   _getSync() {
     if (!this._syncEngine) {
@@ -88,7 +88,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
     return this._syncEngine;
   }
 
-  // ─── Lifecycle ─────────────────────────────────────────────────────────────
+  // --- Lifecycle -------------------------------------------------------------
 
   async _onRender(context, options) {
     await super._onRender(context, options);
@@ -96,7 +96,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
     this._initDragSources();
   }
 
-  // ─── Context ───────────────────────────────────────────────────────────────
+  // --- Context ---------------------------------------------------------------
 
   async _preRender(options) {
     await super._preRender(options);
@@ -205,14 +205,14 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
     };
   }
 
-  // ─── Actions ───────────────────────────────────────────────────────────────
+  // --- Actions ---------------------------------------------------------------
 
-  static async onRescan() {
+  async onRescan() {
     this._reports = { npcs: null, locations: null, playlists: null, alchemy: null, library: null, spells: null, lessons: null };
     await this.refresh();
   }
 
-  static async onSwitchTab(event, target) {
+  async onSwitchTab(event, target) {
     event?.preventDefault?.();
     const tab = target?.dataset?.tab;
     if (!tab || tab === this._activeTab) return;
@@ -223,7 +223,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
   /**
    * "Verknüpfen" — öffnet einen simplen Name-Picker für die Entität.
    */
-  static async onLinkExisting(event, target) {
+  async onLinkExisting(event, target) {
     event?.preventDefault?.();
     const janusId = target?.closest('[data-janus-id]')?.dataset?.janusId;
     if (!janusId) return;
@@ -258,13 +258,13 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
     await sync.linkEntity(janusId, uuid, { type: this._linkTypeForTab(this._activeTab) });
     this._reports[tab] = null; // Force rescan
     await this.refresh();
-    ui.notifications.info(`Verknüpft: ${janusId} → ${uuid}`);
+    ui.notifications.info(`Verknüpft: ${janusId} ? ${uuid}`);
   }
 
   /**
    * "Anlegen" — erstellt Foundry-Entität aus JSON-Daten mit Bestätigungsdialog.
    */
-  static async onCreateEntity(event, target) {
+  async onCreateEntity(event, target) {
     event?.preventDefault?.();
     const janusId = target?.closest('[data-janus-id]')?.dataset?.janusId;
     if (!janusId) return;
@@ -317,7 +317,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
   }
 
   /** Öffnet die verknüpfte Foundry-Entität. */
-  static async onOpenEntity(event, target) {
+  async onOpenEntity(event, target) {
     event?.preventDefault?.();
     const uuid = target?.closest('[data-janus-id]')?.dataset?.foundryUuid;
     if (!uuid) return;
@@ -326,7 +326,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
   }
 
   /** Entfernt eine UUID-Verknüpfung. */
-  static async onUnlinkEntity(event, target) {
+  async onUnlinkEntity(event, target) {
     event?.preventDefault?.();
     const janusId = target?.closest('[data-janus-id]')?.dataset?.janusId;
     if (!janusId) return;
@@ -347,7 +347,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
   /**
    * Importiert einen Compendium-Fund in die Welt.
    */
-  static async onImportFromCompendium(event, target) {
+  async onImportFromCompendium(event, target) {
     event?.preventDefault?.();
     const janusId = target?.closest('[data-janus-id]')?.dataset?.janusId;
     if (!janusId) return;
@@ -384,7 +384,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
   /**
    * Importiert alle FOUND_IN_COMPENDIUM-Einträge des aktiven Tabs.
    */
-  static async onImportAllCompendium(event, _target) {
+  async onImportAllCompendium(event, _target) {
     event?.preventDefault?.();
     const report = this._reports[this._activeTab];
     const candidates = report?.filter(r =>
@@ -415,7 +415,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
   }
 
   /** Legt alle fehlenden Entitäten des aktiven Tabs auf einmal an. */
-  static async onSyncAll(event, _target) {
+  async onSyncAll(event, _target) {
     event?.preventDefault?.();
     const report  = this._reports[this._activeTab];
     const missing = report?.filter(r =>
@@ -464,10 +464,10 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
     ui.notifications.info(`Sync abgeschlossen: ${done} angelegt, ${failed} Fehler.`);
   }
 
-  // ─── Drag & Drop ──────────────────────────────────────────────────────────
+  // --- Drag & Drop ----------------------------------------------------------
 
   /**
-   * Registriert Drop-Ziele (Zeilen mit ❌/⚠️ Status).
+   * Registriert Drop-Ziele (Zeilen mit ?/?? Status).
    * @private
    */
   _initDropTargets() {
@@ -490,7 +490,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
   }
 
   /**
-   * Macht LINKED-Zeilen draggable (→ Foundry-Canvas / Sidebar).
+   * Macht LINKED-Zeilen draggable (? Foundry-Canvas / Sidebar).
    * @private
    */
   _initDragSources() {
@@ -543,10 +543,10 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
     await sync.linkEntity(janusId, uuid, { type: this._linkTypeForTab(this._activeTab) });
     this._reports[this._activeTab] = null;
     await this.refresh();
-    ui.notifications.info(`Verknüpft per Drag & Drop: ${janusId} → ${uuid}`);
+    ui.notifications.info(`Verknüpft per Drag & Drop: ${janusId} ? ${uuid}`);
   }
 
-  // ─── Helpers ──────────────────────────────────────────────────────────────
+  // --- Helpers --------------------------------------------------------------
 
   static _getCandidates(tab) {
     if (tab === 'npcs')      return game.actors?.contents ?? [];
@@ -576,3 +576,4 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
     return lines.join('\n') || '<em>Keine Profildaten verfügbar.</em>';
   }
 }
+

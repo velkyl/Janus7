@@ -34,11 +34,11 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
       resizable: true,
     },
     actions: {
-      refresh: JanusSocialViewApp.onRefresh,
-      selectFrom: JanusSocialViewApp.onSelectFrom,
-      selectTo: JanusSocialViewApp.onSelectTo,
-      adjust: JanusSocialViewApp.onAdjust,
-      executeCommand: JanusSocialViewApp.onExecuteCommand
+      refresh: 'onRefresh',
+      selectFrom: 'onSelectFrom',
+      selectTo: 'onSelectTo',
+      adjust: 'onAdjust',
+      executeCommand: 'onExecuteCommand'
     }
   };
 
@@ -59,30 +59,30 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
     const root = this.element;
     if (!root) return;
     root.querySelector('[name="fromId"]')?.addEventListener('change', (ev) => {
-      this.constructor.onSelectFrom.call(this, ev, ev.currentTarget);
+      this.onSelectFrom(ev, ev.currentTarget);
     });
     root.querySelector('[name="toId"]')?.addEventListener('change', (ev) => {
-      this.constructor.onSelectTo.call(this, ev, ev.currentTarget);
+      this.onSelectTo(ev, ev.currentTarget);
     });
   }
 
-  static async onRefresh(_event,_target){ this.refresh(); }
+  async onRefresh(_event,_target){ this.refresh(); }
 
-  static async onSelectFrom(event, target) {
+  async onSelectFrom(event, target) {
     event?.preventDefault?.();
     const id = target?.value ?? target?.dataset?.value;
     this._fromId = id || null;
     this.refresh();
   }
 
-  static async onSelectTo(event, target) {
+  async onSelectTo(event, target) {
     event?.preventDefault?.();
     const id = target?.value ?? target?.dataset?.value;
     this._toId = id || null;
     this.refresh();
   }
 
-  static async onAdjust(event, target) {
+  async onAdjust(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return ui.notifications.warn('Nur GM darf Beziehungen ändern.');
 
@@ -103,7 +103,7 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
     }
   }
 
-  static async onExecuteCommand(event, target) {
+  async onExecuteCommand(event, target) {
     event?.preventDefault?.();
     const commandId = String(target?.dataset?.commandId ?? '').trim();
     if (!commandId) return;
@@ -132,7 +132,7 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
     const storyHooks = engine?.core?.state?.get?.('academy.social.storyHooks') ?? {};
     const records = Object.values(storyHooks?.records ?? {});
     const resolveName = (id) => {
-      if (!id) return '—';
+      if (!id) return 'â€”';
       return npcs.find((entry) => entry.id === id)?.name
         ?? pcs.find((entry) => entry.id === id)?.name
         ?? id;
@@ -144,14 +144,14 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
         return {
           hookId: entry?.hookId ?? entry?.id ?? null,
           title: entry?.title ?? 'Social-Story-Hook',
-          detail: entry?.detail ?? '—',
+          detail: entry?.detail ?? 'â€”',
           priorityLabel: entry?.priorityLabel ?? 'Normal',
           status,
           statusLabel: status === 'completed' ? 'Abgeschlossen' : status === 'discarded' ? 'Verworfen' : 'Vorgemerkt',
           fromName: resolveName(entry?.fromId ?? null),
           toName: resolveName(entry?.toId ?? null),
           updatedAt: entry?.updatedAt ?? null,
-          updatedAtLabel: entry?.updatedAt ? new Date(entry.updatedAt).toLocaleString('de-DE') : '—',
+          updatedAtLabel: entry?.updatedAt ? new Date(entry.updatedAt).toLocaleString('de-DE') : 'â€”',
           isQueued: status === 'queued',
           isCompleted: status === 'completed',
           isDiscarded: status === 'discarded'
@@ -168,7 +168,7 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
       .slice(0, 6)
       .map((entry) => ({
         actionLabel: entry?.actionLabel ?? 'Hook geändert',
-        changedAtLabel: entry?.changedAt ? new Date(entry.changedAt).toLocaleString('de-DE') : '—'
+        changedAtLabel: entry?.changedAt ? new Date(entry.changedAt).toLocaleString('de-DE') : 'â€”'
       }));
 
     return {
@@ -213,7 +213,7 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
     const livingEvents = engine?.core?.state?.get?.('academy.social.livingEvents') ?? {};
     const livingHistory = (Array.isArray(livingEvents?.history) ? livingEvents.history : []).slice(0, 8).map((entry) => ({
       title: entry?.title ?? 'Autonomes Beziehungs-Event',
-      summary: entry?.summary ?? '—',
+      summary: entry?.summary ?? 'â€”',
       category: entry?.category ?? 'npc-network',
       deltaLabel: `${Number(entry?.delta ?? 0) > 0 ? '+' : ''}${Number(entry?.delta ?? 0)}`,
       pairLabel: `${entry?.fromName ?? entry?.fromId ?? '?'} -> ${entry?.toName ?? entry?.toId ?? '?'}`
@@ -224,7 +224,7 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
     const gateEngine = engine?.academy?.gateEngine ?? null;
     const socialLinksGateOpen = gateEngine
       ? gateEngine.isGateOpen('GATE_SOCIAL_LINKS_MENTOR')
-      : true; // Kein Gate-System aktiv → alles anzeigen (legacy-Kompatibilität)
+      : true; // Kein Gate-System aktiv â†’ alles anzeigen (legacy-Kompatibilität)
     const socialLinksFullOpen = gateEngine
       ? gateEngine.isGateOpen('GATE_SOCIAL_LINKS_FULL')
       : true;
@@ -249,3 +249,4 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
     };
   }
 }
+

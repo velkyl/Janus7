@@ -97,3 +97,4 @@ export class JanusLessonItemSheet extends ItemSheetBase {
 }
 
 export default JanusLessonItemSheet;
+

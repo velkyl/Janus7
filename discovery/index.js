@@ -7,7 +7,7 @@
  *
  * Goal:
  * - Provide a semantic search facade over DSA5 content (items / actors) for use by tools and (later) KI.
- * - Avoid hard compendium IDs in user/assistant prompts by routing everything through domains.
+ * - Optimized to use AcademyLibraryService as its single source of truth.
  */
 
 import { JanusSearchEngine } from './search-engine.js';
@@ -42,7 +42,7 @@ export class JanusContentDiscoveryBridge {
 
   async init() {
     if (this._ready) return;
-    this.logger?.info?.('Discovery: building indexes ...');
+    this.logger?.info?.('Discovery: linking to LibraryService ...');
     await this._buildIndexes();
     this._ready = true;
     this.logger?.info?.('Discovery: ready.');
@@ -65,8 +65,6 @@ export class JanusContentDiscoveryBridge {
    */
   async find(domain, query, { limit = 10 } = {}) {
     if (!this._ready) await this.init();
-    const spec = SEMANTIC_DOMAINS[domain];
-    if (!spec) return [];
     const hits = this.search.search(domain, query, { limit });
     return hits.map((h) => ({
       name: h.doc.name,
@@ -79,12 +77,6 @@ export class JanusContentDiscoveryBridge {
 
   /**
    * Example world-changing action: spawn an actor from a search result.
-   * This is intentionally GM-gated and requires approval.
-   *
-   * @param {string} actorUuid
-   * @param {object} [opts]
-   * @param {string} [opts.name]
-   * @returns {Promise<Actor|null>}
    */
   async spawnActor(actorUuid, { name } = {}) {
     const ok = await requestGMApproval({
@@ -93,12 +85,10 @@ export class JanusContentDiscoveryBridge {
     });
     if (!ok) return null;
 
-    // fromUuid is a Foundry VTT global (not DSA5-specific). Annotated per arch contract.
     const doc = await (globalThis.fromUuid ?? fromUuid)(actorUuid);
     if (!doc) throw new Error(`Actor not found for UUID: ${actorUuid}`);
     if (!(doc instanceof Actor)) throw new Error(`UUID is not an Actor: ${actorUuid}`);
 
-    // Create as world actor (GM-only visibility by default)
     const created = await Actor.create(doc.toObject(), {
       renderSheet: false,
       ownership: { default: 0 }
@@ -108,71 +98,60 @@ export class JanusContentDiscoveryBridge {
   }
 
   // ---------------------------------------------------------------------------
-  // Internal indexing
+  // Internal indexing (Optimized)
   // ---------------------------------------------------------------------------
 
   async _buildIndexes() {
-    const packs = Array.from(game?.packs ?? []);
-
-    // Build Item indexes
-    for (const [domain, spec] of Object.entries(SEMANTIC_DOMAINS)) {
-      if (spec.document !== 'Item') continue;
-      const docs = [];
-
-      const relevantPacks = spec.packs
-        ? packs.filter(p => spec.packs.includes(p.collection))
-        : packs.filter(p => p.documentName === 'Item');
-
-      for (const pack of relevantPacks) {
-        let idx;
-        try {
-          idx = await pack.getIndex({ fields: ['name', 'type'] });
-        } catch {
-          continue;
-        }
-        for (const e of idx) {
-          const type = e.type ?? null;
-          if (spec.types && spec.types.length) {
-            const t = String(type ?? '');
-            const ok = spec.types.some(x => _norm(x) === _norm(t));
-            if (!ok) continue;
-          }
-          const uuid = `Compendium.${pack.collection}.${e._id}`;
-          docs.push({ id: e._id, name: e.name, uuid, type, data: { pack: pack.collection } });
-        }
-      }
-
-      this.search.setIndex(domain, docs);
+    const library = this.engine?.bridge?.dsa5?.library;
+    if (!library) {
+      this.logger?.warn?.('Discovery: LibraryService not available. Skipping indexing.');
+      return;
     }
 
-    // Build Actor indexes
+    // Ensure library index is ready
+    await library.ensureIndex();
+
+    // Group SEMANTIC_DOMAINS by documentName for batch processing
+    const domainsByDoc = { 'Item': [], 'Actor': [], 'JournalEntry': [] };
     for (const [domain, spec] of Object.entries(SEMANTIC_DOMAINS)) {
-      if (spec.document !== 'Actor') continue;
-      const docs = [];
-
-      const relevantPacks = spec.packs
-        ? packs.filter(p => spec.packs.includes(p.collection))
-        : packs.filter(p => p.documentName === 'Actor');
-
-      for (const pack of relevantPacks) {
-        let idx;
-        try {
-          idx = await pack.getIndex({ fields: ['name', 'type'] });
-        } catch {
-          continue;
-        }
-        for (const e of idx) {
-          const type = e.type ?? null;
-          if (spec.types && spec.types.length) {
-            const t = String(type ?? '');
-            const ok = spec.types.some(x => _norm(x) === _norm(t));
-            if (!ok) continue;
-          }
-          const uuid = `Compendium.${pack.collection}.${e._id}`;
-          docs.push({ id: e._id, name: e.name, uuid, type, data: { pack: pack.collection } });
-        }
+      if (domainsByDoc[spec.document]) {
+        domainsByDoc[spec.document].push({ domain, spec });
       }
-      this.search.setIndex(domain, docs);
+    }
+
+    // Process each document type
+    for (const [docName, domains] of Object.entries(domainsByDoc)) {
+      if (!domains.length) continue;
+
+      // Get all entries of this type from the library
+      const entries = await library.entries({ limit: 20000 }); // Get all, but with safety limit
+      const filteredEntries = entries.filter(e => e.documentName === docName);
+
+      for (const { domain, spec } of domains) {
+        const docs = [];
+        const packSet = spec.packs ? new Set(spec.packs) : null;
+        const typeSet = spec.types ? new Set(spec.types.map(_norm)) : null;
+
+        for (const e of filteredEntries) {
+          // Pack filter
+          if (packSet && !packSet.has(e.pack)) continue;
+
+          // Type filter
+          if (typeSet) {
+            const t = _norm(e.type);
+            if (!typeSet.has(t)) continue;
+          }
+
+          docs.push({ 
+            id: e._id, 
+            name: e.name, 
+            uuid: e.uuid, 
+            type: e.type, 
+            data: { pack: e.pack } 
+          });
+        }
+        this.search.setIndex(domain, docs);
+      }
     }
   }
 }

@@ -341,7 +341,11 @@ export class JanusCapabilities {
         try {
           const diagFn = this._engine?.diagnostics?.run;
           if (typeof diagFn === 'function') {
-            return await diagFn({ notify: false, verbose: false });
+            const report = await diagFn({ notify: false, verbose: false });
+            return {
+              ...report,
+              status: report.health ?? (report.ok ? 'ok' : 'fail'),
+            };
           }
           // Fallback: minimale State-Prüfung
           const snap = this._engine?.core?.state?.snapshot?.();
@@ -353,6 +357,43 @@ export class JanusCapabilities {
           return { status: 'error', message: err?.message };
         }
       },
+    });
+
+    /**
+     * Externe Brücken (SQL / Python).
+     * @type {Readonly<{ python: Function, sqlite: Function }>}
+     */
+    this.ext = Object.freeze({
+      /**
+       * Führt ein Python-Skript aus.
+       * @param {string} script - Pfad zum Skript.
+       * @param {object} [args={}] - Argumente.
+       * @returns {Promise<any>}
+       */
+      runScript: async (script, args = {}) => {
+        const python = this._engine?.ext?.python;
+        if (!python) {
+          this._warn('ext.runScript', 'Python-Service nicht verfügbar.');
+          return null;
+        }
+        return python.execute(script, args);
+      },
+
+      /**
+       * Führt eine SQL-Abfrage aus.
+       * @param {string} db - Pfad zur DB.
+       * @param {string} query - SQL-Query.
+       * @param {any[]} [params=[]] - Parameter.
+       * @returns {Promise<any[]>}
+       */
+      querySql: async (db, query, params = []) => {
+        const sqlite = this._engine?.ext?.sqlite;
+        if (!sqlite) {
+          this._warn('ext.querySql', 'SQLite-Service nicht verfügbar.');
+          return [];
+        }
+        return sqlite.query(db, query, params);
+      }
     });
   }
 

@@ -126,11 +126,12 @@
   align-items: center;
   border: 1px solid var(--j7-border);
   border-radius: var(--j7-radius);
-  padding: 6px 12px;
+  padding: 8px 16px;
   background: linear-gradient(180deg, rgba(250, 246, 238, 0.98), rgba(232, 219, 193, 0.98));
   color: var(--j7-text);
   cursor: pointer;
   font-size: var(--j7-font-sm);
+  font-weight: 500;
   font-family: var(--j7-font);
   transition: background 0.15s, border-color 0.15s, transform 0.1s, box-shadow 0.15s;
   line-height: 1.4;

@@ -22,9 +22,9 @@ export class JanusKiBackupManagerApp extends HandlebarsApplicationMixin(JanusBas
       minimizable: true,
     },
     actions: {
-      refresh: JanusKiBackupManagerApp.onRefresh,
-      restoreBackup: JanusKiBackupManagerApp.onRestoreBackup,
-      copyRef: JanusKiBackupManagerApp.onCopyRef,
+      refresh: 'onRefresh',
+      restoreBackup: 'onRestoreBackup',
+      copyRef: 'onCopyRef',
       openKiRoundtrip: () => game?.janus7?.ui?.open?.('kiRoundtrip')
     }
   };
@@ -33,11 +33,11 @@ export class JanusKiBackupManagerApp extends HandlebarsApplicationMixin(JanusBas
     main: { template: moduleTemplatePath('templates/apps/ki-backup-manager.hbs') }
   };
 
-  static async onRefresh(_event, _target) {
+  async onRefresh(_event, _target) {
     return this.refresh?.(true);
   }
 
-  static async onCopyRef(_event, target) {
+  async onCopyRef(_event, target) {
     const ref = target?.dataset?.fileRef ?? '';
     if (!ref) return;
     try {
@@ -48,7 +48,7 @@ export class JanusKiBackupManagerApp extends HandlebarsApplicationMixin(JanusBas
     }
   }
 
-  static async onRestoreBackup(_event, target) {
+  async onRestoreBackup(_event, target) {
     const fileRef = target?.dataset?.fileRef ?? '';
     if (!fileRef) return;
     const DialogV2 = foundry?.applications?.api?.DialogV2;
@@ -106,3 +106,4 @@ ${fileRef}`);
 }
 
 export default JanusKiBackupManagerApp;
+

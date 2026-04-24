@@ -18,6 +18,7 @@ caps.quests   // Quest-System
 caps.lesson   // Aktive Lektion / Examen
 caps.ki       // KI-Export/Import-Roundtrip
 caps.state    // State-Inspektion & Diagnose
+caps.ext      // Externe Brücken (SQL / Python)
 ```
 
 Alle Namespaces sind **eingefroren** — keine externe Mutation möglich.  
@@ -182,6 +183,29 @@ const report = await state.runHealthCheck();
 const { ok, checks, warnings } = await game.janus7.capabilities.state.runHealthCheck();
 console.log('JANUS7 Health:', ok ? '✅ OK' : '❌ FAIL', { checks, warnings });
 ```
+
+---
+
+## 7. `capabilities.ext`
+
+Ermöglicht den Zugriff auf externe Ressourcen wie SQLite-Datenbanken oder Python-Skripte.
+
+```js
+const ext = game.janus7.capabilities.ext;
+
+// SQL-Abfrage an eine externe DB (z.B. Keeper Helper)
+const rows = await ext.querySql("modules/keeper-helper/database/keeper.db", "SELECT * FROM npcs");
+
+// Python-Skript ausführen
+const result = await ext.runScript("scripts/ai_analyzer.py", { data: "abc" });
+```
+
+| Methode | Parameter | Beschreibung |
+|---|---|---|
+| `querySql(db, query, params?)` | `string, string, array?` | Führt SQL aus und gibt Zeilen zurück |
+| `runScript(script, args?)` | `string, object?` | Führt Python aus und gibt Ergebnis zurück |
+
+**Hinweis:** Diese Funktionen erfordern das laufende Hintergrund-Skript `janus_bridge.py`. Siehe [`EXTERNAL_BRIDGE_GUIDE.md`](./docs/EXTERNAL_BRIDGE_GUIDE.md).
 
 ---
 

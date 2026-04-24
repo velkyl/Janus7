@@ -62,8 +62,8 @@ export class JanusLaborApp extends JanusBaseApp {
       icon: 'fas fa-vials'
     },
     actions: {
-      selectRecipe: JanusLaborApp.onSelectRecipe,
-      brewRecipe: JanusLaborApp.onBrewRecipe
+      selectRecipe: 'onSelectRecipe',
+      brewRecipe: 'onBrewRecipe'
     }
   };
 
@@ -137,12 +137,12 @@ export class JanusLaborApp extends JanusBaseApp {
     });
   }
 
-  static async onSelectRecipe(_event, target) {
+  async onSelectRecipe(_event, target) {
     this._activeRecipeId = target.dataset.recipeId;
     this.render({ force: true });
   }
 
-  static async onBrewRecipe(_event, target) {
+  async onBrewRecipe(_event, target) {
     const { core, dsa5 } = getJanusCore();
     const stashActorId = core.config.get('stashActorId');
     const stashActor = game.actors.get(stashActorId);
@@ -225,3 +225,4 @@ export class JanusLaborApp extends JanusBaseApp {
     return this._instance;
   }
 }
+

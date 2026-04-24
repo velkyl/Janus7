@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @file ui/apps/JanusSettingsTestHarnessApp.js
  * @module janus7/ui
  * @phase 6
@@ -92,3 +92,4 @@ export class JanusSettingsTestHarnessApp extends JanusBaseApp {
     content.replaceChildren(result);
   }
 }
+

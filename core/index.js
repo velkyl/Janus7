@@ -58,6 +58,7 @@ export class Janus7Engine {
     
     this.academy = { data: null, debug: null };
     this.bridge = { dsa5: null };
+    this.ext = {};
     this.services = { registry: this.serviceRegistry };
     this.assetGuard = new JanusAssetGuard(this);
   }
@@ -240,6 +241,12 @@ export class Janus7Engine {
       }
 
       this.logger.info("JANUS7 | Orchestration complete. System is stable.");
+
+      // Optional: SQLite Sync
+      if (JanusConfig.get('enableExternalSqlite')) {
+        this.ext?.syncSqlite?.().catch(err => this.logger.warn("SQLite Sync failed", err));
+      }
+
       emitHook(HOOKS.ENGINE_READY, this);
 
     } catch (err) {

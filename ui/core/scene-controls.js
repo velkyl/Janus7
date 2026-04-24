@@ -4,7 +4,6 @@
  *
  * Purpose:
  * Centralized Factory for JANUS7 Scene Control Buttons.
- * Extracted from scripts/janus.mjs to keep the entry point lean.
  */
 
 import { HOOKS } from '../../core/hooks/topics.js';
@@ -16,7 +15,6 @@ import { HOOKS } from '../../core/hooks/topics.js';
  * @param {object} engine - The JANUS7 engine instance
  */
 export function attachJanusSceneControls(controls, engine) {
-  console.log('[JANUS7] attachJanusSceneControls triggered', { hasControls: !!controls, hasEngine: !!engine });
   if (!game.user?.isGM) return;
 
   const logger = engine?.core?.logger ?? console;
@@ -34,11 +32,17 @@ export function attachJanusSceneControls(controls, engine) {
     if (Array.isArray(value?.data)) return value.data;
     return value;
   };
+  
   const top = getTopLevelControls(controls);
   const isRecord = isObject(top);
   const isList = Array.isArray(top);
-  console.log('[JANUS7] attachJanusSceneControls detection', { isRecord, isList, topCount: isList ? top.length : (isRecord ? Object.keys(top).length : 0) });
+  
   if (!isRecord && !isList) return;
+
+  // Debug log only if explicitly enabled in config
+  if (engine?.core?.config?.get?.('debug')) {
+    logger.debug?.('[JANUS7] attachJanusSceneControls triggered', { isRecord, isList });
+  }
 
   const getControlSet = (...names) => {
     if (isRecord) {
@@ -54,7 +58,6 @@ export function attachJanusSceneControls(controls, engine) {
     try {
       const uiReg = game?.janus7?.ui;
       if (uiReg?.openShell) return uiReg.openShell();
-      if (uiReg?.openControlPanel) return uiReg.openControlPanel();
       const { JanusShellApp } = await import('../apps/JanusShellApp.js');
       const app = JanusShellApp.showSingleton();
       app.render?.({ force: true, focus: true });
@@ -91,7 +94,6 @@ export function attachJanusSceneControls(controls, engine) {
       return true;
     } catch (err) {
       logger.error?.('[JANUS7] Scene control openStoryGraph fehlgeschlagen:', { message: err?.message });
-      ui.notifications?.error?.('Story Graph konnte nicht geöffnet werden.');
       return false;
     }
   };
@@ -119,195 +121,93 @@ export function attachJanusSceneControls(controls, engine) {
       name: 'openControlPanel',
       title: localize('JANUS7.Menu.ControlPanel.Label', 'JANUS Shell öffnen'),
       icon: 'fas fa-cogs',
-      order: 0,
       button: true,
       visible: toolVisible,
-      onClick: runTool(openControlPanel)
+      onChange: runTool(openControlPanel)
     },
     openMasterDashboard: {
       name: 'openMasterDashboard',
-      title: 'Master Dashboard (Balancing / Heat / Rumors)',
+      title: 'Master Dashboard',
       icon: 'fas fa-crown',
-      order: 0.5,
       button: true,
       visible: toolVisible,
-      onClick: runTool(async () => {
+      onChange: runTool(async () => {
         const { JanusMasterDashboard } = await import('../../scripts/ui/master-dashboard.js');
         new JanusMasterDashboard().render({ force: true, focus: true });
       })
-    },
-    openAcademyOverview: {
-      name: 'openAcademyOverview',
-      title: 'Academy Overview öffnen',
-      icon: 'fas fa-university',
-      order: 1,
-      button: true,
-      visible: toolVisible,
-      onClick: runTool(() => openUiApp('academyOverview', 'academyOverview'))
-    },
-    openScoringView: {
-      name: 'openScoringView',
-      title: 'Scoring öffnen',
-      icon: 'fas fa-trophy',
-      order: 2,
-      button: true,
-      visible: toolVisible,
-      onClick: runTool(() => openUiApp('scoringView', 'scoringView'))
-    },
-    openSocialView: {
-      name: 'openSocialView',
-      title: 'Social View öffnen',
-      icon: 'fas fa-users',
-      order: 3,
-      button: true,
-      visible: toolVisible,
-      onClick: runTool(() => openUiApp('socialView', 'socialView'))
     },
     openStoryGraph: {
       name: 'openStoryGraph',
       title: 'Story Graph öffnen',
       icon: 'fas fa-project-diagram',
-      order: 3.5,
       button: true,
       visible: toolVisible,
-      onClick: runTool(openStoryGraph)
+      onChange: runTool(openStoryGraph)
     },
     openKiSearch: {
       name: 'openKiSearch',
       title: 'KI Semantische Suche',
       icon: 'fas fa-search',
-      order: 3.8,
       button: true,
       visible: toolVisible,
-      onClick: runTool(openKiSearch)
-    },
-    openAtmosphereDJ: {
-      name: 'openAtmosphereDJ',
-      title: 'Atmosphere DJ öffnen',
-      icon: 'fas fa-music',
-      order: 4,
-      button: true,
-      visible: toolVisible,
-      onClick: runTool(() => openUiApp('atmosphereDJ', 'atmosphereDJ'))
+      onChange: runTool(openKiSearch)
     },
     openQuestJournal: {
       name: 'openQuestJournal',
       title: 'Quest-Journal öffnen',
       icon: 'fas fa-book-open',
-      order: 5,
       button: true,
       visible: toolVisible,
       onClick: runTool(openQuestJournal)
     },
-    openSyncPanel: {
-      name: 'openSyncPanel',
-      title: 'Sync Panel öffnen',
-      icon: 'fas fa-link',
-      order: 12,
-      button: true,
-      visible: toolVisible,
-      onClick: runTool(() => openUiApp('syncPanel', 'syncPanel'))
-    },
-    openStateInspector: {
-      name: 'openStateInspector',
-      title: 'State Inspector öffnen',
+    openDataStudio: {
+      name: 'openDataStudio',
+      title: 'Academy Data Studio',
       icon: 'fas fa-database',
-      order: 13,
       button: true,
       visible: toolVisible,
-      onClick: runTool(() => openUiApp('stateInspector', 'stateInspector'))
+      onClick: runTool(() => openUiApp('academyDataStudio', 'Academy Data Studio'))
     },
-    openConfigPanel: {
-      name: 'openConfigPanel',
-      title: 'Config Panel öffnen',
-      icon: 'fas fa-sliders-h',
-      order: 14,
-      button: true,
-      visible: toolVisible,
-      onClick: runTool(() => openUiApp('configPanel', 'configPanel'))
-    },
-    openAcademyDataStudio: {
-      name: 'openAcademyDataStudio',
-      title: 'Academy Data Studio öffnen',
-      icon: 'fas fa-edit',
-      order: 15,
-      button: true,
-      visible: toolVisible,
-      onClick: runTool(() => openUiApp('academyDataStudio', 'academyDataStudio'))
+    openAtmosphereDJ: {
+        name: 'openAtmosphereDJ',
+        title: 'Atmosphere DJ öffnen',
+        icon: 'fas fa-music',
+        button: true,
+        visible: toolVisible,
+        onClick: runTool(() => openUiApp('atmosphereDJ', 'atmosphereDJ'))
     },
     openSessionPrep: {
       name: 'openSessionPrep',
       title: localize('JANUS7.UI.OpenSessionPrepWizard', 'Session Prep öffnen'),
       icon: 'fas fa-wand-magic-sparkles',
-      order: 16,
       button: true,
       visible: toolVisible,
       onClick: runTool(() => openUiApp('shell', 'sessionPrep', { viewId: 'sessionPrep' }))
-    },
-    openCommandCenter: {
-      name: 'openCommandCenter',
-      title: 'Power Tools öffnen',
-      icon: 'fas fa-terminal',
-      order: 17,
-      button: true,
-      visible: toolVisible,
-      onClick: runTool(() => openUiApp('commandCenter', 'commandCenter'))
-    },
-    openKiBackupManager: {
-      name: 'openKiBackupManager',
-      title: 'KI-Backups öffnen',
-      icon: 'fas fa-life-ring',
-      order: 18,
-      button: true,
-      visible: toolVisible,
-      onClick: runTool(() => openUiApp('kiBackupManager', 'kiBackupManager'))
-    },
-    openKiRoundtrip: {
-      name: 'openKiRoundtrip',
-      title: 'KI Roundtrip öffnen',
-      icon: 'fas fa-brain',
-      order: 19,
-      button: true,
-      visible: toolVisible,
-      onClick: runTool(() => openUiApp('kiRoundtrip', 'kiRoundtrip'))
-    },
-    openTestResults: {
-      name: 'openTestResults',
-      title: 'Test Results öffnen',
-      icon: 'fas fa-vial',
-      order: 20,
-      button: true,
-      visible: toolVisible,
-      onClick: runTool(() => openUiApp('testResults', 'testResults'))
-    },
-    openGuidedManualTests: {
-      name: 'openGuidedManualTests',
-      title: 'Guided Manual Tests öffnen',
-      icon: 'fas fa-route',
-      order: 21,
-      button: true,
-      visible: toolVisible,
-      onClick: runTool(() => openUiApp('guidedManualTests', 'guidedManualTests'))
     }
   };
 
+  // Convert other buttons to onClick as well
+  janusToolsRecord.openControlPanel.onClick = janusToolsRecord.openControlPanel.onChange;
+  delete janusToolsRecord.openControlPanel.onChange;
+  janusToolsRecord.openMasterDashboard.onClick = janusToolsRecord.openMasterDashboard.onChange;
+  delete janusToolsRecord.openMasterDashboard.onChange;
+  janusToolsRecord.openStoryGraph.onClick = janusToolsRecord.openStoryGraph.onChange;
+  delete janusToolsRecord.openStoryGraph.onChange;
+  janusToolsRecord.openKiSearch.onClick = janusToolsRecord.openKiSearch.onChange;
+  delete janusToolsRecord.openKiSearch.onChange;
+
   if (isRecord) {
-    console.log('[JANUS7] attachJanusSceneControls adding category (record mode)');
     top.janus7 ??= {
       name: 'janus7',
       title: localize('JANUS7.Sidebar.Title', 'JANUS7'),
       icon: 'fas fa-university',
       visible: toolVisible,
-      tools: janusToolsRecord
+      tools: {}
     };
-    top.janus7.tools ??= {};
-    for (const [toolName, toolData] of Object.entries(janusToolsRecord)) {
-      top.janus7.tools[toolName] = toolData;
-    }
+    Object.assign(top.janus7.tools, janusToolsRecord);
     top.janus7.visible = toolVisible;
   } else if (isList) {
     const existing = getControlSet('janus7');
-    console.log('[JANUS7] attachJanusSceneControls list mode', { hasExisting: !!existing });
     if (!existing) {
       top.push({
         name: 'janus7',
@@ -315,30 +215,24 @@ export function attachJanusSceneControls(controls, engine) {
         icon: 'fas fa-university',
         visible: toolVisible,
         layer: null,
-        layer: null,
         tools: Object.values(janusToolsRecord)
       });
     } else {
-      existing.title = localize('JANUS7.Sidebar.Title', 'JANUS7');
-      existing.icon = 'fas fa-university';
       existing.visible = toolVisible;
-      existing.layer = null;
-      existing.layer = null;
       existing.tools = Object.values(janusToolsRecord);
     }
 
-    // Add a shortcut to Token Controls for easier discovery
+    // Shortcut to Token Controls
     const token = getControlSet('token');
     if (token) {
       token.tools ??= [];
-      const hasTool = token.tools.some(t => t.name === 'openJanusShellShortcut');
-      if (!hasTool) {
+      if (!token.tools.some(t => t.name === 'openJanusShellShortcut')) {
         token.tools.push({
           name: 'openJanusShellShortcut',
-          title: 'JANUS Shell (Schnellzugriff)',
+          title: 'JANUS Shell (Shortcut)',
           icon: 'fas fa-layer-group',
           button: true,
-          onClick: openControlPanel
+          onChange: openControlPanel
         });
       }
     }

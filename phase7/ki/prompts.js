@@ -27,12 +27,14 @@ const ID_RULES = [
 ].join('');
 
 const KNOWLEDGE_BRIDGE_RULES = [
-  'KNOWLEDGE BRIDGE AVAILABLE: You now have access to semantic search and world actions. ',
-  'If you need to find an entity (NPC, item, spell), use game.janus7.ki.search(domain, query). ',
-  'To interact with the world, use game.janus7.ki.executeAction(type, uuid, params). ',
+  'KNOWLEDGE BRIDGE AVAILABLE: You now have access to semantic search, world actions, and external tools. ',
+  'If you need to find an entity (NPC, item, spell), use search(domain, query). ',
+  'To interact with the world, use executeAction(type, uuid, params). ',
+  'EXTERNAL TOOLS: You can query external databases or run scripts. ',
+  '- external_sql_query(db, query, params): Use this for advanced campaign data (e.g. from Keeper Helper). ',
+  '- external_python_script(script, args): Use this for specialized data processing. ',
   'Supported actions: "spawnActor", "openDocument", "rollTable", "playSound". ',
-  'You can moderate academic lessons using these tools to spawn teachers or play atmospheric sounds. ',
-  'When generating a lesson narrative, you can include JavaScript code blocks using these tools.'
+  'You can moderate academic lessons using these tools to spawn teachers or play atmospheric sounds.'
 ].join('');
 
 export const Prompts = {

@@ -137,8 +137,13 @@ function _sanitizeStateCandidate(candidate, { applySchemaHealing = true } = {}) 
   const rootQuestStates = (clone?.questStates && typeof clone.questStates === 'object')
     ? _pruneQuestTestActors(clone.questStates)
     : null;
-  clone.questStates = foundry.utils.deepClone(rootQuestStates ?? academyQuestRoot ?? {});
-  if (clone?.academy && Object.prototype.hasOwnProperty.call(clone.academy, 'quests')) delete clone.academy.quests;
+
+  // Restore canonical 'academy.quests' as SSOT
+  clone.academy ??= {};
+  clone.academy.quests = foundry.utils.deepClone(academyQuestRoot ?? rootQuestStates ?? {});
+
+  // Keep root-level questStates as legacy mirror for roundtrip compatibility
+  clone.questStates = foundry.utils.deepClone(clone.academy.quests);
 
   const academyScoring = (clone?.academy?.scoring && typeof clone.academy.scoring === 'object' && !Array.isArray(clone.academy.scoring))
     ? foundry.utils.deepClone(clone.academy.scoring)
@@ -273,7 +278,7 @@ export class JanusIO {
 
     // 2) Validate sanitized input. Unknown keys & wrong types must still be rejected.
     if (validate && validator?.validateState) {
-      const res = validator.validateState(sanitizedInput);
+      const res = validator.validateState(sanitizedInput, { notify: !silentValidation });
       if (!res?.valid) {
         if (!silentValidation) this.logger?.warn?.('State-Import: Validierung fehlgeschlagen (raw).', res?.errors);
         throw new JanusValidationError('State-Import Validierung fehlgeschlagen.', {

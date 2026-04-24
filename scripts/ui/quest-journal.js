@@ -74,10 +74,10 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(JanusBaseApp) 
       height: 760
     },
     actions: {
-      viewQuest: this._onViewQuest,
-      startQuest: this._onStartQuest,
-      completeQuest: this._onCompleteQuest,
-      refreshJournal: this._onRefreshJournal
+      viewQuest: '_onViewQuest',
+      startQuest: '_onStartQuest',
+      completeQuest: '_onCompleteQuest',
+      refreshJournal: '_onRefreshJournal'
     }
   };
 
@@ -95,27 +95,35 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(JanusBaseApp) 
   __renderCache = null;
 
   /** @override */
-  async _preRender(_options) {
-    await super._preRender(_options);
+  async _prepareContext(_options) {
+    const defaults = {
+      revealRumorTruth: false,
+      rumors: [],
+      activeQuests: [],
+      availableQuests: [],
+      completedQuests: [],
+      factions: []
+    };
+
     try {
       const actor = game.user.character || game.actors.find((a) => a.type === 'character');
       if (!actor) {
-        this.__renderCache = {
+        return {
+          ...defaults,
           hasActor: false,
           error: 'Kein Character gefunden. Bitte einen Character auswaehlen.'
         };
-        return;
       }
 
       const dataApi = game.janus7?.academy?.data;
       const questEngine = game.janus7?.academy?.quests;
       if (!dataApi || !questEngine) {
-        this.__renderCache = {
+        return {
+          ...defaults,
           hasActor: true,
           actor: actor.name,
           error: 'Quest-System nicht initialisiert. Bitte JANUS7 laden.'
         };
-        return;
       }
 
       const actorKeys = new Set(_actorCandidates(actor));
@@ -180,7 +188,8 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(JanusBaseApp) 
         currentLocationId: eventContext.activeLocationId ?? '-'
       };
 
-      this.__renderCache = {
+      return {
+        ...defaults,
         hasActor: true,
         actor: actor.name,
         actorId: actor.uuid,
@@ -200,33 +209,21 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(JanusBaseApp) 
         revealRumorTruth: revealTruth
       };
     } catch (err) {
-      this._getLogger?.().error?.('[JANUS7][QuestJournal] _preRender failed', err);
-      this.__renderCache = {
+      this._getLogger?.().error?.('[JANUS7][QuestJournal] _prepareContext failed', err);
+      return {
+        ...defaults,
         hasActor: false,
         error: `Quest-Journal konnte nicht geladen werden: ${String(err?.message ?? err)}`
       };
     }
   }
 
-  /** @override */
-  _prepareContext(_options) {
-    const defaults = {
-      revealRumorTruth: false,
-      rumors: [],
-      activeQuests: [],
-      availableQuests: [],
-      completedQuests: [],
-      factions: []
-    };
-    return this.__renderCache ? { ...defaults, ...this.__renderCache } : defaults;
-  }
-
-  static async _onRefreshJournal(event, _target) {
+  async _onRefreshJournal(event, _target) {
     event?.preventDefault?.();
     this.refresh();
   }
 
-  static async _onViewQuest(event, target) {
+  async _onViewQuest(event, target) {
     event?.preventDefault?.();
     const questId = target.dataset.questId;
     const actorId = target.dataset.actorId;
@@ -275,7 +272,7 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(JanusBaseApp) 
     }, { classes: ['janus7', 'quest-journal-dialog'] }).render(true);
   }
 
-  static async _onStartQuest(event, target) {
+  async _onStartQuest(event, target) {
     event?.preventDefault?.();
     const questId = target.dataset.questId;
     const actorId = target.dataset.actorId;
@@ -289,7 +286,7 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(JanusBaseApp) 
     }
   }
 
-  static async _onCompleteQuest(event, target) {
+  async _onCompleteQuest(event, target) {
     event?.preventDefault?.();
     const questId = target.dataset.questId;
     const actorId = target.dataset.actorId;

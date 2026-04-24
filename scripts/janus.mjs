@@ -331,9 +331,12 @@ if (_shouldRegister) {
   Hooks.once('init', () => {
     try { 
       registerLessonDocuments(); 
+      JanusConfig.registerBridgeSettings();
       // Optimized Pass 1: Register UI Partials for declarative rendering
-      import('./integration/ui-partials.js').then(m => m.registerShellPartials());
-    } catch (err) { console.warn('[JANUS7] registerLessonDocuments or partials failed', err); }
+      import('./integration/ui-partials.js')
+        .then(m => m.registerShellPartials())
+        .catch(err => console.warn('[JANUS7] registerShellPartials failed', err));
+    } catch (err) { console.warn('[JANUS7] registerLessonDocuments failed', err); }
     console.log(`
  _______________________________________________________________
  _____ ___  _   _ _   _ ____  ______   __ __     _______ _____
@@ -475,6 +478,12 @@ try {
     }
     if (!Handlebars.helpers.eq) {
       Handlebars.registerHelper('eq', (v1, v2) => v1 === v2);
+    }
+    if (!Handlebars.helpers.slice) {
+      Handlebars.registerHelper('slice', (array, start, end) => {
+        if (!Array.isArray(array)) return [];
+        return array.slice(start, typeof end === 'number' ? end : undefined);
+      });
     }
 
     // Cleanup on world close — register both hook names for v13/v14 compat.

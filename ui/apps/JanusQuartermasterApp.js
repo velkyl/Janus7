@@ -15,8 +15,8 @@ export class JanusQuartermasterApp extends HandlebarsApplicationMixin(JanusBaseA
       minimizable: true
     },
     actions: {
-      buyItem: JanusQuartermasterApp.onBuyItem,
-      openSheet: JanusQuartermasterApp.onOpenSheet
+      buyItem: 'onBuyItem',
+      openSheet: 'onOpenSheet'
     }
   };
 
@@ -96,13 +96,33 @@ export class JanusQuartermasterApp extends HandlebarsApplicationMixin(JanusBaseA
         typesToSearch = ['equipment', 'consumable', 'meleeweapon', 'rangeweapon', 'armor', 'plant', 'poison', 'disease'];
       }
 
+      // 1. Suche im internen Library Service
       const rawItems = await this.libraryService.search({
         q: query,
         types: typesToSearch,
-        limit: 150
+        limit: 100
       });
+
+      // 2. Suche in offiziellen DSA5 Modulen (Option 1: Smart Quartermaster)
+      const dsa5Bridge = this._getEngine()?.bridge?.dsa5;
+      if (dsa5Bridge?.scanner && query.length > 2) {
+        const moduleItems = [];
+        for (const t of typesToSearch) {
+          moduleItems.push(...await dsa5Bridge.searchModuleArmory(query, t));
+        }
+        
+        // Merge & De-duplicate
+        for (const mItem of moduleItems) {
+          if (!rawItems.some(ri => ri.name === mItem.name)) {
+            rawItems.push({
+              ...mItem,
+              uuid: `Compendium.${mItem.pack}.${mItem._id}`
+            });
+          }
+        }
+      }
       
-      // Filtere alles weg, was keinen brauchbaren Preis oder Namen hat
+      // Filtere alles weg, was keinen brauchbaren Namen hat
       this._results = rawItems
         .filter(i => i.name && !i.name.includes("Unbekannt"))
         .sort((a,b) => a.name.localeCompare(b.name, 'de'));
@@ -125,7 +145,7 @@ export class JanusQuartermasterApp extends HandlebarsApplicationMixin(JanusBaseA
     const safeResults = this._results.map(r => ({
       ...r,
       img: r.img || 'icons/svg/item-bag.svg',
-      // Foundry DSA5 speichert Items oft in Kreuzern/Silber – wir geben den rohen Zahlenwert als Indikator aus
+      // Foundry DSA5 speichert Items oft in Kreuzern/Silber â€“ wir geben den rohen Zahlenwert als Indikator aus
       priceDisplay: r.price > 0 ? `${r.price}` : 'Kostenlos'
     }));
 
@@ -140,7 +160,7 @@ export class JanusQuartermasterApp extends HandlebarsApplicationMixin(JanusBaseA
     };
   }
 
-  static async onOpenSheet(event, target) {
+  async onOpenSheet(event, target) {
     event?.preventDefault?.();
     const uuid = target?.dataset?.uuid;
     const inst = this;
@@ -154,7 +174,7 @@ export class JanusQuartermasterApp extends HandlebarsApplicationMixin(JanusBaseA
     }
   }
 
-  static async onBuyItem(event, target) {
+  async onBuyItem(event, target) {
     event?.preventDefault?.();
     const uuid = target?.dataset?.uuid;
     const price = target?.dataset?.price || 0;
@@ -203,3 +223,4 @@ export class JanusQuartermasterApp extends HandlebarsApplicationMixin(JanusBaseA
 }
 
 export default JanusQuartermasterApp;
+

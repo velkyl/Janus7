@@ -72,3 +72,4 @@ export class JanusLessonLibraryApp extends HandlebarsApplicationMixin(JanusBaseA
 }
 
 export default JanusLessonLibraryApp;
+

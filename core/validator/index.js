@@ -130,9 +130,10 @@ export class JanusValidator {
   /**
    * @param {string} key
    * @param {unknown} data
+   * @param {{ notify?: boolean }} [options]
    * @returns {{ valid: boolean, errors: string[] }}
    */
-  validate(key, data) {
+  validate(key, data, { notify = true } = {}) {
     const schema = this._schemas.get(key);
     if (!schema) {
       return { valid: true, errors: [] };
@@ -141,7 +142,7 @@ export class JanusValidator {
     const errors = [];
     this._validateAgainstSchema(schema, data, 'root', errors);
 
-    if (errors.length && this.logger?.warn) {
+    if (errors.length && notify && this.logger?.warn) {
       this.logger.warn(`Validation for ${key} failed:`, errors);
     }
 
@@ -171,61 +172,64 @@ export class JanusValidator {
    * @param {unknown} data
    * @param {Record<string, unknown>} schema
    * @param {string} [label]
+   * @param {{ notify?: boolean }} [options]
    * @returns {{ valid: boolean, errors: string[] }}
    */
-  validateSchema(data, schema, label = 'schema') {
+  validateSchema(data, schema, label = 'schema', { notify = true } = {}) {
     const errors = [];
     this._validateAgainstSchema(schema, data, 'root', errors);
-    if (errors.length && this.logger?.warn) this.logger.warn(`Validation for ${label} failed:`, errors);
+    if (errors.length && notify && this.logger?.warn) {
+      this.logger.warn(`Validation for ${label} failed:`, errors);
+    }
     return { valid: errors.length === 0, errors };
   }
 
   // ─── Convenience-Methoden ─────────────────────────────────────────────────
 
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateState(json) { return this.validate('state', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyCalendar(json) { return this.validate('academy.calendar', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyLessons(json) { return this.validate('academy.lessons', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyExams(json) { return this.validate('academy.exams', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyGradingSchemes(json) { return this.validate('academy.gradingSchemes', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateExamQuestions(json) { return this.validate('academy.examQuestions', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyNPCs(json) { return this.validate('academy.npcs', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyLocations(json) { return this.validate('academy.locations', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyLibrary(json) { return this.validate('academy.library', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyEvents(json) { return this.validate('academy.events', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademySpellCurriculum(json) { return this.validate('academy.spellCurriculum', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyAlchemyRecipes(json) { return this.validate('academy.alchemyRecipes', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyLessonGenerator(json) { return this.validate('academy.lessonGenerator', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyCalendarTemplate(json) { return this.validate('academy.calendarTemplate', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyTeachingSessions(json) { return this.validate('academy.teachingSessions', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyCircles(json) { return this.validate('academy.circles', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyCollections(json) { return this.validate('academy.collections', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademySubjects(json) { return this.validate('academy.subjects', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademySocialLinks(json) { return this.validate('academy.socialLinks', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademySchoolStats(json) { return this.validate('academy.schoolStats', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyMilestones(json) { return this.validate('academy.milestones', json); }
-  /** @param {unknown} json @returns {{ valid: boolean, errors: string[] }} */
-  validateAcademyApAwards(json) { return this.validate('academy.apAwards', json); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateState(json, opts) { return this.validate('state', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyCalendar(json, opts) { return this.validate('academy.calendar', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyLessons(json, opts) { return this.validate('academy.lessons', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyExams(json, opts) { return this.validate('academy.exams', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyGradingSchemes(json, opts) { return this.validate('academy.gradingSchemes', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateExamQuestions(json, opts) { return this.validate('academy.examQuestions', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyNPCs(json, opts) { return this.validate('academy.npcs', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyLocations(json, opts) { return this.validate('academy.locations', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyLibrary(json, opts) { return this.validate('academy.library', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyEvents(json, opts) { return this.validate('academy.events', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademySpellCurriculum(json, opts) { return this.validate('academy.spellCurriculum', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyAlchemyRecipes(json, opts) { return this.validate('academy.alchemyRecipes', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyLessonGenerator(json, opts) { return this.validate('academy.lessonGenerator', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyCalendarTemplate(json, opts) { return this.validate('academy.calendarTemplate', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyTeachingSessions(json, opts) { return this.validate('academy.teachingSessions', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyCircles(json, opts) { return this.validate('academy.circles', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyCollections(json, opts) { return this.validate('academy.collections', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademySubjects(json, opts) { return this.validate('academy.subjects', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademySocialLinks(json, opts) { return this.validate('academy.socialLinks', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademySchoolStats(json, opts) { return this.validate('academy.schoolStats', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyMilestones(json, opts) { return this.validate('academy.milestones', json, opts); }
+  /** @param {unknown} json @param {object} [opts] @returns {{ valid: boolean, errors: string[] }} */
+  validateAcademyApAwards(json, opts) { return this.validate('academy.apAwards', json, opts); }
 
   // ─── Referenz-Integritäts-Prüfung ────────────────────────────────────────
 

@@ -15,9 +15,9 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
       minimizable: true
     },
     actions: {
-      refreshIndex: JanusLibraryBrowserApp.onRefreshIndex,
-      openSheet: JanusLibraryBrowserApp.onOpenSheet,
-      executeAction: JanusLibraryBrowserApp.onExecuteAction
+      refreshIndex: 'onRefreshIndex',
+      openSheet: 'onOpenSheet',
+      executeAction: 'onExecuteAction'
     }
   };
 
@@ -132,6 +132,24 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
         limit: 100, // Hard limit for rendering speed
         sortBy: 'name'
       });
+      
+      // 2. Suche in offiziellen Regelwerken (Option 2: Bibliotheks-Crawler)
+      const dsa5Bridge = this._getEngine()?.bridge?.dsa5;
+      if (dsa5Bridge?.scanner && query.length > 2 && (!typeFilter || typeFilter === 'JournalEntry')) {
+        const moduleResults = await dsa5Bridge.searchModuleLibrary(query);
+        
+        // Merge & De-duplicate
+        for (const mRes of moduleResults) {
+          if (!results.some(ri => ri.name === mRes.name)) {
+            results.push({
+              ...mRes,
+              uuid: `Compendium.${mRes.pack}.${mRes._id}`,
+              img: 'icons/svg/book.svg'
+            });
+          }
+        }
+      }
+
       if (this._searchToken !== token) return;
       this._results = results;
     } catch (err) {
@@ -171,7 +189,7 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
     };
   }
 
-  static async onRefreshIndex(event, target) {
+  async onRefreshIndex(event, target) {
     event?.preventDefault?.();
     const inst = this;
     if (inst._isBuilding) return;
@@ -190,7 +208,7 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
     }
   }
 
-  static async onOpenSheet(event, target) {
+  async onOpenSheet(event, target) {
     event?.preventDefault?.();
     const uuid = target?.dataset?.uuid;
     const inst = this;
@@ -210,7 +228,7 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
     }
   }
 
-  static async onExecuteAction(event, target) {
+  async onExecuteAction(event, target) {
     event?.preventDefault?.();
     const uuid = target?.dataset?.uuid;
     const inst = this;
@@ -235,3 +253,4 @@ export class JanusLibraryBrowserApp extends HandlebarsApplicationMixin(JanusBase
 }
 
 export default JanusLibraryBrowserApp;
+

@@ -1,4 +1,4 @@
-﻿import { moduleTemplatePath } from '../../core/common.js';
+import { moduleTemplatePath } from '../../core/common.js';
 /**
  * @file ui/apps/JanusAtmosphereDJApp.js
  * @module janus7/ui
@@ -32,14 +32,14 @@ export class JanusAtmosphereDJApp extends HandlebarsApplicationMixin(JanusBaseAp
       resizable: true,
     },
     actions: {
-      refresh: JanusAtmosphereDJApp.onRefresh,
-      applyMood: JanusAtmosphereDJApp.onApplyMood,
-      stopAll: JanusAtmosphereDJApp.onStopAll,
-      setVolume: JanusAtmosphereDJApp.onSetVolume,
-      toggleAutoCalendar: JanusAtmosphereDJApp.onToggleAutoCalendar,
-      toggleAutoEvents: JanusAtmosphereDJApp.onToggleAutoEvents,
-      toggleAutoLocation: JanusAtmosphereDJApp.onToggleAutoLocation,
-      setMasterClient: JanusAtmosphereDJApp.onSetMasterClient
+      refresh: 'onRefresh',
+      applyMood: 'onApplyMood',
+      stopAll: 'onStopAll',
+      setVolume: 'onSetVolume',
+      toggleAutoCalendar: 'onToggleAutoCalendar',
+      toggleAutoEvents: 'onToggleAutoEvents',
+      toggleAutoLocation: 'onToggleAutoLocation',
+      setMasterClient: 'onSetMasterClient'
     }
   };
 
@@ -58,21 +58,21 @@ export class JanusAtmosphereDJApp extends HandlebarsApplicationMixin(JanusBaseAp
 
     root.addEventListener('change', (ev) => {
       const target = ev.target;
-      if (target?.name === 'masterClientUserId') this.constructor.onSetMasterClient.call(this, ev, target);
-      if (target?.name === 'autoCalendar') this.constructor.onToggleAutoCalendar.call(this, ev, target);
-      if (target?.name === 'autoEvents') this.constructor.onToggleAutoEvents.call(this, ev, target);
-      if (target?.name === 'autoLocation') this.constructor.onToggleAutoLocation.call(this, ev, target);
+      if (target?.name === 'masterClientUserId') this.this.onSetMasterClient(ev, target);
+      if (target?.name === 'autoCalendar') this.this.onToggleAutoCalendar(ev, target);
+      if (target?.name === 'autoEvents') this.this.onToggleAutoEvents(ev, target);
+      if (target?.name === 'autoLocation') this.this.onToggleAutoLocation(ev, target);
     });
 
     root.addEventListener('input', (ev) => {
-      if (ev.target?.name === 'volume') this.constructor.onSetVolume.call(this, ev, ev.target);
+      if (ev.target?.name === 'volume') this.this.onSetVolume(ev, ev.target);
     });
   }
 
 
-  static async onRefresh(){ this.refresh(); }
+  async onRefresh(){ this.refresh(); }
 
-  static async onApplyMood(event, target) {
+  async onApplyMood(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return ui.notifications.warn('Nur GM darf Atmosphere steuern.');
     const moodId = target?.dataset?.moodId;
@@ -85,7 +85,7 @@ export class JanusAtmosphereDJApp extends HandlebarsApplicationMixin(JanusBaseAp
     }
   }
 
-  static async onStopAll(event, _target) {
+  async onStopAll(event, _target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return;
     try {
@@ -96,7 +96,7 @@ export class JanusAtmosphereDJApp extends HandlebarsApplicationMixin(JanusBaseAp
     }
   }
 
-  static async onSetVolume(event, target) {
+  async onSetVolume(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return;
 
@@ -110,7 +110,7 @@ export class JanusAtmosphereDJApp extends HandlebarsApplicationMixin(JanusBaseAp
     }
   }
 
-  static async onToggleAutoCalendar(event, target) {
+  async onToggleAutoCalendar(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return;
     const enabled = target?.checked ?? (target?.dataset?.enabled === 'true');
@@ -119,7 +119,7 @@ export class JanusAtmosphereDJApp extends HandlebarsApplicationMixin(JanusBaseAp
     } catch (err) { ui.notifications.error(err.message); }
   }
 
-  static async onToggleAutoEvents(event, target) {
+  async onToggleAutoEvents(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return;
     const enabled = target?.checked ?? (target?.dataset?.enabled === 'true');
@@ -128,7 +128,7 @@ export class JanusAtmosphereDJApp extends HandlebarsApplicationMixin(JanusBaseAp
     } catch (err) { ui.notifications.error(err.message); }
   }
 
-  static async onToggleAutoLocation(event, target) {
+  async onToggleAutoLocation(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return;
     const enabled = target?.checked ?? (target?.dataset?.enabled === 'true');
@@ -137,7 +137,7 @@ export class JanusAtmosphereDJApp extends HandlebarsApplicationMixin(JanusBaseAp
     } catch (err) { ui.notifications.error(err.message); }
   }
 
-  static async onSetMasterClient(event, target) {
+  async onSetMasterClient(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return;
     const userId = target?.value ?? null;
@@ -181,3 +181,5 @@ export class JanusAtmosphereDJApp extends HandlebarsApplicationMixin(JanusBaseAp
     };
   }
 }
+
+

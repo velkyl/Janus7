@@ -169,9 +169,14 @@ export class JanusAiService {
 
   /** @private */
   _getActiveQuestIds(state) {
-    const quests = state.get('questStates') || {};
-    return Object.entries(quests)
-      .filter(([_, q]) => q.status === 'active')
-      .map(([id]) => id);
+    const questRoot = state.get('academy.quests') || {};
+    const activeIds = new Set();
+    for (const questMap of Object.values(questRoot)) {
+      if (!questMap || typeof questMap !== 'object') continue;
+      for (const [questId, q] of Object.entries(questMap)) {
+        if (q?.status === 'active') activeIds.add(questId);
+      }
+    }
+    return [...activeIds];
   }
 }

@@ -1,6 +1,8 @@
 import { JanusBaseApp } from '../core/base-app.js';
 
-export class StoryGraphApp extends JanusBaseApp {
+const { HandlebarsApplicationMixin } = foundry.applications.api;
+
+export class StoryGraphApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   static _mermaidLoadPromise = null;
 
   static DEFAULT_OPTIONS = {
@@ -18,16 +20,30 @@ export class StoryGraphApp extends JanusBaseApp {
     }
   };
 
-  async _renderHTML(_context, _options) {
-    const graph = game.janus7?.graph;
-    if (!graph || typeof graph.getAllNodes !== 'function') {
-      return `<div style="padding: 20px;">Graph-Service nicht verf&uuml;gbar oder l&auml;dt noch.</div>`;
+  static PARTS = {
+    content: {
+      template: 'modules/Janus7/templates/apps/story-graph.hbs'
     }
+  };
+
+  /** @override */
+  async _prepareContext(_options) {
+    const service = game.janus7?.graph;
+    const graph = service?.getGraph?.();
+    
+    if (!graph || typeof graph.getAllNodes !== 'function') {
+      return {
+        mermaidDef: 'graph TD; Error["Graph Service not available"];',
+        nodesCount: 0,
+        edgesCount: 0
+      };
+    }
+
+    const nodes = graph.getAllNodes() || [];
+    const edges = graph.getAllEdges() || [];
 
     let mermaidDef = 'graph TD;\n';
 
-    // Nodes
-    const nodes = graph.getAllNodes() || [];
     for (const node of nodes) {
       const id = String(node.id).replace(/[^a-zA-Z0-9]/g, '_');
       const rawLabel = node.name || node.title || node.label || node.id;
@@ -54,8 +70,6 @@ export class StoryGraphApp extends JanusBaseApp {
       if (style) mermaidDef += `  ${style}\n`;
     }
 
-    // Edges
-    const edges = graph.getAllEdges() || [];
     for (const edge of edges) {
       const from = String(edge.from).replace(/[^a-zA-Z0-9]/g, '_');
       const to = String(edge.to).replace(/[^a-zA-Z0-9]/g, '_');
@@ -63,35 +77,25 @@ export class StoryGraphApp extends JanusBaseApp {
       mermaidDef += `  ${from} -- "${edgeLabel}" --> ${to}\n`;
     }
 
-    return `
-      <div style="width: 100%; height: 100%; overflow: hidden; background: #e0e6ed; display: flex; flex-direction: column;">
-        <header style="padding: 15px; background: #1e2830; color: #fff; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0b1116;">
-          <div>
-            <h2 style="margin: 0; color: #4dc2d3;"><i class="fas fa-project-diagram"></i> JANUS7 Story Graph</h2>
-            <p style="margin: 5px 0 0 0; font-size: 0.9em; opacity: 0.8;">Visuelle Darstellung der Akademiedaten (NPCs, Quests, Lektionen).</p>
-          </div>
-          <div style="font-size: 0.9em; text-align: right;">
-            <b>Nodes:</b> ${nodes.length} &nbsp;|&nbsp; <b>Edges:</b> ${edges.length}
-          </div>
-        </header>
-        <div style="flex: 1; padding: 20px; overflow: auto; display: flex; justify-content: center;">
-          <div class="mermaid-container" style="min-width: 80%; text-align: center;">
-            <div class="mermaid" style="background: transparent;">
-${mermaidDef}
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
+    return {
+      mermaidDef,
+      nodesCount: nodes.length,
+      edgesCount: edges.length
+    };
   }
 
-  async _onRender(context, options) {
-    await super._onRender(context, options);
+  /** @override */
+  _onPostRender(context, options) {
+    super._onPostRender(context, options);
 
     const root = this.domElement;
     const mermaidNode = root?.querySelector('.mermaid');
     if (!mermaidNode) return;
 
+    this._renderMermaid(mermaidNode);
+  }
+
+  async _renderMermaid(mermaidNode) {
     try {
       const mermaid = await this.constructor._getMermaid();
       if (!this.rendered || !this.domElement?.isConnected) return;
@@ -122,3 +126,4 @@ ${mermaidDef}
     return this._mermaidLoadPromise;
   }
 }
+

@@ -77,13 +77,13 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
       resizable: true,
     },
     actions: {
-      refresh:          JanusConfigPanelApp.onRefresh,
-      saveSceneMaps:    JanusConfigPanelApp.onSaveSceneMaps,
-      addSceneMap:      JanusConfigPanelApp.onAddSceneMap,
-      removeSceneMap:   JanusConfigPanelApp.onRemoveSceneMap,
-      saveFeatureFlags: JanusConfigPanelApp.onSaveFeatureFlags,
-      fetchGeminiModels: JanusConfigPanelApp.onFetchGeminiModels,
-      saveAiModels:     JanusConfigPanelApp.onSaveAiModels,
+      refresh: 'onRefresh',
+      saveSceneMaps: 'onSaveSceneMaps',
+      addSceneMap: 'onAddSceneMap',
+      removeSceneMap: 'onRemoveSceneMap',
+      saveFeatureFlags: 'onSaveFeatureFlags',
+      fetchGeminiModels: 'onFetchGeminiModels',
+      saveAiModels: 'onSaveAiModels',
     }
   };
 
@@ -112,11 +112,11 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
   // Action Handlers
   // ---------------------------------------------------------------------------
 
-  static async onRefresh() {
+  async onRefresh() {
     this.refresh();
   }
 
-  static async onSaveSceneMaps(event, target) {
+  async onSaveSceneMaps(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return ui.notifications.warn('Nur GM darf Konfiguration ändern.');
 
@@ -138,7 +138,7 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
     }
   }
 
-  static async onAddSceneMap(event, _target) {
+  async onAddSceneMap(event, _target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return;
 
@@ -176,13 +176,13 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
     container.appendChild(row);
   }
 
-  static async onRemoveSceneMap(event, target) {
+  async onRemoveSceneMap(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return;
     target.closest('[data-scene-row]')?.remove();
   }
 
-  static async onSaveFeatureFlags(event, target) {
+  async onSaveFeatureFlags(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return ui.notifications.warn('Nur GM darf Feature-Flags ändern.');
 
@@ -203,7 +203,7 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
     }
   }
 
-  static async onFetchGeminiModels(event, target) {
+  async onFetchGeminiModels(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return;
     const gemini = game.janus7?.ki?.gemini;
@@ -220,7 +220,7 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
     }
   }
 
-  static async onSaveAiModels(event, target) {
+  async onSaveAiModels(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return;
     const el = this.element;
@@ -293,3 +293,4 @@ export class JanusConfigPanelApp extends HandlebarsApplicationMixin(JanusBaseApp
     try { return Boolean(JanusConfig.get(key)); } catch { return fallback; }
   }
 }
+

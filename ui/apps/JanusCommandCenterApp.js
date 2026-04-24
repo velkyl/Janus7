@@ -269,7 +269,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(JanusBaseA
         commands: [
           { id: 'openSyncPanel',   label: 'Welt-Synchronisation', icon: 'fa-sync-alt',    available: !!JanusCommands.openSyncPanel },
           { id: 'openConfigPanel', label: 'Konfiguration',        icon: 'fa-sliders-h',   available: !!JanusCommands.openConfigPanel },
-                    { id: 'seedImportAcademyToJournals', label: 'Seed-Import: Academy→Journals', icon: 'fa-seedling',    available: !!JanusCommands.seedImportAcademyToJournals },
+                    { id: 'seedImportAcademyToJournals', label: 'Seed-Import: Academyâ†’Journals', icon: 'fa-seedling',    available: !!JanusCommands.seedImportAcademyToJournals },
           { id: 'openAcademyDataStudio',       label: 'Academy Data Studio',          icon: 'fa-pen-to-square', available: !!JanusCommands.openAcademyDataStudio },
           { id: 'openSessionPrepWizard',      label: 'Session Prep Wizard',         icon: 'fa-wand-sparkles', available: !!JanusCommands.openSessionPrepWizard },
           { id: 'openKiBackupManager',       label: 'KI Backup Manager',           icon: 'fa-life-ring', available: !!JanusCommands.openKiBackupManager },
@@ -346,7 +346,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(JanusBaseA
     this._selectedCategory = categoryId;
     this.render({ force: true });
   }
-  // ─── Lifecycle ─────────────────────────────────────────────────────────────
+  // â”€â”€â”€ Lifecycle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   /** @override */
   async _onRender(context, options) {
@@ -384,7 +384,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(JanusBaseA
     return super.close(options);
   }
 
-  // ─── Ctrl+K Global Hook ──────────────────────────────────────────────────
+  // â”€â”€â”€ Ctrl+K Global Hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   _registerCtrlK() {
     if (this._ctrlKHandler) return;
@@ -405,7 +405,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(JanusBaseA
     }
   }
 
-  // ─── Inline-Filter (in normaler Ansicht) ─────────────────────────────────
+  // â”€â”€â”€ Inline-Filter (in normaler Ansicht) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   _filterCommands(query) {
     const q = query.toLowerCase().trim();
@@ -425,7 +425,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(JanusBaseA
     }
   }
 
-  // ─── Spotlight ───────────────────────────────────────────────────────────
+  // â”€â”€â”€ Spotlight â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   _buildSpotlightItems() {
     const all = [];
@@ -455,13 +455,13 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(JanusBaseA
     const searchInput = document.createElement('input');
     searchInput.type = 'text';
     searchInput.className = 'j7-spotlight-input';
-    searchInput.placeholder = 'Befehl suchen…';
+    searchInput.placeholder = 'Befehl suchenâ€¦';
     searchInput.autocomplete = 'off';
     searchInput.spellcheck = false;
     inputWrap.appendChild(searchInput);
     const hintSpan = document.createElement('span');
     hintSpan.className = 'j7-spotlight-hint';
-    for (const key of ['↑↓', '↵', 'Esc']) {
+    for (const key of ['â†‘â†“', 'â†µ', 'Esc']) {
       const kbd = document.createElement('kbd');
       kbd.textContent = key;
       hintSpan.appendChild(kbd);
@@ -477,7 +477,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(JanusBaseA
 
     const footer = document.createElement('div');
     footer.className = 'j7-spotlight-footer';
-    for (const [keys, label] of [['↑↓', 'Navigieren'], ['↵', 'Ausführen'], ['Esc', 'Schließen']]) {
+    for (const [keys, label] of [['â†‘â†“', 'Navigieren'], ['â†µ', 'Ausführen'], ['Esc', 'Schließen']]) {
       const span = document.createElement('span');
       for (const k of keys.split('')) {
         const kbd = document.createElement('kbd');
@@ -498,7 +498,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(JanusBaseA
     const input   = overlay.querySelector('.j7-spotlight-input');
     const results = overlay.querySelector('.j7-spotlight-results');
 
-    // Click outside → close
+    // Click outside â†’ close
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) this._closeSpotlight();
     });
@@ -546,7 +546,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(JanusBaseA
     if (!filtered.length) {
       const emptyDiv = document.createElement('div');
       emptyDiv.className = 'j7-spotlight-empty';
-      emptyDiv.textContent = `Keine Befehle gefunden für „${q}”`;
+      emptyDiv.textContent = `Keine Befehle gefunden für â€ž${q}â€`;
       container.appendChild(emptyDiv);
       return;
     }
@@ -632,7 +632,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(JanusBaseA
     }
     try {
       const result = await command({});
-      if (result?.success) ui?.notifications?.info?.(`✓ ${commandId}`);
+      if (result?.success) ui?.notifications?.info?.(`âœ“ ${commandId}`);
       else if (!result?.cancelled) ui?.notifications?.warn?.(`Fehlgeschlagen: ${commandId}`);
     } catch (err) {
       this._getLogger().error?.('[CommandCenter] Spotlight-Ausführung fehlgeschlagen:', err);
@@ -640,7 +640,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(JanusBaseA
     }
   }
 
-  // ─── Action Handlers ─────────────────────────────────────────────────────
+  // â”€â”€â”€ Action Handlers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   static async _onOpenSpotlight(event, target) {
     event.preventDefault();
@@ -657,3 +657,4 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(JanusBaseA
   }
 
 }
+

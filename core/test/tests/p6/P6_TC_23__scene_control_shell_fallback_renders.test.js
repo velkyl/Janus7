@@ -20,7 +20,7 @@ export default {
     }
 
     const src = stripJsComments(await response.text());
-    const fallbackBlockMatch = src.match(/const openControlPanel = async \(\) => \{([\s\S]*?)\n\};/);
+    const fallbackBlockMatch = src.match(/const openControlPanel = async \(\) => \{([\s\S]*?)\n\s*\};/);
     if (!fallbackBlockMatch) {
       throw new Error('openControlPanel() block not found');
     }

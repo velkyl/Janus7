@@ -32,6 +32,13 @@ import { DSA5DamageBridge } from './damage.js';
 import { DSA5ItemFactoryBridge, itemTypeFromSystemSkillId, nameFromSystemSkillId } from './item-factory.js';
 import { AcademyLibraryService } from './library-service.js';
 import { DSA5CraftingBridge } from './crafting.js';
+import { 
+  DSA5ModuleScanner, DSA5RegionalProvider, DSA5SocialProvider, 
+  DSA5CompanionProvider, DSA5ArmoryProvider, DSA5LibraryProvider, 
+  DSA5HerbariumProvider, DSA5BestiaryProvider, DSA5AssetProvider,
+  DSA5SystemProvider
+} from './module-scanner.js';
+import { MagnaCartaBridge } from './magna-carta-bridge.js';
 
 // ─── Neue Sub-Bridges (Phase 3 Audit, Aufgaben 1-8) ──────────────────────────
 import { DSA5GroupCheckBridge } from './group-check.js';
@@ -109,6 +116,8 @@ export class DSA5SystemBridge {
     this.advancement  = new DSA5AdvancementBridge({ logger: this.logger });
     this.fate         = new DSA5FateBridge({ logger: this.logger });
     this.moon         = new DSA5MoonBridge({ logger: this.logger });
+    this.scanner      = new DSA5ModuleScanner({ logger: this.logger });
+    this.magnaCarta   = new MagnaCartaBridge({ logger: this.logger });
 
     /**
      * Hooks-Bridge: lazy — erst bei init() aktiviert.
@@ -225,6 +234,8 @@ export class DSA5SystemBridge {
       // ─── Sub-Bridges v3: Hooks registrieren ──────────────────────────
       this.fate.register();
       this.moon.register();
+      this.scanner.scan();
+      this.magnaCarta.register();
       this.moon.loadModifiers(moduleAssetPath('data/academy/moon-modifiers.json'))
         .catch(e => this.logger?.warn?.('[JANUS7][Moon] Modifikatoren konnten nicht geladen werden', e));
 
@@ -1226,4 +1237,165 @@ export class DSA5SystemBridge {
   /** @see moon.getNextNewMoon */
   getNextNewMoon(...args) { this.assertAvailable(); return this.moon.getNextNewMoon(...args); }
 
+
+  getRegionalContext() {
+    this.assertAvailable();
+    return this.scanner.getProvidersByType(DSA5RegionalProvider).map(p => ({
+      id: p.id,
+      title: p.info.title,
+      region: p.getRegionKey()
+    }));
+  }
+
+  async getSocialLinks() {
+    this.assertAvailable();
+    const taverns = [];
+    for (const p of this.scanner.getProvidersByType(DSA5SocialProvider)) {
+      taverns.push(...await p.getTaverns());
+    }
+    return taverns;
+  }
+
+  async getCompanionData() {
+    this.assertAvailable();
+    const companions = [];
+    for (const p of this.scanner.getProvidersByType(DSA5CompanionProvider)) {
+      companions.push(...await p.getCompanions());
+    }
+    return companions;
+  }
+
+  /**
+   * Sucht nach Begleitern/Tieren in den Modulen.
+   */
+  async searchModuleCompanions(query) {
+    this.assertAvailable();
+    const results = [];
+    for (const p of this.scanner.getProvidersByType(DSA5CompanionProvider)) {
+      results.push(...await p.getCompanions(query));
+    }
+    return results;
+  }
+
+  /**
+   * Durchsucht alle aktiven Rüstkammern/Module nach Gegenständen.
+   */
+  async searchModuleArmory(query, type) {
+    this.assertAvailable();
+    const results = [];
+    
+    // 1. Armory Providers (Weapons, Armor, Equipment)
+    for (const p of this.scanner.getProvidersByType(DSA5ArmoryProvider)) {
+      results.push(...await p.searchItems(query, type));
+    }
+    
+    // 2. Herbarium Providers (Plants)
+    if (!type || type === 'plant') {
+      for (const p of this.scanner.getProvidersByType(DSA5HerbariumProvider)) {
+        results.push(...await p.getPlants(query));
+      }
+    }
+    
+    return results;
+  }
+
+  /**
+   * Durchsucht alle aktiven Regelwerke/Journale nach Informationen.
+   */
+  async searchModuleLibrary(query) {
+    this.assertAvailable();
+    const results = [];
+    for (const p of this.scanner.getProvidersByType(DSA5LibraryProvider)) {
+      results.push(...await p.searchJournals(query));
+    }
+    return results;
+  }
+
+  /**
+   * Sucht gezielt nach Tavernen/Treffpunkten in den Modulen.
+   */
+  async searchModuleTaverns(query) {
+    this.assertAvailable();
+    const results = [];
+    for (const p of this.scanner.getProvidersByType(DSA5SocialProvider)) {
+      const taverns = await p.getTaverns();
+      if (!query) {
+        results.push(...taverns);
+      } else {
+        const q = query.toLowerCase();
+        results.push(...taverns.filter(t => t.name.toLowerCase().includes(q)));
+      }
+    }
+    return results;
+  }
+
+  /**
+   * Durchsucht alle aktiven Bestiarien nach Kreaturen.
+   */
+  async searchModuleBestiary(query) {
+    this.assertAvailable();
+    const results = [];
+    for (const p of this.scanner.getProvidersByType(DSA5BestiaryProvider)) {
+      results.push(...await p.getCreatures(query));
+    }
+    return results;
+  }
+
+  /**
+   * Liefert offizielle Kalender-Events aus dem Almanach.
+   */
+  async getModuleCalendarEvents() {
+    this.assertAvailable();
+    const results = [];
+    for (const p of this.scanner.getProvidersByType(DSA5SystemProvider)) {
+      results.push(...await p.getCalendarEvents());
+    }
+    return results;
+  }
+
+  /**
+   * Sucht nach Karten, Szenen und visuellen Assets in den Modulen.
+   */
+  async searchModuleAssets(query) {
+    this.assertAvailable();
+    const results = [];
+    for (const p of this.scanner.getProvidersByType(DSA5AssetProvider)) {
+      results.push(...await p.getScenes(query));
+    }
+    return results;
+  }
+
+  /**
+   * Sucht nach Regeltexten (Status, Bedingungen) in den Modulen.
+   */
+  async searchModuleRules(query) {
+    this.assertAvailable();
+    const results = [];
+    for (const p of this.scanner.getProvidersByType(DSA5SystemProvider)) {
+      results.push(...await p.searchRules(query));
+    }
+    return results;
+  }
+
+  /**
+   * Liefert alle aktiven regionalen Themen.
+   */
+  getRegionalThemes() {
+    this.assertAvailable();
+    return this.scanner.getProvidersByType(DSA5RegionalProvider).map(p => p.getThemeData());
+  }
+
+  /**
+   * Baut den Bibliotheks-Index für DSA5-Inhalte auf.
+   * @param {object} [opts]
+   * @returns {Promise<void>}
+   */
+  async buildLibraryIndex(opts = {}) {
+    this.assertAvailable();
+    await this.library.buildIndex(opts);
+    emitHook(HOOKS.DSA5_INDEX_UPDATED, { 
+      documentName: opts.documentName ?? 'Item',
+      timestamp: Date.now()
+    });
+  }
 }

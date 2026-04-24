@@ -126,3 +126,4 @@ export class JanusAlumniApp extends HandlebarsApplicationMixin(JanusBaseApp) {
 }
 
 export default JanusAlumniApp;
+

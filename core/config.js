@@ -23,7 +23,9 @@ export class JanusConfig {
     ui: 'enableUI',
     quests: 'enableQuestSystem',
     phase7: 'enablePhase7',
-    gemini: 'enableGemini'
+    gemini: 'enableGemini',
+    python: 'enableExternalPython',
+    sqlite: 'enableExternalSqlite'
   });
 
   /**
@@ -208,6 +210,16 @@ export class JanusConfig {
       default: {}
     });
 
+    // Library Cache: stores serialized index to speed up startup.
+    game.settings.register(MODULE_ID, 'libraryCache', {
+      name: 'JANUS7: Library Cache',
+      hint: 'Persistierter Index der DSA5-Bibliothek zur Startbeschleunigung.',
+      scope: 'world',
+      config: false,
+      type: Object,
+      default: null,
+    });
+
     // Test Runner: run integrated smoke tests on startup + show result window
     game.settings.register(MODULE_ID, 'enableTestRunner', {
       name: 'JANUS7.Settings.EnableTestRunner.Name',
@@ -334,7 +346,7 @@ export class JanusConfig {
       hint: 'JANUS7.Settings.GeminiTextModel.Hint',
       scope: 'world',
       config: false,
-      default: 'models/gemini-1.5-flash',
+      default: 'models/gemini-1.5-flash-latest',
       type: String
     });
 
@@ -354,8 +366,8 @@ export class JanusConfig {
       config: false,
       type: Array,
       default: [
-        { id: 'models/gemini-1.5-flash', name: 'Gemini 1.5 Flash' },
-        { id: 'models/gemini-1.5-pro', name: 'Gemini 1.5 Pro' }
+        { id: 'models/gemini-1.5-flash-latest', name: 'Gemini 1.5 Flash' },
+        { id: 'models/gemini-1.5-pro-latest', name: 'Gemini 1.5 Pro' }
       ]
     });
 
@@ -377,10 +389,39 @@ export class JanusConfig {
       config: false,
       type: Array,
       default: [
-        { id: 'models/gemini-1.5-flash', name: 'Gemini 1.5 Flash' },
-        { id: 'models/gemini-1.5-pro', name: 'Gemini 1.5 Pro' },
+        { id: 'models/gemini-1.5-flash-latest', name: 'Gemini 1.5 Flash' },
+        { id: 'models/gemini-1.5-pro-latest', name: 'Gemini 1.5 Pro' },
         { id: 'models/imagen-3.0-generate-001', name: 'Imagen 3.0' }
       ]
+    });
+  }
+
+  static registerBridgeSettings() {
+    game.settings.register(MODULE_ID, 'enableExternalPython', {
+      name: 'JANUS7.Settings.EnableExternalPython.Name',
+      hint: 'JANUS7.Settings.EnableExternalPython.Hint',
+      scope: 'world',
+      config: true,
+      type: Boolean,
+      default: false,
+    });
+
+    game.settings.register(MODULE_ID, 'enableExternalSqlite', {
+      name: 'JANUS7.Settings.EnableExternalSqlite.Name',
+      hint: 'JANUS7.Settings.EnableExternalSqlite.Hint',
+      scope: 'world',
+      config: true,
+      type: Boolean,
+      default: false,
+    });
+
+    game.settings.register(MODULE_ID, 'sqliteDbPath', {
+      name: 'JANUS7.Settings.SqliteDbPath.Name',
+      hint: 'JANUS7.Settings.SqliteDbPath.Hint',
+      scope: 'world',
+      config: true,
+      type: String,
+      default: 'janus7/data/keeper.db',
     });
   }
 
@@ -471,6 +512,8 @@ export class JanusConfig {
       case 'ui': return Boolean(this.get('enableUI'));
       case 'quests': return Boolean(this.get('enableQuestSystem'));
       case 'gemini': return Boolean(this.get('enableGemini'));
+      case 'python': return Boolean(this.get('enableExternalPython'));
+      case 'sqlite': return Boolean(this.get('enableExternalSqlite'));
       default: return true;
     }
   }

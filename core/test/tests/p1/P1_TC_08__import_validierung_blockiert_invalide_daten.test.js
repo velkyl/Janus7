@@ -20,7 +20,7 @@ export default {
 
     let blocked = false;
     try {
-      await io.importStateFromObject(bad, { save: false, validate: true });
+      await io.importStateFromObject(bad, { save: false, validate: true, silentValidation: true });
     } catch (_e) {
       blocked = true;
     }

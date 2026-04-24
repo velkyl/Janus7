@@ -142,6 +142,31 @@
           },
           "description": "Array of social patch objects."
         },
+        "questUpdates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "A patch operation to modify quest states.",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Dot-delimited path into the academy.quests tree."
+              },
+              "op": {
+                "type": "string",
+                "enum": ["replace", "append", "delete"],
+                "description": "The patch operation to perform."
+              },
+              "value": {
+                "description": "The new value for replace or append operations.",
+                "nullable": true
+              }
+            },
+            "required": ["path", "op"],
+            "additionalProperties": false
+          },
+          "description": "Array of quest patch objects."
+        },
         "journalEntries": {
           "type": "array",
           "items": {

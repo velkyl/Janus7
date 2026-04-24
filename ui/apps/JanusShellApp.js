@@ -53,12 +53,12 @@ function toChronicleDsa5Date(value) {
 function buildChronicleCalendarEntryContent(entry = {}, focusDate = '') {
   const lines = [
     `<p><strong>JANUS7 Bote-Chronik</strong></p>`,
-    `<p><strong>Datum:</strong> ${escHtml(focusDate || '—')}</p>`,
-    `<p><strong>Kategorie:</strong> ${escHtml(entry?.category ?? '—')}</p>`,
-    `<p><strong>Quelle:</strong> ${escHtml(entry?.sourceType ?? '—')}</p>`,
+    `<p><strong>Datum:</strong> ${escHtml(focusDate || 'â€”')}</p>`,
+    `<p><strong>Kategorie:</strong> ${escHtml(entry?.category ?? 'â€”')}</p>`,
+    `<p><strong>Quelle:</strong> ${escHtml(entry?.sourceType ?? 'â€”')}</p>`,
   ];
   if (entry?.tags) lines.push(`<p><strong>Tags:</strong> ${escHtml(entry.tags)}</p>`);
-  lines.push(`<p>${escHtml(entry?.description ?? '—')}</p>`);
+  lines.push(`<p>${escHtml(entry?.description ?? 'â€”')}</p>`);
   return lines.join('\n');
 }
 
@@ -370,46 +370,46 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       minimizable: true
     },
     actions: {
-      selectView: JanusShellApp.onSelectView,
-      openPanel: JanusShellApp.onOpenPanel,
-      closePanel: JanusShellApp.onClosePanel,
-      executeShellAction: JanusShellApp.onExecuteShellAction,
-      togglePalette: JanusShellApp.onTogglePalette,
-      copySeed: JanusShellApp.onCopySeed,
-      chroniclePickDate: JanusShellApp.onChroniclePickDate,
-      chronicleSearch: JanusShellApp.onChronicleSearch,
-      chronicleJumpPeriod: JanusShellApp.onChronicleJumpPeriod,
-      chronicleExportCalendar: JanusShellApp.onChronicleExportCalendar,
-      chronicleExportMonthCalendar: JanusShellApp.onChronicleExportMonthCalendar,
-      chronicleSelectCalendarImport: JanusShellApp.onChronicleSelectCalendarImport,
-      chronicleClearCalendarImport: JanusShellApp.onChronicleClearCalendarImport,
+      selectView: 'onSelectView',
+      openPanel: 'onOpenPanel',
+      closePanel: 'onClosePanel',
+      executeShellAction: 'onExecuteShellAction',
+      togglePalette: 'onTogglePalette',
+      copySeed: 'onCopySeed',
+      chroniclePickDate: 'onChroniclePickDate',
+      chronicleSearch: 'onChronicleSearch',
+      chronicleJumpPeriod: 'onChronicleJumpPeriod',
+      chronicleExportCalendar: 'onChronicleExportCalendar',
+      chronicleExportMonthCalendar: 'onChronicleExportMonthCalendar',
+      chronicleSelectCalendarImport: 'onChronicleSelectCalendarImport',
+      chronicleClearCalendarImport: 'onChronicleClearCalendarImport',
 
       // Control Panel Extracted Actions
-      clearSlotBuilder: JanusShellApp.onClearSlotBuilder,
-      generateSlotJournal: JanusShellApp.onGenerateSlotJournal,
-      kiClearContext: JanusShellApp.onKiClearContext,
-      kiExportClipboard: JanusShellApp.onKiExportClipboard,
-      kiExportFile: JanusShellApp.onKiExportFile,
-      kiApplyImport: JanusShellApp.onKiApplyImport,
-      kiPreviewImport: JanusShellApp.onKiPreviewImport,
-      kiSearch: JanusShellApp.onKiSearch,
-      kiGeminiTest: JanusShellApp.onKiGeminiTest,
-      kiGenerateConsequences: JanusShellApp.onKiGenerateConsequences,
-      kiGenerateAtmosphere: JanusShellApp.onKiGenerateAtmosphere,
-      kiGenerateVisual: JanusShellApp.onKiGenerateVisual,
-      kiGenerateImage: JanusShellApp.onKiGenerateImage,
-      kiApplySceneBackground: JanusShellApp.onKiApplySceneBackground,
-      kiApplyAsPortrait: JanusShellApp.onKiApplyAsPortrait,
-      kiApplyAsIcon: JanusShellApp.onKiApplyAsIcon,
+      clearSlotBuilder: 'onClearSlotBuilder',
+      generateSlotJournal: 'onGenerateSlotJournal',
+      kiClearContext: 'onKiClearContext',
+      kiExportClipboard: 'onKiExportClipboard',
+      kiExportFile: 'onKiExportFile',
+      kiApplyImport: 'onKiApplyImport',
+      kiPreviewImport: 'onKiPreviewImport',
+      kiSearch: 'onKiSearch',
+      kiGeminiTest: 'onKiGeminiTest',
+      kiGenerateConsequences: 'onKiGenerateConsequences',
+      kiGenerateAtmosphere: 'onKiGenerateAtmosphere',
+      kiGenerateVisual: 'onKiGenerateVisual',
+      kiGenerateImage: 'onKiGenerateImage',
+      kiApplySceneBackground: 'onKiApplySceneBackground',
+      kiApplyAsPortrait: 'onKiApplyAsPortrait',
+      kiApplyAsIcon: 'onKiApplyAsIcon',
       
-      startDirectorDay: JanusShellApp.onStartDirectorDay,
-      directorRunLesson: JanusShellApp.onDirectorRunLesson,
-      directorProcessQueue: JanusShellApp.onDirectorProcessQueue,
-      directorGenerateQuests: JanusShellApp.onDirectorGenerateQuests,
-      directorAcceptQuestSuggestion: JanusShellApp.onDirectorAcceptQuestSuggestion,
-      directorEvaluateSocial: JanusShellApp.onDirectorEvaluateSocial,
-      directorApplyMood: JanusShellApp.onDirectorApplyMood,
-      directorRunbookNext: JanusShellApp.onDirectorRunbookNext,
+      startDirectorDay: 'onStartDirectorDay',
+      directorRunLesson: 'onDirectorRunLesson',
+      directorProcessQueue: 'onDirectorProcessQueue',
+      directorGenerateQuests: 'onDirectorGenerateQuests',
+      directorAcceptQuestSuggestion: 'onDirectorAcceptQuestSuggestion',
+      directorEvaluateSocial: 'onDirectorEvaluateSocial',
+      directorApplyMood: 'onDirectorApplyMood',
+      directorRunbookNext: 'onDirectorRunbookNext',
       
       // New UI/UX Actions
       onSearch: "onSearch",
@@ -449,9 +449,9 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     };
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
+  // ═══════════════════════════════════════════════════════════════════════════
   // Shell Core Hooks
-  // ═══════════════════════════════════════════════════════════════════════════
+  // ═══════════════════════════════════════════════════════════════════════════
 
   static showSingleton(options = {}) {
     if (this._instance?.rendered) {
@@ -542,13 +542,22 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     // 3. Fetch Live Statistics via Bridge (Pass 2 Integration)
     const playerStats = this.#getLivePlayerStats(engine);
 
-    // 4. Populate Transient Cache
+    // 4. Fetch Module Content Context (Options 1, 5, 7, 12, 15)
+    const moduleContent = await this.#getModuleContentInfo(engine);
+
+    // 4b. Deep Status Monitor (Option 11): Fetch rule links for active conditions
+    const activeConditionNames = [...new Set(playerStats.flatMap(p => p.conditions.map(c => c.label)))];
+    const conditionRules = await this.#getConditionRules(activeConditionNames);
+
+    // 5. Populate Transient Cache
     this.__renderCache = {
       viewId: view.id,
       panelId: panel?.id ?? null,
       viewModel,
       panelModel,
       playerStats,
+      moduleContent,
+      conditionRules,
       viewPartial: `modules/${MODULE_ID}/templates/shell/views/${view.id}.hbs`,
       panelPartial: panel ? `modules/${MODULE_ID}/templates/shell/panels/default-panel.hbs` : null
     };
@@ -558,11 +567,20 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   _onPostRender(context, options) {
     super._onPostRender?.(context, options);
     this._enableDirectorDragDrop();
+    
+    // Apply Regional Theme
+    if (this.__renderCache?.moduleContent?.themes?.length > 0) {
+      const activeTheme = this.__renderCache.moduleContent.themes[0];
+      if (activeTheme?.color) {
+        this.element.style.setProperty('--j7-shell-accent', activeTheme.color);
+        this.element.style.setProperty('--j7-shell-header-bg', `${activeTheme.color}22`);
+      }
+    }
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
+  // ═══════════════════════════════════════════════════════════════════════════
   // Context Building
-  // ═══════════════════════════════════════════════════════════════════════════
+  // ═══════════════════════════════════════════════════════════════════════════
 
   /**
    * Fetches raw player statistics via the DSA5 Bridge.
@@ -571,22 +589,72 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
    * @private
    */
   #getLivePlayerStats(engine) {
-    const bridge = engine?.bridge?.dsa5?.attributes;
-    if (!bridge) return [];
+    const bridge = engine?.bridge?.dsa5;
+    if (!bridge?.attributes) return [];
     
-    // Filter optimization: Only process actors that are likely "active students"
-    // or designated player characters.
     return game.actors
       .filter(a => {
         if (a.type !== 'character') return false;
         const flags = a.flags?.[MODULE_ID] ?? {};
-        // Priority 1: Specifically marked as Janus7 student/actor
-        if (flags.role === 'student' || flags.managed) return true;
-        // Priority 2: Player-owned characters (fallback for party views)
-        return a.hasPlayerOwner && !a.isToken;
+        return flags.role === 'student' || flags.managed || (a.hasPlayerOwner && !a.isToken);
       })
-      .slice(0, 20) // Safety cap for UI display
-      .map(a => bridge.getFullSnapshot(a));
+      .slice(0, 20)
+      .map(a => {
+        const stats = bridge.attributes.getFullSnapshot(a);
+        const conditions = bridge.conditions?.getAcademyConditionSnapshot(a) ?? {};
+        return {
+          ...stats,
+          conditions: Object.entries(conditions).filter(([, c]) => c.active).map(([key, c]) => ({
+            id: key,
+            dsaId: c.dsaConditionId,
+            label: game.i18n.localize(`DSA5.CON.${c.dsaConditionId}`) || key,
+            value: c.value
+          }))
+        };
+      });
+  }
+
+  /**
+   * Fetches summary of installed DSA5 module content.
+   * (Options 1, 5, 7, 12)
+   * @private
+   */
+  async #getModuleContentInfo(engine) {
+    const scanner = engine?.bridge?.dsa5?.scanner;
+    if (!scanner) return null;
+
+    return {
+      activeModulesCount: scanner.modules.size,
+      activeProvidersCount: scanner.providers.size,
+      regions: engine.bridge.dsa5.getRegionalContext() ?? [],
+      socialLinks: await engine.bridge.dsa5.getSocialLinks() ?? [],
+      creatures: await engine.bridge.dsa5.searchModuleBestiary() ?? [],
+      companions: await engine.bridge.dsa5.getCompanionData() ?? [],
+      calendarEvents: await engine.bridge.dsa5.getModuleCalendarEvents() ?? [],
+      assets: await engine.bridge.dsa5.searchModuleAssets() ?? [],
+      themes: engine.bridge.dsa5.getRegionalThemes() ?? [],
+      hasSocialPacks: scanner.getProvidersByType(scanner.constructor.DSA5SocialProvider || Object.getPrototypeOf(scanner).constructor.DSA5SocialProvider).length > 0
+    };
+  }
+
+  async #getConditionRules(conditions = []) {
+    const engine = this._getEngine();
+    const dsa5Bridge = engine?.bridge?.dsa5;
+    if (!dsa5Bridge || conditions.length === 0) return {};
+
+    const rules = {};
+    for (const cond of conditions) {
+      if (rules[cond]) continue;
+      const hits = await dsa5Bridge.searchModuleRules(cond);
+      if (hits.length > 0) {
+        rules[cond] = {
+          name: hits[0].name,
+          uuid: hits[0].uuid,
+          packLabel: hits[0].packLabel
+        };
+      }
+    }
+    return rules;
   }
 
   _getStateTime() {
@@ -664,8 +732,8 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     return {
       moduleVersion: game?.modules?.get?.('Janus7')?.version ?? 'unknown',
       worldTitle: game?.world?.title ?? game?.world?.id ?? 'World',
-      dayName: time?.dayName ?? time?.day ?? '—',
-      phaseName: time?.phase ?? time?.slotName ?? '—',
+      dayName: time?.dayName ?? time?.day ?? 'â€”',
+      phaseName: time?.phase ?? time?.slotName ?? 'â€”',
       activeViewTitle: activeView?.title ?? 'Director',
       lastActionResult: this._lastActionResult ? escHtml(this._lastActionResult) : null,
       quickPanels: getQuickPanels().map((panel) => ({
@@ -739,6 +807,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       view: this.__renderCache.viewModel,
       panel: this.__renderCache.panelModel,
       playerStats: this.__renderCache.playerStats,
+      moduleContent: this.__renderCache.moduleContent,
       
       panelOpen: !!this.__renderCache.panelPartial,
       panelTitle: getPanel(this._activePanelId)?.title ?? null,
@@ -757,11 +826,11 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this.render();
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
+  // ═══════════════════════════════════════════════════════════════════════════
   // Shell Actions
-  // ═══════════════════════════════════════════════════════════════════════════
+  // ═══════════════════════════════════════════════════════════════════════════
 
-  static async onSelectView(event, target) {
+  async onSelectView(event, target) {
     event?.preventDefault?.();
     const viewId = target?.dataset?.viewId ?? 'director';
     try {
@@ -775,18 +844,18 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this._setView(viewId);
   }
 
-  static async onOpenPanel(event, target) {
+  async onOpenPanel(event, target) {
     event?.preventDefault?.();
     const panelId = target?.dataset?.panelId ?? null;
     this._setActivePanel(panelId);
   }
 
-  static async onClosePanel(event, _target) {
+  async onClosePanel(event, _target) {
     event?.preventDefault?.();
     this._setActivePanel(null);
   }
 
-  static async onTogglePalette(event, _target) {
+  async onTogglePalette(event, _target) {
     event?.preventDefault?.();
     try {
       game?.janus7?.ui?.open?.('commandCenter');
@@ -795,7 +864,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async onCopySeed(event, target) {
+  async onCopySeed(event, target) {
     event?.preventDefault?.();
     const box = target?.closest?.('.j7-seed-card');
     const textarea = box?.querySelector?.('textarea');
@@ -809,7 +878,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async onExecuteShellAction(event, target) {
+  async onExecuteShellAction(event, target) {
     event?.preventDefault?.();
     const panelId = target?.dataset?.panelId ?? null;
     const actionIndex = Number(target?.dataset?.actionIndex ?? -1);
@@ -850,7 +919,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this.refresh?.();
   }
 
-  static async onChroniclePickDate(event, _target) {
+  async onChroniclePickDate(event, _target) {
     event?.preventDefault?.();
     const D2 = foundry?.applications?.api?.DialogV2;
     if (!D2?.prompt) {
@@ -888,7 +957,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this?._setViewState?.('chronicleBrowser', { focusDate: value, offset: 0 });
   }
 
-  static async onChronicleSearch(event, _target) {
+  async onChronicleSearch(event, _target) {
     event?.preventDefault?.();
     const D2 = foundry?.applications?.api?.DialogV2;
     if (!D2?.prompt) {
@@ -921,7 +990,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this?._setViewState?.('chronicleBrowser', { search: value });
   }
 
-  static async onChronicleJumpPeriod(event, _target) {
+  async onChronicleJumpPeriod(event, _target) {
     event?.preventDefault?.();
     const D2 = foundry?.applications?.api?.DialogV2;
     if (!D2?.prompt) {
@@ -967,7 +1036,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this?._setViewState?.('chronicleBrowser', { focusDate: `${nextYear}-${normalizedMonth}-01`, offset: 0 });
   }
 
-  static async onChronicleExportCalendar(event, _target) {
+  async onChronicleExportCalendar(event, _target) {
     event?.preventDefault?.();
     if (!game?.user?.isGM) {
       ui.notifications?.warn?.('Nur der GM kann Kalender-Eintraege exportieren.');
@@ -1074,11 +1143,11 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     else ui.notifications?.warn?.(`Keine neuen Kalendereintraege exportiert. ${skipped} uebersprungen.`);
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
+  // ═══════════════════════════════════════════════════════════════════════════
   // Director Native Drag & Drop Logic
-  // ═══════════════════════════════════════════════════════════════════════════
+  // ═══════════════════════════════════════════════════════════════════════════
 
-  static async onChronicleExportMonthCalendar(event, _target) {
+  async onChronicleExportMonthCalendar(event, _target) {
     event?.preventDefault?.();
     if (!game?.user?.isGM) {
       ui.notifications?.warn?.('Nur der GM kann Kalender-Eintraege exportieren.');
@@ -1123,7 +1192,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     else ui.notifications?.warn?.(`Keine neuen Monatsanker exportiert. ${result.skipped} uebersprungen.`);
   }
 
-  static async onChronicleSelectCalendarImport(event, _target) {
+  async onChronicleSelectCalendarImport(event, _target) {
     event?.preventDefault?.();
     if (game?.system?.id !== 'dsa5') {
       ui.notifications?.warn?.('Der Kalender-Import ist nur im DSA5-System verfuegbar.');
@@ -1143,7 +1212,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     ui.notifications?.info?.('DSA5-Kalenderquelle gesetzt.');
   }
 
-  static async onChronicleClearCalendarImport(event, _target) {
+  async onChronicleClearCalendarImport(event, _target) {
     event?.preventDefault?.();
     this?._setViewState?.('chronicleBrowser', { calendarJournalId: '' });
     this._lastActionResult = 'DSA5-Kalenderquelle fuer Chronicle Browser entfernt.';
@@ -1234,8 +1303,8 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     const result = await director.addActorToRoster(role, uuid, { save: true });
     ui.notifications?.info?.(
       result?.added === false
-        ? `Zuordnung bereits vorhanden: ${role} ← ${doc.name}`
-        : `Zuordnung gespeichert: ${role} ← ${doc.name}`
+        ? `Zuordnung bereits vorhanden: ${role} â† ${doc.name}`
+        : `Zuordnung gespeichert: ${role} â† ${doc.name}`
     );
     this.refresh();
   }
@@ -1253,7 +1322,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     if (kind === 'Scene')        await sync.linkEntity(locId, doc.uuid, { type: 'scenes',    saveState: true });
     if (kind === 'Playlist')     await sync.linkEntity(locId, doc.uuid, { type: 'playlists', saveState: true });
     if (kind === 'JournalEntry') await sync.linkEntity(locId, doc.uuid, { type: 'journals',  saveState: true });
-    ui.notifications?.info?.(`Ort verknüpft: ${locId} ← ${kind} (${doc.name})`);
+    ui.notifications?.info?.(`Ort verknüpft: ${locId} â† ${kind} (${doc.name})`);
     this.refresh();
   }
 
@@ -1280,7 +1349,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
 
     const content = `<div class="janus7-card j7-dialog-card-reset">
       <p class="j7-dialog-heading"><strong>JANUS7 Link setzen</strong></p>
-      <p class="j7-dialog-subtext">Drop: <code>${JanusUI.escape(docName)}</code> → <code>${JanusUI.escape(uuid)}</code></p>
+      <p class="j7-dialog-subtext">Drop: <code>${JanusUI.escape(docName)}</code> â†’ <code>${JanusUI.escape(uuid)}</code></p>
       <div class="j7-dialog-form-row">
         <label class="j7-dialog-label-fixed" for="janus7-dnd-janusKey">JANUS-Key</label>
         <input type="text" id="janus7-dnd-janusKey" name="janusKey" class="j7-dialog-input-grow" placeholder="NPC_ELRIKA_REBENLIEB" />
@@ -1294,7 +1363,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     const D2 = foundry?.applications?.api?.DialogV2;
     if (!D2?.prompt) { ui.notifications?.warn?.('DialogV2 nicht verfügbar. Nutze das Sync-Panel.'); return; }
 
-    const res = await D2.prompt({ window: { title: 'JANUS7 — Drag&Drop Link' }, content, ok: { label: 'Link setzen' }, rejectClose: false, modal: true }).catch(() => null);
+    const res = await D2.prompt({ window: { title: 'JANUS7 â€” Drag&Drop Link' }, content, ok: { label: 'Link setzen' }, rejectClose: false, modal: true }).catch(() => null);
     if (res === null) return;
 
     const keyRaw = document.getElementById('janus7-dnd-janusKey')?.value?.trim?.() ?? '';
@@ -1307,19 +1376,19 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
 
     const key = sync.normalizeJanusId ? sync.normalizeJanusId(keyRaw) : keyRaw;
     await sync.linkEntity(key, uuid, { type: bucket, saveState: true });
-    ui.notifications?.info?.(`Linked ${key} → ${uuid}`);
+    ui.notifications?.info?.(`Linked ${key} â†’ ${uuid}`);
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
+  // ═══════════════════════════════════════════════════════════════════════════
   // Director Shell Internal Actions
-  // ═══════════════════════════════════════════════════════════════════════════
+  // ═══════════════════════════════════════════════════════════════════════════
 
-  static async onClearSlotBuilder(_event, _target) {
+  async onClearSlotBuilder(_event, _target) {
     this._slotBuilder = [];
     this.refresh();
   }
 
-  static async onGenerateSlotJournal(_event, _target) {
+  async onGenerateSlotJournal(_event, _target) {
     const e = this._getEngine();
     if (!e) return false;
     const st = e?.core?.state?.get?.() ?? {};
@@ -1329,10 +1398,10 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     const items = this._slotBuilder ?? [];
     if (!items.length) { ui.notifications?.warn?.('Keine Bausteine im Slot-Builder.'); return false; }
 
-    const lines = items.map((x) => `• <strong>${JanusUI.escape(x.kind)}</strong>: ${JanusUI.escape(x.label)}<br><code>${JanusUI.escape(x.uuid)}</code>`);
+    const lines = items.map((x) => `â€¢ <strong>${JanusUI.escape(x.kind)}</strong>: ${JanusUI.escape(x.label)}<br><code>${JanusUI.escape(x.uuid)}</code>`);
     const content = `<h2>Stunde (${JanusUI.escape(slotKey)})</h2><p><em>Generiert aus Slot-Builder.</em></p><hr><div>${lines.join('<hr>')}</div>`;
 
-    const je = await JournalEntry.create({ name: `Stunde — ${slotKey}`, pages: [{ name: 'Inhalt', type: 'text', text: { content, format: 1 } }] });
+    const je = await JournalEntry.create({ name: `Stunde â€” ${slotKey}`, pages: [{ name: 'Inhalt', type: 'text', text: { content, format: 1 } }] });
     if (!je?.uuid) { ui.notifications?.error?.('Journal konnte nicht erstellt werden.'); return false; }
 
     const sync = e?.core?.sync ?? e?.sync;
@@ -1353,7 +1422,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this.refresh();
   }
 
-  static async onKiSearch(event) {
+  async onKiSearch(event) {
     event?.preventDefault?.();
     const D2 = foundry?.applications?.api?.DialogV2;
     if (!D2?.prompt) { ui.notifications?.error('DialogV2 nicht verf\u00fcgbar'); return; }
@@ -1365,9 +1434,18 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
         <div class="j7-dialog-form-row">
           <label for="janus7-ki-domain" class="j7-dialog-label-fixed">Such-Domain</label>
           <select id="janus7-ki-domain" class="j7-dialog-input-grow">
-            <option value="actors">NSCs & Actors (Welt)</option>
-            <option value="items">Zubeh\u00f6r, Items & Zauber (Welt)</option>
-            <option value="compendium">Compendia (Module)</option>
+            <optgroup label="Hauptkategorien">
+              <option value="all">Alles durchsuchen</option>
+              <option value="creature.npc">NSCs & Charaktere</option>
+              <option value="magic.spell">Zauber & Rituale</option>
+              <option value="item.weapon">Waffen & Rüstung</option>
+            </optgroup>
+            <optgroup label="Spezialgebiete">
+              <option value="item.herb">Pflanzen & Alchimie</option>
+              <option value="trait.special_ability">Sonderfertigkeiten</option>
+              <option value="creature.beast">Bestiarium (Tiere/Monster)</option>
+              <option value="journal.lore">Hintergrundwissen (Lore)</option>
+            </optgroup>
           </select>
         </div>
         <div class="j7-dialog-form-row">
@@ -1377,11 +1455,28 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       </div>
     `;
 
-    const res = await D2.prompt({ window: { title: 'Semantische Suche' }, content, ok: { label: 'Suchen', icon: 'fas fa-search' }, rejectClose: false, modal: false }).catch(() => null);
-    if (res === null) return;
+    // Use a more robust pattern for multi-input prompts in ApplicationV2
+    let domain = 'actors';
+    let query = '';
 
-    const domain = document.getElementById('janus7-ki-domain')?.value ?? 'actors';
-    const query = document.getElementById('janus7-ki-query')?.value?.trim() ?? '';
+    const res = await D2.prompt({
+      window: { title: 'Semantische Suche' },
+      content,
+      ok: { 
+        label: 'Suchen', 
+        icon: 'fas fa-search',
+        callback: (event, target) => {
+          const dlg = target.closest('foundry-app, .window-app, .dialog-v2');
+          domain = dlg?.querySelector('#janus7-ki-domain')?.value ?? 'all';
+          query = dlg?.querySelector('#janus7-ki-query')?.value?.trim() ?? '';
+          return 'ok';
+        }
+      },
+      rejectClose: false,
+      modal: false
+    }).catch(() => null);
+
+    if (res !== 'ok') return;
     
     if (!query) { ui.notifications?.warn('Bitte einen Suchbegriff eingeben.'); return; }
 
@@ -1408,14 +1503,14 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
         content: `<div style="max-height: 400px; overflow-y: auto;">${resContent}</div>`,
         ok: { label: 'Schlie\u00dfen', icon: 'fas fa-check' },
         rejectClose: false
-      });
+      }).catch(() => null);
     } catch(err) {
       console.error('[JANUS7]', err);
       ui.notifications?.error('Abfrage \u00fcber KI Knowledge Bridge fehlgeschlagen.');
     }
   }
 
-  static async onKiGeminiTest(event) {
+  async onKiGeminiTest(event) {
     event?.preventDefault?.();
     const gemini = game.janus7?.ki?.gemini;
     if (!gemini) {
@@ -1433,7 +1528,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async onKiGenerateConsequences(event, _target) {
+  async onKiGenerateConsequences(event, _target) {
     event?.preventDefault?.();
     const input = document.getElementById('j7-ai-input')?.value?.trim();
     if (!input) return ui.notifications.warn('Bitte beschreibe zuerst eine Situation oder Aktion.');
@@ -1441,7 +1536,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this._runAiTask('generateConsequences', input);
   }
 
-  static async onKiGenerateAtmosphere(event, _target) {
+  async onKiGenerateAtmosphere(event, _target) {
     event?.preventDefault?.();
     const input = document.getElementById('j7-ai-input')?.value?.trim();
     if (!input) return ui.notifications.warn('Bitte beschreibe zuerst eine Situation.');
@@ -1449,7 +1544,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this._runAiTask('suggestAtmosphere', input);
   }
 
-  static async onKiGenerateVisual(event, _target) {
+  async onKiGenerateVisual(event, _target) {
     event?.preventDefault?.();
     const input = document.getElementById('j7-ai-input')?.value?.trim();
     if (!input) return ui.notifications.warn('Bitte beschreibe zuerst ein Motiv.');
@@ -1457,7 +1552,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this._runAiTask('suggestVisual', input);
   }
 
-  static async onKiGenerateImage(event, _target) {
+  async onKiGenerateImage(event, _target) {
     event?.preventDefault?.();
     const input = document.getElementById('j7-ai-input')?.value?.trim();
     if (!input) return ui.notifications.warn('Bitte beschreibe zuerst das gewünschte Motiv.');
@@ -1493,7 +1588,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async onKiApplyAsPortrait(event, _target) {
+  async onKiApplyAsPortrait(event, _target) {
     event?.preventDefault?.();
     const path = document.getElementById('j7-ai-result-actions')?.dataset.imagePath;
     if (!path) return;
@@ -1509,7 +1604,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     ui.notifications.info(`Portr\u00e4t f\u00fcr "${actor.name}" aktualisiert.`);
   }
 
-  static async onKiApplyAsIcon(event, _target) {
+  async onKiApplyAsIcon(event, _target) {
     event?.preventDefault?.();
     const path = document.getElementById('j7-ai-result-actions')?.dataset.imagePath;
     if (!path) return;
@@ -1533,22 +1628,22 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async onKiClearContext() {
+  async onKiClearContext() {
     this._kiContextItems = [];
     this.refresh();
   }
 
-  static async onKiExportClipboard() {
+  async onKiExportClipboard() {
     // Implementiere den Export...
     ui.notifications?.info?.('KI Bundle exportiert (WIP)');
   }
 
-  static async onKiExportFile() {
+  async onKiExportFile() {
     // File Export
   }
 
-  static async onKiPreviewImport() {}
-  static async onKiApplyImport() {}
+  async onKiPreviewImport() {}
+  async onKiApplyImport() {}
 
   _rememberDirectorWorkflow(action, result, { error = null } = {}) {
     const entry = { action, at: new Date().toISOString(), ok: !error, result: result ?? null, error: error ? (error?.message ?? String(error)) : null };
@@ -1557,7 +1652,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this._directorWorkflow = { lastAction: action, lastRunAt: entry.at, lastResult: result ?? null, lastError: entry.error, history: [entry, ...history] };
   }
 
-  static async onStartDirectorDay() {
+  async onStartDirectorDay() {
     const e = this._getEngine();
     const director = e?.core?.director ?? e?.director;
     try {
@@ -1570,14 +1665,15 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async onDirectorRunLesson() {}
-  static async onDirectorProcessQueue() {}
-  static async onDirectorGenerateQuests() {}
-  static async onDirectorAcceptQuestSuggestion() {}
-  static async onDirectorEvaluateSocial() {}
-  static async onDirectorApplyMood() {}
-  static async onDirectorRunbookNext() {}
+  async onDirectorRunLesson() {}
+  async onDirectorProcessQueue() {}
+  async onDirectorGenerateQuests() {}
+  async onDirectorAcceptQuestSuggestion() {}
+  async onDirectorEvaluateSocial() {}
+  async onDirectorApplyMood() {}
+  async onDirectorRunbookNext() {}
 
 }
 
 export default JanusShellApp;
+

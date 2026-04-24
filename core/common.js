@@ -45,12 +45,12 @@ export const STATE_PATHS = Object.freeze({
   ACADEMY: 'academy',
   ACADEMY_ROSTER: 'academy.roster',
   ACADEMY_SLOT_JOURNALS: 'academy.slotJournals',
-  ACADEMY_QUESTS: 'questStates',
+  ACADEMY_QUESTS: 'academy.quests',
   ACADEMY_SOCIAL: 'academy.social',
   ACADEMY_JOURNAL_ENTRIES: 'academy.journalEntries',
   ACADEMY_EXAM_RESULTS: 'academy.examResults',
   PLAYER_STATE: 'playerState',
-  QUEST_STATES: 'questStates',
+  QUEST_STATES: 'academy.quests',
   EVENT_STATES: 'eventStates'
 });
 

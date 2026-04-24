@@ -98,6 +98,7 @@ export class AcademyDataApi {
   }
 
   findCalendarEntries(query = {}) { return findCalendarEntries(query); }
+  export() { return exportAcademyData(); }
   getCalendarEntryByDay(slotRef) { return getCalendarEntryByDay(slotRef); }
   listEventsForDay(slotRef) { return listEventsForDay(slotRef); }
 

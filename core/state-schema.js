@@ -56,9 +56,9 @@ export const DEFAULT_STATE = Object.freeze({
     alumni: { records: {}, history: [] },
     mechanicGates: {},
     activeEventPools: null,
+    quests: {},
   },
   actors: { pcs: {}, npcs: {} },
-  questStates: {},
   foundryLinks: {
     npcs: {}, pcs: {}, locations: {}, scenes: {}, playlists: {},
     items: {}, journals: {}, rollTables: {}, macros: {},
@@ -73,7 +73,7 @@ export const DEFAULT_STATE = Object.freeze({
  * Used by JanusStateCore to redirect reads/writes during transition periods.
  */
 export const LEGACY_PATH_ALIASES = Object.freeze([
-  ['academy.quests', 'questStates'],
+  ['questStates', 'academy.quests'],
   ['scoring', 'academy.scoring'],
 ]);
 
@@ -145,10 +145,11 @@ export function migrateStateSchema(stateObj) {
     }
   }
 
-  // 4. Link legacy quest root if needed
-  if (stateObj.academy?.quests && !Object.keys(stateObj.questStates).length) {
-    stateObj.questStates = foundry.utils.deepClone(stateObj.academy.quests);
-    delete stateObj.academy.quests;
+  // 4. Restore canonical quest root if needed
+  if (stateObj.questStates && Object.keys(stateObj.questStates).length && !stateObj.academy?.quests) {
+    stateObj.academy ??= {};
+    stateObj.academy.quests = foundry.utils.deepClone(stateObj.questStates);
+    delete stateObj.questStates;
     changed = true;
   }
 

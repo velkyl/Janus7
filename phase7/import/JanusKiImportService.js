@@ -203,9 +203,6 @@ export class JanusKiImportService {
     return false;
   }
 
-
-
-
   _dayOrder() {
     return game?.janus7?.calendar?.config?.dayOrder
       ?? game?.janus7?.academy?.calendar?.config?.dayOrder
@@ -515,14 +512,6 @@ export class JanusKiImportService {
   }
 
   /**
-   * Load and cache the KI response schema. Uses fetch to retrieve the
-   * schema file from the module directory. Returns null if fetching
-   * fails. The schema is only loaded once per instance.
-   *
-   * @returns {Promise<any|null>}
-   */
-
-  /**
    * Validates a KI response without mutating state.
    * Returns a stable report object for tests/UI instead of throwing.
    * @param {any} response
@@ -559,7 +548,6 @@ export class JanusKiImportService {
   }
 
   async _loadSchema() {
-
     if (this._schema) return this._schema;
     try {
       const url = moduleAssetPath('phase7/contract/JanusKiResponse.schema.json');
@@ -613,6 +601,16 @@ export class JanusKiImportService {
       }
       throw new JanusKiResponseInvalidError(`Unsupported KI response version: ${response.version}`);
     }
+
+    // Sanitize sparse arrays in changes (AI sometimes returns null entries)
+    if (response?.changes && typeof response.changes === 'object') {
+      for (const [key, list] of Object.entries(response.changes)) {
+        if (Array.isArray(list)) {
+          response.changes[key] = list.filter(item => item !== null);
+        }
+      }
+    }
+
     // Validate against the published schema when available
     const schema = await this._loadSchema();
     if (schema && this.validator?.validateSchema) {
@@ -631,12 +629,7 @@ export class JanusKiImportService {
     const downtimeMeta = this._detectDowntime(response);
     this._lastPreviewMeta = downtimeMeta;
 
-    // Build a detailed summary of proposed patch operations. Each entry in
-    // changes arrays may specify a path, op and value. The summary
-    // includes the domain (type), the operation, the full path in the
-    // state tree, and the before/after values. Unknown change keys are
-    // ignored in lenient mode; in strict mode unknown keys are rejected
-    // by the JSON schema.
+    // Build a detailed summary of proposed patch operations.
     const changes = response.changes ?? {};
     const summary = [];
     // Mapping of change keys to base path prefixes and human-readable types
@@ -646,6 +639,7 @@ export class JanusKiImportService {
       eventUpdates: { prefix: 'academy.events', type: 'events' },
       scoringAdjustments: { prefix: 'academy.scoring', type: 'scoring' },
       socialAdjustments: { prefix: 'academy.social', type: 'social' },
+      questUpdates: { prefix: 'academy.quests', type: 'quests' },
       journalEntries: { prefix: 'academy.journalEntries', type: 'journal' }
     };
     for (const [changeKey, arr] of Object.entries(changes)) {
@@ -911,7 +905,8 @@ export class JanusKiImportService {
           lessonUpdates: 'academy.lessons',
           eventUpdates: 'academy.events',
           scoringAdjustments: 'academy.scoring',
-          socialAdjustments: 'academy.social'
+          socialAdjustments: 'academy.social',
+          questUpdates: 'academy.quests'
         };
         for (const [changeKey, arr] of Object.entries(changes)) {
           if (!Array.isArray(arr)) continue;

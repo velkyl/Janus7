@@ -1,4 +1,4 @@
-﻿import { moduleTemplatePath } from '../../core/common.js';
+import { moduleTemplatePath } from '../../core/common.js';
 /**
  * @file ui/apps/JanusStateInspectorApp.js
  * @module janus7/ui
@@ -32,8 +32,8 @@ export class JanusStateInspectorApp extends HandlebarsApplicationMixin(JanusBase
       resizable: true,
     },
     actions: {
-      refresh: JanusStateInspectorApp.onRefresh,
-      copy: JanusStateInspectorApp.onCopy
+      refresh: 'onRefresh',
+      copy: 'onCopy'
     }
   };
 
@@ -46,9 +46,9 @@ export class JanusStateInspectorApp extends HandlebarsApplicationMixin(JanusBase
     this.enableAutoRefresh(['janus7StateChanged']);
   }
 
-  static async onRefresh(){ this.refresh(); }
+  async onRefresh(){ this.refresh(); }
 
-  static async onCopy(event, target) {
+  async onCopy(event, target) {
     event?.preventDefault?.();
     const textarea = this.element?.querySelector?.('textarea[name="snapshot"]');
     const text = textarea?.value ?? '';
@@ -72,7 +72,8 @@ export class JanusStateInspectorApp extends HandlebarsApplicationMixin(JanusBase
     return {
       notReady: false,
       isGM: game.user?.isGM ?? false,
-      json
+      stateSnapshotJson: json
     };
   }
 }
+

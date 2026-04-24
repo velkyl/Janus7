@@ -25,6 +25,17 @@ export class JanusGeminiService {
   constructor({ logger, aiService } = {}) {
     this.logger = logger;
     this.aiService = aiService;
+    
+    /** @type {JanusKnowledgeBridge|null} */
+    this.kiBridge = null;
+  }
+
+  /**
+   * Sets the knowledge bridge instance for tool use.
+   * @param {JanusKnowledgeBridge} bridge 
+   */
+  setKiBridge(bridge) {
+    this.kiBridge = bridge;
   }
 
   /**
@@ -172,7 +183,8 @@ export class JanusGeminiService {
     const includeState = opts.includeState !== false;
     const context = includeState ? this.aiService?.getContext(opts) : null;
     
-    const model = this._normalizeModelId(opts.model || JanusConfig.get('geminiTextModel') || 'models/gemini-1.5-flash').substring(7);
+    const rawModel = opts.model || JanusConfig.get('geminiTextModel') || 'models/gemini-1.5-flash-latest';
+    const model = this._normalizeModelId(rawModel).replace(/^models\//, '');
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
     
@@ -202,14 +214,58 @@ export class JanusGeminiService {
     try {
       this.logger?.debug?.('GeminiService: Sending request...', { promptSnippet: prompt.substring(0, 100) });
 
-      const result = await this._fetchJson(url, {
+      // Support for Function Calling (Tools)
+      const tools = this._getToolDefinitions();
+      const toolConfig = { function_calling_config: { mode: 'AUTO' } };
+
+      const requestBody = {
+        ...body,
+        tools: opts.useTools !== false ? tools : undefined,
+        tool_config: opts.useTools !== false ? toolConfig : undefined
+      };
+
+      let result = await this._fetchJson(url, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
         timeout: opts.timeout ?? 15000
       });
+
+      // Handle Tool Calls (single level for now)
+      const candidate = result.candidates?.[0];
+      const part = candidate?.content?.parts?.[0];
+
+      if (part?.functionCall) {
+        this.logger?.info?.('GeminiService: AI requested tool call', part.functionCall);
+        const toolResult = await this._executeToolCall(part.functionCall);
+        
+        // Follow up with tool result
+        const followUpBody = {
+          contents: [
+            ...body.contents,
+            candidate.content,
+            {
+              role: 'function',
+              parts: [{
+                functionResponse: {
+                  name: part.functionCall.name,
+                  response: { content: toolResult }
+                }
+              }]
+            }
+          ],
+          generationConfig: body.generationConfig
+        };
+
+        this.logger?.debug?.('GeminiService: Sending tool response back to AI...');
+        result = await this._fetchJson(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(followUpBody),
+          timeout: opts.timeout ?? 15000
+        });
+      }
+
       const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
 
       if (!text) {
@@ -221,6 +277,125 @@ export class JanusGeminiService {
     } catch (err) {
       this.logger?.error?.('GeminiService: Generation failed', err);
       throw err;
+    }
+  }
+
+  /** @private */
+  _getToolDefinitions() {
+    return [{
+      function_declarations: [
+        {
+          name: 'dsa_knowledge_search',
+          description: 'Search for DSA5 entities (NPCs, items, spells, locations) by domain and name.',
+          parameters: {
+            type: 'OBJECT',
+            properties: {
+              domain: { 
+                type: 'STRING', 
+                description: 'The semantic domain to search in',
+                enum: [
+                  'magic.spell', 'magic.liturgy', 
+                  'item.weapon', 'item.armor', 'item.equipment', 'item.herb',
+                  'trait.special_ability', 'trait.advantage',
+                  'creature.beast', 'creature.demon', 'creature.npc',
+                  'journal.lore', 'scene.location', 'all'
+                ] 
+              },
+              query: { type: 'STRING', description: 'The search term' }
+            },
+            required: ['domain', 'query']
+          }
+        },
+        {
+          name: 'dsa_knowledge_retrieve',
+          description: 'Retrieve full details and content for a specific entity by its UUID.',
+          parameters: {
+            type: 'OBJECT',
+            properties: {
+              uuid: { type: 'STRING', description: 'The unique Foundry UUID of the entity' }
+            },
+            required: ['uuid']
+          }
+        },
+        {
+          name: 'foundry_action',
+          description: 'Execute an action in the Foundry world (spawn actor, open document, play sound).',
+          parameters: {
+            type: 'OBJECT',
+            properties: {
+              action: { 
+                type: 'STRING', 
+                description: 'The action to perform',
+                enum: ['spawnActor', 'openDocument', 'rollTable', 'playSound'] 
+              },
+              uuid: { type: 'STRING', description: 'The UUID of the target entity' },
+              params: { 
+                type: 'OBJECT', 
+                description: 'Optional parameters (x, y coordinates for spawn, etc.)',
+                properties: {
+                  x: { type: 'NUMBER' },
+                  y: { type: 'NUMBER' },
+                  volume: { type: 'NUMBER' }
+                }
+              }
+            },
+            required: ['action', 'uuid']
+          }
+        },
+        {
+          name: 'external_sql_query',
+          description: 'Query a SQLite database (e.g. Keeper Helper) for advanced campaign data.',
+          parameters: {
+            type: 'OBJECT',
+            properties: {
+              db: { type: 'STRING', description: 'Path to the .db file' },
+              query: { type: 'STRING', description: 'SQL SELECT query' },
+              params: { type: 'ARRAY', items: { type: 'STRING' }, description: 'Query parameters' }
+            },
+            required: ['db', 'query']
+          }
+        },
+        {
+          name: 'external_python_script',
+          description: 'Execute a specialized Python script for data processing or generation.',
+          parameters: {
+            type: 'OBJECT',
+            properties: {
+              script: { type: 'STRING', description: 'Path to the .py script' },
+              args: { type: 'OBJECT', description: 'Arguments passed to the script' }
+            },
+            required: ['script']
+          }
+        }
+      ]
+    }];
+  }
+
+  /** @private */
+  async _executeToolCall(call) {
+    if (!this.kiBridge) {
+      this.logger?.warn?.('GeminiService: Tool call requested but no kiBridge set.');
+      return { error: 'Knowledge Bridge not available.' };
+    }
+
+    try {
+      switch (call.name) {
+        case 'dsa_knowledge_search':
+          return await this.kiBridge.search(call.args.domain, call.args.query);
+        case 'dsa_knowledge_retrieve':
+          return await this.kiBridge.retrieve(call.args.uuid);
+        case 'foundry_action':
+          return await this.kiBridge.executeAction(call.args.action, call.args.uuid, call.args.params);
+        case 'external_sql_query':
+          return await this.kiBridge.executeAction('sqlQuery', null, call.args);
+        case 'external_python_script':
+          return await this.kiBridge.executeAction('runScript', null, call.args);
+        default:
+          return { error: `Unknown tool: ${call.name}` };
+      }
+    } catch (err) {
+      this.logger?.error?.(`GeminiService: Tool execution failed (${call.name})`, err);
+      return { error: err.message };
     }
   }
 

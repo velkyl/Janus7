@@ -13,6 +13,8 @@ import { JanusKiIoService } from '../../phase7/io/JanusKiIoService.js';
 import { JanusKnowledgeBridge } from '../../phase7/ki/knowledge-bridge.js';
 import { Prompts } from '../../phase7/ki/prompts.js';
 import { JanusGeminiService } from '../../phase7/ki/GeminiService.js';
+import { JanusPythonService } from '../../extensions/external-bridge/PythonService.js';
+import { JanusSqliteService } from '../../extensions/external-bridge/SqliteService.js';
 import { HOOKS, registerRuntimeHook } from '../core/public-api.mjs';
 
 export function attachPhase7Ki(engine) {
@@ -36,6 +38,33 @@ export function attachPhase7Ki(engine) {
     const dsaBridge = engine?.bridge?.dsa5 ?? null;
     services.knowledgeBridge ??= new JanusKnowledgeBridge({ bridge: dsaBridge, state, logger });
     services.geminiService ??= new JanusGeminiService({ logger, aiService: engine.ai || engine.ki });
+    services.geminiService.setKiBridge(services.knowledgeBridge);
+
+    // External Bridges
+    if (!engine.ext) engine.ext = {};
+    const enablePython = engine.config.get('enableExternalPython');
+    const enableSqlite = engine.config.get('enableExternalSqlite');
+
+    if (enablePython) {
+      services.python ??= new JanusPythonService({ logger, io: services.ioService });
+      engine.ext.python = services.python;
+      engine.markServiceReady?.('ext.python', services.python);
+      logger.info("JANUS7 | External Bridge (Python) enabled.");
+    }
+
+    if (enableSqlite) {
+      services.sqlite ??= new JanusSqliteService({ logger, io: services.ioService });
+      engine.ext.sqlite = services.sqlite;
+      engine.markServiceReady?.('ext.sqlite', services.sqlite);
+      logger.info("JANUS7 | External Bridge (SQLite) enabled.");
+
+      // Expose sync API
+      engine.ext.syncSqlite = async () => {
+        const data = await engine.academy.data.export();
+        const dbPath = engine.config.get('sqliteDbPath') || 'janus7/data/keeper.db';
+        return services.sqlite.syncDatabase(dbPath, data);
+      };
+    }
 
     // Export / import APIs
     engine.ki.exportBundle = (opts = {}) => services.exportService.exportBundle(opts);

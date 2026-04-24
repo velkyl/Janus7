@@ -125,3 +125,4 @@ export class JanusReportCardApp extends HandlebarsApplicationMixin(JanusBaseApp)
 }
 
 export default JanusReportCardApp;
+

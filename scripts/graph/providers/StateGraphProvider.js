@@ -36,7 +36,7 @@ export class StateGraphProvider {
     if (!state || typeof state.get !== 'function') return { nodes, edges };
     let questRoot;
     try {
-      questRoot = state.get('questStates') ?? state.get('academy.quests');
+      questRoot = state.get('academy.quests') ?? state.get('questStates');
     } catch (err) {
       this.logger?.debug?.('[JANUS7] StateGraphProvider: failed to read academy.quests', { message: err?.message });
       questRoot = null;

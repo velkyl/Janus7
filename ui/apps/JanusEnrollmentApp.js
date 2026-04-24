@@ -28,8 +28,8 @@ export class JanusEnrollmentApp extends HandlebarsApplicationMixin(JanusBaseApp)
       minimizable: true
     },
     actions: {
-      importNpc: JanusEnrollmentApp.onImportNpc,
-      openSheet: JanusEnrollmentApp.onOpenSheet
+      importNpc: 'onImportNpc',
+      openSheet: 'onOpenSheet'
     }
   };
 
@@ -132,7 +132,7 @@ export class JanusEnrollmentApp extends HandlebarsApplicationMixin(JanusBaseApp)
     };
   }
 
-  static async onOpenSheet(event, target) {
+  async onOpenSheet(event, target) {
     event?.preventDefault?.();
     const uuid = target?.dataset?.uuid;
     const inst = this;
@@ -146,7 +146,7 @@ export class JanusEnrollmentApp extends HandlebarsApplicationMixin(JanusBaseApp)
     }
   }
 
-  static async onImportNpc(event, target) {
+  async onImportNpc(event, target) {
     event?.preventDefault?.();
     const uuid = target?.dataset?.uuid;
     const inst = this;
@@ -178,3 +178,4 @@ export class JanusEnrollmentApp extends HandlebarsApplicationMixin(JanusBaseApp)
 }
 
 export default JanusEnrollmentApp;
+

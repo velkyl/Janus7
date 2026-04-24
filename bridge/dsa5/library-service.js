@@ -148,6 +148,18 @@ export class AcademyLibraryService {
     if (this._built && !force) return;
 
     this._building = true;
+
+    // ─── Cache Check ────────────────────────────────────────────────────────
+    if (!force) {
+      const cached = await this._loadFromCache();
+      if (cached) {
+        this._built    = true;
+        this._building = false;
+        this.logger?.info?.(`[Library] Index aus Cache geladen (${cached.total} Einträge, Hash: ${cached.hash})`);
+        return;
+      }
+    }
+
     this._byUuid.clear();
     this._byKey.clear();
 
@@ -216,6 +228,9 @@ export class AcademyLibraryService {
     this._lastBuildMs = Date.now();
     this._building    = false;
     
+    // ─── Cache Save ─────────────────────────────────────────────────────────
+    await this._saveToCache(total);
+
     Hooks.callAll('janusLibraryProgress', 100);
 
     this.logger?.info?.(`[Library] Index fertig: ${total} Einträge aus ${packs.length} Packs (${Date.now() - start}ms)`);
@@ -420,12 +435,97 @@ export class AcademyLibraryService {
 
   /**
    * Index leeren.
+   * @param {boolean} [clearSettings=false] - Löscht auch den persistenten Cache.
    */
-  clear() {
+  async clear(clearSettings = false) {
     this._byUuid.clear();
     this._byKey.clear();
     this._built       = false;
     this._lastBuildMs = null;
     this._building    = false;
+
+    if (clearSettings) {
+      await JanusConfig.set('libraryCache', null);
+      this.logger?.info?.('[Library] Persistenter Cache gelöscht.');
+    }
+  }
+
+  // ─── Private Caching Logic ────────────────────────────────────────────────
+
+  /**
+   * Berechnet einen Hash der aktuellen Modul-Konfiguration.
+   * @private
+   * @returns {string}
+   */
+  _calculateEnvironmentHash() {
+    const modules = [...(game.modules?.values() || [])]
+      .filter(m => m.active)
+      .map(m => `${m.id}@${m.version}`)
+      .sort()
+      .join('|');
+    
+    const system = `${game.system?.id}@${game.system?.version}`;
+    const core   = game.release?.generation || game.version;
+
+    return `env:${core}:${system}:${modules.length}:${this._getLibraryModulsFilter(true).size}`;
+  }
+
+  /**
+   * Versucht, den Index aus den Settings zu laden.
+   * @private
+   * @returns {Promise<{total: number, hash: string}|null>}
+   */
+  async _loadFromCache() {
+    try {
+      const cache = JanusConfig.get('libraryCache');
+      if (!cache || !cache.data || !cache.hash) return null;
+
+      // Validierung: Hat sich die Umgebung geändert?
+      const currentHash = this._calculateEnvironmentHash();
+      if (cache.hash !== currentHash) {
+        this.logger?.info?.('[Library] Cache veraltet (Umgebung geändert).');
+        return null;
+      }
+
+      // Daten wiederherstellen
+      this._byUuid = new Map(Object.entries(cache.data));
+      
+      // Index-Key-Map wiederherstellen
+      this._byKey.clear();
+      for (const [uuid, entry] of this._byUuid) {
+        const key = this._makeKey(entry.type, entry.name);
+        const existing = this._byKey.get(key);
+        if (existing) existing.push(uuid);
+        else this._byKey.set(key, [uuid]);
+      }
+
+      this._lastBuildMs = cache.timestamp || Date.now();
+      return { total: this._byUuid.size, hash: cache.hash };
+    } catch (err) {
+      this.logger?.warn?.('[Library] Fehler beim Laden des Caches', err);
+      return null;
+    }
+  }
+
+  /**
+   * Speichert den aktuellen Index in den Settings.
+   * @private
+   * @param {number} total
+   */
+  async _saveToCache(total) {
+    try {
+      const hash = this._calculateEnvironmentHash();
+      const data = Object.fromEntries(this._byUuid);
+
+      await JanusConfig.set('libraryCache', {
+        hash,
+        timestamp: Date.now(),
+        total,
+        data
+      });
+      this.logger?.debug?.(`[Library] Index persistiert (${total} Einträge).`);
+    } catch (err) {
+      this.logger?.warn?.('[Library] Fehler beim Speichern des Caches', err);
+    }
   }
 }

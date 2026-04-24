@@ -116,4 +116,108 @@
       </div>
     </article>
   </div>
+
+  <!-- Status Monitor (Option 11) -->
+  <div class="j7-mt-sm">
+    <article class="j7-shell__card j7-shell__card--wide">
+      <header class="j7-shell__card-head">
+        <div>
+          <h3><i class="fas fa-heart-pulse j7-shell__card-icon" aria-hidden="true"></i><span>Status Monitor</span></h3>
+          <p>Echtzeit-Überwachung der Studenten & Helden</p>
+        </div>
+      </header>
+      <div class="j7-shell__status-grid">
+        {{#each playerStats}}
+          <div class="j7-shell__status-item">
+            <div class="j7-shell__status-actor">
+              <strong>{{name}}</strong>
+              <div class="j7-shell__status-vitals">
+                <span class="j7-badge {{#if (lt lep.value 5)}}j7-badge--danger{{/if}}">LP: {{lep.value}}/{{lep.max}}</span>
+                <span class="j7-badge j7-badge--info">AP: {{asp.value}}/{{asp.max}}</span>
+                {{#if kap.max}}<span class="j7-badge j7-badge--warning">KP: {{kap.value}}/{{kap.max}}</span>{{/if}}
+              </div>
+            </div>
+            <div class="j7-shell__status-effects">
+              {{#each conditions}}
+                <span class="j7-tag j7-tag--accent j7-clickable" 
+                      data-action="openSheet" 
+                      data-uuid="{{lookup (lookup ../../conditionRules label) 'uuid'}}"
+                      title="Regel: {{label}} ({{value}})">
+                  {{label}} ({{value}})
+                </span>
+              {{else}}
+                <span class="muted small">Keine Zustände</span>
+              {{/each}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </article>
+  </div>
+
+  <!-- Regionale Kreaturen (Option 8) -->
+  <div class="j7-mt-sm">
+    <article class="j7-shell__card j7-shell__card--wide">
+      <header class="j7-shell__card-head">
+        <div>
+          <h3><i class="fas fa-dragon j7-shell__card-icon" aria-hidden="true"></i><span>Regionale Fauna & Flora (Kreaturen)</span></h3>
+          <p>Potenzielle Begegnungen aus den Bestiarien & Modulen</p>
+        </div>
+      </header>
+      <div class="j7-shell__status-grid">
+        {{#each (slice moduleContent.creatures 0 12)}}
+          <div class="j7-shell__status-item">
+             <div class="j7-shell__status-actor">
+               <img src="{{img}}" style="width: 24px; height: 24px; border-radius: 50%; margin-right: 8px;">
+               <strong>{{name}}</strong>
+               <span class="j7-badge">{{packLabel}}</span>
+             </div>
+             <div class="j7-shell__card-actions j7-mt-xs">
+               <button type="button" class="j7-shell__btn j7-shell__btn--small" data-action="openSheet" data-uuid="{{uuid}}">
+                 <i class="fas fa-eye"></i> Details
+               </button>
+               <button type="button" class="j7-shell__btn j7-shell__btn--small" data-action="executeShellAction" data-command="importCreature" data-dataset-uuid="{{uuid}}">
+                 <i class="fas fa-download"></i> Import
+               </button>
+             </div>
+          </div>
+        {{else}}
+          <p class="muted j7-p-md">Keine Bestiarien oder regionalen Kreaturen gefunden.</p>
+        {{/each}}
+      </div>
+    </article>
+  </div>
+
+  <!-- Kalender & Almanach (Option 15) -->
+  <div class="j7-mt-sm">
+    <article class="j7-shell__card j7-shell__card--wide">
+      <header class="j7-shell__card-head">
+        <div>
+          <h3><i class="fas fa-calendar-alt j7-shell__card-icon" aria-hidden="true"></i><span>Regionale Ereignisse & Feiertage</span></h3>
+          <p>Aktuelle Feste und astronomische Daten aus dem Almanach</p>
+        </div>
+      </header>
+      <div class="j7-shell__status-grid">
+        {{#each (slice moduleContent.calendarEvents 0 8)}}
+          <div class="j7-shell__status-item j7-shell__status-item--info">
+             <div class="j7-shell__status-actor">
+               <i class="fas fa-star j7-mr-sm"></i>
+               <strong>{{name}}</strong>
+               <span class="j7-badge">{{packLabel}}</span>
+             </div>
+             <div class="j7-shell__card-actions j7-mt-xs">
+               <button type="button" class="j7-shell__btn j7-shell__btn--small" data-action="openSheet" data-uuid="{{uuid}}">
+                 <i class="fas fa-eye"></i> Nachschlagen
+               </button>
+               <button type="button" class="j7-shell__btn j7-shell__btn--small" data-action="executeShellAction" data-command="syncCalendarEvent" data-dataset-uuid="{{uuid}}">
+                 <i class="fas fa-sync"></i> Synchronisieren
+               </button>
+             </div>
+          </div>
+        {{else}}
+          <p class="muted j7-p-md">Keine Almanach-Ereignisse in den aktiven Modulen gefunden.</p>
+        {{/each}}
+      </div>
+    </article>
+  </div>
 </div>

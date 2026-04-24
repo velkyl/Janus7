@@ -140,7 +140,7 @@ export const STATE_SCHEMA = {
     },
     academy: {
       type: 'object',
-      required: ['examResults', 'scoring', 'social'],
+      required: ['examResults', 'scoring', 'social', 'quests'],
       additionalProperties: true,
       properties: {
         currentLocationId: { type: 'string', nullable: true },
@@ -245,4 +245,3 @@ export const STATE_SCHEMA = {
     }
   }
 };
-

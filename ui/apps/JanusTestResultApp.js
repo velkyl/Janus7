@@ -1,4 +1,4 @@
-﻿import { moduleTemplatePath } from '../../core/common.js';
+import { moduleTemplatePath } from '../../core/common.js';
 /**
  * @file ui/apps/JanusTestResultApp.js
  * @module janus7/ui
@@ -15,13 +15,13 @@ function uniqueSorted(values = []) {
 
 function statusMeta(status) {
   switch (status) {
-    case 'PASS': return { icon: '✅', css: 'pass', label: 'PASS' };
-    case 'FAIL': return { icon: '❌', css: 'fail', label: 'FAIL' };
-    case 'ERROR': return { icon: '⛔', css: 'error', label: 'ERROR' };
-    case 'SKIP': return { icon: '⏭️', css: 'skip', label: 'SKIP' };
-    case 'MANUAL': return { icon: '🧭', css: 'manual', label: 'MANUAL' };
-    case 'CATALOG': return { icon: '🗂️', css: 'catalog', label: 'CATALOG' };
-    case 'IMPORT_FAILED': return { icon: '📦', css: 'import-failed', label: 'IMPORT_FAILED' };
+    case 'PASS': return { icon: '?', css: 'pass', label: 'PASS' };
+    case 'FAIL': return { icon: '?', css: 'fail', label: 'FAIL' };
+    case 'ERROR': return { icon: '?', css: 'error', label: 'ERROR' };
+    case 'SKIP': return { icon: '??', css: 'skip', label: 'SKIP' };
+    case 'MANUAL': return { icon: '??', css: 'manual', label: 'MANUAL' };
+    case 'CATALOG': return { icon: '???', css: 'catalog', label: 'CATALOG' };
+    case 'IMPORT_FAILED': return { icon: '??', css: 'import-failed', label: 'IMPORT_FAILED' };
     default: return { icon: '•', css: 'skip', label: status ?? 'UNKNOWN' };
   }
 }
@@ -104,27 +104,27 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
           break;
         case 'copyReport':
           event.preventDefault();
-          await JanusTestResultApp.onCopyReport.call(this);
+          await this.onCopyReport();
           break;
         case 'copyBugReport':
           event.preventDefault();
-          await JanusTestResultApp.onCopyBugReport.call(this);
+          await this.onCopyBugReport();
           break;
         case 'toggleGroup':
           event.preventDefault();
-          JanusTestResultApp.onToggleGroup.call(this, event);
+          this.onToggleGroup(event);
           break;
         case 'applyFilters':
           event.preventDefault();
-          await JanusTestResultApp.onApplyFilters.call(this);
+          await this.onApplyFilters();
           break;
         case 'resetFilters':
           event.preventDefault();
-          await JanusTestResultApp.onResetFilters.call(this);
+          await this.onResetFilters();
           break;
         case 'openGuidedManual':
           event.preventDefault();
-          await JanusTestResultApp.onOpenGuidedManual.call(this);
+          await this.onOpenGuidedManual();
           break;
       }
     });
@@ -248,11 +248,11 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
     }
   }
 
-  static async onRerun() {
+  async onRerun() {
     await this.runTests();
   }
 
-  static async onCopyReport() {
+  async onCopyReport() {
     if (!this._testData) {
       ui.notifications.warn('Kein Report vorhanden.');
       return;
@@ -263,7 +263,7 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
   }
 
 
-  static async onOpenGuidedManual() {
+  async onOpenGuidedManual() {
     const engine = game?.janus7;
     if (!engine?.test?.openGuidedManualTests) {
       ui.notifications.warn('Guided Manual Tests sind nicht verfügbar.');
@@ -272,7 +272,7 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
     engine.test.openGuidedManualTests();
   }
 
-  static async onCopyBugReport() {
+  async onCopyBugReport() {
     const engine = game?.janus7;
     if (!engine?.diagnostics?.generateBugReport) {
       ui.notifications.warn('Bug-Report-Generator nicht verfügbar.');
@@ -304,7 +304,7 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
     }
   }
 
-  static async onApplyFilters() {
+  async onApplyFilters() {
     this._filters = {
       phase: this._readFilterValue('[name="phaseFilter"]'),
       suiteClass: this._readFilterValue('[name="suiteFilter"]'),
@@ -313,8 +313,10 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
     await this.render({ force: true });
   }
 
-  static async onResetFilters() {
+  async onResetFilters() {
     this._filters = { phase: 'all', suiteClass: 'all', status: 'all' };
     await this.render({ force: true });
   }
 }
+
+

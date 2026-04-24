@@ -1,0 +1,42 @@
+<div class="janus7-story-graph janus7-page">
+  <header class="janus7-toolbar">
+    <div class="janus7-toolbar__left">
+      <i class="fas fa-project-diagram"></i>
+      <span class="janus7-title">Story Graph Visualisierung</span>
+    </div>
+    <div class="janus7-toolbar__right">
+      <span class="janus7-muted">Nodes: {{nodesCount}} | Edges: {{edgesCount}}</span>
+    </div>
+  </header>
+
+  <div class="graph-viewer">
+    <div class="mermaid-container">
+      <div class="mermaid">
+        {{mermaidDef}}
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .janus7-story-graph {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: #e0e6ed;
+    }
+    .graph-viewer {
+      flex: 1;
+      overflow: auto;
+      display: flex;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .mermaid-container {
+      min-width: 80%;
+      text-align: center;
+    }
+    .mermaid {
+      background: transparent;
+    }
+  </style>
+</div>

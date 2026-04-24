@@ -800,6 +800,18 @@
       "hasRun": true
     },
     {
+      "id": "P3-TC-SCAN-01",
+      "title": "DSA5 Module Scanner: Erkennung und Provider-Zuweisung",
+      "importPath": "./tests/p3/P3_TC_SCAN_01__module_scanner.test.js",
+      "suiteClass": "extended-auto",
+      "kind": "auto",
+      "phase": 3,
+      "phases": [
+        3
+      ],
+      "hasRun": false
+    },
+    {
       "id": "P3-TC-BUFF-01",
       "title": "PostRoll Teacher Buff: applyTeacherBonus erstellt DSA5-ActiveEffect",
       "importPath": "./tests/p3/P3_TC_BUFF_01__postroll_teacher_bonus.test.js",

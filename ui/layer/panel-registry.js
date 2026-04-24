@@ -112,9 +112,8 @@ function buildAtmospherePanel(engine) {
 
 function buildQuestPanel(engine) {
   const quests = engine?.academy?.quests;
-  // FIX P2-04: 'academy.quests' wurde in der State-Migration entfernt.
-  // Nur 'questStates' ist der kanonische Root-Key.
-  const state = engine?.core?.state?.get?.('questStates') ?? {};
+  // Restore canonical path (aligned with VERSION.json)
+  const state = engine?.core?.state?.get?.('academy.quests') ?? engine?.core?.state?.get?.('questStates') ?? {};
   const active = [];
   for (const [actorId, questMap] of Object.entries(state ?? {})) {
     if (!questMap || typeof questMap !== 'object') continue;

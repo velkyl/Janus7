@@ -1,4 +1,4 @@
-﻿import { moduleTemplatePath } from '../../core/common.js';
+import { moduleTemplatePath } from '../../core/common.js';
 /**
  * @file ui/apps/JanusAcademyOverviewApp.js
  * @module janus7/ui
@@ -35,11 +35,11 @@ export class JanusAcademyOverviewApp extends HandlebarsApplicationMixin(JanusBas
       resizable: true,
     },
     actions: {
-      refresh: JanusAcademyOverviewApp.onRefresh,
-      selectSlot: JanusAcademyOverviewApp.onSelectSlot,
-      setActiveSlot: JanusAcademyOverviewApp.onSetActiveSlot,
-      gotoToday: JanusAcademyOverviewApp.onGotoToday,
-      openLessonLibrary: JanusAcademyOverviewApp.onOpenLessonLibrary
+      refresh: 'onRefresh',
+      selectSlot: 'onSelectSlot',
+      setActiveSlot: 'onSetActiveSlot',
+      gotoToday: 'onGotoToday',
+      openLessonLibrary: 'onOpenLessonLibrary'
     }
   };
 
@@ -68,28 +68,28 @@ export class JanusAcademyOverviewApp extends HandlebarsApplicationMixin(JanusBas
     await super._onRender(context, options);
     this.enableAutoRefresh(['janus7StateChanged', 'janus7DateChanged']);
 
-    // Doppelklick auf Zeitslot → als aktiven Slot setzen
+    // Doppelklick auf Zeitslot ? als aktiven Slot setzen
     this.element?.querySelectorAll?.('[data-action="selectSlot"]').forEach((cell) => {
       cell.addEventListener('dblclick', (ev) => {
         ev.preventDefault();
         ev.stopPropagation();
-        JanusAcademyOverviewApp.onSetActiveSlot.call(this, ev, cell);
+        this.onSetActiveSlot(ev, cell);
       });
     });
   }
 
-  static async onRefresh(_event, _target) {
+  async onRefresh(_event, _target) {
     this.refresh();
   }
 
-  static async onGotoToday(_event, _target) {
+  async onGotoToday(_event, _target) {
     const engine = game.janus7;
     const slotRef = engine?.academy?.calendar?.getCurrentSlotRef?.();
     this._selectedSlotRef = slotRef ?? null;
     this.refresh();
   }
 
-  static async onOpenLessonLibrary(_event, _target) {
+  async onOpenLessonLibrary(_event, _target) {
     try {
       return game?.janus7?.ui?.open?.('lessonLibrary');
     } catch (err) {
@@ -99,7 +99,7 @@ export class JanusAcademyOverviewApp extends HandlebarsApplicationMixin(JanusBas
     }
   }
 
-  static async onSelectSlot(event, target) {
+  async onSelectSlot(event, target) {
     event?.preventDefault?.();
     const ds = target?.dataset ?? {};
     const year = Number(ds.year);
@@ -116,9 +116,9 @@ export class JanusAcademyOverviewApp extends HandlebarsApplicationMixin(JanusBas
 
   /**
    * Doppelklick: Zeitslot als aktiven Spielzeitpunkt setzen.
-   * Mappt day/phase (Strings) → dayIndex/slotIndex via calendar.config.
+   * Mappt day/phase (Strings) ? dayIndex/slotIndex via calendar.config.
    */
-  static async onSetActiveSlot(event, target) {
+  async onSetActiveSlot(event, target) {
     event?.preventDefault?.();
     const ds = target?.dataset ?? {};
     const day = ds.day;
@@ -295,3 +295,5 @@ export class JanusAcademyOverviewApp extends HandlebarsApplicationMixin(JanusBas
     };
   }
 }
+
+

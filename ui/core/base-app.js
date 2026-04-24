@@ -93,6 +93,23 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
    * Unified DOM element accessor guaranteed to return a raw HTMLElement in ApplicationV2 flows.
    * @returns {HTMLElement|null}
    */
+  /**
+   * Unified accessor for the JANUS7 engine instance.
+   * Checks the local property first, then the global game object.
+   * @returns {any}
+   */
+  _getEngine() {
+    return this.engine ?? globalThis.game?.janus7 ?? null;
+  }
+
+  /**
+   * Unified logger accessor.
+   * @returns {Console|object}
+   */
+  _getLogger() {
+    return this._getEngine()?.core?.logger ?? console;
+  }
+
   get domElement() {
     const raw = this.element ?? this._element ?? this._legacyElement ?? null;
     if (!raw) return null;
@@ -131,6 +148,12 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
   _onPostRender(_context, _options) {
     this._legacyElement = this.domElement;
     this._bindBaseUiActions();
+
+    // Fix P1-02: Ensure background windows focus on first click so that buttons respond immediately.
+    const el = this.domElement;
+    el?.addEventListener('pointerdown', () => {
+      if (this.rendered && !el?.classList.contains('active')) this.bringToFront?.();
+    }, { capture: true, passive: true });
 
     if (this._isFirstRender) {
       this._isFirstRender = false;
