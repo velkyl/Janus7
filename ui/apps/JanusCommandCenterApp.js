@@ -546,7 +546,7 @@ export class JanusCommandCenterApp extends HandlebarsApplicationMixin(JanusBaseA
     if (!filtered.length) {
       const emptyDiv = document.createElement('div');
       emptyDiv.className = 'j7-spotlight-empty';
-      emptyDiv.textContent = `Keine Befehle gefunden für â€ž${q}â€`;
+      emptyDiv.textContent = `Keine Befehle gefunden für â€ž${q}”`;
       container.appendChild(emptyDiv);
       return;
     }

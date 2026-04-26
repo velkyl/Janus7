@@ -58,7 +58,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
 
   static DEFAULT_OPTIONS = {
     id: 'janus7-academy-data-studio',
-    window: { title: 'JANUS7 â€” Academy Data Studio' },
+    window: { title: 'JANUS7 — Academy Data Studio' },
     position: { width: 1100, height: 720 },
     resizable: true,
   };
@@ -746,10 +746,10 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
         uuidP.appendChild(uuidStrong);
         uuidP.append(' ');
         const uuidCode = document.createElement('code');
-        uuidCode.textContent = linkedUuid ?? 'â€”';
+        uuidCode.textContent = linkedUuid ?? '—';
         uuidP.appendChild(uuidCode);
         linkNotes.appendChild(uuidP);
-        linkNotes.appendChild(mkInfoP('Dokument', linkedDoc?.name ?? 'â€”'));
+        linkNotes.appendChild(mkInfoP('Dokument', linkedDoc?.name ?? '—'));
         const dropzone = document.createElement('div');
         dropzone.dataset.j7 = 'link-dropzone';
         dropzone.className = 'j7-data-studio__empty';

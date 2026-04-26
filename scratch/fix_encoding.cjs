@@ -39,4 +39,16 @@ function processDir(dir) {
             }
             
             // Also handle the case where it was read as UTF-16? 
-            // Probably not likely h
+            // Probably not likely here.
+            
+            fs.writeFileSync(fullPath, content, 'utf8');
+            if (fixed) console.log(`Fixed mangling in ${fullPath}`);
+            else console.log(`Ensured UTF-8 (no BOM) for ${fullPath}`);
+        }
+    }
+}
+
+const targetDir = process.argv[2];
+if (targetDir) {
+    processDir(targetDir);
+}

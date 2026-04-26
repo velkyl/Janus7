@@ -132,7 +132,7 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
     const storyHooks = engine?.core?.state?.get?.('academy.social.storyHooks') ?? {};
     const records = Object.values(storyHooks?.records ?? {});
     const resolveName = (id) => {
-      if (!id) return 'â€”';
+      if (!id) return '—';
       return npcs.find((entry) => entry.id === id)?.name
         ?? pcs.find((entry) => entry.id === id)?.name
         ?? id;
@@ -144,14 +144,14 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
         return {
           hookId: entry?.hookId ?? entry?.id ?? null,
           title: entry?.title ?? 'Social-Story-Hook',
-          detail: entry?.detail ?? 'â€”',
+          detail: entry?.detail ?? '—',
           priorityLabel: entry?.priorityLabel ?? 'Normal',
           status,
           statusLabel: status === 'completed' ? 'Abgeschlossen' : status === 'discarded' ? 'Verworfen' : 'Vorgemerkt',
           fromName: resolveName(entry?.fromId ?? null),
           toName: resolveName(entry?.toId ?? null),
           updatedAt: entry?.updatedAt ?? null,
-          updatedAtLabel: entry?.updatedAt ? new Date(entry.updatedAt).toLocaleString('de-DE') : 'â€”',
+          updatedAtLabel: entry?.updatedAt ? new Date(entry.updatedAt).toLocaleString('de-DE') : '—',
           isQueued: status === 'queued',
           isCompleted: status === 'completed',
           isDiscarded: status === 'discarded'
@@ -168,7 +168,7 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
       .slice(0, 6)
       .map((entry) => ({
         actionLabel: entry?.actionLabel ?? 'Hook geändert',
-        changedAtLabel: entry?.changedAt ? new Date(entry.changedAt).toLocaleString('de-DE') : 'â€”'
+        changedAtLabel: entry?.changedAt ? new Date(entry.changedAt).toLocaleString('de-DE') : '—'
       }));
 
     return {
@@ -213,7 +213,7 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
     const livingEvents = engine?.core?.state?.get?.('academy.social.livingEvents') ?? {};
     const livingHistory = (Array.isArray(livingEvents?.history) ? livingEvents.history : []).slice(0, 8).map((entry) => ({
       title: entry?.title ?? 'Autonomes Beziehungs-Event',
-      summary: entry?.summary ?? 'â€”',
+      summary: entry?.summary ?? '—',
       category: entry?.category ?? 'npc-network',
       deltaLabel: `${Number(entry?.delta ?? 0) > 0 ? '+' : ''}${Number(entry?.delta ?? 0)}`,
       pairLabel: `${entry?.fromName ?? entry?.fromId ?? '?'} -> ${entry?.toName ?? entry?.toId ?? '?'}`

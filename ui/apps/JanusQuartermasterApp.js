@@ -145,7 +145,7 @@ export class JanusQuartermasterApp extends HandlebarsApplicationMixin(JanusBaseA
     const safeResults = this._results.map(r => ({
       ...r,
       img: r.img || 'icons/svg/item-bag.svg',
-      // Foundry DSA5 speichert Items oft in Kreuzern/Silber â€“ wir geben den rohen Zahlenwert als Indikator aus
+      // Foundry DSA5 speichert Items oft in Kreuzern/Silber – wir geben den rohen Zahlenwert als Indikator aus
       priceDisplay: r.price > 0 ? `${r.price}` : 'Kostenlos'
     }));
 

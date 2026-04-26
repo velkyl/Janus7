@@ -53,12 +53,12 @@ function toChronicleDsa5Date(value) {
 function buildChronicleCalendarEntryContent(entry = {}, focusDate = '') {
   const lines = [
     `<p><strong>JANUS7 Bote-Chronik</strong></p>`,
-    `<p><strong>Datum:</strong> ${escHtml(focusDate || 'â€”')}</p>`,
-    `<p><strong>Kategorie:</strong> ${escHtml(entry?.category ?? 'â€”')}</p>`,
-    `<p><strong>Quelle:</strong> ${escHtml(entry?.sourceType ?? 'â€”')}</p>`,
+    `<p><strong>Datum:</strong> ${escHtml(focusDate || '—')}</p>`,
+    `<p><strong>Kategorie:</strong> ${escHtml(entry?.category ?? '—')}</p>`,
+    `<p><strong>Quelle:</strong> ${escHtml(entry?.sourceType ?? '—')}</p>`,
   ];
   if (entry?.tags) lines.push(`<p><strong>Tags:</strong> ${escHtml(entry.tags)}</p>`);
-  lines.push(`<p>${escHtml(entry?.description ?? 'â€”')}</p>`);
+  lines.push(`<p>${escHtml(entry?.description ?? '—')}</p>`);
   return lines.join('\n');
 }
 
@@ -732,8 +732,8 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     return {
       moduleVersion: game?.modules?.get?.('Janus7')?.version ?? 'unknown',
       worldTitle: game?.world?.title ?? game?.world?.id ?? 'World',
-      dayName: time?.dayName ?? time?.day ?? 'â€”',
-      phaseName: time?.phase ?? time?.slotName ?? 'â€”',
+      dayName: time?.dayName ?? time?.day ?? '—',
+      phaseName: time?.phase ?? time?.slotName ?? '—',
       activeViewTitle: activeView?.title ?? 'Director',
       lastActionResult: this._lastActionResult ? escHtml(this._lastActionResult) : null,
       quickPanels: getQuickPanels().map((panel) => ({
@@ -1363,7 +1363,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     const D2 = foundry?.applications?.api?.DialogV2;
     if (!D2?.prompt) { ui.notifications?.warn?.('DialogV2 nicht verfügbar. Nutze das Sync-Panel.'); return; }
 
-    const res = await D2.prompt({ window: { title: 'JANUS7 â€” Drag&Drop Link' }, content, ok: { label: 'Link setzen' }, rejectClose: false, modal: true }).catch(() => null);
+    const res = await D2.prompt({ window: { title: 'JANUS7 — Drag&Drop Link' }, content, ok: { label: 'Link setzen' }, rejectClose: false, modal: true }).catch(() => null);
     if (res === null) return;
 
     const keyRaw = document.getElementById('janus7-dnd-janusKey')?.value?.trim?.() ?? '';
@@ -1401,7 +1401,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     const lines = items.map((x) => `â€¢ <strong>${JanusUI.escape(x.kind)}</strong>: ${JanusUI.escape(x.label)}<br><code>${JanusUI.escape(x.uuid)}</code>`);
     const content = `<h2>Stunde (${JanusUI.escape(slotKey)})</h2><p><em>Generiert aus Slot-Builder.</em></p><hr><div>${lines.join('<hr>')}</div>`;
 
-    const je = await JournalEntry.create({ name: `Stunde â€” ${slotKey}`, pages: [{ name: 'Inhalt', type: 'text', text: { content, format: 1 } }] });
+    const je = await JournalEntry.create({ name: `Stunde — ${slotKey}`, pages: [{ name: 'Inhalt', type: 'text', text: { content, format: 1 } }] });
     if (!je?.uuid) { ui.notifications?.error?.('Journal konnte nicht erstellt werden.'); return false; }
 
     const sync = e?.core?.sync ?? e?.sync;

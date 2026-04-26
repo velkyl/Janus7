@@ -5,7 +5,7 @@
  * Zeigt dem SL den gewürfelten Patzer-Eintrag.
  * Buttons: "An alle posten" (ChatMessage) · "Neu würfeln" · Schließen.
  *
- * Wird über JanusMishapDialog.showForMishap(mishap, context) geöffnet â€”
+ * Wird über JanusMishapDialog.showForMishap(mishap, context) geöffnet —
  * typischerweise aus bootMishapGenerator() heraus nach einem erkannten Patzer.
  * Kann auch manuell über JanusMishapDialog.showSingleton() geöffnet werden.
  */
@@ -38,9 +38,9 @@ export class JanusMishapDialog extends JanusBaseApp {
   };
 
   /**
-   * @param {object} mishap   â€” Eintrag aus mishaps.json
-   * @param {object} context  â€” { spellName, actorName }
-   * @param {object} options  â€” AppV2 options
+   * @param {object} mishap   — Eintrag aus mishaps.json
+   * @param {object} context  — { spellName, actorName }
+   * @param {object} options  — AppV2 options
    */
   constructor(mishap = null, context = {}, options = {}) {
     super(options);
@@ -52,8 +52,8 @@ export class JanusMishapDialog extends JanusBaseApp {
 
   _prepareContext(_options) {
     const mishap     = this._mishap;
-    const spellName  = this._context?.spellName ?? 'â€”';
-    const actorName  = this._context?.actorName ?? 'â€”';
+    const spellName  = this._context?.spellName ?? '—';
+    const actorName  = this._context?.actorName ?? '—';
     const isEmpty    = !mishap || mishap.id === '_empty';
 
     return { mishap, spellName, actorName, isEmpty };
@@ -69,7 +69,7 @@ export class JanusMishapDialog extends JanusBaseApp {
       ? `<em>Zauber: ${this._context.spellName}</em> · `
       : '';
     const actorHint = this._context?.actorName
-      ? `<strong>${this._context.actorName}</strong> â€” `
+      ? `<strong>${this._context.actorName}</strong> — `
       : '';
 
     await ChatMessage.create({

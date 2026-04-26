@@ -142,7 +142,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
   set _exportMode(v) { this.__exportMode = ['lite','week','full'].includes(v) ? v : 'lite'; }
 
   /**
-   * Pre-render hook (async â€” may await freely, runs before the render lock).
+   * Pre-render hook (async — may await freely, runs before the render lock).
    * Fetches the KI export bundle and caches it on the instance so that
    * _prepareContext() can read it synchronously without awaiting.
    *
@@ -167,7 +167,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
 
   /**
    * Prepare the Handlebars context. Reads from the cache populated by
-   * _preRender() â€” no async KI calls here (ApplicationV2 render-lock safe).
+   * _preRender() — no async KI calls here (ApplicationV2 render-lock safe).
    *
    * @param {Object} options
    */
