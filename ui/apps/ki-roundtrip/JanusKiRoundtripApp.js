@@ -108,17 +108,17 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
       resizable: true
     },
     actions: {
-      exportMode: 'onExportMode',
-      exportJson: 'onExportJson',
-      exportFile: 'onExportFile',
-      preview: 'onPreview',
-      apply: 'onApply',
-      applySelected: 'onApplySelected',
-      toggleDiff: 'onToggleDiff',
-      selectAllDiffs: 'onSelectAllDiffs',
-      selectNoneDiffs: 'onSelectNoneDiffs',
-      loadFile: 'onLoadFile',
-      browseFile: 'onBrowseFile'
+      exportMode: '_onExportMode',
+      exportJson: '_onExportJson',
+      exportFile: '_onExportFile',
+      preview: '_onPreview',
+      apply: '_onApply',
+      applySelected: '_onApplySelected',
+      toggleDiff: '_onToggleDiff',
+      selectAllDiffs: '_onSelectAllDiffs',
+      selectNoneDiffs: '_onSelectNoneDiffs',
+      loadFile: '_onLoadFile',
+      browseFile: '_onBrowseFile'
     }
   };
 
@@ -149,15 +149,18 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    * @param {Object} _force
    * @param {Object} _options
    */
-  async _preRender(options) {
-    await super._preRender(options);
-    const engine = resolveEngine(this);
+  async _preRender(context, options) {
+    await super._preRender(context, options);
     const mode = this._exportMode;
-    const ki = (engine?.capabilities?.ki ?? engine?.ki);
+    // Skip expensive exportBundle() when only diff-selection state changed.
+    // Cache is invalidated when the export mode changes or cache is cold.
+    if (this.__exportCache !== undefined && this.__lastFetchedMode === mode) return;
+    const ki = (resolveEngine(this)?.capabilities?.ki ?? resolveEngine(this)?.ki);
     try {
       const bundle = await ki?.exportBundle?.({ mode }) ?? null;
       this.__exportCache = bundle ? JSON.stringify(bundle, null, 2) : '';
       this.__historyCache = ki?.getImportHistory?.() ?? [];
+      this.__lastFetchedMode = mode;
     } catch (err) {
       this._getLogger().warn?.('[JANUS7][KI Roundtrip] _preRender: Failed to fetch export data', err);
       this.__exportCache ??= '';
@@ -201,13 +204,13 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    * @param {Event} event
    * @param {HTMLElement} target
    */
-  async onExportMode(event, target) {
+  async _onExportMode(event, target) {
     event?.preventDefault?.();
-    const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
     const mode = target?.dataset?.mode ?? 'lite';
-    if (inst) inst._exportMode = mode;
-    // Rebuild context and re-render (updates active-button highlight + textarea)
-    await inst?.render({ force: true });
+    this._exportMode = mode;
+    // Invalidate cache so _preRender re-fetches the bundle for the new mode.
+    this.__lastFetchedMode = null;
+    await this.render({ force: true });
   }
 
   /**
@@ -216,15 +219,14 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    *
    * @param {Event} event
    */
-  async onExportJson(event) {
+  async _onExportJson(event) {
     event?.preventDefault?.();
-    const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
-    const engine = resolveEngine(inst);
+    const engine = resolveEngine(this);
     try {
-      const mode = inst?._exportMode ?? 'lite';
+      const mode = this._exportMode ?? 'lite';
       const bundle = await (engine?.capabilities?.ki ?? engine?.ki)?.exportBundle?.({ mode }) ?? null;
       const json = bundle ? JSON.stringify(bundle, null, 2) : '';
-      const textarea = inst.element?.querySelector?.('textarea[name="ki-json"]');
+      const textarea = this.element?.querySelector?.('textarea[name="ki-json"]');
       if (textarea) textarea.value = json;
       try {
         await navigator.clipboard.writeText(json);
@@ -245,15 +247,15 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    *
    * @param {Event} event
    */
-  async onExportFile(event) {
+  async _onExportFile(event) {
+    if (!this._requireGM('exportFile')) return;
     event?.preventDefault?.();
-    const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
-    const engine = resolveEngine(inst);
+    const engine = resolveEngine(this);
     try {
-      const mode = inst?._exportMode ?? 'lite';
+      const mode = this._exportMode ?? 'lite';
       const res = await (engine?.capabilities?.ki ?? engine?.ki)?.exportToOutbox?.({ mode }) ?? {};
       const filename = res.filename ?? null;
-      const textarea = inst.element?.querySelector?.('textarea[name="ki-json"]');
+      const textarea = this.element?.querySelector?.('textarea[name="ki-json"]');
       if (textarea && typeof res.json === 'string') textarea.value = res.json;
       if (filename) {
         ui.notifications?.info?.(`KI-Export gespeichert als ${filename}`);
@@ -273,27 +275,27 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    *
    * @param {Event} event
    */
-  async onPreview(event) {
+  async _onPreview(event) {
     event?.preventDefault?.();
-    const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
-    const engine = resolveEngine(inst);
-    const textarea = inst.element?.querySelector?.('textarea[name="ki-json"]');
+    const engine = resolveEngine(this);
+    const textarea = this.element?.querySelector?.('textarea[name="ki-json"]');
     let jsonText = textarea?.value ?? '';
     let bundle;
     try {
       bundle = JSON.parse(jsonText);
     } catch (_) {
       ui.notifications?.warn?.('JSON ist ungültig.');
-      inst.__previewDiffs = [];
-      inst.__previewWarning = 'Ungültiges JSON.';
-      await inst?.render({ force: true });
+      this.__previewDiffs = [];
+      this.__previewWarning = 'Ungültiges JSON.';
+      await this.render({ force: true });
       return;
     }
     try {
-      const diffs = await (engine?.capabilities?.ki ?? engine?.ki)?.previewImport?.(bundle) ?? [];
-      // Store preview source to detect later edits before applySelected
-      inst.__previewSourceText = jsonText;
-      // Staleness warning (soft, UI only)
+      const raw = await (engine?.capabilities?.ki ?? engine?.ki)?.previewImport?.(bundle) ?? [];
+      // previewImport may return a plain array OR a result-object { diffs, downtimeDetected, ... }
+      const diffsArray = Array.isArray(raw) ? raw : (Array.isArray(raw?.diffs) ? raw.diffs : []);
+      const meta = Array.isArray(raw) ? {} : (raw ?? {});
+      this.__previewSourceText = jsonText;
       let warning = null;
       try {
         const exportedAt = bundle?.sourceExportMeta?.exportedAt ?? null;
@@ -304,27 +306,25 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
           }
         }
       } catch (_) { /* ignore */ }
-      inst.__previewWarning = warning;
-      inst.__downtimeMeta = {
-        downtimeDetected: Boolean(diffs?.downtimeDetected),
-        skippedDays: Number(diffs?.skippedDays ?? 0),
-        firstSlot: diffs?.firstSlot ?? null,
-        currentTime: diffs?.currentTime ?? null
+      this.__previewWarning = warning;
+      this.__downtimeMeta = {
+        downtimeDetected: Boolean(meta.downtimeDetected),
+        skippedDays: Number(meta.skippedDays ?? 0),
+        firstSlot: meta.firstSlot ?? null,
+        currentTime: meta.currentTime ?? null
       };
 
-      // Normalise diffs for UI (keep original fields; add stable idx + selected)
-      inst.__previewDiffs = Array.isArray(diffs)
-        ? diffs.map((d, i) => ({ ...d, _uiIndex: i, selected: d?.missingReference ? false : (d?.selected ?? true) }))
-        : [];
-      await inst?.render({ force: true });
+      this.__previewDiffs = diffsArray
+        .map((d, i) => ({ ...d, _uiIndex: i, selected: d?.missingReference ? false : (d?.selected ?? true) }));
+      await this.render({ force: true });
       ui.notifications?.info?.('Diff berechnet.');
     } catch (err) {
       this._getLogger().warn?.('[JANUS7][KI Roundtrip] preview failed', err);
       ui.notifications?.warn?.(err?.message ?? 'Preview fehlgeschlagen');
-      inst.__previewDiffs = [];
-      inst.__downtimeMeta = { downtimeDetected: false, skippedDays: 0 };
-      inst.__previewWarning = err?.message ?? 'Preview fehlgeschlagen';
-      await inst?.render({ force: true });
+      this.__previewDiffs = [];
+      this.__downtimeMeta = { downtimeDetected: false, skippedDays: 0 };
+      this.__previewWarning = err?.message ?? 'Preview fehlgeschlagen';
+      await this.render({ force: true });
     }
   }
 
@@ -334,12 +334,12 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    *
    * @param {Event} event
    */
-  async onApply(event) {
+  async _onApply(event) {
+    if (!this._requireGM('apply')) return;
     event?.preventDefault?.();
-    const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
-    const engine = resolveEngine(inst);
-    const textarea = inst.element?.querySelector?.('textarea[name="ki-json"]');
-    const diffBox = inst.element?.querySelector?.('.ki-diff');
+    const engine = resolveEngine(this);
+    const textarea = this.element?.querySelector?.('textarea[name="ki-json"]');
+    const diffBox = this.element?.querySelector?.('.ki-diff');
     let bundle;
     try {
       bundle = JSON.parse(textarea?.value ?? '');
@@ -348,23 +348,24 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
       return;
     }
     try {
-      const selectedIds = collectSelectedDiffIds(inst);
-      if (Array.isArray(inst.__previewDiffs) && inst.__previewDiffs.length > 0 && selectedIds.length === 0) {
+      const selectedIds = collectSelectedDiffIds(this);
+      if (Array.isArray(this.__previewDiffs) && this.__previewDiffs.length > 0 && selectedIds.length === 0) {
         ui.notifications?.info?.('Keine Import-Elemente ausgewählt.');
         return;
       }
-      const skillFallbacks = collectSkillFallbacks(inst);
-      const simulateDowntime = collectDowntimeSelection(inst);
-      const preparedBundle = applySkillFallbacksToBundle(bundle, inst.__previewDiffs, skillFallbacks);
+      const skillFallbacks = collectSkillFallbacks(this);
+      const simulateDowntime = collectDowntimeSelection(this);
+      const preparedBundle = applySkillFallbacksToBundle(bundle, this.__previewDiffs, skillFallbacks);
       const diffs = await (engine?.capabilities?.ki ?? engine?.ki)?.applyImport?.(preparedBundle, { selectedIds, simulateDowntime }) ?? [];
       if (Array.isArray(diffs) && diffs.length > 0) {
         ui.notifications?.info?.(`Import erfolgreich (${diffs.length} Änderungen)`);
       } else {
         ui.notifications?.info?.('Keine Änderungen angewendet');
       }
-      // Refresh history and diff box (ApplicationV2: force context rebuild)
       if (diffBox) diffBox.textContent = '';
-      await inst.render({ force: true });
+      // Invalidate cache: imported state is now different from the cached bundle.
+      this.__lastFetchedMode = null;
+      await this.render({ force: true });
     } catch (err) {
       this._getLogger().warn?.('[JANUS7][KI Roundtrip] apply failed', err);
       ui.notifications?.error?.(err?.message ?? 'Import fehlgeschlagen');
@@ -373,56 +374,70 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
 
   /**
    * Toggle a single diff selection checkbox.
+   * DOM-patch only: the checkbox state is already correct (user just clicked it);
+   * we only need to update the in-memory flag and the counter display.
    */
-  async onToggleDiff(event, target) {
-    const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
+  _onToggleDiff(_event, target) {
     const idx = Number(target?.dataset?.diffIdx ?? target?.dataset?.idx ?? NaN);
-    if (!inst || !Number.isFinite(idx)) return;
-    const diffs = Array.isArray(inst.__previewDiffs) ? inst.__previewDiffs : [];
+    if (!Number.isFinite(idx)) return;
+    const diffs = Array.isArray(this.__previewDiffs) ? this.__previewDiffs : [];
     const hit = diffs.find((d) => d?._uiIndex === idx) ?? diffs[idx];
     if (hit) hit.selected = !!target?.checked;
-    await inst.render({ force: true });
+    this._patchDiffCounters();
   }
 
-  async onSelectAllDiffs(event) {
+  _onSelectAllDiffs(event) {
     event?.preventDefault?.();
-    const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
-    if (!inst) return;
-    const diffs = Array.isArray(inst.__previewDiffs) ? inst.__previewDiffs : [];
+    const diffs = Array.isArray(this.__previewDiffs) ? this.__previewDiffs : [];
     for (const d of diffs) d.selected = true;
-    await inst.render({ force: true });
+    this._patchDiffSelection(true);
   }
 
-  async onSelectNoneDiffs(event) {
+  _onSelectNoneDiffs(event) {
     event?.preventDefault?.();
-    const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
-    if (!inst) return;
-    const diffs = Array.isArray(inst.__previewDiffs) ? inst.__previewDiffs : [];
+    const diffs = Array.isArray(this.__previewDiffs) ? this.__previewDiffs : [];
     for (const d of diffs) d.selected = false;
-    await inst.render({ force: true });
+    this._patchDiffSelection(false);
+  }
+
+  /**
+   * Patches the "Diffs / Ausgewählt" counter spans in-place without a full re-render.
+   * @protected
+   */
+  _patchDiffCounters() {
+    const el = this.element;
+    if (!el) return;
+    const diffs = Array.isArray(this.__previewDiffs) ? this.__previewDiffs : [];
+    const spans = el.querySelectorAll('.j7-diff-meta strong');
+    if (spans[0]) spans[0].textContent = String(diffs.length);
+    if (spans[1]) spans[1].textContent = String(diffs.filter((d) => d?.selected).length);
+  }
+
+  /**
+   * Sets all `.import-toggle` checkboxes to the given state and patches the counters.
+   * @param {boolean} selected
+   * @protected
+   */
+  _patchDiffSelection(selected) {
+    const el = this.element;
+    if (!el) return;
+    el.querySelectorAll('.import-toggle').forEach((cb) => { cb.checked = selected; });
+    this._patchDiffCounters();
   }
 
   /**
    * Apply only the selected diffs. This filters the KI response payload
    * by (changeKey, idx) metadata produced by previewImport.
    */
-  async onApplySelected(event) {
-    return this.onApply(event);
+  async _onApplySelected(event) {
+    return this._onApply(event);
   }
 
-
-  /**
-   * Action: import from a named file in the outbox/inbox. The
-   * filename is taken from the input field. After applying, the
-   * history panel is refreshed.
-   *
-   * @param {Event} event
-   */
-  async onLoadFile(event) {
+  async _onLoadFile(event) {
+    if (!this._requireGM('loadFile')) return;
     event?.preventDefault?.();
-    const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
-    const engine = resolveEngine(inst);
-    const input = inst.element?.querySelector?.('input[name="ki-file-name"]');
+    const engine = resolveEngine(this);
+    const input = this.element?.querySelector?.('input[name="ki-file-name"]');
     const filename = input?.value?.trim?.();
     if (!filename) {
       ui.notifications?.warn?.('Dateiname fehlt.');
@@ -431,8 +446,7 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
     try {
       const diffs = await (engine?.capabilities?.ki ?? engine?.ki)?.importFromInbox?.(filename) ?? [];
       ui.notifications?.info?.(`Import aus Datei erfolgreich (${diffs.length} Änderungen)`);
-      // Refresh UI (ApplicationV2: force context rebuild)
-      await inst.render({ force: true });
+      await this.render({ force: true });
     } catch (err) {
       this._getLogger().warn?.('[JANUS7][KI Roundtrip] import file failed', err);
       ui.notifications?.error?.(err?.message ?? 'Import aus Datei fehlgeschlagen');
@@ -445,10 +459,9 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
    *
    * @param {Event} event
    */
-  async onBrowseFile(event) {
+  async _onBrowseFile(event) {
     event?.preventDefault?.();
-    const inst = this instanceof JanusKiRoundtripApp ? this : (this._instance ?? null);
-    const input = inst?.element?.querySelector?.('input[name="ki-file-name"]');
+    const input = this.element?.querySelector?.('input[name="ki-file-name"]');
 
     const FP = getFilePickerClass()?.implementation ?? getFilePickerClass();
     if (!FP || !globalThis.game?.world) {
@@ -460,8 +473,6 @@ export class JanusKiRoundtripApp extends HandlebarsApplicationMixin(JanusBaseApp
     const dir = 'worlds/' + worldId + '/janus7/io/inbox';
 
     try {
-      // Foundry FilePicker kennt keinen stabilen 'json' Type. Wir nutzen 'text'
-      // und validieren die Endung selbst.
       await ensureDataDirectory(dir);
 
       const picker = new FP({

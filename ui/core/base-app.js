@@ -390,6 +390,23 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
     return this._getEngine()?.core?.logger ?? console;
   }
 
+  /**
+   * Guard: returns true if the current user is a GM, otherwise shows a warning
+   * notification, logs the attempt, and returns false.
+   * Call at the top of any mutating action handler to enforce server-side intent.
+   * Template-level `disabled` attributes are UI hints, not security barriers —
+   * a player can invoke any action handler from the browser console.
+   *
+   * @param {string} [actionName='action'] Name used in the log entry.
+   * @returns {boolean}
+   */
+  _requireGM(actionName = 'action') {
+    if (game?.user?.isGM) return true;
+    this._getLogger().warn?.(`[JANUS7][${this.constructor.name}] Non-GM attempted GM-only action: ${actionName}`);
+    ui?.notifications?.warn?.('Diese Aktion ist nur für den Spielleiter verfügbar.');
+    return false;
+  }
+
   /** @returns {string} Installed module version or 'unknown'. */
   _getModuleVersion() {
     try {

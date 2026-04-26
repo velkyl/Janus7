@@ -1,8 +1,8 @@
 # JANUS7 - Dokumentations-Index
 
-**Modul-Version (SSOT: `module.json`):** 0.9.12.46
+**Modul-Version (SSOT: `module.json`):** 0.9.12.47
 **Foundry:** v13+
-**Stand:** 2026-03-30
+**Stand:** 2026-04-26
 
 ## Einstieg
 1. `README.md`
@@ -47,6 +47,10 @@
 - `docs/TESTING.md`
 - `docs/manual-tests-release.md`
 - `docs/TECHNICAL_HANDBOOK.md` (Kapitel Diagnose / Tests)
+
+## Release-Notes
+- `docs/RELEASE_0.9.12.47.md` — UI Security & Stability Patch (2026-04-26)
+- `docs/RELEASE_0.9.12.3.md` — Archiv
 
 ## Hinweis
 Archiv-, Audit- und Wellen-Dokumente koennen bewusst aeltere Stichtage enthalten. Massgeblich fuer den aktuellen Stand sind die oben genannten Kern-Dokumente sowie `CHANGELOG.md`, `VERSION.json`, `module.json` und `package.json`.

@@ -66,8 +66,8 @@ export class JanusReportCardApp extends HandlebarsApplicationMixin(JanusBaseApp)
    * This avoids blocking the UI lock during complex result aggregation.
    * @override
    */
-  async _preRender(_options) {
-    await super._preRender(_options);
+  async _preRender(_context, _options) {
+    await super._preRender(_context, _options);
     try {
       const service = await this.#getService();
       const data = await service.buildArtifacts();
@@ -97,21 +97,21 @@ export class JanusReportCardApp extends HandlebarsApplicationMixin(JanusBaseApp)
   // Handlers
   // -------------------------
 
-  async _onExportPdf(_event, _target) {
-    const app = this;
+  async _onExportPdf(event, target) {
+    if (!this._requireGM('exportPdf')) return;
     try {
       ui.notifications.info(game.i18n.localize('JANUS7.Notifications.PreparingExport'));
-      const service = await app.#getService();
+      const service = await this.#getService();
       await service.exportPdf();
     } catch (err) {
       ui.notifications.error(`Export Error: ${err.message}`);
     }
   }
 
-  async _onWriteJournals(_event, _target) {
-    const app = this;
+  async _onWriteJournals(event, target) {
+    if (!this._requireGM('writeJournals')) return;
     try {
-      const service = await app.#getService();
+      const service = await this.#getService();
       const result = await service.writeJournals();
       ui.notifications.info(`${game.i18n.localize('JANUS7.Notifications.SyncDone')}: ${result.journalName}`);
     } catch (err) {
