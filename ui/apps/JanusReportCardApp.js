@@ -47,9 +47,9 @@ export class JanusReportCardApp extends HandlebarsApplicationMixin(JanusBaseApp)
     },
     position: { width: 850, height: 700 },
     actions: {
-      'export-pdf': JanusReportCardApp._onExportPdf,
-      'write-journals': JanusReportCardApp._onWriteJournals,
-      'refresh': JanusReportCardApp._onRefresh
+      'export-pdf': '_onExportPdf',
+      'write-journals': '_onWriteJournals',
+      'refresh': '_onRefresh'
     }
   };
 
@@ -97,7 +97,7 @@ export class JanusReportCardApp extends HandlebarsApplicationMixin(JanusBaseApp)
   // Handlers
   // -------------------------
 
-  static async _onExportPdf(_event, _target) {
+  async _onExportPdf(_event, _target) {
     const app = this;
     try {
       ui.notifications.info(game.i18n.localize('JANUS7.Notifications.PreparingExport'));
@@ -108,7 +108,7 @@ export class JanusReportCardApp extends HandlebarsApplicationMixin(JanusBaseApp)
     }
   }
 
-  static async _onWriteJournals(_event, _target) {
+  async _onWriteJournals(_event, _target) {
     const app = this;
     try {
       const service = await app.#getService();
@@ -119,7 +119,7 @@ export class JanusReportCardApp extends HandlebarsApplicationMixin(JanusBaseApp)
     }
   }
 
-  static async _onRefresh(_event, _target) {
+  async _onRefresh(_event, _target) {
     this.render({ force: true });
   }
 }

@@ -37,11 +37,11 @@ export class JanusAlumniApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     },
     position: { width: 980, height: 750 },
     actions: {
-      'register': JanusAlumniApp._onRegister,
-      'set-status': JanusAlumniApp._onSetStatus,
-      'set-focus': JanusAlumniApp._onSetFocus,
-      'open-npc-sheet': JanusAlumniApp._onOpenNpcSheet,
-      'refresh': JanusAlumniApp._onRefresh
+      'register': '_onRegister',
+      'set-status': '_onSetStatus',
+      'set-focus': '_onSetFocus',
+      'open-npc-sheet': '_onOpenNpcSheet',
+      'refresh': '_onRefresh'
     }
   };
 
@@ -66,7 +66,7 @@ export class JanusAlumniApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   // Handlers
   // -------------------------
 
-  static async _onRegister(_event, target) {
+  async _onRegister(_event, target) {
     const npcId = target.dataset.npcId;
     if (!npcId) return;
     try {
@@ -78,7 +78,7 @@ export class JanusAlumniApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async _onSetStatus(_event, target) {
+  async _onSetStatus(_event, target) {
     const npcId = target.dataset.npcId;
     const status = target.value;
     if (!npcId || !status) return;
@@ -91,7 +91,7 @@ export class JanusAlumniApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async _onSetFocus(_event, target) {
+  async _onSetFocus(_event, target) {
     const npcId = target.closest('[data-npc-id]')?.dataset.npcId;
     const focus = target.dataset.focus;
     if (!npcId) return;
@@ -104,7 +104,7 @@ export class JanusAlumniApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async _onOpenNpcSheet(_event, target) {
+  async _onOpenNpcSheet(_event, target) {
     const npcId = target.dataset.npcId;
     if (!npcId) return;
     try {
@@ -120,7 +120,7 @@ export class JanusAlumniApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async _onRefresh(_event, _target) {
+  async _onRefresh(_event, _target) {
     this.render({ force: true });
   }
 }

@@ -26,8 +26,8 @@ export class JanusMishapDialog extends JanusBaseApp {
       icon: 'fas fa-bomb',
     },
     actions: {
-      postToChat: 'onPostToChat',
-      reroll: 'onReroll',
+      postToChat: '_onPostToChat',
+      reroll: '_onReroll',
     },
   };
 
@@ -61,7 +61,7 @@ export class JanusMishapDialog extends JanusBaseApp {
 
   // â”€â”€â”€ Actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-  async onPostToChat(_event, _target) {
+  async _onPostToChat(_event, _target) {
     const mishap = this._mishap;
     if (!mishap || mishap.id === '_empty') return;
 
@@ -90,7 +90,7 @@ export class JanusMishapDialog extends JanusBaseApp {
     await this.close();
   }
 
-  async onReroll(_event, _target) {
+  async _onReroll(_event, _target) {
     try {
       const { rollMishap } = await import('../../extensions/mishap-generator/mishap-generator.js');
       const newMishap = await rollMishap();

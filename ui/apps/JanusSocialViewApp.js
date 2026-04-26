@@ -34,11 +34,11 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
       resizable: true,
     },
     actions: {
-      refresh: 'onRefresh',
-      selectFrom: 'onSelectFrom',
-      selectTo: 'onSelectTo',
-      adjust: 'onAdjust',
-      executeCommand: 'onExecuteCommand'
+      refresh: '_onRefresh',
+      selectFrom: '_onSelectFrom',
+      selectTo: '_onSelectTo',
+      adjust: '_onAdjust',
+      executeCommand: '_onExecuteCommand'
     }
   };
 
@@ -55,34 +55,25 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
   async _onRender(context, options) {
     await super._onRender(context, options);
     this.enableAutoRefresh(['janus7RelationChanged', 'janus7StoryHookChanged']);
-
-    const root = this.element;
-    if (!root) return;
-    root.querySelector('[name="fromId"]')?.addEventListener('change', (ev) => {
-      this.onSelectFrom(ev, ev.currentTarget);
-    });
-    root.querySelector('[name="toId"]')?.addEventListener('change', (ev) => {
-      this.onSelectTo(ev, ev.currentTarget);
-    });
   }
 
-  async onRefresh(_event,_target){ this.refresh(); }
+  async _onRefresh(_event,_target){ this.refresh(); }
 
-  async onSelectFrom(event, target) {
+  async _onSelectFrom(event, target) {
     event?.preventDefault?.();
     const id = target?.value ?? target?.dataset?.value;
     this._fromId = id || null;
     this.refresh();
   }
 
-  async onSelectTo(event, target) {
+  async _onSelectTo(event, target) {
     event?.preventDefault?.();
     const id = target?.value ?? target?.dataset?.value;
     this._toId = id || null;
     this.refresh();
   }
 
-  async onAdjust(event, target) {
+  async _onAdjust(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) return ui.notifications.warn('Nur GM darf Beziehungen ändern.');
 
@@ -103,7 +94,7 @@ export class JanusSocialViewApp extends HandlebarsApplicationMixin(JanusBaseApp)
     }
   }
 
-  async onExecuteCommand(event, target) {
+  async _onExecuteCommand(event, target) {
     event?.preventDefault?.();
     const commandId = String(target?.dataset?.commandId ?? '').trim();
     if (!commandId) return;

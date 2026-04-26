@@ -155,6 +155,21 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
       if (this.rendered && !el?.classList.contains('active')) this.bringToFront?.();
     }, { capture: true, passive: true });
 
+    // Enhance action system to support 'change' events (e.g. for selects)
+    el?.addEventListener('change', (ev) => {
+      const target = ev.target?.closest?.('[data-action]');
+      if (!target) return;
+      const action = target.dataset.action;
+      const handler = this.options.actions[action];
+      if (handler) {
+        if (typeof handler === 'string') {
+          if (typeof this[handler] === 'function') this[handler](ev, target);
+        } else if (typeof handler === 'function') {
+          handler.call(this, ev, target);
+        }
+      }
+    }, { capture: true });
+
     if (this._isFirstRender) {
       this._isFirstRender = false;
       this._updatePositionSafe();

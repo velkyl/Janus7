@@ -35,11 +35,11 @@ export class JanusAcademyOverviewApp extends HandlebarsApplicationMixin(JanusBas
       resizable: true,
     },
     actions: {
-      refresh: 'onRefresh',
-      selectSlot: 'onSelectSlot',
-      setActiveSlot: 'onSetActiveSlot',
-      gotoToday: 'onGotoToday',
-      openLessonLibrary: 'onOpenLessonLibrary'
+      refresh: '_onRefresh',
+      selectSlot: '_onSelectSlot',
+      setActiveSlot: '_onSetActiveSlot',
+      gotoToday: '_onGotoToday',
+      openLessonLibrary: '_onOpenLessonLibrary'
     }
   };
 
@@ -70,36 +70,36 @@ export class JanusAcademyOverviewApp extends HandlebarsApplicationMixin(JanusBas
 
     // Doppelklick auf Zeitslot ? als aktiven Slot setzen
     this.element?.querySelectorAll?.('[data-action="selectSlot"]').forEach((cell) => {
-      cell.addEventListener('dblclick', (ev) => {
+      cell.addEventListener('dblclick', async (ev) => {
         ev.preventDefault();
         ev.stopPropagation();
-        this.onSetActiveSlot(ev, cell);
+        await this._onSetActiveSlot(ev, cell);
       });
     });
   }
 
-  async onRefresh(_event, _target) {
+  async _onRefresh(_event, _target) {
     this.refresh();
   }
 
-  async onGotoToday(_event, _target) {
+  async _onGotoToday(_event, _target) {
     const engine = game.janus7;
     const slotRef = engine?.academy?.calendar?.getCurrentSlotRef?.();
     this._selectedSlotRef = slotRef ?? null;
     this.refresh();
   }
 
-  async onOpenLessonLibrary(_event, _target) {
+  async _onOpenLessonLibrary(_event, _target) {
     try {
       return game?.janus7?.ui?.open?.('lessonLibrary');
     } catch (err) {
-      this._getLogger?.().warn?.('JANUS7 onOpenLessonLibrary failed', err);
+      this._getLogger?.().warn?.('JANUS7 _onOpenLessonLibrary failed', err);
       ui.notifications?.error?.('JANUS7: Lesson Library konnte nicht geöffnet werden.');
       return null;
     }
   }
 
-  async onSelectSlot(event, target) {
+  async _onSelectSlot(event, target) {
     event?.preventDefault?.();
     const ds = target?.dataset ?? {};
     const year = Number(ds.year);
@@ -118,7 +118,7 @@ export class JanusAcademyOverviewApp extends HandlebarsApplicationMixin(JanusBas
    * Doppelklick: Zeitslot als aktiven Spielzeitpunkt setzen.
    * Mappt day/phase (Strings) ? dayIndex/slotIndex via calendar.config.
    */
-  async onSetActiveSlot(event, target) {
+  async _onSetActiveSlot(event, target) {
     event?.preventDefault?.();
     const ds = target?.dataset ?? {};
     const day = ds.day;

@@ -34,11 +34,11 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
       height: 740,
     },
     actions: {
-      refresh: JanusScoringViewApp._onRefresh,
-      createCircle: JanusScoringViewApp._onCreateCircle,
-      deleteCircle: JanusScoringViewApp._onDeleteCircle,
-      awardCircle: JanusScoringViewApp._onAwardCircle,
-      awardStudent: JanusScoringViewApp._onAwardStudent,
+      refresh: '_onRefresh',
+      createCircle: '_onCreateCircle',
+      deleteCircle: '_onDeleteCircle',
+      awardCircle: '_onAwardCircle',
+      awardStudent: '_onAwardStudent',
     },
   };
 
@@ -158,12 +158,12 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
     };
   }
 
-  static async _onRefresh(event, target) {
+  async _onRefresh(event, target) {
     event?.preventDefault?.();
     await this.render({ force: true });
   }
 
-  static async _onAwardCircle(event, target) {
+  async _onAwardCircle(event, target) {
     event.preventDefault();
     const form = target.closest('form');
     const data = new FormData(form);
@@ -182,7 +182,7 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
     }
   }
 
-  static async _onCreateCircle(event, target) {
+  async _onCreateCircle(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) {
       ui.notifications?.warn?.('Nur der GM kann Zirkel/Häuser anlegen.');
@@ -285,7 +285,7 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
     }
   }
 
-  static async _onDeleteCircle(event, target) {
+  async _onDeleteCircle(event, target) {
     event?.preventDefault?.();
     if (!game.user?.isGM) {
       ui.notifications?.warn?.('Nur der GM kann Zirkel/Häuser löschen.');
@@ -329,7 +329,7 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
     }
   }
 
-  static async _onAwardStudent(event, target) {
+  async _onAwardStudent(event, target) {
     event.preventDefault();
     const form = target.closest('form');
     const data = new FormData(form);
@@ -383,7 +383,7 @@ export class JanusScoringViewApp extends HandlebarsApplicationMixin(JanusBaseApp
           circleDeltas[cid] = {
             score: cur,
             delta,
-            trend:      delta === null ? '—' : delta > 0 ? 'â–²' : delta < 0 ? 'â–¼' : '—',
+            trend:      delta === null ? '—' : delta > 0 ? '▲' : delta < 0 ? '▼' : '—',
             trendClass: delta === null ? 'janus7-trend-flat'
                       : delta > 0    ? 'janus7-trend-up'
                       : delta < 0    ? 'janus7-trend-down'

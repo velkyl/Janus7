@@ -28,10 +28,10 @@ export class JanusEventPopup extends HandlebarsApplicationMixin(JanusBaseApp) {
       height: 680
     },
     actions: {
-      selectOption: this._onSelectOption,
-      close: this._onClose,
-      refreshPopup: this._onRefresh,
-      enrichEvent: this._onEnrichEvent
+      selectOption: '_onSelectOption',
+      close: '_onClose',
+      refreshPopup: '_onRefresh',
+      enrichEvent: '_onEnrichEvent'
     }
   };
 
@@ -41,7 +41,8 @@ export class JanusEventPopup extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   };
 
-  async _prepareContext(_options) {
+  async _preRender(options) {
+    await super._preRender(options);
     const dataApi = game.janus7?.academy?.data;
     if (!this.event && this.eventId && dataApi?.getEvent) {
       this.event = await dataApi.getEvent(this.eventId).catch(() => null);
@@ -51,30 +52,38 @@ export class JanusEventPopup extends HandlebarsApplicationMixin(JanusBaseApp) {
       this.eventOptions = await dataApi?.getOptionsForParent?.('event', this.eventId).catch?.(() => []) ?? [];
     }
 
-    const eventContext = dataApi?.buildEventContext?.() ?? {};
-    const activeQuests = (eventContext.activeQuests ?? []).filter((q) => !this.actorId || q.actorId === this.actorId);
-    const availableRumors = eventContext.availableRumors ?? [];
-
-    return {
+    this.__renderCache = {
       event: this.event ?? { title: this.eventId ?? 'Unbekanntes Event', description: 'Kein Event geladen.' },
       options: this.eventOptions,
+      eventContext: dataApi?.buildEventContext?.() ?? {}
+    };
+  }
+
+  _prepareContext(_options) {
+    const { event, options, eventContext } = this.__renderCache ?? {};
+    const activeQuests = (eventContext?.activeQuests ?? []).filter((q) => !this.actorId || q.actorId === this.actorId);
+    const availableRumors = eventContext?.availableRumors ?? [];
+
+    return {
+      event,
+      options,
       actorId: this.actorId,
-      hasOptions: this.eventOptions.length > 0,
+      hasOptions: (options ?? []).length > 0,
       activeQuests,
       availableRumors,
       hasActiveQuests: activeQuests.length > 0,
       hasRumors: availableRumors.length > 0,
-      activeLocationId: eventContext.activeLocationId ?? '—',
+      activeLocationId: eventContext?.activeLocationId ?? '—',
       geminiEnabled: game.janus7?.ki?.gemini?.isEnabled ?? false
     };
   }
 
-  static async _onRefresh(event, _target) {
+  async _onRefresh(event, _target) {
     event?.preventDefault?.();
     this.render({ force: true });
   }
 
-  static async _onSelectOption(event, target) {
+  async _onSelectOption(event, target) {
     event?.preventDefault?.();
     const optionId = target.dataset.optionId;
     const actorId = target.dataset.actorId;
@@ -92,12 +101,12 @@ export class JanusEventPopup extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static _onClose(event, _target) {
+  _onClose(event, _target) {
     event?.preventDefault?.();
     this.close();
   }
 
-  static async _onEnrichEvent(event, _target) {
+  async _onEnrichEvent(event, _target) {
     event?.preventDefault?.();
     if (!game.janus7.ki.gemini.isEnabled) return;
 
@@ -113,8 +122,6 @@ export class JanusEventPopup extends HandlebarsApplicationMixin(JanusBaseApp) {
         location: this.activeLocationId
       });
 
-      // Temporary override for display - we don't persist it to the JSON source automatically
-      // but we show it to the GM.
       if (this.event) {
         this.event.description = enrichedText;
         this.render({ force: true });

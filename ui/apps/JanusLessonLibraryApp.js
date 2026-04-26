@@ -18,24 +18,34 @@ export class JanusLessonLibraryApp extends HandlebarsApplicationMixin(JanusBaseA
     position: { width: 980, height: 760, top: 80, left: 110 },
     window: { title: 'JANUS7 - Lesson Library', icon: 'fas fa-book-open', resizable: true },
     actions: {
-      refresh: async function() { this.render({ force: true }); },
-      migrate: async function() {
-        await ensureLessonDocumentsReady(game?.janus7, { forceSync: true });
-        ui.notifications?.info?.('JANUS7: Lesson-Dokumente synchronisiert.');
-        this.render({ force: true });
-      },
-      openLesson: async function(_ev, target) {
-        const uuid = target?.dataset?.uuid;
-        if (!uuid) return;
-        const doc = await fromUuid(uuid);
-        return doc?.sheet?.render?.(true);
-      },
-      createLesson: async function() {
-        const doc = await createEmptyLessonDocument();
-        return doc?.sheet?.render?.(true);
-      }
+      refresh: '_onRefresh',
+      migrate: '_onMigrate',
+      openLesson: '_onOpenLesson',
+      createLesson: '_onCreateLesson'
     }
   };
+
+  async _onRefresh() {
+    this.render({ force: true });
+  }
+
+  async _onMigrate() {
+    await ensureLessonDocumentsReady(game?.janus7, { forceSync: true });
+    ui.notifications?.info?.('JANUS7: Lesson-Dokumente synchronisiert.');
+    this.render({ force: true });
+  }
+
+  async _onOpenLesson(_ev, target) {
+    const uuid = target?.dataset?.uuid;
+    if (!uuid) return;
+    const doc = await fromUuid(uuid);
+    return doc?.sheet?.render?.(true);
+  }
+
+  async _onCreateLesson() {
+    const doc = await createEmptyLessonDocument();
+    return doc?.sheet?.render?.(true);
+  }
 
   static PARTS = {
     main: { template: moduleTemplatePath('templates/apps/lesson-library.hbs') }

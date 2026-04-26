@@ -36,11 +36,11 @@ class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       minimizable: true
     },
     actions: {
-      openShell: this._onOpenShell,
-      advanceSlot: this._onAdvanceSlot,
-      advanceDay: this._onAdvanceDay,
-      openScoring: this._onOpenScoring,
-      executeContextAction: this._onExecuteContextAction
+      openShell: '_onOpenShell',
+      advanceSlot: '_onAdvanceSlot',
+      advanceDay: '_onAdvanceDay',
+      openScoring: '_onOpenScoring',
+      executeContextAction: '_onExecuteContextAction'
     }
   };
 
@@ -167,11 +167,11 @@ class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   /*  Actions                                     */
   /* -------------------------------------------- */
 
-  static _onOpenShell(event) {
+  _onOpenShell(event) {
     game.janus7.ui.open('shell');
   }
 
-  static async _onAdvanceSlot(event) {
+  async _onAdvanceSlot(event) {
     const director = game.janus7.director;
     if (director?.time?.advanceSlot) {
       await director.time.advanceSlot({ save: true });
@@ -179,7 +179,7 @@ class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async _onAdvanceDay(event) {
+  async _onAdvanceDay(event) {
     const director = game.janus7.director;
     if (director?.time?.advanceDay) {
       await director.time.advanceDay({ save: true });
@@ -187,11 +187,11 @@ class JanusGmQuickOverlayApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static _onOpenScoring(event) {
+  _onOpenScoring(event) {
     game.janus7.ui.open('shell', { viewId: 'tools' });
   }
 
-  static async _onExecuteContextAction(event, target) {
+  async _onExecuteContextAction(event, target) {
     const command = target.dataset.command;
     const dataset = JSON.parse(target.dataset.dataset || '{}');
     const { JanusCommands } = await import('../commands/index.js');

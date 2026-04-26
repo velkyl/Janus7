@@ -37,7 +37,15 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
       resizable: true,
       minimizable: true
     },
-    actions: {}
+    actions: {
+      rerun: '_onRerun',
+      copyReport: '_onCopyReport',
+      copyBugReport: '_onCopyBugReport',
+      toggleGroup: '_onToggleGroup',
+      applyFilters: '_onApplyFilters',
+      resetFilters: '_onResetFilters',
+      openGuidedManual: '_onOpenGuidedManual'
+    }
   };
 
   static PARTS = {
@@ -85,50 +93,9 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
   async _onRender(context, options) {
     await super._onRender(context, options);
     this.enableAutoRefresh(['janus7TestManualResultsChanged']);
-    this._bindLocalUiActions();
   }
 
-  _bindLocalUiActions() {
-    const el = this.domElement;
-    if (!el || el._janusTestActionsBound) return;
-    el._janusTestActionsBound = true;
 
-    el.addEventListener('click', async (event) => {
-      const target = event.target?.closest?.('[data-action]');
-      if (!target) return;
-      const action = target.dataset.action;
-      switch (action) {
-        case 'rerun':
-          event.preventDefault();
-          await this.runTests();
-          break;
-        case 'copyReport':
-          event.preventDefault();
-          await this.onCopyReport();
-          break;
-        case 'copyBugReport':
-          event.preventDefault();
-          await this.onCopyBugReport();
-          break;
-        case 'toggleGroup':
-          event.preventDefault();
-          this.onToggleGroup(event);
-          break;
-        case 'applyFilters':
-          event.preventDefault();
-          await this.onApplyFilters();
-          break;
-        case 'resetFilters':
-          event.preventDefault();
-          await this.onResetFilters();
-          break;
-        case 'openGuidedManual':
-          event.preventDefault();
-          await this.onOpenGuidedManual();
-          break;
-      }
-    });
-  }
 
   _prepareContext(_options) {
     if (this._running) return { running: true, hasResults: false };
@@ -248,11 +215,13 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
     }
   }
 
-  async onRerun() {
+  async _onRerun(event) {
+    event?.preventDefault?.();
     await this.runTests();
   }
 
-  async onCopyReport() {
+  async _onCopyReport(event) {
+    event?.preventDefault?.();
     if (!this._testData) {
       ui.notifications.warn('Kein Report vorhanden.');
       return;
@@ -263,7 +232,8 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
   }
 
 
-  async onOpenGuidedManual() {
+  async _onOpenGuidedManual(event) {
+    event?.preventDefault?.();
     const engine = game?.janus7;
     if (!engine?.test?.openGuidedManualTests) {
       ui.notifications.warn('Guided Manual Tests sind nicht verfügbar.');
@@ -272,7 +242,8 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
     engine.test.openGuidedManualTests();
   }
 
-  async onCopyBugReport() {
+  async _onCopyBugReport(event) {
+    event?.preventDefault?.();
     const engine = game?.janus7;
     if (!engine?.diagnostics?.generateBugReport) {
       ui.notifications.warn('Bug-Report-Generator nicht verfügbar.');
@@ -291,8 +262,9 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
     }
   }
 
-  static onToggleGroup(event) {
-    const header = event.currentTarget;
+  _onToggleGroup(event, target) {
+    event?.preventDefault?.();
+    const header = target;
     const body = header.nextElementSibling;
     if (!body) return;
     const isHidden = body.style.display === 'none';
@@ -304,7 +276,8 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
     }
   }
 
-  async onApplyFilters() {
+  async _onApplyFilters(event) {
+    event?.preventDefault?.();
     this._filters = {
       phase: this._readFilterValue('[name="phaseFilter"]'),
       suiteClass: this._readFilterValue('[name="suiteFilter"]'),
@@ -313,7 +286,8 @@ export class JanusTestResultApp extends HandlebarsApplicationMixin(JanusBaseApp)
     await this.render({ force: true });
   }
 
-  async onResetFilters() {
+  async _onResetFilters(event) {
+    event?.preventDefault?.();
     this._filters = { phase: 'all', suiteClass: 'all', status: 'all' };
     await this.render({ force: true });
   }

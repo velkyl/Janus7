@@ -32,8 +32,8 @@ export class JanusThesisApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       icon: 'fas fa-book-reader'
     },
     actions: {
-      evaluateSource: 'onEvaluateSource',
-      removeSource: 'onRemoveSource'
+      evaluateSource: '_onEvaluateSource',
+      removeSource: '_onRemoveSource'
     }
   };
 
@@ -125,7 +125,7 @@ export class JanusThesisApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     this.render({ force: true });
   }
 
-  async onEvaluateSource(_event, target) {
+  async _onEvaluateSource(_event, target) {
     const thesisId = target.closest('[data-thesis-id]')?.dataset.thesisId;
     if (!thesisId) return;
 
@@ -183,7 +183,7 @@ export class JanusThesisApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  async onRemoveSource(_event, target) {
+  async _onRemoveSource(_event, target) {
     const thesisId = target.closest('[data-thesis-id]')?.dataset.thesisId;
     const sourceUuid = target.dataset.uuid;
     if (!thesisId || !sourceUuid) return;

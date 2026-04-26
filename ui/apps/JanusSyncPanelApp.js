@@ -41,15 +41,15 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
       resizable: true,
     },
     actions: {
-      rescan: 'onRescan',
-      switchTab: 'onSwitchTab',
-      linkExisting: 'onLinkExisting',
-      createEntity: 'onCreateEntity',
-      importFromCompendium: 'onImportFromCompendium',
-      importAllCompendium: 'onImportAllCompendium',
-      openEntity: 'onOpenEntity',
-      unlinkEntity: 'onUnlinkEntity',
-      syncAll: 'onSyncAll',
+      rescan: '_onRescan',
+      switchTab: '_onSwitchTab',
+      linkExisting: '_onLinkExisting',
+      createEntity: '_onCreateEntity',
+      importFromCompendium: '_onImportFromCompendium',
+      importAllCompendium: '_onImportAllCompendium',
+      openEntity: '_onOpenEntity',
+      unlinkEntity: '_onUnlinkEntity',
+      syncAll: '_onSyncAll',
     }
   };
 
@@ -207,12 +207,12 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
 
   // --- Actions ---------------------------------------------------------------
 
-  async onRescan() {
+  async _onRescan() {
     this._reports = { npcs: null, locations: null, playlists: null, alchemy: null, library: null, spells: null, lessons: null };
     await this.refresh();
   }
 
-  async onSwitchTab(event, target) {
+  async _onSwitchTab(event, target) {
     event?.preventDefault?.();
     const tab = target?.dataset?.tab;
     if (!tab || tab === this._activeTab) return;
@@ -223,7 +223,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
   /**
    * "Verknüpfen" — öffnet einen simplen Name-Picker für die Entität.
    */
-  async onLinkExisting(event, target) {
+  async _onLinkExisting(event, target) {
     event?.preventDefault?.();
     const janusId = target?.closest('[data-janus-id]')?.dataset?.janusId;
     if (!janusId) return;
@@ -264,7 +264,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
   /**
    * "Anlegen" — erstellt Foundry-Entität aus JSON-Daten mit Bestätigungsdialog.
    */
-  async onCreateEntity(event, target) {
+  async _onCreateEntity(event, target) {
     event?.preventDefault?.();
     const janusId = target?.closest('[data-janus-id]')?.dataset?.janusId;
     if (!janusId) return;
@@ -317,7 +317,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
   }
 
   /** Öffnet die verknüpfte Foundry-Entität. */
-  async onOpenEntity(event, target) {
+  async _onOpenEntity(event, target) {
     event?.preventDefault?.();
     const uuid = target?.closest('[data-janus-id]')?.dataset?.foundryUuid;
     if (!uuid) return;
@@ -326,7 +326,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
   }
 
   /** Entfernt eine UUID-Verknüpfung. */
-  async onUnlinkEntity(event, target) {
+  async _onUnlinkEntity(event, target) {
     event?.preventDefault?.();
     const janusId = target?.closest('[data-janus-id]')?.dataset?.janusId;
     if (!janusId) return;
@@ -347,7 +347,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
   /**
    * Importiert einen Compendium-Fund in die Welt.
    */
-  async onImportFromCompendium(event, target) {
+  async _onImportFromCompendium(event, target) {
     event?.preventDefault?.();
     const janusId = target?.closest('[data-janus-id]')?.dataset?.janusId;
     if (!janusId) return;
@@ -384,7 +384,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
   /**
    * Importiert alle FOUND_IN_COMPENDIUM-Einträge des aktiven Tabs.
    */
-  async onImportAllCompendium(event, _target) {
+  async _onImportAllCompendium(event, _target) {
     event?.preventDefault?.();
     const report = this._reports[this._activeTab];
     const candidates = report?.filter(r =>
@@ -415,7 +415,7 @@ export class JanusSyncPanelApp extends HandlebarsApplicationMixin(JanusBaseApp) 
   }
 
   /** Legt alle fehlenden Entitäten des aktiven Tabs auf einmal an. */
-  async onSyncAll(event, _target) {
+  async _onSyncAll(event, _target) {
     event?.preventDefault?.();
     const report  = this._reports[this._activeTab];
     const missing = report?.filter(r =>

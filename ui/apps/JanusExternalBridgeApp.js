@@ -16,8 +16,8 @@ export class JanusExternalBridgeApp extends HandlebarsApplicationMixin(JanusBase
       height: 'auto'
     },
     actions: {
-      testSql: JanusExternalBridgeApp._onTestSql,
-      testPython: JanusExternalBridgeApp._onTestPython
+      testSql: '_onTestSql',
+      testPython: '_onTestPython'
     }
   };
 
@@ -43,7 +43,7 @@ export class JanusExternalBridgeApp extends HandlebarsApplicationMixin(JanusBase
     };
   }
 
-  static async _onTestSql(event, target) {
+  async _onTestSql(event, target) {
     const app = this; // In ApplicationV2 actions, 'this' is the app instance
     const db = app.element.querySelector('[name="dbPath"]').value;
     const query = app.element.querySelector('[name="sqlQuery"]').value;
@@ -59,7 +59,7 @@ export class JanusExternalBridgeApp extends HandlebarsApplicationMixin(JanusBase
     app.render();
   }
 
-  static async _onTestPython(event, target) {
+  async _onTestPython(event, target) {
     const app = this;
     const script = app.element.querySelector('[name="scriptPath"]').value;
     const argsRaw = app.element.querySelector('[name="pythonArgs"]').value;

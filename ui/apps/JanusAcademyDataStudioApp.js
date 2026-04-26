@@ -61,6 +61,18 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     window: { title: 'JANUS7 — Academy Data Studio' },
     position: { width: 1100, height: 720 },
     resizable: true,
+    actions: {
+      new: '_onNew',
+      seed: '_onSeed',
+      open: '_onOpen',
+      save: '_onSave',
+      openLink: '_onOpenLink',
+      unlinkLink: '_onUnlinkLink',
+      selectRecord: '_onSelectRecord',
+      changeDomain: '_onChangeDomain',
+      changeMode: '_onChangeMode',
+      changeProfile: '_onChangeProfile'
+    }
   };
 
   static showSingleton(options = {}) {
@@ -469,7 +481,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     
     profileRow.appendChild(profileIcon);
     const profileSelect = document.createElement('select');
-    profileSelect.dataset.j7 = 'profile';
+    profileSelect.dataset.action = 'changeProfile';
     profileSelect.className = 'janus7-textarea j7-data-studio__input j7-data-studio__input--profile';
     for (const p of JanusProfileRegistry.list()) {
       const opt = document.createElement('option');
@@ -487,7 +499,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     domainIcon.className = `fas ${domain.icon}`;
     topRow.appendChild(domainIcon);
     const domainSelect = document.createElement('select');
-    domainSelect.dataset.j7 = 'domain';
+    domainSelect.dataset.action = 'changeDomain';
     domainSelect.className = 'janus7-textarea j7-data-studio__input j7-data-studio__input--compact';
     for (const entry of DOMAINS) {
       const opt = document.createElement('option');
@@ -498,7 +510,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     }
     topRow.appendChild(domainSelect);
     const modeSelect = document.createElement('select');
-    modeSelect.dataset.j7 = 'mode';
+    modeSelect.dataset.action = 'changeMode';
     modeSelect.className = 'janus7-textarea j7-data-studio__input j7-data-studio__input--compact';
     for (const [val, label] of [['form', 'Formular'], ['json', 'JSON']]) {
       const opt = document.createElement('option');
@@ -521,14 +533,14 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     filterInput.className = 'janus7-textarea j7-data-studio__input j7-data-studio__input--compact';
     filterRow.appendChild(filterInput);
     const newBtn = document.createElement('button');
-    newBtn.dataset.j7 = 'new';
+    newBtn.dataset.action = 'new';
     newBtn.className = 'j7-btn';
     newBtn.title = 'Neuen Datensatz anlegen';
     newBtn.setAttribute('aria-label', 'Neuen Datensatz anlegen');
     newBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-plus' }));
     filterRow.appendChild(newBtn);
     const seedBtn = document.createElement('button');
-    seedBtn.dataset.j7 = 'seed';
+    seedBtn.dataset.action = 'seed';
     seedBtn.className = 'j7-btn';
     seedBtn.title = 'Seed Import (Journals + Items)';
     seedBtn.setAttribute('aria-label', 'Seed Import (Journals + Items)');
@@ -564,6 +576,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
       const badge = doc?.documentName === 'Item' ? 'Item' : 'Journal';
       const button = document.createElement('button');
       button.type = 'button';
+      button.dataset.action = 'selectRecord';
       button.dataset.uuid = doc.uuid;
       button.className = `j7-btn j7-data-studio__record${isSelected ? ' is-selected' : ''}`;
       const titleDiv = document.createElement('div');
@@ -643,14 +656,14 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
       headerBtns.className = 'j7-data-studio__row';
       if (selected) {
         const openBtn = document.createElement('button');
-        openBtn.dataset.j7 = 'open';
+        openBtn.dataset.action = 'open';
         openBtn.className = 'j7-btn';
         openBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-up-right-from-square' }));
         openBtn.append(` Open ${docLabel}`);
         headerBtns.appendChild(openBtn);
       }
       const saveBtn = document.createElement('button');
-      saveBtn.dataset.j7 = 'save';
+      saveBtn.dataset.action = 'save';
       saveBtn.className = 'j7-btn';
       saveBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-save' }));
       saveBtn.append(' Save');
@@ -768,7 +781,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
         linkBtnRow.className = 'j7-data-studio__row';
         if (linkedDoc) {
           const openLinkBtn = document.createElement('button');
-          openLinkBtn.dataset.j7 = 'open-link';
+          openLinkBtn.dataset.action = 'openLink';
           openLinkBtn.className = 'j7-btn';
           openLinkBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-up-right-from-square' }));
           openLinkBtn.append(` ${linkSpec.label} öffnen`);
@@ -776,7 +789,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
         }
         if (linkedUuid) {
           const unlinkBtn = document.createElement('button');
-          unlinkBtn.dataset.j7 = 'unlink-link';
+          unlinkBtn.dataset.action = 'unlinkLink';
           unlinkBtn.className = 'j7-btn';
           unlinkBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-link-slash' }));
           unlinkBtn.append(' Verknüpfung lösen');
@@ -800,105 +813,9 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     const element = this.domElement;
     if (!element) return;
 
-    element.querySelector('[data-j7="profile"]')?.addEventListener('change', async (event) => {
-      const val = String(event.target.value || 'punin');
-      const { JanusConfig } = await import('../../core/config.js');
-      await JanusConfig.set('activeProfile', val);
-      
-      const engine = this._getEngine();
-      if (engine) {
-        const dataApi = engine.services?.registry?.get('academy.data');
-        if (dataApi) {
-          if (typeof dataApi.constructor?.resetCache === 'function') dataApi.constructor.resetCache();
-          await dataApi.init();
-        }
-      }
-      this.refresh?.();
-    });
-
-    element.querySelector('[data-j7="domain"]')?.addEventListener('change', (event) => {
-      this._domain = String(event.target.value);
-      this._selectedUuid = null;
-      this._draft = null;
-      this.refresh?.();
-    });
-
-    element.querySelector('[data-j7="mode"]')?.addEventListener('change', (event) => {
-      this._editorMode = String(event.target.value || 'json');
-      this.refresh?.();
-    });
-
     element.querySelector('[data-j7="filter"]')?.addEventListener('input', (event) => {
       this._filter = String(event.target.value ?? '');
       this.refresh?.(false);
-    });
-
-    element.querySelector('[data-j7="new"]')?.addEventListener('click', () => {
-      this._selectedUuid = null;
-      this._draft = this._defaultRecord(this._domain);
-      this.refresh?.();
-    });
-
-    element.querySelector('[data-j7="seed"]')?.addEventListener('click', async () => {
-      try {
-        const { seedImportAcademyToJournals } = await import('../../academy/world-seed.js');
-        const report = await seedImportAcademyToJournals({ mode: 'merge' });
-        const docs = report?.documents ?? {};
-        ui.notifications?.info?.(
-          `Seed Import: Journals c=${docs?.journals?.created ?? 0}/u=${docs?.journals?.updated ?? 0}, Items c=${docs?.items?.created ?? 0}/u=${docs?.items?.updated ?? 0}`
-        );
-        const engine = this._getEngine();
-        const dataApi = engine?.services?.registry?.get('academy.data');
-        if (dataApi) {
-          if (typeof dataApi.constructor?.resetCache === 'function') dataApi.constructor.resetCache();
-          if (typeof dataApi.init === 'function') await dataApi.init();
-        }
-        this.refresh?.();
-      } catch (err) {
-        ui.notifications?.error?.(`Seed Import failed: ${err?.message ?? err}`);
-        this._getEngine()?.recordError?.('ui.studio', 'seed_import', err);
-      }
-    });
-
-    element.querySelectorAll('button[data-uuid]')?.forEach((button) => {
-      button.addEventListener('click', () => {
-        this._selectedUuid = button.dataset.uuid;
-        this._draft = null;
-        this.refresh?.();
-      });
-    });
-
-    element.querySelector('[data-j7="open"]')?.addEventListener('click', async () => {
-      const selected = this._selectedDoc();
-      if (!selected) return;
-      try {
-        selected.sheet?.render?.(true);
-      } catch (err) {
-        ui.notifications?.error?.(`Open failed: ${err?.message ?? err}`);
-      }
-    });
-
-    element.querySelector('[data-j7="save"]')?.addEventListener('click', async () => {
-      const seed = this._activeRecordData() ?? {};
-
-      try {
-        const record = this._extractEditedRecord(element, this._domain, seed);
-        const selected = this._selectedDoc();
-        const selectedFlags = this._moduleFlags(selected);
-        const selectedId = String(selectedFlags?.janusId ?? '').trim();
-        const nextId = String(record?.id ?? '').trim();
-
-        if (selectedId && nextId && selectedId !== nextId) {
-          throw new Error(`id mismatch: editor.id=${nextId} vs janusId=${selectedId}`);
-        }
-
-        await this._persistRecord(record);
-        ui.notifications?.info?.('Saved.');
-        this.refresh?.();
-      } catch (err) {
-        ui.notifications?.error?.(`Save failed: ${err?.message ?? err}`);
-        this._getEngine()?.recordError?.('ui.studio', 'save_record', err);
-      }
     });
 
     const dropzone = element.querySelector('[data-j7="link-dropzone"]');
@@ -942,37 +859,135 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
         this._getEngine()?.recordError?.('ui.studio', 'link_drop', err);
       }
     });
+  }
 
-    element.querySelector('[data-j7="open-link"]')?.addEventListener('click', async () => {
-      const spec = this._linkSpecForDomain(this._domain);
-      const record = this._activeRecordData();
-      if (!spec || !record?.id) return;
-      const uuid = this._getSync().resolveUUID(record.id, record, spec.bucket);
-      if (!uuid) return;
-      const doc = await fromUuid(uuid).catch(() => null);
-      doc?.sheet?.render?.(true);
-    });
+  // ─── Action Handlers ───────────────────────────────────────────────────────────
 
-    element.querySelector('[data-j7="unlink-link"]')?.addEventListener('click', async () => {
-      const spec = this._linkSpecForDomain(this._domain);
-      if (!spec) return;
-
-      try {
-        const seed = this._activeRecordData() ?? this._defaultRecord(this._domain);
-        const record = this._extractEditedRecord(element, this._domain, seed);
-        const janusId = String(record?.id ?? '').trim();
-        if (!janusId) throw new Error('Datensatz hat keine id.');
-
-        await this._getSync().unlinkEntity(janusId, { type: spec.bucket, saveState: true });
-        const unlinkedRecord = this._setFoundryUuid(record, spec, null);
-        await this._persistRecord(unlinkedRecord);
-        ui.notifications?.info?.(`Verknüpfung entfernt: ${janusId}`);
-        this.refresh?.();
-      } catch (err) {
-        ui.notifications?.error?.(`Entfernen fehlgeschlagen: ${err?.message ?? err}`);
-        this._getEngine()?.recordError?.('ui.studio', 'unlink_record', err);
+  async _onChangeProfile(event, target) {
+    const val = String(target.value || 'punin');
+    const { JanusConfig } = await import('../../core/config.js');
+    await JanusConfig.set('activeProfile', val);
+    
+    const engine = this._getEngine();
+    if (engine) {
+      const dataApi = engine.services?.registry?.get('academy.data');
+      if (dataApi) {
+        if (typeof dataApi.constructor?.resetCache === 'function') dataApi.constructor.resetCache();
+        await dataApi.init();
       }
-    });
+    }
+    this.refresh?.();
+  }
+
+  _onChangeDomain(event, target) {
+    this._domain = String(target.value);
+    this._selectedUuid = null;
+    this._draft = null;
+    this.refresh?.();
+  }
+
+  _onChangeMode(event, target) {
+    this._editorMode = String(target.value || 'json');
+    this.refresh?.();
+  }
+
+  _onNew() {
+    this._selectedUuid = null;
+    this._draft = this._defaultRecord(this._domain);
+    this.refresh?.();
+  }
+
+  async _onSeed() {
+    try {
+      const { seedImportAcademyToJournals } = await import('../../academy/world-seed.js');
+      const report = await seedImportAcademyToJournals({ mode: 'merge' });
+      const docs = report?.documents ?? {};
+      ui.notifications?.info?.(
+        `Seed Import: Journals c=${docs?.journals?.created ?? 0}/u=${docs?.journals?.updated ?? 0}, Items c=${docs?.items?.created ?? 0}/u=${docs?.items?.updated ?? 0}`
+      );
+      const engine = this._getEngine();
+      const dataApi = engine?.services?.registry?.get('academy.data');
+      if (dataApi) {
+        if (typeof dataApi.constructor?.resetCache === 'function') dataApi.constructor.resetCache();
+        if (typeof dataApi.init === 'function') await dataApi.init();
+      }
+      this.refresh?.();
+    } catch (err) {
+      ui.notifications?.error?.(`Seed Import failed: ${err?.message ?? err}`);
+      this._getEngine()?.recordError?.('ui.studio', 'seed_import', err);
+    }
+  }
+
+  _onSelectRecord(event, target) {
+    this._selectedUuid = target.dataset.uuid;
+    this._draft = null;
+    this.refresh?.();
+  }
+
+  async _onOpen() {
+    const selected = this._selectedDoc();
+    if (!selected) return;
+    try {
+      selected.sheet?.render?.(true);
+    } catch (err) {
+      ui.notifications?.error?.(`Open failed: ${err?.message ?? err}`);
+    }
+  }
+
+  async _onSave(event, target) {
+    const element = this.domElement;
+    const seed = this._activeRecordData() ?? {};
+
+    try {
+      const record = this._extractEditedRecord(element, this._domain, seed);
+      const selected = this._selectedDoc();
+      const selectedFlags = this._moduleFlags(selected);
+      const selectedId = String(selectedFlags?.janusId ?? '').trim();
+      const nextId = String(record?.id ?? '').trim();
+
+      if (selectedId && nextId && selectedId !== nextId) {
+        throw new Error(`id mismatch: editor.id=${nextId} vs janusId=${selectedId}`);
+      }
+
+      await this._persistRecord(record);
+      ui.notifications?.info?.('Saved.');
+      this.refresh?.();
+    } catch (err) {
+      ui.notifications?.error?.(`Save failed: ${err?.message ?? err}`);
+      this._getEngine()?.recordError?.('ui.studio', 'save_record', err);
+    }
+  }
+
+  async _onOpenLink() {
+    const spec = this._linkSpecForDomain(this._domain);
+    const record = this._activeRecordData();
+    if (!spec || !record?.id) return;
+    const uuid = this._getSync().resolveUUID(record.id, record, spec.bucket);
+    if (!uuid) return;
+    const doc = await fromUuid(uuid).catch(() => null);
+    doc?.sheet?.render?.(true);
+  }
+
+  async _onUnlinkLink() {
+    const spec = this._linkSpecForDomain(this._domain);
+    if (!spec) return;
+
+    try {
+      const seed = this._activeRecordData() ?? this._defaultRecord(this._domain);
+      const record = this._extractEditedRecord(this.domElement, this._domain, seed);
+      const janusId = String(record?.id ?? '').trim();
+      if (!janusId) throw new Error('Datensatz hat keine id.');
+
+      await this._getSync().unlinkEntity(janusId, { type: spec.bucket, saveState: true });
+      const unlinkedRecord = this._setFoundryUuid(record, spec, null);
+      await this._persistRecord(unlinkedRecord);
+      ui.notifications?.info?.(`Verknüpfung entfernt: ${janusId}`);
+      this.refresh?.();
+    } catch (err) {
+      ui.notifications?.error?.(`Entfernen fehlgeschlagen: ${err?.message ?? err}`);
+      this._getEngine()?.recordError?.('ui.studio', 'unlink_record', err);
+    }
+  }
   }
 }
 

@@ -234,7 +234,7 @@ export class JanusQuestJournal extends HandlebarsApplicationMixin(JanusBaseApp) 
     const state = questEngine?.getActiveQuest?.(actorId, questId);
     
     // Sanitize inputs for HTML content
-    const esc = (s) => (this.prototype._escape ? this.prototype._escape(s) : String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])));
+    const esc = (s) => (typeof this._escape === 'function' ? this._escape(s) : String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])));
     
     const content = `
       <h3>${esc(quest?.title ?? questId)}</h3>

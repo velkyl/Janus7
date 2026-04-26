@@ -21,11 +21,11 @@ export class JanusMasterDashboard extends HandlebarsApplicationMixin(JanusBaseAp
       height: 700
     },
     actions: {
-      refresh: this._onRefresh,
-      adjustHeat: this._onAdjustHeat,
-      modifyStress: this._onModifyStress,
-      distributeRumor: this._onDistributeRumor,
-      adjustAttitude: this._onAdjustAttitude
+      refresh: '_onRefresh',
+      adjustHeat: '_onAdjustHeat',
+      modifyStress: '_onModifyStress',
+      distributeRumor: '_onDistributeRumor',
+      adjustAttitude: '_onAdjustAttitude'
     }
   };
 
@@ -58,41 +58,30 @@ export class JanusMasterDashboard extends HandlebarsApplicationMixin(JanusBaseAp
         const threshold1 = ko / 3;
         const threshold2 = (ko / 3) * 2;
 
-        const isCritical = stress >= ko;
-        const isDanger   = !isCritical && stress >= threshold2;
-        const isWarn     = !isCritical && !isDanger && stress >= threshold1;
-
-        let stressStateLabel = `KO: ${ko}`;
-        if (isCritical) stressStateLabel = '💀 Zusammenbruch!';
-        else if (isDanger) stressStateLabel = '❤ Betäubung II';
-        else if (isWarn)   stressStateLabel = '⚠ Betäubung I';
+        let status = 'Stabil';
+        let statusClass = 'status-ok';
+        if (stress >= threshold2) { status = 'Kritisch'; statusClass = 'status-critical'; }
+        else if (stress >= threshold1) { status = 'Belastet'; statusClass = 'status-warning'; }
 
         return {
           id: a.id,
           name: a.name,
-          ko,
           stress,
+          ko,
           stressPercent,
-          threshold1,
-          threshold2,
-          isCritical,
-          isDanger,
-          isWarn,
-          stressStateLabel
+          status,
+          statusClass
         };
       });
 
-      // NPCs & Relationships
-      const npcs = await dataApi.getNpcs() || [];
-      const npcRelationships = npcs.map(n => {
+      // Simple NPC social overview
+      const npcRelationships = (dataApi.getNpcs?.() ?? []).filter(n => n.role === 'teacher').map(n => {
         const attitude = state.get(`academy.social.global.${n.id}`) || 0;
-        let status = "Neutral";
-        let statusClass = "neutral";
-        if (attitude >= 10) { status = "Freundlich"; statusClass = "friendly"; }
-        if (attitude >= 20) { status = "Verbündet"; statusClass = "ally"; }
-        if (attitude <= -5) { status = "Abweisend"; statusClass = "wary"; }
-        if (attitude <= -15) { status = "Feindselig"; statusClass = "hostile"; }
-        
+        let status = 'Neutral';
+        let statusClass = 'status-neutral';
+        if (attitude >= 5) { status = 'Gezielt Wohlwollend'; statusClass = 'status-ok'; }
+        else if (attitude <= -5) { status = 'Feindselig'; statusClass = 'status-critical'; }
+
         return {
           id: n.id,
           name: n.name,
@@ -122,37 +111,37 @@ export class JanusMasterDashboard extends HandlebarsApplicationMixin(JanusBaseAp
     return this.__renderCache ?? {};
   }
 
-  static async _onRefresh() {
-    this.refresh();
+  async _onRefresh() {
+    this.render({ force: true });
   }
 
-  static async _onAdjustHeat(event, target) {
+  async _onAdjustHeat(event, target) {
     const delta = parseInt(target.dataset.delta);
     const state = game.janus7.core.state;
     const current = state.get('academy.punin.heat') || 0;
     await state.set('academy.punin.heat', Math.max(0, current + delta));
-    this.refresh();
+    this.render({ force: true });
   }
 
-  static async _onModifyStress(event, target) {
+  async _onModifyStress(event, target) {
     const actorId = target.dataset.actorId;
     const delta = parseInt(target.dataset.delta);
     const state = game.janus7.core.state;
     const current = state.get(`academy.actors.${actorId}.stress`) || 0;
     await state.set(`academy.actors.${actorId}.stress`, Math.max(0, current + delta));
-    this.refresh();
+    this.render({ force: true });
   }
 
-  static async _onAdjustAttitude(event, target) {
+  async _onAdjustAttitude(event, target) {
     const npcId = target.dataset.npcId;
     const delta = parseInt(target.dataset.delta);
     const state = game.janus7.core.state;
     const current = state.get(`academy.social.global.${npcId}`) || 0;
     await state.set(`academy.social.global.${npcId}`, current + delta);
-    this.refresh();
+    this.render({ force: true });
   }
 
-  static async _onDistributeRumor(event, target) {
+  async _onDistributeRumor(event, target) {
     const form = target.closest('.janus-master-dashboard');
     const actorId = form.querySelector('[name="targetActorId"]').value;
     const category = form.querySelector('[name="rumorCategory"]').value;

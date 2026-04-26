@@ -26,7 +26,7 @@
     <div class="j7-form-grid-2">
       <div class="janus7-formrow">
         <label>Von (NPC/SC)</label>
-        <select name="fromId">
+        <select name="fromId" data-action="selectFrom">
           <optgroup label="NPCs">
             {{#each npcs}}
               <option value="{{id}}" {{#if (eq id ../fromId)}}selected{{/if}}>{{name}}</option>
@@ -42,7 +42,7 @@
 
       <div class="janus7-formrow">
         <label>Zu (NPC/SC)</label>
-        <select name="toId">
+        <select name="toId" data-action="selectTo">
           <optgroup label="SCs">
             {{#each pcs}}
               <option value="{{id}}" {{#if (eq id ../toId)}}selected{{/if}}>{{name}}</option>

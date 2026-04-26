@@ -19,11 +19,11 @@ export class JanusDevPanel extends HandlebarsApplicationMixin(JanusBaseApp) {
       height: 600
     },
     actions: {
-      spawnEvent: this._onSpawnEvent,
-      startQuest: this._onStartQuest,
-      applyEffect: this._onApplyEffect,
-      resetState: this._onResetState,
-      exportState: this._onExportState
+      spawnEvent: '_onSpawnEvent',
+      startQuest: '_onStartQuest',
+      applyEffect: '_onApplyEffect',
+      resetState: '_onResetState',
+      exportState: '_onExportState'
     }
   };
 
@@ -73,7 +73,7 @@ export class JanusDevPanel extends HandlebarsApplicationMixin(JanusBaseApp) {
     };
   }
 
-  static async _onSpawnEvent(event, target) {
+  async _onSpawnEvent(event, target) {
     const poolName = target.closest('[data-pool-name]')?.dataset.poolName;
     const actorId = target.dataset.actorId;
 
@@ -107,7 +107,7 @@ export class JanusDevPanel extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async _onStartQuest(event, target) {
+  async _onStartQuest(event, target) {
     const questId = target.closest('[data-quest-id]')?.dataset.questId;
     const actorId = target.dataset.actorId;
 
@@ -122,7 +122,7 @@ export class JanusDevPanel extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async _onApplyEffect(event, target) {
+  async _onApplyEffect(event, target) {
     const effectId = target.closest('[data-effect-id]')?.dataset.effectId;
     const actorId = target.dataset.actorId;
 
@@ -146,7 +146,7 @@ export class JanusDevPanel extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async _onResetState(event, target) {
+  async _onResetState(event, target) {
     const actorId = target.dataset.actorId;
     if (!actorId) return;
 
@@ -167,7 +167,7 @@ export class JanusDevPanel extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  static async _onExportState(event, target) {
+  async _onExportState(event, target) {
     const actorId = target.dataset.actorId;
     if (!actorId) return;
 
