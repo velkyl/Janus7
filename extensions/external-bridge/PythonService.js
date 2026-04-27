@@ -90,8 +90,37 @@ export class JanusPythonService {
     
     this.logger.info(`[JANUS7][Python] Task ${taskId} written to outbox. Waiting for result...`);
 
-    // In a real implementation, we would poll the inbox or wait for a socket event.
-    // For now, we return a message that the task is queued.
-    return { status: 'queued', taskId, info: 'Task written to outbox. Background worker required.' };
+    // Poll for result file (result_{taskId}.json) in inbox
+    const resultFilename = `result_${taskId}.json`;
+    const maxRetries = 10;
+    const pollInterval = 1000;
+
+    for (let i = 0; i < maxRetries; i++) {
+      await new Promise(r => setTimeout(r, pollInterval));
+      
+      try {
+        const inboxFiles = await this.io.listInboxFiles();
+        const found = inboxFiles.some(f => f.endsWith(resultFilename));
+        
+        if (found) {
+          this.logger.info(`[JANUS7][Python] Result found for task ${taskId}. Importing...`);
+          // Note: importFromInbox currently returns the result of applyImport.
+          // We might need a raw read if we don't want to apply patches.
+          // But for Python results, we usually want to read the data.
+          
+          // Assuming the bridge writes a JSON that importFromInbox can handle:
+          const result = await this.io.importFromInbox(resultFilename);
+          return result;
+        }
+      } catch (err) {
+        this.logger.debug(`[JANUS7][Python] Poll attempt ${i+1} failed: ${err.message}`);
+      }
+    }
+
+    return { 
+      status: 'timeout', 
+      taskId, 
+      info: 'Task written to outbox, but no response received within timeout. Background worker might be offline.' 
+    };
   }
 }

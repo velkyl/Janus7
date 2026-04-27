@@ -156,12 +156,18 @@
   color: var(--j7s-accent);
 }
 
-.j7-shell__header-actions {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 8px;
   flex-wrap: wrap;
+}
+
+.j7-shell__busy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  color: var(--j7s-accent);
+  font-size: 16px;
+  margin-right: 4px;
 }
 
 .j7-shell__quick,
@@ -648,19 +654,91 @@
   }
 }
 
-/* Drag and Drop Feedback */
-.j7-shell__drop-zone {
-  border: 2px dashed var(--j7s-border-soft);
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  transition: all 0.2s ease;
-}
-
 .j7-shell__drop-zone.is-active {
   background: var(--j7s-accent-soft);
   border-color: var(--j7s-accent);
   transform: scale(1.02);
+}
+
+/* Empty States */
+.j7-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  background: rgba(124, 96, 66, 0.04);
+  border: 1px dashed var(--j7s-border-soft);
+  border-radius: 12px;
+  color: var(--j7s-muted);
+}
+
+.j7-empty-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  opacity: 0.4;
+}
+
+/* Status Grid & Items */
+.j7-shell__status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.j7-shell__status-item {
+  background: var(--j7s-surface);
+  border: 1px solid var(--j7s-border-soft);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.j7-shell__status-item:hover {
+  background: var(--j7s-surface-2);
+  border-color: var(--j7s-accent-soft);
+  transform: translateY(-2px);
+}
+
+.j7-shell__status-item--info {
+  border-left: 4px solid var(--j7s-accent);
+}
+
+.j7-shell__status-actor {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--j7s-border-soft);
+  padding-bottom: 6px;
+}
+
+.j7-shell__status-vitals {
+  display: flex;
+  gap: 4px;
+}
+
+.j7-shell__status-effects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.j7-tag--accent {
+  background: var(--j7s-accent);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.j7-shell__card--wide {
+  grid-column: 1 / -1;
 }
 
 /* Theme Presets */
@@ -686,62 +764,6 @@
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-  }
-
-  .j7-shell__status-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 12px;
-    padding: 12px 0;
-  }
-
-  .j7-shell__status-item {
-    background: var(--j7s-surface);
-    border: 1px solid var(--j7s-border-soft);
-    border-radius: 8px;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    transition: all 0.2s ease;
-  }
-
-  .j7-shell__status-item:hover {
-    background: var(--j7s-surface-2);
-    border-color: var(--j7s-accent-soft);
-    transform: translateY(-2px);
-  }
-
-  .j7-shell__status-actor {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--j7s-border-soft);
-    padding-bottom: 6px;
-  }
-
-  .j7-shell__status-vitals {
-    display: flex;
-    gap: 4px;
-  }
-
-  .j7-shell__status-effects {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-
-  .j7-tag--accent {
-    background: var(--j7s-accent);
-    color: #fff;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 10px;
-    font-weight: bold;
-  }
-
-  .j7-shell__card--wide {
-    grid-column: 1 / -1;
   }
 }
 

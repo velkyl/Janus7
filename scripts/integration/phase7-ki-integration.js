@@ -111,6 +111,10 @@ export function attachPhase7Ki(engine) {
     }
 
     logger?.debug?.('[JANUS7][Phase7] KI integration attached.');
+    
+    // Perform initial outbox cleanup (async, non-blocking)
+    if (services.sqlite) services.sqlite.cleanupOutbox().catch(e => logger.warn('Outbox cleanup failed', e));
+
     engine?.markServiceReady?.('phase7.ki', engine.ki);
     return engine.ki;
   } catch (err) {

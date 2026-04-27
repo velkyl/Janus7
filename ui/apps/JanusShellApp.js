@@ -412,8 +412,15 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       directorRunbookNext: 'onDirectorRunbookNext',
       
       // New UI/UX Actions
+      selectView: 'onSelectView',
+      openPanel: 'onOpenPanel',
+      closePanel: 'onClosePanel',
+      togglePalette: 'onTogglePalette',
+      executeShellAction: 'onExecuteShellAction',
       onSearch: "onSearch",
-      clearSearch: "clearSearch"
+      clearSearch: "clearSearch",
+      openSheet: "onOpenSheet",
+      openUrl: "onOpenUrl"
     }
   };
 
@@ -445,7 +452,18 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       panelId: null,
       viewModel: { cards: [], cardSections: [], tiles: [] },
       panelModel: { metrics: [], items: [], actions: [] },
-      playerStats: []
+      playerStats: [],
+      viewPartial: `modules/${MODULE_ID}/templates/shell/views/director.hbs`,
+      panelPartial: null,
+      isBusy: false,
+      busyMessage: '',
+      // Long-term cache for performance-heavy data
+      _persistent: {
+        moduleContent: null,
+        conditionRules: {},
+        lastModuleScanAt: 0,
+        lastConditionScanAt: 0
+      }
     };
   }
 
@@ -464,9 +482,23 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     return this._instance;
   }
 
-  _setView(viewId = 'director') {
-    this._viewId = getView(viewId)?.id ?? 'director';
-    this.render({ force: true });
+  async _setView(viewId = 'director') {
+    const view = getView(viewId);
+    if (!view) {
+      console.warn(`[JANUS7] View "${viewId}" not found in registry.`);
+      return;
+    }
+    
+    // Prevent redundant switches
+    if (this._viewId === view.id && !this.__renderCache.isBusy) return;
+
+    this._viewId = view.id;
+    this._activePanelId = null; // Clear panel when switching views
+    
+    // Use setBusy for visual feedback during heavy pre-render
+    this.setBusy(`Lade ${view.title}...`);
+    await this.render({ force: true });
+    this.clearBusy();
   }
 
   _setActivePanel(panelId = null) {
@@ -521,46 +553,81 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
+  setBusy(message = 'Verarbeite...') {
+    this.__renderCache.isBusy = true;
+    this.__renderCache.busyMessage = message;
+    this.render();
+  }
+
+  clearBusy() {
+    this.__renderCache.isBusy = false;
+    this.__renderCache.busyMessage = '';
+    this.render();
+  }
+
   /**
    * Refactored Pass 1: Modular Pre-rendering
    * Fetches data models asynchronously but defers HTML rendering to the Handlebars Partials.
    * @override
    */
   async _preRender(options) {
-    await super._preRender(options);
-    
-    const engine = this._getEngine();
-    const view = getView(this._viewId) ?? getView('director');
-    const panel = this._activePanelId ? getPanel(this._activePanelId) : null;
+    try {
+      await super._preRender(options);
+      
+      const engine = this._getEngine();
+      const view = getView(this._viewId) ?? getView('director');
+      const panel = this._activePanelId ? getPanel(this._activePanelId) : null;
 
-    // 1. Fetch View Data
-    const viewModel = await this.#buildViewModel(engine, view);
-    
-    // 2. Fetch Panel Data
-    const panelModel = this.#buildPanelModel(engine, panel);
+      // 1. Fetch View Data
+      const viewModel = await this.#buildViewModel(engine, view);
+      
+      // 2. Fetch Panel Data
+      const panelModel = this.#buildPanelModel(engine, panel);
 
-    // 3. Fetch Live Statistics via Bridge (Pass 2 Integration)
-    const playerStats = this.#getLivePlayerStats(engine);
+      // 3. Fetch Live Statistics via Bridge (Pass 2 Integration)
+      const playerStats = this.#getLivePlayerStats(engine);
 
-    // 4. Fetch Module Content Context (Options 1, 5, 7, 12, 15)
-    const moduleContent = await this.#getModuleContentInfo(engine);
+      // 4. Fetch Module Content Context (with caching: 5 min TTL)
+      const now = Date.now();
+      const cache = this.__renderCache._persistent;
+      
+      if (!cache.moduleContent || (now - cache.lastModuleScanAt > 300000)) {
+        cache.moduleContent = await this.#getModuleContentInfo(engine);
+        cache.lastModuleScanAt = now;
+      }
+      const moduleContent = cache.moduleContent;
 
-    // 4b. Deep Status Monitor (Option 11): Fetch rule links for active conditions
-    const activeConditionNames = [...new Set(playerStats.flatMap(p => p.conditions.map(c => c.label)))];
-    const conditionRules = await this.#getConditionRules(activeConditionNames);
+      // 4b. Deep Status Monitor (with caching: 1 min TTL)
+      const activeConditionNames = [...new Set(playerStats.flatMap(p => p.conditions.map(c => c.label)))];
+      const needsConditionRefresh = activeConditionNames.some(name => !cache.conditionRules[name]) || (now - cache.lastConditionScanAt > 60000);
+      
+      if (needsConditionRefresh) {
+        cache.conditionRules = await this.#getConditionRules(activeConditionNames);
+        cache.lastConditionScanAt = now;
+      }
+      const conditionRules = cache.conditionRules;
 
-    // 5. Populate Transient Cache
-    this.__renderCache = {
-      viewId: view.id,
-      panelId: panel?.id ?? null,
-      viewModel,
-      panelModel,
-      playerStats,
-      moduleContent,
-      conditionRules,
-      viewPartial: `modules/${MODULE_ID}/templates/shell/views/${view.id}.hbs`,
-      panelPartial: panel ? `modules/${MODULE_ID}/templates/shell/panels/default-panel.hbs` : null
-    };
+      // 5. Populate Transient Cache
+      this.__renderCache = {
+        ...this.__renderCache,
+        viewId: view.id,
+        panelId: panel?.id ?? null,
+        viewModel,
+        panelModel,
+        playerStats,
+        moduleContent,
+        conditionRules,
+        viewPartial: `modules/${MODULE_ID}/templates/shell/views/${view.id}.hbs`,
+        panelPartial: panel ? `modules/${MODULE_ID}/templates/shell/panels/default-panel.hbs` : null
+      };
+    } catch (err) {
+      console.error(`[JANUS7] Shell _preRender failed for view "${this._viewId}":`, err);
+      // Fallback to director to avoid ghosting if navigation failed
+      if (this._viewId !== 'director') {
+        this._viewId = 'director';
+        return this._preRender(options);
+      }
+    }
   }
   
   /** @override */
@@ -804,6 +871,8 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       // View & Panel State (Delegated to Partials)
       viewPartial: this.__renderCache.viewPartial,
       panelPartial: this.__renderCache.panelPartial,
+      isBusy: this.__renderCache.isBusy,
+      busyMessage: this.__renderCache.busyMessage,
       view: this.__renderCache.viewModel,
       panel: this.__renderCache.panelModel,
       playerStats: this.__renderCache.playerStats,
@@ -832,16 +901,17 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
 
   async onSelectView(event, target) {
     event?.preventDefault?.();
-    const viewId = target?.dataset?.viewId ?? 'director';
-    try {
-      const nav = target?.closest?.('.j7-shell__sidebar, .janus-shell__nav') ?? null;
-      for (const button of nav?.querySelectorAll?.('[data-action="selectView"][data-view-id]') ?? []) {
-        const active = (button.dataset.viewId === viewId);
-        button.classList.toggle('is-active', active);
-        button.setAttribute('aria-pressed', active ? 'true' : 'false');
+    const viewId = target?.dataset?.viewId ?? target?.closest('[data-view-id]')?.dataset?.viewId ?? 'director';
+    
+    // Visual immediate feedback
+    const nav = target?.closest?.('.j7-shell__sidebar, .janus-shell__nav') ?? null;
+    if (nav) {
+      for (const button of nav.querySelectorAll('.j7-shell__nav')) {
+        button.classList.toggle('is-active', button.dataset.viewId === viewId);
       }
-    } catch (_err) { /* non-blocking DOM sync */ }
-    this._setView(viewId);
+    }
+
+    await this._setView(viewId);
   }
 
   async onOpenPanel(event, target) {
@@ -1483,7 +1553,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     const searchFn = game?.janus7?.ki?.search;
     if (typeof searchFn !== 'function') { ui.notifications?.error('Knowledge Bridge: Suche nicht verf\u00fcgbar.'); return; }
 
-    ui.notifications?.info(`KI sucht in "${domain}" nach "${query}"...`);
+    this.setBusy(`KI sucht in "${domain}"...`);
     try {
       const results = await searchFn(domain, query);
       const resContent = results.length === 0 
@@ -1504,7 +1574,9 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
         ok: { label: 'Schlie\u00dfen', icon: 'fas fa-check' },
         rejectClose: false
       }).catch(() => null);
+      this.clearBusy();
     } catch(err) {
+      this.clearBusy();
       console.error('[JANUS7]', err);
       ui.notifications?.error('Abfrage \u00fcber KI Knowledge Bridge fehlgeschlagen.');
     }
@@ -1601,7 +1673,19 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     if (!actor) return ui.notifications.warn('Bitte markiere zuerst einen Token (NSC).');
     
     await actor.update({ img: path });
-    ui.notifications.info(`Portr\u00e4t f\u00fcr "${actor.name}" aktualisiert.`);
+    ui.notifications.info(`Porträt für "${actor.name}" aktualisiert.`);
+  }
+
+  async onKiApplySceneBackground(event, _target) {
+    event?.preventDefault?.();
+    const path = document.getElementById('j7-ai-result-actions')?.dataset.imagePath;
+    if (!path) return;
+
+    const scene = game.scenes.viewed;
+    if (!scene) return ui.notifications.warn('Keine aktive Szene gefunden.');
+
+    await scene.update({ background: { src: path } });
+    ui.notifications.info(`Hintergrund für Szene "${scene.name}" aktualisiert.`);
   }
 
   async onKiApplyAsIcon(event, _target) {
@@ -1618,12 +1702,14 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     const outputBox = document.getElementById('j7-ai-output');
     if (!outputBox || !gemini?.isEnabled) return;
 
-    renderAiStatus(outputBox, { iconClass: 'fas fa-spinner fa-spin', message: 'KI analysiert Situation...' });
+    this.setBusy('KI analysiert Situation...');
     
     try {
       const result = await gemini[method](input);
       renderAiTextResponse(outputBox, result);
+      this.clearBusy();
     } catch (err) {
+      this.clearBusy();
       renderAiError(outputBox, err);
     }
   }
@@ -1634,16 +1720,82 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   }
 
   async onKiExportClipboard() {
-    // Implementiere den Export...
-    ui.notifications?.info?.('KI Bundle exportiert (WIP)');
+    const e = game.janus7;
+    if (!e?.ki?.exportBundle) return ui.notifications.warn('KI Export Service nicht verf\u00fcgbar.');
+    
+    try {
+      const bundle = await e.ki.exportBundle();
+      const text = JSON.stringify(bundle, null, 2);
+      await navigator.clipboard.writeText(text);
+      ui.notifications.info('KI Bundle in Zwischenablage kopiert.');
+    } catch (err) {
+      ui.notifications.error('Export fehlgeschlagen: ' + err.message);
+    }
   }
 
   async onKiExportFile() {
-    // File Export
+    const e = game.janus7;
+    if (!e?.ki?.exportBundle) return ui.notifications.warn('KI Export Service nicht verf\u00fcgbar.');
+    
+    try {
+      const bundle = await e.ki.exportBundle();
+      const filename = `janus7_ki_export_${Date.now()}.json`;
+      saveDataToFile(JSON.stringify(bundle, null, 2), 'text/json', filename);
+      ui.notifications.info('Export-Datei wird heruntergeladen...');
+    } catch (err) {
+      ui.notifications.error('Datei-Export fehlgeschlagen: ' + err.message);
+    }
   }
 
-  async onKiPreviewImport() {}
-  async onKiApplyImport() {}
+  async onKiPreviewImport() {
+    const e = game.janus7;
+    if (!e?.ki?.previewImport) return ui.notifications.warn('KI Import Service nicht verf\u00fcgbar.');
+
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = async (ev) => {
+      const file = ev.target.files[0];
+      if (!file) return;
+      
+      try {
+        const text = await file.text();
+        const data = JSON.parse(text);
+        
+        // Use DialogV2 for preview feedback
+        const { DialogV2 } = foundry.applications.api;
+        const confirm = await DialogV2.confirm({
+          window: { title: 'KI Import Vorschau' },
+          content: `<p>M\u00f6chten Sie das KI-Bundle importieren?</p><ul><li>Datens\u00e4tze: ${Object.keys(data).length}</li></ul>`,
+          yes: { label: 'Importieren', icon: 'fas fa-download' }
+        });
+
+        if (confirm) {
+          this.setBusy('KI Bundle wird importiert...');
+          await e.ki.applyImport(data);
+          this.clearBusy();
+          ui.notifications.info('Import erfolgreich abgeschlossen.');
+          this.render();
+        }
+      } catch (err) {
+        ui.notifications.error('Import-Vorschau fehlgeschlagen: ' + err.message);
+        this.clearBusy();
+      }
+    };
+    input.click();
+  }
+
+  async onKiApplyImport() {
+    // Falls ein direkter Import aus dem Textfeld o.ä. gewünscht ist
+    ui.notifications.info('Bitte nutzen Sie die Import-Vorschau (Datei), um Daten einzuspielen.');
+  }
+
+  onOpenUrl(event, target) {
+    event?.preventDefault?.();
+    const url = target?.dataset?.url || target?.href;
+    if (url) window.open(url, '_blank');
+    else ui.notifications.warn('Keine Ziel-URL gefunden.');
+  }
 
   _rememberDirectorWorkflow(action, result, { error = null } = {}) {
     const entry = { action, at: new Date().toISOString(), ok: !error, result: result ?? null, error: error ? (error?.message ?? String(error)) : null };
@@ -1665,13 +1817,117 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     }
   }
 
-  async onDirectorRunLesson() {}
-  async onDirectorProcessQueue() {}
-  async onDirectorGenerateQuests() {}
-  async onDirectorAcceptQuestSuggestion() {}
-  async onDirectorEvaluateSocial() {}
-  async onDirectorApplyMood() {}
-  async onDirectorRunbookNext() {}
+  async onDirectorRunLesson(event) {
+    event?.preventDefault?.();
+    const e = this._getEngine();
+    const director = e?.core?.director ?? e?.director;
+    try {
+      const result = await director?.kernel?.runLesson?.();
+      this._rememberDirectorWorkflow('directorRunLesson', result);
+      ui.notifications?.info?.('Lektion erfolgreich durchgefuehrt.');
+      this.render();
+    } catch(err) {
+      ui.notifications?.error("Lektions-Lauf fehlgeschlagen.");
+    }
+  }
+
+  async onDirectorProcessQueue(event) {
+    event?.preventDefault?.();
+    const e = this._getEngine();
+    const director = e?.core?.director ?? e?.director;
+    try {
+      const result = await director?.kernel?.dequeueQueuedEvents?.({ present: true });
+      this._rememberDirectorWorkflow('directorProcessQueue', result);
+      ui.notifications?.info?.('Event-Queue verarbeitet.');
+      this.render();
+    } catch(err) {
+      ui.notifications?.error("Queue-Verarbeitung fehlgeschlagen.");
+    }
+  }
+
+  async onDirectorGenerateQuests(event) {
+    event?.preventDefault?.();
+    const e = this._getEngine();
+    const director = e?.core?.director ?? e?.director;
+    try {
+      const result = await director?.kernel?.generateQuests?.();
+      this._rememberDirectorWorkflow('directorGenerateQuests', result);
+      ui.notifications?.info?.('Quest-Kandidaten generiert.');
+      this.render();
+    } catch(err) {
+      ui.notifications?.error("Quest-Generierung fehlgeschlagen.");
+    }
+  }
+
+  async onDirectorAcceptQuestSuggestion(event, target) {
+    event?.preventDefault?.();
+    const questId = target?.dataset?.questId;
+    if (!questId) return;
+    const e = this._getEngine();
+    const director = e?.core?.director ?? e?.director;
+    try {
+      await director?.kernel?.acceptQuest?.(questId);
+      ui.notifications?.info?.(`Quest "${questId}" akzeptiert.`);
+      this.render();
+    } catch(err) {
+      ui.notifications?.error("Quest-Annahme fehlgeschlagen.");
+    }
+  }
+
+  async onDirectorEvaluateSocial(event) {
+    event?.preventDefault?.();
+    const e = this._getEngine();
+    const director = e?.core?.director ?? e?.director;
+    try {
+      await director?.kernel?.evaluateSocialLinks?.();
+      ui.notifications?.info?.('Soziale Dynamik neu berechnet.');
+      this.render();
+    } catch(err) {
+      ui.notifications?.error("Soziale Evaluation fehlgeschlagen.");
+    }
+  }
+
+  async onDirectorApplyMood(event, target) {
+    event?.preventDefault?.();
+    const moodId = target?.dataset?.moodId;
+    const e = this._getEngine();
+    const atmosphere = e?.atmosphere;
+    try {
+      await atmosphere?.applyMood?.(moodId);
+      ui.notifications?.info?.(`Stimmung "${moodId}" angewendet.`);
+    } catch(err) {
+      ui.notifications?.error("Stimmungs-Wechsel fehlgeschlagen.");
+    }
+  }
+
+  async onDirectorRunbookNext(event) {
+    event?.preventDefault?.();
+    const e = this._getEngine();
+    const view = this.__renderCache?.viewModel ?? {};
+    const suggested = view.suggestedAction;
+
+    if (!suggested || !suggested.action || suggested.action === 'directorRunbookNext') {
+      ui.notifications?.info?.('Der Tageslauf ist aktuell auf dem neuesten Stand. Keine weiteren Prioritäten.');
+      return;
+    }
+
+    try {
+      this.setBusy(`Fuehre Runbook-Schritt aus: ${suggested.label}...`);
+      // Find the action handler on this instance
+      const handler = this[suggested.action];
+      if (typeof handler === 'function') {
+        await handler.call(this, event, { dataset: suggested });
+      } else {
+        // Fallback: try to execute via global router if possible, or warn
+        ui.notifications?.warn?.(`Aktion "${suggested.action}" konnte nicht automatisch ausgefuehrt werden.`);
+      }
+    } catch(err) {
+      ui.notifications?.error(`Fehler bei Runbook-Schritt: ${err.message}`);
+    } finally {
+      this.setBusy(false);
+      this.render();
+    }
+  }
 
 }
 

@@ -761,7 +761,7 @@
         "garten",
         "outdoor"
       ],
-      "defaultMoodKey": null,
+      "defaultMoodKey": "academy_day",
       "foundry": {
         "sceneKey": "scene_herb_garden",
         "sceneUuid": null

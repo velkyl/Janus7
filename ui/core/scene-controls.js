@@ -101,7 +101,7 @@ export function attachJanusSceneControls(controls, engine) {
   const openKiSearch = async () => {
     try {
       const { JanusShellApp } = await import('../apps/JanusShellApp.js');
-      JanusShellApp.onKiSearch();
+      JanusShellApp.showSingleton().onKiSearch();
       return true;
     } catch (err) {
       logger.error?.('[JANUS7] openKiSearch fehlgeschlagen:', { message: err?.message });
@@ -158,7 +158,7 @@ export function attachJanusSceneControls(controls, engine) {
       icon: 'fas fa-book-open',
       button: true,
       visible: toolVisible,
-      onClick: runTool(openQuestJournal)
+      onChange: runTool(openQuestJournal)
     },
     openDataStudio: {
       name: 'openDataStudio',
@@ -166,7 +166,7 @@ export function attachJanusSceneControls(controls, engine) {
       icon: 'fas fa-database',
       button: true,
       visible: toolVisible,
-      onClick: runTool(() => openUiApp('academyDataStudio', 'Academy Data Studio'))
+      onChange: runTool(() => openUiApp('academyDataStudio', 'Academy Data Studio'))
     },
     openAtmosphereDJ: {
         name: 'openAtmosphereDJ',
@@ -174,7 +174,7 @@ export function attachJanusSceneControls(controls, engine) {
         icon: 'fas fa-music',
         button: true,
         visible: toolVisible,
-        onClick: runTool(() => openUiApp('atmosphereDJ', 'atmosphereDJ'))
+        onChange: runTool(() => openUiApp('atmosphereDJ', 'atmosphereDJ'))
     },
     openSessionPrep: {
       name: 'openSessionPrep',
@@ -182,19 +182,10 @@ export function attachJanusSceneControls(controls, engine) {
       icon: 'fas fa-wand-magic-sparkles',
       button: true,
       visible: toolVisible,
-      onClick: runTool(() => openUiApp('shell', 'sessionPrep', { viewId: 'sessionPrep' }))
+      onChange: runTool(() => openUiApp('shell', 'sessionPrep', { viewId: 'sessionPrep' }))
     }
   };
 
-  // Convert other buttons to onClick as well
-  janusToolsRecord.openControlPanel.onClick = janusToolsRecord.openControlPanel.onChange;
-  delete janusToolsRecord.openControlPanel.onChange;
-  janusToolsRecord.openMasterDashboard.onClick = janusToolsRecord.openMasterDashboard.onChange;
-  delete janusToolsRecord.openMasterDashboard.onChange;
-  janusToolsRecord.openStoryGraph.onClick = janusToolsRecord.openStoryGraph.onChange;
-  delete janusToolsRecord.openStoryGraph.onChange;
-  janusToolsRecord.openKiSearch.onClick = janusToolsRecord.openKiSearch.onChange;
-  delete janusToolsRecord.openKiSearch.onChange;
 
   if (isRecord) {
     top.janus7 ??= {

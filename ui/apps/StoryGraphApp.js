@@ -17,6 +17,9 @@ export class StoryGraphApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     position: {
       width: 1024,
       height: 768
+    },
+    actions: {
+      refreshGraph: 'refresh'
     }
   };
 
@@ -29,11 +32,17 @@ export class StoryGraphApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   /** @override */
   async _prepareContext(_options) {
     const service = game.janus7?.graph;
-    const graph = service?.getGraph?.();
-    
+    if (!service) return { mermaidDef: 'graph TD; Error["Graph Service not available"];', nodesCount: 0, edgesCount: 0 };
+
+    // Auto-build if empty or dirty
+    if (!service.getGraph() || service.isDirty()) {
+      await service.build();
+    }
+
+    const graph = service.getGraph();
     if (!graph || typeof graph.getAllNodes !== 'function') {
       return {
-        mermaidDef: 'graph TD; Error["Graph Service not available"];',
+        mermaidDef: 'graph TD; Error["Graph build failed or invalid"];',
         nodesCount: 0,
         edgesCount: 0
       };
@@ -41,6 +50,14 @@ export class StoryGraphApp extends HandlebarsApplicationMixin(JanusBaseApp) {
 
     const nodes = graph.getAllNodes() || [];
     const edges = graph.getAllEdges() || [];
+
+    if (!nodes.length) {
+      return {
+        mermaidDef: 'graph TD; Empty["Keine Story-Daten gefunden"];',
+        nodesCount: 0,
+        edgesCount: 0
+      };
+    }
 
     let mermaidDef = 'graph TD;\n';
 
@@ -80,7 +97,8 @@ export class StoryGraphApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     return {
       mermaidDef,
       nodesCount: nodes.length,
-      edgesCount: edges.length
+      edgesCount: edges.length,
+      isTooLarge: nodes.length > 500
     };
   }
 
@@ -92,18 +110,36 @@ export class StoryGraphApp extends HandlebarsApplicationMixin(JanusBaseApp) {
     const mermaidNode = root?.querySelector('.mermaid');
     if (!mermaidNode) return;
 
-    this._renderMermaid(mermaidNode);
+    this._renderMermaid(mermaidNode, context);
   }
 
-  async _renderMermaid(mermaidNode) {
+  async _renderMermaid(mermaidNode, context) {
+    const loader = this.domElement?.querySelector('.graph-loader');
+    if (loader) loader.style.display = 'flex';
+
     try {
       const mermaid = await this.constructor._getMermaid();
       if (!this.rendered || !this.domElement?.isConnected) return;
-      await mermaid.run({ nodes: [mermaidNode] });
+      
+      // Clean up previous SVG to avoid ID collisions
+      mermaidNode.removeAttribute('data-processed');
+      mermaidNode.innerHTML = context?.mermaidDef || '';
+
+      await mermaid.run({ 
+        nodes: [mermaidNode],
+        suppressErrors: false 
+      });
+      
+      if (loader) loader.style.display = 'none';
     } catch (err) {
-      console.error('[JANUS7] Could not load mermaid script', err);
+      console.error('[JANUS7] Mermaid rendering failed', err);
+      if (loader) loader.style.display = 'none';
       if (mermaidNode.isConnected) {
-        mermaidNode.textContent = 'Laden von Mermaid fehlgeschlagen. Bitte Internetverbindung prüfen.';
+        mermaidNode.innerHTML = `<div class="error">
+          <i class="fas fa-exclamation-triangle"></i> Rendering fehlgeschlagen.<br>
+          Der Graph ist mit ${context?.nodesCount || 0} Knoten eventuell zu groß für Mermaid.js.<br>
+          <small>${err.message}</small>
+        </div>`;
       }
     }
   }
@@ -111,17 +147,25 @@ export class StoryGraphApp extends HandlebarsApplicationMixin(JanusBaseApp) {
   static async _getMermaid() {
     if (globalThis.window?.mermaid) return globalThis.window.mermaid;
     if (!this._mermaidLoadPromise) {
-      this._mermaidLoadPromise = import('https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs')
-        .then((m) => {
+      // Use a more robust loading approach
+      this._mermaidLoadPromise = (async () => {
+        try {
+          const m = await import('https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs');
           const mermaid = m.default;
           globalThis.window.mermaid = mermaid;
-          mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose' });
+          mermaid.initialize({ 
+            startOnLoad: false, 
+            theme: 'dark', 
+            securityLevel: 'loose', 
+            maxTextSize: 5000000, // Increase to 5MB for large graphs
+            flowchart: { useMaxWidth: false, htmlLabels: true }
+          });
           return mermaid;
-        })
-        .catch((err) => {
+        } catch (err) {
           this._mermaidLoadPromise = null;
           throw err;
-        });
+        }
+      })();
     }
     return this._mermaidLoadPromise;
   }

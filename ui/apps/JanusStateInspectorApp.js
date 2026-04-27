@@ -72,7 +72,7 @@ export class JanusStateInspectorApp extends HandlebarsApplicationMixin(JanusBase
     return {
       notReady: false,
       isGM: game.user?.isGM ?? false,
-      stateSnapshotJson: json
+      stateJson: json
     };
   }
 }

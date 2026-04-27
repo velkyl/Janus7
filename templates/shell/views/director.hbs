@@ -100,13 +100,21 @@
             {{/each}}
           </ul>
         {{else}}
-           <p class="muted">Keine neuen Social Fortschritte in dieser Sitzung.</p>
+          <div class="j7-empty-state j7-mt-sm">
+            <i class="fas fa-users-slash j7-empty-icon"></i>
+            <p class="muted">Keine neuen Social Fortschritte erkannt.</p>
+          </div>
         {{/if}}
 
         {{#if directorWorkflow.startedQuest}}
            <div class="j7-callout j7-mt-sm">
              <p><strong>Neue Quest:</strong> {{directorWorkflow.startedQuest.title}} gestartet (#{{directorWorkflow.startedQuest.actorLabel}})</p>
            </div>
+        {{else}}
+          <div class="j7-empty-state j7-mt-sm">
+            <i class="fas fa-scroll j7-empty-icon"></i>
+            <p class="muted">Keine aktiven Quest-Hooks im aktuellen Workflow.</p>
+          </div>
         {{/if}}
 
         <div class="j7-shell__card-actions j7-mt-sm">

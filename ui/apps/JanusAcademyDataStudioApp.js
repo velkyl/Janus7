@@ -71,7 +71,10 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
       selectRecord: '_onSelectRecord',
       changeDomain: '_onChangeDomain',
       changeMode: '_onChangeMode',
-      changeProfile: '_onChangeProfile'
+      changeSource: '_onChangeSource',
+      changeProfile: '_onChangeProfile',
+      syncSqlite: '_onSyncSqlite',
+      importJson: '_onImportJson'
     }
   };
 
@@ -89,6 +92,9 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     this._editorMode = options.editorMode ?? 'form';
     this._draft = null;
     this._syncEngine = null;
+    this._dataSource = options.dataSource ?? 'foundry'; // 'foundry' or 'sqlite'
+    this._sqliteRecords = [];
+    this._isSqliteLoading = false;
   }
 
   _moduleFlags(doc) {
@@ -130,11 +136,115 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     });
   }
 
+  _getSqliteTable(domainId) {
+    const map = {
+      'lesson': 'lessons',
+      'npc': 'npcs',
+      'location': 'locations',
+      'event': 'events'
+    };
+    return map[domainId] || null;
+  }
+
+  async _fetchSqliteRecords() {
+    const table = this._getSqliteTable(this._domain);
+    if (!table) {
+      this._sqliteRecords = [];
+      return;
+    }
+
+    const sqlite = game.janus7?.ext?.sqlite;
+    if (!sqlite) {
+      ui.notifications?.warn('SQLite Service nicht verfügbar.');
+      return;
+    }
+
+    const dbPath = game.janus7.config.get('sqliteDbPath') || 'janus7/data/keeper.db';
+    
+    this._isSqliteLoading = true;
+    this.refresh();
+
+    try {
+      const result = await sqlite.query(dbPath, `SELECT * FROM ${table}`);
+      
+      // If result is an array, we got direct data (Electron/Node)
+      if (Array.isArray(result)) {
+        this._sqliteRecords = result.map(r => {
+          // Parse JSON strings back to objects
+          const entry = { ...r };
+          for (const key in entry) {
+            if (typeof entry[key] === 'string' && (entry[key].startsWith('{') || entry[key].startsWith('['))) {
+              try { entry[key] = JSON.parse(entry[key]); } catch(e) {}
+            }
+          }
+          return entry;
+        });
+      } else if (result?.status === 'queued') {
+        ui.notifications?.info('SQLite-Abfrage eingereiht. Bitte warten Sie auf den Hintergrund-Worker.');
+        this._sqliteRecords = [];
+      }
+    } catch (err) {
+      console.error('[JANUS7] SQLite fetch failed', err);
+      ui.notifications?.error('SQLite-Abfrage fehlgeschlagen.');
+    } finally {
+      this._isSqliteLoading = false;
+      this.refresh();
+    }
+  }
+
+  _getRecords() {
+    if (this._dataSource === 'sqlite') {
+      const q = String(this._filter ?? '').trim().toLowerCase();
+      if (!q) return this._sqliteRecords;
+      return this._sqliteRecords.filter(r => 
+        String(r.name || r.title || r.id || '').toLowerCase().includes(q)
+      );
+    }
+    return this._getDocs(this._domain);
+  }
+
+  _activeRecordData() {
+    if (this._draft) return this._draft;
+    const selected = this._selectedRecord();
+    if (selected) {
+      if (selected.id) return selected;
+      return this._moduleFlags(selected) || selected;
+    }
+    return null;
+  }
+
+  _selectedRecord() {
+    if (this._dataSource === 'sqlite') {
+      return this._sqliteRecords.find(r => r.id === this._selectedUuid) || null;
+    }
+    return this._selectedDoc();
+  }
+
   _selectedDoc() {
     if (!this._selectedUuid) return null;
     return (game?.items?.contents ?? []).find((doc) => doc.uuid === this._selectedUuid)
       ?? (game?.journal?.contents ?? []).find((doc) => doc.uuid === this._selectedUuid)
+      ?? (game?.actors?.contents ?? []).find((doc) => doc.uuid === this._selectedUuid)
+      ?? (game?.scenes?.contents ?? []).find((doc) => doc.uuid === this._selectedUuid)
       ?? null;
+  }
+
+  _getDocs(domainId) {
+    if (!domainId) return [];
+    const engine = game.janus7;
+    const items = (game?.items?.contents ?? []).filter((doc) => this._moduleFlags(doc)?.domain === domainId);
+    const journals = (game?.journal?.contents ?? []).filter((doc) => this._moduleFlags(doc)?.domain === domainId);
+    return [...items, ...journals];
+  }
+
+  _moduleFlags(doc) {
+    if (!doc) return null;
+    return doc.getFlag?.(MODULE_ID, 'janus7') ?? doc.flags?.[MODULE_ID]?.janus7 ?? null;
+  }
+
+  _displayName(record) {
+    if (!record) return 'Unbekannt';
+    return record.name || record.title || record.label || record.id || 'Unbenannt';
   }
 
   _supportsForm(domainId) {
@@ -229,6 +339,12 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
   }
 
   _activeRecordData() {
+    if (this._dataSource === 'sqlite') {
+      const rec = this._selectedRecord();
+      if (rec) return foundry.utils.deepClone(rec);
+      if (this._draft) return foundry.utils.deepClone(this._draft);
+      return null;
+    }
     const selected = this._selectedDoc();
     if (selected) return foundry.utils.deepClone(this._moduleFlags(selected)?.data ?? {});
     if (this._draft) return foundry.utils.deepClone(this._draft);
@@ -520,6 +636,19 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
       modeSelect.appendChild(opt);
     }
     topRow.appendChild(modeSelect);
+    
+    const sourceSelect = document.createElement('select');
+    sourceSelect.dataset.action = 'changeSource';
+    sourceSelect.className = 'janus7-textarea j7-data-studio__input j7-data-studio__input--compact';
+    for (const [val, label] of [['foundry', 'Foundry World'], ['sqlite', 'SQLite DB']]) {
+      const opt = document.createElement('option');
+      opt.value = val;
+      opt.selected = this._dataSource === val;
+      opt.textContent = label;
+      sourceSelect.appendChild(opt);
+    }
+    topRow.appendChild(sourceSelect);
+    
     left.appendChild(topRow);
 
     const filterRow = document.createElement('div');
@@ -546,6 +675,23 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     seedBtn.setAttribute('aria-label', 'Seed Import (Journals + Items)');
     seedBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-seedling' }));
     filterRow.appendChild(seedBtn);
+
+    const syncSqliteBtn = document.createElement('button');
+    syncSqliteBtn.dataset.action = 'syncSqlite';
+    syncSqliteBtn.className = 'j7-btn';
+    syncSqliteBtn.title = 'Daten in SQLite Datenbank sichern (Keeper)';
+    syncSqliteBtn.setAttribute('aria-label', 'Sync to SQLite');
+    syncSqliteBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-database' }));
+    filterRow.appendChild(syncSqliteBtn);
+
+    const importJsonBtn = document.createElement('button');
+    importJsonBtn.dataset.action = 'importJson';
+    importJsonBtn.className = 'j7-btn';
+    importJsonBtn.title = 'JSON Datei importieren (Initialbetankung)';
+    importJsonBtn.setAttribute('aria-label', 'Import JSON');
+    importJsonBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-file-import' }));
+    filterRow.appendChild(importJsonBtn);
+
     left.appendChild(filterRow);
 
     const metaDiv = document.createElement('div');
@@ -562,35 +708,46 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     ssotCode.textContent = `flags.${MODULE_ID}.data`;
     ssotSpan.appendChild(ssotCode);
     metaDiv.appendChild(ssotSpan);
-    left.appendChild(metaDiv);
-
     const listDiv = document.createElement('div');
     listDiv.dataset.j7 = 'list';
     listDiv.className = 'j7-data-studio__list';
     left.appendChild(listDiv);
 
-    const list = left.querySelector('[data-j7="list"]');
-    for (const doc of docs) {
-      const flags = this._moduleFlags(doc);
-      const isSelected = doc.uuid === this._selectedUuid;
-      const badge = doc?.documentName === 'Item' ? 'Item' : 'Journal';
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.dataset.action = 'selectRecord';
-      button.dataset.uuid = doc.uuid;
-      button.className = `j7-btn j7-data-studio__record${isSelected ? ' is-selected' : ''}`;
-      const titleDiv = document.createElement('div');
-      titleDiv.className = 'j7-data-studio__title';
-      titleDiv.textContent = doc.name;
-      button.appendChild(titleDiv);
-      const subtitleDiv = document.createElement('div');
-      subtitleDiv.className = 'j7-data-studio__subtitle';
-      const janusIdCode = document.createElement('code');
-      janusIdCode.textContent = flags?.janusId ?? '';
-      subtitleDiv.appendChild(janusIdCode);
-      subtitleDiv.append(` · ${badge}`);
-      button.appendChild(subtitleDiv);
-      list.appendChild(button);
+    const list = listDiv;
+    const records = this._getRecords();
+
+    if (this._isSqliteLoading) {
+      const loading = document.createElement('div');
+      loading.className = 'j7-data-studio__empty';
+      loading.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Lade SQLite Daten...';
+      list.appendChild(loading);
+    } else {
+      for (const doc of records) {
+        const isSelected = this._dataSource === 'sqlite' 
+          ? (doc.id === this._selectedUuid)
+          : (doc.uuid === this._selectedUuid);
+        
+        const janusId = this._dataSource === 'sqlite' ? doc.id : this._moduleFlags(doc)?.janusId;
+        const badge = this._dataSource === 'sqlite' ? 'SQL' : (doc?.documentName === 'Item' ? 'Item' : 'Journal');
+        
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.dataset.action = 'selectRecord';
+        button.dataset.uuid = this._dataSource === 'sqlite' ? doc.id : doc.uuid;
+        button.className = `j7-btn j7-data-studio__record${isSelected ? ' is-selected' : ''}`;
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'j7-data-studio__title';
+        titleDiv.textContent = doc.name || doc.title || doc.id;
+        button.appendChild(titleDiv);
+        const subtitleDiv = document.createElement('div');
+        subtitleDiv.className = 'j7-data-studio__subtitle';
+        const janusIdCode = document.createElement('code');
+        janusIdCode.textContent = janusId ?? '';
+        subtitleDiv.appendChild(janusIdCode);
+        subtitleDiv.append(` · ${badge}`);
+        button.appendChild(subtitleDiv);
+        list.appendChild(button);
+      }
     }
 
     const right = document.createElement('div');
@@ -625,8 +782,9 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
       emptyDiv.appendChild(ep3);
       right.appendChild(emptyDiv);
     } else {
-      const flags = this._moduleFlags(selected) ?? { janusId: activeData?.id ?? '', dataType: domain.id };
-      const docLabel = selected?.documentName === 'Item' ? 'Item' : (selected?.documentName === 'JournalEntry' ? 'Journal' : 'Draft');
+      const isSql = this._dataSource === 'sqlite';
+      const flags = isSql ? { janusId: activeData?.id, dataType: this._domain } : (this._moduleFlags(selected) ?? { janusId: activeData?.id ?? '', dataType: domain.id });
+      const docLabel = isSql ? 'SQLite' : (selected?.documentName === 'Item' ? 'Item' : (selected?.documentName === 'JournalEntry' ? 'Journal' : 'Draft'));
 
       // Header row
       const headerRow = document.createElement('div');
@@ -654,7 +812,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
       headerRow.appendChild(headerInfo);
       const headerBtns = document.createElement('div');
       headerBtns.className = 'j7-data-studio__row';
-      if (selected) {
+      if (selected && !isSql) {
         const openBtn = document.createElement('button');
         openBtn.dataset.action = 'open';
         openBtn.className = 'j7-btn';
@@ -666,7 +824,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
       saveBtn.dataset.action = 'save';
       saveBtn.className = 'j7-btn';
       saveBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-save' }));
-      saveBtn.append(' Save');
+      saveBtn.append(isSql ? ' Save to Foundry' : ' Save');
       headerBtns.appendChild(saveBtn);
       headerRow.appendChild(headerBtns);
       right.appendChild(headerRow);
@@ -883,7 +1041,16 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     this._domain = String(target.value);
     this._selectedUuid = null;
     this._draft = null;
-    this.refresh?.();
+    if (this._dataSource === 'sqlite') this._fetchSqliteRecords();
+    else this.refresh?.();
+  }
+
+  _onChangeSource(event, target) {
+    this._dataSource = String(target.value || 'foundry');
+    this._selectedUuid = null;
+    this._draft = null;
+    if (this._dataSource === 'sqlite') this._fetchSqliteRecords();
+    else this.refresh?.();
   }
 
   _onChangeMode(event, target) {
@@ -940,22 +1107,100 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
 
     try {
       const record = this._extractEditedRecord(element, this._domain, seed);
-      const selected = this._selectedDoc();
-      const selectedFlags = this._moduleFlags(selected);
-      const selectedId = String(selectedFlags?.janusId ?? '').trim();
-      const nextId = String(record?.id ?? '').trim();
+      
+      if (this._dataSource === 'sqlite') {
+        // Direct SQLite Edit Path
+        await this._saveToSqlite(record);
+        ui.notifications?.info?.('Record in SQLite-Puffer aktualisiert. Synchronisierung eingereiht.');
+      } else {
+        // Standard Foundry Path
+        const selected = this._selectedDoc();
+        const selectedFlags = this._moduleFlags(selected);
+        const selectedId = String(selectedFlags?.janusId ?? '').trim();
+        const nextId = String(record?.id ?? '').trim();
 
-      if (selectedId && nextId && selectedId !== nextId) {
-        throw new Error(`id mismatch: editor.id=${nextId} vs janusId=${selectedId}`);
+        if (selectedId && nextId && selectedId !== nextId) {
+          throw new Error(`id mismatch: editor.id=${nextId} vs janusId=${selectedId}`);
+        }
+
+        await this._persistRecord(record);
+        ui.notifications?.info?.('In Foundry gespeichert.');
       }
-
-      await this._persistRecord(record);
-      ui.notifications?.info?.('Saved.');
       this.refresh?.();
     } catch (err) {
       ui.notifications?.error?.(`Save failed: ${err?.message ?? err}`);
       this._getEngine()?.recordError?.('ui.studio', 'save_record', err);
     }
+  }
+
+  /**
+   * Fetches records from the external SQLite database via the bridge.
+   * @protected
+   */
+  async _fetchSqliteRecords() {
+    const engine = this._getEngine();
+    const service = engine?.ext?.sqlite;
+    if (!service) return;
+
+    this._isSqliteLoading = true;
+    try {
+      const dbPath = engine.config.get('sqliteDbPath') || 'janus7/data/keeper.db';
+      const table = this._getSqliteTable(this._domain);
+      const query = `SELECT * FROM ${table}`;
+      
+      const result = await service.query(dbPath, query);
+      if (Array.isArray(result)) {
+        this._sqliteRecords = result.map(r => {
+          // Parse JSON strings back to objects
+          for (const [k, v] of Object.entries(r)) {
+            if (typeof v === 'string' && (v.startsWith('{') || v.startsWith('['))) {
+              try { r[k] = JSON.parse(v); } catch (_) { /* noop */ }
+            }
+          }
+          return r;
+        });
+      } else if (result?.status === 'queued') {
+        ui.notifications?.info('SQLite Abfrage eingereiht...');
+      }
+    } catch (err) {
+      this._getEngine()?.core?.logger?.error?.(`[JANUS7][Studio] Fetch SQLite failed`, err);
+    } finally {
+      this._isSqliteLoading = false;
+    }
+  }
+
+  /**
+   * Maps a domain ID to its corresponding SQLite table name.
+   * @param {string} domainId 
+   * @returns {string}
+   * @protected
+   */
+  _getSqliteTable(domainId) {
+    const map = {
+      'lesson': 'lessons',
+      'npc': 'npcs',
+      'location': 'locations',
+      'event': 'events'
+    };
+    return map[domainId] || 'generic_data';
+  }
+
+  async _saveToSqlite(updatedRecord) {
+    const engine = this._getEngine();
+    if (!engine?.ext?.syncSqlite) throw new Error('SQLite Sync nicht verfügbar.');
+
+    // 1. Update local cache
+    const idx = this._sqliteRecords.findIndex(r => r.id === updatedRecord.id);
+    if (idx !== -1) this._sqliteRecords[idx] = updatedRecord;
+    else this._sqliteRecords.push(updatedRecord);
+
+    // 2. Trigger full sync to SQLite (current domain records)
+    const dbPath = engine.config.get('sqliteDbPath') || 'janus7/data/keeper.db';
+    const data = {};
+    const table = this._getSqliteTable(this._domain);
+    data[table] = { [table]: this._sqliteRecords };
+
+    await engine.ext.sqlite.syncDatabase(dbPath, data);
   }
 
   async _onOpenLink() {
@@ -988,6 +1233,78 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
       this._getEngine()?.recordError?.('ui.studio', 'unlink_record', err);
     }
   }
+
+  async _onSyncSqlite() {
+    const engine = this._getEngine();
+    if (!engine?.ext?.syncSqlite) {
+      ui.notifications?.error('SQLite Sync Service nicht verfügbar.');
+      return;
+    }
+
+    try {
+      ui.notifications?.info('Starte SQLite Synchronisierung...');
+      const result = await engine.ext.syncSqlite();
+      if (result?.status === 'queued') {
+        ui.notifications?.info('Synchronisierung in Outbox eingereiht. Hintergrund-Worker erforderlich.');
+      } else {
+        ui.notifications?.info('Synchronisierung erfolgreich abgeschlossen.');
+      }
+    } catch (err) {
+      ui.notifications?.error(`SQLite Sync fehlgeschlagen: ${err.message}`);
+      engine.recordError?.('ui.studio', 'sync_sqlite', err);
+    }
+  }
+
+  async _onImportJson() {
+    const content = `
+      <div class="j7-dialog-content">
+        <p>Wählen Sie eine JSON-Datei für die Initialbetankung aus. Die Daten werden direkt in die <strong>${this._dataSource === 'sqlite' ? 'SQLite DB' : 'Foundry Welt'}</strong> geladen.</p>
+        <div class="j7-dialog-form-row">
+          <input type="file" id="j7-import-file" accept=".json" class="j7-dialog-input-grow" />
+        </div>
+      </div>
+    `;
+
+    const { DialogV2 } = foundry.applications.api;
+    const res = await DialogV2.prompt({
+      window: { title: 'JSON Initialbetankung' },
+      content,
+      ok: {
+        label: 'Importieren',
+        callback: async (event, target) => {
+          const fileInput = target.querySelector('#j7-import-file');
+          if (!fileInput.files.length) return null;
+          return await fileInput.files[0].text();
+        }
+      }
+    }).catch(() => null);
+
+    if (!res) return;
+
+    try {
+      const data = JSON.parse(res);
+      const engine = this._getEngine();
+
+      if (this._dataSource === 'sqlite') {
+        const dbPath = engine.config.get('sqliteDbPath') || 'janus7/data/keeper.db';
+        const table = this._getSqliteTable(this._domain);
+        
+        // Ensure data is in bridge format
+        const bundle = { [table]: { [table]: Array.isArray(data) ? data : [data] } };
+        await engine.ext.sqlite.syncDatabase(dbPath, bundle);
+        ui.notifications?.info('JSON in SQLite importiert.');
+        await this._fetchSqliteRecords();
+      } else {
+        const records = Array.isArray(data) ? data : [data];
+        for (const r of records) {
+          await this._persistRecord(r);
+        }
+        ui.notifications?.info(`${records.length} Datensätze in Foundry importiert.`);
+      }
+      this.refresh();
+    } catch (err) {
+      ui.notifications?.error(`Import fehlgeschlagen: ${err.message}`);
+    }
   }
 }
 

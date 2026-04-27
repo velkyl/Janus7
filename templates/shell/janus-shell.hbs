@@ -32,12 +32,17 @@
       <span class="j7-shell__status-pill j7-shell__status-pill--accent">{{header.activeViewTitle}}</span>
     </div>
     <div class="j7-shell__header-actions">
+      {{#if isBusy}}
+        <div class="j7-shell__busy" data-tooltip="{{busyMessage}}">
+          <i class="fas fa-spinner fa-spin"></i>
+        </div>
+      {{/if}}
       {{#each header.quickPanels}}
-        <button type="button" class="j7-shell__quick" data-action="openPanel" data-panel-id="{{id}}" title="{{title}}">
+        <button type="button" class="j7-shell__quick" data-action="openPanel" data-panel-id="{{id}}" data-tooltip="{{title}}">
           <i class="{{icon}} j7-shell__quick-icon" aria-hidden="true"></i>
         </button>
       {{/each}}
-      <button type="button" class="j7-shell__command" data-action="togglePalette">{{shellPaletteHint}}</button>
+      <button type="button" class="j7-shell__command" data-action="togglePalette" data-tooltip="Kommando-Konsole (Alt+Space)">{{shellPaletteHint}}</button>
     </div>
   </header>
 
@@ -55,6 +60,7 @@
                     class="j7-shell__nav {{#if isActive}}is-active{{/if}}"
                     data-action="selectView"
                     data-view-id="{{id}}"
+                    data-tooltip="{{title}}"
                     aria-pressed="{{#if isActive}}true{{else}}false{{/if}}">
               <i class="{{icon}} j7-shell__nav-icon" aria-hidden="true"></i>
               <span class="j7-shell__nav-copy">

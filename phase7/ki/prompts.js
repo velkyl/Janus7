@@ -90,34 +90,35 @@ export const Prompts = {
    * Real-time enrichment templates for different types.
    */
   ENRICHMENT: {
-    event: ({ text, meta }) => `Enrich the following event description for a Dark Eye (DSA5) campaign.
-Context: Magic Academy in Aventuria.
-Original Text: "${text}"
-Metadata: ${JSON.stringify(meta)}
-Produce a detailed, atmospheric, and lore-friendly description in German.`,
+    event: ({ text, meta }) => `Du bist der Chronist der Janus-Akademie. Beschreibe das folgende Ereignis für eine "Das Schwarze Auge" (DSA5) Kampagne.
+Nutze eine atmosphärische, mittelalterliche Sprache, die den mystischen Flair einer Magierakademie in Aventurien einfängt.
+Originaler Text: "${text}"
+Metadaten: ${JSON.stringify(meta)}
+Antworte in elegantem Deutsch. Achte auf Details wie Kerzenschein, den Geruch von Pergament oder das ferne Murmeln von Zauberformeln.`,
     
-    situation: ({ text, meta }) => `Describe the following situation in a magic academy. 
+    situation: ({ text, meta }) => `Beschreibe die folgende Situation in der Akademie. Biete dem Spielleiter sensorische Details (Hören, Riechen, Tasten) und schlage zwei mögliche Handlungsoptionen für die Spieler vor.
 Original: "${text}"
-Context: ${JSON.stringify(meta)}
-Provide choices and sensory details.`,
+Kontext: ${JSON.stringify(meta)}
+Stil: Immersiv, aventurisch, geheimnisvoll.`,
     
-    visual: ({ text, meta }) => `Generate a highly detailed visual prompt for an AI image generator (like Midjourney or DALL-E) based on this description:
-"${text}"
-Context: ${JSON.stringify(meta)}
-Focus on light, composition, and Aventurian aesthetics.`,
-
-    dialogue: ({ text, meta }) => `Generate a dialogue snippet for an NPC in a Dark Eye academy.
-NPC Meta: ${JSON.stringify(meta.npc)}
-Player Relationship: ${meta.relationship}
-Context: ${text}
-The response should be in German, immersive, and reflect the NPC's status and personality.`,
-
-    consequences: ({ action, state }) => `Based on the player action "${action}" and the current academy state, propose three cinematic and mechanically relevant consequences.
-State: ${JSON.stringify(state)}
-Respond in German with "Option 1", "Option 2", "Option 3".`,
-
-    atmosphere: ({ situation, state }) => `Suggest atmospheric changes for this situation: "${situation}".
-Current State: ${JSON.stringify(state)}
-Include: Lighting color (hex), a music mood (e.g., 'mystic', 'tense'), and a short sensory description (Smell, Temperature).`
+    visual: ({ text, meta }) => `Generiere einen hochdetaillierten Visual Prompt für einen KI-Bildgenerator (Imagen/Midjourney).
+Thema: "${text}"
+Kontext: ${JSON.stringify(meta)}
+Ästhetik: Aventurisch (DSA), Fokus auf dramatische Lichtsetzung (Chiaroscuro), Staubpartikel im Licht, antike Artefakte. Vermeide generische High-Fantasy; nutze bodenständige, aber magisch durchsetzte Details.`,
+    
+    dialogue: ({ text, meta }) => `Generiere einen Dialog-Schnipsel für einen NSC der Akademie.
+NSC-Profil: ${JSON.stringify(meta.npc)}
+Beziehung zum Spieler: ${meta.relationship}
+Situation: ${text}
+Der NSC sollte seinem Stand und seiner Persönlichkeit entsprechend sprechen (z.B. arrogant als Hochmagier, eifrig als Adept). Sprache: Deutsch.`,
+    
+    consequences: ({ action, state }) => `Die Spieler haben folgende Aktion durchgeführt: "${action}".
+Basierend auf dem aktuellen Zustand der Akademie (${JSON.stringify(state)}), schlage drei filmische und regeltechnisch relevante Konsequenzen vor.
+Eine Konsequenz sollte positiv, eine neutral und eine gefährlich sein.
+Antworte auf Deutsch mit "Option 1: [Titel]", "Option 2: [Titel]", "Option 3: [Titel]".`,
+    
+    atmosphere: ({ situation, state }) => `Schlage atmosphärische Änderungen für diese Situation vor: "${situation}".
+Aktueller Status: ${JSON.stringify(state)}
+Gib an: Lichtfarbe (Hex-Code), eine musikalische Stimmung (z.B. 'Sphärisch', 'Bedrohlich', 'Feierlich') und eine kurze sensorische Beschreibung (Geruch, Temperatur).`
   }
 };

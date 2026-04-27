@@ -110,4 +110,16 @@ export class JanusSqliteService {
     
     return { status: 'queued', taskId, info: 'Sync Task written to outbox.' };
   }
+
+  /**
+   * Removes old task files from the outbox folder.
+   * Only works if IO service supports list/remove (v2+).
+   */
+  async cleanupOutbox(maxAgeMs = 3600000) {
+    if (!this.io?.cleanupOutbox) {
+      this.logger.warn('[JANUS7][SQL] IO service does not support outbox cleanup.');
+      return;
+    }
+    await this.io.cleanupOutbox(maxAgeMs);
+  }
 }

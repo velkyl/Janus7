@@ -39,7 +39,9 @@ export class JanusAcademyOverviewApp extends HandlebarsApplicationMixin(JanusBas
       selectSlot: '_onSelectSlot',
       setActiveSlot: '_onSetActiveSlot',
       gotoToday: '_onGotoToday',
-      openLessonLibrary: '_onOpenLessonLibrary'
+      openLessonLibrary: '_onOpenLessonLibrary',
+      openSheet: 'onOpenSheet',
+      openUrl: 'onOpenUrl'
     }
   };
 

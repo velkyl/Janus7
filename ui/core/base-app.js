@@ -71,6 +71,37 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
 
     /** @type {ReturnType<typeof setTimeout>|null} */
     this._rerenderTimer = null;
+
+    // Resolve action handlers immediately in the constructor to ensure they are functions
+    // when Foundry's internal click handlers are registered.
+    this._bindActionHandlers();
+  }
+
+  /**
+   * Resolves string action handlers in this.options.actions to bound instance methods.
+   * Required for ApplicationV2 compatibility where actions must be functions.
+   * @protected
+   */
+  _bindActionHandlers() {
+    const actions = this.options?.actions;
+    if (!actions || typeof actions !== 'object') return;
+
+    for (const [key, val] of Object.entries(actions)) {
+      if (typeof val === 'string') {
+        const method = this[val];
+        if (typeof method === 'function') {
+          actions[key] = method.bind(this);
+        } else {
+          // Check if it exists on the prototype (fallback for some inheritance patterns)
+          const protoMethod = this.constructor.prototype[val];
+          if (typeof protoMethod === 'function') {
+            actions[key] = protoMethod.bind(this);
+          } else {
+            this._getLogger()?.warn?.(`[JANUS7] Action "${key}" references missing method "${val}" on ${this.constructor.name}`);
+          }
+        }
+      }
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -93,23 +124,6 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
    * Unified DOM element accessor guaranteed to return a raw HTMLElement in ApplicationV2 flows.
    * @returns {HTMLElement|null}
    */
-  /**
-   * Unified accessor for the JANUS7 engine instance.
-   * Checks the local property first, then the global game object.
-   * @returns {any}
-   */
-  _getEngine() {
-    return this.engine ?? globalThis.game?.janus7 ?? null;
-  }
-
-  /**
-   * Unified logger accessor.
-   * @returns {Console|object}
-   */
-  _getLogger() {
-    return this._getEngine()?.core?.logger ?? console;
-  }
-
   get domElement() {
     const raw = this.element ?? this._element ?? this._legacyElement ?? null;
     if (!raw) return null;
@@ -391,6 +405,15 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
   }
 
   /**
+   * Refreshes the application UI by triggering a re-render.
+   * @param {boolean} [force=true] - Whether to force a full re-render.
+   * @returns {Promise<JanusBaseApp>} - A promise that resolves to the application instance.
+   */
+  refresh(force = true) {
+    return this.render({ force });
+  }
+
+  /**
    * Guard: returns true if the current user is a GM, otherwise shows a warning
    * notification, logs the attempt, and returns false.
    * Call at the top of any mutating action handler to enforce server-side intent.
@@ -597,6 +620,42 @@ export class JanusBaseApp extends foundry.applications.api.ApplicationV2 {
         details.hidden = expanded;
       }
     });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Common Action Handlers
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Universal action handler to open a document sheet.
+   * Expects data-uuid on the target element.
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  async onOpenSheet(event, target) {
+    event?.preventDefault?.();
+    const uuid = target?.dataset?.uuid;
+    if (!uuid) return;
+    try {
+      const doc = await fromUuid(uuid);
+      if (doc) return doc.sheet ? doc.sheet.render(true) : doc.render?.(true);
+      ui.notifications?.warn?.(`Dokument konnte nicht gefunden werden: ${uuid}`);
+    } catch (err) {
+      this._getLogger().error?.(`[JANUS7] onOpenSheet failed for ${uuid}`, err);
+    }
+  }
+
+  /**
+   * Universal action handler to open an external URL.
+   * Expects data-url on the target element.
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
+  async onOpenUrl(event, target) {
+    event?.preventDefault?.();
+    const url = target?.dataset?.url;
+    if (!url) return;
+    window.open(url, '_blank', 'noopener,noreferrer');
   }
 
   // ---------------------------------------------------------------------------
