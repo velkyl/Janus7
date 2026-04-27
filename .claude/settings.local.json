@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:30000)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:30000\" -TimeoutSec 3 -UseBasicParsing; $r.StatusCode } catch { \"not running: $_\" })",
+      "mcp__Claude_in_Chrome__browser_batch"
+    ]
+  }
+}
