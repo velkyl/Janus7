@@ -1,0 +1,16 @@
+<div class="j7-shell__metrics">
+  {{#each metrics}}
+    <div class="j7-shell__metric">
+      <span>{{label}}</span>
+      <strong>{{value}}</strong>
+    </div>
+  {{/each}}
+</div>
+<div class="j7-shell__list j7-mt-sm">
+  {{#each items}}
+    <div class="j7-shell__list-row">
+      <span>{{label}}</span>
+      <span class="tag {{#if (eq value 'OK')}}tag--success{{else}}tag--warn{{/if}}">{{value}}</span>
+    </div>
+  {{/each}}
+</div>

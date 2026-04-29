@@ -1,0 +1,30 @@
+{{#with directorRunbook}}
+  <div class="j7-shell__metrics">
+    {{#if suggestedAction}}
+      <div class="j7-callout">
+        <p><strong>Nächste Aktion:</strong> {{suggestedAction.label}}</p>
+        <p class="muted">{{suggestedAction.reason}}</p>
+        <div class="j7-shell__card-actions j7-mt-sm">
+          <button type="button" class="j7-shell__btn" data-action="directorRunbookNext"><i class="fas fa-play"></i> Fortsetzen</button>
+          <button type="button" class="j7-shell__btn" data-action="{{suggestedAction.action}}"><i class="fas fa-bolt"></i> Ausführen</button>
+        </div>
+      </div>
+    {{else}}
+      <p class="muted">Aktuell keine Runbook Empfehlung.</p>
+    {{/if}}
+
+    {{#if moodSuggestion}}
+      <div class="j7-shell__metric j7-mt-sm">
+        <span>Mood Suggestion</span>
+        <strong>{{moodSuggestion.moodLabel}}</strong>
+      </div>
+    {{/if}}
+
+    <div class="j7-shell__card-actions j7-mt-sm" style="flex-wrap: wrap;">
+      <button type="button" class="j7-shell__btn" data-action="startDirectorDay"><i class="fas fa-sun"></i> Tagesstart</button>
+      <button type="button" class="j7-shell__btn" data-action="directorProcessQueue"><i class="fas fa-list-check"></i> Queue Run</button>
+      <button type="button" class="j7-shell__btn" data-action="directorRunLesson"><i class="fas fa-chalkboard-teacher"></i> Lesson Run</button>
+      <button type="button" class="j7-shell__btn" data-action="directorApplyMood"><i class="fas fa-music"></i> Mood Apply</button>
+    </div>
+  </div>
+{{/with}}

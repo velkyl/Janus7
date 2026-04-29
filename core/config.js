@@ -394,6 +394,15 @@ export class JanusConfig {
         { id: 'models/imagen-3.0-generate-001', name: 'Imagen 3.0' }
       ]
     });
+
+    game.settings.register(MODULE_ID, 'uiLayout', {
+      name: 'JANUS7.Settings.UiLayout.Name',
+      hint: 'JANUS7.Settings.UiLayout.Hint',
+      scope: 'client',
+      config: false,
+      type: Object,
+      default: {}
+    });
   }
 
   static registerBridgeSettings() {

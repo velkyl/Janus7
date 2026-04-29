@@ -1,0 +1,14 @@
+<div class="j7-shell__list">
+  {{#each items}}
+    <div class="j7-shell__list-row j7-flex-between">
+      <div class="j7-flex-row j7-gap-sm">
+        <i class="fas fa-paw muted"></i>
+        <span>{{label}}</span>
+      </div>
+      <div class="j7-flex-row j7-gap-xs">
+        <button type="button" class="j7-icon-btn" data-action="executeShellAction" data-command="rollFauna" data-id="{{id}}" title="Probe würfeln"><i class="fas fa-dice-d20"></i></button>
+        <button type="button" class="j7-icon-btn" data-action="openSheet" data-uuid="{{uuid}}" title="Werte öffnen"><i class="fas fa-address-card"></i></button>
+      </div>
+    </div>
+  {{/each}}
+</div>

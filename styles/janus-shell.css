@@ -259,12 +259,21 @@
 }
 
 .j7-shell__sidebar-heading {
-  padding: 2px 2px 0;
-  color: var(--j7s-muted);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  padding: 12px 4px 4px;
+  color: var(--j7s-accent);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  border-bottom: 1px solid var(--j7s-border-soft);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.j7-shell__sidebar-section:first-child .j7-shell__sidebar-heading {
+  padding-top: 4px;
 }
 
 .j7-shell__nav {
@@ -411,9 +420,88 @@
   color: var(--j7s-border-soft);
 }
 
-.j7-shell__view {
+.j7-shell__view-grid {
   display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
+  align-items: start;
+}
+
+.is-layout-mode .j7-shell__view-grid {
+  gap: 20px;
+}
+
+.j7-shell__card.is-dragging {
+  opacity: 0.4;
+  transform: scale(0.95);
+  border: 2px dashed var(--j7s-accent);
+}
+
+.j7-shell__card.drag-over {
+  border-left: 4px solid var(--j7s-accent);
+  transform: translateX(4px);
+}
+
+.j7-shell__card.is-hidden-module {
+  opacity: 0.5;
+  filter: grayscale(0.8);
+}
+
+.j7-card__layout-controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  z-index: 10;
+}
+
+.j7-card__drag-handle {
+  width: 28px;
+  height: 28px;
+  background: var(--j7s-accent);
+  color: #fff;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.j7-card__drag-handle:active {
+  cursor: grabbing;
+}
+
+.j7-card__hide-btn {
+  width: 28px;
+  height: 28px;
+  background: var(--j7s-bg-strong);
+  border: 1px solid var(--j7s-border);
+  border-radius: 4px;
+  color: var(--j7s-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.j7-card__hide-btn:hover {
+  background: var(--j7s-accent-soft);
+  color: var(--j7s-accent);
+}
+
+.j7-layout-toolbar {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.j7-shell__view {
+  display: block; /* Override previous grid */
 }
 
 .j7-shell__section {

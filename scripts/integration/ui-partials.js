@@ -22,9 +22,19 @@ const PARTIALS = [
   'templates/shell/views/sessionPrep.hbs',
   'templates/shell/views/system.hbs',
   'templates/shell/views/tools.hbs',
+  'templates/shell/views/workbench.hbs',
   
   // Panels
-  'templates/shell/panels/default-panel.hbs'
+  'templates/shell/panels/default-panel.hbs',
+  'templates/shell/panels/layout-manager.hbs',
+
+  // Parts
+  'templates/shell/parts/modular-view.hbs',
+  'templates/shell/parts/modules/runbook.hbs',
+  'templates/shell/parts/modules/workflow-events.hbs',
+  'templates/shell/parts/modules/status-monitor.hbs',
+  'templates/shell/parts/modules/regional-fauna.hbs',
+  'templates/shell/parts/modules/slot-builder.hbs'
 ];
 
 /**

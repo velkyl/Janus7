@@ -1,0 +1,27 @@
+{{#with directorWorkflow}}
+  <div class="j7-shell__metrics">
+    {{#if socialAdvances.length}}
+      <ul class="janus7-list">
+        {{#each socialAdvances}}
+          <li><span class="tag">SOCIAL</span> <strong>{{label}}</strong> (Rank {{rank}})</li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <div class="j7-empty-state j7-mt-sm">
+        <i class="fas fa-users-slash j7-empty-icon"></i>
+        <p class="muted">Keine neuen Social Fortschritte erkannt.</p>
+      </div>
+    {{/if}}
+
+    {{#if startedQuest}}
+       <div class="j7-callout j7-mt-sm">
+         <p><strong>Neue Quest:</strong> {{startedQuest.title}} gestartet (#{{startedQuest.actorLabel}})</p>
+       </div>
+    {{else}}
+      <div class="j7-empty-state j7-mt-sm">
+        <i class="fas fa-scroll j7-empty-icon"></i>
+        <p class="muted">Keine aktiven Quest-Hooks im aktuellen Workflow.</p>
+      </div>
+    {{/if}}
+  </div>
+{{/with}}

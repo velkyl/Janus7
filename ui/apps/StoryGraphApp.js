@@ -123,7 +123,7 @@ export class StoryGraphApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       
       // Clean up previous SVG to avoid ID collisions
       mermaidNode.removeAttribute('data-processed');
-      mermaidNode.innerHTML = context?.mermaidDef || '';
+      mermaidNode.textContent = context?.mermaidDef || '';
 
       await mermaid.run({ 
         nodes: [mermaidNode],
@@ -135,11 +135,16 @@ export class StoryGraphApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       console.error('[JANUS7] Mermaid rendering failed', err);
       if (loader) loader.style.display = 'none';
       if (mermaidNode.isConnected) {
-        mermaidNode.innerHTML = `<div class="error">
-          <i class="fas fa-exclamation-triangle"></i> Rendering fehlgeschlagen.<br>
-          Der Graph ist mit ${context?.nodesCount || 0} Knoten eventuell zu groß für Mermaid.js.<br>
-          <small>${err.message}</small>
-        </div>`;
+        const errDiv = document.createElement('div');
+        errDiv.className = 'error';
+        const icon = document.createElement('i');
+        icon.className = 'fas fa-exclamation-triangle';
+        errDiv.append(icon, ' Rendering fehlgeschlagen.', document.createElement('br'));
+        errDiv.append(`Der Graph ist mit ${context?.nodesCount || 0} Knoten eventuell zu groß für Mermaid.js.`, document.createElement('br'));
+        const small = document.createElement('small');
+        small.textContent = err.message;
+        errDiv.appendChild(small);
+        mermaidNode.replaceChildren(errDiv);
       }
     }
   }

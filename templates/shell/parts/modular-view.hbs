@@ -1,0 +1,159 @@
+<div class="j7-shell__view j7-shell__view--{{viewId}} {{#if layoutMode}}is-layout-mode{{/if}}">
+  
+  {{#if layoutMode}}
+    <div class="j7-layout-toolbar j7-mt-sm j7-mb-md">
+      <div class="j7-callout j7-callout--info">
+        <div class="j7-flex-row j7-flex-between j7-flex-center">
+          <div>
+            <strong><i class="fas fa-up-down-left-right"></i> Layout-Editor aktiv</strong>
+            <p class="small muted">Ziehe die Karten am Griff ☰ um sie neu anzuordnen. Klicke auf das Auge um Module auszublenden.</p>
+          </div>
+          <div class="j7-flex-row j7-gap-sm">
+            <button type="button" class="j7-shell__btn" data-action="resetLayout"><i class="fas fa-undo"></i> Zurücksetzen</button>
+            <button type="button" class="j7-shell__btn j7-shell__btn--primary" data-action="toggleLayoutMode"><i class="fas fa-check"></i> Fertig</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
+  <div class="j7-shell__view-grid">
+    {{#each view.cards}}
+      <article class="j7-shell__card {{#if isWide}}j7-shell__card--wide{{/if}} {{#if (eq visible false)}}is-hidden-module{{/if}}" 
+               data-module-key="{{id}}" 
+               draggable="{{#if ../../layoutMode}}true{{else}}false{{/if}}">
+        
+        {{#if ../../layoutMode}}
+          <div class="j7-card__layout-controls">
+            <div class="j7-card__drag-handle" title="Ziehen zum Verschieben">
+              <i class="fas fa-bars"></i>
+            </div>
+            <button type="button" class="j7-card__hide-btn" data-action="hideModule" data-module-key="{{id}}" title="Modul ausblenden">
+              <i class="fas {{#if (eq visible false)}}fa-eye-slash{{else}}fa-eye{{/if}}"></i>
+            </button>
+          </div>
+        {{/if}}
+
+        <header class="j7-shell__card-head">
+          <div>
+            <h3><i class="{{icon}} j7-shell__card-icon" aria-hidden="true"></i><span>{{title}}</span></h3>
+            <p>{{description}}</p>
+          </div>
+        </header>
+
+        <div class="j7-shell__card-content">
+          {{#if (eq type 'runbook')}}
+             {{> "modules/Janus7/templates/shell/parts/modules/runbook.hbs"}}
+          {{else if (eq type 'workflow-events')}}
+             {{> "modules/Janus7/templates/shell/parts/modules/workflow-events.hbs"}}
+          {{else if (eq type 'status-monitor')}}
+             {{> "modules/Janus7/templates/shell/parts/modules/status-monitor.hbs"}}
+          {{else if (eq type 'regional-fauna')}}
+             {{> "modules/Janus7/templates/shell/parts/modules/regional-fauna.hbs"}}
+          {{else if (eq type 'slot-builder')}}
+             {{> "modules/Janus7/templates/shell/parts/modules/slot-builder.hbs"}}
+          
+          {{else if (eq type 'people-roster')}}
+            <div class="j7-shell__metrics">
+              <div class="j7-dropzone j7-dropzone--medium" data-dropzone="people" data-role="{{role}}">
+                <div class="j7-dropzone__label"><i class="fas fa-user-plus"></i> Actors hier ablegen</div>
+              </div>
+              {{#if items.length}}
+                <ul class="janus7-list j7-mt-sm">
+                  {{#each items}}
+                    <li><span class="tag">{{#if (eq value 'Lehrer')}}L{{else}}S{{/if}}</span> <strong>{{label}}</strong></li>
+                  {{/each}}
+                </ul>
+              {{else}}
+                <p class="muted">Keine Einträge zugeordnet.</p>
+              {{/if}}
+            </div>
+
+          {{else if (eq type 'location-list')}}
+            <div class="j7-shell__list">
+              {{#each items}}
+                <div class="j7-shell__list-row j7-flex-between">
+                  <div class="j7-flex-column">
+                    <strong>{{label}}</strong>
+                    <span class="small muted">{{value}}</span>
+                  </div>
+                  <div class="j7-flex-row j7-gap-xs">
+                    {{#if hasScene}}
+                      <button type="button" class="j7-icon-btn" data-action="executeShellAction" data-command="activateScene" data-scene-id="{{sceneId}}" title="Szene aktivieren"><i class="fas fa-map"></i></button>
+                    {{/if}}
+                    <button type="button" class="j7-icon-btn" data-action="executeShellAction" data-command="setLocationFocus" data-location-id="{{id}}" title="Fokus setzen"><i class="fas fa-location-dot"></i></button>
+                  </div>
+                </div>
+              {{/each}}
+            </div>
+
+          {{else if (eq type 'alumni-manager')}}
+             {{! Alumni Manager typically needs a lot of custom data from the view root }}
+             <div class="j7-empty-state">
+               <p>Alumni-Management ist im aktiven Panel verfügbar.</p>
+               <button type="button" class="j7-shell__btn" data-action="openPanel" data-panel-id="alumni"><i class="fas fa-user-graduate"></i> Alumni Panel öffnen</button>
+             </div>
+
+          {{else if (eq type 'app-launcher')}}
+            <div class="j7-shell__tiles j7-shell__tiles--compact">
+              {{#each items}}
+                <button type="button" 
+                        class="j7-shell__tile {{#unless isAvailable}}is-disabled{{/unless}}" 
+                        data-action="executeShellAction" 
+                        data-app-key="{{key}}"
+                        {{#unless isAvailable}}disabled{{/unless}}
+                        title="{{description}}">
+                  <div class="j7-shell__tile-icon">
+                    <i class="{{icon}}" aria-hidden="true"></i>
+                  </div>
+                  <div class="j7-shell__tile-copy">
+                    <strong>{{label}}</strong>
+                  </div>
+                </button>
+              {{/each}}
+            </div>
+
+          {{else}}
+            {{#if metrics.length}}
+              <div class="j7-shell__metrics">
+                {{#each metrics}}
+                  <div class="j7-shell__metric">
+                    <span>{{label}}</span>
+                    <strong>{{value}}</strong>
+                  </div>
+                {{/each}}
+              </div>
+            {{/if}}
+
+            {{#if items.length}}
+              <div class="j7-shell__list">
+                {{#each items}}
+                  <div class="j7-shell__list-row">
+                    <span>{{label}}</span>
+                    <strong>{{value}}</strong>
+                  </div>
+                {{/each}}
+              </div>
+            {{/if}}
+          {{/if}}
+        </div>
+
+        {{#if actions.length}}
+          <div class="j7-shell__card-actions j7-mt-sm">
+            {{#each actions}}
+              {{#if panelId}}
+                <button type="button" class="j7-shell__btn" data-action="openPanel" data-panel-id="{{panelId}}">
+                  <i class="{{icon}}"></i>{{label}}
+                </button>
+              {{else}}
+                <button type="button" class="j7-shell__btn" data-action="executeShellAction" data-action-index="{{actionIndex}}" data-card-index="{{../cardIndex}}">
+                  <i class="{{icon}}"></i>{{label}}
+                </button>
+              {{/if}}
+            {{/each}}
+          </div>
+        {{/if}}
+      </article>
+    {{/each}}
+  </div>
+</div>

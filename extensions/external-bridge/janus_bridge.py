@@ -140,10 +140,47 @@ def process_task(task_file):
     except Exception as e:
         print(f"Error processing task {task_file}: {e}")
 
+import sys
+import argparse
+
 def main():
+    parser = argparse.ArgumentParser(description="JANUS7 External Bridge")
+    parser.add_argument("--sync", help="Directly sync a world's academy data to SQLite (World ID or Path)")
+    parser.add_argument("--db", help="Path to the SQLite database (relative to FOUNDRY_DATA)")
+    parser.add_argument("--poll", action="store_true", help="Start polling outbox for tasks (default)")
+    
+    args = parser.parse_args()
+
     print(f"Janus7 External Bridge started.")
     print(f"Foundry Data Root: {FOUNDRY_DATA}")
-    
+
+    if args.sync:
+        world_id = args.sync
+        db_rel_path = args.db or "janus7/data/keeper.db"
+        db_path = (FOUNDRY_DATA / db_rel_path).resolve()
+        
+        # Search for academy-data.json in world data (Foundry v13 usually stores in flags or settings)
+        # However, Janus7 also exports to world/janus7/data/academy-data.json sometimes.
+        # For simplicity, we assume the data is passed via outbox OR we look for a specific export file.
+        
+        print(f"Direct sync requested for world: {world_id}")
+        print(f"Database: {db_path}")
+        
+        # If we are in CLI sync mode, we might want to look for the latest export.json
+        world_dir = FOUNDRY_DATA / "worlds" / world_id
+        export_file = world_dir / "janus7" / "io" / "outbox" / "academy_export.json"
+        
+        if export_file.exists():
+            with open(export_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            res = handle_sync_task({"data": data}, str(db_path))
+            print(f"Sync Result: {res}")
+        else:
+            print(f"Error: Export file not found at {export_file}")
+            print("Please export the data from Foundry first.")
+        return
+
+    # Default: Polling mode
     while True:
         outbox_dirs = get_outbox_dirs()
         for outbox in outbox_dirs:

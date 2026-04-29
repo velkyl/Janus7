@@ -449,6 +449,17 @@ const PANEL_DEFINITIONS = [
     build: buildLessonLibraryPanel
   },
   {
+    id: 'layoutManager',
+    title: 'Layout Manager',
+    icon: 'fas fa-up-down-left-right',
+    group: 'tools',
+    quick: true,
+    description: 'UI-Module verwalten und Oberflächen zuordnen.',
+    summary: 'Konfiguration der modularen Shell-Oberfläche.',
+    actions: [],
+    build: (engine) => ({})
+  },
+  {
     id: 'academyOverview',
     title: 'Academy Overview',
     icon: 'fas fa-calendar-alt',

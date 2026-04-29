@@ -74,6 +74,7 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
       changeSource: '_onChangeSource',
       changeProfile: '_onChangeProfile',
       syncSqlite: '_onSyncSqlite',
+      checkBridge: '_onCheckBridge',
       importJson: '_onImportJson'
     }
   };
@@ -682,6 +683,13 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     syncSqliteBtn.title = 'Daten in SQLite Datenbank sichern (Keeper)';
     syncSqliteBtn.setAttribute('aria-label', 'Sync to SQLite');
     syncSqliteBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-database' }));
+    const checkBridgeBtn = document.createElement('button');
+    checkBridgeBtn.dataset.action = 'checkBridge';
+    checkBridgeBtn.className = 'j7-btn';
+    checkBridgeBtn.title = 'Status der External Bridge (Python) prüfen';
+    checkBridgeBtn.appendChild(Object.assign(document.createElement('i'), { className: 'fas fa-plug-circle-check' }));
+    filterRow.appendChild(checkBridgeBtn);
+
     filterRow.appendChild(syncSqliteBtn);
 
     const importJsonBtn = document.createElement('button');
@@ -719,7 +727,10 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     if (this._isSqliteLoading) {
       const loading = document.createElement('div');
       loading.className = 'j7-data-studio__empty';
-      loading.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Lade SQLite Daten...';
+      const spinner = document.createElement('i');
+      spinner.className = 'fas fa-spinner fa-spin';
+      loading.appendChild(spinner);
+      loading.append(' Lade SQLite Daten...');
       list.appendChild(loading);
     } else {
       for (const doc of records) {
@@ -1242,10 +1253,20 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
     }
 
     try {
-      ui.notifications?.info('Starte SQLite Synchronisierung...');
+      ui.notifications?.info('Exportiere Academy-Daten für SQLite...');
       const result = await engine.ext.syncSqlite();
+      
       if (result?.status === 'queued') {
-        ui.notifications?.info('Synchronisierung in Outbox eingereiht. Hintergrund-Worker erforderlich.');
+        const dbPath = engine.config.get('sqliteDbPath') || 'janus7/data/keeper.db';
+        const msg = `Daten wurden in die Outbox exportiert.
+                     Stellen Sie sicher, dass die "janus_bridge.py" läuft, 
+                     um den Import in "${dbPath}" abzuschließen.`;
+        
+        await foundry.applications.api.DialogV2.prompt({
+          window: { title: 'SQLite Sync Eingereiht' },
+          content: `<p>${msg.replace(/\n/g, '<br>')}</p>`,
+          ok: { label: 'Verstanden' }
+        });
       } else {
         ui.notifications?.info('Synchronisierung erfolgreich abgeschlossen.');
       }
@@ -1253,6 +1274,33 @@ export class JanusAcademyDataStudioApp extends JanusBaseApp {
       ui.notifications?.error(`SQLite Sync fehlgeschlagen: ${err.message}`);
       engine.recordError?.('ui.studio', 'sync_sqlite', err);
     }
+  }
+
+  async _onCheckBridge() {
+    const engine = this._getEngine();
+    const io = engine?._phase7KiServices?.ioService;
+    if (!io) return;
+
+    ui.notifications?.info('Prüfe Status der External Bridge...');
+    
+    // Write a heartbeat task
+    const taskId = `heartbeat_${Date.now()}`;
+    await io.exportToOutbox({ 
+      bundle: { type: 'heartbeat', taskId, timestamp: new Date().toISOString() }, 
+      filename: `task_${taskId}.json` 
+    });
+
+    ui.notifications?.info('Heartbeat-Task erstellt. Warte auf Antwort der Bridge (ca. 5s)...');
+    
+    // Wait and check for result
+    setTimeout(async () => {
+      const result = await io.importFromInbox(`result_${taskId}.json`).catch(() => null);
+      if (result) {
+        ui.notifications?.info('✅ External Bridge ist AKTIV und reagiert.');
+      } else {
+        ui.notifications?.warn('⚠️ External Bridge reagiert nicht. Bitte "START_JANUS7.bat" prüfen.');
+      }
+    }, 5000);
   }
 
   async _onImportJson() {

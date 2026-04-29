@@ -1,8 +1,10 @@
 import { MODULE_ID, moduleTemplatePath } from '../../core/common.js';
+import { buildAppLauncherSections } from '../layer/app-launcher-context.js';
 import { JanusBaseApp } from '../core/base-app.js';
 import { listJanusUiAppStatus } from '../app-manifest.js';
 import { getPanel, getQuickPanels } from '../layer/panel-registry.js';
 import { getView, getViews } from '../layer/view-registry.js';
+import { getModule, getAllModules } from '../layer/module-registry.js';
 import { runShellAction } from '../layer/action-router.js';
 import { JanusUI } from '../helpers.js';
 import { prepareDirectorRuntimeSummary, buildDirectorRunbookView, buildDirectorWorkflowView } from '../layer/director-context.js';
@@ -240,98 +242,21 @@ function renderAiTextResponse(outputBox, text) {
   outputBox.append(wrapper);
 }
 
-const APP_LAUNCHER_EXCLUDE = new Set(['shell', 'sessionPrepWizard', 'commandCenter', 'settingsTestHarness']);
-
-const APP_NAV_META = Object.freeze({
-  academyOverview: { title: 'Academy Overview', icon: 'fas fa-school', description: 'Kalender, Wochenraster und Akademie-Überblick.' },
-  scoringView: { title: 'Scoring View', icon: 'fas fa-trophy', description: 'Zirkelpunkte, Wertungen und Ranglisten.' },
-  lessonLibrary: { title: 'Lesson Library', icon: 'fas fa-book-open', description: 'Lektionskatalog und Arbeitsbibliothek.' },
-  socialView: { title: 'Social View', icon: 'fas fa-users', description: 'Beziehungen, Spannungen und Sozialgraph.' },
-  atmosphereDJ: { title: 'Atmosphäre DJ', icon: 'fas fa-music', description: 'Mood-, Audio- und Overlay-Steuerung.' },
-  academyDataStudio: { title: 'Academy Data Studio', icon: 'fas fa-table', description: 'Direkter Datenzugriff für Inhalte und Kataloge.' },
-  kiRoundtrip: { title: 'KI Roundtrip', icon: 'fas fa-brain', description: 'Export, Preview und kontrollierter Import.' },
-  kiBackupManager: { title: 'KI Backups', icon: 'fas fa-life-ring', description: 'Backup- und Restore-Werkzeuge für KI-Artefakte.' },
-  configPanel: { title: 'Config Panel', icon: 'fas fa-sliders', description: 'Modulweite Konfiguration und Kill-Switches.' },
-  syncPanel: { title: 'Sync Panel', icon: 'fas fa-link', description: 'UUID-Verknüpfungen, Diagnose und Sync-Audits.' },
-  libraryBrowser: { title: 'Library Browser', icon: 'fas fa-folder-open', description: 'Bibliotheks- und Sammlungsnavigation.' },
-  studentArchive: { title: 'Student Archive', icon: 'fas fa-user-graduate', description: 'Archivierte Schüler und Verlaufsdaten.' },
-  enrollmentScanner: { title: 'Enrollment Scanner', icon: 'fas fa-id-card', description: 'Import- und Einschreibungsprüfung.' },
-  quartermaster: { title: 'Quartermaster', icon: 'fas fa-box-open', description: 'Inventar- und Versorgungswerkzeuge.' },
-  stateInspector: { title: 'State Inspector', icon: 'fas fa-database', description: 'Read-only Sicht auf den Runtime-State.' },
-  commandCenter: { title: 'Command Center', icon: 'fas fa-terminal', description: 'Legacy Power Tools für Debug und Spezialpfade.' },
-  testResults: { title: 'Test Results', icon: 'fas fa-clipboard-check', description: 'Testergebnisse und Ausführungsberichte.' },
-  guidedManualTests: { title: 'Guided Manual Tests', icon: 'fas fa-vial', description: 'Geführte manuelle Prüfschritte.' },
-  settingsTestHarness: { title: 'Settings Harness', icon: 'fas fa-flask', description: 'Spezialwerkzeug für Settings-Tests.' },
-  thesisManager: { title: 'Thesis Manager', icon: 'fas fa-microscope', description: 'Recherche-Fortschritt und Quellen-Management.' },
-  laborInterface: { title: 'Labor Interface', icon: 'fas fa-vials', description: 'Alchimie-Lager und Brau-Workflow.' },
-  doomMonitor: { title: 'Doom Monitor', icon: 'fas fa-skull', description: 'Überwachung des Risikos dunkler Magie.' }
-});
-
-function classifyAppNavGroup(meta = {}) {
-  const maturity = String(meta.maturity ?? '').toLowerCase();
-  if (maturity.includes('test') || maturity.includes('debug')) return 'debug';
-  if (maturity.includes('legacy')) return 'legacy';
-  if (meta.admin) return 'admin';
-  return 'workbench';
-}
-
-function buildAppLauncherSections(currentViewId = 'director', app = null) {
-  const appRegistry = game?.janus7?.ui?.apps ?? {};
-  const query = (app?._searchQuery || '').toLowerCase();
-  
-  const groups = new Map([
-    ['workbench', { id: 'workbench', title: 'Arbeitsflächen', items: [] }],
-    ['admin', { id: 'admin', title: 'GM & Admin', items: [] }],
-    ['debug', { id: 'debug', title: 'Debug & Tests', items: [] }],
-    ['legacy', { id: 'legacy', title: 'Legacy & Bridges', items: [] }]
-  ]);
-
-  for (const meta of listJanusUiAppStatus()) {
-    if (!meta?.key || APP_LAUNCHER_EXCLUDE.has(meta.key)) continue;
-    const navMeta = APP_NAV_META[meta.key] ?? {};
-    
-    const matches = !query || 
-                    navMeta.title?.toLowerCase().includes(query) || 
-                    navMeta.description?.toLowerCase().includes(query) ||
-                    meta.key.toLowerCase().includes(query);
-
-    if (matches) {
-      groups.get(classifyAppNavGroup(meta))?.items.push({
-        key: meta.key,
-        icon: navMeta.icon ?? 'fas fa-window-maximize',
-        title: navMeta.title ?? meta.className ?? meta.key,
-        description: navMeta.description ?? meta.mode ?? '',
-        maturity: meta.maturity ?? 'unbekannt',
-        mode: meta.mode ?? 'n/a',
-        isAvailable: !!appRegistry?.[meta.key],
-        isActive: meta.key === 'sessionPrepWizard' ? (currentViewId === 'sessionPrep') : false
-      });
-    }
-  }
-
-  return [...groups.values()]
-    .map((group) => ({
-      ...group,
-      items: group.items.sort((a, b) => a.title.localeCompare(b.title, 'de'))
-    }))
-    .filter((group) => group.items.length > 0);
-}
-
 function buildViewNavSections(currentViewId = 'director', app = null) {
   const query = (app?._searchQuery || '').toLowerCase();
   
   const groups = new Map([
-    ['main', { id: 'main', title: 'Hauptbereiche', items: [] }],
-    ['academy', { id: 'academy', title: 'Akademie-Betrieb', items: [] }],
-    ['system', { id: 'system', title: 'System & Tools', items: [] }]
+    ['academy', { id: 'academy', title: '🎓 Academy', items: [] }],
+    ['livingWorld', { id: 'livingWorld', title: '🌍 Living World', items: [] }],
+    ['system', { id: 'system', title: '⚙️ System', items: [] }]
   ]);
 
   const viewCategories = {
-    director: 'main',
+    director: 'academy',
     academy: 'academy',
     schedule: 'academy',
-    people: 'academy',
-    places: 'academy',
+    people: 'livingWorld',
+    places: 'livingWorld',
     system: 'system',
     tools: 'system'
   };
@@ -420,7 +345,14 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       onSearch: "onSearch",
       clearSearch: "clearSearch",
       openSheet: "onOpenSheet",
-      openUrl: "onOpenUrl"
+      openUrl: "onOpenUrl",
+      toggleLayoutMode: "onToggleLayoutMode",
+      resetLayout: "onResetLayout",
+      hideModule: "onHideModule",
+      
+      toggleModuleGlobal: "onToggleModuleGlobal",
+      toggleModuleAssignment: "onToggleModuleAssignment",
+      resetAllLayouts: "onResetAllLayouts"
     }
   };
 
@@ -430,12 +362,13 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
 
   constructor(options = {}) {
     super(options);
-    this._viewId = options.viewId ?? 'director';
+    this._viewId = options.viewId ?? 'workbench';
     this._activePanelId = options.panelId ?? null;
     this._paletteOpen = false;
     this._lastActionResult = null;
     this._viewState = {};
     this._searchQuery = '';
+    this._layoutMode = false;
 
     // Director State
     this._slotBuilder = [];
@@ -549,6 +482,7 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
         case 's': this._setView('schedule'); break;
         case 'p': this._setView('people'); break;
         case 't': this._setView('tools'); break;
+        case 'w': this._setView('workbench'); break;
       }
     }
   }
@@ -618,7 +552,11 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
         moduleContent,
         conditionRules,
         viewPartial: `modules/${MODULE_ID}/templates/shell/views/${view.id}.hbs`,
-        panelPartial: panel ? `modules/${MODULE_ID}/templates/shell/panels/default-panel.hbs` : null
+        panelPartial: panel ? (
+          panel.id === 'layoutManager' 
+            ? `modules/${MODULE_ID}/templates/shell/panels/layout-manager.hbs` 
+            : `modules/${MODULE_ID}/templates/shell/panels/default-panel.hbs`
+        ) : null
       };
     } catch (err) {
       console.error(`[JANUS7] Shell _preRender failed for view "${this._viewId}":`, err);
@@ -806,25 +744,74 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       quickPanels: getQuickPanels().map((panel) => ({
         ...panel,
         datasetActionIndex: 0
-      }))
+      })),
+      layoutMode: this._layoutMode
     };
   }
 
   async #buildViewModel(engine, view) {
-    const model = await view?.build?.(engine, this) ?? { cards: [], cardSections: [], tiles: [] };
+    const layout = this.#getLayoutConfig(view.id);
+    const assignments = JanusConfig.get('uiModuleAssignments') || {};
+    const globalStatus = JanusConfig.get('uiModuleStatus') || {};
+    
+    // 1. Determine which modules should be on this view
+    let assignedModuleIds = Object.entries(assignments)
+      .filter(([id, viewIds]) => Array.isArray(viewIds) && viewIds.includes(view.id))
+      .map(([id]) => id);
+
+    if (assignedModuleIds.length === 0) {
+      assignedModuleIds = view.defaultModuleIds || [];
+    }
+
+    // 1b. Filter by global active status
+    assignedModuleIds = assignedModuleIds.filter(id => globalStatus[id] !== false);
+
+    // 2. Build the module data objects
+    const modulePromises = assignedModuleIds.map(id => buildGlobalModule(id, engine, this));
+    const rawCards = (await Promise.all(modulePromises)).filter(Boolean);
+    
+    // 3. Apply layout overrides (order, visibility)
+    let cards = rawCards.map(card => {
+      const mod = layout.modules?.find(m => m.id === card.id);
+      return mod ? { ...card, ...mod } : card;
+    });
+    
+    // Filter out hidden (except in layout mode)
+    if (!this._layoutMode) {
+      cards = cards.filter(c => c.visible !== false);
+    }
+    
+    // Sort by order
+    cards.sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+
     return {
-      ...model,
-      cards: mapViewCards(model.cards ?? []),
-      cardSections: (model.cardSections ?? []).map((section) => ({
-        ...section,
-        cards: mapViewCards(section.cards ?? [])
-      })),
-      tiles: model.tiles ?? []
+      cards: mapViewCards(cards)
     };
   }
 
   #buildPanelModel(engine, panel) {
     if (!panel) return { metrics: [], items: [], actions: [] };
+
+    // Specialized data for Layout Manager
+    if (panel.id === 'layoutManager') {
+      const assignments = JanusConfig.get('uiModuleAssignments') || {};
+      const globalStatus = JanusConfig.get('uiModuleStatus') || {};
+      const modules = getAllModules().map(m => ({
+        ...m,
+        isActive: globalStatus[m.id] !== false,
+        assignedTo: assignments[m.id] || []
+      }));
+      const views = getViews().filter(v => !['tools', 'chronicleBrowser', 'sessionPrep'].includes(v.id));
+
+      return {
+        modules,
+        views,
+        metrics: [{ label: 'Module gesamt', value: modules.length }],
+        items: [],
+        actions: []
+      };
+    }
+
     const detail = panel.build?.(engine) ?? {};
     return {
       metrics: detail.metrics ?? [],
@@ -881,8 +868,21 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       panelOpen: !!this.__renderCache.panelPartial,
       panelTitle: getPanel(this._activePanelId)?.title ?? null,
       shellPaletteHint: 'Power Tools',
-      themeClass: JanusConfig.get('uiTheme') || 'theme-standard'
+      themeClass: JanusConfig.get('uiTheme') || 'theme-standard',
+      layoutMode: this._layoutMode,
+      layoutConfig: this.#getLayoutConfig(this._viewId)
     };
+  }
+
+  #getLayoutConfig(viewId) {
+    const allLayouts = JanusConfig.get('uiLayout') || {};
+    return allLayouts[viewId] || { modules: [] };
+  }
+
+  async #saveLayoutConfig(viewId, config) {
+    const allLayouts = foundry.utils.deepClone(JanusConfig.get('uiLayout') || {});
+    allLayouts[viewId] = config;
+    await JanusConfig.set('uiLayout', allLayouts);
   }
 
   onSearch(event, target) {
@@ -1927,6 +1927,178 @@ export class JanusShellApp extends HandlebarsApplicationMixin(JanusBaseApp) {
       this.setBusy(false);
       this.render();
     }
+  }
+
+  async onToggleModuleGlobal(event, target) {
+    const moduleId = target.dataset.moduleId;
+    const isChecked = target.checked;
+    const globalStatus = foundry.utils.deepClone(JanusConfig.get('uiModuleStatus') || {});
+    globalStatus[moduleId] = isChecked;
+    await JanusConfig.set('uiModuleStatus', globalStatus);
+    this.render();
+  }
+
+  async onToggleModuleAssignment(event, target) {
+    const moduleId = target.dataset.moduleId;
+    const viewId = target.dataset.viewId;
+    const assignments = foundry.utils.deepClone(JanusConfig.get('uiModuleAssignments') || {});
+    const current = assignments[moduleId] || [];
+    
+    if (current.includes(viewId)) {
+      assignments[moduleId] = current.filter(id => id !== viewId);
+    } else {
+      assignments[moduleId] = [...current, viewId];
+    }
+    
+    await JanusConfig.set('uiModuleAssignments', assignments);
+    this.render();
+  }
+
+  async onResetAllLayouts(event, target) {
+    const confirm = await Dialog.confirm({
+      title: "Layouts zurücksetzen",
+      content: "<p>Möchtest du wirklich alle Modul-Zuordnungen und Raster-Positionen auf die Standardwerte zurücksetzen?</p>",
+      yes: () => true,
+      no: () => false,
+      defaultYes: false
+    });
+    
+    if (confirm) {
+      await JanusConfig.set('uiModuleAssignments', {});
+      await JanusConfig.set('uiModuleStatus', {});
+      await JanusConfig.set('uiLayout', {});
+      ui.notifications.info("Alle UI-Layouts wurden zurückgesetzt.");
+      this.render();
+    }
+  }
+
+  async onToggleLayoutMode(event, _target) {
+    event?.preventDefault?.();
+    this._layoutMode = !this._layoutMode;
+    ui.notifications?.info?.(this._layoutMode ? 'Layout-Editor aktiviert.' : 'Layout-Editor deaktiviert.');
+    this.render({ force: true });
+  }
+
+  async onResetLayout(event, _target) {
+    event?.preventDefault?.();
+    const confirm = await foundry.applications.api.DialogV2.confirm({
+      window: { title: 'Layout zurücksetzen?' },
+      content: '<p>Möchtest du das Layout für diese Ansicht wirklich auf den Standard zurücksetzen?</p>',
+      modal: true
+    });
+    if (!confirm) return;
+    
+    const allLayouts = foundry.utils.deepClone(JanusConfig.get('uiLayout') || {});
+    delete allLayouts[this._viewId];
+    await JanusConfig.set('uiLayout', allLayouts);
+    ui.notifications?.info?.('Layout zurückgesetzt.');
+    this.render({ force: true });
+  }
+
+  async onHideModule(event, target) {
+    event?.preventDefault?.();
+    const moduleKey = target?.dataset?.moduleKey;
+    if (!moduleKey) return;
+    
+    const config = this.#getLayoutConfig(this._viewId);
+    let mod = config.modules.find(m => m.id === moduleKey);
+    if (!mod) {
+      mod = { id: moduleKey, order: 99, visible: false };
+      config.modules.push(mod);
+    } else {
+      mod.visible = false;
+    }
+    
+    await this.#saveLayoutConfig(this._viewId, config);
+    this.render({ force: true });
+  }
+
+  // ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ 
+  // Drag & Drop (Rearrange Modules)
+  // ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ 
+
+  /** @override */
+  _onDragStart(event) {
+    if (!this._layoutMode) return super._onDragStart(event);
+    const target = event.target.closest('.j7-shell__card[data-module-key]');
+    if (!target) return;
+    
+    const moduleKey = target.dataset.moduleKey;
+    event.dataTransfer.setData('text/plain', JSON.stringify({
+      type: 'JanusModule',
+      viewId: this._viewId,
+      moduleKey
+    }));
+    target.classList.add('is-dragging');
+  }
+
+  /** @override */
+  _onDragOver(event) {
+    if (!this._layoutMode) return super._onDragOver(event);
+    event.preventDefault();
+    const target = event.target.closest('.j7-shell__card[data-module-key]');
+    if (target) {
+      target.classList.add('drag-over');
+    }
+  }
+
+  _onDragLeave(event) {
+    const target = event.target.closest('.j7-shell__card[data-module-key]');
+    if (target) {
+      target.classList.remove('drag-over');
+    }
+  }
+
+  /** @override */
+  async _onDrop(event) {
+    if (!this._layoutMode) return super._onDrop(event);
+    event.preventDefault();
+    
+    let data;
+    try {
+      data = JSON.parse(event.dataTransfer.getData('text/plain'));
+    } catch (err) {
+      return;
+    }
+    
+    if (data.type !== 'JanusModule' || data.viewId !== this._viewId) return;
+    
+    const dropTarget = event.target.closest('.j7-shell__card[data-module-key]');
+    if (!dropTarget) return;
+    
+    const sourceKey = data.moduleKey;
+    const targetKey = dropTarget.dataset.moduleKey;
+    if (sourceKey === targetKey) return;
+    
+    await this.#reorderModules(sourceKey, targetKey);
+  }
+
+  async #reorderModules(sourceKey, targetKey) {
+    const config = this.#getLayoutConfig(this._viewId);
+    
+    // Ensure all currently rendered modules are in the config
+    const cards = this.element.querySelectorAll('.j7-shell__card[data-module-key]');
+    cards.forEach((card, index) => {
+      const key = card.dataset.moduleKey;
+      if (!config.modules.find(m => m.id === key)) {
+        config.modules.push({ id: key, order: index, visible: true });
+      }
+    });
+
+    const sourceIdx = config.modules.findIndex(m => m.id === sourceKey);
+    const targetIdx = config.modules.findIndex(m => m.id === targetKey);
+    
+    if (sourceIdx === -1 || targetIdx === -1) return;
+    
+    // Move element in array
+    const [moved] = config.modules.splice(sourceIdx, 1);
+    config.modules.splice(targetIdx, 0, moved);
+    
+    // Normalize orders
+    config.modules.forEach((m, i) => m.order = i);
+    
+    await this.#saveLayoutConfig(this._viewId, config);
+    this.render({ force: true });
   }
 
 }

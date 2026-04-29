@@ -1,0 +1,22 @@
+<div class="j7-shell__metrics">
+  <div class="j7-dropzone j7-dropzone--large j7-mt-sm" data-dropzone="slot-builder">
+    <div class="j7-dropzone__label">
+      <i class="fas fa-plus-circle"></i>
+      Drop-Zone: <strong>{{header.phaseName}}</strong>
+    </div>
+    {{#if slotBuilder.items.length}}
+      <ul class="janus7-list j7-mt-sm">
+        {{#each slotBuilder.items}}
+          <li><code>{{kind}}</code> — <strong>{{label}}</strong></li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <p class="muted j7-dropzone__hint">Noch keine Bausteine — Elemente aus der Seitenleiste hierher ziehen.</p>
+    {{/if}}
+  </div>
+</div>
+
+<div class="j7-shell__card-actions j7-mt-sm">
+  <button type="button" class="j7-shell__btn" data-action="generateSlotJournal"><i class="fas fa-file-alt"></i> Stunde generieren</button>
+  <button type="button" class="j7-shell__btn" data-action="clearSlotBuilder">   <i class="fas fa-trash"></i> Leeren</button>
+</div>
