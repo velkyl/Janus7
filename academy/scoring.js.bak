@@ -80,13 +80,15 @@ export class JanusScoringEngine {
     const source = options.source ?? 'manual';
 
     await this.state.transaction((state) => {
-      const current = state.get(`${STATE_PATHS.SCORING}.circles.${normalizedId}`);
-      if (current === undefined || current === null) {
-        state.set(`${STATE_PATHS.SCORING}.circles.${normalizedId}`, init);
-        state.set(`${STATE_PATHS.SCORING}.updatedAt`, now);
+      const scoring = this._ensureScoringRoot(state);
+      const circles = scoring.circles;
+      if (circles[normalizedId] === undefined || circles[normalizedId] === null) {
+        circles[normalizedId] = init;
         created = true;
+        scoring.updatedAt = now;
+        state.set(STATE_PATHS.SCORING, scoring);
       }
-      score = Number(state.get(`${STATE_PATHS.SCORING}.circles.${normalizedId}`) ?? 0);
+      score = Number(circles[normalizedId] ?? 0);
     });
 
     if (created) {
@@ -118,11 +120,12 @@ export class JanusScoringEngine {
     const source = options.source ?? 'manual';
 
     await this.state.transaction((state) => {
-      const path = `${STATE_PATHS.SCORING}.circles.${normalizedId}`;
-      if (state.get(path) !== undefined) {
-        state.unset(path);
-        state.set(`${STATE_PATHS.SCORING}.updatedAt`, new Date().toISOString());
+      const scoring = this._ensureScoringRoot(state);
+      const circles = scoring.circles;
+      if (Object.prototype.hasOwnProperty.call(circles, normalizedId)) {
+        delete circles[normalizedId];
         removed = true;
+        state.set(STATE_PATHS.SCORING, scoring);
       }
     });
 
@@ -174,14 +177,14 @@ export class JanusScoringEngine {
 
     try {
       await this.state.transaction((state) => {
-        const scorePath = `${STATE_PATHS.SCORING}.circles.${normalizedId}`;
-        const prev = Number(state.get(scorePath) ?? 0);
-        newScore = prev + delta;
-        
-        state.set(scorePath, newScore);
+        const scoring = this._ensureScoringRoot(state);
+        const circles = scoring.circles;
 
-        const historyPath = `${STATE_PATHS.SCORING}.lastAwarded`;
-        const history = state.get(historyPath) ?? [];
+        const prev = Number(circles[normalizedId] ?? 0);
+        newScore = prev + delta;
+        circles[normalizedId] = newScore;
+
+        const history = scoring.lastAwarded ?? [];
         history.push({
           timestamp: now,
           source,
@@ -192,8 +195,9 @@ export class JanusScoringEngine {
           meta,
         });
         this._trimHistory(history);
-        state.set(historyPath, history);
-        state.set(`${STATE_PATHS.SCORING}.updatedAt`, now);
+        scoring.lastAwarded = history;
+
+        state.set(STATE_PATHS.SCORING, scoring);
       });
     } catch (err) {
       this.logger?.error?.('[JANUS7] addCirclePoints-Transaktion fehlgeschlagen', { circleId: normalizedId, amount: delta, err: err?.message });
@@ -253,14 +257,14 @@ export class JanusScoringEngine {
 
     try {
       await this.state.transaction((state) => {
-        const scorePath = `${STATE_PATHS.SCORING}.students.${normalizedId}`;
-        const prev = Number(state.get(scorePath) ?? 0);
-        newScore = prev + delta;
-        
-        state.set(scorePath, newScore);
+        const scoring = this._ensureScoringRoot(state);
+        const students = scoring.students;
 
-        const historyPath = `${STATE_PATHS.SCORING}.lastAwarded`;
-        const history = state.get(historyPath) ?? [];
+        const prev = Number(students[normalizedId] ?? 0);
+        newScore = prev + delta;
+        students[normalizedId] = newScore;
+
+        const history = scoring.lastAwarded ?? [];
         history.push({
           timestamp: now,
           source,
@@ -271,8 +275,9 @@ export class JanusScoringEngine {
           meta,
         });
         this._trimHistory(history);
-        state.set(historyPath, history);
-        state.set(`${STATE_PATHS.SCORING}.updatedAt`, now);
+        scoring.lastAwarded = history;
+
+        state.set(STATE_PATHS.SCORING, scoring);
       });
     } catch (err) {
       this.logger?.error?.('[JANUS7] addStudentPoints-Transaktion fehlgeschlagen', { studentId: normalizedId, amount: delta, err: err?.message });

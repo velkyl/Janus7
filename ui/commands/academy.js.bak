@@ -416,30 +416,216 @@ export const academyCommands = {
    */
   async organizeJanusFolders(dataset = {}) {
     if (!_checkPermission('organizeJanusFolders')) return { success: false, cancelled: true };
-    
+    if (!game.user.isGM) {
+      ui.notifications.warn('Nur GM darf Ordner anlegen/verschieben.');
+      return { success: false, error: 'GM only' };
+    }
+
+    const dryRun = !!dataset.dryRun;
+    const folderSvc = new JanusFolderService({ logger: _engine()?.core?.logger ?? console });
+
     return await _wrap('organizeJanusFolders', async () => {
-      const dryRun = !!dataset.dryRun;
-      const folderSvc = new JanusFolderService({ logger: _engine()?.core?.logger ?? console });
+      const t0 = (typeof globalThis.performance !== 'undefined' && globalThis.performance.now) ? globalThis.performance.now() : Date.now();
+      const report = {
+        dryRun,
+        ensured: 0,
+        moved: { journals: 0, items: 0, actors: 0, scenes: 0, playlists: 0 },
+        skipped: { journals: 0, items: 0, actors: 0, scenes: 0, playlists: 0 },
+        errors: [],
+        durationMs: 0
+      };
 
-      const report = await folderSvc.bulkOrganize({ dryRun });
-
-      if (report.errors.length > 0) {
-        _engine()?.core?.logger?.error?.(`${MODULE_ABBREV} | organizeJanusFolders errors`, report.errors);
+      // Pre-create common paths.
+      const warmups = [
+        { docType: 'JournalEntry', kind: 'lesson' },
+        { docType: 'JournalEntry', kind: 'library' },
+        { docType: 'JournalEntry', kind: 'curriculum' },
+        { docType: 'JournalEntry', kind: 'spell' },
+        { docType: 'Item', kind: 'alchemy' },
+        { docType: 'Actor', kind: 'npc' },
+        { docType: 'Scene', kind: 'location' },
+        { docType: 'Playlist', kind: 'music' },
+      ];
+      for (const w of warmups) {
+        try {
+          if (dryRun) continue;
+          const r = await folderSvc.ensureFor(w);
+          if (r.folderId) report.ensured += 1;
+        } catch (e) {
+          report.errors.push(String(e?.message ?? e));
+        }
       }
+
+      // Journals
+      const journals = game.journal?.contents ?? [];
+      const journalUpdates = [];
+      for (const j of journals) {
+        const flags = j.flags?.[MODULE_ID] ?? null;
+        // Backwards compatible: treat any JANUS-tagged doc as managed.
+        const isManaged = !!(flags?.managed || flags?.janusId);
+        if (!isManaged) { report.skipped.journals += 1; continue; }
+
+        const kind = flags.kind
+          ?? (flags.dataType === 'lesson' ? 'lesson'
+            : flags.dataType === 'library-item' ? 'library'
+              : 'misc');
+
+        const target = folderSvc.resolve({ docType: 'JournalEntry', kind });
+        if (!target) { report.skipped.journals += 1; continue; }
+
+        try {
+          const folderId = dryRun
+            ? (j.folder?.id ?? null)
+            : (await folderSvc.ensurePath({ type: target.type, path: target.path, key: target.key })).folderId;
+          if (j.folder?.id === folderId) { report.skipped.journals += 1; continue; }
+          if (!dryRun) {
+            journalUpdates.push({ _id: j.id, folder: folderId, flags: { [MODULE_ID]: { ...flags, folderKey: target.key } } });
+          }
+          report.moved.journals += 1;
+        } catch (e) {
+          report.errors.push(`Journal "${j.name}": ${String(e?.message ?? e)}`);
+        }
+      }
+      if (journalUpdates.length > 0) {
+        try { await JournalEntry.updateDocuments(journalUpdates); }
+        catch (e) { report.errors.push(`Journal bulk update failed: ${String(e?.message ?? e)}`); }
+      }
+
+      // Items
+      const items = game.items?.contents ?? [];
+      const itemUpdates = [];
+      for (const it of items) {
+        const flags = it.flags?.[MODULE_ID] ?? null;
+        const isManaged = !!(flags?.managed || flags?.janusId);
+        if (!isManaged) { report.skipped.items += 1; continue; }
+
+        const kind = flags.kind
+          ?? (flags.dataType === 'alchemy-recipe' ? 'alchemy' : 'misc');
+        const target = folderSvc.resolve({ docType: 'Item', kind });
+        if (!target) { report.skipped.items += 1; continue; }
+
+        try {
+          const folderId = dryRun
+            ? (it.folder?.id ?? null)
+            : (await folderSvc.ensurePath({ type: target.type, path: target.path, key: target.key })).folderId;
+          if (it.folder?.id === folderId) { report.skipped.items += 1; continue; }
+          if (!dryRun) {
+            itemUpdates.push({ _id: it.id, folder: folderId, flags: { [MODULE_ID]: { ...flags, folderKey: target.key } } });
+          }
+          report.moved.items += 1;
+        } catch (e) {
+          report.errors.push(`Item "${it.name}": ${String(e?.message ?? e)}`);
+        }
+      }
+      if (itemUpdates.length > 0) {
+        try { await Item.updateDocuments(itemUpdates); }
+        catch (e) { report.errors.push(`Item bulk update failed: ${String(e?.message ?? e)}`); }
+      }
+
+      // Actors
+      const actors = game.actors?.contents ?? [];
+      const actorUpdates = [];
+      for (const a of actors) {
+        const flags = a.flags?.[MODULE_ID] ?? null;
+        const isManaged = !!(flags?.managed || flags?.janusId);
+        if (!isManaged) { report.skipped.actors += 1; continue; }
+
+        const kind = flags.kind ?? 'npc';
+        const target = folderSvc.resolve({ docType: 'Actor', kind });
+        if (!target) { report.skipped.actors += 1; continue; }
+
+        try {
+          const folderId = dryRun
+            ? (a.folder?.id ?? null)
+            : (await folderSvc.ensurePath({ type: target.type, path: target.path, key: target.key })).folderId;
+          if (a.folder?.id === folderId) { report.skipped.actors += 1; continue; }
+          if (!dryRun) {
+            actorUpdates.push({ _id: a.id, folder: folderId, flags: { [MODULE_ID]: { ...flags, folderKey: target.key } } });
+          }
+          report.moved.actors += 1;
+        } catch (e) {
+          report.errors.push(`Actor "${a.name}": ${String(e?.message ?? e)}`);
+        }
+      }
+      if (actorUpdates.length > 0) {
+        try { await Actor.updateDocuments(actorUpdates); }
+        catch (e) { report.errors.push(`Actor bulk update failed: ${String(e?.message ?? e)}`); }
+      }
+
+      // Scenes
+      const scenes = game.scenes?.contents ?? [];
+      const sceneUpdates = [];
+      for (const s of scenes) {
+        const flags = s.flags?.[MODULE_ID] ?? null;
+        const isManaged = !!(flags?.managed || flags?.janusId);
+        if (!isManaged) { report.skipped.scenes += 1; continue; }
+
+        const kind = flags.kind ?? 'location';
+        const target = folderSvc.resolve({ docType: 'Scene', kind });
+        if (!target) { report.skipped.scenes += 1; continue; }
+
+        try {
+          const folderId = dryRun
+            ? (s.folder?.id ?? null)
+            : (await folderSvc.ensurePath({ type: target.type, path: target.path, key: target.key })).folderId;
+          if (s.folder?.id === folderId) { report.skipped.scenes += 1; continue; }
+          if (!dryRun) {
+            sceneUpdates.push({ _id: s.id, folder: folderId, flags: { [MODULE_ID]: { ...flags, folderKey: target.key } } });
+          }
+          report.moved.scenes += 1;
+        } catch (e) {
+          report.errors.push(`Scene "${s.name}": ${String(e?.message ?? e)}`);
+        }
+      }
+      if (sceneUpdates.length > 0) {
+        try { await Scene.updateDocuments(sceneUpdates); }
+        catch (e) { report.errors.push(`Scene bulk update failed: ${String(e?.message ?? e)}`); }
+      }
+
+      // Playlists
+      const playlists = game.playlists?.contents ?? [];
+      const playlistUpdates = [];
+      for (const p of playlists) {
+        const flags = p.flags?.[MODULE_ID] ?? null;
+        const isManaged = !!(flags?.managed || flags?.janusId);
+        if (!isManaged) { report.skipped.playlists += 1; continue; }
+
+        const kind = flags.kind ?? 'music';
+        const target = folderSvc.resolve({ docType: 'Playlist', kind });
+        if (!target) { report.skipped.playlists += 1; continue; }
+
+        try {
+          const folderId = dryRun
+            ? (p.folder?.id ?? null)
+            : (await folderSvc.ensurePath({ type: target.type, path: target.path, key: target.key })).folderId;
+          if (p.folder?.id === folderId) { report.skipped.playlists += 1; continue; }
+          if (!dryRun) {
+            playlistUpdates.push({ _id: p.id, folder: folderId, flags: { [MODULE_ID]: { ...flags, folderKey: target.key } } });
+          }
+          report.moved.playlists += 1;
+        } catch (e) {
+          report.errors.push(`Playlist "${p.name}": ${String(e?.message ?? e)}`);
+        }
+      }
+      if (playlistUpdates.length > 0) {
+        try { await Playlist.updateDocuments(playlistUpdates); }
+        catch (e) { report.errors.push(`Playlist bulk update failed: ${String(e?.message ?? e)}`); }
+      }
+
+      const t1 = (typeof globalThis.performance !== 'undefined' && globalThis.performance.now) ? globalThis.performance.now() : Date.now();
+      report.durationMs = Math.round(t1 - t0);
 
       console.table([
         { key: 'ensuredFolders', value: report.ensured },
         { key: 'movedJournals', value: report.moved.journals },
         { key: 'movedItems', value: report.moved.items },
-        { key: 'movedActors', value: report.moved.actors },
-        { key: 'movedScenes', value: report.moved.scenes },
-        { key: 'movedPlaylists', value: report.moved.playlists },
+        { key: 'movedActors', value: report.moved.actors ?? 0 },
+        { key: 'movedScenes', value: report.moved.scenes ?? 0 },
+        { key: 'movedPlaylists', value: report.moved.playlists ?? 0 },
         { key: 'errors', value: report.errors.length },
         { key: 'durationMs', value: report.durationMs },
       ]);
-
-      const msg = `JANUS7 Ordnerstruktur: ${report.moved.journals} J, ${report.moved.items} I, ${report.moved.actors} A, ${report.moved.scenes} S, ${report.moved.playlists} P verschoben${dryRun ? ' (dryRun)' : ''} in ${report.durationMs}ms`;
-      ui.notifications.info(msg);
+      ui.notifications.info(`JANUS7 Ordnerstruktur: moved journals=${report.moved.journals}, items=${report.moved.items}, actors=${report.moved.actors ?? 0}, scenes=${report.moved.scenes ?? 0}, playlists=${report.moved.playlists ?? 0}${dryRun ? ' (dryRun)' : ''} in ${report.durationMs}ms`);
 
       return report;
     });
